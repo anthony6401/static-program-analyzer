@@ -1,4 +1,4 @@
-# Team 00
+# Team 17
 
 > Please fill in this Readme with the required information, and delete this box.
 > 
@@ -29,4 +29,4 @@ No additional instructions required.
 
 Name | Mobile | Email | Development OS/Toolchain
 -:|:-:|:-|-|
-John Doe | 99887766 | john@doe.com | Windows 10/Visual Studio 2019
+Choo Jia Xin | 97259057 | e0426255@u.nus.edu | Windows 10/Visual Studio 2019
