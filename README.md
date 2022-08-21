@@ -29,6 +29,7 @@ No additional instructions required.
 
 Name | Mobile | Email | Development OS/Toolchain
 -:|:-:|:-|-|
+Anthony Lie	 | 84307354 | e0407672@u.nus.edu | Windows 10/Visual Studio 2022
 Choo Jia Xin | 97259057 | e0426255@u.nus.edu | Windows 10/Visual Studio 2019
 Heinrich	 | 85891940 | e0426326@u.nus.edu | Windows 10/Visual Studio 2022
 Andrea Tan Ker Yue	 | 83281611 | e0425799@u.nus.edu | MacOS w/ M1 Chips/Clion 2022.2, Cmake 3.24.0, Make 3.81
