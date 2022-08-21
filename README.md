@@ -33,4 +33,5 @@ Andrea Tan Ker Yue	 | 83281611 | e0425799@u.nus.edu | MacOS w/ M1 Chips/Clion 20
 Anthony Lie	 | 84307354 | e0407672@u.nus.edu | Windows 10/Visual Studio 2022
 Choo Jia Xin | 97259057 | e0426255@u.nus.edu | Windows 10/Visual Studio 2019
 Heinrich	 | 85891940 | e0426326@u.nus.edu | Windows 10/Visual Studio 2022
+Hwang Yong Kang | 91084831 | e0415735@u.nus.edu | Windows 10/Visual Studio 2019
 Wong Hon Wee, Howard | 96479701 | e0556059@u.nus.edu | Windows 10/Visual Studio 2019
