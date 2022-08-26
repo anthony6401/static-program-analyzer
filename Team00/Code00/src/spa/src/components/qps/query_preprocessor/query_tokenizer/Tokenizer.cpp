@@ -40,3 +40,34 @@ Tokenizer::Tokenizer(std::string query) : query(query) {
             {"procedure", TokenType::PROCEDURE}
     };
 }
+
+/**
+ * Checks that string s follows the NAME lexical syntax
+ */
+bool Tokenizer::isName(std::string s) {
+    if (!isalpha(s[0]) || s.empty()) {
+        return false;
+    }
+    for (const auto c : s) {
+        if (!isalnum(c)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+/**
+ * Checks that string s follows the INTEGER lexical syntax
+ */
+bool Tokenizer::isInteger(std::string s) {
+    if (s[0] == '0' && s.length() > 1) {
+        return false;
+    }
+    for (const auto c : s) {
+        if (!isdigit(c)) {
+            return false;
+        }
+    }
+    return true;
+}
+

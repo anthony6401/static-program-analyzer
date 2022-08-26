@@ -13,6 +13,8 @@ private:
     std::string query;
     std::unordered_map<std::string, TokenType> stringToTokenMap;
     std::vector<TokenObject> tokenize();
+    bool isName(std::string s);
+    bool isInteger(std::string s);
 
 public:
     Tokenizer(std::string query);
