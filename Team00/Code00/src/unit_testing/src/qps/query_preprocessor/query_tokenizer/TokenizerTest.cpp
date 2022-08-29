@@ -5,10 +5,10 @@
 
 // To be amended
 TEST_CASE("Sample name test function") {
-    std::string test_string = "A123ndrea";
+    std::string test_string = "            Select   ";
     Tokenizer tokenizer = Tokenizer();
-    bool test_result = Tokenizer().tokenize(test_string);
-    bool expected_result = true;
+    std::string test_result = Tokenizer().tokenize(test_string);
+    std::string expected_result = "Select";
     REQUIRE(test_result == expected_result);
 }
 

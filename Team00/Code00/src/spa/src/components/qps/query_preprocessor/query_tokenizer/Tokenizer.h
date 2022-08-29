@@ -17,7 +17,7 @@ private:
 
 public:
     Tokenizer();
-    bool tokenize(std::string query);
+    std::string tokenize(std::string query);
 };
 
 #endif //INC_22S1_CP_SPA_TEAM_17_TOKENIZER_H
