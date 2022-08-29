@@ -6,8 +6,7 @@
 
 using namespace qps;
 
-
-Tokenizer::Tokenizer(std::string query) : query(query) {
+Tokenizer::Tokenizer() {
     /**
      * Initialises unordered map of string values to tokens with initializer list.
      */
@@ -17,6 +16,10 @@ Tokenizer::Tokenizer(std::string query) : query(query) {
             {"that", TokenType::THAT},
             {"Modifies", TokenType::MODIFIES},
             {"Uses", TokenType::USES},
+            {"Parent", TokenType::PARENT},
+            {"Parent*", TokenType::PARENT_T},
+            {"Follows", TokenType::FOLLOWS},
+            {"Follows*", TokenType::FOLLOWS_T},
             {"_", TokenType::UNDERSCORE},
             {",", TokenType::COMMA},
             {"(", TokenType::OPEN_BRACKET},
@@ -39,6 +42,20 @@ Tokenizer::Tokenizer(std::string query) : query(query) {
             {"constant", TokenType::CONSTANT},
             {"procedure", TokenType::PROCEDURE}
     };
+}
+
+/**
+ * Splits query
+ */
+
+/**
+ * Outputs vector<TokenObject>
+ */
+
+bool Tokenizer::tokenize(std::string query) {
+    bool test_name = isName(query);
+    bool test_integer = isInteger(query);
+    return test_name;
 }
 
 /**
