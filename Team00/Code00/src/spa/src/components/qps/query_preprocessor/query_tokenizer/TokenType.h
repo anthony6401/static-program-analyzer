@@ -3,16 +3,22 @@
 
 namespace qps {
     enum class TokenType {
+// Relationships and Clauses
+        MODIFIES,
+        USES,
+        FOLLOWS,
+        FOLLOWS_T,
+        PARENT,
+        PARENT_T,
+        PATTERN,
         SELECT,
         SUCH,
         THAT,
-
-        MODIFIES,
-        USES,
-
+// Lexical tokens
         NAME,
         INTEGER,
-
+        NAME_WITH_QUOTATION,
+// Special symbols
         UNDERSCORE,
         COMMA,
         OPEN_BRACKET,
@@ -24,7 +30,7 @@ namespace qps {
         DIVIDE,
         MULTIPLY,
         PERCENTAGE,
-
+// Design entities
         STMT,
         READ,
         PRINT,
