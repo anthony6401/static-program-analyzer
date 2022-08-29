@@ -1,4 +1,4 @@
-name: CI Cmake Project - MacOS
+name: CI for Cmake Project - MacOS
 
 on:
   push:
