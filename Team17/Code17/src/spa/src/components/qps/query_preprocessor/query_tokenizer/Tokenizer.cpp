@@ -73,12 +73,12 @@ std::vector<std::string> Tokenizer::tokenize(std::string query) {
     return splitByDelimiter(query, ' ');
 }
 
-//std::vector<std::string> splitQuery(std::string &query) {
-//
-//    for (char c : query) {
-//
-//    }
-//}
+std::vector<std::string> splitQuery(std::string &query) {
+
+    for (char c : query) {
+
+    }
+}
 
 
 /**

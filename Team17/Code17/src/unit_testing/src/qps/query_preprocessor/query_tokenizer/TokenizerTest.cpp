@@ -6,8 +6,8 @@
 // To be amended
 TEST_CASE("Sample test function") {
     std::vector<std::string> expected_result;
-    std::string test_string = "stmt s, s1; assign a, a1; while w; if ifs; variable v, v1;\n"
-                              "procedure p, q; constant c; read re; print pn; call cl;";
+    std::string test_string = "stmt s;\n"
+                              "Select s such that Follows (1, s)";
     Tokenizer tokenizer = Tokenizer();
     std::vector<std::string> test_result = Tokenizer().tokenize(test_string);
     expected_result.push_back("stmt");
