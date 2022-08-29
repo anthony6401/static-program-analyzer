@@ -6,6 +6,8 @@
 
 using namespace qps;
 
+std::string whitespace = "\f\n\r\t\v";
+
 Tokenizer::Tokenizer() {
     /**
      * Initialises unordered map of string values to tokens with initializer list.
@@ -46,17 +48,27 @@ Tokenizer::Tokenizer() {
 }
 
 /**
- * Splits query
+ * Tokenizes each character or string according to Token Types and outputs vector<TokenObject>
  */
-
-/**
- * Outputs vector<TokenObject>
- */
-
 bool Tokenizer::tokenize(std::string query) {
     bool test_name = isName(query);
     bool test_integer = isInteger(query);
     return test_name;
+}
+
+/**
+ * Splits query
+ */
+
+
+/**
+ * Trim the string to remove leading and trailing spaces
+ */
+std::string Tokenizer::trim(const std::string& s) {
+    const auto beginning = s.find_first_not_of(whitespace);
+    const auto ending = s.find_last_not_of(whitespace);
+    const auto range = ending - beginning + 1;
+    return s.substr(beginning, range);
 }
 
 /**

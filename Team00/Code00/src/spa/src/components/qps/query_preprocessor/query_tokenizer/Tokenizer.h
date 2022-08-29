@@ -13,6 +13,7 @@ private:
     std::unordered_map<std::string, TokenType> stringToTokenMap;
     bool isName(std::string s);
     bool isInteger(std::string s);
+    std::string trim(const std::string& s);
 
 public:
     Tokenizer();
