@@ -20,6 +20,7 @@ Tokenizer::Tokenizer() {
             {"Parent*", TokenType::PARENT_T},
             {"Follows", TokenType::FOLLOWS},
             {"Follows*", TokenType::FOLLOWS_T},
+            {"pattern", TokenType::PATTERN},
             {"_", TokenType::UNDERSCORE},
             {",", TokenType::COMMA},
             {"(", TokenType::OPEN_BRACKET},
