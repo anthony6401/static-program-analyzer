@@ -6,6 +6,9 @@
 # Prerequisites
 *.d
 
+#XML
+*/out.xml
+
 # Compiled Object files
 *.slo
 *.lo
