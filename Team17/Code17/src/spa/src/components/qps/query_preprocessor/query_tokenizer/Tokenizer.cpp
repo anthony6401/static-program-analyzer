@@ -1,7 +1,10 @@
 # include "Tokenizer.h"
 #include <utility>
 #include "TokenType.h"
-#include "string"
+#include <string>
+#include <sstream>
+#include <vector>
+#include <iterator>
 
 
 using namespace qps;
@@ -47,24 +50,41 @@ Tokenizer::Tokenizer() {
     };
 }
 
-/**
- * Tokenizes each character or string according to Token Types and outputs vector<TokenObject>
- */
-std::string Tokenizer::tokenize(std::string query) {
-    bool test_name = isName(query);
-    bool test_integer = isInteger(query);
-    return trim(query);
+
+template <typename Out>
+void splitIterator(const std::string query, char delim, Out result) {
+    std::istringstream iss(query);
+    std::string item;
+    while (std::getline(iss, item, delim)) {
+        *result++ = item;
+    }
+}
+
+std::vector<std::string> splitByDelimiter(const std::string query, char delim) {
+    std::vector<std::string> elems;
+    splitIterator(query, delim, std::back_inserter(elems));
+    return elems;
 }
 
 /**
- * Splits query
+ * Tokenizes each character or string according to Token Types and outputs vector<TokenObject>
  */
+std::vector<std::string> Tokenizer::tokenize(std::string query) {
+    return splitByDelimiter(query, ' ');
+}
+
+//std::vector<std::string> splitQuery(std::string &query) {
+//
+//    for (char c : query) {
+//
+//    }
+//}
 
 
 /**
  * Trim the string to remove leading and trailing spaces
  */
-std::string Tokenizer::trim(const std::string& s) {
+std::string Tokenizer::trimString(const std::string& s) {
     const auto beginning = s.find_first_not_of(whitespace);
     const auto ending = s.find_last_not_of(whitespace);
     const auto range = ending - beginning + 2;
