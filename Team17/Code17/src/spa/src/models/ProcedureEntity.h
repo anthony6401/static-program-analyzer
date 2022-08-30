@@ -3,5 +3,6 @@
 #include "Entity.h"
 
 class ProcedureEntity : public Entity {
-	ProcedureEntity(std::string n);
+	public:
+		ProcedureEntity(std::string n);
 };
