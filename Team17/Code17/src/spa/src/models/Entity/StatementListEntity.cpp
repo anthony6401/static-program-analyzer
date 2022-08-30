@@ -6,8 +6,8 @@
 
 StatementListEntity::StatementListEntity(std::vector<StatementEntity> statements) {
 	this->stmts = statements;
-};
+}
 
-std::vector<StatementEntity>StatementListEntity::getStatements() {
+std::vector<StatementEntity> StatementListEntity::getStatements() {
 	return this->stmts;
 }
