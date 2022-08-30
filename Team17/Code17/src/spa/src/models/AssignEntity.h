@@ -5,7 +5,7 @@
 #include <string>
 
 class AssignEntity : public StatementEntity {
-public:
-	AssignEntity(std::string n);
-private:
+	public:
+		AssignEntity(std::string n);
+	private:
 };
