@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Entity.h"
+#include "StatementEntity.h"
 
-class WhileEntity : public Entity {
+class WhileEntity : public StatementEntity {
 	WhileEntity(std::string n);
 };

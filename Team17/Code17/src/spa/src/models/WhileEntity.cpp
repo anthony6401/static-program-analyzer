@@ -1,6 +1,6 @@
 #include "WhileEntity.h"
-#include "Entity.h"
+#include "StatementEntity.h"
 
 #include <string>
 
-WhileEntity::WhileEntity(std::string n) : Entity(n) {};
+WhileEntity::WhileEntity(std::string n) : StatementEntity(n) {};
