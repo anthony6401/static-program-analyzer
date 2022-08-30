@@ -4,9 +4,9 @@
 
 
 Entity::Entity(std::string n) {
-	this->name = n;
+	this->value = n;
 }
 
-std::string Entity::getName() {
-	return this->name;
+std::string Entity::getValue() {
+	return this->value;
 }

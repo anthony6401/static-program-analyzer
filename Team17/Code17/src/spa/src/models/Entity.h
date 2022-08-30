@@ -7,9 +7,9 @@
 class Entity {
 	public:
 		Entity(std::string n);
-		std::string getName();
+		std::string getValue();
 	private:
-		std::string name;
+		std::string value;
 
 };
 
