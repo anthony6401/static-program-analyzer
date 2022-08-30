@@ -7,7 +7,7 @@
 
 class StatementListEntity {
 	public:
-		StatementListEntity();
+		StatementListEntity(std::vector<StatementEntity> statements);
 		std::vector<StatementEntity> getStatements();
 	private:
 		std::vector<StatementEntity> stmts;

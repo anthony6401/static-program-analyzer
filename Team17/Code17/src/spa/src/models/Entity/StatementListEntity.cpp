@@ -4,7 +4,9 @@
 
 #include <string>
 
-StatementListEntity::StatementListEntity() {};
+StatementListEntity::StatementListEntity(std::vector<StatementEntity> statements) {
+	this->stmts = statements;
+};
 
 std::vector<StatementEntity>StatementListEntity::getStatements() {
 	return this->stmts;
