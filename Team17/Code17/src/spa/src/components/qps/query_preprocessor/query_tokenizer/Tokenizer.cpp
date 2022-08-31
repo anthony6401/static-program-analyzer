@@ -229,7 +229,13 @@ std::vector<TokenObject> Tokenizer::tokenize(std::string query) {
             if (isName(s)) {
                 TokenObject object = *new TokenObject(TokenType::NAME, s);
                 tokenList.push_back(object);
+            } else if (isInteger(s)) {
+                TokenObject object = *new TokenObject(TokenType::INTEGER, s);
+                tokenList.push_back(object);
             }
+            // subexpressions
+
+            // name with quotes
         }
     }
     return tokenList;
