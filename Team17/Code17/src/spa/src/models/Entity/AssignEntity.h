@@ -7,5 +7,4 @@
 class AssignEntity : public StatementEntity {
 	public:
 		AssignEntity(std::string n);
-	private:
 };

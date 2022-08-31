@@ -7,5 +7,4 @@
 class CallEntity : public StatementEntity {
 	public:
 		CallEntity(std::string n);
-	private:
 };

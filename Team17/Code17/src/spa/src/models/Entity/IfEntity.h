@@ -7,5 +7,4 @@
 class IfEntity : public StatementEntity {
 	public:
 		IfEntity(std::string n);
-	private:
 };

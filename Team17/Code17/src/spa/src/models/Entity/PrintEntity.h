@@ -7,5 +7,4 @@
 class PrintEntity : public StatementEntity {
 	public:
 		PrintEntity(std::string n);
-	private:
 };
