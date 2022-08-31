@@ -7,6 +7,7 @@
 
 TokenObject modifiesTokenObject = TokenObject(TokenType::MODIFIES, "Modifies");
 TokenObject usesTokenObject = TokenObject(TokenType::USES, "Uses");
+TokenObject selectTokenObject = TokenObject(TokenType::SELECT, "Select");
 
 TokenObject stmtTokenObject = TokenObject(TokenType::STMT, "stmt");
 TokenObject procTokenObject = TokenObject(TokenType::PROCEDURE, "procedure");

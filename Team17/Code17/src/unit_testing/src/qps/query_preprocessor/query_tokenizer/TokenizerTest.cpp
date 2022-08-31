@@ -5,6 +5,7 @@
 #include <catch.hpp>
 #include <iostream>
 
+
 // To be added
 TEST_CASE("Declarations - Single") {
     std::string testQuery = "variable v;";
@@ -37,4 +38,11 @@ TEST_CASE("Declarations - Multiple") {
     REQUIRE(test_result == expectedResult);
 }
 
-
+TEST_CASE("DEMO") {
+    std::string testQuery = "variable v; Select v";
+    std::vector<TokenObject> expectedResult {variableTokenObject, v_nameTokenObject, semicolonTokenObject,
+    selectTokenObject, v_nameTokenObject};
+    Tokenizer tokenizer = Tokenizer();
+    std::vector<TokenObject> test_result = Tokenizer().tokenize(testQuery);
+    REQUIRE(test_result == expectedResult);
+}
