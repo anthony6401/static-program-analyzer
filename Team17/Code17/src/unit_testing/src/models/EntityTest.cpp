@@ -34,21 +34,6 @@ TEST_CASE("Procedure Entity Test") {
 
 }
 
-TEST_CASE("Assign Entity Test") {
-	AssignEntity a = AssignEntity(VALUE);
-	Entity e = Entity(VALUE);
-
-	REQUIRE(a.getValue() == "1");
-	REQUIRE(e == a);
-}
-
-TEST_CASE("Call Entity Test") {
-	CallEntity c = CallEntity(VALUE);
-	Entity e = Entity(VALUE);
-
-	REQUIRE(c.getValue() == "1");
-	REQUIRE(e == c);
-}
 
 TEST_CASE("Constant Entity Test") {
 	ConstantEntity ct = ConstantEntity(VALUE);
@@ -76,7 +61,30 @@ TEST_CASE("Statement Entity Test") {
 	REQUIRE(e == st);
 }
 
+
 // Child of Statement Entity
+TEST_CASE("Call Entity Test") {
+	CallEntity c = CallEntity(VALUE);
+	Entity e = Entity(VALUE);
+	StatementEntity st = StatementEntity(VALUE);
+
+	REQUIRE(c.getValue() == "1");
+	REQUIRE(e == c);
+	REQUIRE(st == c);
+}
+
+TEST_CASE("Assign Entity Test") {
+	AssignEntity a = AssignEntity(VALUE);
+	Entity e = Entity(VALUE);
+	StatementEntity st = StatementEntity(VALUE);
+	WhileEntity w = WhileEntity(VALUE);
+
+	REQUIRE(a.getValue() == "1");
+	REQUIRE(e == a);
+	REQUIRE(st == a);
+
+}
+
 TEST_CASE("If Entity Test") {
 	IfEntity i = IfEntity(VALUE);
 	Entity e = Entity(VALUE);
