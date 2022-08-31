@@ -100,17 +100,17 @@ TEST_CASE("While Entity Test") {
 
 //TODO:NEED TO TEST STATEMENTLISTENTITY
 //StatementList
-//TEST_CASE("While Entity Test") {
-//	StatementEntity st1 = StatementEntity("1");
-//	StatementEntity st2 = StatementEntity("2");
-//
-//	std::vector<StatementEntity> statements{ st1, st2 };
-//
-//	StatementListEntity stmtLst = StatementListEntity(statements);
-//
-//	std::vector<StatementEntity> result = stmtLst.getStatements();
-//
-//	REQUIRE(std::equal(result.begin(), result.end(), statements.begin()));
-//
-//}
+TEST_CASE("StatementList Entity Test") {
+	StatementEntity st1 = StatementEntity("1");
+	StatementEntity st2 = StatementEntity("2");
+
+	std::vector<StatementEntity> statements{ st1, st2 };
+
+	StatementListEntity stmtLst1 = StatementListEntity(statements);
+	StatementListEntity stmtLst2 = StatementListEntity(std::vector<StatementEntity> { st1, st2 });
+	
+
+	REQUIRE(stmtLst1 == stmtLst2);
+
+}
 
