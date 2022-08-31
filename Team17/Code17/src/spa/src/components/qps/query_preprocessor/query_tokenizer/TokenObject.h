@@ -8,11 +8,13 @@ using namespace qps;
 
 class TokenObject {
 private:
-    TokenType tokenized_type;
-    std::string tokenized_value;
+    TokenType tokenType;
+    std::string tokenValue;
 
 public:
     TokenObject(TokenType tokenType, std::string value);
+    TokenType getTokenType();
+    std::string getTokenValue();
 };
 
 
