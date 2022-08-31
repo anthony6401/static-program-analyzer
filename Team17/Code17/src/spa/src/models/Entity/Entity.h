@@ -7,10 +7,10 @@ class Entity {
 	public:
 		Entity(std::string n);
 		std::string getValue();
-		bool operator==(const Entity& other) const {
+		virtual bool operator==(const Entity& other) const {
 			return value == other.value;
 		}
-	private:
+	protected:
 		std::string value;
 
 };

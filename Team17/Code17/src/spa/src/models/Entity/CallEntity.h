@@ -7,4 +7,7 @@
 class CallEntity : public StatementEntity {
 	public:
 		CallEntity(std::string n);
+		bool operator==(const CallEntity& other) const {
+			return value == other.value;
+		}
 };
