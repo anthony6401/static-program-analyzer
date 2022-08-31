@@ -18,5 +18,9 @@ TokenObject ifTokenObject = TokenObject(TokenType::IF, "if");
 TokenObject variableTokenObject = TokenObject(TokenType::VARIABLE, "variable");
 TokenObject constantTokenObject = TokenObject(TokenType::CONSTANT, "constant");
 
+TokenObject semicolonTokenObject = TokenObject(TokenType::SEMI_COLON, ";");
+
+
+TokenObject v_nameTokenObject = TokenObject(TokenType::NAME, "v");
 
 #endif //SPA_REUSABLETOKENS_H
