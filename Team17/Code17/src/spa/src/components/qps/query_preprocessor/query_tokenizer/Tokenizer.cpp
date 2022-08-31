@@ -6,11 +6,12 @@
 #include <vector>
 #include <iterator>
 #include <iostream>
-
+#include <unordered_set>
 
 using namespace qps;
 
 std::string whitespace = " \\t";
+std::unordered_set<char> expressionSymbols = {'*', '/', '+', '-', '%', '='};
 
 Tokenizer::Tokenizer() {
     /**
@@ -33,11 +34,6 @@ Tokenizer::Tokenizer() {
             {")", TokenType::CLOSED_BRACKET},
             {"\"", TokenType::QUOTATION_MARK},
             {";", TokenType::SEMI_COLON},
-            {"+", TokenType::PLUS},
-            {"-", TokenType::MINUS},
-            {"/", TokenType::DIVIDE},
-            {"*", TokenType::MULTIPLY},
-            {"%", TokenType::PERCENTAGE},
             {"stmt", TokenType::STMT},
             {"read", TokenType::READ},
             {"print", TokenType::PRINT},
@@ -214,6 +210,25 @@ bool Tokenizer::isInteger(std::string s) {
     return true;
 }
 
+//for (char symbol : expressionSymbols) {
+//// Contains expression symbol
+//if (s.find(symbol) != std::string::npos) {
+//return false;
+//}
+//}
+
+/**
+ * Checks that string s follows the IDENTITY lexical syntax with quotation mark
+ */
+bool Tokenizer::isIdentity(std::string s) {
+    if (s.front() == '"' && s.back() == '"') {
+        if (isName(s.substr())) {
+            return true;
+        }
+    }
+    return false;
+}
+
 /**
  * Tokenizes each character or string according to Token Types and outputs vector<TokenObject>
  */
@@ -235,7 +250,9 @@ std::vector<TokenObject> Tokenizer::tokenize(std::string query) {
             }
             // subexpressions
 
-            // name with quotes
+            // expression
+
+            // identity
         }
     }
     return tokenList;

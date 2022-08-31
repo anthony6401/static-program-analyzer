@@ -14,6 +14,7 @@ private:
     std::unordered_map<std::string, TokenType> stringToTokenMap;
     bool isName(std::string s);
     bool isInteger(std::string s);
+    bool isIdentity(std::string s);
     // std::string trimString(const std::string& s);
     // std::vector<std::string> splitQuery(std::string query);
 
