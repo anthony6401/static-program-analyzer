@@ -163,42 +163,26 @@ std::string trimString(const std::string& s) {
 }
 
 
-//std::vector<std::string> splitQuery(std::string query) {
-//    std::vector<std::string> firstSplit = splitByDelimiter(query, ' ');
-//    char split_delimiter = '|';
-//    std::vector<char> char_output;
-//    for (const std::string s : firstSplit) {
-//        trimString(s);
-//        for (char c : s) {
-//            if (c == '"' || c == ',' || c == '(' || c == ')' || c == '\n' || c == '+' || c == '-') {
-//                char_output.push_back(split_delimiter);
-//                char_output.push_back(c);
-//            } else {
-//                char_output.push_back(c);
-//            }
-//        }
-//        char_output.push_back(split_delimiter);
-//    }
-//
-//    std::string string_output = std::string(char_output.begin(), char_output.end());
-//    return formatCharToStringVector(string_output, split_delimiter);
-//}
-
-/**
- * Tokenizes each character or string according to Token Types and outputs vector<TokenObject>
- */
-std::vector<TokenObject> Tokenizer::tokenize(std::string query) {
-    std::vector<TokenObject> tokenList;
-    std::vector<std::string> tokenValues = splitQuery(query);
-    for (std::string s : tokenValues) {
-        // Token value exists in list
-        if (stringToTokenMap.find(s) != stringToTokenMap.end()) {
-            tokenList.push_back(TokenObject(stringToTokenMap[s], s));
+std::vector<std::string> split(std::string query) {
+    std::vector<std::string> firstSplit = splitByDelimiter(query, ' ');
+    char split_delimiter = '|';
+    std::vector<char> char_output;
+    for (const std::string s : firstSplit) {
+        trimString(s);
+        for (char c : s) {
+            if (c == '"' || c == ',' || c == '(' || c == ')' || c == '\n' || c == '+' || c == '-') {
+                char_output.push_back(split_delimiter);
+                char_output.push_back(c);
+            } else {
+                char_output.push_back(c);
+            }
         }
+        char_output.push_back(split_delimiter);
     }
-    return tokenList;
-}
 
+    std::string string_output = std::string(char_output.begin(), char_output.end());
+    return formatCharToStringVector(string_output, split_delimiter);
+}
 
 /**
  * Checks that string s follows the NAME lexical syntax
@@ -229,4 +213,29 @@ bool Tokenizer::isInteger(std::string s) {
     }
     return true;
 }
+
+/**
+ * Tokenizes each character or string according to Token Types and outputs vector<TokenObject>
+ */
+std::vector<TokenObject> Tokenizer::tokenize(std::string query) {
+    std::vector<TokenObject> tokenList;
+    std::vector<std::string> tokenValues = splitQuery(query);
+    for (std::string s : tokenValues) {
+        // Token value exists in list
+        if (stringToTokenMap.find(s) != stringToTokenMap.end()) {
+            TokenObject object = *new TokenObject(stringToTokenMap[s], s);
+            tokenList.push_back(object);
+        } else {
+            if (isName(s)) {
+                TokenObject object = *new TokenObject(TokenType::NAME, s);
+                tokenList.push_back(object);
+            }
+        }
+    }
+    return tokenList;
+}
+
+
+
+
 
