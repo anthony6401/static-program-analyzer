@@ -38,10 +38,36 @@ TEST_CASE("Declarations - Multiple") {
     REQUIRE(test_result == expectedResult);
 }
 
-TEST_CASE("DEMO") {
+
+
+TEST_CASE("DEMO - Select v") {
     std::string testQuery = "variable v; Select v";
     std::vector<TokenObject> expectedResult {variableTokenObject, v_nameTokenObject, semicolonTokenObject,
     selectTokenObject, v_nameTokenObject};
+    Tokenizer tokenizer = Tokenizer();
+    std::vector<TokenObject> test_result = Tokenizer().tokenize(testQuery);
+    REQUIRE(test_result == expectedResult);
+}
+
+TEST_CASE("DEMO - Modifies") {
+    std::string testQuery = "variable v;\n"
+                            "Select v such that Modifies (6, v)";
+    std::vector<TokenObject> expectedResult {variableTokenObject, v_nameTokenObject, semicolonTokenObject,
+                                             selectTokenObject, v_nameTokenObject, suchTokenObject, thatTokenObject,
+                                             modifiesTokenObject, openBracketTokenObject, six_intTokenObject, commaTokenObject,
+                                             v_nameTokenObject, closedBracketTokenObject};
+    Tokenizer tokenizer = Tokenizer();
+    std::vector<TokenObject> test_result = Tokenizer().tokenize(testQuery);
+    REQUIRE(test_result == expectedResult);
+}
+
+TEST_CASE("DEMO - Uses") {
+    std::string testQuery = "variable v;\n"
+                            "Select v such that Uses (14, v)";
+    std::vector<TokenObject> expectedResult {variableTokenObject, v_nameTokenObject, semicolonTokenObject,
+                                             selectTokenObject, v_nameTokenObject, suchTokenObject, thatTokenObject,
+                                             usesTokenObject, openBracketTokenObject, fourteen_intTokenObject, commaTokenObject,
+                                             v_nameTokenObject, closedBracketTokenObject};
     Tokenizer tokenizer = Tokenizer();
     std::vector<TokenObject> test_result = Tokenizer().tokenize(testQuery);
     REQUIRE(test_result == expectedResult);

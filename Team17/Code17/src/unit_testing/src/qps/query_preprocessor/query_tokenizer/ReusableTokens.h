@@ -8,6 +8,10 @@
 TokenObject modifiesTokenObject = TokenObject(TokenType::MODIFIES, "Modifies");
 TokenObject usesTokenObject = TokenObject(TokenType::USES, "Uses");
 TokenObject selectTokenObject = TokenObject(TokenType::SELECT, "Select");
+TokenObject suchTokenObject = TokenObject(TokenType::SUCH, "such");
+TokenObject thatTokenObject = TokenObject(TokenType::THAT, "that");
+TokenObject openBracketTokenObject = TokenObject(TokenType::OPEN_BRACKET, "(");
+TokenObject closedBracketTokenObject = TokenObject(TokenType::CLOSED_BRACKET, ")");
 
 TokenObject stmtTokenObject = TokenObject(TokenType::STMT, "stmt");
 TokenObject procTokenObject = TokenObject(TokenType::PROCEDURE, "procedure");
@@ -37,5 +41,8 @@ TokenObject c_nameTokenObject = TokenObject(TokenType::NAME, "c");
 TokenObject re_nameTokenObject = TokenObject(TokenType::NAME, "re");
 TokenObject pn_nameTokenObject = TokenObject(TokenType::NAME, "pn");
 TokenObject cl_nameTokenObject = TokenObject(TokenType::NAME, "cl");
+
+TokenObject six_intTokenObject = TokenObject(TokenType::INTEGER, "6");
+TokenObject fourteen_intTokenObject = TokenObject(TokenType::INTEGER, "14");
 
 #endif //SPA_REUSABLETOKENS_H
