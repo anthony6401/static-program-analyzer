@@ -7,6 +7,7 @@
 #include <iterator>
 #include <iostream>
 #include <unordered_set>
+#include "../exceptions/TokenException.h"
 
 using namespace qps;
 
@@ -240,7 +241,7 @@ bool Tokenizer::isIdentity(std::string s) {
 // INCOMPLETE!!!
 // "x+(x+2)" // "x+1"
 bool Tokenizer::isExpression(std::string s) {
-    if (s.size() < 5) {
+    if (s.size() < 5) { // Perhaps add in expression symbol checking
         return false;
     } else {
         if (s.front() == '"' && s.back() == '"') {
@@ -292,15 +293,16 @@ std::vector<TokenObject> Tokenizer::tokenize(std::string query) {
                 TokenObject object = *new TokenObject(TokenType::IDENTITY, s);
                 tokenList.push_back(object);
             } else if (isExpression(s)) {
+                // Return trimmed string
                 TokenObject object = *new TokenObject(TokenType::EXPRESSION, s);
                 tokenList.push_back(object);
             } else if (isSubExpression(s)) {
-
+                TokenObject object = *new TokenObject(TokenType::SUBEXPRESSION, s);
+                tokenList.push_back(object);
+            } else {
+                // throw exception
+                throw TokenException();
             }
-            // subexpressions
-
-            // expression
-
         }
     }
     return tokenList;
