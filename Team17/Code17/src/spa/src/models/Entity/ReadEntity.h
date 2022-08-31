@@ -6,7 +6,7 @@
 
 class ReadEntity : public StatementEntity {
 public:
-	ReadEntity(std::string n);
+	ReadEntity(std::string entityValue);
 	bool operator==(const ReadEntity& other) const {
 		return value == other.value;
 	}

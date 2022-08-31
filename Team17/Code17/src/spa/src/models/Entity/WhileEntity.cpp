@@ -3,4 +3,4 @@
 
 #include <string>
 
-WhileEntity::WhileEntity(std::string n) : StatementEntity(n) {};
+WhileEntity::WhileEntity(std::string entityValue) : StatementEntity(entityValue) {};

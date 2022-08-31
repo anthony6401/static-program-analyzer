@@ -6,7 +6,7 @@
 
 class AssignEntity : public StatementEntity {
 public:
-	AssignEntity(std::string n);
+	AssignEntity(std::string entityValue);
 	bool operator==(const AssignEntity& other) const {
 		return value == other.value;
 	}

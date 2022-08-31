@@ -3,8 +3,8 @@
 #include "Entity.h"
 
 
-Entity::Entity(std::string n) {
-	this->value = n;
+Entity::Entity(std::string entityValue) {
+	this->value = entityValue;
 }
 
 std::string Entity::getValue() {

@@ -4,7 +4,7 @@
 
 class ProcedureEntity : public Entity {
 public:
-	ProcedureEntity(std::string n);
+	ProcedureEntity(std::string entityValuen);
 	bool operator==(const ProcedureEntity& other) const {
 		return value == other.value;
 	}

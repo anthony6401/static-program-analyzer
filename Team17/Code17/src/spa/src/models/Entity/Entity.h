@@ -5,7 +5,7 @@
 
 class Entity {
 public:
-	Entity(std::string n);
+	Entity(std::string entityValue);
 	std::string getValue();
 	virtual bool operator==(const Entity& other) const {
 		return value == other.value;
