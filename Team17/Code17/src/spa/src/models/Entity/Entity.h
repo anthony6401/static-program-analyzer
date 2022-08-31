@@ -14,4 +14,3 @@ class Entity {
 		std::string value;
 
 };
-
