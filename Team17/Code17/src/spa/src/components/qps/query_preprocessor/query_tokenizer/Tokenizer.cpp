@@ -11,7 +11,7 @@
 using namespace qps;
 
 std::string whitespace = " \\t";
-std::unordered_set<char> expressionSymbols = {'*', '/', '+', '-', '%', '='};
+std::unordered_set<char> expressionSymbols = {'+', '-', '*', '/',  '%'};
 
 Tokenizer::Tokenizer() {
     /**
@@ -217,13 +217,54 @@ bool Tokenizer::isInteger(std::string s) {
 //}
 //}
 
+std::string trimQuotesOrWildcard(std::string s) {
+    return s.substr(1, s.size() - 2);
+}
+
 /**
- * Checks that string s follows the IDENTITY lexical syntax with quotation mark
+ * Checks that string s follows the IDENTITY lexical syntax with Quotation Marks
  */
 bool Tokenizer::isIdentity(std::string s) {
-    if (s.front() == '"' && s.back() == '"') {
-        if (isName(s.substr())) {
-            return true;
+    if (s.size() <= 2) {
+        return false;
+    } else {
+        if (s.front() == '"' && s.back() == '"') {
+            if (isName(trimQuotesOrWildcard(s))) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+// INCOMPLETE!!!
+// "x+(x+2)" // "x+1"
+bool Tokenizer::isExpression(std::string s) {
+    if (s.size() < 5) {
+        return false;
+    } else {
+        if (s.front() == '"' && s.back() == '"') {
+            std::string withoutQuotes = trimQuotesOrWildcard(s);
+            for (char c : withoutQuotes) {
+                if (isalnum(c)) {
+                    return true;
+                }
+            }
+        }
+    }
+    return true;
+}
+
+// _"x+1"_, _"x"_
+bool Tokenizer::isSubExpression(std::string s) {
+    if (s.size() < 5) {
+        return false;
+    } else {
+        if (s.front() == '_' && s.back() == '_') {
+            std::string withoutWildcard = trimQuotesOrWildcard(s);
+           if (isIdentity(withoutWildcard) || isExpression(withoutWildcard)) {
+               return true;
+           }
         }
     }
     return false;
@@ -247,12 +288,19 @@ std::vector<TokenObject> Tokenizer::tokenize(std::string query) {
             } else if (isInteger(s)) {
                 TokenObject object = *new TokenObject(TokenType::INTEGER, s);
                 tokenList.push_back(object);
+            } else if (isIdentity(s)) {
+                TokenObject object = *new TokenObject(TokenType::IDENTITY, s);
+                tokenList.push_back(object);
+            } else if (isExpression(s)) {
+                TokenObject object = *new TokenObject(TokenType::EXPRESSION, s);
+                tokenList.push_back(object);
+            } else if (isSubExpression(s)) {
+
             }
             // subexpressions
 
             // expression
 
-            // identity
         }
     }
     return tokenList;
