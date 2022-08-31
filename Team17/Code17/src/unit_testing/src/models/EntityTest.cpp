@@ -77,12 +77,10 @@ TEST_CASE("Assign Entity Test") {
 	AssignEntity a = AssignEntity(VALUE);
 	Entity e = Entity(VALUE);
 	StatementEntity st = StatementEntity(VALUE);
-	WhileEntity w = WhileEntity(VALUE);
 
 	REQUIRE(a.getValue() == "1");
 	REQUIRE(e == a);
 	REQUIRE(st == a);
-
 }
 
 TEST_CASE("If Entity Test") {
