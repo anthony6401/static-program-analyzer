@@ -271,12 +271,17 @@ bool Tokenizer::isSubExpression(std::string s) {
     return false;
 }
 
+auto isEmptyOrBlank = [](const std::string &s) {
+    return s.find_first_not_of(" \t") == std::string::npos;
+};
+
 /**
  * Tokenizes each character or string according to Token Types and outputs vector<TokenObject>
  */
 std::vector<TokenObject> Tokenizer::tokenize(std::string query) {
     std::vector<TokenObject> tokenList;
     std::vector<std::string> tokenValues = splitQuery(query);
+    tokenValues.erase(std::remove_if(tokenValues.begin(), tokenValues.end(), isEmptyOrBlank), tokenValues.end());
     for (std::string s : tokenValues) {
         // Token value exists in list
         if (stringToTokenMap.find(s) != stringToTokenMap.end()) {
