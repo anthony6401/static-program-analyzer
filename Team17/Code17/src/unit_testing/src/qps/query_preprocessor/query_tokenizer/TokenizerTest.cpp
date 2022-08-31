@@ -16,7 +16,8 @@ TEST_CASE("Declarations - Single") {
 }
 
 TEST_CASE("Declarations - Multiple") {
-    std::string testQuery = "stmt s, s1; variable v, v1; procedure p, q; assign a, a1; while w; if ifs; constant c; read re; print pn; call cl;";
+    std::string testQuery = "stmt s, s1; \n"
+                            "variable v, v1; procedure p, q; assign a, a1; while w; if ifs; constant c; read re; print pn; call cl;";
     std::vector<TokenObject> expectedResult {
         stmtTokenObject, s_nameTokenObject, commaTokenObject, s1_nameTokenObject, semicolonTokenObject,
         variableTokenObject, v_nameTokenObject, commaTokenObject, v1_nameTokenObject, semicolonTokenObject,
@@ -31,33 +32,40 @@ TEST_CASE("Declarations - Multiple") {
     Tokenizer tokenizer = Tokenizer();
     std::vector<TokenObject> test_result = Tokenizer().tokenize(testQuery);
     // For debugging purposes
-    //    std::cout << test_result.size();
-    //    for (TokenObject o : test_result) {
-    //        std::cout << o.getValue() << std::endl;
-    //    }
+        std::cout << test_result.size();
+        for (TokenObject o : test_result) {
+            std::cout << o.getValue() << std::endl;
+        }
     REQUIRE(test_result == expectedResult);
 }
 
-
-
 TEST_CASE("DEMO - Select v") {
-    std::string testQuery = "variable v; Select v";
+    std::string testQuery = "variable v;\nSelect v";
     std::vector<TokenObject> expectedResult {variableTokenObject, v_nameTokenObject, semicolonTokenObject,
     selectTokenObject, v_nameTokenObject};
     Tokenizer tokenizer = Tokenizer();
     std::vector<TokenObject> test_result = Tokenizer().tokenize(testQuery);
+    // For debugging purposes
+    std::cout << test_result.size();
+    for (TokenObject o : test_result) {
+        std::cout << o.getValue() << std::endl;
+    }
     REQUIRE(test_result == expectedResult);
 }
 
 TEST_CASE("DEMO - Modifies") {
-    std::string testQuery = "variable v;\n"
-                            "Select v such that Modifies (6, v)";
+    std::string testQuery = "variable v; Select v such that Modifies (6, v)";
     std::vector<TokenObject> expectedResult {variableTokenObject, v_nameTokenObject, semicolonTokenObject,
                                              selectTokenObject, v_nameTokenObject, suchTokenObject, thatTokenObject,
                                              modifiesTokenObject, openBracketTokenObject, six_intTokenObject, commaTokenObject,
                                              v_nameTokenObject, closedBracketTokenObject};
     Tokenizer tokenizer = Tokenizer();
     std::vector<TokenObject> test_result = Tokenizer().tokenize(testQuery);
+     // For debugging purposes
+        std::cout << test_result.size();
+        for (TokenObject o : test_result) {
+            std::cout << o.getValue() << std::endl;
+        }
     REQUIRE(test_result == expectedResult);
 }
 
@@ -70,5 +78,10 @@ TEST_CASE("DEMO - Uses") {
                                              v_nameTokenObject, closedBracketTokenObject};
     Tokenizer tokenizer = Tokenizer();
     std::vector<TokenObject> test_result = Tokenizer().tokenize(testQuery);
+    // For debugging purposes
+    std::cout << test_result.size();
+    for (TokenObject o : test_result) {
+        std::cout << o.getValue() << std::endl;
+    }
     REQUIRE(test_result == expectedResult);
 }

@@ -93,6 +93,8 @@ std::vector<std::string> splitQuery(std::string query) {
                 isIdentity = charTypeToggler(isIdentity);
                 break;
             case ' ':
+            case '\n':
+            case '\t':
                 if (!isWildcard && !isIdentity) {
                     char_output.push_back(delimiter);
                 }
@@ -272,7 +274,7 @@ bool Tokenizer::isSubExpression(std::string s) {
 }
 
 auto isEmptyOrBlank = [](const std::string &s) {
-    return s.find_first_not_of(" \t") == std::string::npos;
+    return s.find_first_not_of("\n ") == std::string::npos;
 };
 
 /**
