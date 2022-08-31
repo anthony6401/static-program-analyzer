@@ -40,7 +40,14 @@ namespace qps {
         ASSIGN,
         VARIABLE,
         CONSTANT,
-        PROCEDURE
+        PROCEDURE,
+        // Syntax Types - may be removed in future sprints
+        DECLARATION,
+        SYNONYM,
+        DESIGN_ENTITY,
+        RELREF,
+        STMTREF,
+        ENTREF
     };
 }
 
