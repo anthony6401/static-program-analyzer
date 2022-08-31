@@ -14,12 +14,12 @@ private:
     std::unordered_map<std::string, TokenType> stringToTokenMap;
     bool isName(std::string s);
     bool isInteger(std::string s);
-    std::string trimString(const std::string& s);
-    std::vector<std::string> splitQuery(std::string query);
+    // std::string trimString(const std::string& s);
+    // std::vector<std::string> splitQuery(std::string query);
 
 public:
     Tokenizer();
-    std::vector<std::string> tokenize(std::string query);
+    std::vector<TokenObject> tokenize(std::string query);
 };
 
 #endif //INC_22S1_CP_SPA_TEAM_17_TOKENIZER_H

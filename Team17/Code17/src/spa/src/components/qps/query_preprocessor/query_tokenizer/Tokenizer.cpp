@@ -5,6 +5,7 @@
 #include <sstream>
 #include <vector>
 #include <iterator>
+#include <iostream>
 
 
 using namespace qps;
@@ -66,30 +67,138 @@ std::vector<std::string> splitByDelimiter(const std::string query, char delim) {
     return elems;
 }
 
-/**
- * Tokenizes each character or string according to Token Types and outputs vector<TokenObject>
- */
-std::vector<std::string> Tokenizer::tokenize(std::string query) {
-    return splitByDelimiter(query, ' ');
+std::vector<std::string> formatCharToStringVector(std::string s, char delimiter) {
+    std::vector<std::string> tokenValueString;
+    std::stringstream ss(s);
+    std::string tokenValue;
+
+    while (getline(ss, tokenValue, delimiter)) {
+        tokenValueString.push_back(tokenValue);
+    }
+    return tokenValueString;
 }
 
-std::vector<std::string> splitQuery(std::string &query) {
+bool charTypeToggler(bool isCharType) {
+    return !isCharType;
+}
 
+std::vector<std::string> splitQuery(std::string query) {
+    std::vector<char> char_output;
+    char delimiter = '|';
+    bool isWildcard = false;
+    bool isIdentity = false;
     for (char c : query) {
+        switch (c) {
+            case '_':
+                isWildcard = charTypeToggler(isWildcard);
+                break;
+            case '"':
+                isIdentity = charTypeToggler(isIdentity);
+                break;
+            case ' ':
+                if (!isWildcard && !isIdentity) {
+                    char_output.push_back(delimiter);
+                }
+                break;
+            case ';':
+                char_output.push_back(delimiter);
+                break;
+            case ',':
+                char_output.push_back(delimiter);
+                if (isWildcard) {
+                    isWildcard = charTypeToggler(isWildcard);
+                }
+                break;
+            case '(':
+                if (!isIdentity) {
+                    char_output.push_back(delimiter);
+                }
+                break;
+            case ')':
+                if (!isIdentity) {
+                    char_output.push_back(delimiter);
+                }
 
+                if (isWildcard) {
+                    isWildcard = charTypeToggler(isWildcard);
+                }
+                break;
+            default: break;
+        }
+
+        // Removes white spaces between identities and sub-expressions eg. "x + y" becomes "x+y"
+        if (c != ' ') {
+            char_output.push_back(c);
+        }
+
+        switch (c) {
+            case ';':
+            case ',':
+                char_output.push_back(delimiter);
+                break;
+            case '(':
+            case ')':
+                if (!isIdentity) {
+                    char_output.push_back(delimiter);
+                }
+                break;
+            default: break;
+        }
     }
+
+    std::string string_output = std::string(char_output.begin(), char_output.end());
+    std::vector<std::string> splittedQuery = formatCharToStringVector(string_output, delimiter);
+    return splittedQuery;
 }
 
 
 /**
  * Trim the string to remove leading and trailing spaces
  */
-std::string Tokenizer::trimString(const std::string& s) {
+std::string trimString(const std::string& s) {
     const auto beginning = s.find_first_not_of(whitespace);
     const auto ending = s.find_last_not_of(whitespace);
     const auto range = ending - beginning + 2;
     return s.substr(beginning, range);
 }
+
+
+//std::vector<std::string> splitQuery(std::string query) {
+//    std::vector<std::string> firstSplit = splitByDelimiter(query, ' ');
+//    char split_delimiter = '|';
+//    std::vector<char> char_output;
+//    for (const std::string s : firstSplit) {
+//        trimString(s);
+//        for (char c : s) {
+//            if (c == '"' || c == ',' || c == '(' || c == ')' || c == '\n' || c == '+' || c == '-') {
+//                char_output.push_back(split_delimiter);
+//                char_output.push_back(c);
+//            } else {
+//                char_output.push_back(c);
+//            }
+//        }
+//        char_output.push_back(split_delimiter);
+//    }
+//
+//    std::string string_output = std::string(char_output.begin(), char_output.end());
+//    return formatCharToStringVector(string_output, split_delimiter);
+//}
+
+/**
+ * Tokenizes each character or string according to Token Types and outputs vector<TokenObject>
+ */
+std::vector<TokenObject> Tokenizer::tokenize(std::string query) {
+    std::vector<TokenObject> tokenList;
+    std::vector<std::string> tokenValues = splitQuery(query);
+    for (std::string s : tokenValues) {
+        // Token value exists in list
+        if (stringToTokenMap.find(s) != stringToTokenMap.end()) {
+            tokenList.push_back(TokenObject(stringToTokenMap[s], s));
+        }
+    }
+    return tokenList;
+}
+
 
 /**
  * Checks that string s follows the NAME lexical syntax
