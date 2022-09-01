@@ -3,12 +3,12 @@
 #include "SimpleToken.h"
 #include "../../models/Relationship/Relationship.h"
 
+#include <vector>
+
+using namespace std;
+
 class Extractor {
 public:
 	Extractor::Extractor();
-	Relationship extractRelationship(SimpleToken parentToken);
-
-private:
-	SimpleToken current;
-
+	vector<Relationship*> extractRelationships(SimpleToken parentToken);
 };

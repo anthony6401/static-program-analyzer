@@ -1,14 +1,8 @@
 #include "Extractor.h"
-#include "SimpleToken.h"
-#include "../../models/Relationship/Relationship.h"
-
-#include <vector>
-
-using namespace std;
 
 Extractor::Extractor() {}
 
-vector<Relationship*> extractRelationship(SimpleToken parentToken) {
+vector<Relationship*> Extractor::extractRelationships(SimpleToken parentToken) {
 	vector<Relationship*> relationships;
 	vector<SimpleToken*> children = parentToken.getChildren();
 
@@ -17,35 +11,55 @@ vector<Relationship*> extractRelationship(SimpleToken parentToken) {
 	do {
 		TokenType tokenType = currentToken.type;
 
-		if (tokenType == T_PROCEDURE) {
+		if (tokenType == TokenType::TPROCEDURE) {
 			handleProcedure(relationships);
-		} else if (tokenType == T_STMT) {
+		} else if (tokenType == TokenType::TSTMT) {
 			handleStatement(relationships);
-		} else if (tokenType == T_READ) {
+		} else if (tokenType == TokenType::TREAD) {
 			handleRead(relationships);
-		} else if (tokenType == T_PRINT) {
+		} else if (tokenType == TokenType::TPRINT) {
 			handlePrint(relationships);
-		} else if (tokenType == T_CALL) {
+		} else if (tokenType == TokenType::TCALL) {
 			handleCall(relationships);
-		} else if (tokenType == T_WHILE) {
+		} else if (tokenType == TokenType::TWHILE) {
 			handleWhile(relationships);
-		} else if (tokenType == T_IF) {
+		} else if (tokenType == TokenType::TIF) {
 			handleIf(relationships);
-		} else if (tokenType == T_ASSIGN) {
+		} else if (tokenType == TokenType::TASSIGN) {
 			handleAssign(relationships);
-		} else if (tokenType == T_COND_EXPR) {
+		} else if (tokenType == TokenType::TCONDEXPR) {
 			handleCondExpr(relationships);
-		} else if (tokenType == T_VARIABLE) {
+		} else if (tokenType == TokenType::TVARIABLE) {
 			handleVariable(relationships);
-		} else if (tokenType == T_CONSTANT) {
+		} else if (tokenType == TokenType::TCONSTANT) {
 			handleConstant(relationships);
+		} else if (tokenType == TokenType::TCLOSE) {
+			handleClose(relationships);
+		} else if (tokenType == TokenType::TOPR) {
+			handleOpr(relationships);
 		} else {
 			handleError();
 		}
 
-		currentToken = children.
+		currentToken = *children.front();
+		children.erase(children.begin());
 
 	} while (!children.empty());
 
 	return relationships;
 }
+
+void handleProcedure(vector<Relationship*> relationships) {}
+void handleStatement(vector<Relationship*> relationships) {}
+void handleRead(vector<Relationship*> relationships) {}
+void handlePrint(vector<Relationship*> relationships) {}
+void handleCall(vector<Relationship*> relationships) {}
+void handleWhile(vector<Relationship*> relationships) {}
+void handleIf(vector<Relationship*> relationships) {}
+void handleAssign(vector<Relationship*> relationships) {}
+void handleCondExpr(vector<Relationship*> relationships) {}
+void handleVariable(vector<Relationship*> relationships) {}
+void handleConstant(vector<Relationship*> relationships) {}
+void handleClose(vector<Relationship*> relationships) {}
+void handleOpr(vector<Relationship*> relationships) {}
+void handleError() {}
