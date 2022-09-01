@@ -2,11 +2,9 @@
 
 #include <string>
 #include <vector>
-#include "SimpleToken.h"
+#include <regex>
 
 class SimpleTokenizer {
     public:
-        SimpleTokenizer();
-        void processCode(std::string code);
-        std::vector<std::string> splitBracket(std::string code);
+        SimpleTokenizer(std::string code);
 };
