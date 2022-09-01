@@ -11,8 +11,8 @@
 
 using namespace qps;
 
-std::string whitespace = " \\t";
-std::unordered_set<char> expressionSymbols = {'+', '-', '*', '/',  '%'};
+std::string whitespace = "\n\r\t\f\v";
+std::unordered_set<char> expressionSymbols = {'+', '-', '*', '/', '%'};
 
 Tokenizer::Tokenizer() {
     /**
@@ -150,38 +150,28 @@ std::vector<std::string> splitQuery(std::string query) {
     return splittedQuery;
 }
 
+// First attempt at string splitting, might require in the future
 
-/**
- * Trim the string to remove leading and trailing spaces
- */
-std::string trimString(const std::string& s) {
-    const auto beginning = s.find_first_not_of(whitespace);
-    const auto ending = s.find_last_not_of(whitespace);
-    const auto range = ending - beginning + 2;
-    return s.substr(beginning, range);
-}
-
-
-std::vector<std::string> split(std::string query) {
-    std::vector<std::string> firstSplit = splitByDelimiter(query, ' ');
-    char split_delimiter = '|';
-    std::vector<char> char_output;
-    for (const std::string s : firstSplit) {
-        trimString(s);
-        for (char c : s) {
-            if (c == '"' || c == ',' || c == '(' || c == ')' || c == '\n' || c == '+' || c == '-') {
-                char_output.push_back(split_delimiter);
-                char_output.push_back(c);
-            } else {
-                char_output.push_back(c);
-            }
-        }
-        char_output.push_back(split_delimiter);
-    }
-
-    std::string string_output = std::string(char_output.begin(), char_output.end());
-    return formatCharToStringVector(string_output, split_delimiter);
-}
+//std::vector<std::string> split(std::string query) {
+//    std::vector<std::string> firstSplit = splitByDelimiter(query, ' ');
+//    char split_delimiter = '|';
+//    std::vector<char> char_output;
+//    for (const std::string s : firstSplit) {
+//        trimString(s);
+//        for (char c : s) {
+//            if (c == '"' || c == ',' || c == '(' || c == ')' || c == '\n' || c == '+' || c == '-') {
+//                char_output.push_back(split_delimiter);
+//                char_output.push_back(c);
+//            } else {
+//                char_output.push_back(c);
+//            }
+//        }
+//        char_output.push_back(split_delimiter);
+//    }
+//
+//    std::string string_output = std::string(char_output.begin(), char_output.end());
+//    return formatCharToStringVector(string_output, split_delimiter);
+//}
 
 /**
  * Checks that string s follows the NAME lexical syntax
@@ -212,13 +202,6 @@ bool Tokenizer::isInteger(std::string s) {
     }
     return true;
 }
-
-//for (char symbol : expressionSymbols) {
-//// Contains expression symbol
-//if (s.find(symbol) != std::string::npos) {
-//return false;
-//}
-//}
 
 std::string trimQuotesOrWildcard(std::string s) {
     return s.substr(1, s.size() - 2);
@@ -274,8 +257,18 @@ bool Tokenizer::isSubExpression(std::string s) {
 }
 
 auto isEmptyOrBlank = [](const std::string &s) {
-    return s.find_first_not_of("\n ") == std::string::npos;
+    return s.find_first_not_of(" \n\t") == std::string::npos;
 };
+
+/**
+ * Trim the string to remove leading and trailing spaces
+ */
+std::string trimString(const std::string& s) {
+    const auto beginning = s.find_first_not_of(whitespace);
+    const auto ending = s.find_last_not_of(whitespace);
+    const auto range = ending - beginning + 2;
+    return s.substr(beginning, range);
+}
 
 /**
  * Tokenizes each character or string according to Token Types and outputs vector<TokenObject>
@@ -283,8 +276,12 @@ auto isEmptyOrBlank = [](const std::string &s) {
 std::vector<TokenObject> Tokenizer::tokenize(std::string query) {
     std::vector<TokenObject> tokenList;
     std::vector<std::string> tokenValues = splitQuery(query);
+
+    // Remove empty strings from tokenized values
     tokenValues.erase(std::remove_if(tokenValues.begin(), tokenValues.end(), isEmptyOrBlank), tokenValues.end());
+
     for (std::string s : tokenValues) {
+        s = trimString(s);
         // Token value exists in list
         if (stringToTokenMap.find(s) != stringToTokenMap.end()) {
             TokenObject object = *new TokenObject(stringToTokenMap[s], s);
