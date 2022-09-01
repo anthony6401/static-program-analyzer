@@ -3,4 +3,4 @@
 
 #include <string>
 
-AssignEntity::AssignEntity(std::string n) : StatementEntity(n) {};
+AssignEntity::AssignEntity(std::string entityValue) : StatementEntity(entityValue) {};

@@ -3,4 +3,4 @@
 
 #include <string>
 
-ConstantEntity::ConstantEntity(std::string n) : Entity(n) {};
+ConstantEntity::ConstantEntity(std::string entityValue) : Entity(entityValue) {};

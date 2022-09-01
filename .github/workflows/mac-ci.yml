@@ -2,9 +2,11 @@ name: CI for Cmake Project - MacOS
 
 on:
   push:
-    branches: [ master ]
+    branches:
+      - '**'
   pull_request:
-    branches: [ master ]
+    branches:
+      - '**'
   schedule:
     - cron: "0 23 * * *"
 

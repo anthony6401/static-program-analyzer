@@ -3,4 +3,4 @@
 
 #include <string>
 
-ProcedureEntity::ProcedureEntity(std::string n) : Entity(n) {};
+ProcedureEntity::ProcedureEntity(std::string entityValue) : Entity(entityValue) {};

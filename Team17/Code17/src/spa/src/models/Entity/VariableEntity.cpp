@@ -3,4 +3,4 @@
 
 #include <string>
 
-VariableEntity::VariableEntity(std::string n) : Entity(n) {};
+VariableEntity::VariableEntity(std::string entityValue) : Entity(entityValue) {};

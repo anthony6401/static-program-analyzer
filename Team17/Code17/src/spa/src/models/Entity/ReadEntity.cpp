@@ -3,4 +3,4 @@
 
 #include <string>
 
-ReadEntity::ReadEntity(std::string n) : StatementEntity(n) {};
+ReadEntity::ReadEntity(std::string entityValue) : StatementEntity(entityValue) {};

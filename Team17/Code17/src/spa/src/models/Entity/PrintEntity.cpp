@@ -3,4 +3,4 @@
 
 #include <string>
 
-PrintEntity::PrintEntity(std::string n) : StatementEntity(n) {};
+PrintEntity::PrintEntity(std::string entityValue) : StatementEntity(entityValue) {};
