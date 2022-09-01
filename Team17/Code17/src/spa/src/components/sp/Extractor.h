@@ -9,7 +9,7 @@ using namespace std;
 
 class Extractor {
 public:
-	Extractor::Extractor();
+	Extractor();
 	vector<Relationship*> extractRelationships(SimpleToken parentToken);
 	void handleProcedure(vector<Relationship*> relationships);
 	void handleStatement(vector<Relationship*> relationships);
