@@ -4,17 +4,19 @@
 #include <string>
 
 enum class TokenType {
-    tProcedure,
-    tStmt,
-    tRead,
-    tPrint,
-    tCall,
-    tWhile,
-    tIf,
-    tAssign,
-    tCondExpr,
-    tVariable,
-    tConstant
+    TPROCEDURE,
+    TSTMT,
+    TREAD,
+    TPRINT,
+    TCALL,
+    TWHILE,
+    TIF,
+    TASSIGN,
+    TCONDEXPR,
+    TVARIABLE,
+    TCONSTANT,
+    TCLOSE,
+    TOPR
 };
 
 class SimpleToken {
