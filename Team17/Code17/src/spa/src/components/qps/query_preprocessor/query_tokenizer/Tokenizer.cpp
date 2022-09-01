@@ -150,28 +150,38 @@ std::vector<std::string> splitQuery(std::string query) {
     return splittedQuery;
 }
 
+/**
+ * Trim the string to remove leading and trailing spaces
+ */
+std::string trimString(const std::string& s) {
+    const auto beginning = s.find_first_not_of(whitespace);
+    const auto ending = s.find_last_not_of(whitespace);
+    const auto range = ending - beginning + 2;
+    return s.substr(beginning, range);
+}
+
 // First attempt at string splitting, might require in the future
 
-//std::vector<std::string> split(std::string query) {
-//    std::vector<std::string> firstSplit = splitByDelimiter(query, ' ');
-//    char split_delimiter = '|';
-//    std::vector<char> char_output;
-//    for (const std::string s : firstSplit) {
-//        trimString(s);
-//        for (char c : s) {
-//            if (c == '"' || c == ',' || c == '(' || c == ')' || c == '\n' || c == '+' || c == '-') {
-//                char_output.push_back(split_delimiter);
-//                char_output.push_back(c);
-//            } else {
-//                char_output.push_back(c);
-//            }
-//        }
-//        char_output.push_back(split_delimiter);
-//    }
-//
-//    std::string string_output = std::string(char_output.begin(), char_output.end());
-//    return formatCharToStringVector(string_output, split_delimiter);
-//}
+std::vector<std::string> split(std::string query) {
+    std::vector<std::string> firstSplit = splitByDelimiter(query, ' ');
+    char split_delimiter = '|';
+    std::vector<char> char_output;
+    for (const std::string s : firstSplit) {
+        trimString(s);
+        for (char c : s) {
+            if (c == '"' || c == ',' || c == '(' || c == ')' || c == '\n' || c == '+' || c == '-') {
+                char_output.push_back(split_delimiter);
+                char_output.push_back(c);
+            } else {
+                char_output.push_back(c);
+            }
+        }
+        char_output.push_back(split_delimiter);
+    }
+
+    std::string string_output = std::string(char_output.begin(), char_output.end());
+    return formatCharToStringVector(string_output, split_delimiter);
+}
 
 /**
  * Checks that string s follows the NAME lexical syntax
@@ -259,16 +269,6 @@ bool Tokenizer::isSubExpression(std::string s) {
 auto isEmptyOrBlank = [](const std::string &s) {
     return s.find_first_not_of(" \n\t") == std::string::npos;
 };
-
-/**
- * Trim the string to remove leading and trailing spaces
- */
-std::string trimString(const std::string& s) {
-    const auto beginning = s.find_first_not_of(whitespace);
-    const auto ending = s.find_last_not_of(whitespace);
-    const auto range = ending - beginning + 2;
-    return s.substr(beginning, range);
-}
 
 /**
  * Tokenizes each character or string according to Token Types and outputs vector<TokenObject>
