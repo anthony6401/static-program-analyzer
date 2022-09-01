@@ -8,7 +8,7 @@
 
 // To be added
 TEST_CASE("Declarations - Single") {
-    std::string testQuery = "variable v      ;   ";
+    std::string testQuery = "variable v;";
     std::vector<TokenObject> expectedResult {variableTokenObject, v_nameTokenObject, semicolonTokenObject};
     Tokenizer tokenizer = Tokenizer();
     std::vector<TokenObject> testResult = Tokenizer().tokenize(testQuery);
