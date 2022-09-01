@@ -25,9 +25,10 @@ public:
     TokenType type;
     std::string value;
     int statementNumber;
-    void setChilds(std::vector<SimpleToken*> tokens);
-    std::vector<SimpleToken*> getChilds();
+    void setChildren(std::vector<SimpleToken*> tokens);
+    std::vector<SimpleToken*> getChildren();
 
 private:
-    std::vector<SimpleToken*> childs;
+    std::vector<SimpleToken*> children;
+
 };

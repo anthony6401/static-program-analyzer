@@ -6,10 +6,10 @@ SimpleToken::SimpleToken(TokenType type, std::string value, int statementNumber)
     this->statementNumber = statementNumber;
 }
 
-void SimpleToken::setChilds(std::vector<SimpleToken*> childs) {
-    this->childs = childs;
+void SimpleToken::setChildren(std::vector<SimpleToken*> children) {
+    this->children = children;
 }
 
-std::vector<SimpleToken*> SimpleToken::getChilds() {
-    return this->childs;
+std::vector<SimpleToken*> SimpleToken::getChildren() {
+    return this->children;
 }
