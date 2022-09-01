@@ -16,5 +16,6 @@ void QPS::tokenizeAndParseQuery(std::string query) {
 
 void QPS::obtainQueryResult(std::string query, std::list<std::string> &results) {
     tokenizeAndParseQuery(query);
+    Evaluator::evaluateQuery(results);
 }
 

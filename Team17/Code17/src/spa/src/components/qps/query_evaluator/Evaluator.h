@@ -5,8 +5,9 @@
 #include <vector>
 
 class Evaluator {
+public:
     // And also takes in Parsed Query
-    void evaluateQuery(std::list<std::string> &results);
+    static void evaluateQuery(std::list<std::string> &results);
 };
 
 #endif //SPA_EVALUATOR_H
