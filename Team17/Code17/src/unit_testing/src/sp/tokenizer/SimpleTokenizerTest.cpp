@@ -43,3 +43,9 @@ TEST_CASE("Split procedure {};") {
     expected_result.push_back("}");
     REQUIRE(test_result == expected_result);
 }
+
+TEST_CASE("Split no {};") {
+    std::string test_string = "qwerty";
+    std::vector<std::string> test_result = SpUtils::split(test_string, "[^{};]*[{};]");
+    REQUIRE(test_result.empty());
+}

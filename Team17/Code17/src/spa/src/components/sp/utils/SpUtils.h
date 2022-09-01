@@ -5,5 +5,5 @@
 
 class SpUtils {
     public:
-        static std::vector<std::string> split(std::string code, std::string delimiters);
+        static std::vector<std::string> split(std::string code, std::regex delimiters);
 };
