@@ -30,11 +30,7 @@ TEST_CASE("Declarations - Multiple") {
         callTokenObject, cl_nameTokenObject, semicolonTokenObject};
     Tokenizer tokenizer = Tokenizer();
     std::vector<TokenObject> test_result = Tokenizer().tokenize(testQuery);
-    // For debugging purposes
-        std::cout << test_result.size();
-        for (TokenObject o : test_result) {
-            std::cout << o.getValue() << std::endl;
-        }
+
     REQUIRE(test_result == expectedResult);
 }
 
@@ -44,11 +40,7 @@ TEST_CASE("DEMO - Select v") {
     selectTokenObject, v_nameTokenObject};
     Tokenizer tokenizer = Tokenizer();
     std::vector<TokenObject> test_result = Tokenizer().tokenize(testQuery);
-    // For debugging purposes
-    std::cout << test_result.size();
-    for (TokenObject o : test_result) {
-        std::cout << o.getValue() << std::endl;
-    }
+
     REQUIRE(test_result == expectedResult);
 }
 
@@ -61,11 +53,7 @@ TEST_CASE("DEMO - Modifies") {
                                              v_nameTokenObject, closedBracketTokenObject};
     Tokenizer tokenizer = Tokenizer();
     std::vector<TokenObject> test_result = Tokenizer().tokenize(testQuery);
-     // For debugging purposes
-        std::cout << test_result.size();
-        for (TokenObject o : test_result) {
-            std::cout << o.getValue() << std::endl;
-        }
+
     REQUIRE(test_result == expectedResult);
 }
 
@@ -78,10 +66,6 @@ TEST_CASE("DEMO - Uses") {
                                              v_nameTokenObject, closedBracketTokenObject};
     Tokenizer tokenizer = Tokenizer();
     std::vector<TokenObject> test_result = Tokenizer().tokenize(testQuery);
-    // For debugging purposes
-    std::cout << test_result.size();
-    for (TokenObject o : test_result) {
-        std::cout << o.getValue() << std::endl;
-    }
+
     REQUIRE(test_result == expectedResult);
 }
