@@ -57,19 +57,19 @@ TEST_CASE("Uses Relationship Test") {
     Relationship procedureUsesRelationship = UsesRelationship(procedureEntity, varProcedureEntity);
 
     REQUIRE(assignUsesRelationship.getLeftEntity() == assignEntity);
-    REQUIRE(assignUsesRelationship.getRightEntity() == varAssignValue);
+    REQUIRE(assignUsesRelationship.getRightEntity() == varAssignEntity);
 
     REQUIRE(whileUsesRelationship.getLeftEntity() == whileEntity);
-    REQUIRE(whileUsesRelationship.getRightEntity() == varWhileValue);
+    REQUIRE(whileUsesRelationship.getRightEntity() == varWhileEntity);
 
     REQUIRE(ifUsesRelationship.getLeftEntity() == ifEntity);
-    REQUIRE(ifUsesRelationship.getRightEntity() == varIfValue);
+    REQUIRE(ifUsesRelationship.getRightEntity() == varIfEntity);
 
     REQUIRE(printUsesRelationship.getLeftEntity() == printEntity);
-    REQUIRE(printUsesRelationship.getRightEntity() == varPrintValue);
+    REQUIRE(printUsesRelationship.getRightEntity() == varPrintEntity);
 
     REQUIRE(procedureUsesRelationship.getLeftEntity() == procedureEntity);
-    REQUIRE(procedureUsesRelationship.getRightEntity() == varProcedureValue);
+    REQUIRE(procedureUsesRelationship.getRightEntity() == varProcedureEntity);
 }
 
 TEST_CASE("Modify Relationship Test") {
@@ -104,17 +104,17 @@ TEST_CASE("Modify Relationship Test") {
     Relationship procedureModifyRelationship = ModifyRelationship(procedureEntity, varProcedureEntity);
 
     REQUIRE(assignModifyRelationship.getLeftEntity() == assignEntity);
-    REQUIRE(assignModifyRelationship.getRightEntity() == varAssignValue);
+    REQUIRE(assignModifyRelationship.getRightEntity() == varAssignEntity);
 
     REQUIRE(whileModifyRelationship.getLeftEntity() == whileEntity);
-    REQUIRE(whileModifyRelationship.getRightEntity() == varWhileValue);
+    REQUIRE(whileModifyRelationship.getRightEntity() == varWhileEntity);
 
     REQUIRE(ifModifyRelationship.getLeftEntity() == ifEntity);
-    REQUIRE(ifModifyRelationship.getRightEntity() == varIfValue);
+    REQUIRE(ifModifyRelationship.getRightEntity() == varIfEntity);
 
     REQUIRE(readModifyRelationship.getLeftEntity() == readEntity);
-    REQUIRE(readModifyRelationship.getRightEntity() == varReadValue);
+    REQUIRE(readModifyRelationship.getRightEntity() == varReadEntity);
 
     REQUIRE(procedureModifyRelationship.getLeftEntity() == procedureEntity);
-    REQUIRE(procedureModifyRelationship.getRightEntity() == varProcedureValue);
+    REQUIRE(procedureModifyRelationship.getRightEntity() == varProcedureEntity);
 }
