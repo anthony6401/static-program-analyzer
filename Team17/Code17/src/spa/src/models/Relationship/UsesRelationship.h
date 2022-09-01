@@ -5,5 +5,5 @@
 class UsesRelationship : public Relationship {
 
 public:
-	UsesRelationship(std::string leftValue, std::string rightValue);
+	UsesRelationship(Entity leftEntity, Entity rightEntity);
 };

@@ -5,5 +5,5 @@
 class ModifyRelationship : public Relationship {
 
 public:
-	ModifyRelationship(std::string leftValue, std::string rightValue);
+	ModifyRelationship(Entity leftEntity, Entity rightEntity);
 };
