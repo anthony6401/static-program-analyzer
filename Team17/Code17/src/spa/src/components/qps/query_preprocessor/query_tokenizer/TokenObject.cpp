@@ -11,6 +11,6 @@ TokenType TokenObject::getTokenType() {
     return this->tokenType;
 }
 
-std::string TokenObject::getTokenValue() {
+std::string TokenObject::getValue() {
     return this->tokenValue;
 }

@@ -14,7 +14,11 @@ private:
 public:
     TokenObject(TokenType tokenType, std::string value);
     TokenType getTokenType();
-    std::string getTokenValue();
+    std::string getValue();
+    bool operator==(const TokenObject &other) const {
+        return tokenType == other.tokenType && tokenValue == other.tokenValue;
+    }
+
 };
 
 
