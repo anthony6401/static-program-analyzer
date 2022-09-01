@@ -1,0 +1,4 @@
+#ifndef SPA_EVALUATOR_H
+#define SPA_EVALUATOR_H
+
+#endif //SPA_EVALUATOR_H
