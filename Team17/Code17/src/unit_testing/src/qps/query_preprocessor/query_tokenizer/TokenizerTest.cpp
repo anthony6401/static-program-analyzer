@@ -11,8 +11,8 @@ TEST_CASE("Declarations - Single") {
     std::string testQuery = "variable v      ;   ";
     std::vector<TokenObject> expectedResult {variableTokenObject, v_nameTokenObject, semicolonTokenObject};
     Tokenizer tokenizer = Tokenizer();
-    std::vector<TokenObject> test_result = Tokenizer().tokenize(testQuery);
-    REQUIRE(test_result == expectedResult);
+    std::vector<TokenObject> testResult = Tokenizer().tokenize(testQuery);
+    REQUIRE(testResult == expectedResult);
 }
 
 TEST_CASE("Declarations - Multiple") {
@@ -29,9 +29,9 @@ TEST_CASE("Declarations - Multiple") {
         printTokenObject, pn_nameTokenObject, semicolonTokenObject,
         callTokenObject, cl_nameTokenObject, semicolonTokenObject};
     Tokenizer tokenizer = Tokenizer();
-    std::vector<TokenObject> test_result = Tokenizer().tokenize(testQuery);
+    std::vector<TokenObject> testResult = Tokenizer().tokenize(testQuery);
 
-    REQUIRE(test_result == expectedResult);
+    REQUIRE(testResult == expectedResult);
 }
 
 TEST_CASE("DEMO - Select v") {
@@ -39,9 +39,9 @@ TEST_CASE("DEMO - Select v") {
     std::vector<TokenObject> expectedResult {variableTokenObject, v_nameTokenObject, semicolonTokenObject,
     selectTokenObject, v_nameTokenObject};
     Tokenizer tokenizer = Tokenizer();
-    std::vector<TokenObject> test_result = Tokenizer().tokenize(testQuery);
+    std::vector<TokenObject> testResult = Tokenizer().tokenize(testQuery);
 
-    REQUIRE(test_result == expectedResult);
+    REQUIRE(testResult == expectedResult);
 }
 
 TEST_CASE("DEMO - Modifies") {
@@ -52,9 +52,9 @@ TEST_CASE("DEMO - Modifies") {
                                              modifiesTokenObject, openBracketTokenObject, six_intTokenObject, commaTokenObject,
                                              v_nameTokenObject, closedBracketTokenObject};
     Tokenizer tokenizer = Tokenizer();
-    std::vector<TokenObject> test_result = Tokenizer().tokenize(testQuery);
+    std::vector<TokenObject> testResult = Tokenizer().tokenize(testQuery);
 
-    REQUIRE(test_result == expectedResult);
+    REQUIRE(testResult == expectedResult);
 }
 
 TEST_CASE("DEMO - Uses") {
@@ -65,7 +65,7 @@ TEST_CASE("DEMO - Uses") {
                                              usesTokenObject, openBracketTokenObject, fourteen_intTokenObject, commaTokenObject,
                                              v_nameTokenObject, closedBracketTokenObject};
     Tokenizer tokenizer = Tokenizer();
-    std::vector<TokenObject> test_result = Tokenizer().tokenize(testQuery);
+    std::vector<TokenObject> testResult = Tokenizer().tokenize(testQuery);
 
-    REQUIRE(test_result == expectedResult);
+    REQUIRE(testResult == expectedResult);
 }
