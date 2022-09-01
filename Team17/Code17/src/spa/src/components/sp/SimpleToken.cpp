@@ -13,4 +13,3 @@ void SimpleToken::setChilds(std::vector<SimpleToken*> childs) {
 std::vector<SimpleToken*> SimpleToken::getChilds() {
     return this->childs;
 }
-

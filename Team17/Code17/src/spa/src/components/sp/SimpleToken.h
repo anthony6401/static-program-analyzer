@@ -19,7 +19,7 @@ enum class TokenType {
 
 class SimpleToken {
 public:
-    SimpleToken::SimpleToken(TokenType type, std::string value, int statementNumber);
+    SimpleToken(TokenType type, std::string value, int statementNumber);
     TokenType type;
     std::string value;
     int statementNumber;
