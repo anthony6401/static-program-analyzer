@@ -9,6 +9,19 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
     // Combine results of evaluation and store in query db
 }
 
-//std::vector<Clause> extractClausesToEvaluate(QueryObject) {
+//std::vector<Clause> extractClausesToEvaluate(QueryObject queryObject) {
+//    std::vector<Clause> clausesToEvaluate;
+//    std::vector<SuchThat> relationships = queryObject.getRelationships();
+//    std::vector<Pattern> patterns = queryObject.getPattern();
+//    if (!relationships.empty()) {
+//        // Create relationships
+//        for (SuchThat r : relationships) {
 //
+//        }
+//    }
+//
+//    if (!queryObject.getPattern().empty()) {
+//        // Create patterns
+//    }
+//    return clausesToEvaluate;
 //}

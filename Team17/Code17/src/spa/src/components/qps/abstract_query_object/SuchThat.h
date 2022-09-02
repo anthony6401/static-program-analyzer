@@ -7,13 +7,13 @@
 
 class SuchThat {
 private:
-    std::vector<TokenType> relationship;
+    TokenType relationship;
     TokenObject left;
     TokenObject right;
 
 public:
-    SuchThat(std::vector<TokenType> relationships, TokenObject left, TokenObject right);
-    std::vector<TokenType> getRelationshipType();
+    SuchThat(TokenType relationships, TokenObject left, TokenObject right);
+    TokenType getRelationshipType();
     TokenObject getLeft();
     TokenObject getRight();
 };
