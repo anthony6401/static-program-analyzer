@@ -6,10 +6,12 @@
 // Select v; Have to determine entity type of v
 class SelectClause : public Clause {
 private:
-   Declaration declarations;
+   std::string name; // Might not be needed
+   TokenType entityReturnType;
 
 public:
-    std::string evaluateClause() override;
+    std::vector<std::string> evaluateClause() override;
+    SelectClause(TokenType entityReturnType);
 };
 
 #endif //SPA_SELECTCLAUSE_H

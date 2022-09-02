@@ -12,8 +12,8 @@ private:
 
 public:
     Select();
-    static TokenType getReturnType();
-    static std::string getName();
+    // static TokenType getReturnType();
+    std::string getName();
 };
 
 #endif //SPA_SELECT_H
