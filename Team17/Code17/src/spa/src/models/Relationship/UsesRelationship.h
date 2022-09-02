@@ -5,5 +5,5 @@
 class UsesRelationship : public Relationship {
 
 public:
-	UsesRelationship(Entity leftEntity, Entity rightEntity);
+	UsesRelationship(Entity* leftEntity, Entity* rightEntity);
 };
