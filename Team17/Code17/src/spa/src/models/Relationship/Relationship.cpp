@@ -2,12 +2,12 @@
 #include <string>
 #include "../Entity/Entity.h"
 
-Relationship::Relationship(Entity leftEntity, Entity rightEntity) : leftEntity(leftEntity), rightEntity(rightEntity) {}
+Relationship::Relationship(Entity* leftEntity, Entity* rightEntity) : leftEntity(leftEntity), rightEntity(rightEntity) {}
 
-Entity Relationship::getLeftEntity() {
+Entity* Relationship::getLeftEntity() {
 	return this->leftEntity;
 }
 
-Entity Relationship::getRightEntity() {
+Entity* Relationship::getRightEntity() {
 	return this->rightEntity;
 }
