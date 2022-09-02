@@ -41,8 +41,8 @@ EntityManager::EntityManager() {
 bool EntityManager::storeEntity(Entity* entity) {
 
 	bool ret = false;
-	for (auto& st : entityStore) {
-		ret = ret || st->storeEntity(entity);
+	for (auto& et : entityStore) {
+		ret = ret || et->storeEntity(entity);
 	}
 	return ret;
 }
