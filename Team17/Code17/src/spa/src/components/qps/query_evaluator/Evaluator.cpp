@@ -16,7 +16,7 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
 //    if (!relationships.empty()) {
 //        // Create relationships
 //        for (SuchThat r : relationships) {
-//
+//            Clause clause
 //        }
 //    }
 //

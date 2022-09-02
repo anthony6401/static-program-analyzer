@@ -5,7 +5,7 @@ std::vector<SuchThat> QueryObject::getRelationships() {
     return relationships;
 }
 
-std::vector<Declaration> QueryObject::getDeclarations() {
+std::unordered_map<std::string, TokenType> QueryObject::getDeclarations() {
     return declarations;
 };
 std::vector<Pattern> QueryObject::getPattern() {

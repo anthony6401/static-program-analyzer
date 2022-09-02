@@ -12,7 +12,7 @@ private:
     TokenObject right;
 
 public:
-    SuchThat(TokenType relationships, TokenObject left, TokenObject right);
+    SuchThat(TokenType relationship, TokenObject left, TokenObject right);
     TokenType getRelationshipType();
     TokenObject getLeft();
     TokenObject getRight();

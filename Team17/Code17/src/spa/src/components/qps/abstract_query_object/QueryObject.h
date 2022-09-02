@@ -1,4 +1,5 @@
 #include <vector>
+#include <unordered_map>
 #include "SuchThat.h"
 #include "Declaration.h"
 #include "Pattern.h"
@@ -11,16 +12,16 @@
 class QueryObject {
 private:
     std::vector<SuchThat> relationships;
-    std::vector<Declaration> declarations;
+    std::unordered_map<std::string, TokenType> declarations;
     std::vector<Pattern> patterns;
     Select select;
 
 public:
     QueryObject();
     QueryObject(std::vector<SuchThat> relationships,
-                std::vector<Declaration> declarations, std::vector<Pattern> patterns, Select select);
+                std::unordered_map<std::string, TokenType> declarations, std::vector<Pattern> patterns, Select select);
     std::vector<SuchThat> getRelationships();
-    std::vector<Declaration> getDeclarations();
+    std::unordered_map<std::string, TokenType> getDeclarations();
     std::vector<Pattern> getPattern();
     Select getSelect();
 };
