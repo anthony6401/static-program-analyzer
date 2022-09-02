@@ -1,16 +1,23 @@
 #include "SuchThat.h"
+#include <vector>
+
+SuchThat::SuchThat(std::vector<TokenType> relationship, TokenObject left, TokenObject right) {
+    this->relationship = relationship;
+    this->left = left;
+    this->right = right;
+}
 
 // to be amended
-TokenType SuchThat::getRelationshipType() {
-    return TokenType::INTEGER;
+std::vector<TokenType> SuchThat::getRelationshipType() {
+    return relationship;
 }
 
 TokenObject SuchThat::getLeft() {
-    return TokenObject(TokenType::INTEGER, "");
+    return left;
 }
 
 TokenObject SuchThat::getRight() {
-    return TokenObject(TokenType::INTEGER, "");
+    return right;
 }
 
 

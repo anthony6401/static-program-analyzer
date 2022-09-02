@@ -1,20 +1,21 @@
 #ifndef SPA_SUCHTHAT_H
 #define SPA_SUCHTHAT_H
 
+#include <vector>
 #include "components/qps/query_preprocessor/query_tokenizer/TokenType.h"
 #include "components/qps/query_preprocessor/query_tokenizer/TokenObject.h"
 
 class SuchThat {
 private:
-    TokenType relationship;
+    std::vector<TokenType> relationship;
     TokenObject left;
     TokenObject right;
 
 public:
-    SuchThat();
-    static TokenType getRelationshipType();
-    static TokenObject getLeft();
-    static TokenObject getRight();
+    SuchThat(std::vector<TokenType> relationships, TokenObject left, TokenObject right);
+    std::vector<TokenType> getRelationshipType();
+    TokenObject getLeft();
+    TokenObject getRight();
 };
 
 #endif //SPA_SUCHTHAT_H
