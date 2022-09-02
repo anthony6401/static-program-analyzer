@@ -1,15 +1,15 @@
-#include "Relationship.h"
+#include "SuchThat.h"
 
 // to be amended
-TokenType Relationship::getRelationshipType() {
+TokenType SuchThat::getRelationshipType() {
     return TokenType::INTEGER;
 }
 
-TokenObject Relationship::getLeft() {
+TokenObject SuchThat::getLeft() {
     return TokenObject(TokenType::INTEGER, "");
 }
 
-TokenObject Relationship::getRight() {
+TokenObject SuchThat::getRight() {
     return TokenObject(TokenType::INTEGER, "");
 }
 

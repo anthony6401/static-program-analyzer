@@ -2,13 +2,13 @@
 #include "../Entity/Entity.h"
 #include <string>
 
-class Relationship {
+class SuchThat {
 private:
 	Entity leftEntity;
 	Entity rightEntity;
 
 public:
-	Relationship(Entity leftEntity, Entity rightEntity);
+	SuchThat(Entity leftEntity, Entity rightEntity);
 	Entity getLeftEntity();
 	Entity getRightEntity();
 };

@@ -13,48 +13,48 @@
 #include <catch.hpp>
 
 // To be amended
-TEST_CASE("Relationship Test") {
+TEST_CASE("SuchThat Test") {
     std::string leftValue = "leftValue";
     std::string rightValue = "rightValue";
 
     Entity leftEntity = Entity(leftValue);
     Entity rightEntity = Entity(rightValue);
    
-    Relationship relationship = Relationship(leftEntity, rightEntity);
+    SuchThat relationship = SuchThat(leftEntity, rightEntity);
     REQUIRE(relationship.getLeftEntity() == leftEntity);
     REQUIRE(relationship.getRightEntity() == rightEntity);
 }
 
-TEST_CASE("Uses Relationship Test") {
+TEST_CASE("Uses SuchThat Test") {
     std::string assignValue = "1";
     std::string varAssignValue = "variableA";
     Entity assignEntity = AssignEntity(assignValue);
     Entity varAssignEntity = VariableEntity(varAssignValue);
-    Relationship assignUsesRelationship = UsesRelationship(assignEntity, varAssignEntity);
+    SuchThat assignUsesRelationship = UsesRelationship(assignEntity, varAssignEntity);
 
     std::string whileValue = "2";
     std::string varWhileValue = "variableB";
     Entity whileEntity = WhileEntity(whileValue);
     Entity varWhileEntity = VariableEntity(varWhileValue);
-    Relationship whileUsesRelationship = UsesRelationship(whileEntity, varWhileEntity);
+    SuchThat whileUsesRelationship = UsesRelationship(whileEntity, varWhileEntity);
 
     std::string ifValue = "3";
     std::string varIfValue = "variableC";
     Entity ifEntity = IfEntity(ifValue);
     Entity varIfEntity = VariableEntity(varIfValue);
-    Relationship ifUsesRelationship = UsesRelationship(ifEntity, varIfEntity);
+    SuchThat ifUsesRelationship = UsesRelationship(ifEntity, varIfEntity);
 
     std::string printValue = "4";
     std::string varPrintValue = "variableD";
     Entity printEntity = PrintEntity(printValue);
     Entity varPrintEntity = VariableEntity(varPrintValue);
-    Relationship printUsesRelationship = UsesRelationship(printEntity, varPrintEntity);
+    SuchThat printUsesRelationship = UsesRelationship(printEntity, varPrintEntity);
 
     std::string procedureValue = "main";
     std::string varProcedureValue = "variableE";
     Entity procedureEntity = ProcedureEntity(procedureValue);
     Entity varProcedureEntity = VariableEntity(varProcedureValue);
-    Relationship procedureUsesRelationship = UsesRelationship(procedureEntity, varProcedureEntity);
+    SuchThat procedureUsesRelationship = UsesRelationship(procedureEntity, varProcedureEntity);
 
     REQUIRE(assignUsesRelationship.getLeftEntity() == assignEntity);
     REQUIRE(assignUsesRelationship.getRightEntity() == varAssignEntity);
@@ -72,36 +72,36 @@ TEST_CASE("Uses Relationship Test") {
     REQUIRE(procedureUsesRelationship.getRightEntity() == varProcedureEntity);
 }
 
-TEST_CASE("Modify Relationship Test") {
+TEST_CASE("Modify SuchThat Test") {
     std::string assignValue = "1";
     std::string varAssignValue = "variableA";
     Entity assignEntity = AssignEntity(assignValue);
     Entity varAssignEntity = VariableEntity(varAssignValue);
-    Relationship assignModifyRelationship = ModifyRelationship(assignEntity, varAssignEntity);
+    SuchThat assignModifyRelationship = ModifyRelationship(assignEntity, varAssignEntity);
 
     std::string whileValue = "2";
     std::string varWhileValue = "variableB";
     Entity whileEntity = WhileEntity(whileValue);
     Entity varWhileEntity = VariableEntity(varWhileValue);
-    Relationship whileModifyRelationship = ModifyRelationship(whileEntity, varWhileEntity);
+    SuchThat whileModifyRelationship = ModifyRelationship(whileEntity, varWhileEntity);
 
     std::string ifValue = "3";
     std::string varIfValue = "variableC";
     Entity ifEntity = IfEntity(ifValue);
     Entity varIfEntity = VariableEntity(varIfValue);
-    Relationship ifModifyRelationship = ModifyRelationship(ifEntity, varIfEntity);
+    SuchThat ifModifyRelationship = ModifyRelationship(ifEntity, varIfEntity);
 
     std::string readValue = "4";
     std::string varReadValue = "variableD";
     Entity readEntity = ReadEntity(readValue);
     Entity varReadEntity = VariableEntity(varReadValue);
-    Relationship readModifyRelationship = ModifyRelationship(readEntity, varReadEntity);
+    SuchThat readModifyRelationship = ModifyRelationship(readEntity, varReadEntity);
 
     std::string procedureValue = "main";
     std::string varProcedureValue = "variableE";
     Entity procedureEntity = ProcedureEntity(procedureValue);
     Entity varProcedureEntity = VariableEntity(varProcedureValue);
-    Relationship procedureModifyRelationship = ModifyRelationship(procedureEntity, varProcedureEntity);
+    SuchThat procedureModifyRelationship = ModifyRelationship(procedureEntity, varProcedureEntity);
 
     REQUIRE(assignModifyRelationship.getLeftEntity() == assignEntity);
     REQUIRE(assignModifyRelationship.getRightEntity() == varAssignEntity);

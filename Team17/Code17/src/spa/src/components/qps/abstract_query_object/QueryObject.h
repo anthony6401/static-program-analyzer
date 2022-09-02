@@ -1,5 +1,5 @@
 #include <vector>
-#include "Relationship.h"
+#include "SuchThat.h"
 #include "Declaration.h"
 #include "Pattern.h"
 #include "Select.h"
@@ -10,7 +10,7 @@
 // At most one such that clause and at most one pattern clause in sequence
 class QueryObject {
 private:
-    Relationship relationship;
+    SuchThat relationship;
     std::vector<Declaration> declarations;
     Pattern pattern;
     Select select;

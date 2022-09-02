@@ -2,12 +2,12 @@
 #include <string>
 #include "../Entity/Entity.h"
 
-Relationship::Relationship(Entity leftEntity, Entity rightEntity) : leftEntity(leftEntity), rightEntity(rightEntity) {}
+SuchThat::SuchThat(Entity leftEntity, Entity rightEntity) : leftEntity(leftEntity), rightEntity(rightEntity) {}
 
-Entity Relationship::getLeftEntity() {
+Entity SuchThat::getLeftEntity() {
 	return this->leftEntity;
 }
 
-Entity Relationship::getRightEntity() {
+Entity SuchThat::getRightEntity() {
 	return this->rightEntity;
 }
