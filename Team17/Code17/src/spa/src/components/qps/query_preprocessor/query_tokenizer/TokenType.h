@@ -27,11 +27,6 @@ namespace qps {
         CLOSED_BRACKET,
         QUOTATION_MARK,
         SEMI_COLON,
-        PLUS,
-        MINUS,
-        DIVIDE,
-        MULTIPLY,
-        PERCENTAGE,
         // Design entities
         STMT,
         READ,
