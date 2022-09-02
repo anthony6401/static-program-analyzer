@@ -1,4 +1,4 @@
-#include "components/sp/simple_parser/SimpleParser.h"
+#include "components/sp/parser/SimpleParser.h"
 
 #include <catch.hpp>
 #include <iostream>

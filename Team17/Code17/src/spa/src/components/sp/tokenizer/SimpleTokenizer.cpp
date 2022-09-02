@@ -1,5 +1,5 @@
 #include "SimpleTokenizer.h"
-#include "../simple_parser/SimpleParser.h"
+#include "../parser/SimpleParser.h"
 #include "../utils/SpUtils.h"
 
 void SimpleTokenizer::tokenizeCode(std::string code) {
