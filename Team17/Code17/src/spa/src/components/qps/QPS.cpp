@@ -5,17 +5,18 @@
 #include <components/qps/query_preprocessor/query_tokenizer/TokenObject.h>
 #include <components/qps/query_evaluator/Evaluator.h>
 #include "QPS.h"
+#include "components/qps/abstract_query_object/QueryObject.h"
 
 
-void QPS::tokenizeAndParseQuery(std::string query) {
+QueryObject QPS::tokenizeAndParseQuery(std::string query) {
     Tokenizer tokenizer = *new Tokenizer();
     std::vector<TokenObject> tokenList = tokenizer.tokenize(query);
     // Parse query and check semantics
-    // returns QueryObject object
+    return QueryObject();
 }
 
 void QPS::obtainQueryResult(std::string query, std::list<std::string> &results) {
-    tokenizeAndParseQuery(query);
-    Evaluator::evaluateQuery(results);
+    QueryObject abstractQueryObject = tokenizeAndParseQuery(query);
+    Evaluator::evaluateQuery(abstractQueryObject, results);
 }
 

@@ -10,6 +10,7 @@ private:
     std::string name;
 
 public:
+    Declaration();
     TokenType getEntityType();
     std::string getName();
 };

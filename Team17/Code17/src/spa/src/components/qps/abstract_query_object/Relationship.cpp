@@ -13,3 +13,5 @@ TokenObject Relationship::getRight() {
     return TokenObject(TokenType::INTEGER, "");
 }
 
+
+

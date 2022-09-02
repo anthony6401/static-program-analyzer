@@ -14,6 +14,9 @@ private:
     std::vector<Declaration> declarations;
     Pattern pattern;
     Select select;
+
+public:
+    QueryObject();
 };
 
 #endif //SPA_QUERY_H

@@ -11,6 +11,7 @@ private:
     TokenObject right;
 
 public:
+    Relationship();
     static TokenType getRelationshipType();
     static TokenObject getLeft();
     static TokenObject getRight();

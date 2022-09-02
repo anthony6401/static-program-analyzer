@@ -11,6 +11,7 @@ private:
     std::string name;
 
 public:
+    Select();
     static TokenType getReturnType();
     static std::string getName();
 };

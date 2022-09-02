@@ -7,9 +7,10 @@
 #include <components/qps/query_preprocessor/query_tokenizer/Tokenizer.h>
 #include <components/qps/query_preprocessor/query_tokenizer/TokenObject.h>
 #include <components/qps/query_evaluator/Evaluator.h>
+#include "components/qps/abstract_query_object/QueryObject.h"
 
 class QPS {
-    void tokenizeAndParseQuery(std::string query);
+    QueryObject tokenizeAndParseQuery(std::string query);
     void obtainQueryResult(std::string query, std::list<std::string> &results);
 };
 

@@ -3,11 +3,11 @@
 
 #include <list>
 #include <vector>
+#include "components/qps/abstract_query_object/QueryObject.h"
 
 class Evaluator {
 public:
-    // And also takes in Parsed QueryObject
-    static void evaluateQuery(std::list<std::string> &results);
+    static void evaluateQuery(QueryObject queryObject, std::list<std::string> &results);
 };
 
 #endif //SPA_EVALUATOR_H

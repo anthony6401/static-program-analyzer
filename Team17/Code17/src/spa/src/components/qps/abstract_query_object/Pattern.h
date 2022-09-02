@@ -12,6 +12,7 @@ private:
     TokenObject right;
 
 public:
+    Pattern();
     static std::string getName();
     static TokenObject getLeft();
     static TokenObject getRight();
