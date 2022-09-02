@@ -2,9 +2,9 @@
 #include "models/Entity/Entity.h"
 #include "EntityStorage.h"
 
-class AssignEntityStorage : public EntityStorage {
+class PrintEntityStorage : public EntityStorage {
 
 public:
-	AssignEntityStorage();
+	PrintEntityStorage();
 	bool storeEntity(Entity* entity);
 };

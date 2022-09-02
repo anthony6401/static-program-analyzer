@@ -2,9 +2,9 @@
 #include "models/Entity/Entity.h"
 #include "EntityStorage.h"
 
-class AssignEntityStorage : public EntityStorage {
+class WhileEntityStorage : public EntityStorage {
 
 public:
-	AssignEntityStorage();
+	WhileEntityStorage();
 	bool storeEntity(Entity* entity);
 };

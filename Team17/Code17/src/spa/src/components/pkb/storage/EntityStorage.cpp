@@ -3,4 +3,3 @@
 #include <unordered_set>
 
 EntityStorage::EntityStorage() : set(new std::unordered_set<Entity*>()) {}
-

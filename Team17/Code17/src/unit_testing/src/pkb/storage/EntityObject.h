@@ -17,6 +17,7 @@ std::string value_one = "value_one";
 std::string value_two = "value_two";
 std::string value_three = "value_three";
 
+Entity* entity = new Entity(value_one);
 Entity* assignEntity = new AssignEntity(value_one);
 Entity* callEntity = new CallEntity(value_one);
 Entity* constantEntity = new ConstantEntity(value_one);
