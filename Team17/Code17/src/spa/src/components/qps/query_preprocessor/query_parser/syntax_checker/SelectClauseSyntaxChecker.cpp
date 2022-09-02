@@ -23,6 +23,9 @@ bool SelectClauseSyntaxChecker::isSyntacticallyCorrect(std::vector<TokenObject> 
 				if (tokenType != syntax) {
 					return false;
 				}
+
+				this->selectSyntax.pop();
+				continue;
 			}
 
 			// SYNONYM token
@@ -44,6 +47,8 @@ bool SelectClauseSyntaxChecker::isSyntacticallyCorrect(std::vector<TokenObject> 
 			this->selectSyntax.pop();
 			continue;
 		}
+
+		return false;
 	}
 
 	if (!this->selectSyntax.empty()) {

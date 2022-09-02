@@ -193,7 +193,7 @@ TEST_CASE("Missing select") {
     REQUIRE(actualResult == false);
 };
 
-TEST_CASE("Missing synonym") {
+TEST_CASE("Missing return value") {
     SelectClauseSyntaxChecker checker = SelectClauseSyntaxChecker();
     std::vector<TokenObject> invalidSelectTokens{
         TokenObject(TokenType::SELECT, "Select")

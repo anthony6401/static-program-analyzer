@@ -74,6 +74,8 @@ bool DeclarationClauseSyntaxChecker::isSyntacticallyCorrect(std::vector<TokenObj
 			this->declarationSyntax.pop();
 			continue;
 		}
+
+		return false;
 	}
 
 	if (!this->declarationSyntax.empty()) {
