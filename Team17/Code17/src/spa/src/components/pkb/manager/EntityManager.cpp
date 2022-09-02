@@ -37,6 +37,10 @@ EntityManager::EntityManager() {
 	entityStore.push_back(whileStore);
 }
 
+std::vector<EntityStorage*> EntityManager::getEntityStorage() {
+	return entityStore;
+}
+
 //Returns true, if it manage to stored, else false
 bool EntityManager::storeEntity(Entity* entity) {
 
