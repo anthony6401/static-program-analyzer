@@ -1,8 +1,6 @@
-//
-// Created by ANDREA TAN on 1/9/22.
-//
-
 #ifndef SPA_CLAUSECREATOR_H
 #define SPA_CLAUSECREATOR_H
+
+// Factory Class
 
 #endif //SPA_CLAUSECREATOR_H
