@@ -16,7 +16,6 @@
 TEST_CASE("Relationship Test") {
     std::string leftValue = "leftValue";
     std::string rightValue = "rightValue";
-
     Entity* leftEntity = new Entity(leftValue);
     Entity* rightEntity = new Entity(rightValue);
    
