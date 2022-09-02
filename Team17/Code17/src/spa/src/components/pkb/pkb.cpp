@@ -1,5 +1,5 @@
 #include "../../models/Relationship/Relationship.h"
-#include "EntityManager.h"
+#include "./manager/EntityManager.h"
 #include "pkb.h"
 
 PKB::PKB() {};

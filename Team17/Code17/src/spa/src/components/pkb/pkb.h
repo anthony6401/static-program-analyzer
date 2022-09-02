@@ -1,6 +1,8 @@
 #pragma once
+
 #include "../../models/Relationship/Relationship.h"
-#include "EntityManager.h"
+
+#include "./manager/EntityManager.h"
 
 class PKB {
 public:
