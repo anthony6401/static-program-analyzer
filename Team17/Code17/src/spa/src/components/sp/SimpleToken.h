@@ -5,6 +5,7 @@
 
 enum class TokenType {
     TPROCEDURE,
+    TELSE,
     TSTMT,
     TREAD,
     TPRINT,
@@ -21,10 +22,10 @@ enum class TokenType {
 
 class SimpleToken {
 public:
-    SimpleToken(TokenType type, std::string value, int statementNumber);
+    SimpleToken(TokenType type, std::vector<std::string> value, int statementNumber);
     TokenType type;
-    std::string value;
     int statementNumber;
+    std::vector<std::string> value;
     void setChildren(std::vector<SimpleToken*> tokens);
     std::vector<SimpleToken*> getChildren();
 
