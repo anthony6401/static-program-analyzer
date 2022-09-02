@@ -8,3 +8,7 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
     // If any returns no results or false, terminate evaluation and return none as a result
     // Combine results of evaluation and store in query db
 }
+
+//std::vector<Clause> extractClausesToEvaluate(QueryObject) {
+//
+//}
