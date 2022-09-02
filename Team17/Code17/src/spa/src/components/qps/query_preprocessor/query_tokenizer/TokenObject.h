@@ -12,6 +12,7 @@ private:
     std::string tokenized_value;
 
 public:
+    TokenObject();
     TokenObject(TokenType tokenType, std::string value);
     bool operator==(const TokenObject &other) const {
         return tokenized_type == other.tokenized_type && tokenized_value == other.tokenized_value;
