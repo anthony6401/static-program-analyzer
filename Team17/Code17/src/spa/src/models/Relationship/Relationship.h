@@ -4,11 +4,11 @@
 
 class Relationship {
 private:
-	Entity leftEntity;
-	Entity rightEntity;
+	Entity* leftEntity;
+	Entity* rightEntity;
 
 public:
-	Relationship(Entity leftEntity, Entity rightEntity);
-	Entity getLeftEntity();
-	Entity getRightEntity();
+	Relationship(Entity* leftEntity, Entity* rightEntity);
+	Entity* getLeftEntity();
+	Entity* getRightEntity();
 };
