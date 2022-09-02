@@ -1,5 +1,10 @@
 #include"Parser.h"
-#include<stdexcept>
+#include "components/qps/abstract_query_object/QueryObject.h"
+#include "components/qps/abstract_query_object/Declaration.h"
+#include "components/qps/abstract_query_object/Select.h"
+#include "components/qps/abstract_query_object/SuchThat.h"
+#include "components/qps/abstract_query_object/Pattern.h"
+#include<unordered_map>
 
 using namespace qps;
 
@@ -7,7 +12,7 @@ Parser::Parser(std::vector<TokenObject> tokenizedQuery) {
 	this->tokenizedQuery = tokenizedQuery;
 };
 
-std::string Parser::parse() {
+QueryObject Parser::parse() {
 	std::vector<std::vector<TokenObject>> groupedQueryTokens = groupQueryIntoClause();
 	std::vector<TokenObject> declarationTokenObjects = groupedQueryTokens[0];
 	std::vector<TokenObject> selectTokenObjects = groupedQueryTokens[1];
@@ -25,10 +30,16 @@ std::string Parser::parse() {
 	// Syntax checking for such that clause and pattern clause to be done next sprint
 
 	if (!hasNoSyntaxError) {
-		return "SyntaxError";
+		return QueryObject();
 	}
 
-	return "";
+	std::unordered_map<std::string, TokenType> mappedSynonyms = mapSynonymToDesignEntity(declarationTokenObjects);
+	std::vector<Declaration> declarations = parseTokensIntoDeclarationObjects(mappedSynonyms);
+	Select select = parseTokensIntoSelectObject(selectTokenObjects, mappedSynonyms);
+	std::vector<SuchThat> relationships = parseTokensIntoSuchThatObjects();
+	std::vector<Pattern> pattern = parseTokensIntoPatternObjects();
+
+	return QueryObject(declarations, select, relationships, pattern, mappedSynonyms);
 };
 
 std::vector<std::vector<TokenObject>> Parser::groupQueryIntoClause() {
@@ -38,7 +49,7 @@ std::vector<std::vector<TokenObject>> Parser::groupQueryIntoClause() {
 	std::vector<TokenObject> patternTokenObjects;
 
 	// Get vector of token types of objects
-	std::vector<TokenType> tokenTypes = getTokenTypes();
+	std::vector<TokenType> tokenTypes = getTokenTypes(this->tokenizedQuery);
 	
 	// Find where each clause starts and ends
 	auto beginIndex = this->tokenizedQuery.begin();
@@ -104,10 +115,10 @@ bool Parser::isSyntacticallyCorrect(std::vector<TokenObject> tokenizedClause, Sy
 	return checker->isSyntacticallyCorrect(tokenizedClause);
 }
 
-std::vector<TokenType> Parser::getTokenTypes() {
+std::vector<TokenType> Parser::getTokenTypes(std::vector<TokenObject> tokenObjects) {
 	std::vector<TokenType> tokenTypes;
 	
-	for (TokenObject token: this->tokenizedQuery) {
+	for (TokenObject token: tokenObjects) {
 		tokenTypes.push_back(token.getTokenType());
 	}
 
@@ -117,3 +128,78 @@ std::vector<TokenType> Parser::getTokenTypes() {
 std::vector<TokenObject> Parser::getTokenizedQuery() {
 	return this->tokenizedQuery;
 }
+
+std::unordered_map<std::string, TokenType> mapSynonymToDesignEntity(std::vector<TokenObject> declarations) {
+	std::unordered_map<std::string, TokenType> mappedSynonyms;
+	TokenType currDesignEntity;
+
+	for (TokenObject token : declarations) {
+		TokenType currTokenType = token.getTokenType();
+
+		if (currTokenType == TokenType::COMMA || currTokenType == TokenType::SEMI_COLON) {
+			continue;
+		}
+
+		// Design entity
+		if (currTokenType != TokenType::NAME) {
+			currDesignEntity = currTokenType;
+			continue;
+		}
+
+		mappedSynonyms.insert({token.getValue(), currDesignEntity});
+
+	}
+
+	return mappedSynonyms;
+}
+
+
+std::vector<Declaration> Parser::parseTokensIntoDeclarationObjects(std::unordered_map<std::string, TokenType> mappedSynonyms) {
+	std::vector<Declaration> declarations;
+	
+	// Since declared synonyms are done in declaration clause, mapped synonyms are all found within declaration clause
+	// Hence, we create Declaration objects from the mapped synonyms
+	for (std::pair<std::string, TokenType> synonym : mappedSynonyms) {
+		std::string synonymValue = synonym.first;
+		TokenType designEntity = synonym.second;
+
+		Declaration declaration = Declaration(designEntity, synonymValue);
+		declarations.push_back(declaration);
+	}
+
+	return declarations;
+};
+
+Select Parser::parseTokensIntoSelectObject(std::vector<TokenObject> selectTokens, std::unordered_map<std::string, TokenType> mappedSynonyms) {
+	for (TokenObject token : selectTokens) {
+		if (token.getTokenType() == TokenType::SELECT) {
+			continue;
+		}
+
+		std::string returnValue = token.getValue();
+
+		// Return empty Select object if return value is not declared for now
+		if (mappedSynonyms.find(returnValue) == mappedSynonyms.end()) {
+			return Select();
+		}
+
+		TokenType returnType = mappedSynonyms.at(returnValue);
+
+		return Select(returnType, returnValue);
+
+	}
+
+	return Select();
+};
+
+// To be amended
+std::vector<SuchThat> Parser::parseTokensIntoSuchThatObjects() {
+	std::vector<SuchThat> relationships;
+	return relationships;
+};
+
+// To be amended
+std::vector<Pattern> Parser::parseTokensIntoPatternObjects() {
+	std::vector<Pattern> patterns;
+	return patterns;
+};

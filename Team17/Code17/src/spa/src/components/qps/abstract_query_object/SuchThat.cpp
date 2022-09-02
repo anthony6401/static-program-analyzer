@@ -9,15 +9,15 @@ SuchThat::SuchThat(std::vector<TokenType> relationship, TokenObject left, TokenO
 
 // to be amended
 std::vector<TokenType> SuchThat::getRelationshipType() {
-    return relationship;
+    return this->relationship;
 }
 
 TokenObject SuchThat::getLeft() {
-    return left;
+    return this->left;
 }
 
 TokenObject SuchThat::getRight() {
-    return right;
+    return this->right;
 }
 
 

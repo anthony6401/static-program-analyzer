@@ -1,9 +1,15 @@
 #include "components/qps/query_preprocessor/query_parser/Parser.h"
 #include "components/qps/query_preprocessor/query_tokenizer/TokenObject.h"
 #include "components/qps/query_preprocessor/query_tokenizer/TokenType.h"
+#include "components/qps/abstract_query_object/QueryObject.h"
+#include "components/qps/abstract_query_object/Declaration.h"
+#include "components/qps/abstract_query_object/Select.h"
+#include "components/qps/abstract_query_object/SuchThat.h"
+#include "components/qps/abstract_query_object/Pattern.h"
 
 #include <catch.hpp>
 #include <components/qps/query_preprocessor/query_parser/Parser.cpp>
+#include <unordered_map>
 
 // Tests for Parser
 TEST_CASE("Initialize Parser") {
@@ -28,10 +34,17 @@ TEST_CASE("Parse queries") {
         TokenObject(TokenType::NAME, std::string("v"))
     };
 
+    std::vector<Declaration> expectedDeclarations{ Declaration(TokenType::VARIABLE, "v")};
+    Select expectedSelect = Select(TokenType::VARIABLE, "v");
+    std::vector<SuchThat> expectedSuchThat;
+    std::vector<Pattern> expectedPattern;
+    std::unordered_map<std::string, TokenType> expectedMappedSynonyms{ {"v", TokenType::VARIABLE} };
+
+    QueryObject expectedResult = QueryObject(expectedDeclarations, expectedSelect, expectedSuchThat, expectedPattern, expectedMappedSynonyms);
+
     Parser parser = Parser(testTokenObject);
-    std::string expectedString = "";
-    std::string actualString = parser.parse();
-    REQUIRE(expectedString == actualString);
+    QueryObject actualResult = parser.parse();
+    REQUIRE(expectedResult == actualResult);
 };
 
 TEST_CASE("No declaration") {
@@ -40,10 +53,17 @@ TEST_CASE("No declaration") {
         TokenObject(TokenType::NAME, std::string("v"))
     };
 
+    std::vector<Declaration> expectedDeclarations;
+    Select expectedSelect = Select();
+    std::vector<SuchThat> expectedSuchThat;
+    std::vector<Pattern> expectedPattern;
+    std::unordered_map<std::string, TokenType> expectedMappedSynonyms;
+
+    QueryObject expectedResult = QueryObject(expectedDeclarations, expectedSelect, expectedSuchThat, expectedPattern, expectedMappedSynonyms);
+
     Parser parser = Parser(testTokenObject);
-    std::string expectedString = "";
-    std::string actualString = parser.parse();
-    REQUIRE(expectedString == actualString);
+    QueryObject actualResult = parser.parse();
+    REQUIRE(expectedResult == actualResult);
 };
 
 TEST_CASE("SyntaxError - No return value") {
@@ -54,10 +74,11 @@ TEST_CASE("SyntaxError - No return value") {
         TokenObject(TokenType::SELECT, std::string("Select"))
     };
 
+    QueryObject expectedResult = QueryObject();
+
     Parser parser = Parser(testTokenObject);
-    std::string expectedString = "SyntaxError";
-    std::string actualString = parser.parse();
-    REQUIRE(expectedString == actualString);
+    QueryObject actualResult = parser.parse();
+    REQUIRE(expectedResult == actualResult);
 };
 
 TEST_CASE("SyntaxError - Select clause ends in semi-colon") {
@@ -70,10 +91,11 @@ TEST_CASE("SyntaxError - Select clause ends in semi-colon") {
         TokenObject(TokenType::SEMI_COLON, std::string(";"))
     };
 
+    QueryObject expectedResult = QueryObject();
+
     Parser parser = Parser(testTokenObject);
-    std::string expectedString = "SyntaxError";
-    std::string actualString = parser.parse();
-    REQUIRE(expectedString == actualString);
+    QueryObject actualResult = parser.parse();
+    REQUIRE(expectedResult == actualResult);
 };
 
 TEST_CASE("SyntaxError - No Select token") {
@@ -84,10 +106,11 @@ TEST_CASE("SyntaxError - No Select token") {
         TokenObject(TokenType::NAME, std::string("v")),
     };
 
+    QueryObject expectedResult = QueryObject();
+
     Parser parser = Parser(testTokenObject);
-    std::string expectedString = "SyntaxError";
-    std::string actualString = parser.parse();
-    REQUIRE(expectedString == actualString);
+    QueryObject actualResult = parser.parse();
+    REQUIRE(expectedResult == actualResult);
 };
 
 TEST_CASE("SyntaxError - SyntaxError in declarations") {
@@ -98,8 +121,9 @@ TEST_CASE("SyntaxError - SyntaxError in declarations") {
         TokenObject(TokenType::NAME, std::string("v"))
     };
 
+    QueryObject expectedResult = QueryObject();
+
     Parser parser = Parser(testTokenObject);
-    std::string expectedString = "SyntaxError";
-    std::string actualString = parser.parse();
-    REQUIRE(expectedString == actualString);
+    QueryObject actualResult = parser.parse();
+    REQUIRE(expectedResult == actualResult);
 };
