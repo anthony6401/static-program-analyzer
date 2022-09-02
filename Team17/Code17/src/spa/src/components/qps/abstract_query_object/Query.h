@@ -9,7 +9,6 @@
 class Query {
 private:
     Relationship relationship;
-
     std::vector<Declaration> declarations;
 };
 
