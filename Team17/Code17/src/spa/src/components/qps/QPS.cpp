@@ -11,7 +11,7 @@ void QPS::tokenizeAndParseQuery(std::string query) {
     Tokenizer tokenizer = *new Tokenizer();
     std::vector<TokenObject> tokenList = tokenizer.tokenize(query);
     // Parse query and check semantics
-    // returns Query object
+    // returns QueryObject object
 }
 
 void QPS::obtainQueryResult(std::string query, std::list<std::string> &results) {

@@ -6,7 +6,7 @@
 
 class Evaluator {
 public:
-    // And also takes in Parsed Query
+    // And also takes in Parsed QueryObject
     static void evaluateQuery(std::list<std::string> &results);
 };
 
