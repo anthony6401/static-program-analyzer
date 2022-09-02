@@ -10,9 +10,9 @@
 // At most one such that clause and at most one pattern clause in sequence
 class QueryObject {
 private:
-    SuchThat relationship;
+    std::vector<SuchThat> relationship;
     std::vector<Declaration> declarations;
-    Pattern pattern;
+    std::vector<Pattern> pattern;
     Select select;
 
 public:
