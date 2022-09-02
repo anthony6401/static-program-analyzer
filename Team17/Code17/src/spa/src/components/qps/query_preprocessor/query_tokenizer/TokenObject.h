@@ -12,6 +12,7 @@ private:
     std::string tokenValue;
 
 public:
+    TokenObject();
     TokenObject(TokenType tokenType, std::string value);
     TokenType getTokenType();
     std::string getValue();

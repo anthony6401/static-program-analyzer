@@ -21,17 +21,12 @@ namespace qps {
         SUBEXPRESSION, // eg. _"x+1"_
         EXPRESSION, // eg. "x+1", "x/y"
         // Symbols
-        UNDERSCORE,
+        WILDCARD,
         COMMA,
         OPEN_BRACKET,
         CLOSED_BRACKET,
         QUOTATION_MARK,
         SEMI_COLON,
-        PLUS,
-        MINUS,
-        DIVIDE,
-        MULTIPLY,
-        PERCENTAGE,
         // Design entities
         STMT,
         READ,

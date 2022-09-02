@@ -29,7 +29,7 @@ Tokenizer::Tokenizer() {
             {"Follows", TokenType::FOLLOWS},
             {"Follows*", TokenType::FOLLOWS_T},
             {"pattern", TokenType::PATTERN},
-            {"_", TokenType::UNDERSCORE},
+            {"_", TokenType::WILDCARD},
             {",", TokenType::COMMA},
             {"(", TokenType::OPEN_BRACKET},
             {")", TokenType::CLOSED_BRACKET},
