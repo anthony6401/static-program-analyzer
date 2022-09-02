@@ -2,4 +2,4 @@
 #include <string>
 #include "../Entity/Entity.h"
 
-ModifyRelationship::ModifyRelationship(Entity leftEntity, Entity rightEntity) : SuchThat(leftEntity, rightEntity) {}
+ModifyRelationship::ModifyRelationship(Entity leftEntity, Entity rightEntity) : Relationship(leftEntity, rightEntity) {}
