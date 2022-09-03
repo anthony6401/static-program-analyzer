@@ -16,7 +16,6 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
         clausesToEvaluate.push_back(selectClauseToEvaluate);
     }
     // Extract return type of query via Select class and map
-    // Extract synonyms to be returned as a result
 
     // Evaluate clauses individually, currently only for select clause
     std::unordered_set<std::string> selectClauseResult = Evaluator::evaluateSelectClause(clausesToEvaluate);
