@@ -9,7 +9,6 @@ class Extractor {
 public:
 	void extractRead(SimpleToken simpleToken, vector<string> tokens);
 	void extractPrint(SimpleToken simpleToken, vector<string> tokens);
-
 	void extractProcedure();
 	void extractStatement();
 	void extractCall();
