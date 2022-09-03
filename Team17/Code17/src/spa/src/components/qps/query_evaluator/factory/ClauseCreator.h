@@ -10,7 +10,7 @@
 
 class ClauseCreator {
 public:
-    Clause createClause(SuchThat relationship);
+    Clause createClause(SuchThat relationship); //return type
     Clause createClause(Pattern pattern);
     Clause createClause(TokenType returnType);
 };

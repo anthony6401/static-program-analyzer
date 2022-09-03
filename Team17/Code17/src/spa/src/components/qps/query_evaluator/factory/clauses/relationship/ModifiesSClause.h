@@ -12,7 +12,7 @@ private:
     TokenObject right;
 
 public:
-    std::vector<std::string> evaluateClause() override;
+    std::string evaluateClause() override;
 };
 
 #endif //SPA_MODIFIESSCLAUSE_H

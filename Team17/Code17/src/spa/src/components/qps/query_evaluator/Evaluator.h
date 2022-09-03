@@ -10,7 +10,6 @@ class Evaluator {
 public:
     static void evaluateQuery(QueryObject queryObject, std::list<std::string> &results);
     std::vector<Clause> extractClausesToEvaluate(QueryObject);
-    std::pair<std::string, std::string> synonymResults; // Require enums of entity types
 };
 
 #endif //SPA_EVALUATOR_H
