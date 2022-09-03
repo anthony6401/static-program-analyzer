@@ -15,6 +15,8 @@ void SimpleTokenizer::tokenizeCode(std::string code) {
     for (std::string line : codeLines) {
         line = std::regex_replace(line, tokenDelimiters, " $& ");
         std::vector<std::string> lineTokens = SpUtils::split(line, whiteSpace);
+        SimpleToken lineToken = SimpleParser::parseLine(lineTokens, line);
+        (lineToken.parseFunction)(lineToken, lineTokens);
     }
-    //SimpleToken* lineToken = SimpleParser::parseLine();
+
 }
