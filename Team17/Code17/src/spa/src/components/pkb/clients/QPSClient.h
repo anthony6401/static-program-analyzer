@@ -4,7 +4,7 @@
 #include "../pkb.h"
 
 #include <string>
-#include  <vector>
+#include <unordered_set>
 
 class QPSClient {
 
@@ -13,7 +13,7 @@ public:
 	QPSClient(PKB *knowledge);
 
 	//For getting entity
-	std::vector<std::string> getAllEntity(qps::TokenType returnType);
+	std::unordered_set<std::string> getAllEntity(qps::TokenType returnType);
 
 	//For Uses Relationship
 	/*bool getUses(int lineNumber, std::string var);

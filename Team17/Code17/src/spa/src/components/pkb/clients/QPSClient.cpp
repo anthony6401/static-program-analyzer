@@ -5,13 +5,13 @@
 #include "../pkb.h"
 
 #include <string>
-#include <vector>
+#include <unordered_set>
 
 QPSClient::QPSClient(PKB* knowledge) {
 	pkb = knowledge;
 }
 
-std::vector<std::string> QPSClient::getAllEntity(qps::TokenType returnType) {
+std::unordered_set<std::string> QPSClient::getAllEntity(qps::TokenType returnType) {
 	return pkb->getAllEntity(returnType);
 }
 
