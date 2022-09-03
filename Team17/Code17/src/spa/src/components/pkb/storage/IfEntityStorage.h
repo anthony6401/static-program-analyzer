@@ -7,4 +7,5 @@ class IfEntityStorage : public EntityStorage {
 public:
 	IfEntityStorage();
 	bool storeEntity(Entity* entity);
+	std::unordered_set<Entity*>* getAllEntity(qps::TokenType returnType);
 };

@@ -7,4 +7,5 @@ class StatementEntityStorage : public EntityStorage {
 public:
 	StatementEntityStorage();
 	bool storeEntity(Entity* entity);
+	std::unordered_set<Entity*>* getAllEntity(qps::TokenType returnType);
 };
