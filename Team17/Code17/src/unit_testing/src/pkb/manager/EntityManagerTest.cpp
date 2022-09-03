@@ -75,25 +75,25 @@ TEST_CASE("Entity Manager getAllEntity method test") {
 	entityManager.storeEntity(variableEntity_new);
 	entityManager.storeEntity(whileEntity_new);
 
-	std::vector<std::string> assign_res{ assign_value };
-	std::vector<std::string> call_res{ call_value };
-	std::vector<std::string> constant_res{ constant_value };
-	std::vector<std::string> if_res{ if_value };
-	std::vector<std::string> print_res{ print_value };
-	std::vector<std::string> procedure_res{ procedure_value };
-	std::vector<std::string> read_res{ read_value };
-	std::vector<std::string> variable_res{ variable_value };
-	std::vector<std::string> while_res{ while_value };
+	std::unordered_set<std::string> assign_res{ assign_value };
+	std::unordered_set<std::string> call_res{ call_value };
+	std::unordered_set<std::string> constant_res{ constant_value };
+	std::unordered_set<std::string> if_res{ if_value };
+	std::unordered_set<std::string> print_res{ print_value };
+	std::unordered_set<std::string> procedure_res{ procedure_value };
+	std::unordered_set<std::string> read_res{ read_value };
+	std::unordered_set<std::string> variable_res{ variable_value };
+	std::unordered_set<std::string> while_res{ while_value };
 
-	std::vector<std::string> ass_test = entityManager.getAllEntity(qps::TokenType::ASSIGN);
-	std::vector<std::string> call_test = entityManager.getAllEntity(qps::TokenType::CALL);
-	std::vector<std::string> constant_test = entityManager.getAllEntity(qps::TokenType::CONSTANT);
-	std::vector<std::string> if_test = entityManager.getAllEntity(qps::TokenType::IF);
-	std::vector<std::string> print_test = entityManager.getAllEntity(qps::TokenType::PRINT);
-	std::vector<std::string> procedure_test = entityManager.getAllEntity(qps::TokenType::PROCEDURE);
-	std::vector<std::string> read_test = entityManager.getAllEntity(qps::TokenType::READ);
-	std::vector<std::string> variable_test = entityManager.getAllEntity(qps::TokenType::VARIABLE);
-	std::vector<std::string> while_test = entityManager.getAllEntity(qps::TokenType::WHILE);
+	std::unordered_set<std::string> ass_test = entityManager.getAllEntity(qps::TokenType::ASSIGN);
+	std::unordered_set<std::string> call_test = entityManager.getAllEntity(qps::TokenType::CALL);
+	std::unordered_set<std::string> constant_test = entityManager.getAllEntity(qps::TokenType::CONSTANT);
+	std::unordered_set<std::string> if_test = entityManager.getAllEntity(qps::TokenType::IF);
+	std::unordered_set<std::string> print_test = entityManager.getAllEntity(qps::TokenType::PRINT);
+	std::unordered_set<std::string> procedure_test = entityManager.getAllEntity(qps::TokenType::PROCEDURE);
+	std::unordered_set<std::string> read_test = entityManager.getAllEntity(qps::TokenType::READ);
+	std::unordered_set<std::string> variable_test = entityManager.getAllEntity(qps::TokenType::VARIABLE);
+	std::unordered_set<std::string> while_test = entityManager.getAllEntity(qps::TokenType::WHILE);
 	
 
 	REQUIRE(ass_test == assign_res);
