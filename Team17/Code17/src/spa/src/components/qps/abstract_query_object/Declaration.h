@@ -12,7 +12,7 @@ private:
     std::string name;
 
 public:
-    Declaration();
+    Declaration(TokenType entity, std::string name);
     TokenType getEntityType();
     std::string getName();
 };

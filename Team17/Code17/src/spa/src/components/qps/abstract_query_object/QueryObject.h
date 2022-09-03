@@ -12,7 +12,6 @@
 class QueryObject {
 private:
     std::vector<SuchThat> relationships;
-    Declaration declarations;
     std::vector<Pattern> patterns;
     Select select;
     std::unordered_map<std::string, TokenType> synonymToDesignEntityMap;
@@ -20,11 +19,9 @@ private:
 
 public:
     QueryObject();
-    QueryObject(std::vector<SuchThat> relationships,
-                Declaration declarations, std::vector<Pattern> patterns, Select select,
-                std::unordered_map<std::string, TokenType> synonymToDesignEntityMap);
+//    QueryObject(std::vector<SuchThat> relationships,std::vector<Pattern> patterns, Select select,
+//                std::unordered_map<std::string, TokenType> synonymToDesignEntityMap);
     std::vector<SuchThat> getRelationships();
-    Declaration getDeclarations();
     std::vector<Pattern> getPattern();
     Select getSelect();
     std::unordered_map<std::string, TokenType> getSynonymToDesignEntityMap();

@@ -4,7 +4,7 @@ SelectClause::SelectClause(Select synonym, std::unordered_map<std::string, Token
         : synonym(synonym), synonymToDesignEntityMap(synonymToDesignEntityMap) {}
 
 std::unordered_set<std::string> SelectClause::evaluateClause() {
-    std::unordered_set<std::string> results;
+    std::unordered_set<std::string> results({"x", "y", "z"});
     // Call PKB API
     return results;
 }

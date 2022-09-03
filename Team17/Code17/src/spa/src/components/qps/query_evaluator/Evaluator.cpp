@@ -27,7 +27,7 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
     // Combine results of evaluation and store in query db
 }
 
-std::unordered_set<std::string> evaluateSelectClause(std::vector<std::shared_ptr<Clause>> clausesToEvaluate) {
+std::unordered_set<std::string> Evaluator::evaluateSelectClause(std::vector<std::shared_ptr<Clause>> clausesToEvaluate) {
     std::unordered_set<std::string> resultOfClause;
     for (auto c : clausesToEvaluate) {
         resultOfClause = c -> evaluateClause();
