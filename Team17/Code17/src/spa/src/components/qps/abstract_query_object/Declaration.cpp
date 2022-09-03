@@ -3,7 +3,7 @@
 Declaration::Declaration(TokenType entity, std::string name) {
     this->entity = entity;
     this->name = name;
-};
+}
 
 TokenType Declaration::getEntityType() {
     return this->entity;

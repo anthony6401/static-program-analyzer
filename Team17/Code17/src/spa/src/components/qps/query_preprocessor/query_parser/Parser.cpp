@@ -1,10 +1,10 @@
-#include"Parser.h"
+#include "Parser.h"
 #include "components/qps/abstract_query_object/QueryObject.h"
 #include "components/qps/abstract_query_object/Declaration.h"
 #include "components/qps/abstract_query_object/Select.h"
 #include "components/qps/abstract_query_object/SuchThat.h"
 #include "components/qps/abstract_query_object/Pattern.h"
-#include<unordered_map>
+#include <unordered_map>
 
 using namespace qps;
 
@@ -30,7 +30,7 @@ QueryObject Parser::parse() {
 	// Syntax checking for such that clause and pattern clause to be done next sprint
 
 	if (!hasNoSyntaxError) {
-		return QueryObject();
+		return *new QueryObject();
 	}
 
 	std::unordered_map<std::string, TokenType> mappedSynonyms = mapSynonymToDesignEntity(declarationTokenObjects);
@@ -39,7 +39,7 @@ QueryObject Parser::parse() {
 	std::vector<SuchThat> relationships = parseTokensIntoSuchThatObjects();
 	std::vector<Pattern> pattern = parseTokensIntoPatternObjects();
 
-	return QueryObject(declarations, select, relationships, pattern, mappedSynonyms);
+	return *new QueryObject(declarations, select, relationships, pattern, mappedSynonyms);
 };
 
 std::vector<std::vector<TokenObject>> Parser::groupQueryIntoClause() {
@@ -129,7 +129,7 @@ std::vector<TokenObject> Parser::getTokenizedQuery() {
 	return this->tokenizedQuery;
 }
 
-std::unordered_map<std::string, TokenType> mapSynonymToDesignEntity(std::vector<TokenObject> declarations) {
+std::unordered_map<std::string, TokenType> Parser::mapSynonymToDesignEntity(std::vector<TokenObject> declarations) {
 	std::unordered_map<std::string, TokenType> mappedSynonyms;
 	TokenType currDesignEntity;
 
@@ -163,7 +163,7 @@ std::vector<Declaration> Parser::parseTokensIntoDeclarationObjects(std::unordere
 		std::string synonymValue = synonym.first;
 		TokenType designEntity = synonym.second;
 
-		Declaration declaration = Declaration(designEntity, synonymValue);
+		Declaration declaration = *new Declaration(designEntity, synonymValue);
 		declarations.push_back(declaration);
 	}
 

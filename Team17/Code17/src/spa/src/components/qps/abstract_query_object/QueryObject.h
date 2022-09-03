@@ -9,8 +9,6 @@
 #ifndef SPA_QUERY_H
 #define SPA_QUERY_H
 
-using namespace qps;
-
 // At most one such that clause and at most one pattern clause in sequence
 class QueryObject {
 private:
@@ -18,7 +16,7 @@ private:
     std::vector<Declaration> declarations;
     std::vector<Pattern> pattern;
     Select select;
-    bool hasNoSyntaxError;
+    bool hasNoSyntaxError = false;
     std::unordered_map<std::string, TokenType> synonymToDesignEntity;
 
 public:

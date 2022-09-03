@@ -13,8 +13,8 @@ private:
 public:
     Select();
     Select(TokenType returnType, std::string name);
-    static TokenType getReturnType();
-    static std::string getName();
+    TokenType getReturnType();
+    std::string getName();
     bool operator==(const Select& other) const {
         return returnType == other.returnType
             && name == other.name;

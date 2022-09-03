@@ -24,8 +24,8 @@
       "variables": [
         {
           "name": "CMAKE_BUILD_TYPE",
-          "value": "Release",
-          "type": "STRING"
+          "type": "STRING",
+          "value": "Release"
         }
       ]
     }
