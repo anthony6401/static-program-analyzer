@@ -3,6 +3,8 @@
 #include "../SimpleToken.h"
 #include "../extractor/Extractor.h"
 
+Extractor* SimpleParser::extractor = new Extractor();
+
 /// <summary>
 /// SIMPLE statement number that is currently being processed
 /// </summary>

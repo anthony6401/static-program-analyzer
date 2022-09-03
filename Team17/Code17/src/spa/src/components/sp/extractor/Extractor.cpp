@@ -5,8 +5,6 @@
 #include "../../../models/Relationship/ModifyRelationship.h"
 #include "../../../models/Relationship/UsesRelationship.h"
 
-Extractor::Extractor() {}
-
 void Extractor::extractRead(SimpleToken simpleToken, vector<string> tokens) {
 	ReadEntity* leftEntity = new ReadEntity(to_string(simpleToken.statementNumber));
 	VariableEntity* rightEntity = new VariableEntity(tokens.at(0));

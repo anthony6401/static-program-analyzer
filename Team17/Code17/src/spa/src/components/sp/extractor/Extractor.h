@@ -1,16 +1,12 @@
 #pragma once
 
 #include "../SimpleToken.h"
-#include "../../../models/Relationship/Relationship.h"
-
 #include <vector>
 
 using namespace std;
 
 class Extractor {
 public:
-	Extractor();
-
 	void extractRead(SimpleToken simpleToken, vector<string> tokens);
 	void extractPrint(SimpleToken simpleToken, vector<string> tokens);
 
