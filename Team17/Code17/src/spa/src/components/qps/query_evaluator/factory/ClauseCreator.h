@@ -2,6 +2,7 @@
 #define SPA_CLAUSECREATOR_H
 
 #include <unordered_map>
+#include <memory>
 #include "components/qps/query_evaluator/factory/interface/Clause.h"
 #include "components/qps/abstract_query_object/SuchThat.h"
 #include "components/qps/query_evaluator/factory/clauses/select/SelectClause.h"

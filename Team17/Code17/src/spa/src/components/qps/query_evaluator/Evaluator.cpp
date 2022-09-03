@@ -1,4 +1,5 @@
 #include "Evaluator.h"
+#include <memory>
 #include "components/qps/abstract_query_object/QueryObject.h"
 #include "components/qps/query_evaluator/factory/ClauseCreator.h"
 

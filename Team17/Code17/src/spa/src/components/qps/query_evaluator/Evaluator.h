@@ -1,6 +1,6 @@
 #ifndef SPA_EVALUATOR_H
 #define SPA_EVALUATOR_H
-
+#include <memory>
 #include <list>
 #include <vector>
 #include "components/qps/abstract_query_object/QueryObject.h"
