@@ -9,15 +9,15 @@
 #ifndef SPA_QUERY_H
 #define SPA_QUERY_H
 
-// At most one such that clause and at most one pattern clause in sequence
+// At most one such that clause and at most one pattern clause in sequence for now
 class QueryObject {
 private:
-    std::vector<SuchThat> relationship;
-    std::vector<Declaration> declarations;
-    std::vector<Pattern> pattern;
+    std::vector<SuchThat> relationships;
+    std::vector<Pattern> patterns;
     Select select;
     bool hasNoSyntaxError = false;
-    std::unordered_map<std::string, TokenType> synonymToDesignEntity;
+    std::unordered_map<std::string, TokenType> synonymToDesignEntityMap;
+
 
 public:
     QueryObject();
@@ -25,13 +25,18 @@ public:
     bool isSyntacticallyCorrect();
     std::unordered_map<std::string, TokenType> getSynonymToDesignEntity();
     bool operator==(const QueryObject& other) const {
-        return relationship == other.relationship
-            && declarations == other.declarations
-            && pattern == other.pattern
+        return relationships == other.relationships
+            && patterns == other.patterns
             && select == other.select
             && hasNoSyntaxError == other.hasNoSyntaxError
-            && synonymToDesignEntity == other.synonymToDesignEntity;
+            && synonymToDesignEntityMap == other.synonymToDesignEntityMap;
     }
+//    QueryObject(std::vector<SuchThat> relationships,std::vector<Pattern> patterns, Select select,
+//                std::unordered_map<std::string, TokenType> synonymToDesignEntityMap);
+    std::vector<SuchThat> getRelationships();
+    std::vector<Pattern> getPattern();
+    Select getSelect();
+    std::unordered_map<std::string, TokenType> getSynonymToDesignEntityMap();
 };
 
 #endif //SPA_QUERY_H

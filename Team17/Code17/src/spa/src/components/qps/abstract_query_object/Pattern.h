@@ -15,6 +15,7 @@ private:
 
 public:
     Pattern();
+    Pattern(std::string name, TokenObject left, TokenObject right);
     static std::string getName();
     static TokenObject getLeft();
     static TokenObject getRight();

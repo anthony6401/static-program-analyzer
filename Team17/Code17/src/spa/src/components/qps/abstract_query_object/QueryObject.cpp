@@ -13,13 +13,12 @@ QueryObject::QueryObject() {
 */
 QueryObject::QueryObject(std::vector<Declaration> declarations, Select select,
 	std::vector<SuchThat> relationship, std::vector<Pattern> pattern, std::unordered_map<std::string, TokenType> synonymToDesignEntity) {
-	
-	this->declarations = declarations;
-	this->relationship = relationship;
+
+	this->relationships = relationship;
 	this->select = select;
-	this->pattern = pattern;
+	this->patterns = pattern;
 	this->hasNoSyntaxError = true;
-	this->synonymToDesignEntity = synonymToDesignEntity;
+	this->synonymToDesignEntityMap = synonymToDesignEntity;
 }
 
 
@@ -28,5 +27,6 @@ bool QueryObject::isSyntacticallyCorrect() {
 }
 
 std::unordered_map<std::string, TokenType> QueryObject::getSynonymToDesignEntity() {
-	return this->synonymToDesignEntity;
+	return this->synonymToDesignEntityMap;
 }
+

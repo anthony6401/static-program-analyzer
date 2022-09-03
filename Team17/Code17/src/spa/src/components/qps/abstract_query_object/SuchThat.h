@@ -10,7 +10,7 @@ using namespace qps;
 
 class SuchThat {
 private:
-    std::vector<TokenType> relationship;
+    TokenType relationship;
     TokenObject left;
     TokenObject right;
 

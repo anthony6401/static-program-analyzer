@@ -12,3 +12,10 @@ bool AssignEntityStorage::storeEntity(Entity* entity) {
 
 	return false;
 }
+
+std::unordered_set<Entity*>* AssignEntityStorage::getAllEntity(qps::TokenType returnType) {
+	if (returnType == qps::TokenType::ASSIGN) {
+		return this->set;
+	}
+	return nullptr;
+}

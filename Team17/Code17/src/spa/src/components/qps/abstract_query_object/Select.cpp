@@ -3,9 +3,7 @@
 #include "components/qps/query_preprocessor/query_tokenizer/TokenType.h"
 #include "components/qps/query_preprocessor/query_tokenizer/TokenObject.h"
 
-Select::Select() {
-    this->returnType = TokenType::WILDCARD;
-}
+Select::Select() {}
 
 Select::Select(TokenType returnType, std::string name) {
     this->returnType = returnType;
@@ -13,9 +11,10 @@ Select::Select(TokenType returnType, std::string name) {
 }
 
 TokenType Select::getReturnType() {
-    return this->returnType;
+    return returnType;
 }
 
 std::string Select::getName() {
-    return this->name;
+    return name;
 }
+
