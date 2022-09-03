@@ -3,10 +3,6 @@
 #include "components/qps/abstract_query_object/QueryObject.h"
 #include "components/qps/query_evaluator/Evaluator.h"
 
-//QueryObject(std::vector<SuchThat> relationships,
-//Declaration declarations, std::vector<Pattern> patterns, Select select,
-//        std::unordered_map<std::string, TokenType> synonymToDesignEntityMap);
-
 TEST_CASE("Evaluation for Select Clause - variable v; Select v") {
     std::list<std::string> testResults;
     std::vector<SuchThat> relationships {};
