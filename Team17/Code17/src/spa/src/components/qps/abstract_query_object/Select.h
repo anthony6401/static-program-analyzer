@@ -4,8 +4,6 @@
 #include "components/qps/query_preprocessor/query_tokenizer/TokenType.h"
 #include "components/qps/query_preprocessor/query_tokenizer/TokenObject.h"
 
-using namespace qps;
-
 // Only synonym
 class Select {
 private:

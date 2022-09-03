@@ -104,6 +104,22 @@ TEST_CASE("Multiple single declaration with missing comma") {
     REQUIRE(actualResult == false);
 };
 
+TEST_CASE("Multiple single declaration with extra comma") {
+    DeclarationClauseSyntaxChecker checker = DeclarationClauseSyntaxChecker();
+    std::vector<TokenObject> invalidDeclarationTokens{
+        TokenObject(TokenType::VARIABLE, "variable"),
+        TokenObject(TokenType::NAME, "v"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME, "a"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME, "vh"),
+        TokenObject(TokenType::SEMI_COLON, ";")
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(invalidDeclarationTokens);
+    REQUIRE(actualResult == false);
+};
+
 TEST_CASE("Multiple declarations with missing semi-colon") {
     DeclarationClauseSyntaxChecker checker = DeclarationClauseSyntaxChecker();
     std::vector<TokenObject> invalidDeclarationTokens{

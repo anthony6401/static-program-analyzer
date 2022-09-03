@@ -15,32 +15,15 @@ bool SelectClauseSyntaxChecker::isSyntacticallyCorrect(std::vector<TokenObject> 
 		TokenObject token = tokenizedClause.at(i);
 		TokenType tokenType = token.getTokenType();
 
-		if (!this->selectSyntax.empty()) {
-			TokenType syntax = this->selectSyntax.top();
+		if (this->selectSyntax.empty()) {
+			return false;
+		}
 
-			// SELECT token
-			if (this->generalSyntax.find(syntax) == this->generalSyntax.end()) {
-				if (tokenType != syntax) {
-					return false;
-				}
+		TokenType syntax = this->selectSyntax.top();
 
-				this->selectSyntax.pop();
-				continue;
-			}
-
-			// SYNONYM token
-			std::vector<TokenType> possibleTokenTypes = this->generalSyntax.at(syntax);
-			bool foundToken = false;
-			for (int j = 0; j < possibleTokenTypes.size(); j++) {
-				TokenType possibleTokenType = possibleTokenTypes.at(j);
-
-				if (tokenType == possibleTokenType) {
-					foundToken = true;
-					break;
-				}
-			}
-
-			if (!foundToken) {
+		// SELECT token
+		if (this->generalSyntax.find(syntax) == this->generalSyntax.end()) {
+			if (tokenType != syntax) {
 				return false;
 			}
 
@@ -48,7 +31,25 @@ bool SelectClauseSyntaxChecker::isSyntacticallyCorrect(std::vector<TokenObject> 
 			continue;
 		}
 
-		return false;
+		// SYNONYM token
+		std::vector<TokenType> possibleTokenTypes = this->generalSyntax.at(syntax);
+		bool foundToken = false;
+		for (int j = 0; j < possibleTokenTypes.size(); j++) {
+			TokenType possibleTokenType = possibleTokenTypes.at(j);
+
+			if (tokenType == possibleTokenType) {
+				foundToken = true;
+				break;
+			}
+		}
+
+		if (!foundToken) {
+			return false;
+		}
+
+		this->selectSyntax.pop();
+		continue;
+
 	}
 
 	if (!this->selectSyntax.empty()) {

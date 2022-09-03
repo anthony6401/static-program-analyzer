@@ -19,63 +19,64 @@ bool DeclarationClauseSyntaxChecker::isSyntacticallyCorrect(std::vector<TokenObj
 		TokenObject token = tokenizedClause.at(i);
 		TokenType tokenType = token.getTokenType();
 
-		if (!this->declarationSyntax.empty()) {
-			TokenType syntax = this->declarationSyntax.top();
+		if (this->declarationSyntax.empty()) {
+			return false;
+		}
 
-			if (tokenType == TokenType::SEMI_COLON) {
-				if (syntax != TokenType::SEMI_COLON) {
-					return false;
-				}
+		TokenType syntax = this->declarationSyntax.top();
 
-				// Multiple declarations, need to check syntax for other declarations
-				if (i < tokenizedClause.size() - 1) {
-					this->declarationSyntax.push(TokenType::SYNONYM);
-					this->declarationSyntax.push(TokenType::DESIGN_ENTITY);
-					continue;
-				}
-
-				this->declarationSyntax.pop();
-				continue;
-			}
-
-			// Multiple synonyms for a single declaration type
-			if (tokenType == TokenType::COMMA) {
-				// Ensures that previous TokenType checked was SYNONYM since SYNONYM always
-				// comes before SEMI_COLON
-				if (syntax != TokenType::SEMI_COLON) {
-					return false;
-				}
-				this->declarationSyntax.push(TokenType::SYNONYM);
-				continue;
-			}
-
-			if (this->generalSyntax.find(syntax) == this->generalSyntax.end()) {
-				if (tokenType != syntax) {
-					return false;
-				}
-			}
-
-			// Token is either DESIGN_ENTITY or SYNONYM
-			std::vector<TokenType> possibleTokenTypes = this->generalSyntax.at(syntax);
-			bool foundToken = false;
-			for (int j = 0; j < possibleTokenTypes.size(); j++) {
-				TokenType possibleTokenType = possibleTokenTypes.at(j);
-
-				if (tokenType == possibleTokenType) {
-					foundToken = true;
-					break;
-				}
-			}
-
-			if (!foundToken) {
+		if (tokenType == TokenType::SEMI_COLON) {
+			if (syntax != TokenType::SEMI_COLON) {
 				return false;
+			}
+
+			// Multiple declarations, need to check syntax for other declarations
+			if (i < tokenizedClause.size() - 1) {
+				this->declarationSyntax.push(TokenType::SYNONYM);
+				this->declarationSyntax.push(TokenType::DESIGN_ENTITY);
+				continue;
 			}
 
 			this->declarationSyntax.pop();
 			continue;
 		}
 
-		return false;
+		// Multiple synonyms for a single declaration type
+		if (tokenType == TokenType::COMMA) {
+			// Ensures that previous TokenType checked was SYNONYM since SYNONYM always
+			// comes before SEMI_COLON
+			if (syntax != TokenType::SEMI_COLON) {
+				return false;
+			}
+			this->declarationSyntax.push(TokenType::SYNONYM);
+			continue;
+		}
+
+		if (this->generalSyntax.find(syntax) == this->generalSyntax.end()) {
+			if (tokenType != syntax) {
+				return false;
+			}
+		}
+
+		// Token is either DESIGN_ENTITY or SYNONYM
+		std::vector<TokenType> possibleTokenTypes = this->generalSyntax.at(syntax);
+		bool foundToken = false;
+		for (int j = 0; j < possibleTokenTypes.size(); j++) {
+			TokenType possibleTokenType = possibleTokenTypes.at(j);
+
+			if (tokenType == possibleTokenType) {
+				foundToken = true;
+				break;
+			}
+		}
+
+		if (!foundToken) {
+			return false;
+		}
+
+		this->declarationSyntax.pop();
+		continue;
+
 	}
 
 	if (!this->declarationSyntax.empty()) {
