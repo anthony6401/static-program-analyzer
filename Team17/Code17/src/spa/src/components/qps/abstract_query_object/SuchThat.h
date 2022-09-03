@@ -16,8 +16,8 @@ private:
 
 public:
     SuchThat();
-    SuchThat(std::vector<TokenType> relationships, TokenObject left, TokenObject right);
-    std::vector<TokenType> getRelationshipType();
+    SuchThat(TokenType relationship, TokenObject left, TokenObject right);
+    TokenType getRelationshipType();
     TokenObject getLeft();
     TokenObject getRight();
     bool operator==(const SuchThat& other) const {

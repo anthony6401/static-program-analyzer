@@ -8,7 +8,7 @@ SuchThat::SuchThat(TokenType relationship, TokenObject left, TokenObject right) 
 }
 
 // to be amended
-std::vector<TokenType> SuchThat::getRelationshipType() {
+TokenType SuchThat::getRelationshipType() {
     return this->relationship;
 }
 

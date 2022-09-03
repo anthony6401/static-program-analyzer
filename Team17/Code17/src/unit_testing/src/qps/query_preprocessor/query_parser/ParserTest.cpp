@@ -34,13 +34,12 @@ TEST_CASE("Parse queries") {
         TokenObject(TokenType::NAME, std::string("v"))
     };
 
-    std::vector<Declaration> expectedDeclarations{ Declaration(TokenType::VARIABLE, "v")};
     Select expectedSelect = Select(TokenType::VARIABLE, "v");
     std::vector<SuchThat> expectedSuchThat;
     std::vector<Pattern> expectedPattern;
     std::unordered_map<std::string, TokenType> expectedMappedSynonyms{ {"v", TokenType::VARIABLE} };
 
-    QueryObject expectedResult = QueryObject(expectedDeclarations, expectedSelect, expectedSuchThat, expectedPattern, expectedMappedSynonyms);
+    QueryObject expectedResult = QueryObject(expectedSelect, expectedSuchThat, expectedPattern, expectedMappedSynonyms);
 
     Parser parser = Parser(testTokenObject);
     QueryObject actualResult = parser.parse();
@@ -53,13 +52,12 @@ TEST_CASE("No declaration") {
         TokenObject(TokenType::NAME, std::string("v"))
     };
 
-    std::vector<Declaration> expectedDeclarations;
     Select expectedSelect = Select();
     std::vector<SuchThat> expectedSuchThat;
     std::vector<Pattern> expectedPattern;
     std::unordered_map<std::string, TokenType> expectedMappedSynonyms;
 
-    QueryObject expectedResult = QueryObject(expectedDeclarations, expectedSelect, expectedSuchThat, expectedPattern, expectedMappedSynonyms);
+    QueryObject expectedResult = QueryObject(expectedSelect, expectedSuchThat, expectedPattern, expectedMappedSynonyms);
 
     Parser parser = Parser(testTokenObject);
     QueryObject actualResult = parser.parse();

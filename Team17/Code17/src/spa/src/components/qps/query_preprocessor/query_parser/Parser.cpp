@@ -30,16 +30,15 @@ QueryObject Parser::parse() {
 	// Syntax checking for such that clause and pattern clause to be done next sprint
 
 	if (!hasNoSyntaxError) {
-		return *new QueryObject();
+		return QueryObject();
 	}
 
 	std::unordered_map<std::string, TokenType> mappedSynonyms = mapSynonymToDesignEntity(declarationTokenObjects);
-	std::vector<Declaration> declarations = parseTokensIntoDeclarationObjects(mappedSynonyms);
 	Select select = parseTokensIntoSelectObject(selectTokenObjects, mappedSynonyms);
 	std::vector<SuchThat> relationships = parseTokensIntoSuchThatObjects();
 	std::vector<Pattern> pattern = parseTokensIntoPatternObjects();
 
-	return *new QueryObject(declarations, select, relationships, pattern, mappedSynonyms);
+	return QueryObject(select, relationships, pattern, mappedSynonyms);
 };
 
 std::vector<std::vector<TokenObject>> Parser::groupQueryIntoClause() {

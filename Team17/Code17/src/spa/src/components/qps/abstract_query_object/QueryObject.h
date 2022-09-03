@@ -21,9 +21,12 @@ private:
 
 public:
     QueryObject();
-    QueryObject(std::vector<Declaration> declarations, Select select, std::vector<SuchThat> relationship, std::vector<Pattern> pattern, std::unordered_map<std::string, TokenType> synonymToDesignEntity);
+    QueryObject(Select select, std::vector<SuchThat> relationship, std::vector<Pattern> pattern, std::unordered_map<std::string, TokenType> synonymToDesignEntity);
     bool isSyntacticallyCorrect();
-    std::unordered_map<std::string, TokenType> getSynonymToDesignEntity();
+    std::vector<SuchThat> getRelationships();
+    std::vector<Pattern> getPattern();
+    Select getSelect();
+    std::unordered_map<std::string, TokenType> getSynonymToDesignEntityMap();
     bool operator==(const QueryObject& other) const {
         return relationships == other.relationships
             && patterns == other.patterns
@@ -31,12 +34,7 @@ public:
             && hasNoSyntaxError == other.hasNoSyntaxError
             && synonymToDesignEntityMap == other.synonymToDesignEntityMap;
     }
-//    QueryObject(std::vector<SuchThat> relationships,std::vector<Pattern> patterns, Select select,
-//                std::unordered_map<std::string, TokenType> synonymToDesignEntityMap);
-    std::vector<SuchThat> getRelationships();
-    std::vector<Pattern> getPattern();
-    Select getSelect();
-    std::unordered_map<std::string, TokenType> getSynonymToDesignEntityMap();
+
 };
 
 #endif //SPA_QUERY_H
