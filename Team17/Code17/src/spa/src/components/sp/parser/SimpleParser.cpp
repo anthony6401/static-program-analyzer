@@ -2,8 +2,17 @@
 #include "../validator/SimpleValidator.h"
 #include "../SimpleToken.h"
 
+/// <summary>
+/// SIMPLE statement number that is currently being processed
+/// </summary>
 int SimpleParser::statementNumber = 1;
 
+/// <summary>
+/// Identifies type of code line and returns a SimpleToken of it
+/// </summary>
+/// <param name="tokens">code of line that has been split into tokens</param>
+/// <param name="code">original line of code before splitting</param>
+/// <returns>SimpleToken identifying line type and value containing code</returns>
 SimpleToken SimpleParser::parseLine(std::vector<std::string>& tokens, std::string code) {
     std::string first = tokens.front();
     if (first == "procedure") {
@@ -58,6 +67,11 @@ SimpleToken SimpleParser::parseLine(std::vector<std::string>& tokens, std::strin
     }
 }
 
+/// <summary>
+/// Process print stmts for design extractor
+/// </summary>
+/// <param name="printStmt">SimpleToken of TPRINT type</param>
+/// <param name="tokens">parameters for print statement</param>
 void SimpleParser::parsePrint(SimpleToken& printStmt, std::vector<std::string>& tokens) {
     if (tokens.size() == 2 && tokens.at(1) == ";") {
         std::vector<SimpleToken> children;
@@ -69,6 +83,11 @@ void SimpleParser::parsePrint(SimpleToken& printStmt, std::vector<std::string>& 
     }
 }
 
+/// <summary>
+/// Process read stmts for design extractor
+/// </summary>
+/// <param name="printStmt">SimpleToken of TREAD type</param>
+/// <param name="tokens">parameters for read statement</param>
 void SimpleParser::parseRead(SimpleToken& readStmt, std::vector<std::string>& tokens) {
     if (tokens.size() == 2 && tokens.at(1) == ";") {
         std::vector<SimpleToken> children;
@@ -81,6 +100,11 @@ void SimpleParser::parseRead(SimpleToken& readStmt, std::vector<std::string>& to
     }
 }
 
+/// <summary>
+/// Process variable for design extractor
+/// </summary>
+/// <param name="token">string to validate if valid variable</param>
+/// <returns>SimpleToken of TVARIABLE with variable name as value</returns>
 SimpleToken SimpleParser::parseVariable(std::string& token) {
     if (SimpleValidator::validateLexical(token)) {
         return SimpleToken(TokenType::TVARIABLE, token, 0, NULL);
