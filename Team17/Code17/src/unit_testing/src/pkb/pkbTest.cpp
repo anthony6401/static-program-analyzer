@@ -12,7 +12,7 @@
 #include <catch.hpp>
 
 
-Relationship* usesRel = new UsesRelationship(assignEntity, variableEntity);
+static Relationship* usesRel = new UsesRelationship(assignEntity, variableEntity);
 
 TEST_CASE("PKB storeEntity method test") {
 	PKB pkb = PKB();
