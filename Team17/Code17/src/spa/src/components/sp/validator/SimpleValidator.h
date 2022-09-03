@@ -7,4 +7,5 @@
 class SimpleValidator {
     public:
         static bool validateLexical(std::string& token);
+
 };
