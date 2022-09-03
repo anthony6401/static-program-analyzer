@@ -5,5 +5,5 @@
 class ModifyRelationship : public Relationship {
 
 public:
-	ModifyRelationship(Entity leftEntity, Entity rightEntity);
+	ModifyRelationship(Entity* leftEntity, Entity* rightEntity);
 };
