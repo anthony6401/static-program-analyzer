@@ -12,3 +12,10 @@ bool StatementEntityStorage::storeEntity(Entity* entity) {
 
 	return false;
 }
+
+std::unordered_set<Entity*>* StatementEntityStorage::getAllEntity(qps::TokenType returnType) {
+	if (returnType == qps::TokenType::STMT) {
+		return this->set;
+	}
+	return nullptr;
+}

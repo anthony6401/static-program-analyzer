@@ -12,3 +12,10 @@ bool WhileEntityStorage::storeEntity(Entity* entity) {
 
 	return false;
 }
+
+std::unordered_set<Entity*>* WhileEntityStorage::getAllEntity(qps::TokenType returnType) {
+	if (returnType == qps::TokenType::WHILE) {
+		return this->set;
+	}
+	return nullptr;
+}
