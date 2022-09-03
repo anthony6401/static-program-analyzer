@@ -28,10 +28,10 @@ public:
     int statementNumber;
     void (*parseFunction)(SimpleToken&, std::vector<std::string>&);
     std::string value;
-    void setChildren(std::vector<SimpleToken*> tokens);
-    std::vector<SimpleToken*> getChildren();
+    void setChildren(std::vector<SimpleToken> tokens);
+    std::vector<SimpleToken> getChildren();
 
 private:
-    std::vector<SimpleToken*> children;
+    std::vector<SimpleToken> children;
 
 };

@@ -59,9 +59,9 @@ SimpleToken SimpleParser::parseLine(std::vector<std::string>& tokens, std::strin
 }
 
 void SimpleParser::parsePrint(SimpleToken& printStmt, std::vector<std::string>& tokens) {
-    if (tokens.size() == 2 && tokens.at(1) != ";") {
-        std::vector<SimpleToken*> children;
-        children.push_back(&parseVariable(tokens.at(0)));
+    if (tokens.size() == 2 && tokens.at(1) == ";") {
+        std::vector<SimpleToken> children;
+        children.push_back(parseVariable(tokens.at(0)));
         printStmt.setChildren(children);
         //pass to extractor
     } else {
@@ -70,18 +70,18 @@ void SimpleParser::parsePrint(SimpleToken& printStmt, std::vector<std::string>& 
 }
 
 void SimpleParser::parseRead(SimpleToken& readStmt, std::vector<std::string>& tokens) {
-    if (tokens.size() == 2 && tokens.at(1) != ";") {
-        std::vector<SimpleToken*> children;
-        children.push_back(&parseVariable(tokens.at(0)));
+    if (tokens.size() == 2 && tokens.at(1) == ";") {
+        std::vector<SimpleToken> children;
+        children.push_back(parseVariable(tokens.at(0)));
         readStmt.setChildren(children);
         //pass to extractor
     }
     else {
-        throw std::invalid_argument("Received invalid Print:Line " + readStmt.statementNumber);
+        throw std::invalid_argument("Received invalid Read:Line " + readStmt.statementNumber);
     }
 }
 
-SimpleToken SimpleParser::parseVariable(std::string token) {
+SimpleToken SimpleParser::parseVariable(std::string& token) {
     if (SimpleValidator::validateLexical(token)) {
         return SimpleToken(TokenType::TVARIABLE, token, 0, NULL);
     } else {

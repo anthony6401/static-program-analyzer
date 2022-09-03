@@ -8,10 +8,10 @@ SimpleToken::SimpleToken(TokenType type, std::string value,
     this->parseFunction = parseFunction;
 }
 
-void SimpleToken::setChildren(std::vector<SimpleToken*> children) {
+void SimpleToken::setChildren(std::vector<SimpleToken> children) {
     this->children = children;
 }
 
-std::vector<SimpleToken*> SimpleToken::getChildren() {
+std::vector<SimpleToken> SimpleToken::getChildren() {
     return this->children;
 }
