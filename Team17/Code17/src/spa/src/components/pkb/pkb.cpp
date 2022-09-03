@@ -28,3 +28,7 @@ bool PKB::storeRelationship(Relationship* rel) {
 
 	return ret;
 }
+
+EntityManager* PKB::getEntityManager() {
+	return entityManager;
+}

@@ -17,6 +17,8 @@ public:
 
 	//For storing relationship
 	bool storeRelationship(Relationship* rel);
+	EntityManager* getEntityManager();
+
 private:
 	//Add managers
 	EntityManager* entityManager;
