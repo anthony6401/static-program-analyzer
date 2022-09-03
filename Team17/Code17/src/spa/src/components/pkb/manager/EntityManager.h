@@ -4,7 +4,7 @@
 #include "../../qps/query_preprocessor/query_tokenizer/TokenType.h"
 
 #include <string>
-#include <unordered_set>
+#include <vector>
 
 class EntityManager {
 public:
@@ -14,6 +14,6 @@ public:
 	bool storeEntity(Entity* entity);
 
 private:
-	 std::unordered_set<EntityStorage*> entityStore;
+	 std::vector<EntityStorage*> entityStore;
 };
 
