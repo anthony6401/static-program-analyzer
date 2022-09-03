@@ -15,7 +15,7 @@
 
 #include "../../qps/query_preprocessor/query_tokenizer/TokenType.h"
 
-#include <unordered_set>s
+#include <unordered_set>
 
 EntityManager::EntityManager() {
 	AssignEntityStorage* assStore = new AssignEntityStorage();
@@ -30,6 +30,7 @@ EntityManager::EntityManager() {
 	WhileEntityStorage* whileStore = new WhileEntityStorage();
 
 	//Add each entity into the array
+	//Parent Entity storage must be stored last
 	entityStore.push_back(assStore);
 	entityStore.push_back(callStore);
 	entityStore.push_back(constStore);
@@ -37,9 +38,10 @@ EntityManager::EntityManager() {
 	entityStore.push_back(prStore);
 	entityStore.push_back(procStore);
 	entityStore.push_back(reStore);
-	entityStore.push_back(stStore);
 	entityStore.push_back(varStore);
 	entityStore.push_back(whileStore);
+	entityStore.push_back(stStore);
+	
 }
 
 std::vector<EntityStorage*> EntityManager::getEntityStorage() {
@@ -48,8 +50,7 @@ std::vector<EntityStorage*> EntityManager::getEntityStorage() {
 
 //Returns true, if it manage to stored, else false
 bool EntityManager::storeEntity(Entity* entity) {
-
-	bool ret = false;
+ 	bool ret = false;
 	for (auto& et : entityStore) {
 		ret = ret || et->storeEntity(entity);
 	}
@@ -57,17 +58,15 @@ bool EntityManager::storeEntity(Entity* entity) {
 }
 
 std::vector<std::string> EntityManager::getAllEntity(qps::TokenType returnType) {
-	//TODO: to be implemented
 	std::unordered_set<Entity*>* temp;
 	std::vector<std::string> ret;
 
 	for (auto& es : entityStore) {
 		temp = es->getAllEntity(returnType);
-
-		if (temp != nullptr) {
+;		if (temp != nullptr) {
 			for (const auto& entity: *temp) {
 				std::string k = entity->getValue();
-				if (std::find(ret.begin(), ret.end(), k) != ret.end()) {
+				if (std::find(ret.begin(), ret.end(), k) == ret.end()) {
 					ret.push_back(k);
 				}
 			}
