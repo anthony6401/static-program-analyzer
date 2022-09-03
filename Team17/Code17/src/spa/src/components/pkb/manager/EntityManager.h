@@ -14,6 +14,6 @@ public:
 	bool storeEntity(Entity* entity);
 
 private:
-	 std::vector<EntityStorage*> entityStore;
+	 std::unordered_set<EntityStorage*> entityStore;
 };
 
