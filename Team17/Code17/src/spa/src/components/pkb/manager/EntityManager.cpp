@@ -1,4 +1,5 @@
 #include "EntityManager.h"
+#include "../../../models/Entity/Entity.h"
 
 #include "../storage/AssignEntityStorage.h"
 #include "../storage/CallEntityStorage.h"
@@ -11,6 +12,11 @@
 #include "../storage/StatementEntityStorage.h"
 #include "../storage/VariableEntityStorage.h"
 #include "../storage/WhileEntityStorage.h"
+
+#include "../../qps/query_preprocessor/query_tokenizer/TokenType.h"
+
+#include <unordered_set>
+//#include <bits/stdc++.h>
 
 EntityManager::EntityManager() {
 	AssignEntityStorage* assStore = new AssignEntityStorage();
@@ -51,7 +57,24 @@ bool EntityManager::storeEntity(Entity* entity) {
 	return ret;
 }
 
-std::vector<std::string> EntityManager::getEntity(Entity entity) {
+std::vector<std::string> EntityManager::getAllEntity(qps::TokenType returnType) {
 	//TODO: to be implemented
-	return std::vector<std::string>{"hi"};
+	std::unordered_set<Entity*>* temp;
+	std::vector<std::string> ret;
+
+	for (auto& es : entityStore) {
+		temp = es->getAllEntity(returnType);
+
+		if (temp != nullptr) {
+			for (const auto& entity: *temp) {
+				std::string k = entity->getValue();
+				if (std::find(ret.begin(), ret.end(), k) != ret.end()) {
+					ret.push_back(k);
+				}
+			}
+			break;
+		}
+	}
+
+	return ret;
 }
