@@ -12,18 +12,22 @@
 class QueryObject {
 private:
     std::vector<SuchThat> relationships;
-    std::unordered_map<std::string, TokenType> declarations;
+    Declaration declarations;
     std::vector<Pattern> patterns;
     Select select;
+    std::unordered_map<std::string, TokenType> synonymToDesignEntityMap;
+
 
 public:
     QueryObject();
     QueryObject(std::vector<SuchThat> relationships,
-                std::unordered_map<std::string, TokenType> declarations, std::vector<Pattern> patterns, Select select);
+                Declaration declarations, std::vector<Pattern> patterns, Select select,
+                std::unordered_map<std::string, TokenType> synonymToDesignEntityMap);
     std::vector<SuchThat> getRelationships();
-    std::unordered_map<std::string, TokenType> getDeclarations();
+    Declaration getDeclarations();
     std::vector<Pattern> getPattern();
     Select getSelect();
+    std::unordered_map<std::string, TokenType> getSynonymToDesignEntityMap();
 };
 
 #endif //SPA_QUERY_H

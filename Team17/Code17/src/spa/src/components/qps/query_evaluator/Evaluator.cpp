@@ -1,5 +1,6 @@
 #include "Evaluator.h"
 #include "components/qps/abstract_query_object/QueryObject.h"
+#include "components/qps/query_evaluator/factory/ClauseCreator.h"
 
 void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &results) {
     // Extract return type of query via Select class and map
@@ -10,19 +11,18 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
     // Combine results of evaluation and store in query db
 }
 
-//std::vector<Clause> extractClausesToEvaluate(QueryObject queryObject) {
-//    std::vector<Clause> clausesToEvaluate;
-//    std::vector<SuchThat> relationships = queryObject.getRelationships();
-//    std::vector<Pattern> patterns = queryObject.getPattern();
-//    if (!relationships.empty()) {
-//        // Create relationships
-//        for (SuchThat r : relationships) {
-//            Clause clause
-//        }
-//    }
-//
-//    if (!queryObject.getPattern().empty()) {
-//        // Create patterns
-//    }
-//    return clausesToEvaluate;
-//}
+std::vector<std::shared_ptr<Clause>> extractClausesToEvaluate(QueryObject queryObject) {
+    std::vector<std::shared_ptr<Clause>> clausesToEvaluate;
+    std::vector<SuchThat> relationships = queryObject.getRelationships();
+    std::vector<Pattern> patterns = queryObject.getPattern();
+    Select synonym = queryObject.getSelect();
+    std::unordered_map<std::string, TokenType> synonymToDesignEntityMap = queryObject.getSynonymToDesignEntityMap();
+
+    // For Select Clauses
+    if (relationships.empty() && patterns.empty()) {
+        // Create a Select Clause Object for evaluation
+        std::shared_ptr<Clause> clause = ClauseCreator::createClause(synonym, synonymToDesignEntityMap);
+        clausesToEvaluate.push_back(clause);
+    }
+    return clausesToEvaluate;
+}
