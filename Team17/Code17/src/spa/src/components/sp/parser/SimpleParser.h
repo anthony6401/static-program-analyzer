@@ -3,6 +3,7 @@
 #include <string>
 #include <stdexcept>
 #include "../SimpleToken.h"
+#include "../extractor/Extractor.h"
 
 class SimpleParser {
     public:
@@ -12,4 +13,6 @@ class SimpleParser {
         static void parseRead(SimpleToken& readStmt, std::vector<std::string>& tokens);
         static SimpleToken parseVariable(std::string& token);
 
+    private:
+        static Extractor* extractor;
 };
