@@ -5,6 +5,7 @@
 #include "components/qps/abstract_query_object/SuchThat.h"
 #include "components/qps/abstract_query_object/Pattern.h"
 #include <unordered_map>
+#include <memory>
 
 using namespace qps;
 
