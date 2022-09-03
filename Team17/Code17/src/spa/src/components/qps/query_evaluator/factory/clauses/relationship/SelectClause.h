@@ -1,6 +1,0 @@
-#ifndef SPA_SELECTCLAUSE_H
-#define SPA_SELECTCLAUSE_H
-
-
-
-#endif //SPA_SELECTCLAUSE_H
