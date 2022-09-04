@@ -3,18 +3,13 @@
 #include "components/qps/query_preprocessor/query_tokenizer/TokenType.h"
 #include "components/qps/query_preprocessor/query_tokenizer/TokenObject.h"
 
-Select::Select() : returnType(TokenType()), name("") {}
+Select::Select() {}
 
-Select::Select(TokenType returnType, std::string name) {
-    this->returnType = returnType;
-    this->name = name;
+Select::Select(std::string synonym) {
+    this->synonym = synonym;
 }
 
-TokenType Select::getReturnType() {
-    return returnType;
-}
-
-std::string Select::getName() {
-    return name;
+std::string Select::getSynonym() {
+    return synonym;
 }
 

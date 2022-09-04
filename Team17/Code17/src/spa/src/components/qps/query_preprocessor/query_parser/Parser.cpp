@@ -185,7 +185,7 @@ Select Parser::parseTokensIntoSelectObject(std::vector<TokenObject> selectTokens
 
 		TokenType returnType = mappedSynonyms.at(returnValue);
 
-		return Select(returnType, returnValue);
+		return Select(returnValue);
 
 	}
 

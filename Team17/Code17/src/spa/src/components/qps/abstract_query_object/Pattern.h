@@ -9,18 +9,18 @@ using namespace qps;
 // Only assign pattern
 class Pattern {
 private:
-    std::string name;
+    std::string synonym;
     TokenObject left;
     TokenObject right;
 
 public:
     Pattern();
-    Pattern(std::string name, TokenObject left, TokenObject right);
-    static std::string getName();
+    Pattern(std::string synonym, TokenObject left, TokenObject right);
+    static std::string getSynonym();
     static TokenObject getLeft();
     static TokenObject getRight();
     bool operator==(const Pattern& other) const {
-        return name == other.name
+        return synonym == other.synonym
             && left == other.left
             && right == other.right;
     }

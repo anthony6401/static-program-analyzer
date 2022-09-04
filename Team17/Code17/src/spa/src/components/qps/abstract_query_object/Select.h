@@ -6,20 +6,16 @@
 
 using namespace qps;
 
-// Only synonym
 class Select {
 private:
-    TokenType returnType;
-    std::string name;
+    std::string synonym;
 
 public:
     Select();
-    Select(TokenType returnType, std::string name);
-    TokenType getReturnType();
-    std::string getName();
+    Select(std::string synonym);
+    std::string getSynonym();
     bool operator==(const Select& other) const {
-        return returnType == other.returnType
-               && name == other.name;
+        return synonym == other.synonym;
     }
 };
 

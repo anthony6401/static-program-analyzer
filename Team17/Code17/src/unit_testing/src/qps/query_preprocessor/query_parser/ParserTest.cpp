@@ -34,7 +34,7 @@ TEST_CASE("Parse queries") {
         TokenObject(TokenType::NAME, std::string("v"))
     };
 
-    Select expectedSelect = Select(TokenType::VARIABLE, "v");
+    Select expectedSelect = Select("v");
     std::vector<SuchThat> expectedSuchThat {};
     std::vector<Pattern> expectedPattern {};
     std::unordered_map<std::string, TokenType> expectedMappedSynonyms{ {"v", TokenType::VARIABLE} };
