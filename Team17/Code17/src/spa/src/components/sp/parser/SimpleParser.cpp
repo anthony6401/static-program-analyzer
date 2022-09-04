@@ -1,6 +1,9 @@
 #include "SimpleParser.h"
 #include "../validator/SimpleValidator.h"
 #include "../SimpleToken.h"
+#include "../extractor/Extractor.h"
+
+Extractor* SimpleParser::extractor = new Extractor();
 
 /// <summary>
 /// SIMPLE statement number that is currently being processed
@@ -77,7 +80,7 @@ void SimpleParser::parsePrint(SimpleToken& printStmt, std::vector<std::string>& 
         std::vector<SimpleToken> children;
         children.push_back(parseVariable(tokens.at(0)));
         printStmt.setChildren(children);
-        //pass to extractor
+        extractor->extractPrint(printStmt, tokens); //pass to extractor
     } else {
         throw std::invalid_argument("Received invalid Print:Line " + printStmt.statementNumber);
     }
@@ -93,7 +96,7 @@ void SimpleParser::parseRead(SimpleToken& readStmt, std::vector<std::string>& to
         std::vector<SimpleToken> children;
         children.push_back(parseVariable(tokens.at(0)));
         readStmt.setChildren(children);
-        //pass to extractor
+        extractor->extractRead(readStmt, tokens); //pass to extractor
     }
     else {
         throw std::invalid_argument("Received invalid Read:Line " + readStmt.statementNumber);
