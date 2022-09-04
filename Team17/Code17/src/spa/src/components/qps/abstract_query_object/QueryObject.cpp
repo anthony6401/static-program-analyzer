@@ -4,7 +4,8 @@
 /*
 * Initializes empty query
 */
-QueryObject::QueryObject() {
+QueryObject::QueryObject() : relationships(std::vector<SuchThat>()),
+patterns(std::vector<Pattern>()), select(Select()), synonymToDesignEntityMap(std::unordered_map<std::string, TokenType>()) {
 	this->hasNoSyntaxError = false;
 }
 

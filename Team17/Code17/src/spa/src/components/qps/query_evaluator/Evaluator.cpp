@@ -1,5 +1,6 @@
 #include "Evaluator.h"
 #include <memory>
+#include <iostream>
 #include "components/qps/abstract_query_object/QueryObject.h"
 #include "components/qps/query_evaluator/factory/ClauseCreator.h"
 
@@ -13,6 +14,7 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
     // Extract select clause from query object
     if (relationships.empty() && patterns.empty()) {
         // Create a Select Clause Object for evaluation
+        // std::cout << "name of synonym is" << synonym.getName();
         std::shared_ptr<Clause> selectClauseToEvaluate = Evaluator::extractSelectClauseToEvaluate(synonym, synonymToDesignEntityMap);
         clausesToEvaluate.push_back(selectClauseToEvaluate);
     }

@@ -2,10 +2,10 @@
 
 Pattern::Pattern() {}
 
-Pattern::Pattern(std::string name, TokenObject left, TokenObject right) : name(name), left(left), right(right) {}
+Pattern::Pattern(std::string synonym, TokenObject left, TokenObject right) : synonym(synonym), left(left), right(right) {}
 
 // to be amended
-std::string Pattern::getName() {
+std::string Pattern::getSynonym() {
     return "TokenType::INTEGER";
 }
 
