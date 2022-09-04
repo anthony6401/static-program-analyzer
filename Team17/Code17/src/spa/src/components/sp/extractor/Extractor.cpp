@@ -1,20 +1,5 @@
 #include "Extractor.h"
 
-#include "../../../models/Entity/ReadEntity.h"
-#include "../../../models/Entity/PrintEntity.h"
-#include "../../../models/Entity/VariableEntity.h"
-#include "../../../models/Entity/ProcedureEntity.h"
-#include "../../../models/Entity/StatementEntity.h"
-#include "../../../models/Entity/CallEntity.h"
-#include "../../../models/Entity/WhileEntity.h"
-#include "../../../models/Entity/IfEntity.h"
-#include "../../../models/Entity/AssignEntity.h"
-#include "../../../models/Entity/VariableEntity.h"
-#include "../../../models/Entity/ConstantEntity.h"
-
-#include "../../../models/Relationship/ModifyRelationship.h"
-#include "../../../models/Relationship/UsesRelationship.h"
-
 void Extractor::extractRead(SimpleToken simpleToken, vector<string> tokens) {
 	ReadEntity* leftEntity = new ReadEntity(to_string(simpleToken.statementNumber));
 	VariableEntity* rightEntity = new VariableEntity(tokens.at(0));
@@ -33,26 +18,33 @@ void Extractor::extractPrint(SimpleToken simpleToken, vector<string> tokens) {
 // ================= //
 void Extractor::extractProcedure() {
 	ProcedureEntity* procedureEntity = new ProcedureEntity("");
-}
-
-void Extractor::extractStatement() {
-	StatementEntity* statementEntity = new StatementEntity("");
+	VariableEntity* variableEntity = new VariableEntity("");
+	// implement stack in the future for further processing
 }
 
 void Extractor::extractCall() {
 	CallEntity* callEntity = new CallEntity("");
+	VariableEntity* variableEntity = new VariableEntity("");
+	// implement stack in the future for further processing
 }
 
 void Extractor::extractWhile() {
 	WhileEntity* whileEntity = new WhileEntity("");
+	VariableEntity* variableEntity = new VariableEntity("");
+	// implement stack in the future for further processing
 }
 
 void Extractor::extractIf() {
 	IfEntity* ifEntity = new IfEntity("");
+	VariableEntity* variableEntity = new VariableEntity("");
+	// implement stack in the future for further processing
 }
 
 void Extractor::extractAssign() {
 	AssignEntity* assignEntity = new AssignEntity("");
+	VariableEntity* variableEntity = new VariableEntity("");
+	// could be a Uses or a Modify
+	// Pattern
 }
 
 void Extractor::extractCondExpr() {}
