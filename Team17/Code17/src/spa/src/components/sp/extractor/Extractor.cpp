@@ -3,14 +3,14 @@
 void Extractor::extractRead(SimpleToken simpleToken, vector<string> tokens) {
 	ReadEntity* leftEntity = new ReadEntity(to_string(simpleToken.statementNumber));
 	VariableEntity* rightEntity = new VariableEntity(tokens.at(0));
-	ModifyRelationship modifyRelationship = ModifyRelationship(leftEntity, rightEntity);
+	ModifyRelationship* modifyRelationship = new ModifyRelationship(leftEntity, rightEntity);
 	// next step is to populate pkb
 }
 
 void Extractor::extractPrint(SimpleToken simpleToken, vector<string> tokens) {
 	PrintEntity* leftEntity = new PrintEntity(to_string(simpleToken.statementNumber));
 	VariableEntity* rightEntity = new VariableEntity(tokens.at(0));
-	UsesRelationship usesRelationship = UsesRelationship(leftEntity, rightEntity);
+	UsesRelationship* usesRelationship = new UsesRelationship(leftEntity, rightEntity);
 	// next step is to populate pkb
 }
 
