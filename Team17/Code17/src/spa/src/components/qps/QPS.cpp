@@ -18,7 +18,7 @@ QueryObject QPS::tokenizeAndParseQuery(std::string query) {
     return parsedQuery;
 }
 
-void QPS::obtainQueryResult(std::string query, std::list<std::string> &results) {
+void QPS::processQueryResult(std::string query, std::list<std::string> &results) {
     QueryObject parsedQuery = tokenizeAndParseQuery(query);
     Evaluator::evaluateQuery(parsedQuery, results);
 }
