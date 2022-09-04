@@ -3,6 +3,7 @@
 #include <iostream>
 #include "components/qps/abstract_query_object/QueryObject.h"
 #include "components/qps/query_evaluator/factory/ClauseCreator.h"
+#include "components/pkb/clients/QPSClient.h"
 
 void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &results) {
     std::vector<std::shared_ptr<Clause>> clausesToEvaluate;
@@ -21,17 +22,16 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
     // Extract return type of query via Select class and map
 
     // Evaluate clauses individually, currently only for select clause
-    std::list<std::string> selectClauseResult = Evaluator::evaluateSelectClause(clausesToEvaluate);
-//    for (auto r : selectClauseResult) {
-//        results.push_back(r);
-//    }
-    results = selectClauseResult;
+    std::unordered_set<std::string> selectClauseResult = Evaluator::evaluateSelectClause(clausesToEvaluate);
+    for (auto r : selectClauseResult) {
+        results.push_back(r);
+    }
     // If any returns no results or false, terminate evaluation and return none as a result
     // Combine results of evaluation and store in query db
 }
 
-std::list<std::string> Evaluator::evaluateSelectClause(std::vector<std::shared_ptr<Clause>> clausesToEvaluate) {
-    std::list<std::string> resultOfClause;
+std::unordered_set<std::string> Evaluator::evaluateSelectClause(std::vector<std::shared_ptr<Clause>> clausesToEvaluate) {
+    std::unordered_set<std::string> resultOfClause;
     for (auto c : clausesToEvaluate) {
         resultOfClause = c -> evaluateClause();
     }

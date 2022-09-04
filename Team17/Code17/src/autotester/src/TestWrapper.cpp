@@ -1,4 +1,5 @@
 #include "TestWrapper.h"
+#include "components/pkb/pkb.h"
 
 // implementation code of WrapperFactory - do NOT modify the next 5 lines
 AbstractWrapper* WrapperFactory::wrapper = 0;
@@ -13,6 +14,7 @@ volatile bool AbstractWrapper::GlobalStop = false;
 TestWrapper::TestWrapper() {
   // create any objects here as instance variables of this class
   // as well as any initialization required for your spa program
+  // auto pkb = std::make_shared<PKB>();
 }
 
 // method for parsing the SIMPLE source

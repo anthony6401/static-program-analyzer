@@ -15,7 +15,7 @@ private:
 
 public:
     SelectClause(Select synonym, std::unordered_map<std::string, TokenType> synonymToDesignEntityMap);
-    std::list<std::string> evaluateClause() override;
+    std::unordered_set<std::string> evaluateClause() override;
 };
 
 #endif //SPA_SELECTCLAUSE_H
