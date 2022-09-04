@@ -11,6 +11,6 @@ TEST_CASE("Evaluation for Select Clause - variable v; Select v") {
     std::unordered_map<std::string, TokenType> synonymToDesignEntityMap = {{"v", TokenType::VARIABLE}};
     QueryObject testQuery = QueryObject(select, relationships, patterns, synonymToDesignEntityMap);
     Evaluator::evaluateQuery(testQuery, testResults);
-    std::list<std::string> expectedResults = {"x", "y", "z"};
+    std::list<std::string> expectedResults = {};
     REQUIRE(testResults == expectedResults);
 }

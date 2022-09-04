@@ -11,7 +11,7 @@ public:
     static void evaluateQuery(QueryObject queryObject, std::list<std::string> &results);
     // std::vector<std::shared_ptr<Clause>> extractClausesToEvaluate(QueryObject queryObject);
     static std::shared_ptr<Clause> extractSelectClauseToEvaluate(Select synonym, std::unordered_map<std::string, TokenType> synonymToDesignEntityMap);
-    static std::list<std::string> evaluateSelectClause(std::vector<std::shared_ptr<Clause>> clausesToEvaluate);
+    static std::unordered_set<std::string> evaluateSelectClause(std::vector<std::shared_ptr<Clause>> clausesToEvaluate);
 };
 
 #endif //SPA_EVALUATOR_H
