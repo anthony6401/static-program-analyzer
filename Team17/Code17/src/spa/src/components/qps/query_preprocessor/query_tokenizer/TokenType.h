@@ -17,7 +17,7 @@ namespace qps {
         // Lexical tokens
         NAME,
         INTEGER,
-        IDENTITY, // eg. "x", "aa"
+        NAME_WITH_QUOTATION, // eg. "x", "aa"
         SUBEXPRESSION, // eg. _"x+1"_
         EXPRESSION, // eg. "x+1", "x/y"
         // Symbols
@@ -37,7 +37,14 @@ namespace qps {
         ASSIGN,
         VARIABLE,
         CONSTANT,
-        PROCEDURE
+        PROCEDURE,
+        // Syntax Types - may be removed in future sprints
+        DECLARATION,
+        SYNONYM,
+        DESIGN_ENTITY,
+        RELREF,
+        STMTREF,
+        ENTREF
     };
 }
 

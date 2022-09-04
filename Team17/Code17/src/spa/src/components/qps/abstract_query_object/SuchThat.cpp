@@ -9,15 +9,15 @@ SuchThat::SuchThat(TokenType relationship, TokenObject left, TokenObject right) 
 
 // to be amended
 TokenType SuchThat::getRelationshipType() {
-    return relationship;
+    return this->relationship;
 }
 
 TokenObject SuchThat::getLeft() {
-    return left;
+    return this->left;
 }
 
 TokenObject SuchThat::getRight() {
-    return right;
+    return this->right;
 }
 
 

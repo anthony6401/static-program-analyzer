@@ -4,8 +4,6 @@
 #include "components/qps/query_preprocessor/query_tokenizer/TokenType.h"
 #include "components/qps/query_preprocessor/query_tokenizer/TokenObject.h"
 
-// Implementing as hashmap, since look up for entity type is O(1)
-// Class is currently unused
 class Declaration {
 private:
     TokenType entity;
@@ -15,6 +13,10 @@ public:
     Declaration(TokenType entity, std::string name);
     TokenType getEntityType();
     std::string getName();
+    bool operator==(const Declaration& other) const {
+        return entity == other.entity
+            && name == other.name;
+    }
 };
 
 #endif //SPA_DECLARATION_H

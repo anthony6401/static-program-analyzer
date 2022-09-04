@@ -294,7 +294,7 @@ std::vector<TokenObject> Tokenizer::tokenize(std::string query) {
                 TokenObject object = *new TokenObject(TokenType::INTEGER, s);
                 tokenList.push_back(object);
             } else if (isIdentity(s)) {
-                TokenObject object = *new TokenObject(TokenType::IDENTITY, s);
+                TokenObject object = *new TokenObject(TokenType::NAME_WITH_QUOTATION, s);
                 tokenList.push_back(object);
             } else if (isExpression(s)) {
                 // Return trimmed string

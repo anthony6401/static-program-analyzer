@@ -6,9 +6,9 @@ Declaration::Declaration(qps::TokenType entity, std::string name) {
 }
 
 TokenType Declaration::getEntityType() {
-    return TokenType::INTEGER;
+    return this->entity;
 }
 
 std::string Declaration::getName() {
-    return "";
+    return this->name;
 }
