@@ -1,5 +1,5 @@
 #include <catch.hpp>
-#include "./EntityObject.h"
+#include "../EntityObject.h"
 #include "components/pkb/storage/EntityStorage.h"
 #include "components/pkb/storage/AssignEntityStorage.h"
 #include "components/pkb/storage/CallEntityStorage.h"
