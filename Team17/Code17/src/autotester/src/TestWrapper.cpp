@@ -1,6 +1,8 @@
 #include "TestWrapper.h"
 #include "components/pkb/pkb.h"
 #include "components/qps/QPS.h"
+#include "components/pkb/pkb.h"
+#include "components/pkb/clients/QPSClient.h"
 
 // implementation code of WrapperFactory - do NOT modify the next 5 lines
 AbstractWrapper* WrapperFactory::wrapper = 0;
@@ -16,6 +18,7 @@ TestWrapper::TestWrapper() {
   // create any objects here as instance variables of this class
   // as well as any initialization required for your spa program
   // auto pkb = std::make_shared<PKB>();
+  pkb = new PKB();
 }
 
 // method for parsing the SIMPLE source
@@ -28,7 +31,8 @@ void TestWrapper::parse(std::string filename) {
 void TestWrapper::evaluate(std::string query, std::list<std::string>& results){
 // call your evaluator to evaluate the query here
   // ...code to evaluate query...
-    QPS::processQueryResult(query, results);
+    auto qpsClient = QPSClient(pkb);
+    QPS::processQueryResult(query, results, qpsClient);
   // store the answers to the query in the results list (it is initially empty)
   // each result must be a string.
 }
