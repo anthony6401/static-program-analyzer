@@ -29,7 +29,6 @@ void TestWrapper::parse(std::string filename) {
 	std::string code((std::istreambuf_iterator<char>(testFile)),
 		std::istreambuf_iterator<char>());
 
-	std::cout << code;
 	this->simpleTokenizer->tokenizeCode(code);
 
 }
