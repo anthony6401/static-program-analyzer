@@ -1,20 +1,20 @@
 #include "Extractor.h"
 
 PKB* knowledge = new PKB();
-SPClient* spClient = new SPClient(knowledge);
+SPClient spClient = SPClient(knowledge);
 
 void Extractor::extractRead(SimpleToken simpleToken, vector<string> tokens) {
 	ReadEntity* leftEntity = new ReadEntity(to_string(simpleToken.statementNumber));
 	VariableEntity* rightEntity = new VariableEntity(tokens.at(0));
 	ModifyRelationship* modifyRelationship = new ModifyRelationship(leftEntity, rightEntity);
-	(*spClient).storeRelationship(modifyRelationship);
+	spClient.storeRelationship(modifyRelationship);
 }
 
 void Extractor::extractPrint(SimpleToken simpleToken, vector<string> tokens) {
 	PrintEntity* leftEntity = new PrintEntity(to_string(simpleToken.statementNumber));
 	VariableEntity* rightEntity = new VariableEntity(tokens.at(0));
 	UsesRelationship* usesRelationship = new UsesRelationship(leftEntity, rightEntity);
-	(*spClient).storeRelationship(usesRelationship);
+	spClient.storeRelationship(usesRelationship);
 }
 
 /* TO BE IMPLEMENTED */
