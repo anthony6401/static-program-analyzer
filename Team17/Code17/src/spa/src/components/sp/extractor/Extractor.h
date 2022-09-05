@@ -40,6 +40,5 @@ public:
 	void extractOpr();
 	void extractError();
 
-private:
 	static SPClient* client;
 };
