@@ -40,5 +40,5 @@ public:
 	void extractOpr();
 	void extractError();
 
-	static SPClient* client;
+	SPClient* client;
 };
