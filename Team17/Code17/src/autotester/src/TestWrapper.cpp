@@ -20,7 +20,7 @@ TestWrapper::TestWrapper() {
   // as well as any initialization required for your spa program
   // auto pkb = std::make_shared<PKB>();
   pkb = new PKB();
-  this->simpleTokenizer = new SimpleTokenizer();
+  //this->simpleTokenizer = new SimpleTokenizer();
 }
 
 // method for parsing the SIMPLE source
