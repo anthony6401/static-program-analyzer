@@ -13,6 +13,7 @@
 class TestWrapper : public AbstractWrapper {
  private:
     PKB* pkb;
+    SimpleTokenizer* simpleTokenizer;
  public:
   // default constructor
   TestWrapper();
@@ -25,9 +26,6 @@ class TestWrapper : public AbstractWrapper {
   
   // method for evaluating a query
   virtual void evaluate(std::string query, std::list<std::string>& results);
-
-private:
-    SimpleTokenizer* simpleTokenizer;
 
 };
 
