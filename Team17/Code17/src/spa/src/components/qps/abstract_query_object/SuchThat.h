@@ -10,14 +10,14 @@ using namespace qps;
 
 class SuchThat {
 private:
-    TokenType relationship;
+    qps::TokenType relationship;
     TokenObject left;
     TokenObject right;
 
 public:
     SuchThat();
-    SuchThat(TokenType relationship, TokenObject left, TokenObject right);
-    TokenType getRelationshipType();
+    SuchThat(qps::TokenType relationship, TokenObject left, TokenObject right);
+    qps::TokenType getRelationshipType();
     TokenObject getLeft();
     TokenObject getRight();
     bool operator==(const SuchThat& other) const {

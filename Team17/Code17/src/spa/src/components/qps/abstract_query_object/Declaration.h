@@ -6,12 +6,12 @@
 
 class Declaration {
 private:
-    TokenType entity;
+    qps::TokenType entity;
     std::string name;
 
 public:
-    Declaration(TokenType entity, std::string name);
-    TokenType getEntityType();
+    Declaration(qps::TokenType entity, std::string name);
+    qps::TokenType getEntityType();
     std::string getName();
     bool operator==(const Declaration& other) const {
         return entity == other.entity

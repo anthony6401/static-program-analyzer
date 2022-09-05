@@ -11,7 +11,7 @@ using namespace qps;
 
 class Tokenizer {
 private:
-    std::unordered_map<std::string, TokenType> stringToTokenMap;
+    std::unordered_map<std::string, qps::TokenType> stringToTokenMap;
     bool isName(std::string s);
     bool isInteger(std::string s);
     bool isIdentity(std::string s);
