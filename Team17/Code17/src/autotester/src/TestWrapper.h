@@ -8,8 +8,11 @@
 // include your other headers here
 #include "AbstractWrapper.h"
 #include "components/sp/tokenizer/SimpleTokenizer.h"
+#include "components/pkb/pkb.h"
 
 class TestWrapper : public AbstractWrapper {
+ private:
+    PKB* pkb;
  public:
   // default constructor
   TestWrapper();
