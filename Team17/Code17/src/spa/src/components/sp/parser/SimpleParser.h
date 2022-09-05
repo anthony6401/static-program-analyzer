@@ -4,6 +4,7 @@
 #include <stdexcept>
 #include "../SimpleToken.h"
 #include "../extractor/Extractor.h"
+#include "../../pkb/clients/SPClient.h"
 
 class SimpleParser {
     public:
@@ -14,6 +15,6 @@ class SimpleParser {
         static SimpleToken parseVariable(std::string& token);
         static void parseHolder(SimpleToken& printStmt, std::vector<std::string>& tokens);
 
-    private:
+        static SPClient client; // to be changed
         static Extractor* extractor;
 };

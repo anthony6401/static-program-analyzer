@@ -4,6 +4,7 @@
 #include "../extractor/Extractor.h"
 #include <iostream>
 
+SPClient SimpleParser::client = SPClient(new PKB()); // to be changed
 Extractor* SimpleParser::extractor = new Extractor();
 
 /// <summary>
@@ -81,7 +82,7 @@ void SimpleParser::parsePrint(SimpleToken& printStmt, std::vector<std::string>& 
         std::vector<SimpleToken> children;
         children.push_back(parseVariable(tokens.at(0)));
         printStmt.setChildren(children);
-        extractor->extractPrint(printStmt, tokens); //pass to extractor
+        extractor->extractPrint(printStmt, tokens, client); //pass to extractor
     } else {
         throw std::invalid_argument("Received invalid Print:Line " + printStmt.statementNumber);
     }
@@ -97,7 +98,7 @@ void SimpleParser::parseRead(SimpleToken& readStmt, std::vector<std::string>& to
         std::vector<SimpleToken> children;
         children.push_back(parseVariable(tokens.at(0)));
         readStmt.setChildren(children);
-        extractor->extractRead(readStmt, tokens); //pass to extractor
+        extractor->extractRead(readStmt, tokens, client); //pass to extractor
     }
     else {
         throw std::invalid_argument("Received invalid Read:Line " + readStmt.statementNumber);
