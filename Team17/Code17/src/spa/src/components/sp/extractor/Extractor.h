@@ -22,12 +22,12 @@
 
 #include <vector>
 
-using namespace std;
-
 class Extractor {
 public:
-	void extractRead(SimpleToken simpleToken, vector<string> tokens);
-	void extractPrint(SimpleToken simpleToken, vector<string> tokens);
+	Extractor(SPClient client);
+
+	void extractRead(SimpleToken simpleToken, std::vector<std::string> tokens);
+	void extractPrint(SimpleToken simpleToken, std::vector<std::string> tokens);
 	void extractProcedure();
 	void extractCall();
 	void extractWhile();
@@ -40,5 +40,5 @@ public:
 	void extractOpr();
 	void extractError();
 
-	SPClient* client;
+	SPClient client;
 };

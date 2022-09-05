@@ -1,20 +1,21 @@
 #include "Extractor.h"
 
-PKB* knowledge = new PKB();
-SPClient spClient = SPClient(knowledge);
-
-void Extractor::extractRead(SimpleToken simpleToken, vector<string> tokens) {
-	ReadEntity* leftEntity = new ReadEntity(to_string(simpleToken.statementNumber));
-	VariableEntity* rightEntity = new VariableEntity(tokens.at(0));
-	ModifyRelationship* modifyRelationship = new ModifyRelationship(leftEntity, rightEntity);
-	spClient.storeRelationship(modifyRelationship);
+Extractor::Extractor(SPClient client) {
+	this->client = client;
 }
 
-void Extractor::extractPrint(SimpleToken simpleToken, vector<string> tokens) {
-	PrintEntity* leftEntity = new PrintEntity(to_string(simpleToken.statementNumber));
+void Extractor::extractRead(SimpleToken simpleToken, std::vector<std::string> tokens) {
+	ReadEntity* leftEntity = new ReadEntity(std::to_string(simpleToken.statementNumber));
+	VariableEntity* rightEntity = new VariableEntity(tokens.at(0));
+	ModifyRelationship* modifyRelationship = new ModifyRelationship(leftEntity, rightEntity);
+	client.storeRelationship(modifyRelationship);
+}
+
+void Extractor::extractPrint(SimpleToken simpleToken, std::vector<std::string> tokens) {
+	PrintEntity* leftEntity = new PrintEntity(std::to_string(simpleToken.statementNumber));
 	VariableEntity* rightEntity = new VariableEntity(tokens.at(0));
 	UsesRelationship* usesRelationship = new UsesRelationship(leftEntity, rightEntity);
-	spClient.storeRelationship(usesRelationship);
+	client.storeRelationship(usesRelationship);
 }
 
 /* TO BE IMPLEMENTED */
