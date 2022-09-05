@@ -12,7 +12,7 @@
 class QPS {
 public:
     static QueryObject tokenizeAndParseQuery(std::string query);
-    static void processQueryResult(std::string query, std::list<std::string> &results);
+    static void processQueryResult(std::string query, std::list<std::string> &results, QPSClient qpsClient);
 };
 
 #endif //SPA_QPS_H

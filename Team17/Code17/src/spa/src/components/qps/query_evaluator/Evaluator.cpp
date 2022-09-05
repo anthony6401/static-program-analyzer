@@ -5,7 +5,7 @@
 #include "components/qps/query_evaluator/factory/ClauseCreator.h"
 #include "components/pkb/clients/QPSClient.h"
 
-void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &results) {
+void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &results, QPSClient qpsClient) {
     std::vector<std::shared_ptr<Clause>> clausesToEvaluate;
     std::vector<SuchThat> relationships = queryObject.getRelationships();
     std::vector<Pattern> patterns = queryObject.getPattern();
@@ -16,13 +16,13 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
     if (relationships.empty() && patterns.empty()) {
         // Create a Select Clause Object for evaluation
         // std::cout << "name of synonym is" << synonym.getName();
-        std::shared_ptr<Clause> selectClauseToEvaluate = Evaluator::extractSelectClauseToEvaluate(synonym, synonymToDesignEntityMap);
+        std::shared_ptr<Clause> selectClauseToEvaluate = Evaluator::extractSelectClauseToEvaluate(synonym, synonymToDesignEntityMap, qpsClient);
         clausesToEvaluate.push_back(selectClauseToEvaluate);
     }
     // Extract return type of query via Select class and map
 
     // Evaluate clauses individually, currently only for select clause
-    std::unordered_set<std::string> selectClauseResult = Evaluator::evaluateSelectClause(clausesToEvaluate);
+    std::unordered_set<std::string> selectClauseResult = Evaluator::evaluateSelectClause(clausesToEvaluate, qpsClient);
     for (auto r : selectClauseResult) {
         results.push_back(r);
     }
@@ -30,7 +30,7 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
     // Combine results of evaluation and store in query db
 }
 
-std::unordered_set<std::string> Evaluator::evaluateSelectClause(std::vector<std::shared_ptr<Clause>> clausesToEvaluate) {
+std::unordered_set<std::string> Evaluator::evaluateSelectClause(std::vector<std::shared_ptr<Clause>> clausesToEvaluate, QPSClient qpsClient) {
     std::unordered_set<std::string> resultOfClause;
     for (auto c : clausesToEvaluate) {
         resultOfClause = c -> evaluateClause();
@@ -40,8 +40,8 @@ std::unordered_set<std::string> Evaluator::evaluateSelectClause(std::vector<std:
 
 
 std::shared_ptr<Clause> Evaluator::extractSelectClauseToEvaluate(Select synonym,
-                                                                               std::unordered_map<std::string, TokenType> synonymToDesignEntityMap) {
-    std::shared_ptr<Clause> selectClauseToEvaluate = ClauseCreator::createClause(synonym, synonymToDesignEntityMap);
+                                                                               std::unordered_map<std::string, TokenType> synonymToDesignEntityMap, QPSClient qpsClient) {
+    std::shared_ptr<Clause> selectClauseToEvaluate = ClauseCreator::createClause(synonym, synonymToDesignEntityMap, qpsClient);
     return selectClauseToEvaluate;
 }
 
