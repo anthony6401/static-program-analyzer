@@ -21,48 +21,48 @@ SimpleToken SimpleParser::parseLine(std::vector<std::string>& tokens, std::strin
     std::string first = tokens.front();
     if (first == "procedure") {
         tokens.erase(tokens.begin());
-        SimpleToken token = SimpleToken(TokenType::TPROCEDURE, code,
+        SimpleToken token = SimpleToken(SpTokenType::TPROCEDURE, code,
             SimpleParser::statementNumber, &SimpleParser::parseHolder);
         SimpleParser::statementNumber++;
         return token;
     } else if (first == "read") {
         tokens.erase(tokens.begin());
-        SimpleToken token = SimpleToken(TokenType::TREAD, code,
+        SimpleToken token = SimpleToken(SpTokenType::TREAD, code,
             SimpleParser::statementNumber, &SimpleParser::parseRead);
         SimpleParser::statementNumber++;
         return token;
     } else if (first == "print") {
         tokens.erase(tokens.begin());
-        SimpleToken token = SimpleToken(TokenType::TPRINT, code,
+        SimpleToken token = SimpleToken(SpTokenType::TPRINT, code,
             SimpleParser::statementNumber, &SimpleParser::parsePrint);
         SimpleParser::statementNumber++;
         return token;
     } else if (first == "call") {
         tokens.erase(tokens.begin());
-        SimpleToken token = SimpleToken(TokenType::TCALL, code,
+        SimpleToken token = SimpleToken(SpTokenType::TCALL, code,
             SimpleParser::statementNumber, &SimpleParser::parseHolder);
         SimpleParser::statementNumber++;
         return token;
     } else if (first == "while") {
         tokens.erase(tokens.begin());
-        SimpleToken token = SimpleToken(TokenType::TWHILE, code,
+        SimpleToken token = SimpleToken(SpTokenType::TWHILE, code,
             SimpleParser::statementNumber, &SimpleParser::parseHolder);
         SimpleParser::statementNumber++;
         return token;
     } else if (first == "else") {
         tokens.erase(tokens.begin());
-        SimpleToken token = SimpleToken(TokenType::TELSE, code,
+        SimpleToken token = SimpleToken(SpTokenType::TELSE, code,
             0, &SimpleParser::parseHolder);
         return token;
     } else if (first == "}") {
         tokens.erase(tokens.begin());
-        SimpleToken token = SimpleToken(TokenType::TCLOSE, code,
+        SimpleToken token = SimpleToken(SpTokenType::TCLOSE, code,
             SimpleParser::statementNumber, &SimpleParser::parseHolder);
         SimpleParser::statementNumber++;
         return token;
     } else {
         if (tokens.at(1) == "=") {
-            SimpleToken token = SimpleToken(TokenType::TASSIGN, code,
+            SimpleToken token = SimpleToken(SpTokenType::TASSIGN, code,
                 SimpleParser::statementNumber, &SimpleParser::parseHolder);
             SimpleParser::statementNumber++;
             return token;
@@ -111,7 +111,7 @@ void SimpleParser::parseRead(SimpleToken& readStmt, std::vector<std::string>& to
 /// <returns>SimpleToken of TVARIABLE with variable name as value</returns>
 SimpleToken SimpleParser::parseVariable(std::string& token) {
     if (SimpleValidator::validateLexical(token)) {
-        return SimpleToken(TokenType::TVARIABLE, token, 0, NULL);
+        return SimpleToken(SpTokenType::TVARIABLE, token, 0, NULL);
     } else {
         throw std::invalid_argument("Received invalid variable " + token);
     }

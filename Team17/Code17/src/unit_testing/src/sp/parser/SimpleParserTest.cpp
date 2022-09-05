@@ -29,7 +29,7 @@ TEST_CASE("parseLine print") {
     test_tokens.push_back("test");
     test_tokens.push_back(";");
     SimpleToken test_result = SimpleParser::parseLine(test_tokens, code);
-    SimpleToken expected_result = SimpleToken(TokenType::TPRINT, code,
+    SimpleToken expected_result = SimpleToken(SpTokenType::TPRINT, code,
         1, SimpleParser::parsePrint);
     REQUIRE(equalToken(test_result, expected_result));
 }
@@ -42,7 +42,7 @@ TEST_CASE("parseLine read") {
     test_tokens.push_back("test");
     test_tokens.push_back(";");
     SimpleToken test_result = SimpleParser::parseLine(test_tokens, code);
-    SimpleToken expected_result = SimpleToken(TokenType::TREAD, code,
+    SimpleToken expected_result = SimpleToken(SpTokenType::TREAD, code,
         1, SimpleParser::parseRead);
     REQUIRE(equalToken(test_result, expected_result));
 }
@@ -53,10 +53,10 @@ TEST_CASE("parse read") {
     std::vector<std::string> tokens;
     tokens.push_back("test");
     tokens.push_back(";");
-    SimpleToken test_token = SimpleToken(TokenType::TREAD, code,
+    SimpleToken test_token = SimpleToken(SpTokenType::TREAD, code,
         1, SimpleParser::parseRead);
     (test_token.parseFunction)(test_token, tokens);
-    SimpleToken expected_children = SimpleToken(TokenType::TVARIABLE, "test", 
+    SimpleToken expected_children = SimpleToken(SpTokenType::TVARIABLE, "test", 
         0, NULL);
     std::vector<SimpleToken> expected_result;
     expected_result.push_back(expected_children);
@@ -69,10 +69,10 @@ TEST_CASE("parse print") {
     std::vector<std::string> tokens;
     tokens.push_back("print");
     tokens.push_back(";");
-    SimpleToken test_token = SimpleToken(TokenType::TPRINT, code,
+    SimpleToken test_token = SimpleToken(SpTokenType::TPRINT, code,
         1, SimpleParser::parsePrint);
     (test_token.parseFunction)(test_token, tokens);
-    SimpleToken expected_children = SimpleToken(TokenType::TVARIABLE, "test",
+    SimpleToken expected_children = SimpleToken(SpTokenType::TVARIABLE, "test",
         0, NULL);
     std::vector<SimpleToken> expected_result;
     expected_result.push_back(expected_children);

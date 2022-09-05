@@ -3,7 +3,7 @@
 #include <vector>
 #include <string>
 
-enum class TokenType {
+enum class SpTokenType {
     TPROCEDURE,
     TELSE,
     TSTMT,
@@ -22,9 +22,9 @@ enum class TokenType {
 
 class SimpleToken {
 public:
-    SimpleToken(TokenType type, std::string value,
+    SimpleToken(SpTokenType type, std::string value,
         int statementNumber, void (*parseFunction)(SimpleToken&, std::vector<std::string>&));
-    TokenType type;
+    SpTokenType type;
     int statementNumber;
     void (*parseFunction)(SimpleToken&, std::vector<std::string>&);
     std::string value;

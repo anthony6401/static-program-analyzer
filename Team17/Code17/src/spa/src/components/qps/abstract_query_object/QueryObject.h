@@ -16,17 +16,17 @@ private:
     std::vector<Pattern> patterns;
     Select select;
     bool hasNoSyntaxError = false;
-    std::unordered_map<std::string, qps::TokenType> synonymToDesignEntityMap;
+    std::unordered_map<std::string, TokenType> synonymToDesignEntityMap;
 
 
 public:
     QueryObject();
-    QueryObject(Select select, std::vector<SuchThat> relationship, std::vector<Pattern> pattern, std::unordered_map<std::string, qps::TokenType> synonymToDesignEntity);
+    QueryObject(Select select, std::vector<SuchThat> relationship, std::vector<Pattern> pattern, std::unordered_map<std::string, TokenType> synonymToDesignEntity);
     bool isSyntacticallyCorrect();
     std::vector<SuchThat> getRelationships();
     std::vector<Pattern> getPattern();
     Select getSelect();
-    std::unordered_map<std::string, qps::TokenType> getSynonymToDesignEntityMap();
+    std::unordered_map<std::string, TokenType> getSynonymToDesignEntityMap();
     bool operator==(const QueryObject& other) const {
         return relationships == other.relationships
             && patterns == other.patterns

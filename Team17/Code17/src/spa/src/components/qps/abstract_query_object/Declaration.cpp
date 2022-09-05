@@ -1,6 +1,6 @@
 #include "Declaration.h"
 
-Declaration::Declaration(qps::TokenType entity, std::string name) {
+Declaration::Declaration(TokenType entity, std::string name) {
     this->entity = entity;
     this->name = name;
 }

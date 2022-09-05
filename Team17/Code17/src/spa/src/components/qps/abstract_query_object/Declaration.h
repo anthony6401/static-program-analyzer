@@ -10,8 +10,8 @@ private:
     std::string name;
 
 public:
-    Declaration(qps::TokenType entity, std::string name);
-    qps::TokenType getEntityType();
+    Declaration(TokenType entity, std::string name);
+    TokenType getEntityType();
     std::string getName();
     bool operator==(const Declaration& other) const {
         return entity == other.entity

@@ -8,12 +8,12 @@ using namespace qps;
 
 class TokenObject {
 private:
-    qps::TokenType tokenType;
+    TokenType tokenType;
     std::string tokenValue;
 
 public:
     TokenObject();
-    TokenObject(qps::TokenType tokenType, std::string value);
+    TokenObject(TokenType tokenType, std::string value);
     qps::TokenType getTokenType();
     std::string getValue();
     bool operator==(const TokenObject &other) const {
