@@ -1,6 +1,7 @@
 #include "SimpleTokenizer.h"
 #include "../parser/SimpleParser.h"
 #include "../utils/SpUtils.h"
+#include <iostream>
 
 /// <summary>
 /// Main method to tokenize SIMPLE code for design extractor
@@ -9,7 +10,7 @@
 void SimpleTokenizer::tokenizeCode(std::string code) {
     std::regex lineDelimiters = std::regex("[^{};]*[{};]");
     std::regex tokenDelimiters = std::regex("(==)|(!=)|(&&)|(\\|\\|)|(>=)|(<=)|[!%+\\-/*=(){};<>]");
-    std::regex whiteSpace = std::regex("\\s+");
+    std::regex whiteSpace = std::regex("\\S+");
 
     std::vector<std::string> codeLines = SpUtils::split(code, lineDelimiters);
     if (codeLines.empty()) {

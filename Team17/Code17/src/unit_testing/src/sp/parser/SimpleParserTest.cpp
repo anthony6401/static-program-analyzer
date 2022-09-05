@@ -1,5 +1,4 @@
 #include "components/sp/parser/SimpleParser.h"
-
 #include <catch.hpp>
 
 bool equalToken(SimpleToken& test, SimpleToken& result) {
@@ -79,3 +78,4 @@ TEST_CASE("parse print") {
     expected_result.push_back(expected_children);
     REQUIRE(equalChildren(test_token.getChildren(), expected_result));
 }
+

@@ -12,6 +12,7 @@ class SimpleParser {
         static void parsePrint(SimpleToken& printStmt, std::vector<std::string>& tokens);
         static void parseRead(SimpleToken& readStmt, std::vector<std::string>& tokens);
         static SimpleToken parseVariable(std::string& token);
+        static void parseHolder(SimpleToken& printStmt, std::vector<std::string>& tokens);
 
     private:
         static Extractor* extractor;
