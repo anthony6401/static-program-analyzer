@@ -14,6 +14,7 @@ class TestWrapper : public AbstractWrapper {
  private:
     PKB* pkb;
     SimpleTokenizer* simpleTokenizer;
+
  public:
   // default constructor
   TestWrapper();
