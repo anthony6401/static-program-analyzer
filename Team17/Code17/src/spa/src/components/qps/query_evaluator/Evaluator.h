@@ -13,7 +13,7 @@ public:
     // std::vector<std::shared_ptr<Clause>> extractClausesToEvaluate(QueryObject queryObject);
     static std::shared_ptr<Clause> extractSelectClauseToEvaluate(Select synonym, std::unordered_map<std::string, qps::TokenType> synonymToDesignEntityMap);
     static std::unordered_set<std::string> evaluateSelectClause(std::vector<std::shared_ptr<Clause>> clausesToEvaluate);
-    static std::shared_ptr<Clause> extractSelectClauseToEvaluate(Select synonym, std::unordered_map<std::string, TokenType> synonymToDesignEntityMap, QPSClient qpsClient);
+    static std::shared_ptr<Clause> extractSelectClauseToEvaluate(Select synonym, std::unordered_map<std::string, qps::TokenType> synonymToDesignEntityMap, QPSClient qpsClient);
     static std::unordered_set<std::string> evaluateSelectClause(std::vector<std::shared_ptr<Clause>> clausesToEvaluate, QPSClient qpsClient);
 };
 
