@@ -7,7 +7,7 @@
 /// <param name="value">value of token</param>
 /// <param name="statementNumber">statement number token is from</param>
 /// <param name="parseFunction">function to parse token for design extractor</param>
-SimpleToken::SimpleToken(TokenType type, std::string value,
+SimpleToken::SimpleToken(SpTokenType type, std::string value,
         int statementNumber, void (*parseFunction)(SimpleToken&, std::vector<std::string>&)) {
     this->type = type;
     this->value = value;

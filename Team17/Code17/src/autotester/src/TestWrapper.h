@@ -7,11 +7,14 @@
 
 // include your other headers here
 #include "AbstractWrapper.h"
+#include "components/sp/tokenizer/SimpleTokenizer.h"
 #include "components/pkb/pkb.h"
 
 class TestWrapper : public AbstractWrapper {
  private:
     PKB* pkb;
+    SimpleTokenizer* simpleTokenizer;
+
  public:
   // default constructor
   TestWrapper();
@@ -24,6 +27,7 @@ class TestWrapper : public AbstractWrapper {
   
   // method for evaluating a query
   virtual void evaluate(std::string query, std::list<std::string>& results);
+
 };
 
 #endif

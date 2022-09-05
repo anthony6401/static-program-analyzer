@@ -3,6 +3,7 @@
 #include "components/qps/QPS.h"
 #include "components/pkb/pkb.h"
 #include "components/pkb/clients/QPSClient.h"
+#include <fstream>
 
 // implementation code of WrapperFactory - do NOT modify the next 5 lines
 AbstractWrapper* WrapperFactory::wrapper = 0;
@@ -19,12 +20,23 @@ TestWrapper::TestWrapper() {
   // as well as any initialization required for your spa program
   // auto pkb = std::make_shared<PKB>();
   pkb = new PKB();
+  this->simpleTokenizer = new SimpleTokenizer();
 }
 
 // method for parsing the SIMPLE source
 void TestWrapper::parse(std::string filename) {
-	// call your parser to do the parsing
-  // ...rest of your code...
+	std::ifstream testFile;
+	testFile.open(filename);
+
+	if (!(testFile.is_open())) {
+		std::cout << "Cannot open file";
+		exit(EXIT_FAILURE);
+	}
+	std::string code((std::istreambuf_iterator<char>(testFile)),
+		std::istreambuf_iterator<char>());
+
+	this->simpleTokenizer->tokenizeCode(code);
+
 }
 
 // method to evaluating a query
