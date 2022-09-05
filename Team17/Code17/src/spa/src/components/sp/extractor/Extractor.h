@@ -18,6 +18,8 @@
 #include "../../../models/Relationship/ModifyRelationship.h"
 #include "../../../models/Relationship/UsesRelationship.h"
 
+#include "../../pkb/clients/SPClient.h"
+
 #include <vector>
 
 using namespace std;
@@ -37,4 +39,7 @@ public:
 	void extractClose();
 	void extractOpr();
 	void extractError();
+
+private:
+	static SPClient* client;
 };
