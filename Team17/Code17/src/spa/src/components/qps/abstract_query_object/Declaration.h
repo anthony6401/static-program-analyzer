@@ -6,7 +6,7 @@
 
 class Declaration {
 private:
-    qps::TokenType entity;
+    TokenType entity;
     std::string name;
 
 public:

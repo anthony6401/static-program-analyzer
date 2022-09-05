@@ -14,7 +14,7 @@ private:
 public:
     TokenObject();
     TokenObject(TokenType tokenType, std::string value);
-    qps::TokenType getTokenType();
+    TokenType getTokenType();
     std::string getValue();
     bool operator==(const TokenObject &other) const {
         return tokenType == other.tokenType && tokenValue == other.tokenValue;
