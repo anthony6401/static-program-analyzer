@@ -10,8 +10,9 @@
 #include "components/qps/abstract_query_object/QueryObject.h"
 
 class QPS {
-    QueryObject tokenizeAndParseQuery(std::string query);
-    void obtainQueryResult(std::string query, std::list<std::string> &results);
+public:
+    static QueryObject tokenizeAndParseQuery(std::string query);
+    static void processQueryResult(std::string query, std::list<std::string> &results);
 };
 
 #endif //SPA_QPS_H
