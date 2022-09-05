@@ -1,17 +1,13 @@
 #include "Extractor.h"
 
-Extractor::Extractor(SPClient client) {
-	this->client = client;
-}
-
-void Extractor::extractRead(SimpleToken simpleToken, std::vector<std::string> tokens) {
+void Extractor::extractRead(SimpleToken simpleToken, std::vector<std::string> tokens, SPClient client) {
 	ReadEntity* leftEntity = new ReadEntity(std::to_string(simpleToken.statementNumber));
 	VariableEntity* rightEntity = new VariableEntity(tokens.at(0));
 	ModifyRelationship* modifyRelationship = new ModifyRelationship(leftEntity, rightEntity);
 	client.storeRelationship(modifyRelationship);
 }
 
-void Extractor::extractPrint(SimpleToken simpleToken, std::vector<std::string> tokens) {
+void Extractor::extractPrint(SimpleToken simpleToken, std::vector<std::string> tokens, SPClient client) {
 	PrintEntity* leftEntity = new PrintEntity(std::to_string(simpleToken.statementNumber));
 	VariableEntity* rightEntity = new VariableEntity(tokens.at(0));
 	UsesRelationship* usesRelationship = new UsesRelationship(leftEntity, rightEntity);
