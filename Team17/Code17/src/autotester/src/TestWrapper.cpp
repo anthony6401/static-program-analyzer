@@ -3,6 +3,7 @@
 #include "components/qps/QPS.h"
 #include "components/pkb/pkb.h"
 #include "components/pkb/clients/QPSClient.h"
+#include "components/sp/parser/SimpleParser.h"
 #include <fstream>
 
 // implementation code of WrapperFactory - do NOT modify the next 5 lines
@@ -21,6 +22,7 @@ TestWrapper::TestWrapper() {
   // auto pkb = std::make_shared<PKB>();
   pkb = new PKB();
   //this->simpleTokenizer = new SimpleTokenizer();
+  SimpleParser::client = SPClient(pkb);
 }
 
 // method for parsing the SIMPLE source
