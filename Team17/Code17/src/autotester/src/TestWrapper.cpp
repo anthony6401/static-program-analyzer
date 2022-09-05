@@ -1,6 +1,7 @@
 #include "TestWrapper.h"
 #include "components/pkb/pkb.h"
 #include "components/qps/QPS.h"
+#include <fstream>
 
 // implementation code of WrapperFactory - do NOT modify the next 5 lines
 AbstractWrapper* WrapperFactory::wrapper = 0;
@@ -13,15 +14,24 @@ volatile bool AbstractWrapper::GlobalStop = false;
 
 // a default constructor
 TestWrapper::TestWrapper() {
-  // create any objects here as instance variables of this class
-  // as well as any initialization required for your spa program
-  // auto pkb = std::make_shared<PKB>();
+	this->simpleTokenizer = new SimpleTokenizer();
 }
 
 // method for parsing the SIMPLE source
 void TestWrapper::parse(std::string filename) {
-	// call your parser to do the parsing
-  // ...rest of your code...
+	std::ifstream testFile;
+	testFile.open(filename);
+
+	if (!(testFile.is_open())) {
+		std::cout << "Cannot open file";
+		exit(EXIT_FAILURE);
+	}
+	std::string code((std::istreambuf_iterator<char>(testFile)),
+		std::istreambuf_iterator<char>());
+
+	std::cout << code;
+	this->simpleTokenizer->tokenizeCode(code);
+
 }
 
 // method to evaluating a query
