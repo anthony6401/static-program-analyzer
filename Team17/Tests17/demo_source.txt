@@ -1,0 +1,27 @@
+procedure test {
+    read b;
+    read c;
+    read d;
+    read e;
+    read f;
+    read g;
+    read h;
+    read i;
+    read j;
+    read k;
+    read l;
+    read m;
+    read n;
+    read o;
+    read p;
+    read q;
+    read r;
+    read s;
+    read t;
+    read u;
+    read v;
+    read x;
+    read y;
+    read z;
+    print abc;
+}
