@@ -80,6 +80,22 @@ bool UsesRelationshipStorage::getRelationship(RelationshipType relType, TokenObj
 }
 
 std::unordered_set<std::string>* UsesRelationshipStorage::getRelationshipByFirst(RelationshipType relType, TokenObject firstArgument, TokenType returnType) {
+	if (relType == RelationshipType::USES) {
+		std::unordered_map<std::string, std::unordered_set<std::string>*>* storage;
+		if (firstArgument.getTokenType() == TokenType::INTEGER) {
+			storage = this->stmtForwardStorage;
+		}
+		else {
+			storage = this->procForwardStorage;
+		}
+
+		if (storage->find(firstArgument.getValue()) != storage->end()) {
+			return storage->find(firstArgument.getValue())->second;
+		} else {
+			return &std::unordered_set<std::string>();
+		}
+	}
+
 	return nullptr;
 }
 
