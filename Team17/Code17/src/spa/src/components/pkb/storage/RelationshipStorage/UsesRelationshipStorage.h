@@ -30,5 +30,3 @@ private:
 	std::unordered_map<std::string, std::unordered_set<std::string>> ifBackwardStorage;
 	std::unordered_map<std::string, std::unordered_set<std::string>> whileBackwardStorage;
 };
-
-

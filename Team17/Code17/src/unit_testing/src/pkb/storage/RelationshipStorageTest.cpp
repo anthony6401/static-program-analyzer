@@ -4,7 +4,6 @@
 #include "components/pkb/storage/RelationshipStorage/UsesRelationshipStorage.h"
 #include "../RelationshipObject.h"
 #include "../ReuseableTokenObject.h"
-#include <iostream>
 
 TEST_CASE("Uses Relationship Storage Test") {
 	RelationshipStorage* usesRelationshipStorage = new UsesRelationshipStorage();

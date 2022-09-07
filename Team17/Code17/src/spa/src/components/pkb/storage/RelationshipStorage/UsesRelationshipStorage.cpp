@@ -7,7 +7,6 @@
 #include "models/Entity/WhileEntity.h"
 #include "utils.h"
 #include "typeinfo"
-#include <iostream>
 
 UsesRelationshipStorage::UsesRelationshipStorage() : RelationshipStorage(), 
 														stmtForwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()),
