@@ -7,15 +7,15 @@ IfEntityStorage::IfEntityStorage() : EntityStorage() {}
 bool IfEntityStorage::storeEntity(Entity* entity) {
 	IfEntity* ifEntity = dynamic_cast<IfEntity*>(entity);
 	if (ifEntity) {
-		return this->set->insert(ifEntity->getValue()).second;
+		return set.insert(ifEntity->getValue()).second;
 	}
 
 	return false;
 }
 
-std::unordered_set<std::string>* IfEntityStorage::getAllEntity(qps::TokenType returnType) {
+std::unordered_set<std::string> IfEntityStorage::getAllEntity(qps::TokenType returnType) {
 	if (returnType == qps::TokenType::IF) {
-		return this->set;
+		return set;
 	}
-	return nullptr;
+	return std::unordered_set<std::string>();
 }
