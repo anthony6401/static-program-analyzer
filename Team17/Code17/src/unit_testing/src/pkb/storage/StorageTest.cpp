@@ -475,7 +475,7 @@ TEST_CASE("Variable Entity Storage Test") {
 	REQUIRE(stmtSet == std::unordered_set<std::string>());
 
 	// Retreiving entities from the storage
-	REQUIRE(variableSet.find(while_value_one) != variableSet.end());
+	REQUIRE(variableSet.find(variable_value_one) != variableSet.end());
 	REQUIRE(variableSet.find(variable_value_two) != variableSet.end());
 	REQUIRE(variableSet.find(variable_value_three) == variableSet.end());
 }
