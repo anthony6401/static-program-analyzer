@@ -26,10 +26,10 @@ TEST_CASE("QPS Client test") {
 	QPSClient qpsClient = QPSClient(pkb);
 
 	std::unordered_set<std::string> ass_set;
-	ass_set.insert(value_one);
+	ass_set.insert(assign_value_one);
 
 	std::unordered_set<std::string> var_set;
-	var_set.insert(value_one);
+	var_set.insert(variable_value_one);
 
 	REQUIRE(qpsClient.getAllEntity(qps::TokenType::ASSIGN) == ass_set);
 	REQUIRE(qpsClient.getAllEntity(qps::TokenType::VARIABLE) == var_set);
