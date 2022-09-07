@@ -3,10 +3,12 @@
 #include <unordered_set>
 #include <string>
 #include "models/Entity/Entity.h"
+#include <iostream>
 
-bool insertEntity(std::unordered_map<std::string, std::unordered_set<std::string>*>* map, std::string leftValue, std::string rightValue) {
-	if (map->find(leftValue) == map->end()) {
-		map->insert({ leftValue, new std::unordered_set<std::string> });
+bool insertEntity(std::unordered_map<std::string, std::unordered_set<std::string>> &map, std::string &leftValueTest, std::string &rightValueTest) {
+	if (map.find(leftValueTest) == map.end()) {
+		map.insert({ leftValueTest, std::unordered_set<std::string>()});
 	}
-	return map->find(leftValue)->second->insert(rightValue).second;
+
+	return map.find(leftValueTest)->second.insert(rightValueTest).second;
 }
