@@ -41,35 +41,35 @@ TEST_CASE("Assign Entity Storage Test") {
 	REQUIRE(assignEntityStorage->getSize() == 2);
 
 	// Get Set based on TokenType
-	std::unordered_set<Entity*>* assignSet = assignEntityStorage->getAllEntity(qps::TokenType::ASSIGN);
-	std::unordered_set<Entity*>* constantSet = assignEntityStorage->getAllEntity(qps::TokenType::CONSTANT);
-	std::unordered_set<Entity*>* callSet = assignEntityStorage->getAllEntity(qps::TokenType::CALL);
-	std::unordered_set<Entity*>* ifSet = assignEntityStorage->getAllEntity(qps::TokenType::IF);
-	std::unordered_set<Entity*>* printSet = assignEntityStorage->getAllEntity(qps::TokenType::PRINT);
-	std::unordered_set<Entity*>* procedureSet = assignEntityStorage->getAllEntity(qps::TokenType::PROCEDURE);
-	std::unordered_set<Entity*>* readSet = assignEntityStorage->getAllEntity(qps::TokenType::READ);
-	std::unordered_set<Entity*>* variableSet = assignEntityStorage->getAllEntity(qps::TokenType::VARIABLE);
-	std::unordered_set<Entity*>* whileSet = assignEntityStorage->getAllEntity(qps::TokenType::WHILE);
-	std::unordered_set<Entity*>* stmtSet = assignEntityStorage->getAllEntity(qps::TokenType::STMT);
+	std::unordered_set<std::string> assignSet = assignEntityStorage->getAllEntity(qps::TokenType::ASSIGN);
+	std::unordered_set<std::string> constantSet = assignEntityStorage->getAllEntity(qps::TokenType::CONSTANT);
+	std::unordered_set<std::string> callSet = assignEntityStorage->getAllEntity(qps::TokenType::CALL);
+	std::unordered_set<std::string> ifSet = assignEntityStorage->getAllEntity(qps::TokenType::IF);
+	std::unordered_set<std::string> printSet = assignEntityStorage->getAllEntity(qps::TokenType::PRINT);
+	std::unordered_set<std::string> procedureSet = assignEntityStorage->getAllEntity(qps::TokenType::PROCEDURE);
+	std::unordered_set<std::string> readSet = assignEntityStorage->getAllEntity(qps::TokenType::READ);
+	std::unordered_set<std::string> variableSet = assignEntityStorage->getAllEntity(qps::TokenType::VARIABLE);
+	std::unordered_set<std::string> whileSet = assignEntityStorage->getAllEntity(qps::TokenType::WHILE);
+	std::unordered_set<std::string> stmtSet = assignEntityStorage->getAllEntity(qps::TokenType::STMT);
 
 	// Correct TokenType should return the set instead of nullptr
-	REQUIRE(assignSet != nullptr);
+	REQUIRE(assignSet != std::unordered_set<std::string>());
 
 	// Incorrect TokenType should return nullptr instead of the set
-	REQUIRE(constantSet == nullptr);
-	REQUIRE(callSet == nullptr);
-	REQUIRE(ifSet == nullptr);
-	REQUIRE(printSet == nullptr);
-	REQUIRE(procedureSet == nullptr);
-	REQUIRE(readSet == nullptr);
-	REQUIRE(variableSet == nullptr);
-	REQUIRE(whileSet == nullptr);
-	REQUIRE(stmtSet == nullptr);
+	REQUIRE(constantSet == std::unordered_set<std::string>());
+	REQUIRE(callSet == std::unordered_set<std::string>());
+	REQUIRE(ifSet == std::unordered_set<std::string>());
+	REQUIRE(printSet == std::unordered_set<std::string>());
+	REQUIRE(procedureSet == std::unordered_set<std::string>());
+	REQUIRE(readSet == std::unordered_set<std::string>());
+	REQUIRE(variableSet == std::unordered_set<std::string>());
+	REQUIRE(whileSet == std::unordered_set<std::string>());
+	REQUIRE(stmtSet == std::unordered_set<std::string>());
 
 	// Retreiving entities from the storage
-	REQUIRE(assignSet->find(assignEntity) != assignSet->end());
-	REQUIRE(assignSet->find(assignEntityTwo) != assignSet->end());
-	REQUIRE(assignSet->find(assignEntityThree) == assignSet->end());
+	REQUIRE(assignSet.find(assign_value_one) != assignSet.end());
+	REQUIRE(assignSet.find(assign_value_two) != assignSet.end());
+	REQUIRE(assignSet.find(assign_value_three) == assignSet.end());
 
 }
 
@@ -100,35 +100,35 @@ TEST_CASE("Constant Entity Storage Test") {
 	REQUIRE(constantEntityStorage->getSize() == 2);
 
 	// Get Set based on TokenType
-	std::unordered_set<Entity*>* assignSet = constantEntityStorage->getAllEntity(qps::TokenType::ASSIGN);
-	std::unordered_set<Entity*>* constantSet = constantEntityStorage->getAllEntity(qps::TokenType::CONSTANT);
-	std::unordered_set<Entity*>* callSet = constantEntityStorage->getAllEntity(qps::TokenType::CALL);
-	std::unordered_set<Entity*>* ifSet = constantEntityStorage->getAllEntity(qps::TokenType::IF);
-	std::unordered_set<Entity*>* printSet = constantEntityStorage->getAllEntity(qps::TokenType::PRINT);
-	std::unordered_set<Entity*>* procedureSet = constantEntityStorage->getAllEntity(qps::TokenType::PROCEDURE);
-	std::unordered_set<Entity*>* readSet = constantEntityStorage->getAllEntity(qps::TokenType::READ);
-	std::unordered_set<Entity*>* variableSet = constantEntityStorage->getAllEntity(qps::TokenType::VARIABLE);
-	std::unordered_set<Entity*>* whileSet = constantEntityStorage->getAllEntity(qps::TokenType::WHILE);
-	std::unordered_set<Entity*>* stmtSet = constantEntityStorage->getAllEntity(qps::TokenType::STMT);
+	std::unordered_set<std::string> assignSet = constantEntityStorage->getAllEntity(qps::TokenType::ASSIGN);
+	std::unordered_set<std::string> constantSet = constantEntityStorage->getAllEntity(qps::TokenType::CONSTANT);
+	std::unordered_set<std::string> callSet = constantEntityStorage->getAllEntity(qps::TokenType::CALL);
+	std::unordered_set<std::string> ifSet = constantEntityStorage->getAllEntity(qps::TokenType::IF);
+	std::unordered_set<std::string> printSet = constantEntityStorage->getAllEntity(qps::TokenType::PRINT);
+	std::unordered_set<std::string> procedureSet = constantEntityStorage->getAllEntity(qps::TokenType::PROCEDURE);
+	std::unordered_set<std::string> readSet = constantEntityStorage->getAllEntity(qps::TokenType::READ);
+	std::unordered_set<std::string> variableSet = constantEntityStorage->getAllEntity(qps::TokenType::VARIABLE);
+	std::unordered_set<std::string> whileSet = constantEntityStorage->getAllEntity(qps::TokenType::WHILE);
+	std::unordered_set<std::string> stmtSet = constantEntityStorage->getAllEntity(qps::TokenType::STMT);
 
 	// Correct TokenType should return the set instead of nullptr
-	REQUIRE(constantSet != nullptr);
+	REQUIRE(constantSet != std::unordered_set<std::string>());
 
 	// Incorrect TokenType should return nullptr instead of the set
-	REQUIRE(assignSet == nullptr);
-	REQUIRE(callSet == nullptr);
-	REQUIRE(ifSet == nullptr);
-	REQUIRE(printSet == nullptr);
-	REQUIRE(procedureSet == nullptr);
-	REQUIRE(readSet == nullptr);
-	REQUIRE(variableSet == nullptr);
-	REQUIRE(whileSet == nullptr);
-	REQUIRE(stmtSet == nullptr);
+	REQUIRE(assignSet == std::unordered_set<std::string>());
+	REQUIRE(callSet == std::unordered_set<std::string>());
+	REQUIRE(ifSet == std::unordered_set<std::string>());
+	REQUIRE(printSet == std::unordered_set<std::string>());
+	REQUIRE(procedureSet == std::unordered_set<std::string>());
+	REQUIRE(readSet == std::unordered_set<std::string>());
+	REQUIRE(variableSet == std::unordered_set<std::string>());
+	REQUIRE(whileSet == std::unordered_set<std::string>());
+	REQUIRE(stmtSet == std::unordered_set<std::string>());
 
 	// Retreiving entities from the storage
-	REQUIRE(constantSet->find(constantEntity) != constantSet->end());
-	REQUIRE(constantSet->find(constantEntityTwo) != constantSet->end());
-	REQUIRE(constantSet->find(constantEntityThree) == constantSet->end());
+	REQUIRE(constantSet.find(constant_value_one) != constantSet.end());
+	REQUIRE(constantSet.find(constant_value_two) != constantSet.end());
+	REQUIRE(constantSet.find(constant_value_three) == constantSet.end());
 }
 
 TEST_CASE("Call Entity Storage Test") {
@@ -158,35 +158,35 @@ TEST_CASE("Call Entity Storage Test") {
 	REQUIRE(callEntityStorage->getSize() == 2);
 
 	// Get Set based on TokenType
-	std::unordered_set<Entity*>* assignSet = callEntityStorage->getAllEntity(qps::TokenType::ASSIGN);
-	std::unordered_set<Entity*>* constantSet = callEntityStorage->getAllEntity(qps::TokenType::CONSTANT);
-	std::unordered_set<Entity*>* callSet = callEntityStorage->getAllEntity(qps::TokenType::CALL);
-	std::unordered_set<Entity*>* ifSet = callEntityStorage->getAllEntity(qps::TokenType::IF);
-	std::unordered_set<Entity*>* printSet = callEntityStorage->getAllEntity(qps::TokenType::PRINT);
-	std::unordered_set<Entity*>* procedureSet = callEntityStorage->getAllEntity(qps::TokenType::PROCEDURE);
-	std::unordered_set<Entity*>* readSet = callEntityStorage->getAllEntity(qps::TokenType::READ);
-	std::unordered_set<Entity*>* variableSet = callEntityStorage->getAllEntity(qps::TokenType::VARIABLE);
-	std::unordered_set<Entity*>* whileSet = callEntityStorage->getAllEntity(qps::TokenType::WHILE);
-	std::unordered_set<Entity*>* stmtSet = callEntityStorage->getAllEntity(qps::TokenType::STMT);
+	std::unordered_set<std::string> assignSet = callEntityStorage->getAllEntity(qps::TokenType::ASSIGN);
+	std::unordered_set<std::string> constantSet = callEntityStorage->getAllEntity(qps::TokenType::CONSTANT);
+	std::unordered_set<std::string> callSet = callEntityStorage->getAllEntity(qps::TokenType::CALL);
+	std::unordered_set<std::string> ifSet = callEntityStorage->getAllEntity(qps::TokenType::IF);
+	std::unordered_set<std::string> printSet = callEntityStorage->getAllEntity(qps::TokenType::PRINT);
+	std::unordered_set<std::string> procedureSet = callEntityStorage->getAllEntity(qps::TokenType::PROCEDURE);
+	std::unordered_set<std::string> readSet = callEntityStorage->getAllEntity(qps::TokenType::READ);
+	std::unordered_set<std::string> variableSet = callEntityStorage->getAllEntity(qps::TokenType::VARIABLE);
+	std::unordered_set<std::string> whileSet = callEntityStorage->getAllEntity(qps::TokenType::WHILE);
+	std::unordered_set<std::string> stmtSet = callEntityStorage->getAllEntity(qps::TokenType::STMT);
 
 	// Correct TokenType should return the set instead of nullptr
-	REQUIRE(callSet != nullptr);
+	REQUIRE(callSet != std::unordered_set<std::string>());
 
 	// Incorrect TokenType should return nullptr instead of the set
-	REQUIRE(assignSet == nullptr);
-	REQUIRE(constantSet == nullptr);
-	REQUIRE(ifSet == nullptr);
-	REQUIRE(printSet == nullptr);
-	REQUIRE(procedureSet == nullptr);
-	REQUIRE(readSet == nullptr);
-	REQUIRE(variableSet == nullptr);
-	REQUIRE(whileSet == nullptr);
-	REQUIRE(stmtSet == nullptr);
+	REQUIRE(assignSet == std::unordered_set<std::string>());
+	REQUIRE(constantSet == std::unordered_set<std::string>());
+	REQUIRE(ifSet == std::unordered_set<std::string>());
+	REQUIRE(printSet == std::unordered_set<std::string>());
+	REQUIRE(procedureSet == std::unordered_set<std::string>());
+	REQUIRE(readSet == std::unordered_set<std::string>());
+	REQUIRE(variableSet == std::unordered_set<std::string>());
+	REQUIRE(whileSet == std::unordered_set<std::string>());
+	REQUIRE(stmtSet == std::unordered_set<std::string>());
 
 	// Retreiving entities from the storage
-	REQUIRE(callSet->find(callEntity) != callSet->end());
-	REQUIRE(callSet->find(callEntityTwo) != callSet->end());
-	REQUIRE(callSet->find(callEntityThree) == callSet->end());
+	REQUIRE(callSet.find(call_value_one) != callSet.end());
+	REQUIRE(callSet.find(call_value_two) != callSet.end());
+	REQUIRE(callSet.find(call_value_three) == callSet.end());
 }
 
 TEST_CASE("If Entity Storage Test") {
@@ -217,35 +217,35 @@ TEST_CASE("If Entity Storage Test") {
 	REQUIRE(ifEntityStorage->getSize() == 2);
 
 	// Get Set based on TokenType
-	std::unordered_set<Entity*>* assignSet = ifEntityStorage->getAllEntity(qps::TokenType::ASSIGN);
-	std::unordered_set<Entity*>* constantSet = ifEntityStorage->getAllEntity(qps::TokenType::CONSTANT);
-	std::unordered_set<Entity*>* callSet = ifEntityStorage->getAllEntity(qps::TokenType::CALL);
-	std::unordered_set<Entity*>* ifSet = ifEntityStorage->getAllEntity(qps::TokenType::IF);
-	std::unordered_set<Entity*>* printSet = ifEntityStorage->getAllEntity(qps::TokenType::PRINT);
-	std::unordered_set<Entity*>* procedureSet = ifEntityStorage->getAllEntity(qps::TokenType::PROCEDURE);
-	std::unordered_set<Entity*>* readSet = ifEntityStorage->getAllEntity(qps::TokenType::READ);
-	std::unordered_set<Entity*>* variableSet = ifEntityStorage->getAllEntity(qps::TokenType::VARIABLE);
-	std::unordered_set<Entity*>* whileSet = ifEntityStorage->getAllEntity(qps::TokenType::WHILE);
-	std::unordered_set<Entity*>* stmtSet = ifEntityStorage->getAllEntity(qps::TokenType::STMT);
+	std::unordered_set<std::string> assignSet = ifEntityStorage->getAllEntity(qps::TokenType::ASSIGN);
+	std::unordered_set<std::string> constantSet = ifEntityStorage->getAllEntity(qps::TokenType::CONSTANT);
+	std::unordered_set<std::string> callSet = ifEntityStorage->getAllEntity(qps::TokenType::CALL);
+	std::unordered_set<std::string> ifSet = ifEntityStorage->getAllEntity(qps::TokenType::IF);
+	std::unordered_set<std::string> printSet = ifEntityStorage->getAllEntity(qps::TokenType::PRINT);
+	std::unordered_set<std::string> procedureSet = ifEntityStorage->getAllEntity(qps::TokenType::PROCEDURE);
+	std::unordered_set<std::string> readSet = ifEntityStorage->getAllEntity(qps::TokenType::READ);
+	std::unordered_set<std::string> variableSet = ifEntityStorage->getAllEntity(qps::TokenType::VARIABLE);
+	std::unordered_set<std::string> whileSet = ifEntityStorage->getAllEntity(qps::TokenType::WHILE);
+	std::unordered_set<std::string> stmtSet = ifEntityStorage->getAllEntity(qps::TokenType::STMT);
 
 	// Correct TokenType should return the set instead of nullptr
-	REQUIRE(ifSet != nullptr);
+	REQUIRE(ifSet != std::unordered_set<std::string>());
 
 	// Incorrect TokenType should return nullptr instead of the set
-	REQUIRE(assignSet == nullptr);
-	REQUIRE(constantSet == nullptr);
-	REQUIRE(callSet == nullptr);
-	REQUIRE(printSet == nullptr);
-	REQUIRE(procedureSet == nullptr);
-	REQUIRE(readSet == nullptr);
-	REQUIRE(variableSet == nullptr);
-	REQUIRE(whileSet == nullptr);
-	REQUIRE(stmtSet == nullptr);
+	REQUIRE(assignSet == std::unordered_set<std::string>());
+	REQUIRE(constantSet == std::unordered_set<std::string>());
+	REQUIRE(callSet == std::unordered_set<std::string>());
+	REQUIRE(printSet == std::unordered_set<std::string>());
+	REQUIRE(procedureSet == std::unordered_set<std::string>());
+	REQUIRE(readSet == std::unordered_set<std::string>());
+	REQUIRE(variableSet == std::unordered_set<std::string>());
+	REQUIRE(whileSet == std::unordered_set<std::string>());
+	REQUIRE(stmtSet == std::unordered_set<std::string>());
 
 	// Retreiving entities from the storage
-	REQUIRE(ifSet->find(ifEntity) != ifSet->end());
-	REQUIRE(ifSet->find(ifEntityTwo) != ifSet->end());
-	REQUIRE(ifSet->find(ifEntityThree) == ifSet->end());
+	REQUIRE(ifSet.find(if_value_one) != ifSet.end());
+	REQUIRE(ifSet.find(if_value_two) != ifSet.end());
+	REQUIRE(ifSet.find(if_value_three) == ifSet.end());
 }
 
 TEST_CASE("print Entity Storage Test") {
@@ -275,35 +275,35 @@ TEST_CASE("print Entity Storage Test") {
 	REQUIRE(printEntityStorage->getSize() == 2);
 
 	// Get Set based on TokenType
-	std::unordered_set<Entity*>* assignSet = printEntityStorage->getAllEntity(qps::TokenType::ASSIGN);
-	std::unordered_set<Entity*>* constantSet = printEntityStorage->getAllEntity(qps::TokenType::CONSTANT);
-	std::unordered_set<Entity*>* callSet = printEntityStorage->getAllEntity(qps::TokenType::CALL);
-	std::unordered_set<Entity*>* ifSet = printEntityStorage->getAllEntity(qps::TokenType::IF);
-	std::unordered_set<Entity*>* printSet = printEntityStorage->getAllEntity(qps::TokenType::PRINT);
-	std::unordered_set<Entity*>* procedureSet = printEntityStorage->getAllEntity(qps::TokenType::PROCEDURE);
-	std::unordered_set<Entity*>* readSet = printEntityStorage->getAllEntity(qps::TokenType::READ);
-	std::unordered_set<Entity*>* variableSet = printEntityStorage->getAllEntity(qps::TokenType::VARIABLE);
-	std::unordered_set<Entity*>* whileSet = printEntityStorage->getAllEntity(qps::TokenType::WHILE);
-	std::unordered_set<Entity*>* stmtSet = printEntityStorage->getAllEntity(qps::TokenType::STMT);
+	std::unordered_set<std::string> assignSet = printEntityStorage->getAllEntity(qps::TokenType::ASSIGN);
+	std::unordered_set<std::string> constantSet = printEntityStorage->getAllEntity(qps::TokenType::CONSTANT);
+	std::unordered_set<std::string> callSet = printEntityStorage->getAllEntity(qps::TokenType::CALL);
+	std::unordered_set<std::string> ifSet = printEntityStorage->getAllEntity(qps::TokenType::IF);
+	std::unordered_set<std::string> printSet = printEntityStorage->getAllEntity(qps::TokenType::PRINT);
+	std::unordered_set<std::string> procedureSet = printEntityStorage->getAllEntity(qps::TokenType::PROCEDURE);
+	std::unordered_set<std::string> readSet = printEntityStorage->getAllEntity(qps::TokenType::READ);
+	std::unordered_set<std::string> variableSet = printEntityStorage->getAllEntity(qps::TokenType::VARIABLE);
+	std::unordered_set<std::string> whileSet = printEntityStorage->getAllEntity(qps::TokenType::WHILE);
+	std::unordered_set<std::string> stmtSet = printEntityStorage->getAllEntity(qps::TokenType::STMT);
 
 	// Correct TokenType should return the set instead of nullptr
-	REQUIRE(printSet != nullptr);
+	REQUIRE(printSet != std::unordered_set<std::string>());
 
 	// Incorrect TokenType should return nullptr instead of the set
-	REQUIRE(assignSet == nullptr);
-	REQUIRE(constantSet == nullptr);
-	REQUIRE(callSet == nullptr);
-	REQUIRE(ifSet == nullptr);
-	REQUIRE(procedureSet == nullptr);
-	REQUIRE(readSet == nullptr);
-	REQUIRE(variableSet == nullptr);
-	REQUIRE(whileSet == nullptr);
-	REQUIRE(stmtSet == nullptr);
+	REQUIRE(assignSet == std::unordered_set<std::string>());
+	REQUIRE(constantSet == std::unordered_set<std::string>());
+	REQUIRE(callSet == std::unordered_set<std::string>());
+	REQUIRE(ifSet == std::unordered_set<std::string>());
+	REQUIRE(procedureSet == std::unordered_set<std::string>());
+	REQUIRE(readSet == std::unordered_set<std::string>());
+	REQUIRE(variableSet == std::unordered_set<std::string>());
+	REQUIRE(whileSet == std::unordered_set<std::string>());
+	REQUIRE(stmtSet == std::unordered_set<std::string>());
 
 	// Retreiving entities from the storage
-	REQUIRE(printSet->find(printEntity) != printSet->end());
-	REQUIRE(printSet->find(printEntityTwo) != printSet->end());
-	REQUIRE(printSet->find(printEntityThree) == printSet->end());
+	REQUIRE(printSet.find(print_value_one) != printSet.end());
+	REQUIRE(printSet.find(print_value_two) != printSet.end());
+	REQUIRE(printSet.find(print_value_three) == printSet.end());
 }
 
 TEST_CASE("Procedure Entity Storage Test") {
@@ -333,35 +333,35 @@ TEST_CASE("Procedure Entity Storage Test") {
 	REQUIRE(procedureEntityStorage->getSize() == 2);
 
 	// Get Set based on TokenType
-	std::unordered_set<Entity*>* assignSet = procedureEntityStorage->getAllEntity(qps::TokenType::ASSIGN);
-	std::unordered_set<Entity*>* constantSet = procedureEntityStorage->getAllEntity(qps::TokenType::CONSTANT);
-	std::unordered_set<Entity*>* callSet = procedureEntityStorage->getAllEntity(qps::TokenType::CALL);
-	std::unordered_set<Entity*>* ifSet = procedureEntityStorage->getAllEntity(qps::TokenType::IF);
-	std::unordered_set<Entity*>* printSet = procedureEntityStorage->getAllEntity(qps::TokenType::PRINT);
-	std::unordered_set<Entity*>* procedureSet = procedureEntityStorage->getAllEntity(qps::TokenType::PROCEDURE);
-	std::unordered_set<Entity*>* readSet = procedureEntityStorage->getAllEntity(qps::TokenType::READ);
-	std::unordered_set<Entity*>* variableSet = procedureEntityStorage->getAllEntity(qps::TokenType::VARIABLE);
-	std::unordered_set<Entity*>* whileSet = procedureEntityStorage->getAllEntity(qps::TokenType::WHILE);
-	std::unordered_set<Entity*>* stmtSet = procedureEntityStorage->getAllEntity(qps::TokenType::STMT);
+	std::unordered_set<std::string> assignSet = procedureEntityStorage->getAllEntity(qps::TokenType::ASSIGN);
+	std::unordered_set<std::string> constantSet = procedureEntityStorage->getAllEntity(qps::TokenType::CONSTANT);
+	std::unordered_set<std::string> callSet = procedureEntityStorage->getAllEntity(qps::TokenType::CALL);
+	std::unordered_set<std::string> ifSet = procedureEntityStorage->getAllEntity(qps::TokenType::IF);
+	std::unordered_set<std::string> printSet = procedureEntityStorage->getAllEntity(qps::TokenType::PRINT);
+	std::unordered_set<std::string> procedureSet = procedureEntityStorage->getAllEntity(qps::TokenType::PROCEDURE);
+	std::unordered_set<std::string> readSet = procedureEntityStorage->getAllEntity(qps::TokenType::READ);
+	std::unordered_set<std::string> variableSet = procedureEntityStorage->getAllEntity(qps::TokenType::VARIABLE);
+	std::unordered_set<std::string> whileSet = procedureEntityStorage->getAllEntity(qps::TokenType::WHILE);
+	std::unordered_set<std::string> stmtSet = procedureEntityStorage->getAllEntity(qps::TokenType::STMT);
 
 	// Correct TokenType should return the set instead of nullptr
-	REQUIRE(procedureSet != nullptr);
+	REQUIRE(procedureSet != std::unordered_set<std::string>());
 
 	// Incorrect TokenType should return nullptr instead of the set
-	REQUIRE(assignSet == nullptr);
-	REQUIRE(constantSet == nullptr);
-	REQUIRE(callSet == nullptr);
-	REQUIRE(ifSet == nullptr);
-	REQUIRE(printSet == nullptr);
-	REQUIRE(readSet == nullptr);
-	REQUIRE(variableSet == nullptr);
-	REQUIRE(whileSet == nullptr);
-	REQUIRE(stmtSet == nullptr);
+	REQUIRE(assignSet == std::unordered_set<std::string>());
+	REQUIRE(constantSet == std::unordered_set<std::string>());
+	REQUIRE(callSet == std::unordered_set<std::string>());
+	REQUIRE(ifSet == std::unordered_set<std::string>());
+	REQUIRE(printSet == std::unordered_set<std::string>());
+	REQUIRE(readSet == std::unordered_set<std::string>());
+	REQUIRE(variableSet == std::unordered_set<std::string>());
+	REQUIRE(whileSet == std::unordered_set<std::string>());
+	REQUIRE(stmtSet == std::unordered_set<std::string>());
 
 	// Retreiving entities from the storage
-	REQUIRE(procedureSet->find(procedureEntity) != procedureSet->end());
-	REQUIRE(procedureSet->find(procedureEntityTwo) != procedureSet->end());
-	REQUIRE(procedureSet->find(procedureEntityThree) == procedureSet->end());
+	REQUIRE(procedureSet.find(procedure_value_one) != procedureSet.end());
+	REQUIRE(procedureSet.find(procedure_value_two) != procedureSet.end());
+	REQUIRE(procedureSet.find(procedure_value_three) == procedureSet.end());
 }
 
 TEST_CASE("Read Entity Storage Test") {
@@ -391,35 +391,35 @@ TEST_CASE("Read Entity Storage Test") {
 	REQUIRE(readEntityStorage->getSize() == 2);
 
 	// Get Set based on TokenType
-	std::unordered_set<Entity*>* assignSet = readEntityStorage->getAllEntity(qps::TokenType::ASSIGN);
-	std::unordered_set<Entity*>* constantSet = readEntityStorage->getAllEntity(qps::TokenType::CONSTANT);
-	std::unordered_set<Entity*>* callSet = readEntityStorage->getAllEntity(qps::TokenType::CALL);
-	std::unordered_set<Entity*>* ifSet = readEntityStorage->getAllEntity(qps::TokenType::IF);
-	std::unordered_set<Entity*>* printSet = readEntityStorage->getAllEntity(qps::TokenType::PRINT);
-	std::unordered_set<Entity*>* procedureSet = readEntityStorage->getAllEntity(qps::TokenType::PROCEDURE);
-	std::unordered_set<Entity*>* readSet = readEntityStorage->getAllEntity(qps::TokenType::READ);
-	std::unordered_set<Entity*>* variableSet = readEntityStorage->getAllEntity(qps::TokenType::VARIABLE);
-	std::unordered_set<Entity*>* whileSet = readEntityStorage->getAllEntity(qps::TokenType::WHILE);
-	std::unordered_set<Entity*>* stmtSet = readEntityStorage->getAllEntity(qps::TokenType::STMT);
+	std::unordered_set<std::string> assignSet = readEntityStorage->getAllEntity(qps::TokenType::ASSIGN);
+	std::unordered_set<std::string> constantSet = readEntityStorage->getAllEntity(qps::TokenType::CONSTANT);
+	std::unordered_set<std::string> callSet = readEntityStorage->getAllEntity(qps::TokenType::CALL);
+	std::unordered_set<std::string> ifSet = readEntityStorage->getAllEntity(qps::TokenType::IF);
+	std::unordered_set<std::string> printSet = readEntityStorage->getAllEntity(qps::TokenType::PRINT);
+	std::unordered_set<std::string> procedureSet = readEntityStorage->getAllEntity(qps::TokenType::PROCEDURE);
+	std::unordered_set<std::string> readSet = readEntityStorage->getAllEntity(qps::TokenType::READ);
+	std::unordered_set<std::string> variableSet = readEntityStorage->getAllEntity(qps::TokenType::VARIABLE);
+	std::unordered_set<std::string> whileSet = readEntityStorage->getAllEntity(qps::TokenType::WHILE);
+	std::unordered_set<std::string> stmtSet = readEntityStorage->getAllEntity(qps::TokenType::STMT);
 
 	// Correct TokenType should return the set instead of nullptr
-	REQUIRE(readSet != nullptr);
+	REQUIRE(readSet != std::unordered_set<std::string>());
 
 	// Incorrect TokenType should return nullptr instead of the set
-	REQUIRE(assignSet == nullptr);
-	REQUIRE(constantSet == nullptr);
-	REQUIRE(callSet == nullptr);
-	REQUIRE(ifSet == nullptr);
-	REQUIRE(printSet == nullptr);
-	REQUIRE(procedureSet == nullptr);
-	REQUIRE(variableSet == nullptr);
-	REQUIRE(whileSet == nullptr);
-	REQUIRE(stmtSet == nullptr);
+	REQUIRE(assignSet == std::unordered_set<std::string>());
+	REQUIRE(constantSet == std::unordered_set<std::string>());
+	REQUIRE(callSet == std::unordered_set<std::string>());
+	REQUIRE(ifSet == std::unordered_set<std::string>());
+	REQUIRE(printSet == std::unordered_set<std::string>());
+	REQUIRE(procedureSet == std::unordered_set<std::string>());
+	REQUIRE(variableSet == std::unordered_set<std::string>());
+	REQUIRE(whileSet == std::unordered_set<std::string>());
+	REQUIRE(stmtSet == std::unordered_set<std::string>());
 
 	// Retreiving entities from the storage
-	REQUIRE(readSet->find(readEntity) != readSet->end());
-	REQUIRE(readSet->find(readEntityTwo) != readSet->end());
-	REQUIRE(readSet->find(readEntityThree) == readSet->end());
+	REQUIRE(readSet.find(read_value_one) != readSet.end());
+	REQUIRE(readSet.find(read_value_two) != readSet.end());
+	REQUIRE(readSet.find(read_value_three) == readSet.end());
 }
 
 TEST_CASE("Variable Entity Storage Test") {
@@ -449,35 +449,35 @@ TEST_CASE("Variable Entity Storage Test") {
 	REQUIRE(variableEntityStorage->getSize() == 2);
 
 	// Get Set based on TokenType
-	std::unordered_set<Entity*>* assignSet = variableEntityStorage->getAllEntity(qps::TokenType::ASSIGN);
-	std::unordered_set<Entity*>* constantSet = variableEntityStorage->getAllEntity(qps::TokenType::CONSTANT);
-	std::unordered_set<Entity*>* callSet = variableEntityStorage->getAllEntity(qps::TokenType::CALL);
-	std::unordered_set<Entity*>* ifSet = variableEntityStorage->getAllEntity(qps::TokenType::IF);
-	std::unordered_set<Entity*>* printSet = variableEntityStorage->getAllEntity(qps::TokenType::PRINT);
-	std::unordered_set<Entity*>* procedureSet = variableEntityStorage->getAllEntity(qps::TokenType::PROCEDURE);
-	std::unordered_set<Entity*>* readSet = variableEntityStorage->getAllEntity(qps::TokenType::READ);
-	std::unordered_set<Entity*>* variableSet = variableEntityStorage->getAllEntity(qps::TokenType::VARIABLE);
-	std::unordered_set<Entity*>* whileSet = variableEntityStorage->getAllEntity(qps::TokenType::WHILE);
-	std::unordered_set<Entity*>* stmtSet = variableEntityStorage->getAllEntity(qps::TokenType::STMT);
+	std::unordered_set<std::string> assignSet = variableEntityStorage->getAllEntity(qps::TokenType::ASSIGN);
+	std::unordered_set<std::string> constantSet = variableEntityStorage->getAllEntity(qps::TokenType::CONSTANT);
+	std::unordered_set<std::string> callSet = variableEntityStorage->getAllEntity(qps::TokenType::CALL);
+	std::unordered_set<std::string> ifSet = variableEntityStorage->getAllEntity(qps::TokenType::IF);
+	std::unordered_set<std::string> printSet = variableEntityStorage->getAllEntity(qps::TokenType::PRINT);
+	std::unordered_set<std::string> procedureSet = variableEntityStorage->getAllEntity(qps::TokenType::PROCEDURE);
+	std::unordered_set<std::string> readSet = variableEntityStorage->getAllEntity(qps::TokenType::READ);
+	std::unordered_set<std::string> variableSet = variableEntityStorage->getAllEntity(qps::TokenType::VARIABLE);
+	std::unordered_set<std::string> whileSet = variableEntityStorage->getAllEntity(qps::TokenType::WHILE);
+	std::unordered_set<std::string> stmtSet = variableEntityStorage->getAllEntity(qps::TokenType::STMT);
 
 	// Correct TokenType should return the set instead of nullptr
-	REQUIRE(variableSet != nullptr);
+	REQUIRE(variableSet != std::unordered_set<std::string>());
 
 	// Incorrect TokenType should return nullptr instead of the set
-	REQUIRE(assignSet == nullptr);
-	REQUIRE(constantSet == nullptr);
-	REQUIRE(callSet == nullptr);
-	REQUIRE(ifSet == nullptr);
-	REQUIRE(printSet == nullptr);
-	REQUIRE(procedureSet == nullptr);
-	REQUIRE(readSet == nullptr);
-	REQUIRE(whileSet == nullptr);
-	REQUIRE(stmtSet == nullptr);
+	REQUIRE(assignSet == std::unordered_set<std::string>());
+	REQUIRE(constantSet == std::unordered_set<std::string>());
+	REQUIRE(callSet == std::unordered_set<std::string>());
+	REQUIRE(ifSet == std::unordered_set<std::string>());
+	REQUIRE(printSet == std::unordered_set<std::string>());
+	REQUIRE(procedureSet == std::unordered_set<std::string>());
+	REQUIRE(readSet == std::unordered_set<std::string>());
+	REQUIRE(whileSet == std::unordered_set<std::string>());
+	REQUIRE(stmtSet == std::unordered_set<std::string>());
 
 	// Retreiving entities from the storage
-	REQUIRE(variableSet->find(variableEntity) != variableSet->end());
-	REQUIRE(variableSet->find(variableEntityTwo) != variableSet->end());
-	REQUIRE(variableSet->find(variableEntityThree) == variableSet->end());
+	REQUIRE(variableSet.find(while_value_one) != variableSet.end());
+	REQUIRE(variableSet.find(variable_value_two) != variableSet.end());
+	REQUIRE(variableSet.find(variable_value_three) == variableSet.end());
 }
 
 TEST_CASE("While Entity Storage Test") {
@@ -507,35 +507,35 @@ TEST_CASE("While Entity Storage Test") {
 	REQUIRE(whileEntityStorage->getSize() == 2);
 
 	// Get Set based on TokenType
-	std::unordered_set<Entity*>* assignSet = whileEntityStorage->getAllEntity(qps::TokenType::ASSIGN);
-	std::unordered_set<Entity*>* constantSet = whileEntityStorage->getAllEntity(qps::TokenType::CONSTANT);
-	std::unordered_set<Entity*>* callSet = whileEntityStorage->getAllEntity(qps::TokenType::CALL);
-	std::unordered_set<Entity*>* ifSet = whileEntityStorage->getAllEntity(qps::TokenType::IF);
-	std::unordered_set<Entity*>* printSet = whileEntityStorage->getAllEntity(qps::TokenType::PRINT);
-	std::unordered_set<Entity*>* procedureSet = whileEntityStorage->getAllEntity(qps::TokenType::PROCEDURE);
-	std::unordered_set<Entity*>* readSet = whileEntityStorage->getAllEntity(qps::TokenType::READ);
-	std::unordered_set<Entity*>* variableSet = whileEntityStorage->getAllEntity(qps::TokenType::VARIABLE);
-	std::unordered_set<Entity*>* whileSet = whileEntityStorage->getAllEntity(qps::TokenType::WHILE);
-	std::unordered_set<Entity*>* stmtSet = whileEntityStorage->getAllEntity(qps::TokenType::STMT);
+	std::unordered_set<std::string> assignSet = whileEntityStorage->getAllEntity(qps::TokenType::ASSIGN);
+	std::unordered_set<std::string> constantSet = whileEntityStorage->getAllEntity(qps::TokenType::CONSTANT);
+	std::unordered_set<std::string> callSet = whileEntityStorage->getAllEntity(qps::TokenType::CALL);
+	std::unordered_set<std::string> ifSet = whileEntityStorage->getAllEntity(qps::TokenType::IF);
+	std::unordered_set<std::string> printSet = whileEntityStorage->getAllEntity(qps::TokenType::PRINT);
+	std::unordered_set<std::string> procedureSet = whileEntityStorage->getAllEntity(qps::TokenType::PROCEDURE);
+	std::unordered_set<std::string> readSet = whileEntityStorage->getAllEntity(qps::TokenType::READ);
+	std::unordered_set<std::string> variableSet = whileEntityStorage->getAllEntity(qps::TokenType::VARIABLE);
+	std::unordered_set<std::string> whileSet = whileEntityStorage->getAllEntity(qps::TokenType::WHILE);
+	std::unordered_set<std::string> stmtSet = whileEntityStorage->getAllEntity(qps::TokenType::STMT);
 
 	// Correct TokenType should return the set instead of nullptr
-	REQUIRE(whileSet != nullptr);
+	REQUIRE(whileSet != std::unordered_set<std::string>());
 
 	// Incorrect TokenType should return nullptr instead of the set
-	REQUIRE(assignSet == nullptr);
-	REQUIRE(constantSet == nullptr);
-	REQUIRE(callSet == nullptr);
-	REQUIRE(ifSet == nullptr);
-	REQUIRE(printSet == nullptr);
-	REQUIRE(procedureSet == nullptr);
-	REQUIRE(readSet == nullptr);
-	REQUIRE(variableSet == nullptr);
-	REQUIRE(stmtSet == nullptr);
+	REQUIRE(assignSet == std::unordered_set<std::string>());
+	REQUIRE(constantSet == std::unordered_set<std::string>());
+	REQUIRE(callSet == std::unordered_set<std::string>());
+	REQUIRE(ifSet == std::unordered_set<std::string>());
+	REQUIRE(printSet == std::unordered_set<std::string>());
+	REQUIRE(procedureSet == std::unordered_set<std::string>());
+	REQUIRE(readSet == std::unordered_set<std::string>());
+	REQUIRE(variableSet == std::unordered_set<std::string>());
+	REQUIRE(stmtSet == std::unordered_set<std::string>());
 
 	// Retreiving entities from the storage
-	REQUIRE(whileSet->find(whileEntity) != whileSet->end());
-	REQUIRE(whileSet->find(whileEntityTwo) != whileSet->end());
-	REQUIRE(whileSet->find(whileEntityThree) == whileSet->end());
+	REQUIRE(whileSet.find(while_value_one) != whileSet.end());
+	REQUIRE(whileSet.find(while_value_two) != whileSet.end());
+	REQUIRE(whileSet.find(while_value_three) == whileSet.end());
 }
 
 TEST_CASE("Statement Entity Storage Test") {
@@ -575,58 +575,58 @@ TEST_CASE("Statement Entity Storage Test") {
 	REQUIRE(statementEntityStorage->storeEntity(callEntityThree));
 
 	// Get Set based on TokenType
-	std::unordered_set<Entity*>* assignSet = statementEntityStorage->getAllEntity(qps::TokenType::ASSIGN);
-	std::unordered_set<Entity*>* constantSet = statementEntityStorage->getAllEntity(qps::TokenType::CONSTANT);
-	std::unordered_set<Entity*>* callSet = statementEntityStorage->getAllEntity(qps::TokenType::CALL);
-	std::unordered_set<Entity*>* ifSet = statementEntityStorage->getAllEntity(qps::TokenType::IF);
-	std::unordered_set<Entity*>* printSet = statementEntityStorage->getAllEntity(qps::TokenType::PRINT);
-	std::unordered_set<Entity*>* procedureSet = statementEntityStorage->getAllEntity(qps::TokenType::PROCEDURE);
-	std::unordered_set<Entity*>* readSet = statementEntityStorage->getAllEntity(qps::TokenType::READ);
-	std::unordered_set<Entity*>* variableSet = statementEntityStorage->getAllEntity(qps::TokenType::VARIABLE);
-	std::unordered_set<Entity*>* whileSet = statementEntityStorage->getAllEntity(qps::TokenType::WHILE);
-	std::unordered_set<Entity*>* stmtSet = statementEntityStorage->getAllEntity(qps::TokenType::STMT);
+	std::unordered_set<std::string> assignSet = statementEntityStorage->getAllEntity(qps::TokenType::ASSIGN);
+	std::unordered_set<std::string> constantSet = statementEntityStorage->getAllEntity(qps::TokenType::CONSTANT);
+	std::unordered_set<std::string> callSet = statementEntityStorage->getAllEntity(qps::TokenType::CALL);
+	std::unordered_set<std::string> ifSet = statementEntityStorage->getAllEntity(qps::TokenType::IF);
+	std::unordered_set<std::string> printSet = statementEntityStorage->getAllEntity(qps::TokenType::PRINT);
+	std::unordered_set<std::string> procedureSet = statementEntityStorage->getAllEntity(qps::TokenType::PROCEDURE);
+	std::unordered_set<std::string> readSet = statementEntityStorage->getAllEntity(qps::TokenType::READ);
+	std::unordered_set<std::string> variableSet = statementEntityStorage->getAllEntity(qps::TokenType::VARIABLE);
+	std::unordered_set<std::string> whileSet = statementEntityStorage->getAllEntity(qps::TokenType::WHILE);
+	std::unordered_set<std::string> stmtSet = statementEntityStorage->getAllEntity(qps::TokenType::STMT);
 
 	// Correct TokenType should return the set instead of nullptr
-	REQUIRE(stmtSet != nullptr);
+	REQUIRE(stmtSet != std::unordered_set<std::string>());
 
 	// Incorrect TokenType should return nullptr instead of the set
-	REQUIRE(assignSet == nullptr);
-	REQUIRE(constantSet == nullptr);
-	REQUIRE(callSet == nullptr);
-	REQUIRE(ifSet == nullptr);
-	REQUIRE(printSet == nullptr);
-	REQUIRE(procedureSet == nullptr);
-	REQUIRE(readSet == nullptr);
-	REQUIRE(variableSet == nullptr);
-	REQUIRE(whileSet == nullptr);
+	REQUIRE(assignSet == std::unordered_set<std::string>());
+	REQUIRE(constantSet == std::unordered_set<std::string>());
+	REQUIRE(callSet == std::unordered_set<std::string>());
+	REQUIRE(ifSet == std::unordered_set<std::string>());
+	REQUIRE(printSet == std::unordered_set<std::string>());
+	REQUIRE(procedureSet == std::unordered_set<std::string>());
+	REQUIRE(readSet == std::unordered_set<std::string>());
+	REQUIRE(variableSet == std::unordered_set<std::string>());
+	REQUIRE(whileSet == std::unordered_set<std::string>());
 
 	// Retreiving entities from the storage
-	REQUIRE(stmtSet->find(assignEntity) != stmtSet->end());
-	REQUIRE(stmtSet->find(assignEntityTwo) != stmtSet->end());
-	REQUIRE(stmtSet->find(assignEntityThree) != stmtSet->end());
+	REQUIRE(stmtSet.find(assign_value_one) != stmtSet.end());
+	REQUIRE(stmtSet.find(assign_value_two) != stmtSet.end());
+	REQUIRE(stmtSet.find(assign_value_three) != stmtSet.end());
 
-	REQUIRE(stmtSet->find(printEntity) != stmtSet->end());
-	REQUIRE(stmtSet->find(printEntityTwo) != stmtSet->end());
-	REQUIRE(stmtSet->find(printEntityThree) != stmtSet->end());
+	REQUIRE(stmtSet.find(print_value_one) != stmtSet.end());
+	REQUIRE(stmtSet.find(print_value_two) != stmtSet.end());
+	REQUIRE(stmtSet.find(print_value_three) != stmtSet.end());
 
-	REQUIRE(stmtSet->find(callEntity) != stmtSet->end());
-	REQUIRE(stmtSet->find(callEntityTwo) != stmtSet->end());
-	REQUIRE(stmtSet->find(callEntityThree) != stmtSet->end());
+	REQUIRE(stmtSet.find(call_value_one) != stmtSet.end());
+	REQUIRE(stmtSet.find(call_value_two) != stmtSet.end());
+	REQUIRE(stmtSet.find(call_value_three) != stmtSet.end());
 
 	// Retreiving entities from the storage and trying to retreive different entities with same value
-	REQUIRE(stmtSet->find(readEntity) != stmtSet->end());
-	REQUIRE(stmtSet->find(readEntityTwo) != stmtSet->end());
-	REQUIRE(stmtSet->find(readEntityThree) == stmtSet->end());
+	REQUIRE(stmtSet.find(read_value_one) != stmtSet.end());
+	REQUIRE(stmtSet.find(read_value_two) != stmtSet.end());
+	REQUIRE(stmtSet.find(read_value_three) == stmtSet.end());
 
-	REQUIRE(stmtSet->find(readEntity) != stmtSet->end());
-	REQUIRE(stmtSet->find(readEntityTwo) != stmtSet->end());
-	REQUIRE(stmtSet->find(readEntityThree) == stmtSet->end());
+	//REQUIRE(stmtSet.find(readEntity) != stmtSet.end());
+	//REQUIRE(stmtSet.find(readEntityTwo) != stmtSet.end());
+	//REQUIRE(stmtSet.find(readEntityThree) == stmtSet.end());
 
-	REQUIRE(stmtSet->find(ifEntity) != stmtSet->end());
-	REQUIRE(stmtSet->find(ifEntityTwo) != stmtSet->end());
-	REQUIRE(stmtSet->find(ifEntityThree) == stmtSet->end());
+	REQUIRE(stmtSet.find(if_value_one) != stmtSet.end());
+	REQUIRE(stmtSet.find(if_value_two) != stmtSet.end());
+	REQUIRE(stmtSet.find(if_value_three) == stmtSet.end());
 
-	REQUIRE(stmtSet->find(whileEntity) != stmtSet->end());
-	REQUIRE(stmtSet->find(whileEntityTwo) != stmtSet->end());
-	REQUIRE(stmtSet->find(whileEntityThree) == stmtSet->end());
+	REQUIRE(stmtSet.find(while_value_one) != stmtSet.end());
+	REQUIRE(stmtSet.find(while_value_two) != stmtSet.end());
+	REQUIRE(stmtSet.find(while_value_three) == stmtSet.end());
 }
