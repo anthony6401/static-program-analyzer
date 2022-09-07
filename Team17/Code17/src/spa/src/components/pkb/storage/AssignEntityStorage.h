@@ -7,5 +7,5 @@ class AssignEntityStorage : public EntityStorage {
 public:
 	AssignEntityStorage();
 	bool storeEntity(Entity* entity);
-	std::unordered_set<Entity*>* getAllEntity(qps::TokenType returnType);
+	std::unordered_set<std::string>* getAllEntity(qps::TokenType returnType);
 };

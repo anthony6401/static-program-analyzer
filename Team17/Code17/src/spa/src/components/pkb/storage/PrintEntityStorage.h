@@ -7,5 +7,5 @@ class PrintEntityStorage : public EntityStorage {
 public:
 	PrintEntityStorage();
 	bool storeEntity(Entity* entity);
-	std::unordered_set<Entity*>* getAllEntity(qps::TokenType returnType);
+	std::unordered_set<std::string>* getAllEntity(qps::TokenType returnType);
 };

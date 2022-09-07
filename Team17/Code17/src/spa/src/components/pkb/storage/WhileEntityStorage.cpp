@@ -7,13 +7,13 @@ WhileEntityStorage::WhileEntityStorage() : EntityStorage() {}
 bool WhileEntityStorage::storeEntity(Entity* entity) {
 	WhileEntity* whileEntity = dynamic_cast<WhileEntity*>(entity);
 	if (whileEntity) {
-		return this->set->insert(whileEntity).second;
+		return this->set->insert(whileEntity->getValue()).second;
 	}
 
 	return false;
 }
 
-std::unordered_set<Entity*>* WhileEntityStorage::getAllEntity(qps::TokenType returnType) {
+std::unordered_set<std::string>* WhileEntityStorage::getAllEntity(qps::TokenType returnType) {
 	if (returnType == qps::TokenType::WHILE) {
 		return this->set;
 	}

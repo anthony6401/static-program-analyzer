@@ -7,13 +7,13 @@ StatementEntityStorage::StatementEntityStorage() : EntityStorage() {}
 bool StatementEntityStorage::storeEntity(Entity* entity) {
 	StatementEntity* statementEntity = dynamic_cast<StatementEntity*>(entity);
 	if (statementEntity) {
-		return this->set->insert(statementEntity).second;
+		return this->set->insert(statementEntity->getValue()).second;
 	}
 
 	return false;
 }
 
-std::unordered_set<Entity*>* StatementEntityStorage::getAllEntity(qps::TokenType returnType) {
+std::unordered_set<std::string>* StatementEntityStorage::getAllEntity(qps::TokenType returnType) {
 	if (returnType == qps::TokenType::STMT) {
 		return this->set;
 	}
