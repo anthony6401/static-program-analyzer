@@ -1,5 +1,6 @@
 #include "ClauseCreator.h"
 #include "components/qps/query_evaluator/factory/clauses/relationship/ModifiesSClause.h"
+#include "components/qps/query_evaluator/factory/clauses/relationship/ModifiesPClause.h"
 #include <memory>
 
 /**
@@ -13,15 +14,27 @@ std::shared_ptr<Clause> ClauseCreator::createClause(SuchThat relationship, Selec
     TokenType relationshipType = relationship.getRelationshipType();
     TokenObject left = relationship.getLeft();
     TokenObject right = relationship.getRight();
+
+    // MODIFIES
     if (relationshipType == TokenType::MODIFIES) {
         if (isStmtRelationship(left, synonymToDesignEntityMap)) {
             return std::make_shared<ModifiesSClause>(left, right, synonym, synonymToDesignEntityMap, qpsClient);
         }
 
         if (isProcRelationship(left, synonymToDesignEntityMap)) {
-            return std::make_shared<ModifiesSClause>(left, right, synonym, synonymToDesignEntityMap, qpsClient);
+            return std::make_shared<ModifiesPClause>(left, right, synonym, synonymToDesignEntityMap, qpsClient);
         }
+
+        // Unrecognised MODIFIES relationship clause
     }
+
+    // USES
+
+    // FOLLOWS
+
+    // PARENT
+
+
     return std::make_shared<SelectClause>(synonym, synonymToDesignEntityMap, qpsClient);
 }
 
