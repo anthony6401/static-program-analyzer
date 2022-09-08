@@ -5,9 +5,9 @@ ModifiesSClause::ModifiesSClause(TokenObject left, TokenObject right, Select syn
                                  QPSClient qpsClient) : left(left), right(right), synonym(synonym),
                                  synonymToDesignEntityMap(synonymToDesignEntityMap), qpsClient(qpsClient) {};
 
-std::unordered_set<std::string> ModifiesSClause::evaluateClause() {
-    std::unordered_set<std::string> result;
-    return result;
-}
+//std::unordered_set<std::string> ModifiesSClause::evaluateClause() {
+//    std::unordered_set<std::string> result;
+//    return result;
+//}
 
 

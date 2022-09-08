@@ -8,15 +8,47 @@
 void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &results, QPSClient qpsClient) {
     std::unordered_map<std::string, TokenType> synonymToDesignEntityMap = queryObject.getSynonymToDesignEntityMap();
     std::vector<std::shared_ptr<Clause>> clausesToEvaluate = extractClausesToEvaluate(queryObject, synonymToDesignEntityMap, qpsClient);
-    // std::vector<std::unordered_set<std::string>> combinedEvaluatedResults;
+    std::vector<RawResult> evaluatedResultsList;
+    bool isNoneResult = false;
     // Select, Relationship, Pattern or Relationship and Pattern
-//    for (auto clause : clausesToEvaluate) {
-//        auto evaluatedResult = clause->evaluateClause();
-//        combinedEvaluatedResults.push_back(evaluatedResult);
-//    }
+    for (auto clause : clausesToEvaluate) {
+        RawResult evaluatedResult = clause->evaluateClause();
+        // If any returns no results or false, terminate evaluation and return none as a result
+        if (evaluatedResult.getIsFalseResult() || evaluatedResult.isResultEmpty()) {
+            results.emplace_back("none");
+            isNoneResult = true;
+            break;
+        }
+        evaluatedResultsList.push_back(evaluatedResult);
+    }
 
-    // If any returns no results or false, terminate evaluation and return none as a result
+    if (!isNoneResult) {
+        std::unordered_set<std::string> joinedResults = Evaluator::joinEvaluatedResults(evaluatedResultsList);
+        for (std::string s : joinedResults) {
+            results.push_back(s);
+        }
+    }
+
+
     // Combine results of evaluation and store in query db
+}
+
+std::unordered_set<std::string> joinEvaluatedResults(std::vector<RawResult> evaluatedResultsList) {
+    std::unordered_set<std::string> firstResult = evaluatedResultsList.front().getResult();
+    if (evaluatedResultsList.size() == 1) {
+        return firstResult;
+    } else {
+        std::unordered_set<std::string> joinedResults = {};
+        std::unordered_set<std::string> secondResult = evaluatedResultsList.back().getResult();
+        std::unordered_set<std::string> smallerResult = (firstResult.size() < secondResult.size()) ? firstResult : secondResult;
+        std::unordered_set<std::string> largerResult = (firstResult.size() >= secondResult.size()) ? firstResult : secondResult;
+        for (std::string s : smallerResult) {
+            if (largerResult.find(s) != largerResult.end()) {
+                joinedResults.insert(s);
+            }
+        }
+        return joinedResults;
+    }
 }
 
 

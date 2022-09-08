@@ -18,7 +18,7 @@ private:
 public:
     ModifiesSClause(TokenObject left, TokenObject right, Select synonym,
                     std::unordered_map<std::string, TokenType> synonymToDesignEntityMap, QPSClient qpsClient);
-    std::unordered_set<std::string> evaluateClause() override;
+    RawResult evaluateClause() override;
 };
 
 #endif //SPA_MODIFIESSCLAUSE_H

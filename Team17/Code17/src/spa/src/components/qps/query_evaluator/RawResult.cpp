@@ -9,3 +9,15 @@ RawResult::RawResult(std::unordered_set<std::string> result) {
 bool RawResult::getIsFalseResult() {
     return isFalseResult;
 }
+
+std::unordered_set<std::string> RawResult::getResult() {
+    return result;
+}
+
+bool RawResult::isResultEmpty() {
+    return result.empty();
+}
+
+void RawResult::toggleIsFalseResult() {
+    isFalseResult = !isFalseResult;
+}
