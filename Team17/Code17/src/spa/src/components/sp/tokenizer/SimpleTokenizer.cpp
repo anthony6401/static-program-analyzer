@@ -4,8 +4,7 @@
 #include <iostream>
 
 SimpleTokenizer::SimpleTokenizer(SPClient* client) {
-    this->client = client;
-    this->extractor = Extractor();
+    this->extractor = &Extractor(client);
 }
 
 /// <summary>
@@ -26,6 +25,6 @@ void SimpleTokenizer::tokenizeCode(std::string code) {
         line = std::regex_replace(line, tokenDelimiters, " $& ");
         std::vector<std::string> lineTokens = SpUtils::split(line, whiteSpace);
         SimpleToken lineToken = SimpleParser::parseLine(lineTokens, line);
-        (lineToken.parseFunction)(lineToken, lineTokens, &extractor, client);
+        (lineToken.parseFunction)(lineToken, lineTokens, extractor);
     }
 }

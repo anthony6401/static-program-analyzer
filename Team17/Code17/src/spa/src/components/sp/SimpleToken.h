@@ -2,7 +2,6 @@
 
 #include <vector>
 #include <string>
-#include "../pkb/clients/SPClient.h"
 
 enum class SpTokenType {
     TPROCEDURE,
@@ -27,10 +26,10 @@ class SimpleToken {
 public:
     SimpleToken(SpTokenType type, std::string value,
         int statementNumber, void (*parseFunction)(SimpleToken&, std::vector<std::string>&,
-            Extractor* extractor, SPClient* client));
+            Extractor* extractor));
     SpTokenType type;
     int statementNumber;
-    void (*parseFunction)(SimpleToken&, std::vector<std::string>&, Extractor* extractor, SPClient* client);
+    void (*parseFunction)(SimpleToken&, std::vector<std::string>&, Extractor* extractor);
     std::string value;
     void setChildren(std::vector<SimpleToken> tokens);
     std::vector<SimpleToken> getChildren();

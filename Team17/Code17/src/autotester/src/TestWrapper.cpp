@@ -21,13 +21,13 @@ TestWrapper::TestWrapper() {
   // as well as any initialization required for your spa program
   // auto pkb = std::make_shared<PKB>();
   pkb = new PKB();
-  SPClient client = SPClient(pkb);
-  this->simpleTokenizer = &SimpleTokenizer(&client);
   //this->simpleTokenizer = new SimpleTokenizer();
 }
 
 // method for parsing the SIMPLE source
 void TestWrapper::parse(std::string filename) {
+	SPClient client = SPClient(pkb);
+	SimpleTokenizer simpleTokenizer = SimpleTokenizer(&client);
 	std::ifstream testFile;
 	testFile.open(filename);
 
@@ -38,7 +38,7 @@ void TestWrapper::parse(std::string filename) {
 	std::string code((std::istreambuf_iterator<char>(testFile)),
 		std::istreambuf_iterator<char>());
 
-	this->simpleTokenizer->tokenizeCode(code);
+	simpleTokenizer.tokenizeCode(code);
 
 }
 

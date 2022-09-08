@@ -17,13 +17,16 @@
 #include "../../../models/Relationship/Relationship.h"
 #include "../../../models/Relationship/ModifyRelationship.h"
 #include "../../../models/Relationship/UsesRelationship.h"
+#include "../../pkb/clients/SPClient.h"
 
 #include <vector>
 
 class Extractor {
 public:
-	void extractRead(SimpleToken simpleToken, std::vector<std::string> tokens, SPClient* client);
-	void extractPrint(SimpleToken simpleToken, std::vector<std::string> tokens, SPClient* client);
+	SPClient* client;
+	Extractor(SPClient* client);
+	void extractRead(SimpleToken simpleToken, std::vector<std::string> tokens);
+	void extractPrint(SimpleToken simpleToken, std::vector<std::string> tokens);
 	void extractProcedure();
 	void extractCall();
 	void extractWhile();

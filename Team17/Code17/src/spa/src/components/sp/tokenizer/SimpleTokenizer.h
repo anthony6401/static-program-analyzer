@@ -13,7 +13,6 @@ class SimpleTokenizer {
         void tokenizeCode(std::string code);
 
     private:
-        SPClient* client;
-        Extractor extractor;
+        Extractor* extractor;
 
 };

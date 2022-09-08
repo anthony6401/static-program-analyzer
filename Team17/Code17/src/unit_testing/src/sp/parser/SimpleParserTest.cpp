@@ -46,7 +46,7 @@ TEST_CASE("parseLine read") {
         1, SimpleParser::parseRead);
     REQUIRE(equalToken(test_result, expected_result));
 }
-
+/*
 TEST_CASE("parse read") {
     SimpleParser::statementNumber = 1;
     std::string code = "read test;";
@@ -78,4 +78,4 @@ TEST_CASE("parse print") {
     expected_result.push_back(expected_children);
     REQUIRE(equalChildren(test_token.getChildren(), expected_result));
 }
-
+*/
