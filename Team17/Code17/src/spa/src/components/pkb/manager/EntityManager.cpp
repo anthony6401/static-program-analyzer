@@ -58,19 +58,15 @@ bool EntityManager::storeEntity(Entity* entity) {
 }
 
 std::unordered_set<std::string> EntityManager::getAllEntity(qps::TokenType returnType) {
-	std::unordered_set<Entity*>* temp;
+	std::unordered_set<std::string> temp;
 	std::unordered_set<std::string> ret;
 
 	for (auto& es : entityStore) {
 		temp = es->getAllEntity(returnType);
-;		if (temp != nullptr) {
-			for (const auto& entity: *temp) {
-				std::string k = entity->getValue();
-				ret.insert(k);
-			}
-			break;
+;		if (temp != std::unordered_set<std::string>()) {
+			return temp;
 		}
 	}
 
-	return ret;
+	return std::unordered_set<std::string>();
 }

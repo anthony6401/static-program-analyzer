@@ -8,8 +8,8 @@ class EntityStorage {
 public:
 	EntityStorage();
 	virtual bool storeEntity(Entity* entity) = 0;
-	virtual std::unordered_set<Entity*>* getAllEntity(qps::TokenType tokenType) = 0;
+	virtual std::unordered_set<std::string> getAllEntity(qps::TokenType tokenType) = 0;
 	int getSize();
 protected:
-	std::unordered_set<Entity*>* set;
+	std::unordered_set<std::string> set;
 };
