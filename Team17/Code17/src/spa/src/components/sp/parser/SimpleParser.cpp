@@ -1,11 +1,7 @@
 #include "SimpleParser.h"
 #include "../validator/SimpleValidator.h"
 #include "../SimpleToken.h"
-#include "../extractor/Extractor.h"
 #include <iostream>
-
-SPClient SimpleParser::client = SPClient(new PKB()); // to be changed
-Extractor* SimpleParser::extractor = new Extractor();
 
 /// <summary>
 /// SIMPLE statement number that is currently being processed
@@ -77,7 +73,8 @@ SimpleToken SimpleParser::parseLine(std::vector<std::string>& tokens, std::strin
 /// </summary>
 /// <param name="printStmt">SimpleToken of TPRINT type</param>
 /// <param name="tokens">parameters for print statement</param>
-void SimpleParser::parsePrint(SimpleToken& printStmt, std::vector<std::string>& tokens) {
+void SimpleParser::parsePrint(SimpleToken& printStmt, std::vector<std::string>& tokens,
+        Extractor* extractor, SPClient* client) {
     if (tokens.size() == 2 && tokens.at(1) == ";") {
         std::vector<SimpleToken> children;
         children.push_back(parseVariable(tokens.at(0)));
@@ -93,7 +90,8 @@ void SimpleParser::parsePrint(SimpleToken& printStmt, std::vector<std::string>& 
 /// </summary>
 /// <param name="printStmt">SimpleToken of TREAD type</param>
 /// <param name="tokens">parameters for read statement</param>
-void SimpleParser::parseRead(SimpleToken& readStmt, std::vector<std::string>& tokens) {
+void SimpleParser::parseRead(SimpleToken& readStmt, std::vector<std::string>& tokens,
+        Extractor* extractor, SPClient* client) {
     if (tokens.size() == 2 && tokens.at(1) == ";") {
         std::vector<SimpleToken> children;
         children.push_back(parseVariable(tokens.at(0)));
@@ -118,6 +116,7 @@ SimpleToken SimpleParser::parseVariable(std::string& token) {
     }
 }
 
-void SimpleParser::parseHolder(SimpleToken& printStmt, std::vector<std::string>& tokens) {
+void SimpleParser::parseHolder(SimpleToken& printStmt, std::vector<std::string>& tokens,
+    Extractor* extractor, SPClient* client) {
 
 }

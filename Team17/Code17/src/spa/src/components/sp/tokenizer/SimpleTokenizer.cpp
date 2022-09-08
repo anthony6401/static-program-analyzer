@@ -1,6 +1,12 @@
 #include "SimpleTokenizer.h"
 #include "../parser/SimpleParser.h"
 #include "../utils/SpUtils.h"
+#include <iostream>
+
+SimpleTokenizer::SimpleTokenizer(SPClient* client, Extractor extractor) {
+    this->client = client;
+    this->extractor = extractor;
+}
 
 /// <summary>
 /// Main method to tokenize SIMPLE code for design extractor
@@ -20,7 +26,6 @@ void SimpleTokenizer::tokenizeCode(std::string code) {
         line = std::regex_replace(line, tokenDelimiters, " $& ");
         std::vector<std::string> lineTokens = SpUtils::split(line, whiteSpace);
         SimpleToken lineToken = SimpleParser::parseLine(lineTokens, line);
-        (lineToken.parseFunction)(lineToken, lineTokens);
+        (lineToken.parseFunction)(lineToken, lineTokens, &extractor, client);
     }
-
 }

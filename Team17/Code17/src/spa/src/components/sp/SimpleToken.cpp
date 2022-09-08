@@ -8,7 +8,8 @@
 /// <param name="statementNumber">statement number token is from</param>
 /// <param name="parseFunction">function to parse token for design extractor</param>
 SimpleToken::SimpleToken(SpTokenType type, std::string value,
-        int statementNumber, void (*parseFunction)(SimpleToken&, std::vector<std::string>&)) {
+        int statementNumber, void (*parseFunction)(SimpleToken&, std::vector<std::string>&,
+            Extractor* extractor, SPClient* client)) {
     this->type = type;
     this->value = value;
     this->statementNumber = statementNumber;
