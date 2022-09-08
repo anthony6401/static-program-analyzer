@@ -1,4 +1,5 @@
 #include "ClauseCreator.h"
+#include "components/qps/query_evaluator/factory/clauses/relationship/ModifiesSClause.h"
 #include <memory>
 
 /**
@@ -10,11 +11,17 @@ std::shared_ptr<Clause> ClauseCreator::createClause(Select synonym, std::unorder
 
 std::shared_ptr<Clause> ClauseCreator::createClause(SuchThat relationship, Select synonym, std::unordered_map<std::string, TokenType> synonymToDesignEntityMap, QPSClient qpsClient) {
     TokenType relationshipType = relationship.getRelationshipType();
-    TokenType leftType = relationship.getLeft().getTokenType();
-    TokenType rightType = relationship.getRight().getTokenType();
-//    if (relationshipType == TokenType::MODIFIES) {
-//        if (leftType == TokenType::INTEGER || synonymToDesignEntityMap[])
-//    }
+    TokenObject left = relationship.getLeft();
+    TokenObject right = relationship.getRight();
+    if (relationshipType == TokenType::MODIFIES) {
+        if (isStmtRelationship(left, synonymToDesignEntityMap)) {
+            return std::make_shared<ModifiesSClause>(left, right, synonym, synonymToDesignEntityMap, qpsClient);
+        }
+
+        if (isProcRelationship(left, synonymToDesignEntityMap)) {
+            return std::make_shared<ModifiesSClause>(left, right, synonym, synonymToDesignEntityMap, qpsClient);
+        }
+    }
     return std::make_shared<SelectClause>(synonym, synonymToDesignEntityMap, qpsClient);
 }
 
