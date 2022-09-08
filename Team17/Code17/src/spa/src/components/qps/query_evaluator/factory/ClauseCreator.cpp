@@ -14,7 +14,6 @@ std::shared_ptr<Clause> ClauseCreator::createClause(SuchThat relationship, Selec
     TokenType relationshipType = relationship.getRelationshipType();
     TokenObject left = relationship.getLeft();
     TokenObject right = relationship.getRight();
-
     // MODIFIES
     if (relationshipType == TokenType::MODIFIES) {
         if (isStmtRelationship(left, synonymToDesignEntityMap)) {
@@ -27,14 +26,13 @@ std::shared_ptr<Clause> ClauseCreator::createClause(SuchThat relationship, Selec
 
         // Unrecognised MODIFIES relationship clause
     }
-
     // USES
 
     // FOLLOWS
 
     // PARENT
 
-
+    // To be amended
     return std::make_shared<SelectClause>(synonym, synonymToDesignEntityMap, qpsClient);
 }
 

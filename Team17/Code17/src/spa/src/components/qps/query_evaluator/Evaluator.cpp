@@ -8,11 +8,6 @@
 void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &results, QPSClient qpsClient) {
     std::unordered_map<std::string, TokenType> synonymToDesignEntityMap = queryObject.getSynonymToDesignEntityMap();
     std::vector<std::shared_ptr<Clause>> clausesToEvaluate = extractClausesToEvaluate(queryObject, synonymToDesignEntityMap, qpsClient);
-
-//        for (auto r : selectClauseResult) {
-//            results.push_back(r);
-//        }
-
     // If any returns no results or false, terminate evaluation and return none as a result
     // Combine results of evaluation and store in query db
 }
