@@ -48,8 +48,10 @@ std::vector<std::shared_ptr<Clause>> Evaluator::extractClausesToEvaluate(QueryOb
         }
 
         for (auto p : patterns) {
-
+            std::shared_ptr<Clause> patternClauseToEvaluate = ClauseCreator::createClause(p, synonym, synonymToDesignEntityMap, qpsClient);
+            clausesToEvaluate.push_back(patternClauseToEvaluate);
         }
+        return clausesToEvaluate;
     }
 }
 
