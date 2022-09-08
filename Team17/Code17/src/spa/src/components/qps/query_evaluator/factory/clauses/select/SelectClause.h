@@ -8,7 +8,6 @@
 #include "components/qps/abstract_query_object/Select.h"
 #include "components/pkb/clients/QPSClient.h"
 
-// Select v; Have to determine entity type of v
 class SelectClause : public Clause {
 private:
     std::unordered_map<std::string, TokenType> synonymToDesignEntityMap;

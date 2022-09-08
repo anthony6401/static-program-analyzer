@@ -14,7 +14,7 @@ std::shared_ptr<Clause> ClauseCreator::createClause(SuchThat relationship, Selec
     TokenType relationshipType = relationship.getRelationshipType();
     TokenObject left = relationship.getLeft();
     TokenObject right = relationship.getRight();
-    // MODIFIES
+
     if (relationshipType == TokenType::MODIFIES) {
         if (isStmtRelationship(left, synonymToDesignEntityMap)) {
             return std::make_shared<ModifiesSClause>(left, right, synonym, synonymToDesignEntityMap, qpsClient);
@@ -25,15 +25,22 @@ std::shared_ptr<Clause> ClauseCreator::createClause(SuchThat relationship, Selec
         }
 
         // Unrecognised MODIFIES relationship clause
+    } else if (relationshipType == TokenType::USES) {
+        if (isStmtRelationship(left, synonymToDesignEntityMap)) {
+            // return std::make_shared<UsesSClause>(left, right, synonym, synonymToDesignEntityMap, qpsClient);
+        }
+
+        if (isProcRelationship(left, synonymToDesignEntityMap)) {
+            // return std::make_shared<UsesPClause>(left, right, synonym, synonymToDesignEntityMap, qpsClient);
+        }
     }
-    // USES
 
     // FOLLOWS
 
     // PARENT
 
     // To be amended
-    return std::make_shared<SelectClause>(synonym, synonymToDesignEntityMap, qpsClient);
+    return nullptr;
 }
 
 bool ClauseCreator::isStmtRelationship(TokenObject left,
@@ -49,7 +56,7 @@ bool ClauseCreator::isStmtRelationship(TokenObject left,
             leftDesignEntityType == TokenType::IF ||
             leftDesignEntityType == TokenType::ASSIGN;
 
-    return leftTokenType == TokenType::INTEGER || isLeftStmtEntity;
+    return (leftTokenType == TokenType::INTEGER) || isLeftStmtEntity;
 }
 
 bool ClauseCreator::isProcRelationship(TokenObject left,
@@ -59,5 +66,5 @@ bool ClauseCreator::isProcRelationship(TokenObject left,
     bool isLeftStmtEntity = (leftTokenType == TokenType::SYNONYM) &&
                             leftDesignEntityType == TokenType::PROCEDURE;
 
-    return leftTokenType == TokenType::NAME_WITH_QUOTATION || isLeftStmtEntity;
+    return (leftTokenType == TokenType::NAME_WITH_QUOTATION) || isLeftStmtEntity;
 }

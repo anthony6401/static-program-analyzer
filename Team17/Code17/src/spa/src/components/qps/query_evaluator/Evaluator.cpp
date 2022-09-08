@@ -33,7 +33,7 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
     // Combine results of evaluation and store in query db
 }
 
-std::unordered_set<std::string> joinEvaluatedResults(std::vector<RawResult> evaluatedResultsList) {
+std::unordered_set<std::string> Evaluator::joinEvaluatedResults(std::vector<RawResult> evaluatedResultsList) {
     std::unordered_set<std::string> firstResult = evaluatedResultsList.front().getResult();
     if (evaluatedResultsList.size() == 1) {
         return firstResult;
