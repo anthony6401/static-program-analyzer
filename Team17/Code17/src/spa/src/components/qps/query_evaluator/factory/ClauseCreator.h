@@ -17,6 +17,8 @@ public:
     static std::shared_ptr<Clause> createClause(SuchThat relationship, Select synonym, std::unordered_map<std::string, TokenType> synonymToDesignEntityMap, QPSClient qpsClient);
     static std::shared_ptr<Clause> createClause(Pattern pattern, Select synonym, std::unordered_map<std::string, TokenType> synonymToDesignEntityMap, QPSClient qpsClient);
     static std::shared_ptr<Clause> createClause(Select synonym, std::unordered_map<std::string, TokenType> synonymToDesignEntityMap, QPSClient qpsClient);
+    bool isStmtRelationship(TokenObject left, std::unordered_map<std::string, TokenType> synonymToDesignEntityMap);
+    bool isProcRelationship(TokenObject left, std::unordered_map<std::string, TokenType> synonymToDesignEntityMap);
 };
 
 #endif //SPA_CLAUSECREATOR_H

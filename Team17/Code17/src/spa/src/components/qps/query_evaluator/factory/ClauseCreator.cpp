@@ -10,8 +10,36 @@ std::shared_ptr<Clause> ClauseCreator::createClause(Select synonym, std::unorder
 
 std::shared_ptr<Clause> ClauseCreator::createClause(SuchThat relationship, Select synonym, std::unordered_map<std::string, TokenType> synonymToDesignEntityMap, QPSClient qpsClient) {
     TokenType relationshipType = relationship.getRelationshipType();
-    if (relationshipType == TokenType::MODIFIES) {
-
-    }
+    TokenType leftType = relationship.getLeft().getTokenType();
+    TokenType rightType = relationship.getRight().getTokenType();
+//    if (relationshipType == TokenType::MODIFIES) {
+//        if (leftType == TokenType::INTEGER || synonymToDesignEntityMap[])
+//    }
+    return std::make_shared<SelectClause>(synonym, synonymToDesignEntityMap, qpsClient);
 }
 
+bool ClauseCreator::isStmtRelationship(TokenObject left,
+                                       std::unordered_map<std::string, TokenType> synonymToDesignEntityMap) {
+    TokenType leftTokenType = left.getTokenType();
+    TokenType leftDesignEntityType = synonymToDesignEntityMap[left.getValue()];
+    bool isLeftStmtEntity = (leftTokenType == TokenType::SYNONYM) &&
+            leftDesignEntityType == TokenType::STMT ||
+            leftDesignEntityType == TokenType::READ ||
+            leftDesignEntityType == TokenType::PRINT ||
+            leftDesignEntityType == TokenType::CALL ||
+            leftDesignEntityType == TokenType::WHILE ||
+            leftDesignEntityType == TokenType::IF ||
+            leftDesignEntityType == TokenType::ASSIGN;
+
+    return leftTokenType == TokenType::INTEGER || isLeftStmtEntity;
+}
+
+bool ClauseCreator::isProcRelationship(TokenObject left,
+                                       std::unordered_map<std::string, TokenType> synonymToDesignEntityMap) {
+    TokenType leftTokenType = left.getTokenType();
+    TokenType leftDesignEntityType = synonymToDesignEntityMap[left.getValue()];
+    bool isLeftStmtEntity = (leftTokenType == TokenType::SYNONYM) &&
+                            leftDesignEntityType == TokenType::PROCEDURE;
+
+    return leftTokenType == TokenType::NAME_WITH_QUOTATION || isLeftStmtEntity;
+}
