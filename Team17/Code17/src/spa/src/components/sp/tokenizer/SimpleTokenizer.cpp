@@ -3,9 +3,9 @@
 #include "../utils/SpUtils.h"
 #include <iostream>
 
-SimpleTokenizer::SimpleTokenizer(SPClient* client, Extractor extractor) {
+SimpleTokenizer::SimpleTokenizer(SPClient* client) {
     this->client = client;
-    this->extractor = extractor;
+    this->extractor = Extractor();
 }
 
 /// <summary>

@@ -9,7 +9,7 @@
 
 class SimpleTokenizer {
     public:
-        SimpleTokenizer(SPClient* client, Extractor extractor);
+        SimpleTokenizer(SPClient* client);
         void tokenizeCode(std::string code);
 
     private:
