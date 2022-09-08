@@ -26,8 +26,9 @@ TestWrapper::TestWrapper() {
 
 // method for parsing the SIMPLE source
 void TestWrapper::parse(std::string filename) {
-	SPClient client = SPClient(pkb);
-	SimpleTokenizer simpleTokenizer = SimpleTokenizer(&client);
+	SPClient* client = new SPClient(pkb);
+	Extractor* extractor = &Extractor(client);
+	SimpleTokenizer simpleTokenizer = SimpleTokenizer(extractor);
 	std::ifstream testFile;
 	testFile.open(filename);
 
