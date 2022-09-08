@@ -41,16 +41,16 @@ TEST_CASE("Assign Entity Storage Test") {
 	REQUIRE(assignEntityStorage->getSize() == 2);
 
 	// Get Set based on TokenType
-	std::unordered_set<std::string> assignSet = assignEntityStorage->getAllEntity(qps::TokenType::ASSIGN);
-	std::unordered_set<std::string> constantSet = assignEntityStorage->getAllEntity(qps::TokenType::CONSTANT);
-	std::unordered_set<std::string> callSet = assignEntityStorage->getAllEntity(qps::TokenType::CALL);
-	std::unordered_set<std::string> ifSet = assignEntityStorage->getAllEntity(qps::TokenType::IF);
-	std::unordered_set<std::string> printSet = assignEntityStorage->getAllEntity(qps::TokenType::PRINT);
-	std::unordered_set<std::string> procedureSet = assignEntityStorage->getAllEntity(qps::TokenType::PROCEDURE);
-	std::unordered_set<std::string> readSet = assignEntityStorage->getAllEntity(qps::TokenType::READ);
-	std::unordered_set<std::string> variableSet = assignEntityStorage->getAllEntity(qps::TokenType::VARIABLE);
-	std::unordered_set<std::string> whileSet = assignEntityStorage->getAllEntity(qps::TokenType::WHILE);
-	std::unordered_set<std::string> stmtSet = assignEntityStorage->getAllEntity(qps::TokenType::STMT);
+	std::unordered_set<std::string> assignSet = assignEntityStorage->getAllEntity(DesignEntity::ASSIGN);
+	std::unordered_set<std::string> constantSet = assignEntityStorage->getAllEntity(DesignEntity::CONSTANT);
+	std::unordered_set<std::string> callSet = assignEntityStorage->getAllEntity(DesignEntity::CALL);
+	std::unordered_set<std::string> ifSet = assignEntityStorage->getAllEntity(DesignEntity::IF);
+	std::unordered_set<std::string> printSet = assignEntityStorage->getAllEntity(DesignEntity::PRINT);
+	std::unordered_set<std::string> procedureSet = assignEntityStorage->getAllEntity(DesignEntity::PROCEDURE);
+	std::unordered_set<std::string> readSet = assignEntityStorage->getAllEntity(DesignEntity::READ);
+	std::unordered_set<std::string> variableSet = assignEntityStorage->getAllEntity(DesignEntity::VARIABLE);
+	std::unordered_set<std::string> whileSet = assignEntityStorage->getAllEntity(DesignEntity::WHILE);
+	std::unordered_set<std::string> stmtSet = assignEntityStorage->getAllEntity(DesignEntity::STMT);
 
 	// Correct TokenType should return the set instead of nullptr
 	REQUIRE(assignSet != std::unordered_set<std::string>());
@@ -100,16 +100,16 @@ TEST_CASE("Constant Entity Storage Test") {
 	REQUIRE(constantEntityStorage->getSize() == 2);
 
 	// Get Set based on TokenType
-	std::unordered_set<std::string> assignSet = constantEntityStorage->getAllEntity(qps::TokenType::ASSIGN);
-	std::unordered_set<std::string> constantSet = constantEntityStorage->getAllEntity(qps::TokenType::CONSTANT);
-	std::unordered_set<std::string> callSet = constantEntityStorage->getAllEntity(qps::TokenType::CALL);
-	std::unordered_set<std::string> ifSet = constantEntityStorage->getAllEntity(qps::TokenType::IF);
-	std::unordered_set<std::string> printSet = constantEntityStorage->getAllEntity(qps::TokenType::PRINT);
-	std::unordered_set<std::string> procedureSet = constantEntityStorage->getAllEntity(qps::TokenType::PROCEDURE);
-	std::unordered_set<std::string> readSet = constantEntityStorage->getAllEntity(qps::TokenType::READ);
-	std::unordered_set<std::string> variableSet = constantEntityStorage->getAllEntity(qps::TokenType::VARIABLE);
-	std::unordered_set<std::string> whileSet = constantEntityStorage->getAllEntity(qps::TokenType::WHILE);
-	std::unordered_set<std::string> stmtSet = constantEntityStorage->getAllEntity(qps::TokenType::STMT);
+	std::unordered_set<std::string> assignSet = constantEntityStorage->getAllEntity(DesignEntity::ASSIGN);
+	std::unordered_set<std::string> constantSet = constantEntityStorage->getAllEntity(DesignEntity::CONSTANT);
+	std::unordered_set<std::string> callSet = constantEntityStorage->getAllEntity(DesignEntity::CALL);
+	std::unordered_set<std::string> ifSet = constantEntityStorage->getAllEntity(DesignEntity::IF);
+	std::unordered_set<std::string> printSet = constantEntityStorage->getAllEntity(DesignEntity::PRINT);
+	std::unordered_set<std::string> procedureSet = constantEntityStorage->getAllEntity(DesignEntity::PROCEDURE);
+	std::unordered_set<std::string> readSet = constantEntityStorage->getAllEntity(DesignEntity::READ);
+	std::unordered_set<std::string> variableSet = constantEntityStorage->getAllEntity(DesignEntity::VARIABLE);
+	std::unordered_set<std::string> whileSet = constantEntityStorage->getAllEntity(DesignEntity::WHILE);
+	std::unordered_set<std::string> stmtSet = constantEntityStorage->getAllEntity(DesignEntity::STMT);
 
 	// Correct TokenType should return the set instead of nullptr
 	REQUIRE(constantSet != std::unordered_set<std::string>());
@@ -158,16 +158,16 @@ TEST_CASE("Call Entity Storage Test") {
 	REQUIRE(callEntityStorage->getSize() == 2);
 
 	// Get Set based on TokenType
-	std::unordered_set<std::string> assignSet = callEntityStorage->getAllEntity(qps::TokenType::ASSIGN);
-	std::unordered_set<std::string> constantSet = callEntityStorage->getAllEntity(qps::TokenType::CONSTANT);
-	std::unordered_set<std::string> callSet = callEntityStorage->getAllEntity(qps::TokenType::CALL);
-	std::unordered_set<std::string> ifSet = callEntityStorage->getAllEntity(qps::TokenType::IF);
-	std::unordered_set<std::string> printSet = callEntityStorage->getAllEntity(qps::TokenType::PRINT);
-	std::unordered_set<std::string> procedureSet = callEntityStorage->getAllEntity(qps::TokenType::PROCEDURE);
-	std::unordered_set<std::string> readSet = callEntityStorage->getAllEntity(qps::TokenType::READ);
-	std::unordered_set<std::string> variableSet = callEntityStorage->getAllEntity(qps::TokenType::VARIABLE);
-	std::unordered_set<std::string> whileSet = callEntityStorage->getAllEntity(qps::TokenType::WHILE);
-	std::unordered_set<std::string> stmtSet = callEntityStorage->getAllEntity(qps::TokenType::STMT);
+	std::unordered_set<std::string> assignSet = callEntityStorage->getAllEntity(DesignEntity::ASSIGN);
+	std::unordered_set<std::string> constantSet = callEntityStorage->getAllEntity(DesignEntity::CONSTANT);
+	std::unordered_set<std::string> callSet = callEntityStorage->getAllEntity(DesignEntity::CALL);
+	std::unordered_set<std::string> ifSet = callEntityStorage->getAllEntity(DesignEntity::IF);
+	std::unordered_set<std::string> printSet = callEntityStorage->getAllEntity(DesignEntity::PRINT);
+	std::unordered_set<std::string> procedureSet = callEntityStorage->getAllEntity(DesignEntity::PROCEDURE);
+	std::unordered_set<std::string> readSet = callEntityStorage->getAllEntity(DesignEntity::READ);
+	std::unordered_set<std::string> variableSet = callEntityStorage->getAllEntity(DesignEntity::VARIABLE);
+	std::unordered_set<std::string> whileSet = callEntityStorage->getAllEntity(DesignEntity::WHILE);
+	std::unordered_set<std::string> stmtSet = callEntityStorage->getAllEntity(DesignEntity::STMT);
 
 	// Correct TokenType should return the set instead of nullptr
 	REQUIRE(callSet != std::unordered_set<std::string>());
@@ -217,16 +217,16 @@ TEST_CASE("If Entity Storage Test") {
 	REQUIRE(ifEntityStorage->getSize() == 2);
 
 	// Get Set based on TokenType
-	std::unordered_set<std::string> assignSet = ifEntityStorage->getAllEntity(qps::TokenType::ASSIGN);
-	std::unordered_set<std::string> constantSet = ifEntityStorage->getAllEntity(qps::TokenType::CONSTANT);
-	std::unordered_set<std::string> callSet = ifEntityStorage->getAllEntity(qps::TokenType::CALL);
-	std::unordered_set<std::string> ifSet = ifEntityStorage->getAllEntity(qps::TokenType::IF);
-	std::unordered_set<std::string> printSet = ifEntityStorage->getAllEntity(qps::TokenType::PRINT);
-	std::unordered_set<std::string> procedureSet = ifEntityStorage->getAllEntity(qps::TokenType::PROCEDURE);
-	std::unordered_set<std::string> readSet = ifEntityStorage->getAllEntity(qps::TokenType::READ);
-	std::unordered_set<std::string> variableSet = ifEntityStorage->getAllEntity(qps::TokenType::VARIABLE);
-	std::unordered_set<std::string> whileSet = ifEntityStorage->getAllEntity(qps::TokenType::WHILE);
-	std::unordered_set<std::string> stmtSet = ifEntityStorage->getAllEntity(qps::TokenType::STMT);
+	std::unordered_set<std::string> assignSet = ifEntityStorage->getAllEntity(DesignEntity::ASSIGN);
+	std::unordered_set<std::string> constantSet = ifEntityStorage->getAllEntity(DesignEntity::CONSTANT);
+	std::unordered_set<std::string> callSet = ifEntityStorage->getAllEntity(DesignEntity::CALL);
+	std::unordered_set<std::string> ifSet = ifEntityStorage->getAllEntity(DesignEntity::IF);
+	std::unordered_set<std::string> printSet = ifEntityStorage->getAllEntity(DesignEntity::PRINT);
+	std::unordered_set<std::string> procedureSet = ifEntityStorage->getAllEntity(DesignEntity::PROCEDURE);
+	std::unordered_set<std::string> readSet = ifEntityStorage->getAllEntity(DesignEntity::READ);
+	std::unordered_set<std::string> variableSet = ifEntityStorage->getAllEntity(DesignEntity::VARIABLE);
+	std::unordered_set<std::string> whileSet = ifEntityStorage->getAllEntity(DesignEntity::WHILE);
+	std::unordered_set<std::string> stmtSet = ifEntityStorage->getAllEntity(DesignEntity::STMT);
 
 	// Correct TokenType should return the set instead of nullptr
 	REQUIRE(ifSet != std::unordered_set<std::string>());
@@ -275,16 +275,16 @@ TEST_CASE("print Entity Storage Test") {
 	REQUIRE(printEntityStorage->getSize() == 2);
 
 	// Get Set based on TokenType
-	std::unordered_set<std::string> assignSet = printEntityStorage->getAllEntity(qps::TokenType::ASSIGN);
-	std::unordered_set<std::string> constantSet = printEntityStorage->getAllEntity(qps::TokenType::CONSTANT);
-	std::unordered_set<std::string> callSet = printEntityStorage->getAllEntity(qps::TokenType::CALL);
-	std::unordered_set<std::string> ifSet = printEntityStorage->getAllEntity(qps::TokenType::IF);
-	std::unordered_set<std::string> printSet = printEntityStorage->getAllEntity(qps::TokenType::PRINT);
-	std::unordered_set<std::string> procedureSet = printEntityStorage->getAllEntity(qps::TokenType::PROCEDURE);
-	std::unordered_set<std::string> readSet = printEntityStorage->getAllEntity(qps::TokenType::READ);
-	std::unordered_set<std::string> variableSet = printEntityStorage->getAllEntity(qps::TokenType::VARIABLE);
-	std::unordered_set<std::string> whileSet = printEntityStorage->getAllEntity(qps::TokenType::WHILE);
-	std::unordered_set<std::string> stmtSet = printEntityStorage->getAllEntity(qps::TokenType::STMT);
+	std::unordered_set<std::string> assignSet = printEntityStorage->getAllEntity(DesignEntity::ASSIGN);
+	std::unordered_set<std::string> constantSet = printEntityStorage->getAllEntity(DesignEntity::CONSTANT);
+	std::unordered_set<std::string> callSet = printEntityStorage->getAllEntity(DesignEntity::CALL);
+	std::unordered_set<std::string> ifSet = printEntityStorage->getAllEntity(DesignEntity::IF);
+	std::unordered_set<std::string> printSet = printEntityStorage->getAllEntity(DesignEntity::PRINT);
+	std::unordered_set<std::string> procedureSet = printEntityStorage->getAllEntity(DesignEntity::PROCEDURE);
+	std::unordered_set<std::string> readSet = printEntityStorage->getAllEntity(DesignEntity::READ);
+	std::unordered_set<std::string> variableSet = printEntityStorage->getAllEntity(DesignEntity::VARIABLE);
+	std::unordered_set<std::string> whileSet = printEntityStorage->getAllEntity(DesignEntity::WHILE);
+	std::unordered_set<std::string> stmtSet = printEntityStorage->getAllEntity(DesignEntity::STMT);
 
 	// Correct TokenType should return the set instead of nullptr
 	REQUIRE(printSet != std::unordered_set<std::string>());
@@ -333,16 +333,16 @@ TEST_CASE("Procedure Entity Storage Test") {
 	REQUIRE(procedureEntityStorage->getSize() == 2);
 
 	// Get Set based on TokenType
-	std::unordered_set<std::string> assignSet = procedureEntityStorage->getAllEntity(qps::TokenType::ASSIGN);
-	std::unordered_set<std::string> constantSet = procedureEntityStorage->getAllEntity(qps::TokenType::CONSTANT);
-	std::unordered_set<std::string> callSet = procedureEntityStorage->getAllEntity(qps::TokenType::CALL);
-	std::unordered_set<std::string> ifSet = procedureEntityStorage->getAllEntity(qps::TokenType::IF);
-	std::unordered_set<std::string> printSet = procedureEntityStorage->getAllEntity(qps::TokenType::PRINT);
-	std::unordered_set<std::string> procedureSet = procedureEntityStorage->getAllEntity(qps::TokenType::PROCEDURE);
-	std::unordered_set<std::string> readSet = procedureEntityStorage->getAllEntity(qps::TokenType::READ);
-	std::unordered_set<std::string> variableSet = procedureEntityStorage->getAllEntity(qps::TokenType::VARIABLE);
-	std::unordered_set<std::string> whileSet = procedureEntityStorage->getAllEntity(qps::TokenType::WHILE);
-	std::unordered_set<std::string> stmtSet = procedureEntityStorage->getAllEntity(qps::TokenType::STMT);
+	std::unordered_set<std::string> assignSet = procedureEntityStorage->getAllEntity(DesignEntity::ASSIGN);
+	std::unordered_set<std::string> constantSet = procedureEntityStorage->getAllEntity(DesignEntity::CONSTANT);
+	std::unordered_set<std::string> callSet = procedureEntityStorage->getAllEntity(DesignEntity::CALL);
+	std::unordered_set<std::string> ifSet = procedureEntityStorage->getAllEntity(DesignEntity::IF);
+	std::unordered_set<std::string> printSet = procedureEntityStorage->getAllEntity(DesignEntity::PRINT);
+	std::unordered_set<std::string> procedureSet = procedureEntityStorage->getAllEntity(DesignEntity::PROCEDURE);
+	std::unordered_set<std::string> readSet = procedureEntityStorage->getAllEntity(DesignEntity::READ);
+	std::unordered_set<std::string> variableSet = procedureEntityStorage->getAllEntity(DesignEntity::VARIABLE);
+	std::unordered_set<std::string> whileSet = procedureEntityStorage->getAllEntity(DesignEntity::WHILE);
+	std::unordered_set<std::string> stmtSet = procedureEntityStorage->getAllEntity(DesignEntity::STMT);
 
 	// Correct TokenType should return the set instead of nullptr
 	REQUIRE(procedureSet != std::unordered_set<std::string>());
@@ -391,16 +391,16 @@ TEST_CASE("Read Entity Storage Test") {
 	REQUIRE(readEntityStorage->getSize() == 2);
 
 	// Get Set based on TokenType
-	std::unordered_set<std::string> assignSet = readEntityStorage->getAllEntity(qps::TokenType::ASSIGN);
-	std::unordered_set<std::string> constantSet = readEntityStorage->getAllEntity(qps::TokenType::CONSTANT);
-	std::unordered_set<std::string> callSet = readEntityStorage->getAllEntity(qps::TokenType::CALL);
-	std::unordered_set<std::string> ifSet = readEntityStorage->getAllEntity(qps::TokenType::IF);
-	std::unordered_set<std::string> printSet = readEntityStorage->getAllEntity(qps::TokenType::PRINT);
-	std::unordered_set<std::string> procedureSet = readEntityStorage->getAllEntity(qps::TokenType::PROCEDURE);
-	std::unordered_set<std::string> readSet = readEntityStorage->getAllEntity(qps::TokenType::READ);
-	std::unordered_set<std::string> variableSet = readEntityStorage->getAllEntity(qps::TokenType::VARIABLE);
-	std::unordered_set<std::string> whileSet = readEntityStorage->getAllEntity(qps::TokenType::WHILE);
-	std::unordered_set<std::string> stmtSet = readEntityStorage->getAllEntity(qps::TokenType::STMT);
+	std::unordered_set<std::string> assignSet = readEntityStorage->getAllEntity(DesignEntity::ASSIGN);
+	std::unordered_set<std::string> constantSet = readEntityStorage->getAllEntity(DesignEntity::CONSTANT);
+	std::unordered_set<std::string> callSet = readEntityStorage->getAllEntity(DesignEntity::CALL);
+	std::unordered_set<std::string> ifSet = readEntityStorage->getAllEntity(DesignEntity::IF);
+	std::unordered_set<std::string> printSet = readEntityStorage->getAllEntity(DesignEntity::PRINT);
+	std::unordered_set<std::string> procedureSet = readEntityStorage->getAllEntity(DesignEntity::PROCEDURE);
+	std::unordered_set<std::string> readSet = readEntityStorage->getAllEntity(DesignEntity::READ);
+	std::unordered_set<std::string> variableSet = readEntityStorage->getAllEntity(DesignEntity::VARIABLE);
+	std::unordered_set<std::string> whileSet = readEntityStorage->getAllEntity(DesignEntity::WHILE);
+	std::unordered_set<std::string> stmtSet = readEntityStorage->getAllEntity(DesignEntity::STMT);
 
 	// Correct TokenType should return the set instead of nullptr
 	REQUIRE(readSet != std::unordered_set<std::string>());
@@ -449,16 +449,16 @@ TEST_CASE("Variable Entity Storage Test") {
 	REQUIRE(variableEntityStorage->getSize() == 2);
 
 	// Get Set based on TokenType
-	std::unordered_set<std::string> assignSet = variableEntityStorage->getAllEntity(qps::TokenType::ASSIGN);
-	std::unordered_set<std::string> constantSet = variableEntityStorage->getAllEntity(qps::TokenType::CONSTANT);
-	std::unordered_set<std::string> callSet = variableEntityStorage->getAllEntity(qps::TokenType::CALL);
-	std::unordered_set<std::string> ifSet = variableEntityStorage->getAllEntity(qps::TokenType::IF);
-	std::unordered_set<std::string> printSet = variableEntityStorage->getAllEntity(qps::TokenType::PRINT);
-	std::unordered_set<std::string> procedureSet = variableEntityStorage->getAllEntity(qps::TokenType::PROCEDURE);
-	std::unordered_set<std::string> readSet = variableEntityStorage->getAllEntity(qps::TokenType::READ);
-	std::unordered_set<std::string> variableSet = variableEntityStorage->getAllEntity(qps::TokenType::VARIABLE);
-	std::unordered_set<std::string> whileSet = variableEntityStorage->getAllEntity(qps::TokenType::WHILE);
-	std::unordered_set<std::string> stmtSet = variableEntityStorage->getAllEntity(qps::TokenType::STMT);
+	std::unordered_set<std::string> assignSet = variableEntityStorage->getAllEntity(DesignEntity::ASSIGN);
+	std::unordered_set<std::string> constantSet = variableEntityStorage->getAllEntity(DesignEntity::CONSTANT);
+	std::unordered_set<std::string> callSet = variableEntityStorage->getAllEntity(DesignEntity::CALL);
+	std::unordered_set<std::string> ifSet = variableEntityStorage->getAllEntity(DesignEntity::IF);
+	std::unordered_set<std::string> printSet = variableEntityStorage->getAllEntity(DesignEntity::PRINT);
+	std::unordered_set<std::string> procedureSet = variableEntityStorage->getAllEntity(DesignEntity::PROCEDURE);
+	std::unordered_set<std::string> readSet = variableEntityStorage->getAllEntity(DesignEntity::READ);
+	std::unordered_set<std::string> variableSet = variableEntityStorage->getAllEntity(DesignEntity::VARIABLE);
+	std::unordered_set<std::string> whileSet = variableEntityStorage->getAllEntity(DesignEntity::WHILE);
+	std::unordered_set<std::string> stmtSet = variableEntityStorage->getAllEntity(DesignEntity::STMT);
 
 	// Correct TokenType should return the set instead of nullptr
 	REQUIRE(variableSet != std::unordered_set<std::string>());
@@ -507,16 +507,16 @@ TEST_CASE("While Entity Storage Test") {
 	REQUIRE(whileEntityStorage->getSize() == 2);
 
 	// Get Set based on TokenType
-	std::unordered_set<std::string> assignSet = whileEntityStorage->getAllEntity(qps::TokenType::ASSIGN);
-	std::unordered_set<std::string> constantSet = whileEntityStorage->getAllEntity(qps::TokenType::CONSTANT);
-	std::unordered_set<std::string> callSet = whileEntityStorage->getAllEntity(qps::TokenType::CALL);
-	std::unordered_set<std::string> ifSet = whileEntityStorage->getAllEntity(qps::TokenType::IF);
-	std::unordered_set<std::string> printSet = whileEntityStorage->getAllEntity(qps::TokenType::PRINT);
-	std::unordered_set<std::string> procedureSet = whileEntityStorage->getAllEntity(qps::TokenType::PROCEDURE);
-	std::unordered_set<std::string> readSet = whileEntityStorage->getAllEntity(qps::TokenType::READ);
-	std::unordered_set<std::string> variableSet = whileEntityStorage->getAllEntity(qps::TokenType::VARIABLE);
-	std::unordered_set<std::string> whileSet = whileEntityStorage->getAllEntity(qps::TokenType::WHILE);
-	std::unordered_set<std::string> stmtSet = whileEntityStorage->getAllEntity(qps::TokenType::STMT);
+	std::unordered_set<std::string> assignSet = whileEntityStorage->getAllEntity(DesignEntity::ASSIGN);
+	std::unordered_set<std::string> constantSet = whileEntityStorage->getAllEntity(DesignEntity::CONSTANT);
+	std::unordered_set<std::string> callSet = whileEntityStorage->getAllEntity(DesignEntity::CALL);
+	std::unordered_set<std::string> ifSet = whileEntityStorage->getAllEntity(DesignEntity::IF);
+	std::unordered_set<std::string> printSet = whileEntityStorage->getAllEntity(DesignEntity::PRINT);
+	std::unordered_set<std::string> procedureSet = whileEntityStorage->getAllEntity(DesignEntity::PROCEDURE);
+	std::unordered_set<std::string> readSet = whileEntityStorage->getAllEntity(DesignEntity::READ);
+	std::unordered_set<std::string> variableSet = whileEntityStorage->getAllEntity(DesignEntity::VARIABLE);
+	std::unordered_set<std::string> whileSet = whileEntityStorage->getAllEntity(DesignEntity::WHILE);
+	std::unordered_set<std::string> stmtSet = whileEntityStorage->getAllEntity(DesignEntity::STMT);
 
 	// Correct TokenType should return the set instead of nullptr
 	REQUIRE(whileSet != std::unordered_set<std::string>());
@@ -575,16 +575,16 @@ TEST_CASE("Statement Entity Storage Test") {
 	REQUIRE(statementEntityStorage->storeEntity(callEntityThree));
 
 	// Get Set based on TokenType
-	std::unordered_set<std::string> assignSet = statementEntityStorage->getAllEntity(qps::TokenType::ASSIGN);
-	std::unordered_set<std::string> constantSet = statementEntityStorage->getAllEntity(qps::TokenType::CONSTANT);
-	std::unordered_set<std::string> callSet = statementEntityStorage->getAllEntity(qps::TokenType::CALL);
-	std::unordered_set<std::string> ifSet = statementEntityStorage->getAllEntity(qps::TokenType::IF);
-	std::unordered_set<std::string> printSet = statementEntityStorage->getAllEntity(qps::TokenType::PRINT);
-	std::unordered_set<std::string> procedureSet = statementEntityStorage->getAllEntity(qps::TokenType::PROCEDURE);
-	std::unordered_set<std::string> readSet = statementEntityStorage->getAllEntity(qps::TokenType::READ);
-	std::unordered_set<std::string> variableSet = statementEntityStorage->getAllEntity(qps::TokenType::VARIABLE);
-	std::unordered_set<std::string> whileSet = statementEntityStorage->getAllEntity(qps::TokenType::WHILE);
-	std::unordered_set<std::string> stmtSet = statementEntityStorage->getAllEntity(qps::TokenType::STMT);
+	std::unordered_set<std::string> assignSet = statementEntityStorage->getAllEntity(DesignEntity::ASSIGN);
+	std::unordered_set<std::string> constantSet = statementEntityStorage->getAllEntity(DesignEntity::CONSTANT);
+	std::unordered_set<std::string> callSet = statementEntityStorage->getAllEntity(DesignEntity::CALL);
+	std::unordered_set<std::string> ifSet = statementEntityStorage->getAllEntity(DesignEntity::IF);
+	std::unordered_set<std::string> printSet = statementEntityStorage->getAllEntity(DesignEntity::PRINT);
+	std::unordered_set<std::string> procedureSet = statementEntityStorage->getAllEntity(DesignEntity::PROCEDURE);
+	std::unordered_set<std::string> readSet = statementEntityStorage->getAllEntity(DesignEntity::READ);
+	std::unordered_set<std::string> variableSet = statementEntityStorage->getAllEntity(DesignEntity::VARIABLE);
+	std::unordered_set<std::string> whileSet = statementEntityStorage->getAllEntity(DesignEntity::WHILE);
+	std::unordered_set<std::string> stmtSet = statementEntityStorage->getAllEntity(DesignEntity::STMT);
 
 	// Correct TokenType should return the set instead of nullptr
 	REQUIRE(stmtSet != std::unordered_set<std::string>());

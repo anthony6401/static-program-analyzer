@@ -2,6 +2,7 @@
 
 #include "../../models/Relationship/Relationship.h"
 #include  "models/Entity/Entity.h"
+#include  "models/Entity/DesignEntity.h"
 
 #include "./manager/EntityManager.h"
 
@@ -13,7 +14,7 @@ class PKB {
 public:
 	PKB();
 	//For getting entity
-	std::unordered_set<std::string> getAllEntity(qps::TokenType returnType);
+	std::unordered_set<std::string> getAllEntity(DesignEntity returnType);
 
 	//For storing relationship
 	bool storeRelationship(Relationship* rel);

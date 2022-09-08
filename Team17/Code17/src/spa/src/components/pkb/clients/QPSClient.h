@@ -1,5 +1,6 @@
 #pragma once
-#include "../../qps/query_preprocessor/query_tokenizer/TokenType.h"
+#include "models/Entity/DesignEntity.h"
+
 
 #include "../pkb.h"
 
@@ -13,7 +14,7 @@ public:
 	QPSClient(PKB *knowledge);
 
 	//For getting entity
-	std::unordered_set<std::string> getAllEntity(qps::TokenType returnType);
+	std::unordered_set<std::string> getAllEntity(DesignEntity returnType);
 
 	//For Uses Relationship
 	/*bool getUses(int lineNumber, std::string var);

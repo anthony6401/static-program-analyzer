@@ -13,8 +13,8 @@ bool WhileEntityStorage::storeEntity(Entity* entity) {
 	return false;
 }
 
-std::unordered_set<std::string> WhileEntityStorage::getAllEntity(qps::TokenType returnType) {
-	if (returnType == qps::TokenType::WHILE) {
+std::unordered_set<std::string> WhileEntityStorage::getAllEntity(DesignEntity returnType) {
+	if (returnType == DesignEntity::WHILE) {
 		return set;
 	}
 	return std::unordered_set<std::string>();

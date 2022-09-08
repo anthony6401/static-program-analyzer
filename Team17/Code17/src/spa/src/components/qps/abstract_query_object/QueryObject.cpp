@@ -5,7 +5,7 @@
 * Initializes empty query
 */
 QueryObject::QueryObject() : relationships(std::vector<SuchThat>()),
-patterns(std::vector<Pattern>()), select(Select()), synonymToDesignEntityMap(std::unordered_map<std::string, TokenType>()) {
+patterns(std::vector<Pattern>()), select(Select()), synonymToDesignEntityMap(std::unordered_map<std::string, DesignEntity>()) {
 	this->hasNoSyntaxError = false;
 }
 
@@ -13,7 +13,7 @@ patterns(std::vector<Pattern>()), select(Select()), synonymToDesignEntityMap(std
 * Initializes query object with the values for clauses
 */
 QueryObject::QueryObject(Select select, std::vector<SuchThat> relationship, 
-	std::vector<Pattern> pattern, std::unordered_map<std::string, TokenType> synonymToDesignEntity) {
+	std::vector<Pattern> pattern, std::unordered_map<std::string, DesignEntity> synonymToDesignEntity) {
 
 	this->relationships = relationship;
 	this->select = select;
@@ -38,6 +38,6 @@ Select QueryObject::getSelect() {
 	return this->select;
 };
 
-std::unordered_map<std::string, TokenType> QueryObject::getSynonymToDesignEntityMap() {
+std::unordered_map<std::string, DesignEntity> QueryObject::getSynonymToDesignEntityMap() {
 	return this->synonymToDesignEntityMap;
 }

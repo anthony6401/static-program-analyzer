@@ -10,6 +10,7 @@
 #include "components/qps/abstract_query_object/Select.h"
 #include "components/qps/abstract_query_object/SuchThat.h"
 #include "components/qps/abstract_query_object/Pattern.h"
+#include "models/Entity/DesignEntity.h"
 #include <vector>
 
 #ifndef INC_22S1_CP_SPA_TEAM_17_PARSER_H
@@ -20,20 +21,34 @@ using namespace qps;
 class Parser {
 private:
     std::vector<TokenObject> tokenizedQuery;
+    std::unordered_map<TokenType, DesignEntity> tokenToDesignEntity = {
+        {TokenType::STMT, DesignEntity::STMT},
+        {TokenType::READ, DesignEntity::READ},
+        {TokenType::PRINT, DesignEntity::PRINT},
+        {TokenType::CALL, DesignEntity::CALL},
+        {TokenType::WHILE, DesignEntity::WHILE},
+        {TokenType::IF, DesignEntity::IF},
+        {TokenType::ASSIGN, DesignEntity::ASSIGN},
+        {TokenType::VARIABLE, DesignEntity::VARIABLE},
+        {TokenType::CONSTANT, DesignEntity::CONSTANT},
+        {TokenType::PROCEDURE, DesignEntity::PROCEDURE}
+    };
+
     std::vector<std::vector<TokenObject>> groupQueryIntoClause();
     bool isSyntacticallyCorrect(std::vector<TokenObject> tokenizedClause, SyntaxChecker* checker);
     int getTokenIndex(TokenType token, std::vector<TokenType> tokenTypes);
     std::vector<TokenType> getTokenTypes(std::vector<TokenObject> tokenObjects);
-    std::vector<Declaration> parseTokensIntoDeclarationObjects(std::unordered_map<std::string, TokenType> mappedSynonyms);
-    Select parseTokensIntoSelectObject(std::vector<TokenObject> selectTokens, std::unordered_map<std::string, TokenType> mappedSynonyms);
+    Select parseTokensIntoSelectObject(std::vector<TokenObject> selectTokens, std::unordered_map<std::string, DesignEntity> mappedSynonyms);
     std::vector<SuchThat> parseTokensIntoSuchThatObjects();
     std::vector<Pattern> parseTokensIntoPatternObjects();
-    std::unordered_map<std::string, TokenType> mapSynonymToDesignEntity(std::vector<TokenObject> declarations);
+    std::unordered_map<std::string, DesignEntity> mapSynonymToDesignEntity(std::vector<TokenObject> declarations);
 
 public:
+    Parser();
     Parser(std::vector<TokenObject> tokenizedQuery);
     QueryObject parse();
     std::vector<TokenObject> getTokenizedQuery();
+
 };
 
 #endif //INC_22S1_CP_SPA_TEAM_17_PARSER_H

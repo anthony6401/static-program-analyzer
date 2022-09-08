@@ -13,8 +13,8 @@ bool VariableEntityStorage::storeEntity(Entity* entity) {
 	return false;
 }
 
-std::unordered_set<std::string> VariableEntityStorage::getAllEntity(qps::TokenType returnType) {
-	if (returnType == qps::TokenType::VARIABLE) {
+std::unordered_set<std::string> VariableEntityStorage::getAllEntity(DesignEntity returnType) {
+	if (returnType == DesignEntity::VARIABLE) {
 		return set;
 	}
 	return std::unordered_set<std::string>();
