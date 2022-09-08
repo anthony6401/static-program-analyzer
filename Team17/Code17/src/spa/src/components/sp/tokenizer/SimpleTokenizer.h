@@ -5,7 +5,6 @@
 #include <regex>
 #include "../SimpleToken.h"
 #include "../extractor/Extractor.h"
-#include "../../pkb/clients/SPClient.h"
 
 class SimpleTokenizer {
     public:
