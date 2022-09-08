@@ -9,6 +9,7 @@ private:
 
 public:
 	Relationship(Entity* leftEntity, Entity* rightEntity);
+	virtual ~Relationship() = default;
 	Entity* getLeftEntity();
 	Entity* getRightEntity();
 };
