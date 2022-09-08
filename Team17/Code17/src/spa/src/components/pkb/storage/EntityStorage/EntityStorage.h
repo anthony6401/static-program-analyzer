@@ -1,7 +1,7 @@
 #pragma once
 #include "models/Entity/Entity.h"
 #include <unordered_set>
-#include "../../qps/query_preprocessor/query_tokenizer/TokenType.h"
+#include "components/qps/query_preprocessor/query_tokenizer/TokenType.h"
 
 class EntityStorage {
 

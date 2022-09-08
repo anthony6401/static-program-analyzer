@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../storage/EntityStorage.h"
+#include "../storage/EntityStorage/EntityStorage.h"
 #include "../../qps/query_preprocessor/query_tokenizer/TokenType.h"
 
 #include <string>
