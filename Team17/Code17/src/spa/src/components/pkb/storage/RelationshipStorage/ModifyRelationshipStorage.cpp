@@ -9,13 +9,13 @@
 #include "typeinfo"
 
 ModifyRelationshipStorage::ModifyRelationshipStorage() : RelationshipStorage(),
-stmtForwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-procForwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-procBackwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-assignBackwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-readBackwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-ifBackwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-whileBackwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()) {}
+														stmtForwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()),
+														procForwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()),
+														procBackwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()),
+														assignBackwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()),
+														readBackwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()),
+														ifBackwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()),
+														whileBackwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()) {}
 
 bool ModifyRelationshipStorage::storeRelationship(Relationship* rel) {
 	ModifyRelationship* modifyRelationship = dynamic_cast<ModifyRelationship*>(rel);
