@@ -9,8 +9,6 @@
 
 using namespace qps;
 
-Parser::Parser() {};
-
 Parser::Parser(std::vector<TokenObject> tokenizedQuery) {
 	this->tokenizedQuery = tokenizedQuery;
 };

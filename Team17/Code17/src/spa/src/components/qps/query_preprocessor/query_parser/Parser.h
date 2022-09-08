@@ -44,7 +44,6 @@ private:
     std::unordered_map<std::string, DesignEntity> mapSynonymToDesignEntity(std::vector<TokenObject> declarations);
 
 public:
-    Parser();
     Parser(std::vector<TokenObject> tokenizedQuery);
     QueryObject parse();
     std::vector<TokenObject> getTokenizedQuery();
