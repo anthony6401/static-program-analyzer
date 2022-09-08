@@ -14,8 +14,8 @@
 class ClauseCreator {
 public:
     ClauseCreator();
-    std::shared_ptr<Clause> createClause(SuchThat relationship, Select synonym, std::unordered_map<std::string, TokenType> synonymToDesignEntityMap, QPSClient qpsClient);
-    std::shared_ptr<Clause> createClause(Pattern pattern, Select synonym, std::unordered_map<std::string, TokenType> synonymToDesignEntityMap, QPSClient qpsClient);
+    static std::shared_ptr<Clause> createClause(SuchThat relationship, Select synonym, std::unordered_map<std::string, TokenType> synonymToDesignEntityMap, QPSClient qpsClient);
+    static std::shared_ptr<Clause> createClause(Pattern pattern, Select synonym, std::unordered_map<std::string, TokenType> synonymToDesignEntityMap, QPSClient qpsClient);
     static std::shared_ptr<Clause> createClause(Select synonym, std::unordered_map<std::string, TokenType> synonymToDesignEntityMap, QPSClient qpsClient);
 };
 
