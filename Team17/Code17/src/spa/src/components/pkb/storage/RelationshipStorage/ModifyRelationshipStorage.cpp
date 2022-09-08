@@ -1,27 +1,27 @@
-#include "UsesRelationshipStorage.h"
-#include "models/Relationship/UsesRelationship.h"
+#include "ModifyRelationshipStorage.h"
+#include "models/Relationship/ModifyRelationship.h"
 #include "models/Entity/ProcedureEntity.h"
 #include "models/Entity/AssignEntity.h"
-#include "models/Entity/PrintEntity.h"
+#include "models/Entity/ReadEntity.h"
 #include "models/Entity/IfEntity.h"
 #include "models/Entity/WhileEntity.h"
 #include "utils.h"
 #include "typeinfo"
 
-UsesRelationshipStorage::UsesRelationshipStorage() : RelationshipStorage(),
-													stmtForwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-													procForwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-													procBackwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-													assignBackwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-													printBackwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-													ifBackwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-													whileBackwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()) {}
+ModifyRelationshipStorage::ModifyRelationshipStorage() : RelationshipStorage(),
+stmtForwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()),
+procForwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()),
+procBackwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()),
+assignBackwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()),
+readBackwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()),
+ifBackwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()),
+whileBackwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()) {}
 
-bool UsesRelationshipStorage::storeRelationship(Relationship* rel) {
-	UsesRelationship* usesRelationship = dynamic_cast<UsesRelationship*>(rel);
-	if (usesRelationship) {
-		Entity* leftEntity = usesRelationship->getLeftEntity();
-		Entity* rightEntity = usesRelationship->getRightEntity();
+bool ModifyRelationshipStorage::storeRelationship(Relationship* rel) {
+	ModifyRelationship* modifyRelationship = dynamic_cast<ModifyRelationship*>(rel);
+	if (modifyRelationship) {
+		Entity* leftEntity = modifyRelationship->getLeftEntity();
+		Entity* rightEntity = modifyRelationship->getRightEntity();
 		std::string leftValue = leftEntity->getValue();
 		std::string rightValue = rightEntity->getValue();
 
@@ -40,9 +40,9 @@ bool UsesRelationshipStorage::storeRelationship(Relationship* rel) {
 			result = result || resultOne || resultTwo;
 		}
 
-		if (typeid(*leftEntity) == typeid(PrintEntity)) {
+		if (typeid(*leftEntity) == typeid(ReadEntity)) {
 			bool resultOne = Utils::insertEntity(this->stmtForwardStorage, leftValue, rightValue);
-			bool resultTwo = Utils::insertEntity(this->printBackwardStorage, rightValue, leftValue);
+			bool resultTwo = Utils::insertEntity(this->readBackwardStorage, rightValue, leftValue);
 			result = result || resultOne || resultTwo;
 		}
 
@@ -64,9 +64,9 @@ bool UsesRelationshipStorage::storeRelationship(Relationship* rel) {
 	return false;
 }
 
-// To answer Uses(1, "x")
-bool UsesRelationshipStorage::getRelationship(RelationshipType relType, TokenObject firstArgument, TokenObject secondArgument) {
-	if (relType == RelationshipType::USES) {
+// To answer Modify(1, "x")
+bool ModifyRelationshipStorage::getRelationship(RelationshipType relType, TokenObject firstArgument, TokenObject secondArgument) {
+	if (relType == RelationshipType::MODIFIES) {
 		std::unordered_map<std::string, std::unordered_set<std::string>>* storage{};
 		if (firstArgument.getTokenType() == TokenType::INTEGER) {
 			storage = &this->stmtForwardStorage;
@@ -86,9 +86,9 @@ bool UsesRelationshipStorage::getRelationship(RelationshipType relType, TokenObj
 	return false;
 }
 
-// To answer Uses(1, v)
-std::unordered_set<std::string> UsesRelationshipStorage::getRelationshipByFirst(RelationshipType relType, TokenObject firstArgument, TokenType returnType) {
-	if (relType == RelationshipType::USES) {
+// To answer Modify(1, v)
+std::unordered_set<std::string> ModifyRelationshipStorage::getRelationshipByFirst(RelationshipType relType, TokenObject firstArgument, TokenType returnType) {
+	if (relType == RelationshipType::MODIFIES) {
 		std::unordered_map<std::string, std::unordered_set<std::string>>* storage;
 		if (firstArgument.getTokenType() == TokenType::INTEGER) {
 			storage = &this->stmtForwardStorage;
@@ -108,9 +108,9 @@ std::unordered_set<std::string> UsesRelationshipStorage::getRelationshipByFirst(
 	return std::unordered_set<std::string>();
 }
 
-// To answer Uses(s, 1)
-std::unordered_set<std::string> UsesRelationshipStorage::getRelationshipBySecond(RelationshipType relType, TokenType returnType, TokenObject secondArgument) {
-	if (relType == RelationshipType::USES) {
+// To answer Modify(s, 1)
+std::unordered_set<std::string> ModifyRelationshipStorage::getRelationshipBySecond(RelationshipType relType, TokenType returnType, TokenObject secondArgument) {
+	if (relType == RelationshipType::MODIFIES) {
 		std::unordered_map<std::string, std::unordered_set<std::string>>* storage;
 		if (returnType == qps::TokenType::PROCEDURE) {
 			storage = &this->procBackwardStorage;
@@ -118,8 +118,8 @@ std::unordered_set<std::string> UsesRelationshipStorage::getRelationshipBySecond
 		else if (returnType == qps::TokenType::ASSIGN) {
 			storage = &this->assignBackwardStorage;
 		}
-		else if (returnType == qps::TokenType::PRINT) {
-			storage = &this->printBackwardStorage;
+		else if (returnType == qps::TokenType::READ) {
+			storage = &this->readBackwardStorage;
 		}
 		else if (returnType == qps::TokenType::IF) {
 			storage = &this->ifBackwardStorage;
@@ -142,9 +142,9 @@ std::unordered_set<std::string> UsesRelationshipStorage::getRelationshipBySecond
 	return std::unordered_set<std::string>();
 }
 
-// To answer Uses(a, v)
-std::unordered_set<std::string> UsesRelationshipStorage::getAllRelationship(RelationshipType relType, TokenType returnType) {
-	if (relType == RelationshipType::USES) {
+// To answer Modify(a, v)
+std::unordered_set<std::string> ModifyRelationshipStorage::getAllRelationship(RelationshipType relType, TokenType returnType) {
+	if (relType == RelationshipType::MODIFIES) {
 		std::unordered_map<std::string, std::unordered_set<std::string>>* storage;
 		if (returnType == qps::TokenType::PROCEDURE) {
 			storage = &this->procBackwardStorage;
@@ -152,8 +152,8 @@ std::unordered_set<std::string> UsesRelationshipStorage::getAllRelationship(Rela
 		else if (returnType == qps::TokenType::ASSIGN) {
 			storage = &this->assignBackwardStorage;
 		}
-		else if (returnType == qps::TokenType::PRINT) {
-			storage = &this->printBackwardStorage;
+		else if (returnType == qps::TokenType::READ) {
+			storage = &this->readBackwardStorage;
 		}
 		else if (returnType == qps::TokenType::IF) {
 			storage = &this->ifBackwardStorage;
