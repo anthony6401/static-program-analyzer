@@ -6,7 +6,7 @@ ModifiesSClause::ModifiesSClause(TokenObject left, TokenObject right, Select syn
                                  synonymToDesignEntityMap(synonymToDesignEntityMap), qpsClient(qpsClient) {};
 
 RawResult ModifiesSClause::evaluateClause() {
-    std::unordered_set<std::string> result;
+    std::unordered_set<std::string> result = {"test", "test", "test"};
     return {result};
 }
 
