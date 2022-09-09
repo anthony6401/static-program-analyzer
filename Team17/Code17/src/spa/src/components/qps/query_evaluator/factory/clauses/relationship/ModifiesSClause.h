@@ -19,6 +19,13 @@ public:
     ModifiesSClause(TokenObject left, TokenObject right, Select synonym,
                     std::unordered_map<std::string, TokenType> synonymToDesignEntityMap, QPSClient qpsClient);
     RawResult evaluateClause() override;
+    TokenType getRelationshipType();
+    RawResult evaluateSynonymSynonym();
+    RawResult evaluateSynonymWildcard();
+    RawResult evaluateSynonymIdentQuotes();
+    RawResult evaluateIntegerSynonym();
+    RawResult evaluateIntegerWildcard();
+    RawResult evaluateIntegerIdentQuotes();
 };
 
 #endif //SPA_MODIFIESSCLAUSE_H
