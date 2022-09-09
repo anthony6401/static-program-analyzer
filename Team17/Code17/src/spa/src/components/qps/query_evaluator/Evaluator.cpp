@@ -28,8 +28,6 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
             results.push_back(s);
         }
     }
-
-
     // Combine results of evaluation and store in query db
 }
 
