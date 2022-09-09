@@ -20,7 +20,10 @@ public:
 
 private:
 	// To answer Uses(1, "x"), Uses(1, v)
-	std::unordered_map<std::string, std::unordered_set<std::string>> stmtForwardStorage;
+	std::unordered_map<std::string, std::unordered_set<std::string>> assignForwardStorage;
+	std::unordered_map<std::string, std::unordered_set<std::string>> printForwardStorage;
+	std::unordered_map<std::string, std::unordered_set<std::string>> ifForwardStorage;
+	std::unordered_map<std::string, std::unordered_set<std::string>> whileForwardStorage;
 	std::unordered_map<std::string, std::unordered_set<std::string>> procForwardStorage;
 
 	// To answer Uses(s, "x"), Uses(a, v)

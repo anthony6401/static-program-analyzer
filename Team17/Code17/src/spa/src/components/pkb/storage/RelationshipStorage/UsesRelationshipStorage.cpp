@@ -9,8 +9,11 @@
 #include "typeinfo"
 
 UsesRelationshipStorage::UsesRelationshipStorage() : RelationshipStorage(),
-													stmtForwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()),
 													procForwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()),
+													assignForwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()),
+													printForwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()),
+													ifForwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()),
+													whileForwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()),
 													procBackwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()),
 													assignBackwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()),
 													printBackwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()),
@@ -34,26 +37,25 @@ bool UsesRelationshipStorage::storeRelationship(Relationship* rel) {
 		}
 
 		if (typeid(*leftEntity) == typeid(AssignEntity)) {
-			bool resultOne = Utils::insertEntity(this->stmtForwardStorage, leftValue, rightValue);
-
+			bool resultOne = Utils::insertEntity(this->assignForwardStorage, leftValue, rightValue);
 			bool resultTwo = Utils::insertEntity(this->assignBackwardStorage, rightValue, leftValue);
 			result = result || resultOne || resultTwo;
 		}
 
 		if (typeid(*leftEntity) == typeid(PrintEntity)) {
-			bool resultOne = Utils::insertEntity(this->stmtForwardStorage, leftValue, rightValue);
+			bool resultOne = Utils::insertEntity(this->printForwardStorage, leftValue, rightValue);
 			bool resultTwo = Utils::insertEntity(this->printBackwardStorage, rightValue, leftValue);
 			result = result || resultOne || resultTwo;
 		}
 
 		if (typeid(*leftEntity) == typeid(IfEntity)) {
-			bool resultOne = Utils::insertEntity(this->stmtForwardStorage, leftValue, rightValue);
+			bool resultOne = Utils::insertEntity(this->ifForwardStorage, leftValue, rightValue);
 			bool resultTwo = Utils::insertEntity(this->ifBackwardStorage, rightValue, leftValue);
 			result = result || resultOne || resultTwo;
 		}
 
 		if (typeid(*leftEntity) == typeid(WhileEntity)) {
-			bool resultOne = Utils::insertEntity(this->stmtForwardStorage, leftValue, rightValue);
+			bool resultOne = Utils::insertEntity(this->whileForwardStorage, leftValue, rightValue);
 			bool resultTwo = Utils::insertEntity(this->whileBackwardStorage, rightValue, leftValue);
 			result = result || resultOne || resultTwo;
 		}
@@ -67,19 +69,36 @@ bool UsesRelationshipStorage::storeRelationship(Relationship* rel) {
 // To answer Uses(1, "x")
 bool UsesRelationshipStorage::getRelationship(RelationshipType relType, TokenObject firstArgument, TokenObject secondArgument) {
 	if (relType == RelationshipType::USES) {
-		std::unordered_map<std::string, std::unordered_set<std::string>>* storage{};
+		std::unordered_set<std::string>* set;
 		if (firstArgument.getTokenType() == TokenType::INTEGER) {
-			storage = &this->stmtForwardStorage;
+			if (this->assignForwardStorage.find(firstArgument.getValue()) != this->assignForwardStorage.end()) {
+				set = &this->assignForwardStorage.find(firstArgument.getValue())->second;
+			}
+			else if (this->printForwardStorage.find(firstArgument.getValue()) != this->printForwardStorage.end()) {
+				set = &this->printForwardStorage.find(firstArgument.getValue())->second;
+			}
+			else if (this->ifForwardStorage.find(firstArgument.getValue()) != this->ifForwardStorage.end()) {
+				set = &this->ifForwardStorage.find(firstArgument.getValue())->second;
+			}
+			else if (this->whileForwardStorage.find(firstArgument.getValue()) != this->whileForwardStorage.end()) {
+				set = &this->whileForwardStorage.find(firstArgument.getValue())->second;
+			}
+			else {
+				return false;
+			}
+
+		}
+		else if (firstArgument.getTokenType() == TokenType::NAME_WITH_QUOTATION) {
+			if (this->procForwardStorage.find(firstArgument.getValue()) != this->procForwardStorage.end()) {
+				set = &this->procForwardStorage.find(firstArgument.getValue())->second;
+			}
+			else {
+				return false;
+			}
 		}
 		else {
-			storage = &this->procForwardStorage;
-		}
-
-		if (storage->find(firstArgument.getValue()) == storage->end()) {
 			return false;
 		}
-
-		std::unordered_set<std::string>* set = &storage->find(firstArgument.getValue())->second;
 
 		return set->find(secondArgument.getValue()) != set->end();
 	}
@@ -89,28 +108,60 @@ bool UsesRelationshipStorage::getRelationship(RelationshipType relType, TokenObj
 // To answer Uses(1, v)
 std::unordered_set<std::string> UsesRelationshipStorage::getRelationshipByFirst(RelationshipType relType, TokenObject firstArgument, DesignEntity returnType) {
 	if (relType == RelationshipType::USES) {
-		std::unordered_map<std::string, std::unordered_set<std::string>>* storage;
 		if (firstArgument.getTokenType() == TokenType::INTEGER) {
-			storage = &this->stmtForwardStorage;
+			if (this->assignForwardStorage.find(firstArgument.getValue()) != this->assignForwardStorage.end()) {
+				return this->assignForwardStorage.find(firstArgument.getValue())->second;
+			}
+			else if (this->printForwardStorage.find(firstArgument.getValue()) != this->printForwardStorage.end()) {
+				return this->printForwardStorage.find(firstArgument.getValue())->second;
+			}
+			else if (this->ifForwardStorage.find(firstArgument.getValue()) != this->ifForwardStorage.end()) {
+				return this->ifForwardStorage.find(firstArgument.getValue())->second;
+			}
+			else if (this->whileForwardStorage.find(firstArgument.getValue()) != this->whileForwardStorage.end()) {
+				return this->whileForwardStorage.find(firstArgument.getValue())->second;
+			}
 		}
-		else {
-			storage = &this->procForwardStorage;
+		else if (firstArgument.getTokenType() == TokenType::NAME_WITH_QUOTATION) {
+			if (this->procForwardStorage.find(firstArgument.getValue()) != this->procForwardStorage.end()) {
+				return this->procForwardStorage.find(firstArgument.getValue())->second;
+			}
 		}
 
-		if (storage->find(firstArgument.getValue()) != storage->end()) {
-			return storage->find(firstArgument.getValue())->second;
-		}
-		else {
-			return std::unordered_set<std::string>();
-		}
+		return std::unordered_set<std::string>();
 	}
 
 	return std::unordered_set<std::string>();
 }
 
-// To answer Uses(s, 1)
+// To answer Uses(s, "x")
 std::unordered_set<std::string> UsesRelationshipStorage::getRelationshipBySecond(RelationshipType relType, DesignEntity returnType, TokenObject secondArgument) {
 	if (relType == RelationshipType::USES) {
+		if (returnType == DesignEntity::STMT) {
+			std::unordered_set<std::string> set;
+			if (this->assignBackwardStorage.find(secondArgument.getValue()) != this->assignBackwardStorage.end()) {
+				std::unordered_set<std::string>* temp = &this->assignBackwardStorage.find(secondArgument.getValue())->second;
+				set.insert(temp->begin(), temp->end());
+			}
+
+			if (this->printBackwardStorage.find(secondArgument.getValue()) != this->printBackwardStorage.end()) {
+				std::unordered_set<std::string>* temp = &this->printBackwardStorage.find(secondArgument.getValue())->second;
+				set.insert(temp->begin(), temp->end());
+			}
+
+			if (this->whileBackwardStorage.find(secondArgument.getValue()) != this->whileBackwardStorage.end()) {
+				std::unordered_set<std::string>* temp = &this->whileBackwardStorage.find(secondArgument.getValue())->second;
+				set.insert(temp->begin(), temp->end());
+			}
+
+			if (this->ifBackwardStorage.find(secondArgument.getValue()) != this->ifBackwardStorage.end()) {
+				std::unordered_set<std::string>* temp = &this->ifBackwardStorage.find(secondArgument.getValue())->second;
+				set.insert(temp->begin(), temp->end());
+			}
+
+			return set;
+		}
+
 		std::unordered_map<std::string, std::unordered_set<std::string>>* storage;
 		if (returnType == DesignEntity::PROCEDURE) {
 			storage = &this->procBackwardStorage;
@@ -145,33 +196,36 @@ std::unordered_set<std::string> UsesRelationshipStorage::getRelationshipBySecond
 // To answer Uses(a, v)
 std::unordered_map<std::string, std::unordered_set<std::string>> UsesRelationshipStorage::getAllRelationship(RelationshipType relType, DesignEntity returnType1, DesignEntity returnType2) {
 	if (relType == RelationshipType::USES) {
-		std::unordered_map<std::string, std::unordered_set<std::string>>* storage;
+
+		if (returnType1 == DesignEntity::STMT) {
+			std::unordered_map<std::string, std::unordered_set<std::string>> map;
+
+			map.insert(this->assignForwardStorage.begin(), this->assignForwardStorage.end());
+			map.insert(this->printForwardStorage.begin(), this->printForwardStorage.end());
+			map.insert(this->whileForwardStorage.begin(), this->whileForwardStorage.end());
+			map.insert(this->ifForwardStorage.begin(), this->ifForwardStorage.end());
+
+			return map;
+		}
+
 		if (returnType1 == DesignEntity::PROCEDURE) {
-			storage = &this->procBackwardStorage;
+			return this->procForwardStorage;
 		}
 		else if (returnType1 == DesignEntity::ASSIGN) {
-			storage = &this->assignBackwardStorage;
+			return this->assignForwardStorage;
 		}
 		else if (returnType1 == DesignEntity::PRINT) {
-			storage = &this->printBackwardStorage;
+			return this->printForwardStorage;
 		}
 		else if (returnType1 == DesignEntity::IF) {
-			storage = &this->ifBackwardStorage;
+			return this->ifForwardStorage;
 		}
 		else if (returnType1 == DesignEntity::WHILE) {
-			storage = &this->whileBackwardStorage;
+			return this->whileForwardStorage;
 		}
 		else {
 			return std::unordered_map<std::string, std::unordered_set<std::string>>();
 		}
-
-		std::unordered_set<std::string> result;
-
-		for (auto const& [key, set] : *storage) {
-			result.insert(set.begin(), set.end());
-		}
-
-		return std::unordered_map<std::string, std::unordered_set<std::string>>();
 
 	}
 
