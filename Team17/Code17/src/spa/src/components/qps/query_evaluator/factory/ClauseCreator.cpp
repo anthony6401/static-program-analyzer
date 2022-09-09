@@ -10,6 +10,11 @@ std::shared_ptr<Clause> ClauseCreator::createClause(Select synonym, std::unorder
     return std::make_shared<SelectClause>(synonym, synonymToDesignEntityMap, qpsClient);
 }
 
+// To be amended for evaluating pattern clauses
+std::shared_ptr<Clause> ClauseCreator::createClause(Pattern pattern, Select synonym, std::unordered_map<std::string, TokenType> synonymToDesignEntityMap, QPSClient qpsClient) {
+    return nullptr;
+}
+
 std::shared_ptr<Clause> ClauseCreator::createClause(SuchThat relationship, Select synonym, std::unordered_map<std::string, TokenType> synonymToDesignEntityMap, QPSClient qpsClient) {
     TokenType relationshipType = relationship.getRelationshipType();
     TokenObject left = relationship.getLeft();
@@ -27,12 +32,14 @@ std::shared_ptr<Clause> ClauseCreator::createClause(SuchThat relationship, Selec
         // Unrecognised MODIFIES relationship clause
     } else if (relationshipType == TokenType::USES) {
         if (isStmtRelationship(left, synonymToDesignEntityMap)) {
-            // return std::make_shared<UsesSClause>(left, right, synonym, synonymToDesignEntityMap, qpsClient);
+            return std::make_shared<ModifiesSClause>(left, right, synonym, synonymToDesignEntityMap, qpsClient);
         }
 
         if (isProcRelationship(left, synonymToDesignEntityMap)) {
-            // return std::make_shared<UsesPClause>(left, right, synonym, synonymToDesignEntityMap, qpsClient);
+            return std::make_shared<ModifiesSClause>(left, right, synonym, synonymToDesignEntityMap, qpsClient);
         }
+    } else {
+        return nullptr;
     }
 
     // FOLLOWS

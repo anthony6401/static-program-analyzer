@@ -5,8 +5,8 @@ ModifiesPClause::ModifiesPClause(TokenObject left, TokenObject right, Select syn
                                  QPSClient qpsClient) : left(left), right(right), synonym(synonym),
                                                         synonymToDesignEntityMap(synonymToDesignEntityMap), qpsClient(qpsClient) {};
 
-//RawResult ModifiesPClause::evaluateClause() {
-//    std::unordered_set<std::string> result;
-//    return result;
-//}
+RawResult ModifiesPClause::evaluateClause() {
+    std::unordered_set<std::string> result;
+    return RawResult(result);
+}
 
