@@ -3,6 +3,7 @@
 #include "models/Entity/AssignEntity.h"
 #include "models/Entity/CallEntity.h"
 #include "models/Entity/ConstantEntity.h"
+#include "models/Entity/DesignEntity.h"
 #include "models/Entity/Entity.h"
 #include "models/Entity/IfEntity.h"
 #include "models/Entity/PrintEntity.h"
@@ -12,8 +13,6 @@
 #include "models/Entity/StatementListEntity.h"
 #include "models/Entity/VariableEntity.h"
 #include "models/Entity/WhileEntity.h"
-
-#include "components/qps/query_preprocessor/query_tokenizer/TokenType.h"
 
 #include "../EntityObject.h"
 
@@ -63,15 +62,15 @@ TEST_CASE("Entity Manager getAllEntity method test") {
 	std::unordered_set<std::string> variable_res{ variable_value_one };
 	std::unordered_set<std::string> while_res{ while_value_one };
 
-	std::unordered_set<std::string> ass_test = entityManager.getAllEntity(qps::TokenType::ASSIGN);
-	std::unordered_set<std::string> call_test = entityManager.getAllEntity(qps::TokenType::CALL);
-	std::unordered_set<std::string> constant_test = entityManager.getAllEntity(qps::TokenType::CONSTANT);
-	std::unordered_set<std::string> if_test = entityManager.getAllEntity(qps::TokenType::IF);
-	std::unordered_set<std::string> print_test = entityManager.getAllEntity(qps::TokenType::PRINT);
-	std::unordered_set<std::string> procedure_test = entityManager.getAllEntity(qps::TokenType::PROCEDURE);
-	std::unordered_set<std::string> read_test = entityManager.getAllEntity(qps::TokenType::READ);
-	std::unordered_set<std::string> variable_test = entityManager.getAllEntity(qps::TokenType::VARIABLE);
-	std::unordered_set<std::string> while_test = entityManager.getAllEntity(qps::TokenType::WHILE);
+	std::unordered_set<std::string> ass_test = entityManager.getAllEntity(DesignEntity::ASSIGN);
+	std::unordered_set<std::string> call_test = entityManager.getAllEntity(DesignEntity::CALL);
+	std::unordered_set<std::string> constant_test = entityManager.getAllEntity(DesignEntity::CONSTANT);
+	std::unordered_set<std::string> if_test = entityManager.getAllEntity(DesignEntity::IF);
+	std::unordered_set<std::string> print_test = entityManager.getAllEntity(DesignEntity::PRINT);
+	std::unordered_set<std::string> procedure_test = entityManager.getAllEntity(DesignEntity::PROCEDURE);
+	std::unordered_set<std::string> read_test = entityManager.getAllEntity(DesignEntity::READ);
+	std::unordered_set<std::string> variable_test = entityManager.getAllEntity(DesignEntity::VARIABLE);
+	std::unordered_set<std::string> while_test = entityManager.getAllEntity(DesignEntity::WHILE);
 	
 
 	REQUIRE(ass_test == assign_res);

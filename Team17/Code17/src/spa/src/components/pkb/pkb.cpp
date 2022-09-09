@@ -12,7 +12,7 @@ PKB::PKB() {
 	entityManager = new EntityManager();
 };
 
-std::unordered_set<std::string> PKB::getAllEntity(qps::TokenType returnType) {
+std::unordered_set<std::string> PKB::getAllEntity(DesignEntity returnType) {
 	return entityManager->getAllEntity(returnType);
 }
 

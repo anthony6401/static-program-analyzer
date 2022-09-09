@@ -1,7 +1,9 @@
+#include "models/Entity/AssignEntity.h"
+#include "models/Entity/DesignEntity.h"
+#include "models/Entity/VariableEntity.h"
 #include "models/Relationship/Relationship.h"
 #include "models/Relationship/UsesRelationship.h"
-#include "models/Entity/AssignEntity.h"
-#include "models/Entity/VariableEntity.h"
+
 
 #include "components/pkb/pkb.h"
 #include "components/pkb/manager/EntityManager.h"
@@ -32,7 +34,7 @@ TEST_CASE("PKB getAllEntity method test") {
 	std::unordered_set<std::string> var_set;
 	var_set.insert(variable_value_one);
 	
-	REQUIRE(pkb.getAllEntity(qps::TokenType::ASSIGN) == ass_set);
-	REQUIRE(pkb.getAllEntity(qps::TokenType::VARIABLE) == var_set);
+	REQUIRE(pkb.getAllEntity(DesignEntity::ASSIGN) == ass_set);
+	REQUIRE(pkb.getAllEntity(DesignEntity::VARIABLE) == var_set);
 
 }

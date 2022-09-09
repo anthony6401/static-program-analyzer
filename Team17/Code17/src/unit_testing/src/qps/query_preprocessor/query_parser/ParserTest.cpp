@@ -10,6 +10,7 @@
 #include <catch.hpp>
 #include <components/qps/query_preprocessor/query_parser/Parser.cpp>
 #include <unordered_map>
+#include <iostream>
 
 // Tests for Parser
 TEST_CASE("Initialize Parser") {
@@ -37,7 +38,7 @@ TEST_CASE("Parse queries") {
     Select expectedSelect = Select("v");
     std::vector<SuchThat> expectedSuchThat {};
     std::vector<Pattern> expectedPattern {};
-    std::unordered_map<std::string, TokenType> expectedMappedSynonyms{ {"v", TokenType::VARIABLE} };
+    std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"v", DesignEntity::VARIABLE} };
 
     QueryObject expectedResult = QueryObject(expectedSelect, expectedSuchThat, expectedPattern, expectedMappedSynonyms);
 
@@ -55,12 +56,34 @@ TEST_CASE("No declaration") {
     Select expectedSelect = Select();
     std::vector<SuchThat> expectedSuchThat;
     std::vector<Pattern> expectedPattern;
-    std::unordered_map<std::string, TokenType> expectedMappedSynonyms;
+    std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms;
 
     QueryObject expectedResult = QueryObject(expectedSelect, expectedSuchThat, expectedPattern, expectedMappedSynonyms);
 
     Parser parser = Parser(testTokenObject);
     QueryObject actualResult = parser.parse();
+    REQUIRE(expectedResult == actualResult);
+};
+
+TEST_CASE("Variable name same as variable design entity") {
+    std::vector<TokenObject> testTokenObject{
+        TokenObject(TokenType::VARIABLE, std::string("variable")),
+        TokenObject(TokenType::VARIABLE, std::string("variable")),
+        TokenObject(TokenType::SEMI_COLON, std::string(";")),
+        TokenObject(TokenType::SELECT, std::string("Select")),
+        TokenObject(TokenType::VARIABLE, std::string("variable"))
+    };
+
+    Select expectedSelect = Select("variable");
+    std::vector<SuchThat> expectedSuchThat{};
+    std::vector<Pattern> expectedPattern{};
+    std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"variable", DesignEntity::VARIABLE} };
+
+    QueryObject expectedResult = QueryObject(expectedSelect, expectedSuchThat, expectedPattern, expectedMappedSynonyms);
+
+    Parser parser = Parser(testTokenObject);
+    QueryObject actualResult = parser.parse();
+
     REQUIRE(expectedResult == actualResult);
 };
 

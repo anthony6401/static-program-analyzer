@@ -13,8 +13,8 @@ bool StatementEntityStorage::storeEntity(Entity* entity) {
 	return false;
 }
 
-std::unordered_set<std::string> StatementEntityStorage::getAllEntity(qps::TokenType returnType) {
-	if (returnType == qps::TokenType::STMT) {
+std::unordered_set<std::string> StatementEntityStorage::getAllEntity(DesignEntity returnType) {
+	if (returnType == DesignEntity::STMT) {
 		return set;
 	}
 	return std::unordered_set<std::string>();

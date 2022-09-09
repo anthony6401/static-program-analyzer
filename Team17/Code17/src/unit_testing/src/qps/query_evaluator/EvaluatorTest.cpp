@@ -10,7 +10,7 @@ TEST_CASE("Evaluation for Select Clause - variable v; Select v") {
     Select select = Select( "v");
     PKB* pkb = new PKB();
     auto qpsClient = QPSClient(pkb);
-    std::unordered_map<std::string, TokenType> synonymToDesignEntityMap = {{"v", TokenType::VARIABLE}};
+    std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap = {{"v", DesignEntity::VARIABLE}};
     QueryObject testQuery = QueryObject(select, relationships, patterns, synonymToDesignEntityMap);
     Evaluator::evaluateQuery(testQuery, testResults, qpsClient);
     std::list<std::string> expectedResults = {};

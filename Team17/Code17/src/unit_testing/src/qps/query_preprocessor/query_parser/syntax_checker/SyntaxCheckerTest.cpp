@@ -60,6 +60,17 @@ TEST_CASE("Multiple declarations with single synonym value") {
     REQUIRE(actualResult == true);
 };
 
+TEST_CASE("Synonym has same name as design entity") {
+    DeclarationClauseSyntaxChecker checker = DeclarationClauseSyntaxChecker();
+    std::vector<TokenObject> validDeclarationTokens{
+        TokenObject(TokenType::VARIABLE, "variable"),
+        TokenObject(TokenType::VARIABLE, "variable"),
+        TokenObject(TokenType::SEMI_COLON, ";")
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validDeclarationTokens);
+    REQUIRE(actualResult == true);
+};
+
 TEST_CASE("Missing design entity") {
     DeclarationClauseSyntaxChecker checker = DeclarationClauseSyntaxChecker();
     std::vector<TokenObject> invalidDeclarationTokens{
@@ -172,6 +183,16 @@ TEST_CASE("Syntactically correct Select with synonym") {
     std::vector<TokenObject> validSelectTokens{
         TokenObject(TokenType::SELECT, "Select"),
         TokenObject(TokenType::NAME, "v"),
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validSelectTokens);
+    REQUIRE(actualResult == true);
+};
+
+TEST_CASE("Syntactically correct Select with synonym with same name as a design entity") {
+    SelectClauseSyntaxChecker checker = SelectClauseSyntaxChecker();
+    std::vector<TokenObject> validSelectTokens{
+        TokenObject(TokenType::SELECT, "Select"),
+        TokenObject(TokenType::VARIABLE, "variable"),
     };
     bool actualResult = checker.isSyntacticallyCorrect(validSelectTokens);
     REQUIRE(actualResult == true);
