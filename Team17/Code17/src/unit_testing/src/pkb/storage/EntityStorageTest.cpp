@@ -618,9 +618,9 @@ TEST_CASE("Statement Entity Storage Test") {
 	REQUIRE(stmtSet.find(read_value_two) != stmtSet.end());
 	REQUIRE(stmtSet.find(read_value_three) == stmtSet.end());
 
-	//REQUIRE(stmtSet.find(readEntity) != stmtSet.end());
-	//REQUIRE(stmtSet.find(readEntityTwo) != stmtSet.end());
-	//REQUIRE(stmtSet.find(readEntityThree) == stmtSet.end());
+	REQUIRE(stmtSet.find(read_value_one) != stmtSet.end());
+	REQUIRE(stmtSet.find(read_value_two) != stmtSet.end());
+	REQUIRE(stmtSet.find(read_value_three) == stmtSet.end());
 
 	REQUIRE(stmtSet.find(if_value_one) != stmtSet.end());
 	REQUIRE(stmtSet.find(if_value_two) != stmtSet.end());

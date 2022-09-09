@@ -87,7 +87,7 @@ bool UsesRelationshipStorage::getRelationship(RelationshipType relType, TokenObj
 }
 
 // To answer Uses(1, v)
-std::unordered_set<std::string> UsesRelationshipStorage::getRelationshipByFirst(RelationshipType relType, TokenObject firstArgument, TokenType returnType) {
+std::unordered_set<std::string> UsesRelationshipStorage::getRelationshipByFirst(RelationshipType relType, TokenObject firstArgument, DesignEntity returnType) {
 	if (relType == RelationshipType::USES) {
 		std::unordered_map<std::string, std::unordered_set<std::string>>* storage;
 		if (firstArgument.getTokenType() == TokenType::INTEGER) {
@@ -109,22 +109,22 @@ std::unordered_set<std::string> UsesRelationshipStorage::getRelationshipByFirst(
 }
 
 // To answer Uses(s, 1)
-std::unordered_set<std::string> UsesRelationshipStorage::getRelationshipBySecond(RelationshipType relType, TokenType returnType, TokenObject secondArgument) {
+std::unordered_set<std::string> UsesRelationshipStorage::getRelationshipBySecond(RelationshipType relType, DesignEntity returnType, TokenObject secondArgument) {
 	if (relType == RelationshipType::USES) {
 		std::unordered_map<std::string, std::unordered_set<std::string>>* storage;
-		if (returnType == qps::TokenType::PROCEDURE) {
+		if (returnType == DesignEntity::PROCEDURE) {
 			storage = &this->procBackwardStorage;
 		}
-		else if (returnType == qps::TokenType::ASSIGN) {
+		else if (returnType == DesignEntity::ASSIGN) {
 			storage = &this->assignBackwardStorage;
 		}
-		else if (returnType == qps::TokenType::PRINT) {
+		else if (returnType == DesignEntity::PRINT) {
 			storage = &this->printBackwardStorage;
 		}
-		else if (returnType == qps::TokenType::IF) {
+		else if (returnType == DesignEntity::IF) {
 			storage = &this->ifBackwardStorage;
 		}
-		else if (returnType == qps::TokenType::WHILE) {
+		else if (returnType == DesignEntity::WHILE) {
 			storage = &this->whileBackwardStorage;
 		}
 		else {
@@ -143,26 +143,26 @@ std::unordered_set<std::string> UsesRelationshipStorage::getRelationshipBySecond
 }
 
 // To answer Uses(a, v)
-std::unordered_set<std::string> UsesRelationshipStorage::getAllRelationship(RelationshipType relType, TokenType returnType) {
+std::unordered_map<std::string, std::unordered_set<std::string>> UsesRelationshipStorage::getAllRelationship(RelationshipType relType, DesignEntity returnType1, DesignEntity returnType2) {
 	if (relType == RelationshipType::USES) {
 		std::unordered_map<std::string, std::unordered_set<std::string>>* storage;
-		if (returnType == qps::TokenType::PROCEDURE) {
+		if (returnType1 == DesignEntity::PROCEDURE) {
 			storage = &this->procBackwardStorage;
 		}
-		else if (returnType == qps::TokenType::ASSIGN) {
+		else if (returnType1 == DesignEntity::ASSIGN) {
 			storage = &this->assignBackwardStorage;
 		}
-		else if (returnType == qps::TokenType::PRINT) {
+		else if (returnType1 == DesignEntity::PRINT) {
 			storage = &this->printBackwardStorage;
 		}
-		else if (returnType == qps::TokenType::IF) {
+		else if (returnType1 == DesignEntity::IF) {
 			storage = &this->ifBackwardStorage;
 		}
-		else if (returnType == qps::TokenType::WHILE) {
+		else if (returnType1 == DesignEntity::WHILE) {
 			storage = &this->whileBackwardStorage;
 		}
 		else {
-			return std::unordered_set<std::string>();
+			return std::unordered_map<std::string, std::unordered_set<std::string>>();
 		}
 
 		std::unordered_set<std::string> result;
@@ -171,9 +171,9 @@ std::unordered_set<std::string> UsesRelationshipStorage::getAllRelationship(Rela
 			result.insert(set.begin(), set.end());
 		}
 
-		return result;
+		return std::unordered_map<std::string, std::unordered_set<std::string>>();
 
 	}
 
-	return std::unordered_set<std::string>();
+	return std::unordered_map<std::string, std::unordered_set<std::string>>();
 }
