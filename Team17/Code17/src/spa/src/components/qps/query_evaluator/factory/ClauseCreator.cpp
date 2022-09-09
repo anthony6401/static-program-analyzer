@@ -70,8 +70,8 @@ bool ClauseCreator::isProcRelationship(TokenObject left,
                                        std::unordered_map<std::string, TokenType> synonymToDesignEntityMap) {
     TokenType leftTokenType = left.getTokenType();
     TokenType leftDesignEntityType = synonymToDesignEntityMap[left.getValue()];
-    bool isLeftStmtEntity = (leftTokenType == TokenType::SYNONYM) &&
+    bool isLeftProcEntity = (leftTokenType == TokenType::SYNONYM) &&
                             leftDesignEntityType == TokenType::PROCEDURE;
 
-    return (leftTokenType == TokenType::NAME_WITH_QUOTATION) || isLeftStmtEntity;
+    return (leftTokenType == TokenType::NAME_WITH_QUOTATION) || isLeftProcEntity;
 }
