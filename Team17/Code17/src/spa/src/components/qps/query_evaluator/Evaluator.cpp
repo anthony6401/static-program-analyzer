@@ -73,18 +73,3 @@ std::vector<std::shared_ptr<Clause>> Evaluator::extractClausesToEvaluate(QueryOb
         return clausesToEvaluate;
     }
 }
-
-
-//std::unordered_set<std::string> Evaluator::evaluateSelectClause(std::vector<std::shared_ptr<Clause>> clausesToEvaluate) {
-//    std::unordered_set<std::string> resultOfClause;
-//    for (auto c : clausesToEvaluate) {
-//        resultOfClause = c -> evaluateClause();
-//    }
-//    return resultOfClause;
-//};
-//
-//std::shared_ptr<Clause> Evaluator::extractSelectClause(Select synonym, std::unordered_map<std::string, TokenType> synonymToDesignEntityMap, QPSClient qpsClient) {
-//    std::shared_ptr<Clause> selectClauseToEvaluate = ClauseCreator::createClause(synonym, synonymToDesignEntityMap, qpsClient);
-//    return selectClauseToEvaluate;
-//}
-//

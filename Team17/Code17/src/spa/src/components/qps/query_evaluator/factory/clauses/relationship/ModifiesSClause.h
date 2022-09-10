@@ -22,10 +22,10 @@ public:
     TokenType getRelationshipType();
     RawResult evaluateSynonymSynonym();
     RawResult evaluateSynonymWildcard();
-    RawResult evaluateSynonymIdentQuotes();
+    RawResult evaluateSynonymNameQuotes();
     RawResult evaluateIntegerSynonym();
     RawResult evaluateIntegerWildcard();
-    RawResult evaluateIntegerIdentQuotes();
+    RawResult evaluateIntegerNameQuotes();
 };
 
 #endif //SPA_MODIFIESSCLAUSE_H
