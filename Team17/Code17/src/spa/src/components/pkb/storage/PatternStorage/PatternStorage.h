@@ -1,8 +1,7 @@
 #pragma once
 #include <unordered_set>
-#include <unordered_map>
 #include <string>
-#include "models/Relationship/Pattern.h"
+#include "models/Pattern/Pattern.h"
 #include "models/Entity/DesignEntity.h"
 #include "../../../qps/query_preprocessor/query_tokenizer/TokenObject.h"
 
