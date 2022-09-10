@@ -26,6 +26,7 @@ bool AssignPatternStorage::storePattern(Pattern* pattern) {
 	return false;
 }
 
+// This method is used to answer pattern query with NAME_WITH_QUOTES TokenType for the firstArgument i.e. a("x", "y"), a("x", _"y"_), a("x", _)
 std::unordered_set<std::string> AssignPatternStorage::getPattern(DesignEntity designEntity, TokenObject firstArgument, TokenObject secondArgument) {
 	std::unordered_set<std::string> result;
 
@@ -60,6 +61,7 @@ std::unordered_set<std::string> AssignPatternStorage::getPattern(DesignEntity de
 	return result;
 }
 
+// This method is used to answer pattern query with SYNONYM and WILDCARD TokenType for the firstArgument i.e. a(v, "y"), a(v, _"y"_), a(v, _), a(_, "y"), a(_, _"y"_), a(_, _)
 std::vector<std::pair<std::string, std::string>> AssignPatternStorage::getPatternPair(DesignEntity designEntity, TokenObject secondArgument) {
 	std::vector<std::pair<std::string, std::string>> result;
 	if (designEntity == DesignEntity::ASSIGN) {
