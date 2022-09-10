@@ -38,8 +38,12 @@ void TestWrapper::parse(std::string filename) {
 	}
 	std::string code((std::istreambuf_iterator<char>(testFile)),
 		std::istreambuf_iterator<char>());
+	try {
+		simpleTokenizer.tokenizeCode(code);
+	} catch(std::exception e) {
+		std::cout << e.what() << std::endl;
+	}
 
-	simpleTokenizer.tokenizeCode(code);
 
 }
 
