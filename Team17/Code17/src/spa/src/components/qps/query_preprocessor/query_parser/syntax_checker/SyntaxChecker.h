@@ -18,7 +18,7 @@ protected:
         {TokenType::ENT_ENT_PARAMS, std::vector<TokenType>{TokenType::ENTREF, TokenType::COMMA, TokenType::ENTREF}},
         {TokenType::STMTREF, std::vector<TokenType>{TokenType::SYNONYM, TokenType::WILDCARD, TokenType::INTEGER}},
         {TokenType::ENTREF, std::vector<TokenType>{TokenType::SYNONYM, TokenType::WILDCARD, TokenType::NAME_WITH_QUOTATION}},
-        {TokenType::SYNONYM, std::vector<TokenType>{TokenType::NAME}}
+        {TokenType::SYNONYM, std::vector<TokenType>{TokenType::NAME, TokenType::STMT, TokenType::READ, TokenType::PRINT, TokenType::CALL, TokenType::WHILE, TokenType::IF, TokenType::ASSIGN, TokenType::VARIABLE, TokenType::CONSTANT, TokenType::PROCEDURE}}
 
         // add for each rs type
 

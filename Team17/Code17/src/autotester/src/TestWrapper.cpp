@@ -22,11 +22,13 @@ TestWrapper::TestWrapper() {
   // auto pkb = std::make_shared<PKB>();
   pkb = new PKB();
   //this->simpleTokenizer = new SimpleTokenizer();
-  SimpleParser::client = SPClient(pkb);
 }
 
 // method for parsing the SIMPLE source
 void TestWrapper::parse(std::string filename) {
+	SPClient* client = new SPClient(pkb);
+	Extractor extractor = Extractor(client);
+	SimpleTokenizer simpleTokenizer = SimpleTokenizer(&extractor);
 	std::ifstream testFile;
 	testFile.open(filename);
 
@@ -37,7 +39,7 @@ void TestWrapper::parse(std::string filename) {
 	std::string code((std::istreambuf_iterator<char>(testFile)),
 		std::istreambuf_iterator<char>());
 
-	this->simpleTokenizer->tokenizeCode(code);
+	simpleTokenizer.tokenizeCode(code);
 
 }
 

@@ -11,7 +11,7 @@ class Evaluator {
 public:
     static void evaluateQuery(QueryObject queryObject, std::list<std::string> &results, QPSClient qpsClient);
     // std::vector<std::shared_ptr<Clause>> extractClausesToEvaluate(QueryObject queryObject);
-    static std::shared_ptr<Clause> extractSelectClauseToEvaluate(Select synonym, std::unordered_map<std::string, TokenType> synonymToDesignEntityMap, QPSClient qpsClient);
+    static std::shared_ptr<Clause> extractSelectClauseToEvaluate(Select synonym, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
     static std::unordered_set<std::string> evaluateSelectClause(std::vector<std::shared_ptr<Clause>> clausesToEvaluate, QPSClient qpsClient);
 };
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../storage/EntityStorage/EntityStorage.h"
-#include "../../qps/query_preprocessor/query_tokenizer/TokenType.h"
+#include  "models/Entity/DesignEntity.h"
 
 #include <string>
 #include <vector>
@@ -10,7 +10,7 @@ class EntityManager {
 public:
 	EntityManager();
 	std::vector<EntityStorage*> getEntityStorage();
-	std::unordered_set<std::string> getAllEntity(qps::TokenType returnType);
+	std::unordered_set<std::string> getAllEntity(DesignEntity returnType);
 	bool storeEntity(Entity* entity);
 
 private:

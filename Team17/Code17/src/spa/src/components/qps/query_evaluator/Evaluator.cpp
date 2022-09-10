@@ -10,7 +10,7 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
     std::vector<SuchThat> relationships = queryObject.getRelationships();
     std::vector<Pattern> patterns = queryObject.getPattern();
     Select synonym = queryObject.getSelect();
-    std::unordered_map<std::string, TokenType> synonymToDesignEntityMap = queryObject.getSynonymToDesignEntityMap();
+    std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap = queryObject.getSynonymToDesignEntityMap();
 
     // Extract select clause from query object
     if (relationships.empty() && patterns.empty()) {
@@ -40,7 +40,7 @@ std::unordered_set<std::string> Evaluator::evaluateSelectClause(std::vector<std:
 
 
 std::shared_ptr<Clause> Evaluator::extractSelectClauseToEvaluate(Select synonym,
-                                                                               std::unordered_map<std::string, TokenType> synonymToDesignEntityMap, QPSClient qpsClient) {
+                                                                               std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) {
     std::shared_ptr<Clause> selectClauseToEvaluate = ClauseCreator::createClause(synonym, synonymToDesignEntityMap, qpsClient);
     return selectClauseToEvaluate;
 }

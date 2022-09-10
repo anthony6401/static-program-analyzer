@@ -5,6 +5,7 @@
 #include "Pattern.h"
 #include "Select.h"
 #include "components/qps/query_preprocessor/query_tokenizer/TokenType.h"
+#include "models/Entity/DesignEntity.h"
 
 #ifndef SPA_QUERY_H
 #define SPA_QUERY_H
@@ -16,17 +17,17 @@ private:
     std::vector<Pattern> patterns;
     Select select;
     bool hasNoSyntaxError = false;
-    std::unordered_map<std::string, TokenType> synonymToDesignEntityMap;
+    std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap;
 
 
 public:
     QueryObject();
-    QueryObject(Select select, std::vector<SuchThat> relationship, std::vector<Pattern> pattern, std::unordered_map<std::string, TokenType> synonymToDesignEntity);
+    QueryObject(Select select, std::vector<SuchThat> relationship, std::vector<Pattern> pattern, std::unordered_map<std::string, DesignEntity> synonymToDesignEntity);
     bool isSyntacticallyCorrect();
     std::vector<SuchThat> getRelationships();
     std::vector<Pattern> getPattern();
     Select getSelect();
-    std::unordered_map<std::string, TokenType> getSynonymToDesignEntityMap();
+    std::unordered_map<std::string, DesignEntity> getSynonymToDesignEntityMap();
     bool operator==(const QueryObject& other) const {
         return relationships == other.relationships
             && patterns == other.patterns
