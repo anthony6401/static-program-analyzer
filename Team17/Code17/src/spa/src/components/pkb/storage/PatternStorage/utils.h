@@ -12,8 +12,6 @@ struct pair_hash {
 class PatternUtils {
 public:
     static bool isSubExpression(const std::string& sub_expression, const std::string& full_expression) {
-        //return full_expression.find(sub_expression) != std::string::npos;  // O(m * n)????
-
         size_t idx = full_expression.find_first_of(" *+/-()");
         size_t prev = 0;
 
@@ -30,20 +28,17 @@ public:
                 str = full_expression.substr(prev + 1, idx - prev - 1);
             }
 
-            if (str.size() > 0 && str.find_first_of(" *+/-()") == std::string::npos) {
-                if (str == sub_expression) {
-                    return true;
-                }
+            if (str.size() > 0 && str.find_first_of(" *+/-()") == std::string::npos && str == sub_expression) {
+                return true;
+                
             }
 
             prev = idx;
             idx = full_expression.find_first_of(" *+/-()", idx + 1);
         }
         std::string lastString = full_expression.substr(prev + 1, full_expression.size() - prev);
-        if (lastString.size() > 0 && lastString.find_first_of(" *+/-()") == std::string::npos) {
-            if (lastString == sub_expression) {
-                return true;
-            }
+        if (lastString.size() > 0 && lastString.find_first_of(" *+/-()") == std::string::npos && lastString == sub_expression) {
+            return true;
         }
 
         return false;
