@@ -15,6 +15,8 @@ public:
     SuchThatClauseSyntaxChecker();
     ~SuchThatClauseSyntaxChecker();
     bool isSyntacticallyCorrect(std::vector<TokenObject> tokenizedClause);
+    bool hasValidFollowsParentSyntax(std::vector<TokenObject> relationshipClauseTokens);
+    bool hasValidUsersModifiesSyntax(std::vector<TokenObject> relationshipClauseTokens);
 
     //{TokenType::FOLLOWS, std::vector<TokenType>{TokenType::FOLLOWS, TokenType::OPEN_BRACKET, TokenType::STMT_STMT_PARAMS, TokenType::CLOSED_BRACKET}},
     //{ TokenType::FOLLOWS_T, std::vector<TokenType>{TokenType::FOLLOWS_T, TokenType::OPEN_BRACKET, TokenType::STMT_STMT_PARAMS, TokenType::CLOSED_BRACKET} },

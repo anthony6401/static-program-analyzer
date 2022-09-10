@@ -14,13 +14,9 @@ protected:
     std::unordered_map<TokenType, std::vector<TokenType>>  generalSyntax = {
         {TokenType::DESIGN_ENTITY, std::vector<TokenType>{TokenType::STMT, TokenType::READ, TokenType::PRINT, TokenType::CALL, TokenType::WHILE, TokenType::IF, TokenType::ASSIGN, TokenType::VARIABLE, TokenType::CONSTANT, TokenType::PROCEDURE}},
         {TokenType::RELREF, std::vector<TokenType>{TokenType::FOLLOWS, TokenType::FOLLOWS_T, TokenType::PARENT, TokenType::PARENT_T, TokenType::USES, TokenType::MODIFIES}},
-        {TokenType::STMT_ENT_PARAMS, std::vector<TokenType>{TokenType::STMTREF, TokenType::COMMA, TokenType::ENTREF}},
-        {TokenType::ENT_ENT_PARAMS, std::vector<TokenType>{TokenType::ENTREF, TokenType::COMMA, TokenType::ENTREF}},
         {TokenType::STMTREF, std::vector<TokenType>{TokenType::SYNONYM, TokenType::WILDCARD, TokenType::INTEGER}},
         {TokenType::ENTREF, std::vector<TokenType>{TokenType::SYNONYM, TokenType::WILDCARD, TokenType::NAME_WITH_QUOTATION}},
         {TokenType::SYNONYM, std::vector<TokenType>{TokenType::NAME, TokenType::STMT, TokenType::READ, TokenType::PRINT, TokenType::CALL, TokenType::WHILE, TokenType::IF, TokenType::ASSIGN, TokenType::VARIABLE, TokenType::CONSTANT, TokenType::PROCEDURE}}
-
-        // add for each rs type
 
     };
 public:
