@@ -8,6 +8,7 @@
 #include "components/qps/query_evaluator/factory/clauses/select/SelectClause.h"
 #include "components/qps/abstract_query_object/Pattern.h"
 #include "components/qps/abstract_query_object/Select.h"
+#include "models/Entity/DesignEntity.h"
 
 // Factory Class for creating Clauses for evaluation
 

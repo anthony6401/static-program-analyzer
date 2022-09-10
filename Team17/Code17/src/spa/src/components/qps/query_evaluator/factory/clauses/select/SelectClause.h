@@ -7,6 +7,7 @@
 #include "components/qps/abstract_query_object/Declaration.h"
 #include "components/qps/abstract_query_object/Select.h"
 #include "components/pkb/clients/QPSClient.h"
+#include "models/Entity/DesignEntity.h"
 
 class SelectClause : public Clause {
 private:

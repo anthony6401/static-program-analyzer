@@ -34,7 +34,7 @@ QueryObject Parser::parse() {
 		return QueryObject();
 	}
 
-	std::unordered_map<std::string, TokenType> mappedSynonyms = mapSynonymToDesignEntity(declarationTokenObjects);
+	std::unordered_map<std::string, DesignEntity> mappedSynonyms = mapSynonymToDesignEntity(declarationTokenObjects);
 	Select select = parseTokensIntoSelectObject(selectTokenObjects, mappedSynonyms);
 	std::vector<SuchThat> relationships = parseTokensIntoSuchThatObjects();
 	std::vector<Pattern> pattern = parseTokensIntoPatternObjects();
@@ -129,20 +129,26 @@ std::vector<TokenObject> Parser::getTokenizedQuery() {
 	return this->tokenizedQuery;
 }
 
-std::unordered_map<std::string, TokenType> Parser::mapSynonymToDesignEntity(std::vector<TokenObject> declarations) {
-	std::unordered_map<std::string, TokenType> mappedSynonyms;
-	TokenType currDesignEntity;
+std::unordered_map<std::string, DesignEntity> Parser::mapSynonymToDesignEntity(std::vector<TokenObject> declarations) {
+	std::unordered_map<std::string, DesignEntity> mappedSynonyms;
+	DesignEntity currDesignEntity;
+	bool newDeclaration = true;
 
 	for (TokenObject token : declarations) {
 		TokenType currTokenType = token.getTokenType();
 
-		if (currTokenType == TokenType::COMMA || currTokenType == TokenType::SEMI_COLON) {
+		if (currTokenType == TokenType::COMMA) {
 			continue;
 		}
 
-		// Design entity
-		if (currTokenType != TokenType::NAME) {
-			currDesignEntity = currTokenType;
+		if (currTokenType == TokenType::SEMI_COLON) {
+			newDeclaration = true;
+			continue;
+		}
+
+		if (newDeclaration) {
+			currDesignEntity = this->tokenToDesignEntity.at(currTokenType);
+			newDeclaration = false;
 			continue;
 		}
 
@@ -153,24 +159,7 @@ std::unordered_map<std::string, TokenType> Parser::mapSynonymToDesignEntity(std:
 	return mappedSynonyms;
 }
 
-
-std::vector<Declaration> Parser::parseTokensIntoDeclarationObjects(std::unordered_map<std::string, TokenType> mappedSynonyms) {
-	std::vector<Declaration> declarations;
-	
-	// Since declared synonyms are done in declaration clause, mapped synonyms are all found within declaration clause
-	// Hence, we create Declaration objects from the mapped synonyms
-	for (std::pair<std::string, TokenType> synonym : mappedSynonyms) {
-		std::string synonymValue = synonym.first;
-		TokenType designEntity = synonym.second;
-
-		Declaration declaration = *new Declaration(designEntity, synonymValue);
-		declarations.push_back(declaration);
-	}
-
-	return declarations;
-};
-
-Select Parser::parseTokensIntoSelectObject(std::vector<TokenObject> selectTokens, std::unordered_map<std::string, TokenType> mappedSynonyms) {
+Select Parser::parseTokensIntoSelectObject(std::vector<TokenObject> selectTokens, std::unordered_map<std::string, DesignEntity> mappedSynonyms) {
 	for (TokenObject token : selectTokens) {
 		if (token.getTokenType() == TokenType::SELECT) {
 			continue;
@@ -182,8 +171,6 @@ Select Parser::parseTokensIntoSelectObject(std::vector<TokenObject> selectTokens
 		if (mappedSynonyms.find(returnValue) == mappedSynonyms.end()) {
 			return Select();
 		}
-
-		TokenType returnType = mappedSynonyms.at(returnValue);
 
 		return Select(returnValue);
 

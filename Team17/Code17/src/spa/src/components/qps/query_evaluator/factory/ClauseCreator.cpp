@@ -3,9 +3,6 @@
 #include "components/qps/query_evaluator/factory/clauses/relationship/ModifiesPClause.h"
 #include <memory>
 
-/**
- * Creates a Select Clause object
- */
 std::shared_ptr<Clause> ClauseCreator::createClause(Select synonym, std::unordered_map<std::string, TokenType> synonymToDesignEntityMap, QPSClient qpsClient) {
     return std::make_shared<SelectClause>(synonym, synonymToDesignEntityMap, qpsClient);
 }

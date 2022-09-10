@@ -1,9 +1,9 @@
+#include "models/Entity/DesignEntity.h"
 #include "models/Relationship/Relationship.h"
 #include "models/Relationship/UsesRelationship.h"
 
 #include "components/pkb/clients/QPSClient.h"
 #include "components/pkb/clients/SPClient.h"
-#include "components/qps/query_preprocessor/query_tokenizer/TokenType.h"
 
 #include "components/pkb/pkb.h"
 
@@ -26,13 +26,13 @@ TEST_CASE("QPS Client test") {
 	QPSClient qpsClient = QPSClient(pkb);
 
 	std::unordered_set<std::string> ass_set;
-	ass_set.insert(value_one);
+	ass_set.insert(assign_value_one);
 
 	std::unordered_set<std::string> var_set;
-	var_set.insert(value_one);
+	var_set.insert(variable_value_one);
 
-	REQUIRE(qpsClient.getAllEntity(qps::TokenType::ASSIGN) == ass_set);
-	REQUIRE(qpsClient.getAllEntity(qps::TokenType::VARIABLE) == var_set);
+	REQUIRE(qpsClient.getAllEntity(DesignEntity::ASSIGN) == ass_set);
+	REQUIRE(qpsClient.getAllEntity(DesignEntity::VARIABLE) == var_set);
 
 
 }

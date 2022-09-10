@@ -1,17 +1,17 @@
 #include "EntityManager.h"
 #include "../../../models/Entity/Entity.h"
 
-#include "../storage/AssignEntityStorage.h"
-#include "../storage/CallEntityStorage.h"
-#include "../storage/ConstantEntityStorage.h"
-#include "../storage/EntityStorage.h"
-#include "../storage/IfEntityStorage.h"
-#include "../storage/PrintEntityStorage.h"
-#include "../storage/ProcedureEntityStorage.h"
-#include "../storage/ReadEntityStorage.h"
-#include "../storage/StatementEntityStorage.h"
-#include "../storage/VariableEntityStorage.h"
-#include "../storage/WhileEntityStorage.h"
+#include "../storage/EntityStorage/AssignEntityStorage.h"
+#include "../storage/EntityStorage/CallEntityStorage.h"
+#include "../storage/EntityStorage/ConstantEntityStorage.h"
+#include "../storage/EntityStorage/EntityStorage.h"
+#include "../storage/EntityStorage/IfEntityStorage.h"
+#include "../storage/EntityStorage/PrintEntityStorage.h"
+#include "../storage/EntityStorage/ProcedureEntityStorage.h"
+#include "../storage/EntityStorage/ReadEntityStorage.h"
+#include "../storage/EntityStorage/StatementEntityStorage.h"
+#include "../storage/EntityStorage/VariableEntityStorage.h"
+#include "../storage/EntityStorage/WhileEntityStorage.h"
 
 #include "../../qps/query_preprocessor/query_tokenizer/TokenType.h"
 
@@ -57,20 +57,16 @@ bool EntityManager::storeEntity(Entity* entity) {
 	return ret;
 }
 
-std::unordered_set<std::string> EntityManager::getAllEntity(qps::TokenType returnType) {
-	std::unordered_set<Entity*>* temp;
+std::unordered_set<std::string> EntityManager::getAllEntity(DesignEntity returnType) {
+	std::unordered_set<std::string> temp;
 	std::unordered_set<std::string> ret;
 
 	for (auto& es : entityStore) {
 		temp = es->getAllEntity(returnType);
-;		if (temp != nullptr) {
-			for (const auto& entity: *temp) {
-				std::string k = entity->getValue();
-				ret.insert(k);
-			}
-			break;
+;		if (temp != std::unordered_set<std::string>()) {
+			return temp;
 		}
 	}
 
-	return ret;
+	return std::unordered_set<std::string>();
 }

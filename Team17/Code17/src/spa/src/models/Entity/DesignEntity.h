@@ -1,0 +1,19 @@
+#ifndef INC_22S1_CP_SPA_TEAM_17_DESIGN_ENTITY_H
+#define INC_22S1_CP_SPA_TEAM_17_DESIGN_ENTITY_H
+
+
+enum class DesignEntity {
+    STMT,
+    READ,
+    PRINT,
+    CALL,
+    WHILE,
+    IF,
+    ASSIGN,
+    VARIABLE,
+    CONSTANT,
+    PROCEDURE,
+};
+
+
+#endif //INC_22S1_CP_SPA_TEAM_17_DESIGN_ENTITY_H
