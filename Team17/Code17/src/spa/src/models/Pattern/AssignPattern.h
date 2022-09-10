@@ -5,5 +5,5 @@
 class AssignPattern : public Pattern {
 
 public:
-	AssignPattern(int lineNum, std::string firstValue, std::string secondValue);
+	AssignPattern(std::string lineNum, std::string firstValue, std::string secondValue);
 };

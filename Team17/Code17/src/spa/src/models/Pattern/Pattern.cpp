@@ -1,9 +1,9 @@
 #include "Pattern.h"
 
 
-Pattern::Pattern(int lineNum, std::string firstValue, std::string secondValue) : lineNum(lineNum), firstValue(firstValue), secondValue(secondValue) {}
+Pattern::Pattern(std::string lineNum, std::string firstValue, std::string secondValue) : lineNum(lineNum), firstValue(firstValue), secondValue(secondValue) {}
 
-int Pattern::getLineNum() {
+std::string Pattern::getLineNum() {
 	return this->lineNum;
 }
 

@@ -3,13 +3,13 @@
 
 class Pattern {
 private:
-	int lineNum;
+	std::string lineNum;
 	std::string firstValue;
 	std::string secondValue;
 
 public:
-	Pattern(int lineNum, std::string firstValue, std::string secondValue);
-	int getLineNum();
+	Pattern(std::string lineNum, std::string firstValue, std::string secondValue);
+	std::string getLineNum();
 	std::string getFirstValue();
 	std::string getSecondValue();
 };
