@@ -11,12 +11,12 @@
 
 class SelectClause : public Clause {
 private:
-    std::unordered_map<std::string, TokenType> synonymToDesignEntityMap;
+    std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap;
     Select synonym;
     QPSClient qpsClient;
 
 public:
-    SelectClause(Select synonym, std::unordered_map<std::string, TokenType> synonymToDesignEntityMap, QPSClient qpsClient);
+    SelectClause(Select synonym, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
     RawResult evaluateClause() override;
 };
 

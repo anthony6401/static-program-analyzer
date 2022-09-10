@@ -6,7 +6,7 @@ SelectClause::SelectClause(Select synonym, std::unordered_map<std::string, Desig
         : synonym(synonym), synonymToDesignEntityMap(synonymToDesignEntityMap), qpsClient(qpsClient) {}
 
 RawResult SelectClause::evaluateClause() {
-    TokenType returnType = synonymToDesignEntityMap[synonym.getSynonym()];
-    std::unordered_set<std::string> results = qpsClient.getAllEntity(returnType);
-    return {results};
+    DesignEntity returnType = synonymToDesignEntityMap[synonym.getSynonym()];
+    // std::unordered_set<std::string> results = qpsClient.getAllEntity(returnType);
+    return {};
 }

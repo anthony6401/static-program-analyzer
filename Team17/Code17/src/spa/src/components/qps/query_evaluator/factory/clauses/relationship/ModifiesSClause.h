@@ -9,7 +9,7 @@
 
 class ModifiesSClause : public Clause {
 private:
-    std::unordered_map<std::string, TokenType> synonymToDesignEntityMap;
+    std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap;
     Select synonym;
     QPSClient qpsClient;
     TokenObject left;
@@ -17,7 +17,7 @@ private:
 
 public:
     ModifiesSClause(TokenObject left, TokenObject right, Select synonym,
-                    std::unordered_map<std::string, TokenType> synonymToDesignEntityMap, QPSClient qpsClient);
+                    std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
     RawResult evaluateClause() override;
     TokenType getRelationshipType();
     RawResult evaluateSynonymSynonym();

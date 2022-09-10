@@ -1,7 +1,7 @@
 #include "ModifiesSClause.h"
 
 ModifiesSClause::ModifiesSClause(TokenObject left, TokenObject right, Select synonym,
-                                 std::unordered_map<std::string, TokenType> synonymToDesignEntityMap,
+                                 std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap,
                                  QPSClient qpsClient) : left(left), right(right), synonym(synonym),
                                  synonymToDesignEntityMap(synonymToDesignEntityMap), qpsClient(qpsClient) {};
 
@@ -20,26 +20,26 @@ TokenType ModifiesSClause::getRelationshipType() {
 }
 
 RawResult ModifiesSClause::evaluateSynonymSynonym() {
-    TokenType stmtType = synonymToDesignEntityMap[left.getValue()];
-    TokenType rightType = synonymToDesignEntityMap[right.getValue()];
+    DesignEntity stmtType = synonymToDesignEntityMap[left.getValue()];
+    DesignEntity rightType = synonymToDesignEntityMap[right.getValue()];
     // API CALL
     return {};
 }
 
 RawResult ModifiesSClause::evaluateSynonymWildcard() {
-    TokenType stmtType = synonymToDesignEntityMap[left.getValue()];
+    DesignEntity stmtType = synonymToDesignEntityMap[left.getValue()];
     // API CALL
     return {};
 }
 
 RawResult ModifiesSClause::evaluateSynonymNameQuotes() {
-    TokenType stmtType = synonymToDesignEntityMap[left.getValue()];
+    DesignEntity stmtType = synonymToDesignEntityMap[left.getValue()];
     // API CALL
     return {};
 }
 
 RawResult ModifiesSClause::evaluateIntegerSynonym() {
-    TokenType rightType = synonymToDesignEntityMap[right.getValue()];
+    DesignEntity rightType = synonymToDesignEntityMap[right.getValue()];
     // API CALL
     return {};
 }

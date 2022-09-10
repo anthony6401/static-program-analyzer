@@ -11,7 +11,7 @@ TEST_CASE("Evaluation for Select Clause - variable v; Select v") {
     std::vector<SuchThat> relationships {};
     std::vector<Pattern> patterns {};
     Select select = Select( "v");
-    std::unordered_map<std::string, TokenType> synonymToDesignEntityMap = {{"v", TokenType::VARIABLE}};
+    std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap = {{"v", DesignEntity::VARIABLE}};
     QueryObject testQuery = QueryObject(select, relationships, patterns, synonymToDesignEntityMap);
     Evaluator::evaluateQuery(testQuery, testResults, qpsClient);
     std::list<std::string> expectedResults = {"none"};
@@ -27,7 +27,7 @@ TEST_CASE("Evaluator for ModifiesS Relationship Clause - variable v; Select v su
                                                   TokenObject(TokenType::NAME, "v"))};
     std::vector<Pattern> patterns {};
     Select select = Select( "v");
-    std::unordered_map<std::string, TokenType> synonymToDesignEntityMap = {{"v", TokenType::VARIABLE}};
+    std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap = {{"v", DesignEntity::VARIABLE}};
     QueryObject testQuery = QueryObject(select, relationships, patterns, synonymToDesignEntityMap);
     Evaluator::evaluateQuery(testQuery, testResults, qpsClient);
     std::list<std::string> expectedResults = {"z", "x", "y"};

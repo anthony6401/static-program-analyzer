@@ -6,7 +6,7 @@
 #include "components/pkb/clients/QPSClient.h"
 
 void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &results, QPSClient qpsClient) {
-    std::unordered_map<std::string, TokenType> synonymToDesignEntityMap = queryObject.getSynonymToDesignEntityMap();
+    std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap = queryObject.getSynonymToDesignEntityMap();
     std::vector<std::shared_ptr<Clause>> clausesToEvaluate = extractClausesToEvaluate(queryObject, synonymToDesignEntityMap, qpsClient);
     std::vector<RawResult> evaluatedResultsList;
     bool isNoneResult = false;
@@ -50,7 +50,7 @@ std::unordered_set<std::string> Evaluator::joinEvaluatedResults(std::vector<RawR
 }
 
 
-std::vector<std::shared_ptr<Clause>> Evaluator::extractClausesToEvaluate(QueryObject queryObject, std::unordered_map<std::string, TokenType> synonymToDesignEntityMap, QPSClient qpsClient) {
+std::vector<std::shared_ptr<Clause>> Evaluator::extractClausesToEvaluate(QueryObject queryObject, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) {
     std::vector<std::shared_ptr<Clause>> clausesToEvaluate;
     std::vector<SuchThat> relationships = queryObject.getRelationships();
     std::vector<Pattern> patterns = queryObject.getPattern();

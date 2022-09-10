@@ -1,7 +1,7 @@
 #include "ModifiesPClause.h"
 
 ModifiesPClause::ModifiesPClause(TokenObject left, TokenObject right, Select synonym,
-                                 std::unordered_map<std::string, TokenType> synonymToDesignEntityMap,
+                                 std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap,
                                  QPSClient qpsClient) : left(left), right(right), synonym(synonym),
                                                         synonymToDesignEntityMap(synonymToDesignEntityMap), qpsClient(qpsClient) {};
 
