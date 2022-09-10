@@ -2,11 +2,8 @@
 #include <unordered_set>
 #include <unordered_map>
 #include <string>
-#include "models/Relationship/Relationship.h"
-#include "models/Relationship/RelationshipType.h"
 #include "PatternStorage.h"
 #include "utils.h"
-#include "../../../qps/query_preprocessor/query_tokenizer/TokenType.h"
 #include "../../../qps/query_preprocessor/query_tokenizer/TokenObject.h"
 
 class AssignPatternStorage : public PatternStorage {
