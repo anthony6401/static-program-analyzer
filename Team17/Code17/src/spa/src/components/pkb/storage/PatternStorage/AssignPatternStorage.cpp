@@ -3,6 +3,7 @@
 #include "models/Pattern/AssignPattern.h"
 
 #include <typeinfo>
+#include <vector>
 
 AssignPatternStorage::AssignPatternStorage() : PatternStorage(), assignPatternStorage(std::unordered_map<std::string, std::unordered_set<std::pair<std::string, std::string>, pair_hash>>()) {}
 
@@ -26,7 +27,7 @@ bool AssignPatternStorage::storePattern(Pattern* pattern) {
 }
 
 std::unordered_set<std::string> AssignPatternStorage::getPattern(DesignEntity designEntity, TokenObject firstArgument, TokenObject secondArgument) {
-	std::unordered_set<std::string> result{};
+	std::unordered_set<std::string> result;
 
 	if (designEntity == DesignEntity::ASSIGN) {
 		if (this->assignPatternStorage.find(firstArgument.getValue()) != this->assignPatternStorage.end()) {
@@ -60,7 +61,7 @@ std::unordered_set<std::string> AssignPatternStorage::getPattern(DesignEntity de
 }
 
 std::vector<std::pair<std::string, std::string>> AssignPatternStorage::getPatternPair(DesignEntity designEntity, TokenObject secondArgument) {
-	std::vector<std::pair<std::string, std::string>> result{};
+	std::vector<std::pair<std::string, std::string>> result;
 	if (designEntity == DesignEntity::ASSIGN) {
 		std::string secondArgumentValue = secondArgument.getValue();
 		for (auto it = this->assignPatternStorage.begin(); it != this->assignPatternStorage.end(); it++) {
