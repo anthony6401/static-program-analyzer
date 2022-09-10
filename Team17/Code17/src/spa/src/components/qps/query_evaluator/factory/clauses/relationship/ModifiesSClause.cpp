@@ -21,8 +21,36 @@ TokenType ModifiesSClause::getRelationshipType() {
 
 RawResult ModifiesSClause::evaluateSynonymSynonym() {
     TokenType stmtType = synonymToDesignEntityMap[left.getValue()];
-    // std::unordered_set<std::string> result = qpsClient.getAllRelationships(getRelationshipType(), stmtType);
+    TokenType rightType = synonymToDesignEntityMap[right.getValue()];
+    // API CALL
     return {};
 }
 
+RawResult ModifiesSClause::evaluateSynonymWildcard() {
+    TokenType stmtType = synonymToDesignEntityMap[left.getValue()];
+    // API CALL
+    return {};
+}
+
+RawResult ModifiesSClause::evaluateSynonymNameQuotes() {
+    TokenType stmtType = synonymToDesignEntityMap[left.getValue()];
+    // API CALL
+    return {};
+}
+
+RawResult ModifiesSClause::evaluateIntegerSynonym() {
+    TokenType rightType = synonymToDesignEntityMap[right.getValue()];
+    // API CALL
+    return {};
+}
+
+RawResult ModifiesSClause::evaluateIntegerWildcard() {
+    // API CALL
+    return {};
+}
+
+RawResult ModifiesSClause::evaluateIntegerNameQuotes() {
+    // API CALL
+    return {};
+}
 

@@ -21,3 +21,7 @@ bool RawResult::isResultEmpty() {
 void RawResult::toggleIsFalseResult() {
     isFalseResult = !isFalseResult;
 }
+
+RawResult::RawResult(std::string leftSynonym, std::string rightSynonym, std::string results) {
+
+}
