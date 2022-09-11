@@ -6,13 +6,23 @@ ModifiesSClause::ModifiesSClause(TokenObject left, TokenObject right, Select syn
                                  synonymToDesignEntityMap(synonymToDesignEntityMap), qpsClient(qpsClient) {};
 
 RawResult ModifiesSClause::evaluateClause() {
-//    TokenType leftType = left.getTokenType();
-//    TokenType rightType = right.getTokenType();
-//    if (leftType == TokenType::SYNONYM && rightType == TokenType::SYNONYM) {
-//        ModifiesSClause::evaluateSynonymSynonym();
-//    }
-    std::unordered_set<std::string> result = {"x", "y", "z"};
-    return {};
+    TokenType leftType = left.getTokenType();
+    TokenType rightType = right.getTokenType();
+    if (leftType == TokenType::SYNONYM && rightType == TokenType::SYNONYM) {
+        return ModifiesSClause::evaluateSynonymSynonym();
+    } else if (leftType == TokenType::SYNONYM && rightType == TokenType::WILDCARD) {
+        return ModifiesSClause::evaluateSynonymWildcard();
+    } else if (leftType == TokenType::SYNONYM && rightType == TokenType::NAME_WITH_QUOTATION) {
+        return ModifiesSClause::evaluateSynonymNameQuotes();
+    } else if (leftType == TokenType::INTEGER && rightType == TokenType::SYNONYM) {
+        return ModifiesSClause::evaluateIntegerSynonym();
+    } else if (leftType == TokenType::INTEGER && rightType == TokenType::WILDCARD) {
+        return ModifiesSClause::evaluateIntegerWildcard();
+    } else if (leftType == TokenType::INTEGER && rightType == TokenType::NAME_WITH_QUOTATION) {
+        return ModifiesSClause::evaluateIntegerNameQuotes();
+    } else {
+        return {};
+    }
 }
 
 TokenType ModifiesSClause::getRelationshipType() {
