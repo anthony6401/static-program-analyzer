@@ -28,30 +28,26 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
     if (!isNoneResult) {
         // join Raw results
     }
-
-
-//
-//
-//    // Select, Relationship, Pattern or Relationship and Pattern
-//    for (auto clause : clausesToEvaluate) {
-//        RawResult evaluatedResult = clause->evaluateClause();
-//        // If any returns no results or false, terminate evaluation and return none as a result
-//        if (evaluatedResult.getIsFalseResult() || evaluatedResult.isResultEmpty()) {
-//            results.emplace_back("none");
-//            isNoneResult = true;
-//            break;
-//        }
-//        evaluatedResultsList.push_back(evaluatedResult);
-//    }
-//
-//    if (!isNoneResult) {
-//        std::unordered_set<std::string> joinedResults = Evaluator::joinEvaluatedResults(evaluatedResultsList);
-//        for (std::string s : joinedResults) {
-//            results.push_back(s);
-//        }
-//    }
-//    // Combine results of evaluation and store in query db
 }
+
+std::unordered_set<std::string> Evaluator::joinRawResults(std::vector<RawResult> rawResultsList) {
+    std::unordered_set<std::string> joinedResults;
+    // Single clause or Select clause query
+    if (rawResultsList.size() == 1) {
+        std::vector<std::vector<std::string>> results = rawResultsList.front().resultsList;
+        // {{x}, {y}, {z}} -> {x, y, z}
+        for (auto singleValue : results) {
+            joinedResults.insert(singleValue.front());
+        }
+    } else { // Multi clause queries
+        // find all common synonyms
+        std::vector<std::string> commonSynonyms;
+        // take note of return synonym
+    }
+
+    return std::unordered_set<std::string>();
+}
+
 
 //std::unordered_set<std::string> Evaluator::joinEvaluatedResults(std::vector<RawResult> evaluatedResultsList) {
 //    std::unordered_set<std::string> firstResult = evaluatedResultsList.front().getResult();
@@ -95,3 +91,4 @@ std::vector<std::shared_ptr<Clause>> Evaluator::extractClausesToEvaluate(QueryOb
         return clausesToEvaluate;
     }
 }
+
