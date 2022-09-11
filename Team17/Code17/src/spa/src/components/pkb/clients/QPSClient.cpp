@@ -1,6 +1,6 @@
 #include "QPSClient.h"
 
-#include "../../qps/query_preprocessor/query_tokenizer/TokenType.h"
+#include "models/Entity/DesignEntity.h"
 
 #include "../pkb.h"
 
@@ -11,7 +11,7 @@ QPSClient::QPSClient(PKB* knowledge) {
 	pkb = knowledge;
 }
 
-std::unordered_set<std::string> QPSClient::getAllEntity(qps::TokenType returnType) {
+std::unordered_set<std::string> QPSClient::getAllEntity(DesignEntity returnType) {
 	return pkb->getAllEntity(returnType);
 }
 

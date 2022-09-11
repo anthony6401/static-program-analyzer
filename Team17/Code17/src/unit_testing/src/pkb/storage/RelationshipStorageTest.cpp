@@ -104,33 +104,33 @@ TEST_CASE("Uses Relationship Storage Test") {
 	std::unordered_set<std::string> expectedResult2({ variable_value_one, variable_value_two });
 	std::unordered_set<std::string> expectedResult3({});
 
-	std::unordered_set<std::string> getUsesRelationshipByStmt1 = usesRelationshipStorage->getRelationshipByFirst(RelationshipType::USES, stmtTokenObject1, TokenType::VARIABLE);
-	std::unordered_set<std::string> getUsesRelationshipByStmt2 = usesRelationshipStorage->getRelationshipByFirst(RelationshipType::USES, stmtTokenObject2, TokenType::VARIABLE);
-	std::unordered_set<std::string> getUsesRelationshipByStmt3 = usesRelationshipStorage->getRelationshipByFirst(RelationshipType::USES, stmtTokenObject3, TokenType::VARIABLE);
-	std::unordered_set<std::string> getUsesRelationshipByStmt4 = usesRelationshipStorage->getRelationshipByFirst(RelationshipType::USES, stmtTokenObject4, TokenType::VARIABLE);
-	std::unordered_set<std::string> getUsesRelationshipByStmt5 = usesRelationshipStorage->getRelationshipByFirst(RelationshipType::USES, stmtTokenObject5, TokenType::VARIABLE);
-	std::unordered_set<std::string> getUsesRelationshipByStmt6 = usesRelationshipStorage->getRelationshipByFirst(RelationshipType::USES, stmtTokenObject6, TokenType::VARIABLE);
-	std::unordered_set<std::string> getUsesRelationshipByStmt7 = usesRelationshipStorage->getRelationshipByFirst(RelationshipType::USES, stmtTokenObject7, TokenType::VARIABLE);
-	std::unordered_set<std::string> getUsesRelationshipByStmt8 = usesRelationshipStorage->getRelationshipByFirst(RelationshipType::USES, stmtTokenObject8, TokenType::VARIABLE);
-	std::unordered_set<std::string> getUsesRelationshipByStmt9 = usesRelationshipStorage->getRelationshipByFirst(RelationshipType::USES, stmtTokenObject9, TokenType::VARIABLE);
-	std::unordered_set<std::string> getUsesRelationshipByStmt10 = usesRelationshipStorage->getRelationshipByFirst(RelationshipType::USES, stmtTokenObject10, TokenType::VARIABLE);
-	std::unordered_set<std::string> getUsesRelationshipByStmt11 = usesRelationshipStorage->getRelationshipByFirst(RelationshipType::USES, stmtTokenObject11, TokenType::VARIABLE);
-	std::unordered_set<std::string> getUsesRelationshipByStmt12 = usesRelationshipStorage->getRelationshipByFirst(RelationshipType::USES, stmtTokenObject12, TokenType::VARIABLE);
-	std::unordered_set<std::string> getUsesRelationshipByStmt13 = usesRelationshipStorage->getRelationshipByFirst(RelationshipType::USES, stmtTokenObject13, TokenType::VARIABLE);
-	std::unordered_set<std::string> getUsesRelationshipByStmt14 = usesRelationshipStorage->getRelationshipByFirst(RelationshipType::USES, stmtTokenObject14, TokenType::VARIABLE);
-	std::unordered_set<std::string> getUsesRelationshipByStmt15 = usesRelationshipStorage->getRelationshipByFirst(RelationshipType::USES, stmtTokenObject15, TokenType::VARIABLE);
-	std::unordered_set<std::string> getUsesRelationshipByStmt16 = usesRelationshipStorage->getRelationshipByFirst(RelationshipType::USES, stmtTokenObject16, TokenType::VARIABLE);
-	std::unordered_set<std::string> getUsesRelationshipByStmt17 = usesRelationshipStorage->getRelationshipByFirst(RelationshipType::USES, stmtTokenObject17, TokenType::VARIABLE);
-	std::unordered_set<std::string> getUsesRelationshipByStmt18 = usesRelationshipStorage->getRelationshipByFirst(RelationshipType::USES, stmtTokenObject18, TokenType::VARIABLE);
-	std::unordered_set<std::string> getUsesRelationshipByProcOne = usesRelationshipStorage->getRelationshipByFirst(RelationshipType::USES, procedureTokenObject, TokenType::VARIABLE);
-	std::unordered_set<std::string> getUsesRelationshipByProcTwo = usesRelationshipStorage->getRelationshipByFirst(RelationshipType::USES, procedureTokenObjectTwo, TokenType::VARIABLE);
-	std::unordered_set<std::string> getUsesRelationshipByProcThree = usesRelationshipStorage->getRelationshipByFirst(RelationshipType::USES, procedureTokenObjectThree, TokenType::VARIABLE);
+	std::unordered_set<std::string> getUsesRelationshipByStmt1 = usesRelationshipStorage->getRelationshipByFirst(RelationshipType::USES, stmtTokenObject1, DesignEntity::VARIABLE);
+	std::unordered_set<std::string> getUsesRelationshipByStmt2 = usesRelationshipStorage->getRelationshipByFirst(RelationshipType::USES, stmtTokenObject2, DesignEntity::VARIABLE);
+	std::unordered_set<std::string> getUsesRelationshipByStmt3 = usesRelationshipStorage->getRelationshipByFirst(RelationshipType::USES, stmtTokenObject3, DesignEntity::VARIABLE);
+	std::unordered_set<std::string> getUsesRelationshipByStmt4 = usesRelationshipStorage->getRelationshipByFirst(RelationshipType::USES, stmtTokenObject4, DesignEntity::VARIABLE);
+	std::unordered_set<std::string> getUsesRelationshipByStmt5 = usesRelationshipStorage->getRelationshipByFirst(RelationshipType::USES, stmtTokenObject5, DesignEntity::VARIABLE);
+	std::unordered_set<std::string> getUsesRelationshipByStmt6 = usesRelationshipStorage->getRelationshipByFirst(RelationshipType::USES, stmtTokenObject6, DesignEntity::VARIABLE);
+	std::unordered_set<std::string> getUsesRelationshipByStmt7 = usesRelationshipStorage->getRelationshipByFirst(RelationshipType::USES, stmtTokenObject7, DesignEntity::VARIABLE);
+	std::unordered_set<std::string> getUsesRelationshipByStmt8 = usesRelationshipStorage->getRelationshipByFirst(RelationshipType::USES, stmtTokenObject8, DesignEntity::VARIABLE);
+	std::unordered_set<std::string> getUsesRelationshipByStmt9 = usesRelationshipStorage->getRelationshipByFirst(RelationshipType::USES, stmtTokenObject9, DesignEntity::VARIABLE);
+	std::unordered_set<std::string> getUsesRelationshipByStmt10 = usesRelationshipStorage->getRelationshipByFirst(RelationshipType::USES, stmtTokenObject10, DesignEntity::VARIABLE);
+	std::unordered_set<std::string> getUsesRelationshipByStmt11 = usesRelationshipStorage->getRelationshipByFirst(RelationshipType::USES, stmtTokenObject11, DesignEntity::VARIABLE);
+	std::unordered_set<std::string> getUsesRelationshipByStmt12 = usesRelationshipStorage->getRelationshipByFirst(RelationshipType::USES, stmtTokenObject12, DesignEntity::VARIABLE);
+	std::unordered_set<std::string> getUsesRelationshipByStmt13 = usesRelationshipStorage->getRelationshipByFirst(RelationshipType::USES, stmtTokenObject13, DesignEntity::VARIABLE);
+	std::unordered_set<std::string> getUsesRelationshipByStmt14 = usesRelationshipStorage->getRelationshipByFirst(RelationshipType::USES, stmtTokenObject14, DesignEntity::VARIABLE);
+	std::unordered_set<std::string> getUsesRelationshipByStmt15 = usesRelationshipStorage->getRelationshipByFirst(RelationshipType::USES, stmtTokenObject15, DesignEntity::VARIABLE);
+	std::unordered_set<std::string> getUsesRelationshipByStmt16 = usesRelationshipStorage->getRelationshipByFirst(RelationshipType::USES, stmtTokenObject16, DesignEntity::VARIABLE);
+	std::unordered_set<std::string> getUsesRelationshipByStmt17 = usesRelationshipStorage->getRelationshipByFirst(RelationshipType::USES, stmtTokenObject17, DesignEntity::VARIABLE);
+	std::unordered_set<std::string> getUsesRelationshipByStmt18 = usesRelationshipStorage->getRelationshipByFirst(RelationshipType::USES, stmtTokenObject18, DesignEntity::VARIABLE);
+	std::unordered_set<std::string> getUsesRelationshipByProcOne = usesRelationshipStorage->getRelationshipByFirst(RelationshipType::USES, procedureTokenObject, DesignEntity::VARIABLE);
+	std::unordered_set<std::string> getUsesRelationshipByProcTwo = usesRelationshipStorage->getRelationshipByFirst(RelationshipType::USES, procedureTokenObjectTwo, DesignEntity::VARIABLE);
+	std::unordered_set<std::string> getUsesRelationshipByProcThree = usesRelationshipStorage->getRelationshipByFirst(RelationshipType::USES, procedureTokenObjectThree, DesignEntity::VARIABLE);
 
-	REQUIRE(usesRelationshipStorage->getRelationshipByFirst(RelationshipType::MODIFIES, stmtTokenObject1, TokenType::VARIABLE) == expectedResult3);
-	REQUIRE(usesRelationshipStorage->getRelationshipByFirst(RelationshipType::FOLLOWS, stmtTokenObject1, TokenType::VARIABLE) == expectedResult3);
-	REQUIRE(usesRelationshipStorage->getRelationshipByFirst(RelationshipType::FOLLOWS_T, stmtTokenObject1, TokenType::VARIABLE) == expectedResult3);
-	REQUIRE(usesRelationshipStorage->getRelationshipByFirst(RelationshipType::PARENT, stmtTokenObject1, TokenType::VARIABLE) == expectedResult3);
-	REQUIRE(usesRelationshipStorage->getRelationshipByFirst(RelationshipType::PARENT_T, stmtTokenObject1, TokenType::VARIABLE) == expectedResult3);
+	REQUIRE(usesRelationshipStorage->getRelationshipByFirst(RelationshipType::MODIFIES, stmtTokenObject1, DesignEntity::VARIABLE) == expectedResult3);
+	REQUIRE(usesRelationshipStorage->getRelationshipByFirst(RelationshipType::FOLLOWS, stmtTokenObject1, DesignEntity::VARIABLE) == expectedResult3);
+	REQUIRE(usesRelationshipStorage->getRelationshipByFirst(RelationshipType::FOLLOWS_T, stmtTokenObject1, DesignEntity::VARIABLE) == expectedResult3);
+	REQUIRE(usesRelationshipStorage->getRelationshipByFirst(RelationshipType::PARENT, stmtTokenObject1, DesignEntity::VARIABLE) == expectedResult3);
+	REQUIRE(usesRelationshipStorage->getRelationshipByFirst(RelationshipType::PARENT_T, stmtTokenObject1, DesignEntity::VARIABLE) == expectedResult3);
 
 	REQUIRE(getUsesRelationshipByStmt1 == expectedResult1);
 	REQUIRE(getUsesRelationshipByStmt2 == expectedResult3);
@@ -154,21 +154,24 @@ TEST_CASE("Uses Relationship Storage Test") {
 	REQUIRE(getUsesRelationshipByProcTwo == expectedResult2);
 	REQUIRE(getUsesRelationshipByProcThree == expectedResult3);
 
-	std::unordered_set<std::string> getUsesAssignRelationshipByVarOne = usesRelationshipStorage->getRelationshipBySecond(RelationshipType::USES, TokenType::ASSIGN, variableTokenObject);
-	std::unordered_set<std::string> getUsesAssignRelationshipByVarTwo = usesRelationshipStorage->getRelationshipBySecond(RelationshipType::USES, TokenType::ASSIGN, variableTokenObjectTwo);
-	std::unordered_set<std::string> getUsesAssignRelationshipByVarThree = usesRelationshipStorage->getRelationshipBySecond(RelationshipType::USES, TokenType::ASSIGN, variableTokenObjectThree);
-	std::unordered_set<std::string> getUsesProcRelationshipByVarOne = usesRelationshipStorage->getRelationshipBySecond(RelationshipType::USES, TokenType::PROCEDURE, variableTokenObject);
-	std::unordered_set<std::string> getUsesProcRelationshipByVarTwo = usesRelationshipStorage->getRelationshipBySecond(RelationshipType::USES, TokenType::PROCEDURE, variableTokenObjectTwo);
-	std::unordered_set<std::string> getUsesProcRelationshipByVarThree = usesRelationshipStorage->getRelationshipBySecond(RelationshipType::USES, TokenType::PROCEDURE, variableTokenObjectThree);
-	std::unordered_set<std::string> getUsesPrintRelationshipByVarOne = usesRelationshipStorage->getRelationshipBySecond(RelationshipType::USES, TokenType::PRINT, variableTokenObject);
-	std::unordered_set<std::string> getUsesPrintRelationshipByVarTwo = usesRelationshipStorage->getRelationshipBySecond(RelationshipType::USES, TokenType::PRINT, variableTokenObjectTwo);
-	std::unordered_set<std::string> getUsesPrintRelationshipByVarThree = usesRelationshipStorage->getRelationshipBySecond(RelationshipType::USES, TokenType::PRINT, variableTokenObjectThree);
-	std::unordered_set<std::string> getUsesWhileRelationshipByVarOne = usesRelationshipStorage->getRelationshipBySecond(RelationshipType::USES, TokenType::WHILE, variableTokenObject);
-	std::unordered_set<std::string> getUsesWhileRelationshipByVarTwo = usesRelationshipStorage->getRelationshipBySecond(RelationshipType::USES, TokenType::WHILE, variableTokenObjectTwo);
-	std::unordered_set<std::string> getUsesWhileRelationshipByVarThree = usesRelationshipStorage->getRelationshipBySecond(RelationshipType::USES, TokenType::WHILE, variableTokenObjectThree);
-	std::unordered_set<std::string> getUsesIfRelationshipByVarOne = usesRelationshipStorage->getRelationshipBySecond(RelationshipType::USES, TokenType::IF, variableTokenObject);
-	std::unordered_set<std::string> getUsesIfRelationshipByVarTwo = usesRelationshipStorage->getRelationshipBySecond(RelationshipType::USES, TokenType::IF, variableTokenObjectTwo);
-	std::unordered_set<std::string> getUsesIfRelationshipByVarThree = usesRelationshipStorage->getRelationshipBySecond(RelationshipType::USES, TokenType::IF, variableTokenObjectThree);
+	std::unordered_set<std::string> getUsesAssignRelationshipByVarOne = usesRelationshipStorage->getRelationshipBySecond(RelationshipType::USES, DesignEntity::ASSIGN, variableTokenObject);
+	std::unordered_set<std::string> getUsesAssignRelationshipByVarTwo = usesRelationshipStorage->getRelationshipBySecond(RelationshipType::USES, DesignEntity::ASSIGN, variableTokenObjectTwo);
+	std::unordered_set<std::string> getUsesAssignRelationshipByVarThree = usesRelationshipStorage->getRelationshipBySecond(RelationshipType::USES, DesignEntity::ASSIGN, variableTokenObjectThree);
+	std::unordered_set<std::string> getUsesProcRelationshipByVarOne = usesRelationshipStorage->getRelationshipBySecond(RelationshipType::USES, DesignEntity::PROCEDURE, variableTokenObject);
+	std::unordered_set<std::string> getUsesProcRelationshipByVarTwo = usesRelationshipStorage->getRelationshipBySecond(RelationshipType::USES, DesignEntity::PROCEDURE, variableTokenObjectTwo);
+	std::unordered_set<std::string> getUsesProcRelationshipByVarThree = usesRelationshipStorage->getRelationshipBySecond(RelationshipType::USES, DesignEntity::PROCEDURE, variableTokenObjectThree);
+	std::unordered_set<std::string> getUsesPrintRelationshipByVarOne = usesRelationshipStorage->getRelationshipBySecond(RelationshipType::USES, DesignEntity::PRINT, variableTokenObject);
+	std::unordered_set<std::string> getUsesPrintRelationshipByVarTwo = usesRelationshipStorage->getRelationshipBySecond(RelationshipType::USES, DesignEntity::PRINT, variableTokenObjectTwo);
+	std::unordered_set<std::string> getUsesPrintRelationshipByVarThree = usesRelationshipStorage->getRelationshipBySecond(RelationshipType::USES, DesignEntity::PRINT, variableTokenObjectThree);
+	std::unordered_set<std::string> getUsesWhileRelationshipByVarOne = usesRelationshipStorage->getRelationshipBySecond(RelationshipType::USES, DesignEntity::WHILE, variableTokenObject);
+	std::unordered_set<std::string> getUsesWhileRelationshipByVarTwo = usesRelationshipStorage->getRelationshipBySecond(RelationshipType::USES, DesignEntity::WHILE, variableTokenObjectTwo);
+	std::unordered_set<std::string> getUsesWhileRelationshipByVarThree = usesRelationshipStorage->getRelationshipBySecond(RelationshipType::USES, DesignEntity::WHILE, variableTokenObjectThree);
+	std::unordered_set<std::string> getUsesIfRelationshipByVarOne = usesRelationshipStorage->getRelationshipBySecond(RelationshipType::USES, DesignEntity::IF, variableTokenObject);
+	std::unordered_set<std::string> getUsesIfRelationshipByVarTwo = usesRelationshipStorage->getRelationshipBySecond(RelationshipType::USES, DesignEntity::IF, variableTokenObjectTwo);
+	std::unordered_set<std::string> getUsesIfRelationshipByVarThree = usesRelationshipStorage->getRelationshipBySecond(RelationshipType::USES, DesignEntity::IF, variableTokenObjectThree);
+	std::unordered_set<std::string> getUsesStmtRelationshipByVarOne = usesRelationshipStorage->getRelationshipBySecond(RelationshipType::USES, DesignEntity::STMT, variableTokenObject);
+	std::unordered_set<std::string> getUsesStmtRelationshipByVarTwo = usesRelationshipStorage->getRelationshipBySecond(RelationshipType::USES, DesignEntity::STMT, variableTokenObjectTwo);
+	std::unordered_set<std::string> getUsesStmtRelationshipByVarThree = usesRelationshipStorage->getRelationshipBySecond(RelationshipType::USES, DesignEntity::STMT, variableTokenObjectThree);
 
 	std::unordered_set<std::string> expectedResultAssignByVarOne({ assign_value_one, assign_value_two });
 	std::unordered_set<std::string> expectedResultAssignByVarTwo({ assign_value_two });
@@ -185,12 +188,15 @@ TEST_CASE("Uses Relationship Storage Test") {
 	std::unordered_set<std::string> expectedResultIfByVarOne({ if_value_one, if_value_two });
 	std::unordered_set<std::string> expectedResultIfByVarTwo({ if_value_two });
 	std::unordered_set<std::string> expectedResultIfByVarThree({ if_value_one });
+	std::unordered_set<std::string> expectedResultStmtByVarOne({ assign_value_one, assign_value_two, print_value_one, print_value_two, while_value_one, while_value_two, if_value_one, if_value_two });
+	std::unordered_set<std::string> expectedResultStmtByVarTwo({ assign_value_two, print_value_two, while_value_two, if_value_two});
+	std::unordered_set<std::string> expectedResultStmtByVarThree({ assign_value_one, print_value_one, while_value_one, if_value_one });
 
-	REQUIRE(usesRelationshipStorage->getRelationshipBySecond(RelationshipType::MODIFIES, TokenType::ASSIGN, variableTokenObject) == expectedResult3);
-	REQUIRE(usesRelationshipStorage->getRelationshipBySecond(RelationshipType::FOLLOWS, TokenType::ASSIGN, variableTokenObject) == expectedResult3);
-	REQUIRE(usesRelationshipStorage->getRelationshipBySecond(RelationshipType::FOLLOWS_T, TokenType::ASSIGN, variableTokenObject) == expectedResult3);
-	REQUIRE(usesRelationshipStorage->getRelationshipBySecond(RelationshipType::PARENT, TokenType::ASSIGN, variableTokenObject) == expectedResult3);
-	REQUIRE(usesRelationshipStorage->getRelationshipBySecond(RelationshipType::PARENT_T, TokenType::ASSIGN, variableTokenObject) == expectedResult3);
+	REQUIRE(usesRelationshipStorage->getRelationshipBySecond(RelationshipType::MODIFIES, DesignEntity::ASSIGN, variableTokenObject) == expectedResult3);
+	REQUIRE(usesRelationshipStorage->getRelationshipBySecond(RelationshipType::FOLLOWS, DesignEntity::ASSIGN, variableTokenObject) == expectedResult3);
+	REQUIRE(usesRelationshipStorage->getRelationshipBySecond(RelationshipType::FOLLOWS_T, DesignEntity::ASSIGN, variableTokenObject) == expectedResult3);
+	REQUIRE(usesRelationshipStorage->getRelationshipBySecond(RelationshipType::PARENT, DesignEntity::ASSIGN, variableTokenObject) == expectedResult3);
+	REQUIRE(usesRelationshipStorage->getRelationshipBySecond(RelationshipType::PARENT_T, DesignEntity::ASSIGN, variableTokenObject) == expectedResult3);
 
 	REQUIRE(getUsesAssignRelationshipByVarOne == expectedResultAssignByVarOne);
 	REQUIRE(getUsesAssignRelationshipByVarTwo == expectedResultAssignByVarTwo);
@@ -207,30 +213,46 @@ TEST_CASE("Uses Relationship Storage Test") {
 	REQUIRE(getUsesIfRelationshipByVarOne == expectedResultIfByVarOne);
 	REQUIRE(getUsesIfRelationshipByVarTwo == expectedResultIfByVarTwo);
 	REQUIRE(getUsesIfRelationshipByVarThree == expectedResultIfByVarThree);
+	REQUIRE(getUsesStmtRelationshipByVarOne == expectedResultStmtByVarOne);
+	REQUIRE(getUsesStmtRelationshipByVarTwo == expectedResultStmtByVarTwo);
+	REQUIRE(getUsesStmtRelationshipByVarThree == expectedResultStmtByVarThree);
 
-	std::unordered_set<std::string> getAllAssignUsesRelationship = usesRelationshipStorage->getAllRelationship(RelationshipType::USES, TokenType::ASSIGN);
-	std::unordered_set<std::string> getAllProcUsesRelationship = usesRelationshipStorage->getAllRelationship(RelationshipType::USES, TokenType::PROCEDURE);
-	std::unordered_set<std::string> getAllPrintUsesRelationship = usesRelationshipStorage->getAllRelationship(RelationshipType::USES, TokenType::PRINT);
-	std::unordered_set<std::string> getAllWhileUsesRelationship = usesRelationshipStorage->getAllRelationship(RelationshipType::USES, TokenType::WHILE);
-	std::unordered_set<std::string> getAllIfUsesRelationship = usesRelationshipStorage->getAllRelationship(RelationshipType::USES, TokenType::IF);
+	std::unordered_map<std::string, std::unordered_set<std::string>> getAllAssignUsesRelationship = usesRelationshipStorage->getAllRelationship(RelationshipType::USES, DesignEntity::ASSIGN, DesignEntity::VARIABLE);
+	std::unordered_map<std::string, std::unordered_set<std::string>> getAllProcUsesRelationship = usesRelationshipStorage->getAllRelationship(RelationshipType::USES, DesignEntity::PROCEDURE, DesignEntity::VARIABLE);
+	std::unordered_map<std::string, std::unordered_set<std::string>> getAllPrintUsesRelationship = usesRelationshipStorage->getAllRelationship(RelationshipType::USES, DesignEntity::PRINT, DesignEntity::VARIABLE);
+	std::unordered_map<std::string, std::unordered_set<std::string>> getAllWhileUsesRelationship = usesRelationshipStorage->getAllRelationship(RelationshipType::USES, DesignEntity::WHILE, DesignEntity::VARIABLE);
+	std::unordered_map<std::string, std::unordered_set<std::string>> getAllIfUsesRelationship = usesRelationshipStorage->getAllRelationship(RelationshipType::USES, DesignEntity::IF, DesignEntity::VARIABLE);
+	std::unordered_map<std::string, std::unordered_set<std::string>> getAllStmtUsesRelationship = usesRelationshipStorage->getAllRelationship(RelationshipType::USES, DesignEntity::STMT, DesignEntity::VARIABLE);
 
-	std::unordered_set<std::string> expectedResultAllUsesAssign({ assign_value_one, assign_value_two });
-	std::unordered_set<std::string> expectedResultAllUsesProc({ procedure_value_one, procedure_value_two });
-	std::unordered_set<std::string> expectedResultAllUsesPrint({ print_value_one, print_value_two });
-	std::unordered_set<std::string> expectedResultAllUsesWhile({ while_value_one, while_value_two });
-	std::unordered_set<std::string> expectedResultAllUsesIf({ if_value_one, if_value_two });
+	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultAllUsesNone({});
+	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultAllUsesAssign{ { assign_value_one, std::unordered_set<std::string>({variable_value_one, variable_value_three}) },
+																									{ assign_value_two, std::unordered_set<std::string>({variable_value_one, variable_value_two})} };
+	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultAllUsesProc{ { procedure_value_one, std::unordered_set<std::string>({variable_value_one, variable_value_three}) },
+																									{ procedure_value_two, std::unordered_set<std::string>({variable_value_one, variable_value_two}) } };
+	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultAllUsesPrint{ { print_value_one, std::unordered_set<std::string>({variable_value_one, variable_value_three}) },
+																									{ print_value_two, std::unordered_set<std::string>({variable_value_one, variable_value_two}) } };
+	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultAllUsesWhile{ { while_value_one, std::unordered_set<std::string>({variable_value_one, variable_value_three}) },
+																									{ while_value_two, std::unordered_set<std::string>({variable_value_one, variable_value_two}) } };
+	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultAllUsesIf{ { if_value_one, std::unordered_set<std::string>({variable_value_one, variable_value_three}) },
+																									{ if_value_two, std::unordered_set<std::string>({variable_value_one, variable_value_two}) } };
+	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultAllUsesStmt;
+	expectedResultAllUsesStmt.insert(expectedResultAllUsesAssign.begin(), expectedResultAllUsesAssign.end());
+	expectedResultAllUsesStmt.insert(expectedResultAllUsesPrint.begin(), expectedResultAllUsesPrint.end());
+	expectedResultAllUsesStmt.insert(expectedResultAllUsesWhile.begin(), expectedResultAllUsesWhile.end());
+	expectedResultAllUsesStmt.insert(expectedResultAllUsesIf.begin(), expectedResultAllUsesIf.end());
 
-	REQUIRE(usesRelationshipStorage->getAllRelationship(RelationshipType::MODIFIES, TokenType::ASSIGN) == expectedResult3);
-	REQUIRE(usesRelationshipStorage->getAllRelationship(RelationshipType::FOLLOWS, TokenType::ASSIGN) == expectedResult3);
-	REQUIRE(usesRelationshipStorage->getAllRelationship(RelationshipType::FOLLOWS_T, TokenType::ASSIGN) == expectedResult3);
-	REQUIRE(usesRelationshipStorage->getAllRelationship(RelationshipType::PARENT, TokenType::ASSIGN) == expectedResult3);
-	REQUIRE(usesRelationshipStorage->getAllRelationship(RelationshipType::PARENT_T, TokenType::ASSIGN) == expectedResult3);
+	REQUIRE(usesRelationshipStorage->getAllRelationship(RelationshipType::MODIFIES, DesignEntity::ASSIGN, DesignEntity::VARIABLE) == expectedResultAllUsesNone);
+	REQUIRE(usesRelationshipStorage->getAllRelationship(RelationshipType::FOLLOWS, DesignEntity::ASSIGN, DesignEntity::VARIABLE) == expectedResultAllUsesNone);
+	REQUIRE(usesRelationshipStorage->getAllRelationship(RelationshipType::FOLLOWS_T, DesignEntity::ASSIGN, DesignEntity::VARIABLE) == expectedResultAllUsesNone);
+	REQUIRE(usesRelationshipStorage->getAllRelationship(RelationshipType::PARENT, DesignEntity::ASSIGN, DesignEntity::VARIABLE) == expectedResultAllUsesNone);
+	REQUIRE(usesRelationshipStorage->getAllRelationship(RelationshipType::PARENT_T, DesignEntity::ASSIGN, DesignEntity::VARIABLE) == expectedResultAllUsesNone);
 
 	REQUIRE(getAllAssignUsesRelationship == expectedResultAllUsesAssign);
 	REQUIRE(getAllProcUsesRelationship == expectedResultAllUsesProc);
 	REQUIRE(getAllPrintUsesRelationship == expectedResultAllUsesPrint);
 	REQUIRE(getAllWhileUsesRelationship == expectedResultAllUsesWhile);
 	REQUIRE(getAllIfUsesRelationship == expectedResultAllUsesIf);
+	REQUIRE(getAllStmtUsesRelationship == expectedResultAllUsesStmt);
 }
 
 TEST_CASE("modify Relationship Storage Test") {
@@ -331,33 +353,33 @@ TEST_CASE("modify Relationship Storage Test") {
 	std::unordered_set<std::string> expectedResult2({ variable_value_one, variable_value_two });
 	std::unordered_set<std::string> expectedResult3({});
 
-	std::unordered_set<std::string> getModifyRelationshipByStmt1 = modifyRelationshipStorage->getRelationshipByFirst(RelationshipType::MODIFIES, stmtTokenObject1, TokenType::VARIABLE);
-	std::unordered_set<std::string> getModifyRelationshipByStmt2 = modifyRelationshipStorage->getRelationshipByFirst(RelationshipType::MODIFIES, stmtTokenObject2, TokenType::VARIABLE);
-	std::unordered_set<std::string> getModifyRelationshipByStmt3 = modifyRelationshipStorage->getRelationshipByFirst(RelationshipType::MODIFIES, stmtTokenObject3, TokenType::VARIABLE);
-	std::unordered_set<std::string> getModifyRelationshipByStmt4 = modifyRelationshipStorage->getRelationshipByFirst(RelationshipType::MODIFIES, stmtTokenObject4, TokenType::VARIABLE);
-	std::unordered_set<std::string> getModifyRelationshipByStmt5 = modifyRelationshipStorage->getRelationshipByFirst(RelationshipType::MODIFIES, stmtTokenObject5, TokenType::VARIABLE);
-	std::unordered_set<std::string> getModifyRelationshipByStmt6 = modifyRelationshipStorage->getRelationshipByFirst(RelationshipType::MODIFIES, stmtTokenObject6, TokenType::VARIABLE);
-	std::unordered_set<std::string> getModifyRelationshipByStmt7 = modifyRelationshipStorage->getRelationshipByFirst(RelationshipType::MODIFIES, stmtTokenObject7, TokenType::VARIABLE);
-	std::unordered_set<std::string> getModifyRelationshipByStmt8 = modifyRelationshipStorage->getRelationshipByFirst(RelationshipType::MODIFIES, stmtTokenObject8, TokenType::VARIABLE);
-	std::unordered_set<std::string> getModifyRelationshipByStmt9 = modifyRelationshipStorage->getRelationshipByFirst(RelationshipType::MODIFIES, stmtTokenObject9, TokenType::VARIABLE);
-	std::unordered_set<std::string> getModifyRelationshipByStmt10 = modifyRelationshipStorage->getRelationshipByFirst(RelationshipType::MODIFIES, stmtTokenObject10, TokenType::VARIABLE);
-	std::unordered_set<std::string> getModifyRelationshipByStmt11 = modifyRelationshipStorage->getRelationshipByFirst(RelationshipType::MODIFIES, stmtTokenObject11, TokenType::VARIABLE);
-	std::unordered_set<std::string> getModifyRelationshipByStmt12 = modifyRelationshipStorage->getRelationshipByFirst(RelationshipType::MODIFIES, stmtTokenObject12, TokenType::VARIABLE);
-	std::unordered_set<std::string> getModifyRelationshipByStmt13 = modifyRelationshipStorage->getRelationshipByFirst(RelationshipType::MODIFIES, stmtTokenObject13, TokenType::VARIABLE);
-	std::unordered_set<std::string> getModifyRelationshipByStmt14 = modifyRelationshipStorage->getRelationshipByFirst(RelationshipType::MODIFIES, stmtTokenObject14, TokenType::VARIABLE);
-	std::unordered_set<std::string> getModifyRelationshipByStmt15 = modifyRelationshipStorage->getRelationshipByFirst(RelationshipType::MODIFIES, stmtTokenObject15, TokenType::VARIABLE);
-	std::unordered_set<std::string> getModifyRelationshipByStmt16 = modifyRelationshipStorage->getRelationshipByFirst(RelationshipType::MODIFIES, stmtTokenObject16, TokenType::VARIABLE);
-	std::unordered_set<std::string> getModifyRelationshipByStmt17 = modifyRelationshipStorage->getRelationshipByFirst(RelationshipType::MODIFIES, stmtTokenObject17, TokenType::VARIABLE);
-	std::unordered_set<std::string> getModifyRelationshipByStmt18 = modifyRelationshipStorage->getRelationshipByFirst(RelationshipType::MODIFIES, stmtTokenObject18, TokenType::VARIABLE);
-	std::unordered_set<std::string> getModifyRelationshipByProcOne = modifyRelationshipStorage->getRelationshipByFirst(RelationshipType::MODIFIES, procedureTokenObject, TokenType::VARIABLE);
-	std::unordered_set<std::string> getModifyRelationshipByProcTwo = modifyRelationshipStorage->getRelationshipByFirst(RelationshipType::MODIFIES, procedureTokenObjectTwo, TokenType::VARIABLE);
-	std::unordered_set<std::string> getModifyRelationshipByProcThree = modifyRelationshipStorage->getRelationshipByFirst(RelationshipType::MODIFIES, procedureTokenObjectThree, TokenType::VARIABLE);
+	std::unordered_set<std::string> getModifyRelationshipByStmt1 = modifyRelationshipStorage->getRelationshipByFirst(RelationshipType::MODIFIES, stmtTokenObject1, DesignEntity::VARIABLE);
+	std::unordered_set<std::string> getModifyRelationshipByStmt2 = modifyRelationshipStorage->getRelationshipByFirst(RelationshipType::MODIFIES, stmtTokenObject2, DesignEntity::VARIABLE);
+	std::unordered_set<std::string> getModifyRelationshipByStmt3 = modifyRelationshipStorage->getRelationshipByFirst(RelationshipType::MODIFIES, stmtTokenObject3, DesignEntity::VARIABLE);
+	std::unordered_set<std::string> getModifyRelationshipByStmt4 = modifyRelationshipStorage->getRelationshipByFirst(RelationshipType::MODIFIES, stmtTokenObject4, DesignEntity::VARIABLE);
+	std::unordered_set<std::string> getModifyRelationshipByStmt5 = modifyRelationshipStorage->getRelationshipByFirst(RelationshipType::MODIFIES, stmtTokenObject5, DesignEntity::VARIABLE);
+	std::unordered_set<std::string> getModifyRelationshipByStmt6 = modifyRelationshipStorage->getRelationshipByFirst(RelationshipType::MODIFIES, stmtTokenObject6, DesignEntity::VARIABLE);
+	std::unordered_set<std::string> getModifyRelationshipByStmt7 = modifyRelationshipStorage->getRelationshipByFirst(RelationshipType::MODIFIES, stmtTokenObject7, DesignEntity::VARIABLE);
+	std::unordered_set<std::string> getModifyRelationshipByStmt8 = modifyRelationshipStorage->getRelationshipByFirst(RelationshipType::MODIFIES, stmtTokenObject8, DesignEntity::VARIABLE);
+	std::unordered_set<std::string> getModifyRelationshipByStmt9 = modifyRelationshipStorage->getRelationshipByFirst(RelationshipType::MODIFIES, stmtTokenObject9, DesignEntity::VARIABLE);
+	std::unordered_set<std::string> getModifyRelationshipByStmt10 = modifyRelationshipStorage->getRelationshipByFirst(RelationshipType::MODIFIES, stmtTokenObject10, DesignEntity::VARIABLE);
+	std::unordered_set<std::string> getModifyRelationshipByStmt11 = modifyRelationshipStorage->getRelationshipByFirst(RelationshipType::MODIFIES, stmtTokenObject11, DesignEntity::VARIABLE);
+	std::unordered_set<std::string> getModifyRelationshipByStmt12 = modifyRelationshipStorage->getRelationshipByFirst(RelationshipType::MODIFIES, stmtTokenObject12, DesignEntity::VARIABLE);
+	std::unordered_set<std::string> getModifyRelationshipByStmt13 = modifyRelationshipStorage->getRelationshipByFirst(RelationshipType::MODIFIES, stmtTokenObject13, DesignEntity::VARIABLE);
+	std::unordered_set<std::string> getModifyRelationshipByStmt14 = modifyRelationshipStorage->getRelationshipByFirst(RelationshipType::MODIFIES, stmtTokenObject14, DesignEntity::VARIABLE);
+	std::unordered_set<std::string> getModifyRelationshipByStmt15 = modifyRelationshipStorage->getRelationshipByFirst(RelationshipType::MODIFIES, stmtTokenObject15, DesignEntity::VARIABLE);
+	std::unordered_set<std::string> getModifyRelationshipByStmt16 = modifyRelationshipStorage->getRelationshipByFirst(RelationshipType::MODIFIES, stmtTokenObject16, DesignEntity::VARIABLE);
+	std::unordered_set<std::string> getModifyRelationshipByStmt17 = modifyRelationshipStorage->getRelationshipByFirst(RelationshipType::MODIFIES, stmtTokenObject17, DesignEntity::VARIABLE);
+	std::unordered_set<std::string> getModifyRelationshipByStmt18 = modifyRelationshipStorage->getRelationshipByFirst(RelationshipType::MODIFIES, stmtTokenObject18, DesignEntity::VARIABLE);
+	std::unordered_set<std::string> getModifyRelationshipByProcOne = modifyRelationshipStorage->getRelationshipByFirst(RelationshipType::MODIFIES, procedureTokenObject, DesignEntity::VARIABLE);
+	std::unordered_set<std::string> getModifyRelationshipByProcTwo = modifyRelationshipStorage->getRelationshipByFirst(RelationshipType::MODIFIES, procedureTokenObjectTwo, DesignEntity::VARIABLE);
+	std::unordered_set<std::string> getModifyRelationshipByProcThree = modifyRelationshipStorage->getRelationshipByFirst(RelationshipType::MODIFIES, procedureTokenObjectThree, DesignEntity::VARIABLE);
 
-	REQUIRE(modifyRelationshipStorage->getRelationshipByFirst(RelationshipType::USES, stmtTokenObject1, TokenType::VARIABLE) == expectedResult3);
-	REQUIRE(modifyRelationshipStorage->getRelationshipByFirst(RelationshipType::FOLLOWS, stmtTokenObject1, TokenType::VARIABLE) == expectedResult3);
-	REQUIRE(modifyRelationshipStorage->getRelationshipByFirst(RelationshipType::FOLLOWS_T, stmtTokenObject1, TokenType::VARIABLE) == expectedResult3);
-	REQUIRE(modifyRelationshipStorage->getRelationshipByFirst(RelationshipType::PARENT, stmtTokenObject1, TokenType::VARIABLE) == expectedResult3);
-	REQUIRE(modifyRelationshipStorage->getRelationshipByFirst(RelationshipType::PARENT_T, stmtTokenObject1, TokenType::VARIABLE) == expectedResult3);
+	REQUIRE(modifyRelationshipStorage->getRelationshipByFirst(RelationshipType::USES, stmtTokenObject1, DesignEntity::VARIABLE) == expectedResult3);
+	REQUIRE(modifyRelationshipStorage->getRelationshipByFirst(RelationshipType::FOLLOWS, stmtTokenObject1, DesignEntity::VARIABLE) == expectedResult3);
+	REQUIRE(modifyRelationshipStorage->getRelationshipByFirst(RelationshipType::FOLLOWS_T, stmtTokenObject1, DesignEntity::VARIABLE) == expectedResult3);
+	REQUIRE(modifyRelationshipStorage->getRelationshipByFirst(RelationshipType::PARENT, stmtTokenObject1, DesignEntity::VARIABLE) == expectedResult3);
+	REQUIRE(modifyRelationshipStorage->getRelationshipByFirst(RelationshipType::PARENT_T, stmtTokenObject1, DesignEntity::VARIABLE) == expectedResult3);
 
 	REQUIRE(getModifyRelationshipByStmt1 == expectedResult1);
 	REQUIRE(getModifyRelationshipByStmt2 == expectedResult3);
@@ -381,21 +403,24 @@ TEST_CASE("modify Relationship Storage Test") {
 	REQUIRE(getModifyRelationshipByProcTwo == expectedResult2);
 	REQUIRE(getModifyRelationshipByProcThree == expectedResult3);
 
-	std::unordered_set<std::string> getModifyAssignRelationshipByVarOne = modifyRelationshipStorage->getRelationshipBySecond(RelationshipType::MODIFIES, TokenType::ASSIGN, variableTokenObject);
-	std::unordered_set<std::string> getModifyAssignRelationshipByVarTwo = modifyRelationshipStorage->getRelationshipBySecond(RelationshipType::MODIFIES, TokenType::ASSIGN, variableTokenObjectTwo);
-	std::unordered_set<std::string> getModifyAssignRelationshipByVarThree = modifyRelationshipStorage->getRelationshipBySecond(RelationshipType::MODIFIES, TokenType::ASSIGN, variableTokenObjectThree);
-	std::unordered_set<std::string> getModifyProcRelationshipByVarOne = modifyRelationshipStorage->getRelationshipBySecond(RelationshipType::MODIFIES, TokenType::PROCEDURE, variableTokenObject);
-	std::unordered_set<std::string> getModifyProcRelationshipByVarTwo = modifyRelationshipStorage->getRelationshipBySecond(RelationshipType::MODIFIES, TokenType::PROCEDURE, variableTokenObjectTwo);
-	std::unordered_set<std::string> getModifyProcRelationshipByVarThree = modifyRelationshipStorage->getRelationshipBySecond(RelationshipType::MODIFIES, TokenType::PROCEDURE, variableTokenObjectThree);
-	std::unordered_set<std::string> getModifyReadRelationshipByVarOne = modifyRelationshipStorage->getRelationshipBySecond(RelationshipType::MODIFIES, TokenType::READ, variableTokenObject);
-	std::unordered_set<std::string> getModifyReadRelationshipByVarTwo = modifyRelationshipStorage->getRelationshipBySecond(RelationshipType::MODIFIES, TokenType::READ, variableTokenObjectTwo);
-	std::unordered_set<std::string> getModifyReadRelationshipByVarThree = modifyRelationshipStorage->getRelationshipBySecond(RelationshipType::MODIFIES, TokenType::READ, variableTokenObjectThree);
-	std::unordered_set<std::string> getModifyWhileRelationshipByVarOne = modifyRelationshipStorage->getRelationshipBySecond(RelationshipType::MODIFIES, TokenType::WHILE, variableTokenObject);
-	std::unordered_set<std::string> getModifyWhileRelationshipByVarTwo = modifyRelationshipStorage->getRelationshipBySecond(RelationshipType::MODIFIES, TokenType::WHILE, variableTokenObjectTwo);
-	std::unordered_set<std::string> getModifyWhileRelationshipByVarThree = modifyRelationshipStorage->getRelationshipBySecond(RelationshipType::MODIFIES, TokenType::WHILE, variableTokenObjectThree);
-	std::unordered_set<std::string> getModifyIfRelationshipByVarOne = modifyRelationshipStorage->getRelationshipBySecond(RelationshipType::MODIFIES, TokenType::IF, variableTokenObject);
-	std::unordered_set<std::string> getModifyIfRelationshipByVarTwo = modifyRelationshipStorage->getRelationshipBySecond(RelationshipType::MODIFIES, TokenType::IF, variableTokenObjectTwo);
-	std::unordered_set<std::string> getModifyIfRelationshipByVarThree = modifyRelationshipStorage->getRelationshipBySecond(RelationshipType::MODIFIES, TokenType::IF, variableTokenObjectThree);
+	std::unordered_set<std::string> getModifyAssignRelationshipByVarOne = modifyRelationshipStorage->getRelationshipBySecond(RelationshipType::MODIFIES, DesignEntity::ASSIGN, variableTokenObject);
+	std::unordered_set<std::string> getModifyAssignRelationshipByVarTwo = modifyRelationshipStorage->getRelationshipBySecond(RelationshipType::MODIFIES, DesignEntity::ASSIGN, variableTokenObjectTwo);
+	std::unordered_set<std::string> getModifyAssignRelationshipByVarThree = modifyRelationshipStorage->getRelationshipBySecond(RelationshipType::MODIFIES, DesignEntity::ASSIGN, variableTokenObjectThree);
+	std::unordered_set<std::string> getModifyProcRelationshipByVarOne = modifyRelationshipStorage->getRelationshipBySecond(RelationshipType::MODIFIES, DesignEntity::PROCEDURE, variableTokenObject);
+	std::unordered_set<std::string> getModifyProcRelationshipByVarTwo = modifyRelationshipStorage->getRelationshipBySecond(RelationshipType::MODIFIES, DesignEntity::PROCEDURE, variableTokenObjectTwo);
+	std::unordered_set<std::string> getModifyProcRelationshipByVarThree = modifyRelationshipStorage->getRelationshipBySecond(RelationshipType::MODIFIES, DesignEntity::PROCEDURE, variableTokenObjectThree);
+	std::unordered_set<std::string> getModifyReadRelationshipByVarOne = modifyRelationshipStorage->getRelationshipBySecond(RelationshipType::MODIFIES, DesignEntity::READ, variableTokenObject);
+	std::unordered_set<std::string> getModifyReadRelationshipByVarTwo = modifyRelationshipStorage->getRelationshipBySecond(RelationshipType::MODIFIES, DesignEntity::READ, variableTokenObjectTwo);
+	std::unordered_set<std::string> getModifyReadRelationshipByVarThree = modifyRelationshipStorage->getRelationshipBySecond(RelationshipType::MODIFIES, DesignEntity::READ, variableTokenObjectThree);
+	std::unordered_set<std::string> getModifyWhileRelationshipByVarOne = modifyRelationshipStorage->getRelationshipBySecond(RelationshipType::MODIFIES, DesignEntity::WHILE, variableTokenObject);
+	std::unordered_set<std::string> getModifyWhileRelationshipByVarTwo = modifyRelationshipStorage->getRelationshipBySecond(RelationshipType::MODIFIES, DesignEntity::WHILE, variableTokenObjectTwo);
+	std::unordered_set<std::string> getModifyWhileRelationshipByVarThree = modifyRelationshipStorage->getRelationshipBySecond(RelationshipType::MODIFIES, DesignEntity::WHILE, variableTokenObjectThree);
+	std::unordered_set<std::string> getModifyIfRelationshipByVarOne = modifyRelationshipStorage->getRelationshipBySecond(RelationshipType::MODIFIES, DesignEntity::IF, variableTokenObject);
+	std::unordered_set<std::string> getModifyIfRelationshipByVarTwo = modifyRelationshipStorage->getRelationshipBySecond(RelationshipType::MODIFIES, DesignEntity::IF, variableTokenObjectTwo);
+	std::unordered_set<std::string> getModifyIfRelationshipByVarThree = modifyRelationshipStorage->getRelationshipBySecond(RelationshipType::MODIFIES, DesignEntity::IF, variableTokenObjectThree);
+	std::unordered_set<std::string> getModifyStmtRelationshipByVarOne = modifyRelationshipStorage->getRelationshipBySecond(RelationshipType::MODIFIES, DesignEntity::STMT, variableTokenObject);
+	std::unordered_set<std::string> getModifyStmtRelationshipByVarTwo = modifyRelationshipStorage->getRelationshipBySecond(RelationshipType::MODIFIES, DesignEntity::STMT, variableTokenObjectTwo);
+	std::unordered_set<std::string> getModifyStmtRelationshipByVarThree = modifyRelationshipStorage->getRelationshipBySecond(RelationshipType::MODIFIES, DesignEntity::STMT, variableTokenObjectThree);
 
 	std::unordered_set<std::string> expectedResultAssignByVarOne({ assign_value_one, assign_value_two });
 	std::unordered_set<std::string> expectedResultAssignByVarTwo({ assign_value_two });
@@ -412,12 +437,15 @@ TEST_CASE("modify Relationship Storage Test") {
 	std::unordered_set<std::string> expectedResultIfByVarOne({ if_value_one, if_value_two });
 	std::unordered_set<std::string> expectedResultIfByVarTwo({ if_value_two });
 	std::unordered_set<std::string> expectedResultIfByVarThree({ if_value_one });
+	std::unordered_set<std::string> expectedResultStmtByVarOne({ assign_value_one, assign_value_two, read_value_one, read_value_two, while_value_one, while_value_two, if_value_one, if_value_two });
+	std::unordered_set<std::string> expectedResultStmtByVarTwo({ assign_value_two, read_value_two, while_value_two, if_value_two });
+	std::unordered_set<std::string> expectedResultStmtByVarThree({ assign_value_one, read_value_one, while_value_one, if_value_one });
 
-	REQUIRE(modifyRelationshipStorage->getRelationshipBySecond(RelationshipType::USES, TokenType::ASSIGN, variableTokenObject) == expectedResult3);
-	REQUIRE(modifyRelationshipStorage->getRelationshipBySecond(RelationshipType::FOLLOWS, TokenType::ASSIGN, variableTokenObject) == expectedResult3);
-	REQUIRE(modifyRelationshipStorage->getRelationshipBySecond(RelationshipType::FOLLOWS_T, TokenType::ASSIGN, variableTokenObject) == expectedResult3);
-	REQUIRE(modifyRelationshipStorage->getRelationshipBySecond(RelationshipType::PARENT, TokenType::ASSIGN, variableTokenObject) == expectedResult3);
-	REQUIRE(modifyRelationshipStorage->getRelationshipBySecond(RelationshipType::PARENT_T, TokenType::ASSIGN, variableTokenObject) == expectedResult3);
+	REQUIRE(modifyRelationshipStorage->getRelationshipBySecond(RelationshipType::USES, DesignEntity::ASSIGN, variableTokenObject) == expectedResult3);
+	REQUIRE(modifyRelationshipStorage->getRelationshipBySecond(RelationshipType::FOLLOWS, DesignEntity::ASSIGN, variableTokenObject) == expectedResult3);
+	REQUIRE(modifyRelationshipStorage->getRelationshipBySecond(RelationshipType::FOLLOWS_T, DesignEntity::ASSIGN, variableTokenObject) == expectedResult3);
+	REQUIRE(modifyRelationshipStorage->getRelationshipBySecond(RelationshipType::PARENT, DesignEntity::ASSIGN, variableTokenObject) == expectedResult3);
+	REQUIRE(modifyRelationshipStorage->getRelationshipBySecond(RelationshipType::PARENT_T, DesignEntity::ASSIGN, variableTokenObject) == expectedResult3);
 
 	REQUIRE(getModifyAssignRelationshipByVarOne == expectedResultAssignByVarOne);
 	REQUIRE(getModifyAssignRelationshipByVarTwo == expectedResultAssignByVarTwo);
@@ -434,28 +462,44 @@ TEST_CASE("modify Relationship Storage Test") {
 	REQUIRE(getModifyIfRelationshipByVarOne == expectedResultIfByVarOne);
 	REQUIRE(getModifyIfRelationshipByVarTwo == expectedResultIfByVarTwo);
 	REQUIRE(getModifyIfRelationshipByVarThree == expectedResultIfByVarThree);
+	REQUIRE(getModifyStmtRelationshipByVarOne == expectedResultStmtByVarOne);
+	REQUIRE(getModifyStmtRelationshipByVarTwo == expectedResultStmtByVarTwo);
+	REQUIRE(getModifyStmtRelationshipByVarThree == expectedResultStmtByVarThree);
 
-	std::unordered_set<std::string> getAllAssignmodifyRelationship = modifyRelationshipStorage->getAllRelationship(RelationshipType::MODIFIES, TokenType::ASSIGN);
-	std::unordered_set<std::string> getAllProcmodifyRelationship = modifyRelationshipStorage->getAllRelationship(RelationshipType::MODIFIES, TokenType::PROCEDURE);
-	std::unordered_set<std::string> getAllReadmodifyRelationship = modifyRelationshipStorage->getAllRelationship(RelationshipType::MODIFIES, TokenType::READ);
-	std::unordered_set<std::string> getAllWhilemodifyRelationship = modifyRelationshipStorage->getAllRelationship(RelationshipType::MODIFIES, TokenType::WHILE);
-	std::unordered_set<std::string> getAllIfmodifyRelationship = modifyRelationshipStorage->getAllRelationship(RelationshipType::MODIFIES, TokenType::IF);
+	std::unordered_map<std::string, std::unordered_set<std::string>> getAllAssignModifyRelationship = modifyRelationshipStorage->getAllRelationship(RelationshipType::MODIFIES, DesignEntity::ASSIGN, DesignEntity::VARIABLE);
+	std::unordered_map<std::string, std::unordered_set<std::string>> getAllProcModifyRelationship = modifyRelationshipStorage->getAllRelationship(RelationshipType::MODIFIES, DesignEntity::PROCEDURE, DesignEntity::VARIABLE);
+	std::unordered_map<std::string, std::unordered_set<std::string>> getAllReadModifyRelationship = modifyRelationshipStorage->getAllRelationship(RelationshipType::MODIFIES, DesignEntity::READ, DesignEntity::VARIABLE);
+	std::unordered_map<std::string, std::unordered_set<std::string>> getAllWhileModifyRelationship = modifyRelationshipStorage->getAllRelationship(RelationshipType::MODIFIES, DesignEntity::WHILE, DesignEntity::VARIABLE);
+	std::unordered_map<std::string, std::unordered_set<std::string>> getAllIfModifyRelationship = modifyRelationshipStorage->getAllRelationship(RelationshipType::MODIFIES, DesignEntity::IF, DesignEntity::VARIABLE);
+	std::unordered_map<std::string, std::unordered_set<std::string>> getAllStmtModifyRelationship = modifyRelationshipStorage->getAllRelationship(RelationshipType::MODIFIES, DesignEntity::STMT, DesignEntity::VARIABLE);
 
-	std::unordered_set<std::string> expectedResultAllModifyAssign({ assign_value_one, assign_value_two });
-	std::unordered_set<std::string> expectedResultAllModifyProc({ procedure_value_one, procedure_value_two });
-	std::unordered_set<std::string> expectedResultAllModifyRead({ read_value_one, read_value_two });
-	std::unordered_set<std::string> expectedResultAllModifyWhile({ while_value_one, while_value_two });
-	std::unordered_set<std::string> expectedResultAllModifyIf({ if_value_one, if_value_two });
+	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultAllModifyNone({});
+	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultAllModifyAssign{ { assign_value_one, std::unordered_set<std::string>({variable_value_one, variable_value_three}) },
+																									{ assign_value_two, std::unordered_set<std::string>({variable_value_one, variable_value_two})} };
+	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultAllModifyProc{ { procedure_value_one, std::unordered_set<std::string>({variable_value_one, variable_value_three}) },
+																									{ procedure_value_two, std::unordered_set<std::string>({variable_value_one, variable_value_two}) } };
+	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultAllModifyRead{ { read_value_one, std::unordered_set<std::string>({variable_value_one, variable_value_three}) },
+																									{ read_value_two, std::unordered_set<std::string>({variable_value_one, variable_value_two}) } };
+	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultAllModifyWhile{ { while_value_one, std::unordered_set<std::string>({variable_value_one, variable_value_three}) },
+																									{ while_value_two, std::unordered_set<std::string>({variable_value_one, variable_value_two}) } };
+	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultAllModifyIf{ { if_value_one, std::unordered_set<std::string>({variable_value_one, variable_value_three}) },
+																									{ if_value_two, std::unordered_set<std::string>({variable_value_one, variable_value_two}) } };
+	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultAllModifyStmt;
+	expectedResultAllModifyStmt.insert(expectedResultAllModifyAssign.begin(), expectedResultAllModifyAssign.end());
+	expectedResultAllModifyStmt.insert(expectedResultAllModifyRead.begin(), expectedResultAllModifyRead.end());
+	expectedResultAllModifyStmt.insert(expectedResultAllModifyWhile.begin(), expectedResultAllModifyWhile.end());
+	expectedResultAllModifyStmt.insert(expectedResultAllModifyIf.begin(), expectedResultAllModifyIf.end());
 
-	REQUIRE(modifyRelationshipStorage->getAllRelationship(RelationshipType::USES, TokenType::ASSIGN) == expectedResult3);
-	REQUIRE(modifyRelationshipStorage->getAllRelationship(RelationshipType::FOLLOWS, TokenType::ASSIGN) == expectedResult3);
-	REQUIRE(modifyRelationshipStorage->getAllRelationship(RelationshipType::FOLLOWS_T, TokenType::ASSIGN) == expectedResult3);
-	REQUIRE(modifyRelationshipStorage->getAllRelationship(RelationshipType::PARENT, TokenType::ASSIGN) == expectedResult3);
-	REQUIRE(modifyRelationshipStorage->getAllRelationship(RelationshipType::PARENT_T, TokenType::ASSIGN) == expectedResult3);
+	REQUIRE(modifyRelationshipStorage->getAllRelationship(RelationshipType::USES, DesignEntity::ASSIGN, DesignEntity::VARIABLE) == expectedResultAllModifyNone);
+	REQUIRE(modifyRelationshipStorage->getAllRelationship(RelationshipType::FOLLOWS, DesignEntity::ASSIGN, DesignEntity::VARIABLE) == expectedResultAllModifyNone);
+	REQUIRE(modifyRelationshipStorage->getAllRelationship(RelationshipType::FOLLOWS_T, DesignEntity::ASSIGN, DesignEntity::VARIABLE) == expectedResultAllModifyNone);
+	REQUIRE(modifyRelationshipStorage->getAllRelationship(RelationshipType::PARENT, DesignEntity::ASSIGN, DesignEntity::VARIABLE) == expectedResultAllModifyNone);
+	REQUIRE(modifyRelationshipStorage->getAllRelationship(RelationshipType::PARENT_T, DesignEntity::ASSIGN, DesignEntity::VARIABLE) == expectedResultAllModifyNone);
 
-	REQUIRE(getAllAssignmodifyRelationship == expectedResultAllModifyAssign);
-	REQUIRE(getAllProcmodifyRelationship == expectedResultAllModifyProc);
-	REQUIRE(getAllReadmodifyRelationship == expectedResultAllModifyRead);
-	REQUIRE(getAllWhilemodifyRelationship == expectedResultAllModifyWhile);
-	REQUIRE(getAllIfmodifyRelationship == expectedResultAllModifyIf);
+	REQUIRE(getAllAssignModifyRelationship == expectedResultAllModifyAssign);
+	REQUIRE(getAllProcModifyRelationship == expectedResultAllModifyProc);
+	REQUIRE(getAllReadModifyRelationship == expectedResultAllModifyRead);
+	REQUIRE(getAllWhileModifyRelationship == expectedResultAllModifyWhile);
+	REQUIRE(getAllIfModifyRelationship == expectedResultAllModifyIf);
+	REQUIRE(getAllStmtModifyRelationship == expectedResultAllModifyStmt);
 }

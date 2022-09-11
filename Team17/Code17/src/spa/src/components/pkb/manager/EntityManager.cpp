@@ -57,7 +57,7 @@ bool EntityManager::storeEntity(Entity* entity) {
 	return ret;
 }
 
-std::unordered_set<std::string> EntityManager::getAllEntity(qps::TokenType returnType) {
+std::unordered_set<std::string> EntityManager::getAllEntity(DesignEntity returnType) {
 	std::unordered_set<std::string> temp;
 	std::unordered_set<std::string> ret;
 

@@ -13,8 +13,8 @@ bool ProcedureEntityStorage::storeEntity(Entity* entity) {
 	return false;
 }
 
-std::unordered_set<std::string> ProcedureEntityStorage::getAllEntity(qps::TokenType returnType) {
-	if (returnType == qps::TokenType::PROCEDURE) {
+std::unordered_set<std::string> ProcedureEntityStorage::getAllEntity(DesignEntity returnType) {
+	if (returnType == DesignEntity::PROCEDURE) {
 		return set;
 	}
 	return std::unordered_set<std::string>();
