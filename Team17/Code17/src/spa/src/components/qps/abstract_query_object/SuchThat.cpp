@@ -1,15 +1,10 @@
 #include "SuchThat.h"
 #include <vector>
 
-SuchThat::SuchThat() {
-    this->relationship = TokenType{};
-}
+SuchThat::SuchThat() {}
 
 
-SuchThat::SuchThat(TokenType relationship, TokenObject left, TokenObject right) {
-    this->relationship = relationship;
-    this->left = left;
-    this->right = right;
+SuchThat::SuchThat(TokenType relationship, TokenObject left, TokenObject right) : relationship(relationship), left(left), right(right) {
 }
 
 // to be amended

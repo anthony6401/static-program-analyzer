@@ -132,6 +132,31 @@ TEST_CASE("SyntaxError - Select clause ends in semi-colon") {
     REQUIRE(expectedResult == actualResult);
 };
 
+TEST_CASE("SyntaxError - Such that clause ends in semi-colon") {
+    std::vector<TokenObject> testTokenObject{
+        TokenObject(TokenType::VARIABLE, std::string("variable")),
+        TokenObject(TokenType::NAME, std::string("v")),
+        TokenObject(TokenType::SEMI_COLON, std::string(";")),
+        TokenObject(TokenType::SELECT, std::string("Select")),
+        TokenObject(TokenType::NAME, std::string("v")),
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::THAT, "that"),
+        TokenObject(TokenType::USES, "Uses"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::INTEGER, "6"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME, "v"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::SEMI_COLON, std::string(";"))
+    };
+
+    QueryObject expectedResult = QueryObject();
+
+    Parser parser = Parser(testTokenObject);
+    QueryObject actualResult = parser.parse();
+    REQUIRE(expectedResult == actualResult);
+};
+
 TEST_CASE("SyntaxError - No Select token") {
     std::vector<TokenObject> testTokenObject{
         TokenObject(TokenType::VARIABLE, std::string("variable")),
