@@ -1,0 +1,8 @@
+//
+// Created by ANDREA TAN on 11/9/22.
+//
+
+#ifndef SPA_FOLLOWSCLAUSE_H
+#define SPA_FOLLOWSCLAUSE_H
+
+#endif //SPA_FOLLOWSCLAUSE_H
