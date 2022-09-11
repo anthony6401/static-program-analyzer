@@ -132,7 +132,6 @@ bool ParentRelationshipStorage::storeRelationship(Relationship* rel) {
 			bool resultTwo = Utils::insertEntity(this->ifToStmtBackwardMap, rightValue, leftValue);
 			result = result || resultOne || resultTwo;
 		}
-		//std::cout << "----------------------------------------------"  << std::endl;
 		return result;
 	}
 	return false;
@@ -211,16 +210,10 @@ std::unordered_set<std::string> ParentRelationshipStorage::getRelationshipBySeco
 			storage = this->ifToStmtBackwardMap;
 		}
 
-		/*for (auto const& pair : storage) {
-			std::cout << "LOL" << std::endl;
-			std::cout << pair.first << "}\n";
-		}*/
 
 		std::string findValue = secondArgument.getValue();
 
-
 		if (storage.find(findValue) == storage.end()) {
-			std::cout << "empty" << std::endl;
 			return std::unordered_set<std::string>();
 		}
 
