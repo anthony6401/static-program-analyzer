@@ -4,13 +4,11 @@
 #include <map>
 #include <initializer_list>
 
-RawResult::RawResult() : resultsList({}), isFalseResult(false), isBooleanResult(false), isEmptyResult(false), synonymsList({}) {}
+RawResult::RawResult() : resultsList({}), isFalseResult(false), isBooleanResult(false), isSingleConstraints(false), synonymsList({}) {}
 
 RawResult::RawResult(const std::string& synonym, const std::unordered_set<std::string>& results) {
-    if (results.empty()) {
-        setIsEmptyResult();
-    }
     synonymsList.emplace_back(synonym);
+    setIsSingleConstraints();
     for (auto singleResult : results) {
         // {{x}, {y}, {z}}
         resultsList.emplace_back(std::initializer_list<std::string>{singleResult});
@@ -19,10 +17,6 @@ RawResult::RawResult(const std::string& synonym, const std::unordered_set<std::s
 
 RawResult::RawResult(std::string leftSynonym, std::string rightSynonym,
                      std::vector<std::pair<std::string, std::string>> results) {
-    if (results.empty()) {
-        setIsEmptyResult();
-    }
-
     synonymsList.emplace_back(leftSynonym);
     synonymsList.emplace_back(rightSynonym);
     for (auto result : results) {
@@ -35,16 +29,12 @@ bool RawResult::getIsFalseResult() {
     return isFalseResult;
 }
 
-bool RawResult::getIsEmptyResult() {
-    return isEmptyResult;
+bool RawResult::isEmptyResult() {
+    return resultsList.empty();
 }
 
 void RawResult::setIsFalseResult() {
     isFalseResult = true;
-}
-
-void RawResult::setIsEmptyResult() {
-    isEmptyResult = true;
 }
 
 int RawResult::getSynonymCount() {
@@ -57,6 +47,22 @@ bool RawResult::getIsBooleanResult() {
 
 void RawResult::setIsBooleanResult() {
     isBooleanResult = true;
+}
+
+bool RawResult::getIsSynonymResult() {
+    return isSynonymResult;
+}
+
+void RawResult::setIsSynonymResult() {
+    isSynonymResult = true;
+}
+
+bool RawResult::getIsSingleConstraints() {
+    return isSingleConstraints;
+}
+
+void RawResult::setIsSingleConstraints() {
+    isSingleConstraints = true;
 }
 
 

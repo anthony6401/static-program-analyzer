@@ -10,9 +10,10 @@ class RawResult {
 private:
     //  Query results returns false
     bool isFalseResult = false;
+    // No synonym queries
     bool isBooleanResult = false;
-    // Query results is empty
-    bool isEmptyResult = false;
+    bool isSynonymResult = false;
+    bool isSingleConstraints = false;
 
 public:
     std::vector<std::string> synonymsList;
@@ -22,13 +23,16 @@ public:
     RawResult(const std::string &synonym, const std::unordered_set<std::string> &results);
     RawResult(std::string leftSynonym, std::string rightSynonym,
               std::vector<std::pair<std::string, std::string>> results);
+    bool getIsSynonymResult();
+    void setIsSynonymResult();
     bool getIsFalseResult();
     void setIsFalseResult();
-    bool getIsEmptyResult();
-    void setIsEmptyResult();
+    bool isEmptyResult();
     bool getIsBooleanResult();
     void setIsBooleanResult();
     int getSynonymCount();
+    bool getIsSingleConstraints();
+    void setIsSingleConstraints();
 
 };
 
