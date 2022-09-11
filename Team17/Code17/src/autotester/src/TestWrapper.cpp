@@ -40,7 +40,7 @@ void TestWrapper::parse(std::string filename) {
 		std::istreambuf_iterator<char>());
 	try {
 		simpleTokenizer.tokenizeCode(code);
-	} catch(std::exception e) {
+	} catch(std::invalid_argument e) {
 		std::cout << e.what() << std::endl;
 	}
 

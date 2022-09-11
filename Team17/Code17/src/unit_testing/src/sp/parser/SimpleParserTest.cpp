@@ -63,8 +63,9 @@ TEST_CASE("parse expr") {
     test_tokens.push_back("1");
     test_tokens.push_back(")");
     SimpleToken test_result = SimpleParser::parseExpr(test_tokens);
-    SimpleToken result = SimpleToken(SpTokenType::TEXPR, "",
-        0, NULL);
+
+    SimpleToken result = SimpleToken(SpTokenType::TEXPR, "", 0, NULL);
+
     std::vector<SimpleToken> resultTokens;
     resultTokens.push_back(SimpleToken(SpTokenType::TCONSTANT, "1", 0, NULL));
     resultTokens.push_back(SimpleToken(SpTokenType::TOPR, "+", 0, NULL));
@@ -85,10 +86,10 @@ TEST_CASE("parse assign") {
     test_tokens.push_back(";");
     SimpleToken test = SimpleToken(SpTokenType::TASSIGN, "", 1, SimpleParser::parseAssign);
     SimpleParser::parseAssign(test, test_tokens, NULL);
-    SimpleToken result = SimpleToken(SpTokenType::TASSIGN, "",
-        1, NULL);
+
     std::vector<SimpleToken> children;
     std::vector<SimpleToken> resultTokens;
+    SimpleToken result = SimpleToken(SpTokenType::TASSIGN, "", 1, NULL);
     children.push_back(SimpleToken(SpTokenType::TVARIABLE, "a", 0, NULL));
     SimpleToken expr = SimpleToken(SpTokenType::TEXPR, "", 0, NULL);
     resultTokens.push_back(SimpleToken(SpTokenType::TCONSTANT, "1", 0, NULL));
@@ -97,6 +98,7 @@ TEST_CASE("parse assign") {
     expr.setChildren(resultTokens);
     children.push_back(expr);
     result.setChildren(children);
+
     REQUIRE(equalToken(test, result));
     REQUIRE(equalChildren(test.getChildren(), result.getChildren()));
 }
