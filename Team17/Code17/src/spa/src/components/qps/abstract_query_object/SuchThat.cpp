@@ -1,7 +1,9 @@
 #include "SuchThat.h"
 #include <vector>
 
-SuchThat::SuchThat() {}
+SuchThat::SuchThat() {
+    this->relationship = TokenType{};
+}
 
 
 SuchThat::SuchThat(TokenType relationship, TokenObject left, TokenObject right) {
