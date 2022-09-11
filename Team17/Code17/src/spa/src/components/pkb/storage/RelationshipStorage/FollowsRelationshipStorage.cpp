@@ -351,6 +351,24 @@ bool FollowsRelationshipStorage::storeRelationship(Relationship* rel) {
 	}
 	return false;
 }
+
+bool FollowsRelationshipStorage::getRelationship(RelationshipType relType, TokenObject firstArgument, TokenObject secondArgument) {
+	if (relType == RelationshipType::FOLLOWS) {
+		std::unordered_map<std::string, std::unordered_set<std::string>>* storage{};
+
+		storage = &this->stmtToStmtForwardMap;
+
+		if (storage->find(firstArgument.getValue()) == storage->end()) {
+			return false;
+		}
+
+		std::unordered_set<std::string>* set = &storage->find(firstArgument.getValue())->second;
+
+		return set->find(secondArgument.getValue()) != set->end();
+	}
+	return false;
+}
+
 // Answer Follows(1,a)
 std::unordered_set<std::string> FollowsRelationshipStorage::getRelationshipByFirst(RelationshipType relType, TokenObject firstArgument, DesignEntity returnType) {
 	if (relType == RelationshipType::FOLLOWS) {
