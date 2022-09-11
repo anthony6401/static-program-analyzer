@@ -81,7 +81,7 @@ void SimpleParser::parseProcedure(SimpleToken& procStmt, std::vector<std::string
         procStmt.setChildren(children);
     }
     else {
-        throw std::invalid_argument("Received invalid Print:Line " + procStmt.statementNumber);
+        throw std::invalid_argument("Received invalid Procedure:Line " + procStmt.statementNumber);
     }
 }
 
@@ -127,7 +127,7 @@ void SimpleParser::parseCall(SimpleToken& callStmt, std::vector<std::string>& to
         callStmt.setChildren(children);
     }
     else {
-        throw std::invalid_argument("Received invalid Read:Line " + callStmt.statementNumber);
+        throw std::invalid_argument("Received invalid Call:Line " + callStmt.statementNumber);
     }
 }
 
@@ -143,27 +143,6 @@ void SimpleParser::parseAssign(SimpleToken& assign, std::vector<std::string>& to
     } else {
         throw std::invalid_argument("Received invalid assign:Line " + assign.statementNumber);
     }
-}
-
-void SimpleParser::parseWhile(SimpleToken& whileStmt, std::vector<std::string>& tokens,
-    Extractor* extractor) {
-    if (tokens.size() >= 6 && tokens.at(tokens.size() - 1) == "{") {
-        std::regex condDelimiters = std::regex("(&&)|(\\|\\|)|[()!]");
-        tokens.pop_back();
-        std::string cond = SpUtils::join(tokens);
-        std::vector<std::string> lineTokens = SpUtils::split(cond, condDelimiters);
-        std::vector<SimpleToken> children = parseCondExpr(tokens);
-        children.push_back(parseVariable(tokens.at(0)));
-        whileStmt.setChildren(children);
-    } else {
-        throw std::invalid_argument("Received invalid While:Line " + whileStmt.statementNumber);
-    }
-}
-
-std::vector<SimpleToken> SimpleParser::parseCondExpr(std::vector<std::string> tokens) {
-    std::vector<SimpleToken> children;
-    children.push_back(SimpleToken(SpTokenType::TVARIABLE, "", 0, NULL));
-    return children;
 }
 
 SimpleToken SimpleParser::parseExpr(std::vector<std::string>& tokens) {

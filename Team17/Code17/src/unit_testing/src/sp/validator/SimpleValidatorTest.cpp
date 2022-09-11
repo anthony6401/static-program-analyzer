@@ -32,20 +32,3 @@ TEST_CASE("invalid constant") {
     test_string = "000";
     REQUIRE(!(SimpleValidator::validateConstant(test_string)));
 }
-
-/*
-TEST_CASE("test") {
-    std::vector<std::string> result;
-    std::vector<std::string> test;
-    std::vector<std::string> temp;
-    temp.push_back(" 1 + 2 ");
-    temp.push_back(" (1 * 2) ");
-    result.push_back("1 + 2");
-    result.push_back("(1 * 2)");
-    std::regex whiteSpace = std::regex("^ +| +$|( ) +");
-    for (std::string i : temp) {
-        i = std::regex_replace(i, whiteSpace, "$1");
-        test.push_back(i);
-    }
-    REQUIRE(result==test);
-}*/

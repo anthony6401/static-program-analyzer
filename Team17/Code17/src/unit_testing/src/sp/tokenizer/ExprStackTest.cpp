@@ -7,6 +7,7 @@
 
 #include <catch.hpp>
 
+//Temporary solution. Will clean up in the future
 bool equalChild(std::vector<SimpleToken> test, std::vector<SimpleToken> result) {
     if (test.size() == result.size()) {
         for (int i = 0; i < test.size(); i++) {
@@ -35,5 +36,4 @@ TEST_CASE("FactorState") {
     std::vector<SimpleToken> result;
     result.push_back(SimpleToken(SpTokenType::TOPR, "-", 0, NULL));
     REQUIRE(equalChild(stack.get(),result));
-
 }

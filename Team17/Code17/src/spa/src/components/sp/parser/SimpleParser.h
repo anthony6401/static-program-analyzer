@@ -18,9 +18,6 @@ class SimpleParser {
             Extractor* extractor);
         static void parseAssign(SimpleToken& readStmt, std::vector<std::string>& tokens,
             Extractor* extractor);
-        static void parseWhile(SimpleToken& readStmt, std::vector<std::string>& tokens,
-            Extractor* extractor);
-        static std::vector<SimpleToken> parseCondExpr(std::vector<std::string> tokens);
         static SimpleToken parseExpr(std::vector<std::string>& tokens);
         static SimpleToken parseVariable(std::string& token);
         static SimpleToken parseConstant(std::string& token);

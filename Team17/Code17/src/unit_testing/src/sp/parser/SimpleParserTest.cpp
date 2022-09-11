@@ -2,6 +2,7 @@
 #include <iostream>
 #include <catch.hpp>
 
+//Temporary solution. Will clean up in the future
 bool equalToken(SimpleToken& test, SimpleToken& result) {
     return test.type == result.type && test.statementNumber == result.statementNumber && test.value == result.value;
 }

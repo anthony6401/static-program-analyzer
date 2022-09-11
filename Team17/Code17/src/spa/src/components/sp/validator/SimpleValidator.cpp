@@ -18,13 +18,3 @@ bool SimpleValidator::validateExprOpr(std::string& token) {
     std::regex operand = std::regex("([+-/*%])");
     return std::regex_match(token, operand);
 }
-
-bool SimpleValidator::validateFactorState(std::string& token) {
-    std::regex operand = std::regex("([+-/*%)])");
-    return std::regex_match(token, operand);
-}
-
-bool SimpleValidator::validateOperandState(std::string& token) {
-    std::regex operand = std::regex("(([a-zA-Z][a-zA-Z0-9]*)|(0|[1-9][0-9]*)|[(])");
-    return std::regex_match(token, operand);
-}
