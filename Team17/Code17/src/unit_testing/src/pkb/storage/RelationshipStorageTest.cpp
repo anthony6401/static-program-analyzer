@@ -636,24 +636,24 @@ TEST_CASE("Parent Relationship Storage Test") {
 
 	//Testing for Parent(s,2), Parent(w,2), and Parent(if,2)
 	//Looking for w
-	//std::unordered_set<std::string> whileResult { while_value_one };
+	std::unordered_set<std::string> whileResult { while_value_one };
 	//
-	//REQUIRE(parentRelationshipStorage->getRelationshipBySecond(RelationshipType::PARENT, DesignEntity::WHILE, stmtTokenObject5) == whileResult);
-	//REQUIRE(parentRelationshipStorage->getRelationshipBySecond(RelationshipType::PARENT, DesignEntity::WHILE, stmtTokenObject4) == whileResult);
-	//REQUIRE(parentRelationshipStorage->getRelationshipBySecond(RelationshipType::PARENT, DesignEntity::WHILE, stmtTokenObject1) == whileResult);
-	//REQUIRE(parentRelationshipStorage->getRelationshipBySecond(RelationshipType::PARENT, DesignEntity::WHILE, stmtTokenObject2) == whileResult);
-	//REQUIRE(parentRelationshipStorage->getRelationshipBySecond(RelationshipType::PARENT, DesignEntity::WHILE, stmtTokenObject12) == whileResult);
-	//REQUIRE(parentRelationshipStorage->getRelationshipBySecond(RelationshipType::PARENT, DesignEntity::WHILE, stmtTokenObject3) == whileResult);
+	REQUIRE(parentRelationshipStorage->getRelationshipBySecond(RelationshipType::PARENT, DesignEntity::WHILE, stmtTokenObject5) == whileResult);
+	REQUIRE(parentRelationshipStorage->getRelationshipBySecond(RelationshipType::PARENT, DesignEntity::WHILE, stmtTokenObject4) == whileResult);
+	REQUIRE(parentRelationshipStorage->getRelationshipBySecond(RelationshipType::PARENT, DesignEntity::WHILE, stmtTokenObject1) == whileResult);
+	REQUIRE(parentRelationshipStorage->getRelationshipBySecond(RelationshipType::PARENT, DesignEntity::WHILE, stmtTokenObject2) == whileResult);
+	REQUIRE(parentRelationshipStorage->getRelationshipBySecond(RelationshipType::PARENT, DesignEntity::WHILE, stmtTokenObject12) == whileResult);
+	REQUIRE(parentRelationshipStorage->getRelationshipBySecond(RelationshipType::PARENT, DesignEntity::WHILE, stmtTokenObject3) == whileResult);
 
 	////Looking for if
-	//std::unordered_set<std::string> ifResult{ if_value_one };
+	std::unordered_set<std::string> ifResult{ if_value_one };
 
-	//REQUIRE(parentRelationshipStorage->getRelationshipBySecond(RelationshipType::PARENT, DesignEntity::IF, stmtTokenObject5) == ifResult);
-	//REQUIRE(parentRelationshipStorage->getRelationshipBySecond(RelationshipType::PARENT, DesignEntity::IF, stmtTokenObject4) == ifResult);
-	//REQUIRE(parentRelationshipStorage->getRelationshipBySecond(RelationshipType::PARENT, DesignEntity::IF, stmtTokenObject1) == ifResult);
-	//REQUIRE(parentRelationshipStorage->getRelationshipBySecond(RelationshipType::PARENT, DesignEntity::IF, stmtTokenObject2) == ifResult);
-	//REQUIRE(parentRelationshipStorage->getRelationshipBySecond(RelationshipType::PARENT, DesignEntity::IF, stmtTokenObject6) == ifResult);
-	//REQUIRE(parentRelationshipStorage->getRelationshipBySecond(RelationshipType::PARENT, DesignEntity::IF, stmtTokenObject9) == ifResult);
+	REQUIRE(parentRelationshipStorage->getRelationshipBySecond(RelationshipType::PARENT, DesignEntity::IF, stmtTokenObject5) == ifResult);
+	REQUIRE(parentRelationshipStorage->getRelationshipBySecond(RelationshipType::PARENT, DesignEntity::IF, stmtTokenObject4) == ifResult);
+	REQUIRE(parentRelationshipStorage->getRelationshipBySecond(RelationshipType::PARENT, DesignEntity::IF, stmtTokenObject1) == ifResult);
+	REQUIRE(parentRelationshipStorage->getRelationshipBySecond(RelationshipType::PARENT, DesignEntity::IF, stmtTokenObject2) == ifResult);
+	REQUIRE(parentRelationshipStorage->getRelationshipBySecond(RelationshipType::PARENT, DesignEntity::IF, stmtTokenObject6) == ifResult);
+	REQUIRE(parentRelationshipStorage->getRelationshipBySecond(RelationshipType::PARENT, DesignEntity::IF, stmtTokenObject9) == ifResult);
 
 
 	//Looking for s
