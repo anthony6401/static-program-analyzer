@@ -11,7 +11,9 @@ class Evaluator {
 public:
     static void evaluateQuery(QueryObject queryObject, std::list<std::string> &results, QPSClient qpsClient);
     static std::vector<std::shared_ptr<Clause>> extractClausesToEvaluate(QueryObject queryObject, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
-    static std::unordered_set<std::string> joinRawResults(std::vector<RawResult> rawResultsList);
+    static std::unordered_set<std::string> joinRawResults(std::vector<RawResult> rawResultsList, std::string selectSynonym, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
+    static std::vector<std::string> findCommonSynonyms(std::vector<std::string> firstSynonymList, std::vector<std::string> secSynonymList);
+    static int getSelectSynonymIndex(std::vector<std::string> synonymList, std::string selectSynonym);
 };
 
 #endif //SPA_EVALUATOR_H

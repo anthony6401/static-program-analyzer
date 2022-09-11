@@ -10,7 +10,7 @@ class RawResult {
 private:
     //  Query results returns false
     bool isFalseResult = false;
-
+    bool isBooleanResult = false;
     // Query results is empty
     bool isEmptyResult = false;
 
@@ -26,6 +26,9 @@ public:
     void setIsFalseResult();
     bool getIsEmptyResult();
     void setIsEmptyResult();
+    bool getIsBooleanResult();
+    void setIsBooleanResult();
+    int getSynonymCount();
 
 };
 

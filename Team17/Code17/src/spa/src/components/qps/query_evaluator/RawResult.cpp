@@ -4,15 +4,16 @@
 #include <map>
 #include <initializer_list>
 
-RawResult::RawResult() : resultsList({}), isFalseResult(false), synonymsList({}) {}
+RawResult::RawResult() : resultsList({}), isFalseResult(false), isBooleanResult(false), isEmptyResult(false), synonymsList({}) {}
 
 RawResult::RawResult(const std::string& synonym, const std::unordered_set<std::string>& results) {
     if (results.empty()) {
         setIsEmptyResult();
     }
     synonymsList.emplace_back(synonym);
-    for (auto result : results) {
-        resultsList.emplace_back(std::initializer_list<std::string>{result});
+    for (auto singleResult : results) {
+        // {{x}, {y}, {z}}
+        resultsList.emplace_back(std::initializer_list<std::string>{singleResult});
     }
 }
 
@@ -25,6 +26,7 @@ RawResult::RawResult(std::string leftSynonym, std::string rightSynonym,
     synonymsList.emplace_back(leftSynonym);
     synonymsList.emplace_back(rightSynonym);
     for (auto result : results) {
+        // {{1, x}, {3, y}, {5, z}}
         resultsList.emplace_back(std::initializer_list<std::string>{result.first, result.second});
     }
 }
@@ -43,6 +45,18 @@ void RawResult::setIsFalseResult() {
 
 void RawResult::setIsEmptyResult() {
     isEmptyResult = true;
+}
+
+int RawResult::getSynonymCount() {
+    return synonymsList.size();
+}
+
+bool RawResult::getIsBooleanResult() {
+    return isBooleanResult;
+}
+
+void RawResult::setIsBooleanResult() {
+    isBooleanResult = true;
 }
 
 
