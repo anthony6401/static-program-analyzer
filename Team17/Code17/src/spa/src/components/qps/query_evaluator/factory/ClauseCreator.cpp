@@ -5,6 +5,7 @@
 #include "components/qps/query_evaluator/factory/clauses/relationship/FollowsTClause.h"
 #include "components/qps/query_evaluator/factory/clauses/relationship/ParentClause.h"
 #include "components/qps/query_evaluator/factory/clauses/relationship/ParentTClause.h"
+#include "components/qps/query_evaluator/factory/clauses/patterns/AssignPatternClause.h"
 #include <memory>
 
 std::shared_ptr<Clause> ClauseCreator::createClause(Select synonym, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) {
@@ -13,7 +14,10 @@ std::shared_ptr<Clause> ClauseCreator::createClause(Select synonym, std::unorder
 
 // To be amended for evaluating pattern clauses
 std::shared_ptr<Clause> ClauseCreator::createClause(Pattern pattern, Select synonym, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) {
-    return nullptr;
+    TokenObject left = pattern.getLeft();
+    TokenObject right = pattern.getRight();
+    std::string assignSynonym = pattern.getSynonym();
+    return std::make_shared<AssignPatternClause>(assignSynonym, left, right, qpsClient, synonym);
 }
 
 std::shared_ptr<Clause> ClauseCreator::createClause(SuchThat relationship, Select synonym, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) {
