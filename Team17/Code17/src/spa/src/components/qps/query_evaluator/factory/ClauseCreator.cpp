@@ -1,6 +1,10 @@
 #include "ClauseCreator.h"
 #include "components/qps/query_evaluator/factory/clauses/relationship/ModifiesSClause.h"
 #include "components/qps/query_evaluator/factory/clauses/relationship/ModifiesPClause.h"
+#include "components/qps/query_evaluator/factory/clauses/relationship/FollowsClause.h"
+#include "components/qps/query_evaluator/factory/clauses/relationship/FollowsTClause.h"
+#include "components/qps/query_evaluator/factory/clauses/relationship/ParentClause.h"
+#include "components/qps/query_evaluator/factory/clauses/relationship/ParentTClause.h"
 #include <memory>
 
 std::shared_ptr<Clause> ClauseCreator::createClause(Select synonym, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) {
@@ -26,7 +30,6 @@ std::shared_ptr<Clause> ClauseCreator::createClause(SuchThat relationship, Selec
             return std::make_shared<ModifiesPClause>(left, right, synonym, synonymToDesignEntityMap, qpsClient);
         }
 
-        // Unrecognised MODIFIES relationship clause
     } else if (relationshipType == TokenType::USES) {
         if (isStmtRelationship(left, synonymToDesignEntityMap)) {
             return std::make_shared<ModifiesSClause>(left, right, synonym, synonymToDesignEntityMap, qpsClient);
@@ -35,16 +38,18 @@ std::shared_ptr<Clause> ClauseCreator::createClause(SuchThat relationship, Selec
         if (isProcRelationship(left, synonymToDesignEntityMap)) {
             return std::make_shared<ModifiesSClause>(left, right, synonym, synonymToDesignEntityMap, qpsClient);
         }
+    } else if (relationshipType == TokenType::FOLLOWS) {
+        return std::make_shared<FollowsClause>(left, right, synonym, synonymToDesignEntityMap, qpsClient);
+    } else if (relationshipType == TokenType::FOLLOWS_T) {
+        return std::make_shared<FollowsTClause>(left, right, synonym, synonymToDesignEntityMap, qpsClient);
+    } else if (relationshipType == TokenType::PARENT) {
+        return std::make_shared<ParentClause>(left, right, synonym, synonymToDesignEntityMap, qpsClient);
+    } else if (relationshipType == TokenType::PARENT_T) {
+        return std::make_shared<ParentTClause>(left, right, synonym, synonymToDesignEntityMap, qpsClient);
     } else {
         return nullptr;
-    }
-
-    // FOLLOWS
-
-    // PARENT
-
-    // To be amended
-    return nullptr;
+    };
+    return {};
 }
 
 bool ClauseCreator::isStmtRelationship(TokenObject left,
