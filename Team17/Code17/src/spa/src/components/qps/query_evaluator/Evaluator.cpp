@@ -10,11 +10,14 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
     std::vector<std::shared_ptr<Clause>> clausesToEvaluate = extractClausesToEvaluate(queryObject, synonymToDesignEntityMap, qpsClient);
     std::vector<RawResult> evaluatedResultsList;
     bool isNoneResult = false;
-    // Select, Relationship, Pattern or Relationship and Pattern
+    // evaluate results to get RawResult
+    // check for false clause or empty results and populate none
+    // Check for syntax or semantic errors
+    // join rawresults to return synonym return type
+
     for (auto clause : clausesToEvaluate) {
         RawResult evaluatedResult = clause->evaluateClause();
-        // If any returns no results or false, terminate evaluation and return none as a result
-        if (evaluatedResult.getIsFalseResult() || evaluatedResult.isResultEmpty()) {
+        if (evaluatedResult.getIsFalseResult() || evaluatedResult.getIsEmptyResult()) {
             results.emplace_back("none");
             isNoneResult = true;
             break;
@@ -23,31 +26,50 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
     }
 
     if (!isNoneResult) {
-        std::unordered_set<std::string> joinedResults = Evaluator::joinEvaluatedResults(evaluatedResultsList);
-        for (std::string s : joinedResults) {
-            results.push_back(s);
-        }
+        // join Raw results
     }
-    // Combine results of evaluation and store in query db
+
+
+//
+//
+//    // Select, Relationship, Pattern or Relationship and Pattern
+//    for (auto clause : clausesToEvaluate) {
+//        RawResult evaluatedResult = clause->evaluateClause();
+//        // If any returns no results or false, terminate evaluation and return none as a result
+//        if (evaluatedResult.getIsFalseResult() || evaluatedResult.isResultEmpty()) {
+//            results.emplace_back("none");
+//            isNoneResult = true;
+//            break;
+//        }
+//        evaluatedResultsList.push_back(evaluatedResult);
+//    }
+//
+//    if (!isNoneResult) {
+//        std::unordered_set<std::string> joinedResults = Evaluator::joinEvaluatedResults(evaluatedResultsList);
+//        for (std::string s : joinedResults) {
+//            results.push_back(s);
+//        }
+//    }
+//    // Combine results of evaluation and store in query db
 }
 
-std::unordered_set<std::string> Evaluator::joinEvaluatedResults(std::vector<RawResult> evaluatedResultsList) {
-    std::unordered_set<std::string> firstResult = evaluatedResultsList.front().getResult();
-    if (evaluatedResultsList.size() == 1) {
-        return firstResult;
-    } else {
-        std::unordered_set<std::string> joinedResults = {};
-        std::unordered_set<std::string> secondResult = evaluatedResultsList.back().getResult();
-        std::unordered_set<std::string> smallerResult = (firstResult.size() < secondResult.size()) ? firstResult : secondResult;
-        std::unordered_set<std::string> largerResult = (firstResult.size() >= secondResult.size()) ? firstResult : secondResult;
-        for (std::string s : smallerResult) {
-            if (largerResult.find(s) != largerResult.end()) {
-                joinedResults.insert(s);
-            }
-        }
-        return joinedResults;
-    }
-}
+//std::unordered_set<std::string> Evaluator::joinEvaluatedResults(std::vector<RawResult> evaluatedResultsList) {
+//    std::unordered_set<std::string> firstResult = evaluatedResultsList.front().getResult();
+//    if (evaluatedResultsList.size() == 1) {
+//        return firstResult;
+//    } else {
+//        std::unordered_set<std::string> joinedResults = {};
+//        std::unordered_set<std::string> secondResult = evaluatedResultsList.back().getResult();
+//        std::unordered_set<std::string> smallerResult = (firstResult.size() < secondResult.size()) ? firstResult : secondResult;
+//        std::unordered_set<std::string> largerResult = (firstResult.size() >= secondResult.size()) ? firstResult : secondResult;
+//        for (std::string s : smallerResult) {
+//            if (largerResult.find(s) != largerResult.end()) {
+//                joinedResults.insert(s);
+//            }
+//        }
+//        return joinedResults;
+//    }
+//}
 
 
 std::vector<std::shared_ptr<Clause>> Evaluator::extractClausesToEvaluate(QueryObject queryObject, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) {

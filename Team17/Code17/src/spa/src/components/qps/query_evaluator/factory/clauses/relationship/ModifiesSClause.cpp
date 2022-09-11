@@ -12,7 +12,7 @@ RawResult ModifiesSClause::evaluateClause() {
 //        ModifiesSClause::evaluateSynonymSynonym();
 //    }
     std::unordered_set<std::string> result = {"x", "y", "z"};
-    return {result};
+    return {};
 }
 
 TokenType ModifiesSClause::getRelationshipType() {

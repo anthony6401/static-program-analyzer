@@ -3,20 +3,33 @@
 
 #include "unordered_set"
 #include "string"
+#include "vector"
 
 class RawResult {
+
 private:
+    //  Query results returns false
     bool isFalseResult = false;
-    std::unordered_set<std::string> result;
+
+    // Query results is empty
+    bool isEmptyResult = false;
 
 public:
+    std::vector<std::string> synonymsList;
+    std::vector<std::vector<std::string>> resultsList;
+
     RawResult();
-    RawResult(std::string leftSynonym, std::string rightSynonym, std::string results);
-    RawResult(std::unordered_set<std::string> result);
-    bool isResultEmpty();
-    std::unordered_set<std::string> getResult();
+
+    RawResult(const std::string &synonym, const std::unordered_set<std::string> &results);
+
+    RawResult(std::string leftSynonym, std::string rightSynonym,
+              std::vector<std::pair<std::string, std::string>> results);
+
     bool getIsFalseResult();
-    void toggleIsFalseResult();
+    void setIsFalseResult();
+    bool getIsEmptyResult();
+    void setIsEmptyResult();
+
 };
 
 #endif //SPA_RAWRESULT_H

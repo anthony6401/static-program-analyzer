@@ -7,6 +7,6 @@ ModifiesPClause::ModifiesPClause(TokenObject left, TokenObject right, Select syn
 
 RawResult ModifiesPClause::evaluateClause() {
     std::unordered_set<std::string> result;
-    return RawResult(result);
+    return {};
 }
 

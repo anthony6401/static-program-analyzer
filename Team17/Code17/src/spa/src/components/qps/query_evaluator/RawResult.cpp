@@ -1,27 +1,51 @@
 #include "RawResult.h"
+#include "vector"
+#include "string"
+#include <map>
+#include <initializer_list>
 
-RawResult::RawResult() : result(std::unordered_set<std::string>()), isFalseResult(false) {}
+RawResult::RawResult() : resultsList({}), isFalseResult(false), synonymsList({}) {}
 
-RawResult::RawResult(std::unordered_set<std::string> result) {
-    this->result = result;
+RawResult::RawResult(const std::string& synonym, const std::unordered_set<std::string>& results) {
+    if (results.empty()) {
+        setIsEmptyResult();
+    }
+    synonymsList.emplace_back(synonym);
+    for (auto result : results) {
+        resultsList.emplace_back(std::initializer_list<std::string>{result});
+    }
+}
+
+RawResult::RawResult(std::string leftSynonym, std::string rightSynonym,
+                     std::vector<std::pair<std::string, std::string>> results) {
+    if (results.empty()) {
+        setIsEmptyResult();
+    }
+
+    synonymsList.emplace_back(leftSynonym);
+    synonymsList.emplace_back(rightSynonym);
+    for (auto result : results) {
+        resultsList.emplace_back(std::initializer_list<std::string>{result.first, result.second});
+    }
 }
 
 bool RawResult::getIsFalseResult() {
     return isFalseResult;
 }
 
-std::unordered_set<std::string> RawResult::getResult() {
-    return result;
+bool RawResult::getIsEmptyResult() {
+    return isEmptyResult;
 }
 
-bool RawResult::isResultEmpty() {
-    return result.empty();
+void RawResult::setIsFalseResult() {
+    isFalseResult = true;
 }
 
-void RawResult::toggleIsFalseResult() {
-    isFalseResult = !isFalseResult;
+void RawResult::setIsEmptyResult() {
+    isEmptyResult = true;
 }
 
-RawResult::RawResult(std::string leftSynonym, std::string rightSynonym, std::string results) {
 
-}
+
+
+
