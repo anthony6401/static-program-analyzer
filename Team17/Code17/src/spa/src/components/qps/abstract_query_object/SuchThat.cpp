@@ -4,20 +4,23 @@
 SuchThat::SuchThat() {}
 
 
-SuchThat::SuchThat(TokenType relationship, TokenObject left, TokenObject right) : relationship(relationship), left(left), right(right) {
+SuchThat::SuchThat(TokenType relationship, TokenObject left, TokenObject right) {
+    this->relationship = relationship;
+    this->left = left;
+    this->right = right;
 }
 
 // to be amended
 TokenType SuchThat::getRelationshipType() {
-    return this->relationship;
+    return relationship;
 }
 
 TokenObject SuchThat::getLeft() {
-    return this->left;
+    return left;
 }
 
 TokenObject SuchThat::getRight() {
-    return this->right;
+    return right;
 }
 
 
