@@ -517,6 +517,23 @@ TEST_CASE("Syntactically incorrect - non-assign synonym") {
     REQUIRE(actualResult == false);
 };
 
+TEST_CASE("Syntactically incorrect - empty declaration") {
+    std::unordered_map<std::string, DesignEntity> mappedSynonymsToDesignEntity{};
+
+    PatternClauseSyntaxChecker checker = PatternClauseSyntaxChecker(mappedSynonymsToDesignEntity);
+    std::vector<TokenObject> validPatternTokens{
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::NAME, "a"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::EXPRESSION, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validPatternTokens);
+    REQUIRE(actualResult == false);
+};
+
 TEST_CASE("Syntactically incorrect - missing pattern token") {
     std::unordered_map<std::string, DesignEntity> mappedSynonymsToDesignEntity{
         {"a", DesignEntity::ASSIGN}
