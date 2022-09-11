@@ -13,6 +13,12 @@ RawResult FollowsTClause::evaluateClause() {
     } else if (leftType == TokenType::SYNONYM && rightType == TokenType::WILDCARD) {
         return FollowsTClause::evaluateSynonymWildcard();
     } else if (leftType == TokenType::SYNONYM && rightType == TokenType::INTEGER) {
+        return FollowsTClause::evaluateSynonymInteger();
+    } else if (leftType == TokenType::INTEGER && rightType == TokenType::SYNONYM) {
+        return FollowsTClause::evaluateIntegerSynonym();
+    } else if (leftType == TokenType::INTEGER && rightType == TokenType::WILDCARD) {
+        return FollowsTClause::evaluateIntegerWildcard();
+    } else if (leftType == TokenType::INTEGER && rightType == TokenType::INTEGER) {
         return FollowsTClause::evaluateIntegerInteger();
     } else if (leftType == TokenType::WILDCARD && rightType == TokenType::SYNONYM) {
         return FollowsTClause::evaluateWildcardSynonym();
@@ -53,8 +59,14 @@ RawResult FollowsTClause::evaluateIntegerInteger() {
     return {};
 }
 
-RawResult FollowsTClause::evaluateWildcardInteger() {
+RawResult FollowsTClause::evaluateWildcardSynonym() {
     return {};
 }
 
+RawResult FollowsTClause::evaluateWildcardWildcard() {
+    return {};
+}
 
+RawResult FollowsTClause::evaluateWildcardInteger() {
+    return {};
+}
