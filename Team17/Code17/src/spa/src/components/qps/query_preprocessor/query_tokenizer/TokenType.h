@@ -44,7 +44,9 @@ namespace qps {
         DESIGN_ENTITY,
         RELREF,
         STMTREF,
-        ENTREF
+        ENTREF,
+        STMT_ENT_PARAMS,
+        ENT_ENT_PARAMS,
     };
 }
 
