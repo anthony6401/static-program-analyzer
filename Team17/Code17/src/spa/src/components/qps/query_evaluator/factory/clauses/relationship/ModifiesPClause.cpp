@@ -6,7 +6,50 @@ ModifiesPClause::ModifiesPClause(TokenObject left, TokenObject right, Select syn
                                                         synonymToDesignEntityMap(synonymToDesignEntityMap), qpsClient(qpsClient) {};
 
 RawResult ModifiesPClause::evaluateClause() {
-    std::unordered_set<std::string> result;
+    TokenType leftType = left.getTokenType();
+    TokenType rightType = right.getTokenType();
+    if (leftType == TokenType::SYNONYM && rightType == TokenType::SYNONYM) {
+        return ModifiesPClause::evaluateSynonymSynonym();
+    } else if (leftType == TokenType::SYNONYM && rightType == TokenType::WILDCARD) {
+        return ModifiesPClause::evaluateSynonymWildcard();
+    } else if (leftType == TokenType::SYNONYM && rightType == TokenType::NAME_WITH_QUOTATION) {
+        return ModifiesPClause::evaluateSynonymNameQuotes();
+    } else if (leftType == TokenType::NAME_WITH_QUOTATION && rightType == TokenType::SYNONYM) {
+        return ModifiesPClause::evaluateNameQuotesSynonym();
+    } else if (leftType == TokenType::NAME_WITH_QUOTATION && rightType == TokenType::WILDCARD) {
+        return ModifiesPClause::evaluateNameQuotesWildcard();
+    } else if (leftType == TokenType::NAME_WITH_QUOTATION && rightType == TokenType::NAME_WITH_QUOTATION) {
+        return ModifiesPClause::evaluateNameQuotesNameQuotes();
+    } else {
+        return {};
+    }
+}
+
+TokenType ModifiesPClause::getRelationshipType() {
+    return TokenType::MODIFIES;
+}
+
+RawResult ModifiesPClause::evaluateSynonymSynonym() {
+    return {};
+}
+
+RawResult ModifiesPClause::evaluateSynonymWildcard() {
+    return {};
+}
+
+RawResult ModifiesPClause::evaluateSynonymNameQuotes() {
+    return {};
+}
+
+RawResult ModifiesPClause::evaluateNameQuotesSynonym() {
+    return {};
+}
+
+RawResult ModifiesPClause::evaluateNameQuotesWildcard() {
+    return {};
+}
+
+RawResult ModifiesPClause::evaluateNameQuotesNameQuotes() {
     return {};
 }
 
