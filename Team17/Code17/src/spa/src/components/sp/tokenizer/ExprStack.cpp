@@ -1,6 +1,5 @@
 #include "ExprStack.h"
 #include "OperandState.h"
-#include <iostream>
 
 ExprStack::ExprStack() {
     this->state = new OperandState(this);

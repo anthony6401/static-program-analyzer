@@ -26,5 +26,5 @@ void ExprCloseState::put(std::vector<SimpleToken>& children, std::string value) 
 }
 
 bool ExprCloseState::valid() {
-    return false;
+    return true;
 }

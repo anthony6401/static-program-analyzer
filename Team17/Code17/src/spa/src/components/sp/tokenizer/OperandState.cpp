@@ -24,5 +24,5 @@ void OperandState::put(std::vector<SimpleToken>& children, std::string value) {
 }
 
 bool OperandState::valid() {
-    return true;
+    return false;
 }

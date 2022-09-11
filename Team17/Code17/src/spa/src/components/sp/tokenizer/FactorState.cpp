@@ -1,5 +1,6 @@
 #include "FactorState.h"
 #include "OperandState.h"
+#include "ExprCloseState.h"
 #include "../validator/SimpleValidator.h"
 
 FactorState::FactorState(ExprStack* context) {
@@ -13,6 +14,7 @@ void FactorState::put(std::vector<SimpleToken>& children, std::string value) {
         this->context->setState(new OperandState(this->context));
     } else if (value == ")") {
         this->context->close();
+        this->context->setState(new ExprCloseState(this->context));
     } else {
         throw std::invalid_argument("Invalid character " + value);
     }
