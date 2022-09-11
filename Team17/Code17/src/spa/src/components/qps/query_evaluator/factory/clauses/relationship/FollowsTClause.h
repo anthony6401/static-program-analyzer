@@ -1,5 +1,6 @@
-#ifndef SPA_FOLLOWSCLAUSE_H
-#define SPA_FOLLOWSCLAUSE_H
+#ifndef SPA_FOLLOWSTCLAUSE_H
+#define SPA_FOLLOWSTCLAUSE_H
+
 #include "components/qps/query_preprocessor/query_tokenizer/TokenObject.h"
 #include "components/qps/query_evaluator/factory/interface/Clause.h"
 #include "components/qps/abstract_query_object/Select.h"
@@ -7,7 +8,7 @@
 #include <unordered_map>
 #include <list>
 
-class FollowsClause : public Clause {
+class FollowsTClause : public Clause {
 private:
     std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap;
     Select synonym;
@@ -16,8 +17,8 @@ private:
     TokenObject right;
 
 public:
-    FollowsClause(TokenObject left, TokenObject right, Select synonym,
-    std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
+    FollowsTClause(TokenObject left, TokenObject right, Select synonym,
+                  std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
     RawResult evaluateClause() override;
     RawResult evaluateSynonymSynonym();
     RawResult evaluateSynonymWildcard();
@@ -31,4 +32,4 @@ public:
     TokenType getRelationshipType();
 };
 
-#endif //SPA_FOLLOWSCLAUSE_H
+#endif //SPA_FOLLOWSTCLAUSE_H

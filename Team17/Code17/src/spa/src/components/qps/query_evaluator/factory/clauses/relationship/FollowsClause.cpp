@@ -31,6 +31,10 @@ RawResult FollowsClause::evaluateClause() {
     }
 }
 
+TokenType getRelationshipType() {
+    return TokenType::FOLLOWS;
+}
+
 RawResult FollowsClause::evaluateSynonymSynonym() {
     return {};
 }
