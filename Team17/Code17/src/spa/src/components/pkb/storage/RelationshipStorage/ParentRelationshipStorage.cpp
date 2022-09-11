@@ -12,6 +12,8 @@
 #include "models/Entity/DesignEntity.h"
 
 #include "utils.h"
+
+#include "utils.h"
 #include "typeinfo"
 #include <iostream>
 
@@ -55,8 +57,8 @@ bool ParentRelationshipStorage::storeRelationship(Relationship* rel) {
 		std::string rightValue = rightEntity->getValue();
 
 		bool result = false;
-		bool resultOne = Utils::insertEntity(this->stmtToStmtForwardMap, leftValue, rightValue);
-		bool resultTwo = Utils::insertEntity(this->stmtToStmtBackwardMap, rightValue, leftValue);
+		bool resultOne = RelationshipUtils::insertEntity(this->stmtToStmtForwardMap, leftValue, rightValue);
+		bool resultTwo = RelationshipUtils::insertEntity(this->stmtToStmtBackwardMap, rightValue, leftValue);
 		
 		result = result || resultOne || resultTwo;
 
@@ -64,72 +66,72 @@ bool ParentRelationshipStorage::storeRelationship(Relationship* rel) {
 			//Store Stmt -> stmt forward and backward
 			
 			if (typeid(*rightEntity) == typeid(ReadEntity)) {
-				bool resultOne = Utils::insertEntity(this->stmtToReadForwardMap, leftValue, rightValue);
-				bool resultTwo = Utils::insertEntity(this->whileToReadForwardMap, leftValue, rightValue);
+				bool resultOne = RelationshipUtils::insertEntity(this->stmtToReadForwardMap, leftValue, rightValue);
+				bool resultTwo = RelationshipUtils::insertEntity(this->whileToReadForwardMap, leftValue, rightValue);
 
 				result = result || resultOne || resultTwo;
 			} 
 			else if (typeid(*rightEntity) == typeid(PrintEntity)) {
-				bool resultOne = Utils::insertEntity(this->stmtToPrintForwardMap, leftValue, rightValue);
-				bool resultTwo = Utils::insertEntity(this->whileToPrintForwardMap, leftValue, rightValue);
+				bool resultOne = RelationshipUtils::insertEntity(this->stmtToPrintForwardMap, leftValue, rightValue);
+				bool resultTwo = RelationshipUtils::insertEntity(this->whileToPrintForwardMap, leftValue, rightValue);
 				result = result || resultOne || resultTwo;
 			}
 			else if (typeid(*rightEntity) == typeid(AssignEntity)) {
-				bool resultOne = Utils::insertEntity(this->stmtToAssignForwardMap, leftValue, rightValue);
-				bool resultTwo = Utils::insertEntity(this->whileToAssignForwardMap, leftValue, rightValue);
+				bool resultOne = RelationshipUtils::insertEntity(this->stmtToAssignForwardMap, leftValue, rightValue);
+				bool resultTwo = RelationshipUtils::insertEntity(this->whileToAssignForwardMap, leftValue, rightValue);
 				result = result || resultOne || resultTwo;
 			}
 			else if (typeid(*rightEntity) == typeid(CallEntity)) {
-				bool resultOne = Utils::insertEntity(this->stmtToCallForwardMap, leftValue, rightValue);
-				bool resultTwo = Utils::insertEntity(this->whileToCallForwardMap, leftValue, rightValue);
+				bool resultOne = RelationshipUtils::insertEntity(this->stmtToCallForwardMap, leftValue, rightValue);
+				bool resultTwo = RelationshipUtils::insertEntity(this->whileToCallForwardMap, leftValue, rightValue);
 				result = result || resultOne || resultTwo;
 			}
 			else if (typeid(*rightEntity) == typeid(WhileEntity)) {
-				bool resultOne = Utils::insertEntity(this->stmtToWhileForwardMap, leftValue, rightValue);
-				bool resultTwo = Utils::insertEntity(this->whileToWhileForwardMap, leftValue, rightValue);
+				bool resultOne = RelationshipUtils::insertEntity(this->stmtToWhileForwardMap, leftValue, rightValue);
+				bool resultTwo = RelationshipUtils::insertEntity(this->whileToWhileForwardMap, leftValue, rightValue);
 				result = result || resultOne || resultTwo;
 			}
 			else if (typeid(*rightEntity) == typeid(IfEntity)) {
-				bool resultOne = Utils::insertEntity(this->stmtToIfForwardMap, leftValue, rightValue);
-				bool resultTwo = Utils::insertEntity(this->whileToIfForwardMap, leftValue, rightValue);
+				bool resultOne = RelationshipUtils::insertEntity(this->stmtToIfForwardMap, leftValue, rightValue);
+				bool resultTwo = RelationshipUtils::insertEntity(this->whileToIfForwardMap, leftValue, rightValue);
 				result = result || resultOne || resultTwo;
 			}
-			bool resultOne = Utils::insertEntity(this->whileToStmtForwardMap, leftValue, rightValue);
-			bool resultTwo = Utils::insertEntity(this->whileToStmtBackwardMap, rightValue, leftValue);
+			bool resultOne = RelationshipUtils::insertEntity(this->whileToStmtForwardMap, leftValue, rightValue);
+			bool resultTwo = RelationshipUtils::insertEntity(this->whileToStmtBackwardMap, rightValue, leftValue);
 			result = result || resultOne || resultTwo;
 
 		} else if (typeid(*leftEntity) == typeid(IfEntity)) {
 			if (typeid(*rightEntity) == typeid(ReadEntity)) {
-				bool resultOne = Utils::insertEntity(this->stmtToReadForwardMap, leftValue, rightValue);
-				bool resultTwo = Utils::insertEntity(this->ifToReadForwardMap, leftValue, rightValue);
+				bool resultOne = RelationshipUtils::insertEntity(this->stmtToReadForwardMap, leftValue, rightValue);
+				bool resultTwo = RelationshipUtils::insertEntity(this->ifToReadForwardMap, leftValue, rightValue);
 				result = result || resultOne || resultTwo;
 			}
 			else if (typeid(*rightEntity) == typeid(PrintEntity)) {
-				bool resultOne = Utils::insertEntity(this->stmtToPrintForwardMap, leftValue, rightValue);
-				bool resultTwo = Utils::insertEntity(this->ifToPrintForwardMap, leftValue, rightValue);
+				bool resultOne = RelationshipUtils::insertEntity(this->stmtToPrintForwardMap, leftValue, rightValue);
+				bool resultTwo = RelationshipUtils::insertEntity(this->ifToPrintForwardMap, leftValue, rightValue);
 				result = result || resultOne || resultTwo;
 			}
 			else if (typeid(*rightEntity) == typeid(AssignEntity)) {
-				bool resultOne = Utils::insertEntity(this->stmtToAssignForwardMap, leftValue, rightValue);
-				bool resultTwo = Utils::insertEntity(this->ifToAssignForwardMap, leftValue, rightValue);
+				bool resultOne = RelationshipUtils::insertEntity(this->stmtToAssignForwardMap, leftValue, rightValue);
+				bool resultTwo = RelationshipUtils::insertEntity(this->ifToAssignForwardMap, leftValue, rightValue);
 				result = result || resultOne || resultTwo;
 			}
 			else if (typeid(*rightEntity) == typeid(CallEntity)) {
-				bool resultOne = Utils::insertEntity(this->stmtToCallForwardMap, leftValue, rightValue);
-				bool resultTwo = Utils::insertEntity(this->ifToCallForwardMap, leftValue, rightValue);
+				bool resultOne = RelationshipUtils::insertEntity(this->stmtToCallForwardMap, leftValue, rightValue);
+				bool resultTwo = RelationshipUtils::insertEntity(this->ifToCallForwardMap, leftValue, rightValue);
 			}
 			else if (typeid(*rightEntity) == typeid(WhileEntity)) {
-				bool resultOne = Utils::insertEntity(this->stmtToWhileForwardMap, leftValue, rightValue);
-				bool resultTwo = Utils::insertEntity(this->ifToWhileForwardMap, leftValue, rightValue);
+				bool resultOne = RelationshipUtils::insertEntity(this->stmtToWhileForwardMap, leftValue, rightValue);
+				bool resultTwo = RelationshipUtils::insertEntity(this->ifToWhileForwardMap, leftValue, rightValue);
 				result = result || resultOne || resultTwo;
 			}
 			else if (typeid(*rightEntity) == typeid(IfEntity)) {
-				bool resultOne = Utils::insertEntity(this->stmtToIfForwardMap, leftValue, rightValue);
-				bool resultTwo = Utils::insertEntity(this->ifToIfForwardMap, leftValue, rightValue);
+				bool resultOne = RelationshipUtils::insertEntity(this->stmtToIfForwardMap, leftValue, rightValue);
+				bool resultTwo = RelationshipUtils::insertEntity(this->ifToIfForwardMap, leftValue, rightValue);
 				result = result || resultOne || resultTwo;
 			}
-			bool resultOne = Utils::insertEntity(this->ifToStmtForwardMap, leftValue, rightValue);
-			bool resultTwo = Utils::insertEntity(this->ifToStmtBackwardMap, rightValue, leftValue);
+			bool resultOne = RelationshipUtils::insertEntity(this->ifToStmtForwardMap, leftValue, rightValue);
+			bool resultTwo = RelationshipUtils::insertEntity(this->ifToStmtBackwardMap, rightValue, leftValue);
 			result = result || resultOne || resultTwo;
 		}
 		return result;
