@@ -2,6 +2,7 @@
 #include "components/qps/query_preprocessor/query_tokenizer/TokenObject.h"
 #include "components/qps/query_preprocessor/query_tokenizer/TokenType.h"
 #include "EntityObject.h"
+#include "PatternObject.h"
 
 static TokenObject stmtTokenObject1 = TokenObject(TokenType::INTEGER, assign_value_one);
 static TokenObject stmtTokenObject2 = TokenObject(TokenType::INTEGER, call_value_one);
@@ -27,3 +28,17 @@ static TokenObject procedureTokenObjectTwo = TokenObject(TokenType::NAME_WITH_QU
 static TokenObject variableTokenObjectTwo = TokenObject(TokenType::NAME_WITH_QUOTATION, variable_value_two);
 static TokenObject procedureTokenObjectThree = TokenObject(TokenType::NAME_WITH_QUOTATION, procedure_value_three);
 static TokenObject variableTokenObjectThree = TokenObject(TokenType::NAME_WITH_QUOTATION, variable_value_three);
+
+static TokenObject assignPatternTokenObjectFirstOne = TokenObject(TokenType::NAME_WITH_QUOTATION, assignFirstValueOne);
+static TokenObject assignPatternTokenObjectFirstTwo = TokenObject(TokenType::NAME_WITH_QUOTATION, assignFirstValueTwo);
+static TokenObject assignPatternTokenObjectFirstThree = TokenObject(TokenType::NAME_WITH_QUOTATION, assignFirstValueThree);
+
+static TokenObject assignPatternTokenObjectSecondOne = TokenObject(TokenType::NAME_WITH_QUOTATION, assignSecondValueForTokenOne);
+static TokenObject assignPatternTokenObjectSecondTwo = TokenObject(TokenType::NAME_WITH_QUOTATION, assignSecondValueForTokenTwo);
+static TokenObject assignPatternTokenObjectSecondThree = TokenObject(TokenType::NAME_WITH_QUOTATION, assignSecondValueForTokenThree);
+
+static TokenObject assignPatternTokenObjectSubexprOne = TokenObject(TokenType::SUBEXPRESSION, assignSubexprOne);
+static TokenObject assignPatternTokenObjectSubexprTwo = TokenObject(TokenType::SUBEXPRESSION, assignSubexprTwo);
+static TokenObject assignPatternTokenObjectSubexprThree = TokenObject(TokenType::SUBEXPRESSION, assignSubexprThree);
+
+static TokenObject wildCardTokenObject = TokenObject(TokenType::WILDCARD, "");

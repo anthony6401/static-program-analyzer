@@ -31,32 +31,32 @@ bool ModifyRelationshipStorage::storeRelationship(Relationship* rel) {
 		bool result = false;
 
 		if (typeid(*leftEntity) == typeid(ProcedureEntity)) {
-			bool resultOne = Utils::insertEntity(this->procForwardStorage, leftValue, rightValue);
-			bool resultTwo = Utils::insertEntity(this->procBackwardStorage, rightValue, leftValue);
+			bool resultOne = RelationshipUtils::insertEntity(this->procForwardStorage, leftValue, rightValue);
+			bool resultTwo = RelationshipUtils::insertEntity(this->procBackwardStorage, rightValue, leftValue);
 			result = result || resultOne || resultTwo;
 		}
 
 		if (typeid(*leftEntity) == typeid(AssignEntity)) {
-			bool resultOne = Utils::insertEntity(this->assignForwardStorage, leftValue, rightValue);
-			bool resultTwo = Utils::insertEntity(this->assignBackwardStorage, rightValue, leftValue);
+			bool resultOne = RelationshipUtils::insertEntity(this->assignForwardStorage, leftValue, rightValue);
+			bool resultTwo = RelationshipUtils::insertEntity(this->assignBackwardStorage, rightValue, leftValue);
 			result = result || resultOne || resultTwo;
 		}
 
 		if (typeid(*leftEntity) == typeid(ReadEntity)) {
-			bool resultOne = Utils::insertEntity(this->readForwardStorage, leftValue, rightValue);
-			bool resultTwo = Utils::insertEntity(this->readBackwardStorage, rightValue, leftValue);
+			bool resultOne = RelationshipUtils::insertEntity(this->readForwardStorage, leftValue, rightValue);
+			bool resultTwo = RelationshipUtils::insertEntity(this->readBackwardStorage, rightValue, leftValue);
 			result = result || resultOne || resultTwo;
 		}
 
 		if (typeid(*leftEntity) == typeid(IfEntity)) {
-			bool resultOne = Utils::insertEntity(this->ifForwardStorage, leftValue, rightValue);
-			bool resultTwo = Utils::insertEntity(this->ifBackwardStorage, rightValue, leftValue);
+			bool resultOne = RelationshipUtils::insertEntity(this->ifForwardStorage, leftValue, rightValue);
+			bool resultTwo = RelationshipUtils::insertEntity(this->ifBackwardStorage, rightValue, leftValue);
 			result = result || resultOne || resultTwo;
 		}
 
 		if (typeid(*leftEntity) == typeid(WhileEntity)) {
-			bool resultOne = Utils::insertEntity(this->whileForwardStorage, leftValue, rightValue);
-			bool resultTwo = Utils::insertEntity(this->whileBackwardStorage, rightValue, leftValue);
+			bool resultOne = RelationshipUtils::insertEntity(this->whileForwardStorage, leftValue, rightValue);
+			bool resultTwo = RelationshipUtils::insertEntity(this->whileBackwardStorage, rightValue, leftValue);
 			result = result || resultOne || resultTwo;
 		}
 
