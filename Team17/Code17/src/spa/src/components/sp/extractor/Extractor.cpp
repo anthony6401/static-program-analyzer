@@ -75,11 +75,11 @@ void Extractor::extractWhile(SimpleToken simpleToken) {
 	WhileEntity* whileEntity = new WhileEntity(std::to_string(simpleToken.statementNumber));
 	std::vector<SimpleToken> children = simpleToken.getChildren();
 
-	SimpleToken condExpr = children.at(0); // Condirion expression
+	SimpleToken condExpr = children.at(0); // Condition expression
 	extractCondExpr(whileEntity, condExpr);
 
 	SimpleToken stmtLst = children.at(1); // Statement list in while loop
-	extractStmtLst(stmtLst);
+	extractStmtLst(whileEntity, stmtLst);
 }
 
 void Extractor::extractIf(SimpleToken simpleToken) {
@@ -94,12 +94,12 @@ void Extractor::extractIf(SimpleToken simpleToken) {
 	extractCondExpr(ifEntity, condExpr);
 
 	SimpleToken stmtLst1 = children.at(1); // If statement
-	extractStmtLst(stmtLst1);
+	extractStmtLst(ifEntity, stmtLst1);
 	SimpleToken stmtLst2 = children.at(2); // Else statement
-	extractStmtLst(stmtLst2);
+	extractStmtLst(ifEntity, stmtLst2);
 }
 
-void Extractor::extractCondExpr(WhileEntity* whileEntity, SimpleToken simpleToken) {
+void Extractor::extractCondExpr(Entity* entity, SimpleToken simpleToken) {
 	if (simpleToken.type != SpTokenType::TCONDEXPR) {
 		throw std::invalid_argument("Invalid token type for extractCondExpr");
 	}
@@ -107,15 +107,7 @@ void Extractor::extractCondExpr(WhileEntity* whileEntity, SimpleToken simpleToke
 	// code here
 }
 
-void Extractor::extractCondExpr(IfEntity* ifEntity, SimpleToken simpleToken) {
-	if (simpleToken.type != SpTokenType::TIF) {
-		throw std::invalid_argument("Invalid token type for extractCondExpr");
-	}
-
-	// code here
-}
-
-void Extractor::extractStmtLst(SimpleToken simpleToken) {
+void Extractor::extractStmtLst(Entity* entity, SimpleToken simpleToken) {
 	if (simpleToken.type != SpTokenType::TSTMT) {
 		throw std::invalid_argument("Invalid token type for extractStmtLst");
 	}
@@ -124,11 +116,11 @@ void Extractor::extractStmtLst(SimpleToken simpleToken) {
 	while (children.size() != 0) {
 		SimpleToken token = children.at(0);
 		if (token.type == SpTokenType::TREAD) {
-			extractRead(token);
+			extractReadInStmtLst(entity, token);
 		} else if (token.type == SpTokenType::TPRINT) {
-			extractPrint(token);
+			extractPrintInStmtLst(entity, token);
 		} else if (token.type == SpTokenType::TASSIGN) {
-			extractAssign(token);
+			extractAssignInStmtLst(entity, token);
 		} else if (token.type == SpTokenType::TWHILE) {
 			extractWhile(token);
 		} else if (token.type == SpTokenType::TIF) {
@@ -138,6 +130,41 @@ void Extractor::extractStmtLst(SimpleToken simpleToken) {
 		}
 		children.erase(children.begin());
 	}
+}
+
+void Extractor::extractReadInStmtLst(Entity* entity, SimpleToken simpleToken) {
+	if (simpleToken.type == SpTokenType::TREAD) {
+		ReadEntity* leftEntity = new ReadEntity(std::to_string(simpleToken.statementNumber));
+		VariableEntity* rightEntity = new VariableEntity(simpleToken.getChildren().at(0).value);
+		ModifyRelationship* modifyRelationship = new ModifyRelationship(leftEntity, rightEntity);
+		this->client->storeRelationship(modifyRelationship);
+
+		ParentRelationship* parentRelationship = new ParentRelationship(entity, leftEntity);
+		this->client->storeRelationship(parentRelationship);
+	}
+	else {
+		throw std::invalid_argument("Invalid token type for extractRead");
+	}
+}
+
+void Extractor::extractPrintInStmtLst(Entity* entity, SimpleToken simpleToken) {
+	if (simpleToken.type == SpTokenType::TPRINT) {
+		PrintEntity* leftEntity = new PrintEntity(std::to_string(simpleToken.statementNumber));
+		VariableEntity* rightEntity = new VariableEntity(simpleToken.getChildren().at(0).value);
+		UsesRelationship* usesRelationship = new UsesRelationship(leftEntity, rightEntity);
+		this->client->storeRelationship(usesRelationship);
+
+
+		ParentRelationship* parentRelationship = new ParentRelationship(entity, leftEntity);
+		this->client->storeRelationship(parentRelationship);
+	}
+	else {
+		throw std::invalid_argument("Invalid token type for extractPrint");
+	}
+}
+
+void Extractor::extractAssignInStmtLst(Entity* entity, SimpleToken simpleToken) {
+	// code here
 }
 
 void Extractor::extractProcedure() {
