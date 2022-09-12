@@ -1,4 +1,5 @@
 #include "Extractor.h"
+#include "PatternExtractor.h"
 
 #include <iostream>
 
@@ -44,6 +45,12 @@ void Extractor::extractAssign(SimpleToken simpleToken) {
 
 	SimpleToken expression = children.at(1);
 	std::vector<SimpleToken> exprChildren = expression.getChildren();
+
+	// Populate PKB with Patterns
+	AssignPattern assignPattern = PatternExtractor::extractPattern(variable, expression);
+	// this->client->storePattern(assignPattern)
+
+	// Populate PKB with UsesRelationship
 	while (exprChildren.size() != 0) {
 		SimpleToken token = exprChildren.at(0);
 		if (token.type == SpTokenType::TVARIABLE) {

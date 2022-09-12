@@ -35,7 +35,4 @@ public:
 	void extractCondExpr(WhileEntity* whileEntity, SimpleToken simpleToken);
 	void extractCondExpr(IfEntity* ifEntity, SimpleToken simpleToken);
 	void extractStmtLst(SimpleToken simpleToken);
-	void extractClose();
-	void extractOpr();
-	void extractError();
 };
