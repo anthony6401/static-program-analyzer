@@ -69,7 +69,8 @@ void Extractor::extractWhile(SimpleToken simpleToken) {
 	std::vector<SimpleToken> children = simpleToken.getChildren();
 
 	SimpleToken condExpr = children.at(0); // Condirion expression
-	extractCondExpr(condExpr);
+	extractCondExpr(whileEntity, condExpr);
+
 	SimpleToken stmtLst = children.at(1); // Statement list in while loop
 	extractStmtLst(stmtLst);
 }
@@ -83,15 +84,24 @@ void Extractor::extractIf(SimpleToken simpleToken) {
 	std::vector<SimpleToken> children = simpleToken.getChildren();
 
 	SimpleToken condExpr = children.at(0); // Condition expression
-	extractCondExpr(condExpr);
+	extractCondExpr(ifEntity, condExpr);
+
 	SimpleToken stmtLst1 = children.at(1); // If statement
 	extractStmtLst(stmtLst1);
 	SimpleToken stmtLst2 = children.at(2); // Else statement
 	extractStmtLst(stmtLst2);
 }
 
-void Extractor::extractCondExpr(SimpleToken simpleToken) {
+void Extractor::extractCondExpr(WhileEntity* whileEntity, SimpleToken simpleToken) {
 	if (simpleToken.type != SpTokenType::TCONDEXPR) {
+		throw std::invalid_argument("Invalid token type for extractCondExpr");
+	}
+
+	// code here
+}
+
+void Extractor::extractCondExpr(IfEntity* ifEntity, SimpleToken simpleToken) {
+	if (simpleToken.type != SpTokenType::TIF) {
 		throw std::invalid_argument("Invalid token type for extractCondExpr");
 	}
 
@@ -134,7 +144,3 @@ void Extractor::extractCall() {
 	VariableEntity* variableEntity = new VariableEntity("");
 	// implement stack in the future for further processing
 }
-
-void Extractor::extractClose() {}
-void Extractor::extractOpr() {}
-void Extractor::extractError() {}

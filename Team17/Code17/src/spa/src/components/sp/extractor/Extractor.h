@@ -32,7 +32,8 @@ public:
 	void extractWhile(SimpleToken simpleToken);
 	void extractIf(SimpleToken simpleToken);
 	void extractAssign(SimpleToken simpleToken);
-	void extractCondExpr(SimpleToken simpleToken);
+	void extractCondExpr(WhileEntity* whileEntity, SimpleToken simpleToken);
+	void extractCondExpr(IfEntity* ifEntity, SimpleToken simpleToken);
 	void extractStmtLst(SimpleToken simpleToken);
 	void extractClose();
 	void extractOpr();
