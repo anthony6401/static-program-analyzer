@@ -25,8 +25,15 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
 
     std::vector<RawResult> evaluatedResultsList;
     bool isNoneResult = false;
+    bool isFalseNoSynonymClauseEvaluation = Evaluator::evaluateNoSynonymClauses(noSynonymsClauses);
+    bool isFalseNoSelectSynonymEvaluation = Evaluator::evaluateNoSelectSynonymClauses(noSelectSynonymPresent);
 
-    // For no synonyms clauses -> Evaluates to boolean value
+    if (isFalseNoSynonymClauseEvaluation || isFalseNoSelectSynonymEvaluation) {
+        isNoneResult = true;
+        results.emplace_back("none");
+    }
+
+    // Evaluate hasSelectSynonym Clauses
 
 
 }
