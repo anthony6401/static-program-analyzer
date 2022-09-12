@@ -19,6 +19,7 @@ public:
     ModifiesSClause(TokenObject left, TokenObject right, Select synonym,
                     std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
     RawResult evaluateClause() override;
+    size_t getNumberOfSynonyms() override;
     TokenType getRelationshipType();
     RawResult evaluateSynonymSynonym();
     RawResult evaluateSynonymWildcard();

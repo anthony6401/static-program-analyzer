@@ -10,10 +10,6 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
     std::vector<std::shared_ptr<Clause>> clausesToEvaluate = extractClausesToEvaluate(queryObject, synonymToDesignEntityMap, qpsClient);
     std::vector<RawResult> evaluatedResultsList;
     bool isNoneResult = false;
-    // evaluate results to get RawResult
-    // check for false clause or empty results and populate none
-    // Check for syntax or semantic errors
-    // join rawresults to return synonym return type
 
     for (auto clause : clausesToEvaluate) {
         RawResult evaluatedResult = clause->evaluateClause();
@@ -25,14 +21,41 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
         evaluatedResultsList.push_back(evaluatedResult);
     }
 
-    // Results are not empty or is true
     if (!isNoneResult) {
-        // join Raw results
         std::unordered_set<std::string> joinedRawResults = joinRawResults(
                 evaluatedResultsList, queryObject.getSelect().getSynonym(), synonymToDesignEntityMap, qpsClient);
-        // emplace results from joinedRawResults
     }
 }
+
+
+
+
+
+std::vector<std::shared_ptr<Clause>> Evaluator::extractClausesToEvaluate(QueryObject queryObject, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) {
+    std::vector<std::shared_ptr<Clause>> clausesToEvaluate;
+    std::vector<SuchThat> relationships = queryObject.getRelationships();
+    std::vector<Pattern> patterns = queryObject.getPattern();
+    Select synonym = queryObject.getSelect();
+
+    if (relationships.empty() && patterns.empty()) {
+        std::shared_ptr<Clause> selectClauseToEvaluate = ClauseCreator::createClause(synonym, synonymToDesignEntityMap, qpsClient);
+        clausesToEvaluate.push_back(selectClauseToEvaluate);
+        return clausesToEvaluate;
+    } else {
+        for (const auto& r : relationships) {
+            std::shared_ptr<Clause> relationshipClauseToEvaluate = ClauseCreator::createClause(r, synonym, synonymToDesignEntityMap, qpsClient);
+            clausesToEvaluate.push_back(relationshipClauseToEvaluate);
+        }
+
+        for (const auto& p : patterns) {
+            std::shared_ptr<Clause> patternClauseToEvaluate = ClauseCreator::createClause(p, synonym, synonymToDesignEntityMap, qpsClient);
+            clausesToEvaluate.push_back(patternClauseToEvaluate);
+        }
+        return clausesToEvaluate;
+    }
+}
+
+
 
 // Assuming maximum of 2 clauses
 std::vector<std::string> Evaluator::findCommonSynonyms(std::vector<std::string> firstSynonymList, std::vector<std::string> secSynonymList) {
@@ -55,9 +78,6 @@ int Evaluator::getSelectSynonymIndex(std::vector<std::string> synonymList, std::
     return index;
 }
 
-std::unordered_set<std::string> mergeCommonSynonymValues(std::vector<std::string> firstList, std::vector<std::string> secondList) {
-
-}
 
 // Might be boolean result, {{x}, {y}..} or {{1. x}, {2, y}..}
 // {{x}, {y}, {z}} -> {x, y, z}
@@ -187,30 +207,3 @@ std::unordered_set<std::string> Evaluator::joinRawResults(std::vector<RawResult>
 
     return joinedResults;
 }
-
-
-
-std::vector<std::shared_ptr<Clause>> Evaluator::extractClausesToEvaluate(QueryObject queryObject, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) {
-    std::vector<std::shared_ptr<Clause>> clausesToEvaluate;
-    std::vector<SuchThat> relationships = queryObject.getRelationships();
-    std::vector<Pattern> patterns = queryObject.getPattern();
-    Select synonym = queryObject.getSelect();
-
-    if (relationships.empty() && patterns.empty()) {
-        std::shared_ptr<Clause> selectClauseToEvaluate = ClauseCreator::createClause(synonym, synonymToDesignEntityMap, qpsClient);
-        clausesToEvaluate.push_back(selectClauseToEvaluate);
-        return clausesToEvaluate;
-    } else {
-        for (const auto& r : relationships) {
-            std::shared_ptr<Clause> relationshipClauseToEvaluate = ClauseCreator::createClause(r, synonym, synonymToDesignEntityMap, qpsClient);
-            clausesToEvaluate.push_back(relationshipClauseToEvaluate);
-        }
-
-        for (const auto& p : patterns) {
-            std::shared_ptr<Clause> patternClauseToEvaluate = ClauseCreator::createClause(p, synonym, synonymToDesignEntityMap, qpsClient);
-            clausesToEvaluate.push_back(patternClauseToEvaluate);
-        }
-        return clausesToEvaluate;
-    }
-}
-

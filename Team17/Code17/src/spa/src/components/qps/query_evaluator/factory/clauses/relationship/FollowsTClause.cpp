@@ -31,6 +31,17 @@ RawResult FollowsTClause::evaluateClause() {
     }
 }
 
+size_t FollowsTClause::getNumberOfSynonyms() {
+    size_t numberOfSynonyms = 0;
+    if (left.getTokenType() == TokenType::SYNONYM) {
+        numberOfSynonyms++;
+    }
+    if (right.getTokenType() == TokenType::SYNONYM) {
+        numberOfSynonyms++;
+    }
+    return numberOfSynonyms;
+}
+
 TokenType getRelationshipType() {
     return TokenType::FOLLOWS_T;
 }

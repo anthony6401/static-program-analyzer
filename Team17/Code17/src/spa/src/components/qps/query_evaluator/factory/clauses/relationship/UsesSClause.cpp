@@ -26,6 +26,17 @@ RawResult UsesSClause::evaluateClause() {
     }
 }
 
+size_t UsesSClause::getNumberOfSynonyms() {
+    size_t numberOfSynonyms = 0;
+    if (left.getTokenType() == TokenType::SYNONYM) {
+        numberOfSynonyms++;
+    }
+    if (right.getTokenType() == TokenType::SYNONYM) {
+        numberOfSynonyms++;
+    }
+    return numberOfSynonyms;
+}
+
 RawResult UsesSClause::evaluateSynonymSynonym() {
     DesignEntity stmtType = synonymToDesignEntityMap[left.getValue()];
     DesignEntity rightType = synonymToDesignEntityMap[right.getValue()];

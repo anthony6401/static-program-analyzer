@@ -25,6 +25,17 @@ RawResult ModifiesSClause::evaluateClause() {
     }
 }
 
+size_t ModifiesSClause::getNumberOfSynonyms() {
+    size_t numberOfSynonyms = 0;
+    if (left.getTokenType() == TokenType::SYNONYM) {
+        numberOfSynonyms++;
+    }
+    if (right.getTokenType() == TokenType::SYNONYM) {
+        numberOfSynonyms++;
+    }
+    return numberOfSynonyms;
+}
+
 TokenType ModifiesSClause::getRelationshipType() {
     return TokenType::MODIFIES;
 }

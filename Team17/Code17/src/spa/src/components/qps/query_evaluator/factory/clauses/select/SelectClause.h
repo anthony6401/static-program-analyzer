@@ -18,6 +18,7 @@ private:
 public:
     SelectClause(Select synonym, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
     RawResult evaluateClause() override;
+    size_t getNumberOfSynonyms() override;
 };
 
 #endif //SPA_SELECTCLAUSE_H

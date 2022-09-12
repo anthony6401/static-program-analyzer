@@ -8,6 +8,7 @@
 class Clause {
 public:
     virtual RawResult evaluateClause() = 0;
+    virtual size_t getNumberOfSynonyms() = 0;
 };
 
 #endif //SPA_CLAUSE_H
