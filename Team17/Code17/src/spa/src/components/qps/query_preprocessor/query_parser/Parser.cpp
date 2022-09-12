@@ -296,20 +296,20 @@ std::vector<Pattern> Parser::parseTokensIntoPatternObjects(std::vector<TokenObje
 		if ((currTokenType != TokenType::WILDCARD) && (currTokenType != TokenType::NAME_WITH_QUOTATION)) {
 			std::string synonymValue = token.getValue();
 
-			//if (mappedSynonyms.find(synonymValue) == mappedSynonyms.end()) {
-			//	patterns.clear();
-			//	patterns.push_back(Pattern());
-			//	return patterns;
-			//}
+			if (mappedSynonyms.find(synonymValue) == mappedSynonyms.end()) {
+				patterns.clear();
+				patterns.push_back(Pattern());
+				return patterns;
+			}
 		}
 
 		if (assignSynonym.empty()) {
 			// Semantic Error as synonym has to be of declared as ASSIGN
-			//if (mappedSynonyms.at(token.getValue()) != DesignEntity::ASSIGN) {
-			//	patterns.clear();
-			//	patterns.push_back(Pattern());
-			//	return patterns;
-			//}
+			if (mappedSynonyms.at(token.getValue()) != DesignEntity::ASSIGN) {
+				patterns.clear();
+				patterns.push_back(Pattern());
+				return patterns;
+			}
 
 			assignSynonym = token.getValue();
 			continue;
@@ -321,8 +321,8 @@ std::vector<Pattern> Parser::parseTokensIntoPatternObjects(std::vector<TokenObje
 		}
 
 		rightParam = token;
-		//Pattern pattern = Pattern(assignSynonym, leftParam, rightParam);
-		//patterns.push_back(pattern);
+		Pattern pattern = Pattern(assignSynonym, leftParam, rightParam);
+		patterns.push_back(pattern);
 
 	}
 	return patterns;
