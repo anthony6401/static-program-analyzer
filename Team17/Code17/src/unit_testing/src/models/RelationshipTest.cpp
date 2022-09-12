@@ -1,8 +1,14 @@
 #include "models/Relationship/Relationship.h"
 #include "models/Relationship/ModifyRelationship.h"
 #include "models/Relationship/UsesRelationship.h"
+#include "models/Relationship/ParentRelationship.h"
+#include "models/Relationship/ParentTRelationship.h"
+#include "models/Relationship/FollowsRelationship.h"
+#include "models/Relationship/FollowsTRelationship.h"
+
 #include "models/Entity/Entity.h"
 #include "models/Entity/AssignEntity.h"
+#include "models/Entity/CallEntity.h"
 #include "models/Entity/VariableEntity.h"
 #include "models/Entity/WhileEntity.h"
 #include "models/Entity/IfEntity.h"
@@ -116,4 +122,260 @@ TEST_CASE("Modify Relationship Test") {
 
     REQUIRE(*(procedureModifyRelationship->getLeftEntity()) == *procedureEntity);
     REQUIRE(*(procedureModifyRelationship->getRightEntity()) == *varProcedureEntity);
+}
+
+TEST_CASE("Parent Relationship Test") {
+    std::string whileValue = "1";
+    std::string ifValue = "2";
+
+    std::string assignValue = "3";
+    std::string readValue = "4";
+    std::string printValue = "5";
+    std::string callValue = "6";
+    std::string whileValue2 = "7";
+    std::string ifValue2 = "8";
+    
+    Entity* whileEntity = new WhileEntity(whileValue);
+    Entity* ifEntity =  new IfEntity(ifValue);
+
+    Entity* readEntity = new ReadEntity(readValue);
+    Entity* printEntity = new PrintEntity(printValue);
+    Entity* assignEntity = new AssignEntity(ifValue);
+    Entity* callEntity = new CallEntity(callValue);
+    Entity* whileEntity2 = new WhileEntity(whileValue2);
+    Entity* ifEntity2= new IfEntity(ifValue2);
+
+    Relationship* whileAssignRel = new ParentRelationship(whileEntity, assignEntity);
+    Relationship* whileReadRel = new ParentRelationship(whileEntity, readEntity);
+    Relationship* whilePrintRel = new ParentRelationship(whileEntity, printEntity);
+    Relationship* whileCallRel = new ParentRelationship(whileEntity, callEntity);
+    Relationship* whileWhileRel = new ParentRelationship(whileEntity, whileEntity2);
+    Relationship* whileIfRel = new ParentRelationship(whileEntity, ifEntity);
+
+    REQUIRE(*(whileAssignRel->getLeftEntity()) == *whileEntity);
+    REQUIRE(*(whileReadRel->getLeftEntity()) == *whileEntity);
+    REQUIRE(*(whilePrintRel->getLeftEntity()) == *whileEntity);
+    REQUIRE(*(whileCallRel->getLeftEntity()) == *whileEntity);
+    REQUIRE(*(whileWhileRel->getLeftEntity()) == *whileEntity);
+    REQUIRE(*(whileIfRel->getLeftEntity()) == *whileEntity);
+
+    REQUIRE(*(whileAssignRel->getRightEntity()) == *assignEntity);
+    REQUIRE(*(whileReadRel->getRightEntity()) == *readEntity);
+    REQUIRE(*(whilePrintRel->getRightEntity()) == *printEntity);
+    REQUIRE(*(whileCallRel->getRightEntity()) == *callEntity);
+    REQUIRE(*(whileWhileRel->getRightEntity()) == *whileEntity2);
+    REQUIRE(*(whileIfRel->getRightEntity()) == *ifEntity);
+
+    Relationship* ifAssignRel = new ParentRelationship(ifEntity, assignEntity);
+    Relationship* ifReadRel = new ParentRelationship(ifEntity, readEntity);
+    Relationship* ifPrintRel = new ParentRelationship(ifEntity, printEntity);
+    Relationship* ifCallRel = new ParentRelationship(ifEntity, callEntity);
+    Relationship* ifWhileRel = new ParentRelationship(ifEntity, whileEntity);
+    Relationship* ifIfRel = new ParentRelationship(ifEntity, ifEntity2);
+
+    REQUIRE(*(ifAssignRel->getLeftEntity()) == *ifEntity);
+    REQUIRE(*(ifReadRel->getLeftEntity()) == *ifEntity);
+    REQUIRE(*(ifPrintRel->getLeftEntity()) == *ifEntity);
+    REQUIRE(*(ifCallRel->getLeftEntity()) == *ifEntity);
+    REQUIRE(*(ifWhileRel->getLeftEntity()) == *ifEntity);
+    REQUIRE(*(ifIfRel->getLeftEntity()) == *ifEntity);
+
+    REQUIRE(*(ifAssignRel->getRightEntity()) == *assignEntity);
+    REQUIRE(*(ifReadRel->getRightEntity()) == *readEntity);
+    REQUIRE(*(ifPrintRel->getRightEntity()) == *printEntity);
+    REQUIRE(*(ifCallRel->getRightEntity()) == *callEntity);
+    REQUIRE(*(ifWhileRel->getRightEntity()) == *whileEntity);
+    REQUIRE(*(ifIfRel->getRightEntity()) == *ifEntity2);
+}
+
+TEST_CASE("ParentT Relationship Test") {
+    std::string whileValue = "1";
+    std::string ifValue = "2";
+
+    std::string assignValue = "3";
+    std::string readValue = "4";
+    std::string printValue = "5";
+    std::string callValue = "6";
+    std::string whileValue2 = "7";
+    std::string ifValue2 = "8";
+
+    Entity* whileEntity = new WhileEntity(whileValue);
+    Entity* ifEntity = new IfEntity(ifValue);
+
+    Entity* readEntity = new ReadEntity(readValue);
+    Entity* printEntity = new PrintEntity(printValue);
+    Entity* assignEntity = new AssignEntity(ifValue);
+    Entity* callEntity = new CallEntity(callValue);
+    Entity* whileEntity2 = new WhileEntity(whileValue2);
+    Entity* ifEntity2 = new IfEntity(ifValue2);
+
+    Relationship* whileAssignRel = new ParentTRelationship(whileEntity, assignEntity);
+    Relationship* whileReadRel = new ParentTRelationship(whileEntity, readEntity);
+    Relationship* whilePrintRel = new ParentTRelationship(whileEntity, printEntity);
+    Relationship* whileCallRel = new ParentTRelationship(whileEntity, callEntity);
+    Relationship* whileWhileRel = new ParentTRelationship(whileEntity, whileEntity2);
+    Relationship* whileIfRel = new ParentTRelationship(whileEntity, ifEntity);
+
+    REQUIRE(*(whileAssignRel->getLeftEntity()) == *whileEntity);
+    REQUIRE(*(whileReadRel->getLeftEntity()) == *whileEntity);
+    REQUIRE(*(whilePrintRel->getLeftEntity()) == *whileEntity);
+    REQUIRE(*(whileCallRel->getLeftEntity()) == *whileEntity);
+    REQUIRE(*(whileWhileRel->getLeftEntity()) == *whileEntity);
+    REQUIRE(*(whileIfRel->getLeftEntity()) == *whileEntity);
+
+    REQUIRE(*(whileAssignRel->getRightEntity()) == *assignEntity);
+    REQUIRE(*(whileReadRel->getRightEntity()) == *readEntity);
+    REQUIRE(*(whilePrintRel->getRightEntity()) == *printEntity);
+    REQUIRE(*(whileCallRel->getRightEntity()) == *callEntity);
+    REQUIRE(*(whileWhileRel->getRightEntity()) == *whileEntity2);
+    REQUIRE(*(whileIfRel->getRightEntity()) == *ifEntity);
+
+    Relationship* ifAssignRel = new ParentTRelationship(ifEntity, assignEntity);
+    Relationship* ifReadRel = new ParentTRelationship(ifEntity, readEntity);
+    Relationship* ifPrintRel = new ParentTRelationship(ifEntity, printEntity);
+    Relationship* ifCallRel = new ParentTRelationship(ifEntity, callEntity);
+    Relationship* ifWhileRel = new ParentTRelationship(ifEntity, whileEntity);
+    Relationship* ifIfRel = new ParentTRelationship(ifEntity, ifEntity2);
+
+    REQUIRE(*(ifAssignRel->getLeftEntity()) == *ifEntity);
+    REQUIRE(*(ifReadRel->getLeftEntity()) == *ifEntity);
+    REQUIRE(*(ifPrintRel->getLeftEntity()) == *ifEntity);
+    REQUIRE(*(ifCallRel->getLeftEntity()) == *ifEntity);
+    REQUIRE(*(ifWhileRel->getLeftEntity()) == *ifEntity);
+    REQUIRE(*(ifIfRel->getLeftEntity()) == *ifEntity);
+
+    REQUIRE(*(ifAssignRel->getRightEntity()) == *assignEntity);
+    REQUIRE(*(ifReadRel->getRightEntity()) == *readEntity);
+    REQUIRE(*(ifPrintRel->getRightEntity()) == *printEntity);
+    REQUIRE(*(ifCallRel->getRightEntity()) == *callEntity);
+    REQUIRE(*(ifWhileRel->getRightEntity()) == *whileEntity);
+    REQUIRE(*(ifIfRel->getRightEntity()) == *ifEntity2);
+}
+
+TEST_CASE("Follows Relationship Test") {
+    std::string whileValue = "1";
+    std::string ifValue = "2";
+
+    std::string assignValue = "3";
+    std::string readValue = "4";
+    std::string printValue = "5";
+    std::string callValue = "6";
+    std::string whileValue2 = "7";
+    std::string ifValue2 = "8";
+
+    Entity* whileEntity = new WhileEntity(whileValue);
+    Entity* ifEntity = new IfEntity(ifValue);
+
+    Entity* readEntity = new ReadEntity(readValue);
+    Entity* printEntity = new PrintEntity(printValue);
+    Entity* assignEntity = new AssignEntity(ifValue);
+    Entity* callEntity = new CallEntity(callValue);
+    Entity* whileEntity2 = new WhileEntity(whileValue2);
+    Entity* ifEntity2 = new IfEntity(ifValue2);
+
+    Relationship* whileAssignRel = new FollowsRelationship(whileEntity, assignEntity);
+    Relationship* whileReadRel = new FollowsRelationship(whileEntity, readEntity);
+    Relationship* whilePrintRel = new FollowsRelationship(whileEntity, printEntity);
+    Relationship* whileCallRel = new FollowsRelationship(whileEntity, callEntity);
+    Relationship* whileWhileRel = new FollowsRelationship(whileEntity, whileEntity2);
+    Relationship* whileIfRel = new FollowsRelationship(whileEntity, ifEntity);
+
+    REQUIRE(*(whileAssignRel->getLeftEntity()) == *whileEntity);
+    REQUIRE(*(whileReadRel->getLeftEntity()) == *whileEntity);
+    REQUIRE(*(whilePrintRel->getLeftEntity()) == *whileEntity);
+    REQUIRE(*(whileCallRel->getLeftEntity()) == *whileEntity);
+    REQUIRE(*(whileWhileRel->getLeftEntity()) == *whileEntity);
+    REQUIRE(*(whileIfRel->getLeftEntity()) == *whileEntity);
+
+    REQUIRE(*(whileAssignRel->getRightEntity()) == *assignEntity);
+    REQUIRE(*(whileReadRel->getRightEntity()) == *readEntity);
+    REQUIRE(*(whilePrintRel->getRightEntity()) == *printEntity);
+    REQUIRE(*(whileCallRel->getRightEntity()) == *callEntity);
+    REQUIRE(*(whileWhileRel->getRightEntity()) == *whileEntity2);
+    REQUIRE(*(whileIfRel->getRightEntity()) == *ifEntity);
+
+    Relationship* ifAssignRel = new FollowsRelationship(ifEntity, assignEntity);
+    Relationship* ifReadRel = new FollowsRelationship(ifEntity, readEntity);
+    Relationship* ifPrintRel = new FollowsRelationship(ifEntity, printEntity);
+    Relationship* ifCallRel = new FollowsRelationship(ifEntity, callEntity);
+    Relationship* ifWhileRel = new FollowsRelationship(ifEntity, whileEntity);
+    Relationship* ifIfRel = new FollowsRelationship(ifEntity, ifEntity2);
+
+    REQUIRE(*(ifAssignRel->getLeftEntity()) == *ifEntity);
+    REQUIRE(*(ifReadRel->getLeftEntity()) == *ifEntity);
+    REQUIRE(*(ifPrintRel->getLeftEntity()) == *ifEntity);
+    REQUIRE(*(ifCallRel->getLeftEntity()) == *ifEntity);
+    REQUIRE(*(ifWhileRel->getLeftEntity()) == *ifEntity);
+    REQUIRE(*(ifIfRel->getLeftEntity()) == *ifEntity);
+
+    REQUIRE(*(ifAssignRel->getRightEntity()) == *assignEntity);
+    REQUIRE(*(ifReadRel->getRightEntity()) == *readEntity);
+    REQUIRE(*(ifPrintRel->getRightEntity()) == *printEntity);
+    REQUIRE(*(ifCallRel->getRightEntity()) == *callEntity);
+    REQUIRE(*(ifWhileRel->getRightEntity()) == *whileEntity);
+    REQUIRE(*(ifIfRel->getRightEntity()) == *ifEntity2);
+}
+
+TEST_CASE("FollowsT Relationship Test") {
+    std::string whileValue = "1";
+    std::string ifValue = "2";
+
+    std::string assignValue = "3";
+    std::string readValue = "4";
+    std::string printValue = "5";
+    std::string callValue = "6";
+    std::string whileValue2 = "7";
+    std::string ifValue2 = "8";
+
+    Entity* whileEntity = new WhileEntity(whileValue);
+    Entity* ifEntity = new IfEntity(ifValue);
+
+    Entity* readEntity = new ReadEntity(readValue);
+    Entity* printEntity = new PrintEntity(printValue);
+    Entity* assignEntity = new AssignEntity(ifValue);
+    Entity* callEntity = new CallEntity(callValue);
+    Entity* whileEntity2 = new WhileEntity(whileValue2);
+    Entity* ifEntity2 = new IfEntity(ifValue2);
+
+    Relationship* whileAssignRel = new FollowsTRelationship(whileEntity, assignEntity);
+    Relationship* whileReadRel = new FollowsTRelationship(whileEntity, readEntity);
+    Relationship* whilePrintRel = new FollowsTRelationship(whileEntity, printEntity);
+    Relationship* whileCallRel = new FollowsTRelationship(whileEntity, callEntity);
+    Relationship* whileWhileRel = new FollowsTRelationship(whileEntity, whileEntity2);
+    Relationship* whileIfRel = new FollowsTRelationship(whileEntity, ifEntity);
+
+    REQUIRE(*(whileAssignRel->getLeftEntity()) == *whileEntity);
+    REQUIRE(*(whileReadRel->getLeftEntity()) == *whileEntity);
+    REQUIRE(*(whilePrintRel->getLeftEntity()) == *whileEntity);
+    REQUIRE(*(whileCallRel->getLeftEntity()) == *whileEntity);
+    REQUIRE(*(whileWhileRel->getLeftEntity()) == *whileEntity);
+    REQUIRE(*(whileIfRel->getLeftEntity()) == *whileEntity);
+
+    REQUIRE(*(whileAssignRel->getRightEntity()) == *assignEntity);
+    REQUIRE(*(whileReadRel->getRightEntity()) == *readEntity);
+    REQUIRE(*(whilePrintRel->getRightEntity()) == *printEntity);
+    REQUIRE(*(whileCallRel->getRightEntity()) == *callEntity);
+    REQUIRE(*(whileWhileRel->getRightEntity()) == *whileEntity2);
+    REQUIRE(*(whileIfRel->getRightEntity()) == *ifEntity);
+
+    Relationship* ifAssignRel = new FollowsTRelationship(ifEntity, assignEntity);
+    Relationship* ifReadRel = new FollowsTRelationship(ifEntity, readEntity);
+    Relationship* ifPrintRel = new FollowsTRelationship(ifEntity, printEntity);
+    Relationship* ifCallRel = new FollowsTRelationship(ifEntity, callEntity);
+    Relationship* ifWhileRel = new FollowsTRelationship(ifEntity, whileEntity);
+    Relationship* ifIfRel = new FollowsTRelationship(ifEntity, ifEntity2);
+
+    REQUIRE(*(ifAssignRel->getLeftEntity()) == *ifEntity);
+    REQUIRE(*(ifReadRel->getLeftEntity()) == *ifEntity);
+    REQUIRE(*(ifPrintRel->getLeftEntity()) == *ifEntity);
+    REQUIRE(*(ifCallRel->getLeftEntity()) == *ifEntity);
+    REQUIRE(*(ifWhileRel->getLeftEntity()) == *ifEntity);
+    REQUIRE(*(ifIfRel->getLeftEntity()) == *ifEntity);
+
+    REQUIRE(*(ifAssignRel->getRightEntity()) == *assignEntity);
+    REQUIRE(*(ifReadRel->getRightEntity()) == *readEntity);
+    REQUIRE(*(ifPrintRel->getRightEntity()) == *printEntity);
+    REQUIRE(*(ifCallRel->getRightEntity()) == *callEntity);
+    REQUIRE(*(ifWhileRel->getRightEntity()) == *whileEntity);
+    REQUIRE(*(ifIfRel->getRightEntity()) == *ifEntity2);
 }

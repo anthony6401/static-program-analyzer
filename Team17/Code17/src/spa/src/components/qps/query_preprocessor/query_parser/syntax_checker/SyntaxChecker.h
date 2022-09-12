@@ -16,11 +16,11 @@ protected:
         {TokenType::RELREF, std::vector<TokenType>{TokenType::FOLLOWS, TokenType::FOLLOWS_T, TokenType::PARENT, TokenType::PARENT_T, TokenType::USES, TokenType::MODIFIES}},
         {TokenType::STMTREF, std::vector<TokenType>{TokenType::SYNONYM, TokenType::WILDCARD, TokenType::INTEGER}},
         {TokenType::ENTREF, std::vector<TokenType>{TokenType::SYNONYM, TokenType::WILDCARD, TokenType::NAME_WITH_QUOTATION}},
+        {TokenType::EXPRESSION_SPEC, std::vector<TokenType>{TokenType::EXPRESSION, TokenType::SUBEXPRESSION, TokenType::WILDCARD}},
         {TokenType::SYNONYM, std::vector<TokenType>{TokenType::NAME, TokenType::STMT, TokenType::READ, TokenType::PRINT, TokenType::CALL, TokenType::WHILE, TokenType::IF, TokenType::ASSIGN, TokenType::VARIABLE, TokenType::CONSTANT, TokenType::PROCEDURE}}
 
-        // add for each rs type
-
     };
+
 public:
     virtual bool isSyntacticallyCorrect(std::vector<TokenObject> tokenizedClause) = 0;
 };

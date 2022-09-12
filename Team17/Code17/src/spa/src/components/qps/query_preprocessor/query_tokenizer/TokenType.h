@@ -39,12 +39,12 @@ namespace qps {
         CONSTANT,
         PROCEDURE,
         // Syntax Types - may be removed in future sprints
-        DECLARATION,
         SYNONYM,
         DESIGN_ENTITY,
         RELREF,
         STMTREF,
-        ENTREF
+        ENTREF,
+        EXPRESSION_SPEC
     };
 }
 

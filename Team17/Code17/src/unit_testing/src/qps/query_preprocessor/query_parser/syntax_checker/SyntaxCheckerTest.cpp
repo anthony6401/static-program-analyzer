@@ -1,6 +1,8 @@
 #include "components/qps/query_preprocessor/query_parser/syntax_checker/SyntaxChecker.h"
 #include "components/qps/query_preprocessor/query_parser/syntax_checker/DeclarationClauseSyntaxChecker.h"
 #include "components/qps/query_preprocessor/query_parser/syntax_checker/SelectClauseSyntaxChecker.h"
+#include "components/qps/query_preprocessor/query_parser/syntax_checker/SuchThatClauseSyntaxChecker.h"
+#include "components/qps/query_preprocessor/query_parser/syntax_checker/PatternClauseSyntaxChecker.h"
 #include "components/qps/query_preprocessor/query_tokenizer/TokenObject.h"
 #include "components/qps/query_preprocessor/query_tokenizer/TokenType.h"
 
@@ -238,3 +240,334 @@ TEST_CASE("Missing return value") {
     bool actualResult = checker.isSyntacticallyCorrect(invalidSelectTokens);
     REQUIRE(actualResult == false);
 };
+
+// Tests for SuchThatClauseSyntaxChecker
+TEST_CASE("Instantiate SuchThatClauseSyntaxChecker") {
+    SuchThatClauseSyntaxChecker checker = SuchThatClauseSyntaxChecker();
+    std::vector<TokenObject> emptyDeclaration{};
+    bool suchThatSyntaxIsEmpty = checker.isSyntacticallyCorrect(emptyDeclaration);
+    REQUIRE(suchThatSyntaxIsEmpty == false);
+};
+
+TEST_CASE("Follows relationship") {
+    SuchThatClauseSyntaxChecker checker = SuchThatClauseSyntaxChecker();
+    std::vector<TokenObject> validSuchThatTokens{
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::THAT, "that"),
+        TokenObject(TokenType::FOLLOWS, "Follows"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::NAME, "s"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::INTEGER, "6"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validSuchThatTokens);
+    REQUIRE(actualResult == true);
+};
+
+TEST_CASE("Parent* relationship - WILDCARD") {
+    SuchThatClauseSyntaxChecker checker = SuchThatClauseSyntaxChecker();
+    std::vector<TokenObject> validSuchThatTokens{
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::THAT, "that"),
+        TokenObject(TokenType::PARENT_T, "Parent*"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::INTEGER, "6"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validSuchThatTokens);
+    REQUIRE(actualResult == true);
+};
+
+TEST_CASE("Uses relationship - STMTREF_ENTREF") {
+    SuchThatClauseSyntaxChecker checker = SuchThatClauseSyntaxChecker();
+    std::vector<TokenObject> validSuchThatTokens{
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::THAT, "that"),
+        TokenObject(TokenType::USES, "Uses"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::INTEGER, "6"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validSuchThatTokens);
+    REQUIRE(actualResult == true);
+};
+
+TEST_CASE("Modifies relationship - ENTREF_ENTREF") {
+    SuchThatClauseSyntaxChecker checker = SuchThatClauseSyntaxChecker();
+    std::vector<TokenObject> validSuchThatTokens{
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::THAT, "that"),
+        TokenObject(TokenType::MODIFIES, "Modifies"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validSuchThatTokens);
+    REQUIRE(actualResult == true);
+};
+
+TEST_CASE("Syntactically incorrect - Follows with wrong parameters") {
+    SuchThatClauseSyntaxChecker checker = SuchThatClauseSyntaxChecker();
+    std::vector<TokenObject> validSuchThatTokens{
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::THAT, "that"),
+        TokenObject(TokenType::FOLLOWS, "Follows"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validSuchThatTokens);
+    REQUIRE(actualResult == false);
+};
+
+TEST_CASE("Syntactically incorrect - Uses with STMTREF as 2nd parameter") {
+    SuchThatClauseSyntaxChecker checker = SuchThatClauseSyntaxChecker();
+    std::vector<TokenObject> validSuchThatTokens{
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::THAT, "that"),
+        TokenObject(TokenType::USES, "Uses"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::INTEGER, "1"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validSuchThatTokens);
+    REQUIRE(actualResult == false);
+};
+
+TEST_CASE("Syntactically incorrect - Missing such token") {
+    SuchThatClauseSyntaxChecker checker = SuchThatClauseSyntaxChecker();
+    std::vector<TokenObject> validSuchThatTokens{
+        TokenObject(TokenType::THAT, "that"),
+        TokenObject(TokenType::USES, "Uses"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::INTEGER, "1"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validSuchThatTokens);
+    REQUIRE(actualResult == false);
+};
+
+TEST_CASE("Syntactically incorrect - Missing that token") {
+    SuchThatClauseSyntaxChecker checker = SuchThatClauseSyntaxChecker();
+    std::vector<TokenObject> validSuchThatTokens{
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::USES, "Uses"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::INTEGER, "1"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validSuchThatTokens);
+    REQUIRE(actualResult == false);
+};
+
+TEST_CASE("Syntactically incorrect - Missing RELREF token") {
+    SuchThatClauseSyntaxChecker checker = SuchThatClauseSyntaxChecker();
+    std::vector<TokenObject> validSuchThatTokens{
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::THAT, "that"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::INTEGER, "1"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validSuchThatTokens);
+    REQUIRE(actualResult == false);
+};
+
+TEST_CASE("Syntactically incorrect - Missing bracket tokens") {
+    SuchThatClauseSyntaxChecker checker = SuchThatClauseSyntaxChecker();
+    std::vector<TokenObject> validSuchThatTokens{
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::THAT, "that"),
+        TokenObject(TokenType::USES, "Uses"),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::INTEGER, "1")
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validSuchThatTokens);
+    REQUIRE(actualResult == false);
+};
+
+TEST_CASE("Syntactically incorrect - Missing relationship tokens") {
+    SuchThatClauseSyntaxChecker checker = SuchThatClauseSyntaxChecker();
+    std::vector<TokenObject> validSuchThatTokens{
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::THAT, "that"),
+        TokenObject(TokenType::USES, "Uses")
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validSuchThatTokens);
+    REQUIRE(actualResult == false);
+};
+
+TEST_CASE("Syntactically incorrect - Missing parameters") {
+    SuchThatClauseSyntaxChecker checker = SuchThatClauseSyntaxChecker();
+    std::vector<TokenObject> validSuchThatTokens{
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::THAT, "that"),
+        TokenObject(TokenType::USES, "Uses"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validSuchThatTokens);
+    REQUIRE(actualResult == false);
+};
+
+// Tests for PatternClauseSyntaxChecker
+TEST_CASE("Instantiate PatternClauseSyntaxChecker") {
+    std::unordered_map<std::string, DesignEntity> mappedSynonymsToDesignEntity;
+    PatternClauseSyntaxChecker checker = PatternClauseSyntaxChecker(mappedSynonymsToDesignEntity);
+    std::vector<TokenObject> emptyDeclaration{};
+    bool patternSyntaxIsEmpty = checker.isSyntacticallyCorrect(emptyDeclaration);
+    REQUIRE(patternSyntaxIsEmpty == false);
+};
+
+TEST_CASE("Valid pattern clause - single declaration") {
+    std::unordered_map<std::string, DesignEntity> mappedSynonymsToDesignEntity{
+        {"a", DesignEntity::ASSIGN}
+    };
+
+    PatternClauseSyntaxChecker checker = PatternClauseSyntaxChecker(mappedSynonymsToDesignEntity);
+    std::vector<TokenObject> validPatternTokens{
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::NAME, "a"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::SUBEXPRESSION, "_\"y\"_"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validPatternTokens);
+    REQUIRE(actualResult == true);
+};
+
+TEST_CASE("Valid pattern clause - multiple declaration") {
+    std::unordered_map<std::string, DesignEntity> mappedSynonymsToDesignEntity{
+        {"a", DesignEntity::ASSIGN},
+        {"v", DesignEntity::VARIABLE},
+        {"s", DesignEntity::STMT},
+    };
+
+    PatternClauseSyntaxChecker checker = PatternClauseSyntaxChecker(mappedSynonymsToDesignEntity);
+    std::vector<TokenObject> validPatternTokens{
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::NAME, "a"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::NAME, "v"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::EXPRESSION, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validPatternTokens);
+    REQUIRE(actualResult == true);
+};
+
+TEST_CASE("Syntactically incorrect - Invalid parameters") {
+    std::unordered_map<std::string, DesignEntity> mappedSynonymsToDesignEntity{
+        {"a", DesignEntity::ASSIGN}
+    };
+
+    PatternClauseSyntaxChecker checker = PatternClauseSyntaxChecker(mappedSynonymsToDesignEntity);
+    std::vector<TokenObject> validPatternTokens{
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::NAME, "a"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::INTEGER, "3"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::EXPRESSION, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validPatternTokens);
+    REQUIRE(actualResult == false);
+};
+
+TEST_CASE("Syntactically incorrect - non-assign synonym") {
+    std::unordered_map<std::string, DesignEntity> mappedSynonymsToDesignEntity{
+        {"a", DesignEntity::VARIABLE}
+    };
+
+    PatternClauseSyntaxChecker checker = PatternClauseSyntaxChecker(mappedSynonymsToDesignEntity);
+    std::vector<TokenObject> validPatternTokens{
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::NAME, "a"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::EXPRESSION, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validPatternTokens);
+    REQUIRE(actualResult == false);
+};
+
+TEST_CASE("Syntactically incorrect - empty declaration") {
+    std::unordered_map<std::string, DesignEntity> mappedSynonymsToDesignEntity{};
+
+    PatternClauseSyntaxChecker checker = PatternClauseSyntaxChecker(mappedSynonymsToDesignEntity);
+    std::vector<TokenObject> validPatternTokens{
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::NAME, "a"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::EXPRESSION, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validPatternTokens);
+    REQUIRE(actualResult == false);
+};
+
+TEST_CASE("Syntactically incorrect - missing pattern token") {
+    std::unordered_map<std::string, DesignEntity> mappedSynonymsToDesignEntity{
+        {"a", DesignEntity::ASSIGN}
+    };
+
+    PatternClauseSyntaxChecker checker = PatternClauseSyntaxChecker(mappedSynonymsToDesignEntity);
+    std::vector<TokenObject> validPatternTokens{
+        TokenObject(TokenType::NAME, "a"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::EXPRESSION, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validPatternTokens);
+    REQUIRE(actualResult == false);
+};
+
+TEST_CASE("Syntactically incorrect - extra tokens") {
+    std::unordered_map<std::string, DesignEntity> mappedSynonymsToDesignEntity{
+        {"a", DesignEntity::ASSIGN}
+    };
+
+    PatternClauseSyntaxChecker checker = PatternClauseSyntaxChecker(mappedSynonymsToDesignEntity);
+    std::vector<TokenObject> validPatternTokens{
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::NAME, "a"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::EXPRESSION, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validPatternTokens);
+    REQUIRE(actualResult == false);
+ };
