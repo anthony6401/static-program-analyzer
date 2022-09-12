@@ -1,24 +1,39 @@
 #include "Extractor.h"
 
+#include <iostream>
+
 Extractor::Extractor(SPClient* client) {
 	this->client = client;
 }
 
 void Extractor::extractRead(SimpleToken simpleToken, std::vector<std::string> tokens) {
-	ReadEntity* leftEntity = new ReadEntity(std::to_string(simpleToken.statementNumber));
-	VariableEntity* rightEntity = new VariableEntity(tokens.at(0));
-	ModifyRelationship* modifyRelationship = new ModifyRelationship(leftEntity, rightEntity);
-	this->client->storeRelationship(modifyRelationship);
+	if (simpleToken.type == SpTokenType::TREAD) {
+		ReadEntity* leftEntity = new ReadEntity(std::to_string(simpleToken.statementNumber));
+		VariableEntity* rightEntity = new VariableEntity(tokens.at(0));
+		ModifyRelationship* modifyRelationship = new ModifyRelationship(leftEntity, rightEntity);
+		this->client->storeRelationship(modifyRelationship);
+	} else {
+		throw std::invalid_argument("Invalid token type for extractRead");
+	}
 }
 
 void Extractor::extractPrint(SimpleToken simpleToken, std::vector<std::string> tokens) {
-	PrintEntity* leftEntity = new PrintEntity(std::to_string(simpleToken.statementNumber));
-	VariableEntity* rightEntity = new VariableEntity(tokens.at(0));
-	UsesRelationship* usesRelationship = new UsesRelationship(leftEntity, rightEntity);
-	this->client->storeRelationship(usesRelationship);
+	if (simpleToken.type == SpTokenType::TPRINT) {
+		PrintEntity* leftEntity = new PrintEntity(std::to_string(simpleToken.statementNumber));
+		VariableEntity* rightEntity = new VariableEntity(tokens.at(0));
+		UsesRelationship* usesRelationship = new UsesRelationship(leftEntity, rightEntity);
+		this->client->storeRelationship(usesRelationship);
+	}
+	else {
+		throw std::invalid_argument("Invalid token type for extractPrint");
+	}
 }
 
 void Extractor::extractAssign(SimpleToken simpleToken) {
+	if (simpleToken.type != SpTokenType::TASSIGN) {
+		throw std::invalid_argument("Invalid token type for extractAssign");
+	}
+
 	AssignEntity* assignEntity = new AssignEntity(std::to_string(simpleToken.statementNumber));
 	std::vector<SimpleToken> children = simpleToken.getChildren();
 
@@ -46,6 +61,10 @@ void Extractor::extractAssign(SimpleToken simpleToken) {
 }
 
 void Extractor::extractWhile(SimpleToken simpleToken) {
+	if (simpleToken.type != SpTokenType::TWHILE) {
+		throw std::invalid_argument("Invalid token type for extractWhile");
+	}
+
 	WhileEntity* whileEntity = new WhileEntity(std::to_string(simpleToken.statementNumber));
 	std::vector<SimpleToken> children = simpleToken.getChildren();
 
@@ -56,6 +75,10 @@ void Extractor::extractWhile(SimpleToken simpleToken) {
 }
 
 void Extractor::extractIf(SimpleToken simpleToken) {
+	if (simpleToken.type != SpTokenType::TIF) {
+		throw std::invalid_argument("Invalid token type for extractIf");
+	}
+
 	IfEntity* ifEntity = new IfEntity(std::to_string(simpleToken.statementNumber));
 	std::vector<SimpleToken> children = simpleToken.getChildren();
 
@@ -67,9 +90,21 @@ void Extractor::extractIf(SimpleToken simpleToken) {
 	extractStmtLst(stmtLst2);
 }
 
-void Extractor::extractCondExpr(SimpleToken simpleToken) {}
+void Extractor::extractCondExpr(SimpleToken simpleToken) {
+	if (simpleToken.type != SpTokenType::TCONDEXPR) {
+		throw std::invalid_argument("Invalid token type for extractCondExpr");
+	}
 
-void Extractor::extractStmtLst(SimpleToken simpleToken) {}
+	// code here
+}
+
+void Extractor::extractStmtLst(SimpleToken simpleToken) {
+	if (simpleToken.type != SpTokenType::TSTMT) {
+		throw std::invalid_argument("Invalid token type for extractStmtLst");
+	}
+
+	std::vector<SimpleToken> children = simpleToken.getChildren();
+}
 
 void Extractor::extractProcedure() {
 	ProcedureEntity* procedureEntity = new ProcedureEntity("");
