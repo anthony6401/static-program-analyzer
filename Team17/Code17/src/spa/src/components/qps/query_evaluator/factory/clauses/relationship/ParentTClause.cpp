@@ -31,8 +31,8 @@ RawResult ParentTClause::evaluateClause() {
     }
 }
 
-std::unordered_set<std::string> ParentTClause::getAllSynonyms() {
-    std::unordered_set<std::string> synonyms = {};
+std::set<std::string> ParentTClause::getAllSynonyms() {
+    std::set<std::string> synonyms = {};
     if (left.getTokenType() == TokenType::SYNONYM) {
         synonyms.emplace(left.getValue());
     }

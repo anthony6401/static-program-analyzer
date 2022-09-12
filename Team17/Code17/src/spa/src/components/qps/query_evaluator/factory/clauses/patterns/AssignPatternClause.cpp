@@ -45,8 +45,8 @@ size_t AssignPatternClause::getNumberOfSynonyms() {
     return numberOfSynonyms + 1;
 }
 
-std::unordered_set<std::string> AssignPatternClause::getAllSynonyms() {
-    std::unordered_set<std::string> synonyms = {assignSynonym};
+std::set<std::string> AssignPatternClause::getAllSynonyms() {
+    std::set<std::string> synonyms = {assignSynonym};
     if (left.getTokenType() == TokenType::SYNONYM) {
         synonyms.emplace(left.getValue());
     }

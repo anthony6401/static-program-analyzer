@@ -42,8 +42,8 @@ size_t FollowsTClause::getNumberOfSynonyms() {
     return numberOfSynonyms;
 }
 
-std::unordered_set<std::string> FollowsTClause::getAllSynonyms() {
-    std::unordered_set<std::string> synonyms = {};
+std::set<std::string> FollowsTClause::getAllSynonyms() {
+    std::set<std::string> synonyms = {};
     if (left.getTokenType() == TokenType::SYNONYM) {
         synonyms.emplace(left.getValue());
     }

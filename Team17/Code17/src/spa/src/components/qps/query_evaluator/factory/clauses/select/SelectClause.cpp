@@ -15,8 +15,8 @@ size_t SelectClause::getNumberOfSynonyms() {
     return 1;
 }
 
-std::unordered_set<std::string> SelectClause::getAllSynonyms() {
-    std::unordered_set<std::string> synonyms = {};
+std::set<std::string> SelectClause::getAllSynonyms() {
+    std::set<std::string> synonyms = {};
     synonyms.emplace(synonym.getSynonym());
     return synonyms;
 }

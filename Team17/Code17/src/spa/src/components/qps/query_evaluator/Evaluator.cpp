@@ -4,10 +4,25 @@
 #include "components/qps/abstract_query_object/QueryObject.h"
 #include "components/qps/query_evaluator/factory/ClauseCreator.h"
 #include "components/pkb/clients/QPSClient.h"
+#include "ClausesDivider.h"
 
 void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &results, QPSClient qpsClient) {
     std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap = queryObject.getSynonymToDesignEntityMap();
+    Select synonym = queryObject.getSelect();
+    std::shared_ptr<Clause> selectClause = ClauseCreator::createClause(synonym, synonymToDesignEntityMap, qpsClient);
+
     std::vector<std::shared_ptr<Clause>> clausesToEvaluate = extractClausesToEvaluate(queryObject, synonymToDesignEntityMap, qpsClient);
+
+    std::pair<GroupedClause, std::vector<GroupedClause>> pairBySynonyms = ClauseDivider::divideClausesBySynonyms(clausesToEvaluate);
+    GroupedClause noSynonymsClauses = pairBySynonyms.first;
+    std::vector<GroupedClause> commonSynonymsGroupedClauses = pairBySynonyms.second;
+
+    std::pair<std::vector<GroupedClause>, std::vector<GroupedClause>> pairBySelect =
+            ClauseDivider::divideCommonSynonymGroupsBySelect(selectClause, commonSynonymsGroupedClauses);
+
+    std::vector<GroupedClause> hasSelectSynonymPresent = pairBySelect.first;
+    std::vector<GroupedClause> noSelectSynonymPresent = pairBySelect.second;
+
     std::vector<RawResult> evaluatedResultsList;
     bool isNoneResult = false;
 
