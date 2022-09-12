@@ -5,6 +5,7 @@
 #include "components/pkb/storage/RelationshipStorage/ModifyRelationshipStorage.h"
 #include "components/pkb/storage/RelationshipStorage/ParentRelationshipStorage.h"
 #include "components/pkb/storage/RelationshipStorage/FollowsRelationshipStorage.h"
+#include "components/pkb/storage/RelationshipStorage/FollowsTRelationshipStorage.h"
 
 #include "../RelationshipObject.h"
 #include "../ReuseableTokenObject.h"
@@ -846,180 +847,180 @@ TEST_CASE("Parent Relationship Storage Test") {
 	REQUIRE(stmtStmtAllResult == expectedResultStmtStmtAll);
 }
 
-TEST_CASE("Follows Relationship Storage Test") {
-	RelationshipStorage* followsRelationshipStorage = new FollowsRelationshipStorage();
+TEST_CASE("FollowsT Relationship Storage Test") {
+	RelationshipStorage* followsTRelationshipStorage = new FollowsTRelationshipStorage();
 
 	// TESTING FOR STORING
 
 	//Test Read Entity
-	REQUIRE(followsRelationshipStorage->storeRelationship(followsRelationshipReadReadOne));
-	REQUIRE(!followsRelationshipStorage->storeRelationship(followsRelationshipReadReadDupOne));
+	REQUIRE(followsTRelationshipStorage->storeRelationship(followsTRelationshipReadReadOne));
+	REQUIRE(!followsTRelationshipStorage->storeRelationship(followsTRelationshipReadReadDupOne));
 
-	REQUIRE(followsRelationshipStorage->storeRelationship(followsRelationshipReadPrintOne));
-	REQUIRE(!followsRelationshipStorage->storeRelationship(followsRelationshipReadPrintDupOne));
+	REQUIRE(followsTRelationshipStorage->storeRelationship(followsTRelationshipReadPrintOne));
+	REQUIRE(!followsTRelationshipStorage->storeRelationship(followsTRelationshipReadPrintDupOne));
 
-	REQUIRE(followsRelationshipStorage->storeRelationship(followsRelationshipReadAssignOne));
-	REQUIRE(!followsRelationshipStorage->storeRelationship(followsRelationshipReadAssignDupOne));
+	REQUIRE(followsTRelationshipStorage->storeRelationship(followsTRelationshipReadAssignOne));
+	REQUIRE(!followsTRelationshipStorage->storeRelationship(followsTRelationshipReadAssignDupOne));
 
-	REQUIRE(followsRelationshipStorage->storeRelationship(followsRelationshipReadCallOne));
-	REQUIRE(!followsRelationshipStorage->storeRelationship(followsRelationshipReadCallDupOne));
+	REQUIRE(followsTRelationshipStorage->storeRelationship(followsTRelationshipReadCallOne));
+	REQUIRE(!followsTRelationshipStorage->storeRelationship(followsTRelationshipReadCallDupOne));
 
-	REQUIRE(followsRelationshipStorage->storeRelationship(followsRelationshipReadWhileOne));
-	REQUIRE(!followsRelationshipStorage->storeRelationship(followsRelationshipReadWhileDupOne));
+	REQUIRE(followsTRelationshipStorage->storeRelationship(followsTRelationshipReadWhileOne));
+	REQUIRE(!followsTRelationshipStorage->storeRelationship(followsTRelationshipReadWhileDupOne));
 
-	REQUIRE(followsRelationshipStorage->storeRelationship(followsRelationshipReadIfOne));
-	REQUIRE(!followsRelationshipStorage->storeRelationship(followsRelationshipReadIfDupOne));
+	REQUIRE(followsTRelationshipStorage->storeRelationship(followsTRelationshipReadIfOne));
+	REQUIRE(!followsTRelationshipStorage->storeRelationship(followsTRelationshipReadIfDupOne));
 
-	//Test Print Entity
-	REQUIRE(followsRelationshipStorage->storeRelationship(followsRelationshipPrintReadOne));
-	REQUIRE(!followsRelationshipStorage->storeRelationship(followsRelationshipPrintReadDupOne));
+	//Test Print EntityT
+	REQUIRE(followsTRelationshipStorage->storeRelationship(followsTRelationshipPrintReadOne));
+	REQUIRE(!followsTRelationshipStorage->storeRelationship(followsTRelationshipPrintReadDupOne));
 
-	REQUIRE(followsRelationshipStorage->storeRelationship(followsRelationshipPrintPrintOne));
-	REQUIRE(!followsRelationshipStorage->storeRelationship(followsRelationshipPrintPrintDupOne));
+	REQUIRE(followsTRelationshipStorage->storeRelationship(followsTRelationshipPrintPrintOne));
+	REQUIRE(!followsTRelationshipStorage->storeRelationship(followsTRelationshipPrintPrintDupOne));
 
-	REQUIRE(followsRelationshipStorage->storeRelationship(followsRelationshipPrintAssignOne));
-	REQUIRE(!followsRelationshipStorage->storeRelationship(followsRelationshipPrintAssignDupOne));
+	REQUIRE(followsTRelationshipStorage->storeRelationship(followsTRelationshipPrintAssignOne));
+	REQUIRE(!followsTRelationshipStorage->storeRelationship(followsTRelationshipPrintAssignDupOne));
 
-	REQUIRE(followsRelationshipStorage->storeRelationship(followsRelationshipPrintCallOne));
-	REQUIRE(!followsRelationshipStorage->storeRelationship(followsRelationshipPrintCallDupOne));
+	REQUIRE(followsTRelationshipStorage->storeRelationship(followsTRelationshipPrintCallOne));
+	REQUIRE(!followsTRelationshipStorage->storeRelationship(followsTRelationshipPrintCallDupOne));
 
-	REQUIRE(followsRelationshipStorage->storeRelationship(followsRelationshipPrintWhileOne));
-	REQUIRE(!followsRelationshipStorage->storeRelationship(followsRelationshipPrintWhileDupOne));
+	REQUIRE(followsTRelationshipStorage->storeRelationship(followsTRelationshipPrintWhileOne));
+	REQUIRE(!followsTRelationshipStorage->storeRelationship(followsTRelationshipPrintWhileDupOne));
 
-	REQUIRE(followsRelationshipStorage->storeRelationship(followsRelationshipPrintIfOne));
-	REQUIRE(!followsRelationshipStorage->storeRelationship(followsRelationshipPrintIfDupOne));
+	REQUIRE(followsTRelationshipStorage->storeRelationship(followsTRelationshipPrintIfOne));
+	REQUIRE(!followsTRelationshipStorage->storeRelationship(followsTRelationshipPrintIfDupOne));
 
 	//Test Assign Entity
-	REQUIRE(followsRelationshipStorage->storeRelationship(followsRelationshipAssignReadOne));
-	REQUIRE(!followsRelationshipStorage->storeRelationship(followsRelationshipAssignReadDupOne));
+	REQUIRE(followsTRelationshipStorage->storeRelationship(followsTRelationshipAssignReadOne));
+	REQUIRE(!followsTRelationshipStorage->storeRelationship(followsTRelationshipAssignReadDupOne));
 
-	REQUIRE(followsRelationshipStorage->storeRelationship(followsRelationshipAssignPrintOne));
-	REQUIRE(!followsRelationshipStorage->storeRelationship(followsRelationshipAssignPrintDupOne));
+	REQUIRE(followsTRelationshipStorage->storeRelationship(followsTRelationshipAssignPrintOne));
+	REQUIRE(!followsTRelationshipStorage->storeRelationship(followsTRelationshipAssignPrintDupOne));
 
-	REQUIRE(followsRelationshipStorage->storeRelationship(followsRelationshipAssignAssignOne));
-	REQUIRE(!followsRelationshipStorage->storeRelationship(followsRelationshipAssignAssignDupOne));
+	REQUIRE(followsTRelationshipStorage->storeRelationship(followsTRelationshipAssignAssignOne));
+	REQUIRE(!followsTRelationshipStorage->storeRelationship(followsTRelationshipAssignAssignDupOne));
 
-	REQUIRE(followsRelationshipStorage->storeRelationship(followsRelationshipAssignCallOne));
-	REQUIRE(!followsRelationshipStorage->storeRelationship(followsRelationshipAssignCallDupOne));
+	REQUIRE(followsTRelationshipStorage->storeRelationship(followsTRelationshipAssignCallOne));
+	REQUIRE(!followsTRelationshipStorage->storeRelationship(followsTRelationshipAssignCallDupOne));
 
-	REQUIRE(followsRelationshipStorage->storeRelationship(followsRelationshipAssignWhileOne));
-	REQUIRE(!followsRelationshipStorage->storeRelationship(followsRelationshipAssignWhileDupOne));
+	REQUIRE(followsTRelationshipStorage->storeRelationship(followsTRelationshipAssignWhileOne));
+	REQUIRE(!followsTRelationshipStorage->storeRelationship(followsTRelationshipAssignWhileDupOne));
 
-	REQUIRE(followsRelationshipStorage->storeRelationship(followsRelationshipAssignIfOne));
-	REQUIRE(!followsRelationshipStorage->storeRelationship(followsRelationshipAssignIfDupOne));
+	REQUIRE(followsTRelationshipStorage->storeRelationship(followsTRelationshipAssignIfOne));
+	REQUIRE(!followsTRelationshipStorage->storeRelationship(followsTRelationshipAssignIfDupOne));
 
 	//Test Call Entity
-	REQUIRE(followsRelationshipStorage->storeRelationship(followsRelationshipCallReadOne));
-	REQUIRE(!followsRelationshipStorage->storeRelationship(followsRelationshipCallReadDupOne));
+	REQUIRE(followsTRelationshipStorage->storeRelationship(followsTRelationshipCallReadOne));
+	REQUIRE(!followsTRelationshipStorage->storeRelationship(followsTRelationshipCallReadDupOne));
 
-	REQUIRE(followsRelationshipStorage->storeRelationship(followsRelationshipCallPrintOne));
-	REQUIRE(!followsRelationshipStorage->storeRelationship(followsRelationshipCallPrintDupOne));
+	REQUIRE(followsTRelationshipStorage->storeRelationship(followsTRelationshipCallPrintOne));
+	REQUIRE(!followsTRelationshipStorage->storeRelationship(followsTRelationshipCallPrintDupOne));
 
-	REQUIRE(followsRelationshipStorage->storeRelationship(followsRelationshipCallAssignOne));
-	REQUIRE(!followsRelationshipStorage->storeRelationship(followsRelationshipCallAssignDupOne));
+	REQUIRE(followsTRelationshipStorage->storeRelationship(followsTRelationshipCallAssignOne));
+	REQUIRE(!followsTRelationshipStorage->storeRelationship(followsTRelationshipCallAssignDupOne));
 
-	REQUIRE(followsRelationshipStorage->storeRelationship(followsRelationshipCallCallOne));
-	REQUIRE(!followsRelationshipStorage->storeRelationship(followsRelationshipCallCallDupOne));
+	REQUIRE(followsTRelationshipStorage->storeRelationship(followsTRelationshipCallCallOne));
+	REQUIRE(!followsTRelationshipStorage->storeRelationship(followsTRelationshipCallCallDupOne));
 
-	REQUIRE(followsRelationshipStorage->storeRelationship(followsRelationshipCallWhileOne));
-	REQUIRE(!followsRelationshipStorage->storeRelationship(followsRelationshipCallWhileDupOne));
+	REQUIRE(followsTRelationshipStorage->storeRelationship(followsTRelationshipCallWhileOne));
+	REQUIRE(!followsTRelationshipStorage->storeRelationship(followsTRelationshipCallWhileDupOne));
 
-	REQUIRE(followsRelationshipStorage->storeRelationship(followsRelationshipCallIfOne));
-	REQUIRE(!followsRelationshipStorage->storeRelationship(followsRelationshipCallIfDupOne));
+	REQUIRE(followsTRelationshipStorage->storeRelationship(followsTRelationshipCallIfOne));
+	REQUIRE(!followsTRelationshipStorage->storeRelationship(followsTRelationshipCallIfDupOne));
 
 	//Test While Entity
-	REQUIRE(followsRelationshipStorage->storeRelationship(followsRelationshipWhileReadOne));
-	REQUIRE(!followsRelationshipStorage->storeRelationship(followsRelationshipWhileReadDupOne));
+	REQUIRE(followsTRelationshipStorage->storeRelationship(followsTRelationshipWhileReadOne));
+	REQUIRE(!followsTRelationshipStorage->storeRelationship(followsTRelationshipWhileReadDupOne));
 
 
-	REQUIRE(followsRelationshipStorage->storeRelationship(followsRelationshipWhilePrintOne));
-	REQUIRE(!followsRelationshipStorage->storeRelationship(followsRelationshipWhilePrintDupOne));
+	REQUIRE(followsTRelationshipStorage->storeRelationship(followsTRelationshipWhilePrintOne));
+	REQUIRE(!followsTRelationshipStorage->storeRelationship(followsTRelationshipWhilePrintDupOne));
 
-	REQUIRE(followsRelationshipStorage->storeRelationship(followsRelationshipWhileAssignOne));
-	REQUIRE(!followsRelationshipStorage->storeRelationship(followsRelationshipWhileAssignDupOne));
+	REQUIRE(followsTRelationshipStorage->storeRelationship(followsTRelationshipWhileAssignOne));
+	REQUIRE(!followsTRelationshipStorage->storeRelationship(followsTRelationshipWhileAssignDupOne));
 
-	REQUIRE(followsRelationshipStorage->storeRelationship(followsRelationshipWhileCallOne));
-	REQUIRE(!followsRelationshipStorage->storeRelationship(followsRelationshipWhileCallDupOne));
+	REQUIRE(followsTRelationshipStorage->storeRelationship(followsTRelationshipWhileCallOne));
+	REQUIRE(!followsTRelationshipStorage->storeRelationship(followsTRelationshipWhileCallDupOne));
 
-	REQUIRE(followsRelationshipStorage->storeRelationship(followsRelationshipWhileWhileOne));
-	REQUIRE(!followsRelationshipStorage->storeRelationship(followsRelationshipWhileWhileDupOne));
+	REQUIRE(followsTRelationshipStorage->storeRelationship(followsTRelationshipWhileWhileOne));
+	REQUIRE(!followsTRelationshipStorage->storeRelationship(followsTRelationshipWhileWhileDupOne));
 
-	REQUIRE(followsRelationshipStorage->storeRelationship(followsRelationshipWhileIfOne));
-	REQUIRE(!followsRelationshipStorage->storeRelationship(followsRelationshipWhileIfDupOne));
-
+	REQUIRE(followsTRelationshipStorage->storeRelationship(followsTRelationshipWhileIfOne));
+	REQUIRE(!followsTRelationshipStorage->storeRelationship(followsTRelationshipWhileIfDupOne));
+	
 	//Test If Entity
-	REQUIRE(followsRelationshipStorage->storeRelationship(followsRelationshipIfReadOne));
-	REQUIRE(!followsRelationshipStorage->storeRelationship(followsRelationshipIfReadDupOne));
+	REQUIRE(followsTRelationshipStorage->storeRelationship(followsTRelationshipIfReadOne));
+	REQUIRE(!followsTRelationshipStorage->storeRelationship(followsTRelationshipIfReadDupOne));
 
-	REQUIRE(followsRelationshipStorage->storeRelationship(followsRelationshipIfPrintOne));
-	REQUIRE(!followsRelationshipStorage->storeRelationship(followsRelationshipIfPrintDupOne));
+	REQUIRE(followsTRelationshipStorage->storeRelationship(followsTRelationshipIfPrintOne));
+	REQUIRE(!followsTRelationshipStorage->storeRelationship(followsTRelationshipIfPrintDupOne));
 
-	REQUIRE(followsRelationshipStorage->storeRelationship(followsRelationshipIfAssignOne));
-	REQUIRE(!followsRelationshipStorage->storeRelationship(followsRelationshipIfAssignDupOne));
+	REQUIRE(followsTRelationshipStorage->storeRelationship(followsTRelationshipIfAssignOne));
+	REQUIRE(!followsTRelationshipStorage->storeRelationship(followsTRelationshipIfAssignDupOne));
 
-	REQUIRE(followsRelationshipStorage->storeRelationship(followsRelationshipIfCallOne));
-	REQUIRE(!followsRelationshipStorage->storeRelationship(followsRelationshipIfCallDupOne));
+	REQUIRE(followsTRelationshipStorage->storeRelationship(followsTRelationshipIfCallOne));
+	REQUIRE(!followsTRelationshipStorage->storeRelationship(followsTRelationshipIfCallDupOne));
 
-	REQUIRE(followsRelationshipStorage->storeRelationship(followsRelationshipIfWhileOne));
-	REQUIRE(!followsRelationshipStorage->storeRelationship(followsRelationshipIfWhileDupOne));
+	REQUIRE(followsTRelationshipStorage->storeRelationship(followsTRelationshipIfWhileOne));
+	REQUIRE(!followsTRelationshipStorage->storeRelationship(followsTRelationshipIfWhileDupOne));
 
-	REQUIRE(followsRelationshipStorage->storeRelationship(followsRelationshipIfIfOne));
-	REQUIRE(!followsRelationshipStorage->storeRelationship(followsRelationshipIfIfDupOne));
+	REQUIRE(followsTRelationshipStorage->storeRelationship(followsTRelationshipIfIfOne));
+	REQUIRE(!followsTRelationshipStorage->storeRelationship(followsTRelationshipIfIfDupOne));
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	REQUIRE(!followsRelationshipStorage->storeRelationship(modifyRelationshipAssignOne));
+	REQUIRE(!followsTRelationshipStorage->storeRelationship(modifyRelationshipAssignOne));
 
 	//Testing for Parent(1,2) query
 	// 
 	
 	//Testing for Read entity	
-	REQUIRE(followsRelationshipStorage->getRelationship(RelationshipType::FOLLOWS, stmtTokenObject5, stmtTokenObject11));
-	REQUIRE(followsRelationshipStorage->getRelationship(RelationshipType::FOLLOWS, stmtTokenObject5, stmtTokenObject4));
-	REQUIRE(followsRelationshipStorage->getRelationship(RelationshipType::FOLLOWS, stmtTokenObject5, stmtTokenObject1));
-	REQUIRE(followsRelationshipStorage->getRelationship(RelationshipType::FOLLOWS, stmtTokenObject5, stmtTokenObject2));
-	REQUIRE(followsRelationshipStorage->getRelationship(RelationshipType::FOLLOWS, stmtTokenObject5, stmtTokenObject6));
-	REQUIRE(followsRelationshipStorage->getRelationship(RelationshipType::FOLLOWS, stmtTokenObject5, stmtTokenObject3));
+	REQUIRE(followsTRelationshipStorage->getRelationship(RelationshipType::FOLLOWS_T, stmtTokenObject5, stmtTokenObject11));
+	REQUIRE(followsTRelationshipStorage->getRelationship(RelationshipType::FOLLOWS_T, stmtTokenObject5, stmtTokenObject4));
+	REQUIRE(followsTRelationshipStorage->getRelationship(RelationshipType::FOLLOWS_T, stmtTokenObject5, stmtTokenObject1));
+	REQUIRE(followsTRelationshipStorage->getRelationship(RelationshipType::FOLLOWS_T, stmtTokenObject5, stmtTokenObject2));
+	REQUIRE(followsTRelationshipStorage->getRelationship(RelationshipType::FOLLOWS_T, stmtTokenObject5, stmtTokenObject6));
+	REQUIRE(followsTRelationshipStorage->getRelationship(RelationshipType::FOLLOWS_T, stmtTokenObject5, stmtTokenObject3));
 
 	//Testing for Print entity	
-	REQUIRE(followsRelationshipStorage->getRelationship(RelationshipType::FOLLOWS, stmtTokenObject4, stmtTokenObject5));
-	REQUIRE(followsRelationshipStorage->getRelationship(RelationshipType::FOLLOWS, stmtTokenObject4, stmtTokenObject10));
-	REQUIRE(followsRelationshipStorage->getRelationship(RelationshipType::FOLLOWS, stmtTokenObject4, stmtTokenObject1));
-	REQUIRE(followsRelationshipStorage->getRelationship(RelationshipType::FOLLOWS, stmtTokenObject4, stmtTokenObject2));
-	REQUIRE(followsRelationshipStorage->getRelationship(RelationshipType::FOLLOWS, stmtTokenObject4, stmtTokenObject6));
-	REQUIRE(followsRelationshipStorage->getRelationship(RelationshipType::FOLLOWS, stmtTokenObject4, stmtTokenObject3));
+	REQUIRE(followsTRelationshipStorage->getRelationship(RelationshipType::FOLLOWS_T, stmtTokenObject4, stmtTokenObject5));
+	REQUIRE(followsTRelationshipStorage->getRelationship(RelationshipType::FOLLOWS_T, stmtTokenObject4, stmtTokenObject10));
+	REQUIRE(followsTRelationshipStorage->getRelationship(RelationshipType::FOLLOWS_T, stmtTokenObject4, stmtTokenObject1));
+	REQUIRE(followsTRelationshipStorage->getRelationship(RelationshipType::FOLLOWS_T, stmtTokenObject4, stmtTokenObject2));
+	REQUIRE(followsTRelationshipStorage->getRelationship(RelationshipType::FOLLOWS_T, stmtTokenObject4, stmtTokenObject6));
+	REQUIRE(followsTRelationshipStorage->getRelationship(RelationshipType::FOLLOWS_T, stmtTokenObject4, stmtTokenObject3));
 
 	//Testing for Assign entity	
-	REQUIRE(followsRelationshipStorage->getRelationship(RelationshipType::FOLLOWS, stmtTokenObject1, stmtTokenObject5));
-	REQUIRE(followsRelationshipStorage->getRelationship(RelationshipType::FOLLOWS, stmtTokenObject1, stmtTokenObject4));
-	REQUIRE(followsRelationshipStorage->getRelationship(RelationshipType::FOLLOWS, stmtTokenObject1, stmtTokenObject7));
-	REQUIRE(followsRelationshipStorage->getRelationship(RelationshipType::FOLLOWS, stmtTokenObject1, stmtTokenObject2));
-	REQUIRE(followsRelationshipStorage->getRelationship(RelationshipType::FOLLOWS, stmtTokenObject1, stmtTokenObject6));
-	REQUIRE(followsRelationshipStorage->getRelationship(RelationshipType::FOLLOWS, stmtTokenObject1, stmtTokenObject3));
+	REQUIRE(followsTRelationshipStorage->getRelationship(RelationshipType::FOLLOWS_T, stmtTokenObject1, stmtTokenObject5));
+	REQUIRE(followsTRelationshipStorage->getRelationship(RelationshipType::FOLLOWS_T, stmtTokenObject1, stmtTokenObject4));
+	REQUIRE(followsTRelationshipStorage->getRelationship(RelationshipType::FOLLOWS_T, stmtTokenObject1, stmtTokenObject7));
+	REQUIRE(followsTRelationshipStorage->getRelationship(RelationshipType::FOLLOWS_T, stmtTokenObject1, stmtTokenObject2));
+	REQUIRE(followsTRelationshipStorage->getRelationship(RelationshipType::FOLLOWS_T, stmtTokenObject1, stmtTokenObject6));
+	REQUIRE(followsTRelationshipStorage->getRelationship(RelationshipType::FOLLOWS_T, stmtTokenObject1, stmtTokenObject3));
 
 	//Testing for Call entity	
-	REQUIRE(followsRelationshipStorage->getRelationship(RelationshipType::FOLLOWS, stmtTokenObject2, stmtTokenObject5));
-	REQUIRE(followsRelationshipStorage->getRelationship(RelationshipType::FOLLOWS, stmtTokenObject2, stmtTokenObject4));
-	REQUIRE(followsRelationshipStorage->getRelationship(RelationshipType::FOLLOWS, stmtTokenObject2, stmtTokenObject1));
-	REQUIRE(followsRelationshipStorage->getRelationship(RelationshipType::FOLLOWS, stmtTokenObject2, stmtTokenObject8));
-	REQUIRE(followsRelationshipStorage->getRelationship(RelationshipType::FOLLOWS, stmtTokenObject2, stmtTokenObject6));
-	REQUIRE(followsRelationshipStorage->getRelationship(RelationshipType::FOLLOWS, stmtTokenObject2, stmtTokenObject3));
+	REQUIRE(followsTRelationshipStorage->getRelationship(RelationshipType::FOLLOWS_T, stmtTokenObject2, stmtTokenObject5));
+	REQUIRE(followsTRelationshipStorage->getRelationship(RelationshipType::FOLLOWS_T, stmtTokenObject2, stmtTokenObject4));
+	REQUIRE(followsTRelationshipStorage->getRelationship(RelationshipType::FOLLOWS_T, stmtTokenObject2, stmtTokenObject1));
+	REQUIRE(followsTRelationshipStorage->getRelationship(RelationshipType::FOLLOWS_T, stmtTokenObject2, stmtTokenObject8));
+	REQUIRE(followsTRelationshipStorage->getRelationship(RelationshipType::FOLLOWS_T, stmtTokenObject2, stmtTokenObject6));
+	REQUIRE(followsTRelationshipStorage->getRelationship(RelationshipType::FOLLOWS_T, stmtTokenObject2, stmtTokenObject3));
 
 	//Testing for While entity	
-	REQUIRE(followsRelationshipStorage->getRelationship(RelationshipType::FOLLOWS, stmtTokenObject6, stmtTokenObject5));
-	REQUIRE(followsRelationshipStorage->getRelationship(RelationshipType::FOLLOWS, stmtTokenObject6, stmtTokenObject4));
-	REQUIRE(followsRelationshipStorage->getRelationship(RelationshipType::FOLLOWS, stmtTokenObject6, stmtTokenObject1));
-	REQUIRE(followsRelationshipStorage->getRelationship(RelationshipType::FOLLOWS, stmtTokenObject6, stmtTokenObject2));
-	REQUIRE(followsRelationshipStorage->getRelationship(RelationshipType::FOLLOWS, stmtTokenObject6, stmtTokenObject12));
-	REQUIRE(followsRelationshipStorage->getRelationship(RelationshipType::FOLLOWS, stmtTokenObject6, stmtTokenObject3));
+	REQUIRE(followsTRelationshipStorage->getRelationship(RelationshipType::FOLLOWS_T, stmtTokenObject6, stmtTokenObject5));
+	REQUIRE(followsTRelationshipStorage->getRelationship(RelationshipType::FOLLOWS_T, stmtTokenObject6, stmtTokenObject4));
+	REQUIRE(followsTRelationshipStorage->getRelationship(RelationshipType::FOLLOWS_T, stmtTokenObject6, stmtTokenObject1));
+	REQUIRE(followsTRelationshipStorage->getRelationship(RelationshipType::FOLLOWS_T, stmtTokenObject6, stmtTokenObject2));
+	REQUIRE(followsTRelationshipStorage->getRelationship(RelationshipType::FOLLOWS_T, stmtTokenObject6, stmtTokenObject12));
+	REQUIRE(followsTRelationshipStorage->getRelationship(RelationshipType::FOLLOWS_T, stmtTokenObject6, stmtTokenObject3));
 
 	//Testing for If entity	
-	REQUIRE(followsRelationshipStorage->getRelationship(RelationshipType::FOLLOWS, stmtTokenObject3, stmtTokenObject5));
-	REQUIRE(followsRelationshipStorage->getRelationship(RelationshipType::FOLLOWS, stmtTokenObject3, stmtTokenObject4));
-	REQUIRE(followsRelationshipStorage->getRelationship(RelationshipType::FOLLOWS, stmtTokenObject3, stmtTokenObject1));
-	REQUIRE(followsRelationshipStorage->getRelationship(RelationshipType::FOLLOWS, stmtTokenObject3, stmtTokenObject2));
-	REQUIRE(followsRelationshipStorage->getRelationship(RelationshipType::FOLLOWS, stmtTokenObject3, stmtTokenObject6));
-	REQUIRE(followsRelationshipStorage->getRelationship(RelationshipType::FOLLOWS, stmtTokenObject3, stmtTokenObject9));
+	REQUIRE(followsTRelationshipStorage->getRelationship(RelationshipType::FOLLOWS_T, stmtTokenObject3, stmtTokenObject5));
+	REQUIRE(followsTRelationshipStorage->getRelationship(RelationshipType::FOLLOWS_T, stmtTokenObject3, stmtTokenObject4));
+	REQUIRE(followsTRelationshipStorage->getRelationship(RelationshipType::FOLLOWS_T, stmtTokenObject3, stmtTokenObject1));
+	REQUIRE(followsTRelationshipStorage->getRelationship(RelationshipType::FOLLOWS_T, stmtTokenObject3, stmtTokenObject2));
+	REQUIRE(followsTRelationshipStorage->getRelationship(RelationshipType::FOLLOWS_T, stmtTokenObject3, stmtTokenObject6));
+	REQUIRE(followsTRelationshipStorage->getRelationship(RelationshipType::FOLLOWS_T, stmtTokenObject3, stmtTokenObject9));
 
 
 	//Testing for Parent(1,a), Parent(1,pr), etc
@@ -1033,13 +1034,13 @@ TEST_CASE("Follows Relationship Storage Test") {
 	std::unordered_set<std::string> readStmtTest{ read_value_two, print_value_one, assign_value_one, call_value_one, while_value_one,
 												   if_value_one };
 
-	REQUIRE(followsRelationshipStorage->getRelationshipByFirst(RelationshipType::FOLLOWS, stmtTokenObject5, DesignEntity::PRINT) == readPrintTest);
-	REQUIRE(followsRelationshipStorage->getRelationshipByFirst(RelationshipType::FOLLOWS, stmtTokenObject4, DesignEntity::ASSIGN) == printAssignTest);
-	REQUIRE(followsRelationshipStorage->getRelationshipByFirst(RelationshipType::FOLLOWS, stmtTokenObject1, DesignEntity::CALL) == assignCallTest);
-	REQUIRE(followsRelationshipStorage->getRelationshipByFirst(RelationshipType::FOLLOWS, stmtTokenObject2, DesignEntity::WHILE) == callWhileTest);
-	REQUIRE(followsRelationshipStorage->getRelationshipByFirst(RelationshipType::FOLLOWS, stmtTokenObject6, DesignEntity::IF) == whileIfTest);
-	REQUIRE(followsRelationshipStorage->getRelationshipByFirst(RelationshipType::FOLLOWS, stmtTokenObject3, DesignEntity::READ) == ifReadTest);
-	REQUIRE(followsRelationshipStorage->getRelationshipByFirst(RelationshipType::FOLLOWS, stmtTokenObject5, DesignEntity::STMT) == readStmtTest);
+	REQUIRE(followsTRelationshipStorage->getRelationshipByFirst(RelationshipType::FOLLOWS_T, stmtTokenObject5, DesignEntity::PRINT) == readPrintTest);
+	REQUIRE(followsTRelationshipStorage->getRelationshipByFirst(RelationshipType::FOLLOWS_T, stmtTokenObject4, DesignEntity::ASSIGN) == printAssignTest);
+	REQUIRE(followsTRelationshipStorage->getRelationshipByFirst(RelationshipType::FOLLOWS_T, stmtTokenObject1, DesignEntity::CALL) == assignCallTest);
+	REQUIRE(followsTRelationshipStorage->getRelationshipByFirst(RelationshipType::FOLLOWS_T, stmtTokenObject2, DesignEntity::WHILE) == callWhileTest);
+	REQUIRE(followsTRelationshipStorage->getRelationshipByFirst(RelationshipType::FOLLOWS_T, stmtTokenObject6, DesignEntity::IF) == whileIfTest);
+	REQUIRE(followsTRelationshipStorage->getRelationshipByFirst(RelationshipType::FOLLOWS_T, stmtTokenObject3, DesignEntity::READ) == ifReadTest);
+	REQUIRE(followsTRelationshipStorage->getRelationshipByFirst(RelationshipType::FOLLOWS_T, stmtTokenObject5, DesignEntity::STMT) == readStmtTest);
 
 
 	//Testing for Parent(s,2), Parent(w,2), and Parent(if,2)
@@ -1052,13 +1053,13 @@ TEST_CASE("Follows Relationship Storage Test") {
 	std::unordered_set<std::string> ifReadResult{ if_value_one };
 	std::unordered_set<std::string> stmtReadResult{ while_value_one, print_value_one, assign_value_one, call_value_one, if_value_one };
 
-	REQUIRE(followsRelationshipStorage->getRelationshipBySecond(RelationshipType::FOLLOWS, DesignEntity::READ, stmtTokenObject4) == readPrintResult);
-	REQUIRE(followsRelationshipStorage->getRelationshipBySecond(RelationshipType::FOLLOWS, DesignEntity::PRINT, stmtTokenObject1) == printAssignResult);
-	REQUIRE(followsRelationshipStorage->getRelationshipBySecond(RelationshipType::FOLLOWS, DesignEntity::ASSIGN, stmtTokenObject2) == assignCallResult);
-	REQUIRE(followsRelationshipStorage->getRelationshipBySecond(RelationshipType::FOLLOWS, DesignEntity::CALL, stmtTokenObject6) == callWhileResult);
-	REQUIRE(followsRelationshipStorage->getRelationshipBySecond(RelationshipType::FOLLOWS, DesignEntity::WHILE, stmtTokenObject3) == whileIfResult);
-	REQUIRE(followsRelationshipStorage->getRelationshipBySecond(RelationshipType::FOLLOWS, DesignEntity::IF, stmtTokenObject5) == ifReadResult);
-	REQUIRE(followsRelationshipStorage->getRelationshipBySecond(RelationshipType::FOLLOWS, DesignEntity::STMT, stmtTokenObject5) == stmtReadResult);
+	REQUIRE(followsTRelationshipStorage->getRelationshipBySecond(RelationshipType::FOLLOWS_T, DesignEntity::READ, stmtTokenObject4) == readPrintResult);
+	REQUIRE(followsTRelationshipStorage->getRelationshipBySecond(RelationshipType::FOLLOWS_T, DesignEntity::PRINT, stmtTokenObject1) == printAssignResult);
+	REQUIRE(followsTRelationshipStorage->getRelationshipBySecond(RelationshipType::FOLLOWS_T, DesignEntity::ASSIGN, stmtTokenObject2) == assignCallResult);
+	REQUIRE(followsTRelationshipStorage->getRelationshipBySecond(RelationshipType::FOLLOWS_T, DesignEntity::CALL, stmtTokenObject6) == callWhileResult);
+	REQUIRE(followsTRelationshipStorage->getRelationshipBySecond(RelationshipType::FOLLOWS_T, DesignEntity::WHILE, stmtTokenObject3) == whileIfResult);
+	REQUIRE(followsTRelationshipStorage->getRelationshipBySecond(RelationshipType::FOLLOWS_T, DesignEntity::IF, stmtTokenObject5) == ifReadResult);
+	REQUIRE(followsTRelationshipStorage->getRelationshipBySecond(RelationshipType::FOLLOWS_T, DesignEntity::STMT, stmtTokenObject5) == stmtReadResult);
 
 
 	//Testing for Parent(s,a),...,Parent(w,a),...,Parent(if,a),..., etc
@@ -1080,20 +1081,20 @@ TEST_CASE("Follows Relationship Storage Test") {
 										{ if_value_one, std::unordered_set<std::string>({read_value_one, print_value_one, assign_value_one, call_value_one, while_value_one, if_value_two})}, };
 
 
-	std::unordered_map<std::string, std::unordered_set<std::string>> readPrintAllResult = followsRelationshipStorage->getAllRelationship(RelationshipType::FOLLOWS,
+	std::unordered_map<std::string, std::unordered_set<std::string>> readPrintAllResult = followsTRelationshipStorage->getAllRelationship(RelationshipType::FOLLOWS_T,
 		DesignEntity::READ, DesignEntity::PRINT);
 
-	std::unordered_map<std::string, std::unordered_set<std::string>> printAssignAllResult = followsRelationshipStorage->getAllRelationship(RelationshipType::FOLLOWS,
+	std::unordered_map<std::string, std::unordered_set<std::string>> printAssignAllResult = followsTRelationshipStorage->getAllRelationship(RelationshipType::FOLLOWS_T,
 		DesignEntity::PRINT, DesignEntity::ASSIGN);
-	std::unordered_map<std::string, std::unordered_set<std::string>> assignCallAllResult = followsRelationshipStorage->getAllRelationship(RelationshipType::FOLLOWS,
+	std::unordered_map<std::string, std::unordered_set<std::string>> assignCallAllResult = followsTRelationshipStorage->getAllRelationship(RelationshipType::FOLLOWS_T,
 		DesignEntity::ASSIGN, DesignEntity::CALL);
-	std::unordered_map<std::string, std::unordered_set<std::string>> callWhileAllResult = followsRelationshipStorage->getAllRelationship(RelationshipType::FOLLOWS,
+	std::unordered_map<std::string, std::unordered_set<std::string>> callWhileAllResult = followsTRelationshipStorage->getAllRelationship(RelationshipType::FOLLOWS_T,
 		DesignEntity::CALL, DesignEntity::WHILE);
-	std::unordered_map<std::string, std::unordered_set<std::string>> whileIfAllResult = followsRelationshipStorage->getAllRelationship(RelationshipType::FOLLOWS,
+	std::unordered_map<std::string, std::unordered_set<std::string>> whileIfAllResult = followsTRelationshipStorage->getAllRelationship(RelationshipType::FOLLOWS_T,
 		DesignEntity::WHILE, DesignEntity::IF);
-	std::unordered_map<std::string, std::unordered_set<std::string>> ifReadAllResult = followsRelationshipStorage->getAllRelationship(RelationshipType::FOLLOWS,
+	std::unordered_map<std::string, std::unordered_set<std::string>> ifReadAllResult = followsTRelationshipStorage->getAllRelationship(RelationshipType::FOLLOWS_T,
 		DesignEntity::IF, DesignEntity::READ);
-	std::unordered_map<std::string, std::unordered_set<std::string>> stmtStmtAllResult = followsRelationshipStorage->getAllRelationship(RelationshipType::FOLLOWS,
+	std::unordered_map<std::string, std::unordered_set<std::string>> stmtStmtAllResult = followsTRelationshipStorage->getAllRelationship(RelationshipType::FOLLOWS_T,
 		DesignEntity::STMT, DesignEntity::STMT);
 
 
