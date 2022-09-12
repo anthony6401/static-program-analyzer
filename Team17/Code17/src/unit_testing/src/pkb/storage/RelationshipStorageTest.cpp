@@ -4,6 +4,7 @@
 #include "components/pkb/storage/RelationshipStorage/UsesRelationshipStorage.h"
 #include "components/pkb/storage/RelationshipStorage/ModifyRelationshipStorage.h"
 #include "components/pkb/storage/RelationshipStorage/ParentRelationshipStorage.h"
+#include "components/pkb/storage/RelationshipStorage/ParentTRelationshipStorage.h"
 #include "components/pkb/storage/RelationshipStorage/FollowsRelationshipStorage.h"
 
 #include "../RelationshipObject.h"
@@ -844,7 +845,329 @@ TEST_CASE("Parent Relationship Storage Test") {
 	REQUIRE(stmtWhileAllResult == expectedResultStmtWhileAll);
 	REQUIRE(stmtIfAllResult == expectedResultStmtIfAll);
 	REQUIRE(stmtStmtAllResult == expectedResultStmtStmtAll);
+}	
+
+TEST_CASE("ParentT Relationship Storage Test") {
+	RelationshipStorage* parentTRelationshipStorage = new ParentTRelationshipStorage();
+
+	// TESTING FOR STORING
+
+	//Test While Entity
+	REQUIRE(parentTRelationshipStorage->storeRelationship(parentTRelationshipWhileReadOne));
+	REQUIRE(parentTRelationshipStorage->storeRelationship(parentTRelationshipWhileReadTwo));
+	REQUIRE(!parentTRelationshipStorage->storeRelationship(parentTRelationshipWhileReadDupOne));
+	REQUIRE(!parentTRelationshipStorage->storeRelationship(parentTRelationshipWhileReadDupTwo));
+
+	REQUIRE(parentTRelationshipStorage->storeRelationship(parentTRelationshipWhilePrintOne));
+	REQUIRE(parentTRelationshipStorage->storeRelationship(parentTRelationshipWhilePrintTwo));
+	REQUIRE(!parentTRelationshipStorage->storeRelationship(parentTRelationshipWhilePrintDupOne));
+	REQUIRE(!parentTRelationshipStorage->storeRelationship(parentTRelationshipWhilePrintDupTwo));
+
+	REQUIRE(parentTRelationshipStorage->storeRelationship(parentTRelationshipWhileAssignOne));
+	REQUIRE(parentTRelationshipStorage->storeRelationship(parentTRelationshipWhileAssignTwo));
+	REQUIRE(!parentTRelationshipStorage->storeRelationship(parentTRelationshipWhileAssignDupOne));
+	REQUIRE(!parentTRelationshipStorage->storeRelationship(parentTRelationshipWhileAssignDupTwo));
+
+	REQUIRE(parentTRelationshipStorage->storeRelationship(parentTRelationshipWhileCallOne));
+	REQUIRE(parentTRelationshipStorage->storeRelationship(parentTRelationshipWhileCallTwo));
+	REQUIRE(!parentTRelationshipStorage->storeRelationship(parentTRelationshipWhileCallDupOne));
+	REQUIRE(!parentTRelationshipStorage->storeRelationship(parentTRelationshipWhileCallDupTwo));
+
+	REQUIRE(parentTRelationshipStorage->storeRelationship(parentTRelationshipWhileWhileOne));
+	REQUIRE(parentTRelationshipStorage->storeRelationship(parentTRelationshipWhileWhileTwo));
+	REQUIRE(!parentTRelationshipStorage->storeRelationship(parentTRelationshipWhileWhileDupOne));
+	REQUIRE(!parentTRelationshipStorage->storeRelationship(parentTRelationshipWhileWhileDupTwo));
+
+	REQUIRE(parentTRelationshipStorage->storeRelationship(parentTRelationshipWhileIfOne));
+	REQUIRE(parentTRelationshipStorage->storeRelationship(parentTRelationshipWhileIfTwo));
+	REQUIRE(!parentTRelationshipStorage->storeRelationship(parentTRelationshipWhileIfDupOne));
+	REQUIRE(!parentTRelationshipStorage->storeRelationship(parentTRelationshipWhileIfDupTwo));
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	//Test If Entity
+	REQUIRE(parentTRelationshipStorage->storeRelationship(parentTRelationshipIfReadOne));
+	REQUIRE(parentTRelationshipStorage->storeRelationship(parentTRelationshipIfReadTwo));
+	REQUIRE(!parentTRelationshipStorage->storeRelationship(parentTRelationshipIfReadDupOne));
+	REQUIRE(!parentTRelationshipStorage->storeRelationship(parentTRelationshipIfReadDupTwo));
+
+	REQUIRE(parentTRelationshipStorage->storeRelationship(parentTRelationshipIfPrintOne));
+	REQUIRE(parentTRelationshipStorage->storeRelationship(parentTRelationshipIfPrintTwo));
+	REQUIRE(!parentTRelationshipStorage->storeRelationship(parentTRelationshipIfPrintDupOne));
+	REQUIRE(!parentTRelationshipStorage->storeRelationship(parentTRelationshipIfPrintDupTwo));
+
+	REQUIRE(parentTRelationshipStorage->storeRelationship(parentTRelationshipIfAssignOne));
+	REQUIRE(parentTRelationshipStorage->storeRelationship(parentTRelationshipIfAssignTwo));
+	REQUIRE(!parentTRelationshipStorage->storeRelationship(parentTRelationshipIfAssignDupOne));
+	REQUIRE(!parentTRelationshipStorage->storeRelationship(parentTRelationshipIfAssignDupTwo));
+
+	REQUIRE(parentTRelationshipStorage->storeRelationship(parentTRelationshipIfCallOne));
+	REQUIRE(parentTRelationshipStorage->storeRelationship(parentTRelationshipIfCallTwo));
+	REQUIRE(!parentTRelationshipStorage->storeRelationship(parentTRelationshipIfCallDupOne));
+	REQUIRE(!parentTRelationshipStorage->storeRelationship(parentTRelationshipIfCallDupTwo));
+
+	REQUIRE(parentTRelationshipStorage->storeRelationship(parentTRelationshipIfWhileOne));
+	REQUIRE(parentTRelationshipStorage->storeRelationship(parentTRelationshipIfWhileTwo));
+	REQUIRE(!parentTRelationshipStorage->storeRelationship(parentTRelationshipIfWhileDupOne));
+	REQUIRE(!parentTRelationshipStorage->storeRelationship(parentTRelationshipIfWhileDupTwo));
+
+	REQUIRE(parentTRelationshipStorage->storeRelationship(parentTRelationshipIfIfOne));
+	REQUIRE(parentTRelationshipStorage->storeRelationship(parentTRelationshipIfIfTwo));
+	REQUIRE(!parentTRelationshipStorage->storeRelationship(parentTRelationshipIfIfDupOne));
+	REQUIRE(!parentTRelationshipStorage->storeRelationship(parentTRelationshipIfIfDupTwo));
+
+	REQUIRE(!parentTRelationshipStorage->storeRelationship(modifyRelationshipAssignOne));
+
+	//Testing for ParentT(1,2) query
+	//Testing for Whie entity
+	REQUIRE(parentTRelationshipStorage->getRelationship(RelationshipType::PARENT_T, stmtTokenObject6, stmtTokenObject5));
+	REQUIRE(parentTRelationshipStorage->getRelationship(RelationshipType::PARENT_T, stmtTokenObject6, stmtTokenObject4));
+	REQUIRE(parentTRelationshipStorage->getRelationship(RelationshipType::PARENT_T, stmtTokenObject6, stmtTokenObject1));
+	REQUIRE(parentTRelationshipStorage->getRelationship(RelationshipType::PARENT_T, stmtTokenObject6, stmtTokenObject2));
+	REQUIRE(parentTRelationshipStorage->getRelationship(RelationshipType::PARENT_T, stmtTokenObject6, stmtTokenObject12));
+	REQUIRE(parentTRelationshipStorage->getRelationship(RelationshipType::PARENT_T, stmtTokenObject6, stmtTokenObject3));
+
+	//Testing for If entity
+	REQUIRE(parentTRelationshipStorage->getRelationship(RelationshipType::PARENT_T, stmtTokenObject3, stmtTokenObject5));
+	REQUIRE(parentTRelationshipStorage->getRelationship(RelationshipType::PARENT_T, stmtTokenObject3, stmtTokenObject4));
+	REQUIRE(parentTRelationshipStorage->getRelationship(RelationshipType::PARENT_T, stmtTokenObject3, stmtTokenObject1));
+	REQUIRE(parentTRelationshipStorage->getRelationship(RelationshipType::PARENT_T, stmtTokenObject3, stmtTokenObject2));
+	REQUIRE(parentTRelationshipStorage->getRelationship(RelationshipType::PARENT_T, stmtTokenObject3, stmtTokenObject6));
+	REQUIRE(parentTRelationshipStorage->getRelationship(RelationshipType::PARENT_T, stmtTokenObject3, stmtTokenObject9));
+
+	//Testing for ParentT(1,a), ParentT(1,pr), etc
+	//Test for While Entity
+	std::unordered_set<std::string> whileReadTest{ read_value_one };
+	std::unordered_set<std::string> whilePrintTest{ print_value_one };
+	std::unordered_set<std::string> whileAssignTest{ assign_value_one };
+	std::unordered_set<std::string> whileCallTest{ call_value_one };
+	std::unordered_set<std::string> whileWhileTest{ while_value_two };
+	std::unordered_set<std::string> whileIfTest{ if_value_one };
+	std::unordered_set<std::string> whileStmtTest{ read_value_one, print_value_one, assign_value_one, call_value_one, while_value_two,
+												   if_value_one };
+
+	REQUIRE(parentTRelationshipStorage->getRelationshipByFirst(RelationshipType::PARENT_T, stmtTokenObject6, DesignEntity::READ) == whileReadTest);
+	REQUIRE(parentTRelationshipStorage->getRelationshipByFirst(RelationshipType::PARENT_T, stmtTokenObject6, DesignEntity::PRINT) == whilePrintTest);
+	REQUIRE(parentTRelationshipStorage->getRelationshipByFirst(RelationshipType::PARENT_T, stmtTokenObject6, DesignEntity::ASSIGN) == whileAssignTest);
+	REQUIRE(parentTRelationshipStorage->getRelationshipByFirst(RelationshipType::PARENT_T, stmtTokenObject6, DesignEntity::CALL) == whileCallTest);
+	REQUIRE(parentTRelationshipStorage->getRelationshipByFirst(RelationshipType::PARENT_T, stmtTokenObject6, DesignEntity::WHILE) == whileWhileTest);
+	REQUIRE(parentTRelationshipStorage->getRelationshipByFirst(RelationshipType::PARENT_T, stmtTokenObject6, DesignEntity::IF) == whileIfTest);
+	REQUIRE(parentTRelationshipStorage->getRelationshipByFirst(RelationshipType::PARENT_T, stmtTokenObject6, DesignEntity::STMT) == whileStmtTest);
+
+	//Test for If Entity
+	std::unordered_set<std::string> ifReadTest{ read_value_one };
+	std::unordered_set<std::string> ifPrintTest{ print_value_one };
+	std::unordered_set<std::string> ifAssignTest{ assign_value_one };
+	std::unordered_set<std::string> ifCallTest{ call_value_one };
+	std::unordered_set<std::string> ifWhileTest{ while_value_one };
+	std::unordered_set<std::string> ifIfTest{ if_value_two };
+	std::unordered_set<std::string> ifStmtTest{ read_value_one, print_value_one, assign_value_one, call_value_one, while_value_one,
+												if_value_two };
+
+	REQUIRE(parentTRelationshipStorage->getRelationshipByFirst(RelationshipType::PARENT_T, stmtTokenObject3, DesignEntity::READ) == ifReadTest);
+	REQUIRE(parentTRelationshipStorage->getRelationshipByFirst(RelationshipType::PARENT_T, stmtTokenObject3, DesignEntity::PRINT) == ifPrintTest);
+	REQUIRE(parentTRelationshipStorage->getRelationshipByFirst(RelationshipType::PARENT_T, stmtTokenObject3, DesignEntity::ASSIGN) == ifAssignTest);
+	REQUIRE(parentTRelationshipStorage->getRelationshipByFirst(RelationshipType::PARENT_T, stmtTokenObject3, DesignEntity::CALL) == ifCallTest);
+	REQUIRE(parentTRelationshipStorage->getRelationshipByFirst(RelationshipType::PARENT_T, stmtTokenObject3, DesignEntity::WHILE) == ifWhileTest);
+	REQUIRE(parentTRelationshipStorage->getRelationshipByFirst(RelationshipType::PARENT_T, stmtTokenObject3, DesignEntity::IF) == ifIfTest);
+	REQUIRE(parentTRelationshipStorage->getRelationshipByFirst(RelationshipType::PARENT_T, stmtTokenObject3, DesignEntity::STMT) == ifStmtTest);
+
+	//Testing for ParentT(s,2), ParentT(w,2), and ParentT(if,2)
+	//Looking for w
+	std::unordered_set<std::string> whileResult{ while_value_one };
+	//
+	REQUIRE(parentTRelationshipStorage->getRelationshipBySecond(RelationshipType::PARENT_T, DesignEntity::WHILE, stmtTokenObject5) == whileResult);
+	REQUIRE(parentTRelationshipStorage->getRelationshipBySecond(RelationshipType::PARENT_T, DesignEntity::WHILE, stmtTokenObject4) == whileResult);
+	REQUIRE(parentTRelationshipStorage->getRelationshipBySecond(RelationshipType::PARENT_T, DesignEntity::WHILE, stmtTokenObject1) == whileResult);
+	REQUIRE(parentTRelationshipStorage->getRelationshipBySecond(RelationshipType::PARENT_T, DesignEntity::WHILE, stmtTokenObject2) == whileResult);
+	REQUIRE(parentTRelationshipStorage->getRelationshipBySecond(RelationshipType::PARENT_T, DesignEntity::WHILE, stmtTokenObject12) == whileResult);
+	REQUIRE(parentTRelationshipStorage->getRelationshipBySecond(RelationshipType::PARENT_T, DesignEntity::WHILE, stmtTokenObject3) == whileResult);
+
+	////Looking for if
+	std::unordered_set<std::string> ifResult{ if_value_one };
+
+	REQUIRE(parentTRelationshipStorage->getRelationshipBySecond(RelationshipType::PARENT_T, DesignEntity::IF, stmtTokenObject5) == ifResult);
+	REQUIRE(parentTRelationshipStorage->getRelationshipBySecond(RelationshipType::PARENT_T, DesignEntity::IF, stmtTokenObject4) == ifResult);
+	REQUIRE(parentTRelationshipStorage->getRelationshipBySecond(RelationshipType::PARENT_T, DesignEntity::IF, stmtTokenObject1) == ifResult);
+	REQUIRE(parentTRelationshipStorage->getRelationshipBySecond(RelationshipType::PARENT_T, DesignEntity::IF, stmtTokenObject2) == ifResult);
+	REQUIRE(parentTRelationshipStorage->getRelationshipBySecond(RelationshipType::PARENT_T, DesignEntity::IF, stmtTokenObject6) == ifResult);
+	REQUIRE(parentTRelationshipStorage->getRelationshipBySecond(RelationshipType::PARENT_T, DesignEntity::IF, stmtTokenObject9) == ifResult);
+
+
+	//Looking for s
+	std::unordered_set<std::string> statementResult{ while_value_one,if_value_one };
+
+	REQUIRE(parentTRelationshipStorage->getRelationshipBySecond(RelationshipType::PARENT_T, DesignEntity::STMT, stmtTokenObject5) == statementResult);
+	REQUIRE(parentTRelationshipStorage->getRelationshipBySecond(RelationshipType::PARENT_T, DesignEntity::STMT, stmtTokenObject4) == statementResult);
+	REQUIRE(parentTRelationshipStorage->getRelationshipBySecond(RelationshipType::PARENT_T, DesignEntity::STMT, stmtTokenObject1) == statementResult);
+	REQUIRE(parentTRelationshipStorage->getRelationshipBySecond(RelationshipType::PARENT_T, DesignEntity::STMT, stmtTokenObject2) == statementResult);
+
+
+	//Testing for ParentT(s,a),...,ParentT(w,a),...,ParentT(if,a),..., etc
+
+	//Test While Entity
+
+
+	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultWhileReadAll{ {while_value_one, std::unordered_set<std::string>({read_value_one}) },
+																								 {while_value_two, std::unordered_set<std::string>({read_value_two}) } };
+
+	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultWhilePrintAll{ {while_value_one, std::unordered_set<std::string>({print_value_one}) },
+																								  {while_value_two, std::unordered_set<std::string>({print_value_two}) } };
+
+	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultWhileAssignAll{ {while_value_one, std::unordered_set<std::string>({assign_value_one}) },
+																								   {while_value_two, std::unordered_set<std::string>({assign_value_two}) } };
+
+	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultWhileCallAll{ {while_value_one, std::unordered_set<std::string>({call_value_one}) },
+																								   {while_value_two, std::unordered_set<std::string>({call_value_two}) } };
+
+	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultWhileWhileAll{ {while_value_one, std::unordered_set<std::string>({while_value_two}) },
+																								   {while_value_two, std::unordered_set<std::string>({while_value_three}) } };
+
+	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultWhileIfAll{ {while_value_one, std::unordered_set<std::string>({if_value_one})},
+																								   {while_value_two, std::unordered_set<std::string>({if_value_two})} };
+	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultWhileStmtAll{
+										{while_value_one, std::unordered_set<std::string>({read_value_one, print_value_one, assign_value_one, call_value_one, while_value_two, if_value_one})},
+										{while_value_two, std::unordered_set<std::string>({read_value_two, print_value_two, assign_value_two, call_value_two, while_value_three, if_value_two}) } };
+
+
+	std::unordered_map<std::string, std::unordered_set<std::string>> whileReadAllResult = parentTRelationshipStorage->getAllRelationship(RelationshipType::PARENT_T,
+		DesignEntity::WHILE, DesignEntity::READ);
+
+	std::unordered_map<std::string, std::unordered_set<std::string>> whilePrintAllResult = parentTRelationshipStorage->getAllRelationship(RelationshipType::PARENT_T,
+		DesignEntity::WHILE, DesignEntity::PRINT);
+	std::unordered_map<std::string, std::unordered_set<std::string>> whileAssignAllResult = parentTRelationshipStorage->getAllRelationship(RelationshipType::PARENT_T,
+		DesignEntity::WHILE, DesignEntity::ASSIGN);
+	std::unordered_map<std::string, std::unordered_set<std::string>> whileCallAllResult = parentTRelationshipStorage->getAllRelationship(RelationshipType::PARENT_T,
+		DesignEntity::WHILE, DesignEntity::CALL);
+	std::unordered_map<std::string, std::unordered_set<std::string>> whileWhileAllResult = parentTRelationshipStorage->getAllRelationship(RelationshipType::PARENT_T,
+		DesignEntity::WHILE, DesignEntity::WHILE);
+	std::unordered_map<std::string, std::unordered_set<std::string>> whileIfAllResult = parentTRelationshipStorage->getAllRelationship(RelationshipType::PARENT_T,
+		DesignEntity::WHILE, DesignEntity::IF);
+	std::unordered_map<std::string, std::unordered_set<std::string>> whileStmtAllResult = parentTRelationshipStorage->getAllRelationship(RelationshipType::PARENT_T,
+		DesignEntity::WHILE, DesignEntity::STMT);
+
+	REQUIRE(whileReadAllResult == expectedResultWhileReadAll);
+	REQUIRE(whilePrintAllResult == expectedResultWhilePrintAll);
+	REQUIRE(whileAssignAllResult == expectedResultWhileAssignAll);
+	REQUIRE(whileCallAllResult == expectedResultWhileCallAll);
+	REQUIRE(whileWhileAllResult == expectedResultWhileWhileAll);
+	REQUIRE(whileIfAllResult == expectedResultWhileIfAll);
+	REQUIRE(whileStmtAllResult == expectedResultWhileStmtAll);
+
+
+	//Test for If Entity
+	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultIfReadAll{ {if_value_one, std::unordered_set<std::string>({read_value_one}) },
+																								 {if_value_two, std::unordered_set<std::string>({read_value_two}) } };
+
+	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultIfPrintAll{ {if_value_one, std::unordered_set<std::string>({print_value_one}) },
+																								  {if_value_two, std::unordered_set<std::string>({print_value_two}) } };
+
+	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultIfAssignAll{ {if_value_one, std::unordered_set<std::string>({assign_value_one}) },
+																								   {if_value_two, std::unordered_set<std::string>({assign_value_two}) } };
+
+	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultIfCallAll{ {if_value_one, std::unordered_set<std::string>({call_value_one}) },
+																								   {if_value_two, std::unordered_set<std::string>({call_value_two}) } };
+
+	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultIfWhileAll{ {if_value_one, std::unordered_set<std::string>({while_value_one}) },
+																								   {if_value_two, std::unordered_set<std::string>({while_value_two}) } };
+
+	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultIfIfAll{ {if_value_one, std::unordered_set<std::string>({if_value_two})},
+																								   {if_value_two, std::unordered_set<std::string>({if_value_three})} };
+	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultIfStmtAll{
+										{if_value_one, std::unordered_set<std::string>({read_value_one, print_value_one, assign_value_one, call_value_one, while_value_one, if_value_two})},
+										{if_value_two, std::unordered_set<std::string>({read_value_two, print_value_two, assign_value_two, call_value_two, while_value_two, if_value_three}) } };
+
+	std::unordered_map<std::string, std::unordered_set<std::string>> ifReadAllResult = parentTRelationshipStorage->getAllRelationship(RelationshipType::PARENT_T,
+		DesignEntity::IF, DesignEntity::READ);
+
+	std::unordered_map<std::string, std::unordered_set<std::string>> ifPrintAllResult = parentTRelationshipStorage->getAllRelationship(RelationshipType::PARENT_T,
+		DesignEntity::IF, DesignEntity::PRINT);
+	std::unordered_map<std::string, std::unordered_set<std::string>> ifAssignAllResult = parentTRelationshipStorage->getAllRelationship(RelationshipType::PARENT_T,
+		DesignEntity::IF, DesignEntity::ASSIGN);
+	std::unordered_map<std::string, std::unordered_set<std::string>> ifCallAllResult = parentTRelationshipStorage->getAllRelationship(RelationshipType::PARENT_T,
+		DesignEntity::IF, DesignEntity::CALL);
+	std::unordered_map<std::string, std::unordered_set<std::string>> ifWhileAllResult = parentTRelationshipStorage->getAllRelationship(RelationshipType::PARENT_T,
+		DesignEntity::IF, DesignEntity::WHILE);
+	std::unordered_map<std::string, std::unordered_set<std::string>> ifIfAllResult = parentTRelationshipStorage->getAllRelationship(RelationshipType::PARENT_T,
+		DesignEntity::IF, DesignEntity::IF);
+	std::unordered_map<std::string, std::unordered_set<std::string>> ifStmtAllResult = parentTRelationshipStorage->getAllRelationship(RelationshipType::PARENT_T,
+		DesignEntity::IF, DesignEntity::STMT);
+
+	REQUIRE(ifReadAllResult == expectedResultIfReadAll);
+	REQUIRE(ifPrintAllResult == expectedResultIfPrintAll);
+	REQUIRE(ifAssignAllResult == expectedResultIfAssignAll);
+	REQUIRE(ifCallAllResult == expectedResultIfCallAll);
+	REQUIRE(ifWhileAllResult == expectedResultIfWhileAll);
+	REQUIRE(ifIfAllResult == expectedResultIfIfAll);
+	REQUIRE(ifStmtAllResult == expectedResultIfStmtAll);
+
+	//Test for StatementEntity
+	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultStmtReadAll{
+		{while_value_one, std::unordered_set<std::string>({read_value_one}) },
+		{while_value_two, std::unordered_set<std::string>({read_value_two}) },
+		{if_value_one, std::unordered_set<std::string>({read_value_one}) },
+		{if_value_two, std::unordered_set<std::string>({read_value_two}) } };
+
+	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultStmtPrintAll{
+		{while_value_one, std::unordered_set<std::string>({print_value_one}) },
+		{while_value_two, std::unordered_set<std::string>({print_value_two}) },
+		{if_value_one, std::unordered_set<std::string>({print_value_one}) },
+		{if_value_two, std::unordered_set<std::string>({print_value_two}) } };
+
+	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultStmtAssignAll{
+		{while_value_one, std::unordered_set<std::string>({assign_value_one}) },
+		{while_value_two, std::unordered_set<std::string>({assign_value_two}) },
+		{if_value_one, std::unordered_set<std::string>({assign_value_one}) },
+		{if_value_two, std::unordered_set<std::string>({assign_value_two}) } };
+
+	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultStmtCallAll{
+		{while_value_one, std::unordered_set<std::string>({call_value_one}) },
+		{while_value_two, std::unordered_set<std::string>({call_value_two}) },
+		{if_value_one, std::unordered_set<std::string>({call_value_one}) },
+		{if_value_two, std::unordered_set<std::string>({call_value_two}) } };
+
+	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultStmtWhileAll{
+		{while_value_one, std::unordered_set<std::string>({while_value_two}) },
+		{while_value_two, std::unordered_set<std::string>({while_value_three}) },
+		{if_value_one, std::unordered_set<std::string>({while_value_one}) },
+		{if_value_two, std::unordered_set<std::string>({while_value_two}) } };
+	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultStmtIfAll{
+		{while_value_one, std::unordered_set<std::string>({if_value_one}) },
+		{while_value_two, std::unordered_set<std::string>({if_value_two}) },
+		{if_value_one, std::unordered_set<std::string>({if_value_two}) },
+		{if_value_two, std::unordered_set<std::string>({if_value_three}) } };
+
+	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultStmtStmtAll{
+		{while_value_one, std::unordered_set<std::string>({read_value_one, print_value_one, assign_value_one, call_value_one, while_value_two, if_value_one})},
+		{while_value_two, std::unordered_set<std::string>({read_value_two, print_value_two, assign_value_two, call_value_two, while_value_three, if_value_two}) },
+		{if_value_one, std::unordered_set<std::string>({read_value_one, print_value_one, assign_value_one, call_value_one, while_value_one, if_value_two})},
+		{if_value_two, std::unordered_set<std::string>({read_value_two, print_value_two, assign_value_two, call_value_two, while_value_two, if_value_three}) } };
+
+	std::unordered_map<std::string, std::unordered_set<std::string>> stmtReadAllResult = parentTRelationshipStorage->getAllRelationship(RelationshipType::PARENT_T,
+		DesignEntity::STMT, DesignEntity::READ);
+
+	std::unordered_map<std::string, std::unordered_set<std::string>> stmtPrintAllResult = parentTRelationshipStorage->getAllRelationship(RelationshipType::PARENT_T,
+		DesignEntity::STMT, DesignEntity::PRINT);
+	std::unordered_map<std::string, std::unordered_set<std::string>> stmtAssignAllResult = parentTRelationshipStorage->getAllRelationship(RelationshipType::PARENT_T,
+		DesignEntity::STMT, DesignEntity::ASSIGN);
+	std::unordered_map<std::string, std::unordered_set<std::string>> stmtCallAllResult = parentTRelationshipStorage->getAllRelationship(RelationshipType::PARENT_T,
+		DesignEntity::STMT, DesignEntity::CALL);
+	std::unordered_map<std::string, std::unordered_set<std::string>> stmtWhileAllResult = parentTRelationshipStorage->getAllRelationship(RelationshipType::PARENT_T,
+		DesignEntity::STMT, DesignEntity::WHILE);
+	std::unordered_map<std::string, std::unordered_set<std::string>> stmtIfAllResult = parentTRelationshipStorage->getAllRelationship(RelationshipType::PARENT_T,
+		DesignEntity::STMT, DesignEntity::IF);
+	std::unordered_map<std::string, std::unordered_set<std::string>> stmtStmtAllResult = parentTRelationshipStorage->getAllRelationship(RelationshipType::PARENT_T,
+		DesignEntity::STMT, DesignEntity::STMT);
+
+	REQUIRE(stmtReadAllResult == expectedResultStmtReadAll);
+	REQUIRE(stmtPrintAllResult == expectedResultStmtPrintAll);
+	REQUIRE(stmtAssignAllResult == expectedResultStmtAssignAll);
+	REQUIRE(stmtCallAllResult == expectedResultStmtCallAll);
+	REQUIRE(stmtWhileAllResult == expectedResultStmtWhileAll);
+	REQUIRE(stmtIfAllResult == expectedResultStmtIfAll);
+	REQUIRE(stmtStmtAllResult == expectedResultStmtStmtAll);
 }
+
 
 TEST_CASE("Follows Relationship Storage Test") {
 	RelationshipStorage* followsRelationshipStorage = new FollowsRelationshipStorage();
