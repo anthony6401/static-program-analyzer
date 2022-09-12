@@ -1,4 +1,5 @@
 #include "FollowsClause.h"
+#include "iostream"
 
 FollowsClause::FollowsClause(TokenObject left, TokenObject right, Select synonym,
                              std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap,
@@ -53,7 +54,7 @@ std::set<std::string> FollowsClause::getAllSynonyms() {
     return synonyms;
 }
 
-TokenType getRelationshipType() {
+TokenType FollowsClause::getRelationshipType() {
     return TokenType::FOLLOWS;
 }
 

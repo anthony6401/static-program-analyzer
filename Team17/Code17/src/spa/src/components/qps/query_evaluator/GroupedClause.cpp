@@ -33,3 +33,7 @@ bool GroupedClause::hasCommonSynonymWithClause(std::shared_ptr<Clause> clause) {
 std::vector<std::shared_ptr<Clause>> GroupedClause::getClauses() {
     return clauses;
 }
+
+std::set<std::string> GroupedClause::getAllSynonyms() {
+    return synonyms;
+}

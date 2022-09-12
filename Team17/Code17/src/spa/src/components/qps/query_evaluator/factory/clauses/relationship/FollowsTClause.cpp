@@ -53,7 +53,7 @@ std::set<std::string> FollowsTClause::getAllSynonyms() {
     return synonyms;
 }
 
-TokenType getRelationshipType() {
+TokenType FollowsTClause::getRelationshipType() {
     return TokenType::FOLLOWS_T;
 }
 

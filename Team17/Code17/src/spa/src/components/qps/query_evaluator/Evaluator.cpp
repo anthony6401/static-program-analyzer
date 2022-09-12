@@ -23,6 +23,9 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
     std::vector<GroupedClause> hasSelectSynonymPresent = pairBySelect.first;
     std::vector<GroupedClause> noSelectSynonymPresent = pairBySelect.second;
 
+
+    // std::cout << noSynonymsClauses.getAllSynonyms() << std::endl;
+
     std::vector<RawResult> evaluatedResultsList;
     bool isNoneResult = false;
     bool isFalseNoSynonymClauseEvaluation = Evaluator::evaluateNoSynonymClauses(noSynonymsClauses);
@@ -55,7 +58,7 @@ bool Evaluator::evaluateNoSynonymClauses(GroupedClause noSynonymsClauses) {
 }
 
 // Returns boolean, check for False or Empty Clauses
-bool evaluateNoSelectSynonymClauses(std::vector<GroupedClause> noSelectSynonymPresent) {
+bool Evaluator::evaluateNoSelectSynonymClauses(std::vector<GroupedClause> noSelectSynonymPresent) {
     for (GroupedClause gc : noSelectSynonymPresent) {
         for (auto c : gc.getClauses()) {
             RawResult result = c->evaluateClause();
@@ -67,9 +70,10 @@ bool evaluateNoSelectSynonymClauses(std::vector<GroupedClause> noSelectSynonymPr
     return false;
 }
 
-RawResult evaluateHasSelectSynonymClauses(std::vector<GroupedClause> hasSelectSynonymPresent) {
-    return {};
-}
+// Each grouped clause has connected synonyms, and each group clause is related to Select synonym
+//RawResult Evaluator::evaluateHasSelectSynonymClauses(std::vector<GroupedClause> hasSelectSynonymPresent) {
+//    return {};
+//}
 
 
 

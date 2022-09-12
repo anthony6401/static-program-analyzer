@@ -1,4 +1,5 @@
 #include "ModifiesSClause.h"
+#include "iostream"
 
 ModifiesSClause::ModifiesSClause(TokenObject left, TokenObject right, Select synonym,
                                  std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap,
@@ -77,11 +78,12 @@ RawResult ModifiesSClause::evaluateIntegerSynonym() {
 }
 
 RawResult ModifiesSClause::evaluateIntegerWildcard() {
-    // API CALL
+    std::cout << "In Integer WildCard" << std::endl;
     return {};
 }
 
 RawResult ModifiesSClause::evaluateIntegerNameQuotes() {
+    std::cout << "In Integer Name Quotes" << std::endl;
     // API CALL
     return {};
 }

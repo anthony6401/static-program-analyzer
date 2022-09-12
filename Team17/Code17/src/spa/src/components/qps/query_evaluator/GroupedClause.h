@@ -18,6 +18,7 @@ public:
     void addClauseToGroup(std::shared_ptr<Clause> clause);
     bool isEmpty();
     std::vector<std::shared_ptr<Clause>> getClauses();
+    std::set<std::string> getAllSynonyms();
     bool hasCommonSynonymWithClause(std::shared_ptr<Clause> clause);
 };
 

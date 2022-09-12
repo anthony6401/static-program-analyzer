@@ -53,7 +53,7 @@ size_t ParentClause::getNumberOfSynonyms() {
     return numberOfSynonyms;
 }
 
-TokenType getRelationshipType() {
+TokenType ParentClause::getRelationshipType() {
     return TokenType::PARENT;
 }
 
