@@ -32,6 +32,10 @@ QueryObject Parser::parse() {
 		hasNoSyntaxError = hasNoSyntaxError && isSyntacticallyCorrect(relationshipTokenObjects, new SuchThatClauseSyntaxChecker());
 	}
 
+	if (patternTokenObjects.size() > 0) {
+		hasNoSyntaxError = hasNoSyntaxError && isSyntacticallyCorrect(patternTokenObjects, new PatternClauseSyntaxChecker());
+	}
+
 	if (!hasNoSyntaxError) {
 		return QueryObject();
 	}
@@ -39,9 +43,9 @@ QueryObject Parser::parse() {
 	std::unordered_map<std::string, DesignEntity> mappedSynonyms = mapSynonymToDesignEntity(declarationTokenObjects);
 	Select select = parseTokensIntoSelectObject(selectTokenObjects, mappedSynonyms);
 	std::vector<SuchThat> relationships = parseTokensIntoSuchThatObjects(relationshipTokenObjects, mappedSynonyms);
-	std::vector<Pattern> pattern = parseTokensIntoPatternObjects();
+	std::vector<Pattern> patterns = parseTokensIntoPatternObjects(patternTokenObjects, mappedSynonyms);
 
-	return QueryObject(select, relationships, pattern, mappedSynonyms);
+	return QueryObject(select, relationships, patterns, mappedSynonyms);
 };
 
 std::vector<std::vector<TokenObject>> Parser::groupQueryIntoClause() {
@@ -80,7 +84,7 @@ std::vector<std::vector<TokenObject>> Parser::groupQueryIntoClause() {
 	}
 	// Neither such that nor pattern clause present
 	else {
-		std::vector<TokenObject> selectTokens(beginIndex + selectIndex, beginIndex + patternIndex);
+		std::vector<TokenObject> selectTokens(beginIndex + selectIndex, beginIndex + endIndex);
 		selectTokenObjects = selectTokens;
 	}
 
@@ -97,14 +101,14 @@ std::vector<std::vector<TokenObject>> Parser::groupQueryIntoClause() {
 		patternTokenObjects = patternTokens;
 	}
 
-std::vector<std::vector<TokenObject>> groupedQuery{
-	declarationTokenObjects,
-	selectTokenObjects,
-	relationshipTokenObjects,
-	patternTokenObjects
-};
+	std::vector<std::vector<TokenObject>> groupedQuery{
+		declarationTokenObjects,
+		selectTokenObjects,
+		relationshipTokenObjects,
+		patternTokenObjects
+	};
 
-return groupedQuery;
+	return groupedQuery;
 };
 
 int Parser::getTokenIndex(TokenType token, std::vector<TokenType> tokenTypes) {
@@ -255,9 +259,72 @@ std::vector<SuchThat> Parser::parseTokensIntoSuchThatObjects(std::vector<TokenOb
 	return relationships;
 };
 
-// To be amended
-std::vector<Pattern> Parser::parseTokensIntoPatternObjects() {
+std::vector<Pattern> Parser::parseTokensIntoPatternObjects(std::vector<TokenObject> patternTokens, std::unordered_map<std::string, DesignEntity> mappedSynonyms) {
 	std::vector<Pattern> patterns;
+	bool isFirstPatternToken = true;
+	bool isFirstParam = true;
+	std::string assignSynonym = "";
+	TokenObject leftParam = TokenObject();
+	TokenObject rightParam = TokenObject();
+
+	for (TokenObject token : patternTokens) {
+		TokenType currTokenType = token.getTokenType();
+
+		if ((currTokenType == TokenType::OPEN_BRACKET)) {
+			continue;
+		}
+
+		if (currTokenType == TokenType::CLOSED_BRACKET) {
+			// For multi such that clauses in advanced SPA
+			isFirstPatternToken = true;
+			assignSynonym = "";
+			continue;
+		}
+
+		if ((currTokenType == TokenType::PATTERN) && isFirstPatternToken) {
+			isFirstPatternToken = false;
+			continue;
+		}
+
+		if (currTokenType == TokenType::COMMA) {
+			isFirstParam = false;
+			continue;
+		}
+
+		// Return vector with only empty Pattern object if parameter value is not declared for now
+		// SemanticError should be caught in PQL validator
+		if ((currTokenType != TokenType::WILDCARD) && (currTokenType != TokenType::NAME_WITH_QUOTATION)) {
+			std::string synonymValue = token.getValue();
+
+			//if (mappedSynonyms.find(synonymValue) == mappedSynonyms.end()) {
+			//	patterns.clear();
+			//	patterns.push_back(Pattern());
+			//	return patterns;
+			//}
+		}
+
+		if (assignSynonym.empty()) {
+			// Semantic Error as synonym has to be of declared as ASSIGN
+			//if (mappedSynonyms.at(token.getValue()) != DesignEntity::ASSIGN) {
+			//	patterns.clear();
+			//	patterns.push_back(Pattern());
+			//	return patterns;
+			//}
+
+			assignSynonym = token.getValue();
+			continue;
+		}
+
+		if (isFirstParam) {
+			leftParam = token;
+			continue;
+		}
+
+		rightParam = token;
+		//Pattern pattern = Pattern(assignSynonym, leftParam, rightParam);
+		//patterns.push_back(pattern);
+
+	}
 	return patterns;
 };
 
