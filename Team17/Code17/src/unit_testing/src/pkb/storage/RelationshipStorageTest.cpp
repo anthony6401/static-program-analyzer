@@ -1096,21 +1096,6 @@ TEST_CASE("Follows Relationship Storage Test") {
 	std::unordered_map<std::string, std::unordered_set<std::string>> stmtStmtAllResult = followsRelationshipStorage->getAllRelationship(RelationshipType::FOLLOWS,
 		DesignEntity::STMT, DesignEntity::STMT);
 
-	////for (auto const& k : whileReadAllResult) {
-	////	std::cout << k.first << "= (";
-	////	for (auto const& v : k.second) {
-	////		std::cout << v << " , ";
-	////	}
-	////	std::cout << ")" << std::endl;
-	////}
-
-	////for (auto const& k : expectedResultWhileReadAll) {
-	////	std::cout << k.first << "= (";
-	////	for (auto const& v : k.second) {
-	////		std::cout << v << " , ";
-	////	}
-	////	std::cout << ")" << std::endl;
-	////}
 
 	REQUIRE(readPrintAllResult == expectedResultReadPrintAll);
 	REQUIRE(printAssignAllResult == expectedResultPrintAssigntAll);
