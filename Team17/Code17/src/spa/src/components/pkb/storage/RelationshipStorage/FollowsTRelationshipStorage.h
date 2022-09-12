@@ -13,9 +13,9 @@
 #include <unordered_map>
 #include <string>
 
-class FollowsRelationshipStorage : public RelationshipStorage {
+class FollowsTRelationshipStorage : public RelationshipStorage {
 public:
-	FollowsRelationshipStorage();
+	FollowsTRelationshipStorage();
 	bool storeRelationship(Relationship* rel);
 	bool getRelationship(RelationshipType relType, TokenObject firstArgument, TokenObject secondArgument);
 	std::unordered_set<std::string> getRelationshipByFirst(RelationshipType relType, TokenObject firstArgument, DesignEntity returnType);

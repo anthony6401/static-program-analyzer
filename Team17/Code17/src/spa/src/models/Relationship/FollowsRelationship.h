@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Relationship.h"
 #include "models/Entity/Entity.h"
 
