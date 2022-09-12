@@ -5,6 +5,7 @@
 #include "models/Relationship/UsesRelationship.h"
 #include "models/Relationship/ModifyRelationship.h"
 #include "models/Relationship/ParentRelationship.h"
+#include "models/Relationship/ParentTRelationship.h"
 #include "models/Relationship/FollowsRelationship.h"
 #include "models/Relationship/FollowsTRelationship.h"
 
@@ -135,6 +136,69 @@ Relationship* parentRelationshipIfIfDupOne = new ParentRelationship(ifEntityDupl
 Relationship* parentRelationshipIfIfDupTwo = new ParentRelationship(ifEntityTwoDuplicate, ifEntityThreeDuplicate);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// While Entity
+Relationship* parentTRelationshipWhileReadOne = new ParentTRelationship(whileEntity, readEntity);
+Relationship* parentTRelationshipWhileReadTwo = new ParentTRelationship(whileEntityTwo, readEntityTwo);
+Relationship* parentTRelationshipWhileReadDupOne = new ParentTRelationship(whileEntityDuplicate, readEntityDuplicate);
+Relationship* parentTRelationshipWhileReadDupTwo = new ParentTRelationship(whileEntityTwoDuplicate, readEntityTwoDuplicate);
+
+Relationship* parentTRelationshipWhilePrintOne = new ParentTRelationship(whileEntity, printEntity);
+Relationship* parentTRelationshipWhilePrintTwo = new ParentTRelationship(whileEntityTwo, printEntityTwo);
+Relationship* parentTRelationshipWhilePrintDupOne = new ParentTRelationship(whileEntityDuplicate, printEntityDuplicate);
+Relationship* parentTRelationshipWhilePrintDupTwo = new ParentTRelationship(whileEntityTwoDuplicate, printEntityTwoDuplicate);
+
+Relationship* parentTRelationshipWhileAssignOne = new ParentTRelationship(whileEntity, assignEntity);
+Relationship* parentTRelationshipWhileAssignTwo = new ParentTRelationship(whileEntityTwo, assignEntityTwo);
+Relationship* parentTRelationshipWhileAssignDupOne = new ParentTRelationship(whileEntityDuplicate, assignEntityDuplicate);
+Relationship* parentTRelationshipWhileAssignDupTwo = new ParentTRelationship(whileEntityTwoDuplicate, assignEntityTwoDuplicate);
+
+Relationship* parentTRelationshipWhileCallOne = new ParentTRelationship(whileEntity, callEntity);
+Relationship* parentTRelationshipWhileCallTwo = new ParentTRelationship(whileEntityTwo, callEntityTwo);
+Relationship* parentTRelationshipWhileCallDupOne = new ParentTRelationship(whileEntityDuplicate, callEntityDuplicate);
+Relationship* parentTRelationshipWhileCallDupTwo = new ParentTRelationship(whileEntityTwoDuplicate, callEntityTwoDuplicate);
+
+Relationship* parentTRelationshipWhileWhileOne = new ParentTRelationship(whileEntity, whileEntityTwo);
+Relationship* parentTRelationshipWhileWhileTwo = new ParentTRelationship(whileEntityTwo, whileEntityThree);
+Relationship* parentTRelationshipWhileWhileDupOne = new ParentTRelationship(whileEntityDuplicate, whileEntityTwoDuplicate);
+Relationship* parentTRelationshipWhileWhileDupTwo = new ParentTRelationship(whileEntityTwoDuplicate, whileEntityThreeDuplicate);
+
+Relationship* parentTRelationshipWhileIfOne = new ParentTRelationship(whileEntity, ifEntity);
+Relationship* parentTRelationshipWhileIfTwo = new ParentTRelationship(whileEntityTwo, ifEntityTwo);
+Relationship* parentTRelationshipWhileIfDupOne = new ParentTRelationship(whileEntityDuplicate, ifEntityDuplicate);
+Relationship* parentTRelationshipWhileIfDupTwo = new ParentTRelationship(whileEntityTwoDuplicate, ifEntityTwoDuplicate);
+
+// If Entity
+Relationship* parentTRelationshipIfReadOne = new ParentTRelationship(ifEntity, readEntity);
+Relationship* parentTRelationshipIfReadTwo = new ParentTRelationship(ifEntityTwo, readEntityTwo);
+Relationship* parentTRelationshipIfReadDupOne = new ParentTRelationship(ifEntityDuplicate, readEntityDuplicate);
+Relationship* parentTRelationshipIfReadDupTwo = new ParentTRelationship(ifEntityTwoDuplicate, readEntityTwoDuplicate);
+
+Relationship* parentTRelationshipIfPrintOne = new ParentTRelationship(ifEntity, printEntity);
+Relationship* parentTRelationshipIfPrintTwo = new ParentTRelationship(ifEntityTwo, printEntityTwo);
+Relationship* parentTRelationshipIfPrintDupOne = new ParentTRelationship(ifEntityDuplicate, printEntityDuplicate);
+Relationship* parentTRelationshipIfPrintDupTwo = new ParentTRelationship(ifEntityTwoDuplicate, printEntityTwoDuplicate);
+
+Relationship* parentTRelationshipIfAssignOne = new ParentTRelationship(ifEntity, assignEntity);
+Relationship* parentTRelationshipIfAssignTwo = new ParentTRelationship(ifEntityTwo, assignEntityTwo);
+Relationship* parentTRelationshipIfAssignDupOne = new ParentTRelationship(ifEntityDuplicate, assignEntityDuplicate);
+Relationship* parentTRelationshipIfAssignDupTwo = new ParentTRelationship(ifEntityTwoDuplicate, assignEntityTwoDuplicate);
+
+Relationship* parentTRelationshipIfCallOne = new ParentTRelationship(ifEntity, callEntity);
+Relationship* parentTRelationshipIfCallTwo = new ParentTRelationship(ifEntityTwo, callEntityTwo);
+Relationship* parentTRelationshipIfCallDupOne = new ParentTRelationship(ifEntityDuplicate, callEntityDuplicate);
+Relationship* parentTRelationshipIfCallDupTwo = new ParentTRelationship(ifEntityTwoDuplicate, callEntityTwoDuplicate);
+
+Relationship* parentTRelationshipIfWhileOne = new ParentTRelationship(ifEntity, whileEntity);
+Relationship* parentTRelationshipIfWhileTwo = new ParentTRelationship(ifEntityTwo, whileEntityTwo);
+Relationship* parentTRelationshipIfWhileDupOne = new ParentTRelationship(ifEntityDuplicate, whileEntityDuplicate);
+Relationship* parentTRelationshipIfWhileDupTwo = new ParentTRelationship(ifEntityTwoDuplicate, whileEntityTwoDuplicate);
+
+Relationship* parentTRelationshipIfIfOne = new ParentTRelationship(ifEntity, ifEntityTwo);
+Relationship* parentTRelationshipIfIfTwo = new ParentTRelationship(ifEntityTwo, ifEntityThree);
+Relationship* parentTRelationshipIfIfDupOne = new ParentTRelationship(ifEntityDuplicate, ifEntityTwoDuplicate);
+Relationship* parentTRelationshipIfIfDupTwo = new ParentTRelationship(ifEntityTwoDuplicate, ifEntityThreeDuplicate);
+
 
 // Read Entity
 Relationship* followsRelationshipReadReadOne = new FollowsRelationship(readEntity, readEntityTwo);
