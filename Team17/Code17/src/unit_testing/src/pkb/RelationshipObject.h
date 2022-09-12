@@ -7,6 +7,7 @@
 #include "models/Relationship/ParentRelationship.h"
 #include "models/Relationship/ParentTRelationship.h"
 #include "models/Relationship/FollowsRelationship.h"
+#include "models/Relationship/FollowsTRelationship.h"
 
 Relationship* usesRelationshipAssignOne = new UsesRelationship(assignEntity, variableEntity);
 Relationship* usesRelationshipAssignTwo = new UsesRelationship(assignEntityTwo, variableEntityTwo);
@@ -230,8 +231,7 @@ Relationship* followsRelationshipPrintAssignDupOne = new FollowsRelationship(pri
 
 
 Relationship* followsRelationshipPrintCallOne = new FollowsRelationship(printEntity, callEntity);
-Relationship* followsRelationshipPrintCallDupOne = new FollowsRelationship(printEntityDuplicate, callEntityDuplicate);
-
+Relationship* followsRelationshipPrintCallDupOne =new FollowsRelationship(printEntityDuplicate, callEntityDuplicate);
 Relationship* followsRelationshipPrintWhileOne = new FollowsRelationship(printEntity, whileEntity);
 Relationship* followsRelationshipPrintWhileDupOne = new FollowsRelationship(printEntityDuplicate, whileEntityDuplicate);
 
@@ -313,3 +313,120 @@ Relationship* followsRelationshipIfWhileDupOne = new FollowsRelationship(ifEntit
 
 Relationship* followsRelationshipIfIfOne = new FollowsRelationship(ifEntity, ifEntityTwo);
 Relationship* followsRelationshipIfIfDupOne = new FollowsRelationship(ifEntityDuplicate, ifEntityTwoDuplicate);
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Read Entity
+Relationship* followsTRelationshipReadReadOne = new FollowsTRelationship(readEntity, readEntityTwo);
+Relationship* followsTRelationshipReadReadDupOne = new FollowsTRelationship(readEntityDuplicate, readEntityTwoDuplicate);
+
+Relationship* followsTRelationshipReadPrintOne = new FollowsTRelationship(readEntity, printEntity);
+Relationship* followsTRelationshipReadPrintDupOne = new FollowsTRelationship(readEntityDuplicate, printEntityDuplicate);
+
+Relationship* followsTRelationshipReadAssignOne = new FollowsTRelationship(readEntity, assignEntity);
+Relationship* followsTRelationshipReadAssignDupOne = new FollowsTRelationship(readEntityDuplicate, assignEntityDuplicate);
+
+Relationship* followsTRelationshipReadCallOne = new FollowsTRelationship(readEntity, callEntity);
+Relationship* followsTRelationshipReadCallDupOne = new FollowsTRelationship(readEntityDuplicate, callEntityDuplicate);
+
+Relationship* followsTRelationshipReadWhileOne = new FollowsTRelationship(readEntity, whileEntity);
+Relationship* followsTRelationshipReadWhileDupOne = new FollowsTRelationship(readEntityDuplicate, whileEntityDuplicate);
+
+Relationship* followsTRelationshipReadIfOne = new FollowsTRelationship(readEntity, ifEntity);
+Relationship* followsTRelationshipReadIfDupOne = new FollowsTRelationship(readEntityDuplicate, ifEntityDuplicate);
+
+// Print Entity
+Relationship* followsTRelationshipPrintReadOne = new FollowsTRelationship(printEntity, readEntity);
+Relationship* followsTRelationshipPrintReadDupOne = new FollowsTRelationship(printEntityDuplicate, readEntityDuplicate);
+
+Relationship* followsTRelationshipPrintPrintOne = new FollowsTRelationship(printEntity, printEntityTwo);
+Relationship* followsTRelationshipPrintPrintDupOne = new FollowsTRelationship(printEntityDuplicate, printEntityTwoDuplicate);
+
+Relationship* followsTRelationshipPrintAssignOne = new FollowsTRelationship(printEntity, assignEntity);
+Relationship* followsTRelationshipPrintAssignDupOne = new FollowsTRelationship(printEntityDuplicate, assignEntityDuplicate);
+
+
+Relationship* followsTRelationshipPrintCallOne = new FollowsTRelationship(printEntity, callEntity);
+Relationship* followsTRelationshipPrintCallDupOne = new FollowsTRelationship(printEntityDuplicate, callEntityDuplicate);
+
+Relationship* followsTRelationshipPrintWhileOne = new FollowsTRelationship(printEntity, whileEntity);
+Relationship* followsTRelationshipPrintWhileDupOne = new FollowsTRelationship(printEntityDuplicate, whileEntityDuplicate);
+
+Relationship* followsTRelationshipPrintIfOne = new FollowsTRelationship(printEntity, ifEntity);
+Relationship* followsTRelationshipPrintIfDupOne = new FollowsTRelationship(printEntityDuplicate, ifEntityDuplicate);
+
+// Assign Entity
+Relationship* followsTRelationshipAssignReadOne = new FollowsTRelationship(assignEntity, readEntity);
+Relationship* followsTRelationshipAssignReadDupOne = new FollowsTRelationship(assignEntityDuplicate, readEntityDuplicate);
+
+Relationship* followsTRelationshipAssignPrintOne = new FollowsTRelationship(assignEntity, printEntity);
+Relationship* followsTRelationshipAssignPrintDupOne = new FollowsTRelationship(assignEntityDuplicate, printEntityDuplicate);
+
+Relationship* followsTRelationshipAssignAssignOne = new FollowsTRelationship(assignEntity, assignEntityTwo);
+Relationship* followsTRelationshipAssignAssignDupOne = new FollowsTRelationship(assignEntityDuplicate, assignEntityTwoDuplicate);
+
+Relationship* followsTRelationshipAssignCallOne = new FollowsTRelationship(assignEntity, callEntity);
+Relationship* followsTRelationshipAssignCallDupOne = new FollowsTRelationship(assignEntityDuplicate, callEntityDuplicate);
+
+Relationship* followsTRelationshipAssignWhileOne = new FollowsTRelationship(assignEntity, whileEntity);
+Relationship* followsTRelationshipAssignWhileDupOne = new FollowsTRelationship(assignEntityDuplicate, whileEntityDuplicate);
+
+Relationship* followsTRelationshipAssignIfOne = new FollowsTRelationship(assignEntity, ifEntity);
+Relationship* followsTRelationshipAssignIfDupOne = new FollowsTRelationship(assignEntityDuplicate, ifEntityDuplicate);
+
+// Call Entity
+Relationship* followsTRelationshipCallReadOne = new FollowsTRelationship(callEntity, readEntity);
+Relationship* followsTRelationshipCallReadDupOne = new FollowsTRelationship(callEntityDuplicate, readEntityDuplicate);
+
+Relationship* followsTRelationshipCallPrintOne = new FollowsTRelationship(callEntity, printEntity);
+Relationship* followsTRelationshipCallPrintDupOne = new FollowsTRelationship(callEntityDuplicate, printEntityDuplicate);
+
+Relationship* followsTRelationshipCallAssignOne = new FollowsTRelationship(callEntity, assignEntity);
+Relationship* followsTRelationshipCallAssignDupOne = new FollowsTRelationship(callEntityDuplicate, assignEntityDuplicate);
+
+Relationship* followsTRelationshipCallCallOne = new FollowsTRelationship(callEntity, callEntityTwo);
+Relationship* followsTRelationshipCallCallDupOne = new FollowsTRelationship(callEntityDuplicate, callEntityTwoDuplicate);
+
+Relationship* followsTRelationshipCallWhileOne = new FollowsTRelationship(callEntity, whileEntity);
+Relationship* followsTRelationshipCallWhileDupOne = new FollowsTRelationship(callEntityDuplicate, whileEntityDuplicate);
+
+Relationship* followsTRelationshipCallIfOne = new FollowsTRelationship(callEntity, ifEntity);
+Relationship* followsTRelationshipCallIfDupOne = new FollowsTRelationship(callEntityDuplicate, ifEntityDuplicate);
+
+// While Entity
+Relationship* followsTRelationshipWhileReadOne = new FollowsTRelationship(whileEntity, readEntity);
+Relationship* followsTRelationshipWhileReadDupOne = new FollowsTRelationship(whileEntityDuplicate, readEntityDuplicate);
+
+Relationship* followsTRelationshipWhilePrintOne = new FollowsTRelationship(whileEntity, printEntity);
+Relationship* followsTRelationshipWhilePrintDupOne = new FollowsTRelationship(whileEntityDuplicate, printEntityDuplicate);
+
+Relationship* followsTRelationshipWhileAssignOne = new FollowsTRelationship(whileEntity, assignEntity);
+Relationship* followsTRelationshipWhileAssignDupOne = new FollowsTRelationship(whileEntityDuplicate, assignEntityDuplicate);
+
+Relationship* followsTRelationshipWhileCallOne = new FollowsTRelationship(whileEntity, callEntity);
+Relationship* followsTRelationshipWhileCallDupOne = new FollowsTRelationship(whileEntityDuplicate, callEntityDuplicate);
+
+Relationship* followsTRelationshipWhileWhileOne = new FollowsTRelationship(whileEntity, whileEntityTwo);
+Relationship* followsTRelationshipWhileWhileDupOne = new FollowsTRelationship(whileEntityDuplicate, whileEntityTwoDuplicate);
+
+Relationship* followsTRelationshipWhileIfOne = new FollowsTRelationship(whileEntity, ifEntity);
+Relationship* followsTRelationshipWhileIfDupOne = new FollowsTRelationship(whileEntityDuplicate, ifEntityDuplicate);
+
+// If Entity
+Relationship* followsTRelationshipIfReadOne = new FollowsTRelationship(ifEntity, readEntity);
+Relationship* followsTRelationshipIfReadDupOne = new FollowsTRelationship(ifEntityDuplicate, readEntityDuplicate);
+
+Relationship* followsTRelationshipIfPrintOne = new FollowsTRelationship(ifEntity, printEntity);
+Relationship* followsTRelationshipIfPrintDupOne = new FollowsTRelationship(ifEntityDuplicate, printEntityDuplicate);
+
+Relationship* followsTRelationshipIfAssignOne = new FollowsTRelationship(ifEntity, assignEntity);
+Relationship* followsTRelationshipIfAssignDupOne = new FollowsTRelationship(ifEntityDuplicate, assignEntityDuplicate);
+
+Relationship* followsTRelationshipIfCallOne = new FollowsTRelationship(ifEntity, callEntity);
+Relationship* followsTRelationshipIfCallDupOne = new FollowsTRelationship(ifEntityDuplicate, callEntityDuplicate);
+
+Relationship* followsTRelationshipIfWhileOne = new FollowsTRelationship(ifEntity, whileEntity);
+Relationship* followsTRelationshipIfWhileDupOne = new FollowsTRelationship(ifEntityDuplicate, whileEntityDuplicate);
+
+Relationship* followsTRelationshipIfIfOne = new FollowsTRelationship(ifEntity, ifEntityTwo);
+Relationship* followsTRelationshipIfIfDupOne = new FollowsTRelationship(ifEntityDuplicate, ifEntityTwoDuplicate);
