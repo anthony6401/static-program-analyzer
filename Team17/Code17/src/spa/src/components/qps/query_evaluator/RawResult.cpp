@@ -25,6 +25,14 @@ RawResult::RawResult(std::string leftSynonym, std::string rightSynonym,
     }
 }
 
+void RawResult::filterBySelectSynonym(std::string synonym) {
+
+}
+
+void RawResult::combineResult(RawResult nextResult) {
+
+}
+
 bool RawResult::getIsFalseResult() {
     return isFalseResult;
 }
@@ -65,13 +73,7 @@ void RawResult::setIsSingleConstraints() {
     isSingleConstraints = true;
 }
 
-void RawResult::filterBySelectSynonym(std::string synonym) {
 
-}
-
-void RawResult::combineResult(RawResult nextResult) {
-
-}
 
 
 

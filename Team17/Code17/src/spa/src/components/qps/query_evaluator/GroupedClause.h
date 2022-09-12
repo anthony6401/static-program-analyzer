@@ -2,6 +2,7 @@
 #define SPA_GROUPEDCLAUSE_H
 
 #include "vector"
+#include "memory"
 #include "components/qps/query_evaluator/factory/interface/Clause.h"
 
 // Represents Groups with common areas in:
