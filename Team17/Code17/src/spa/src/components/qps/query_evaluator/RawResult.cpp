@@ -51,6 +51,8 @@ void RawResult::combineResult(RawResult nextResult) {
     } else {
         RawResult::joinResultsListWithCommonSynonym(nextResult, commonSynonymsIndexPairs);
     }
+
+    if ()
 }
 
 void RawResult::joinResultsListWithNoCommonSynonym(RawResult nextResult) {
@@ -73,8 +75,7 @@ void RawResult::joinResultsListWithNoCommonSynonym(RawResult nextResult) {
             newResultsList.emplace_back(newPair);
         }
     }
-
-
+    resultsList = std::move(newResultsList);
 }
 
 void RawResult::joinResultsListWithCommonSynonym(RawResult nextResult, std::vector<std::pair<size_t, size_t>> commonSynonymsIndexPairs) {
@@ -103,6 +104,7 @@ void RawResult::joinResultsListWithCommonSynonym(RawResult nextResult, std::vect
             }
         }
     }
+    resultsList = std::move(newResultsList);
 }
 
 std::vector<size_t> RawResult::findNotCommonSynonymsIndex(std::vector<std::string> nextSynonymsList) {
