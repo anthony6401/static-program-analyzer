@@ -14,7 +14,8 @@ public:
     static std::vector<std::shared_ptr<Clause>> extractClausesToEvaluate(QueryObject queryObject, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
     static bool evaluateNoSynonymClauses(GroupedClause noSynonymsClauses);
     static bool evaluateNoSelectSynonymClauses(std::vector<GroupedClause> noSelectSynonymPresent);
-    static RawResult evaluateHasSelectSynonymClauses(std::vector<GroupedClause> hasSelectSynonymPresent, std::shared_ptr<Clause> selectClause);
+    static RawResult evaluateHasSelectSynonymClauses(std::vector<GroupedClause> hasSelectSynonymPresent, std::string selectSynonym);
+    static RawResult evaluateWithinGroupSelectSynonymClauses(GroupedClause currentGroupedClause);
     static std::unordered_set<std::string> joinRawResults(std::vector<RawResult> rawResultsList, std::string selectSynonym, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
     static std::vector<std::string> findCommonSynonyms(std::vector<std::string> firstSynonymList, std::vector<std::string> secSynonymList);
     static int getSelectSynonymIndex(std::vector<std::string> synonymList, std::string selectSynonym);

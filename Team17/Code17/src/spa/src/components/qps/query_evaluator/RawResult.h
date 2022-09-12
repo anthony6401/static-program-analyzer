@@ -10,10 +10,10 @@ class RawResult {
 private:
     //  Query results returns false
     bool isFalseResult = false;
-    // No synonym queries
     bool isBooleanResult = false;
     bool isSynonymResult = false;
     bool isSingleConstraints = false;
+
 
 public:
     std::vector<std::string> synonymsList;
@@ -23,6 +23,8 @@ public:
     RawResult(const std::string &synonym, const std::unordered_set<std::string> &results);
     RawResult(std::string leftSynonym, std::string rightSynonym,
               std::vector<std::pair<std::string, std::string>> results);
+    void filterBySelectSynonym(std::string synonym);
+    void combineResult(RawResult nextResult);
     bool getIsSynonymResult();
     void setIsSynonymResult();
     bool getIsFalseResult();

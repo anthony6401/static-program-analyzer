@@ -67,22 +67,36 @@ bool Evaluator::evaluateNoSelectSynonymClauses(std::vector<GroupedClause> noSele
     return false;
 }
 
+
+
 // Each grouped clause has connected synonyms, and each group clause is related to Select synonym
 // Evaluate each grouped clause in a loop, find common synonyms and combine results
 // Combine all grouped clauses and filter values by select synonym
-RawResult Evaluator::evaluateHasSelectSynonymClauses(std::vector<GroupedClause> hasSelectSynonymPresent, std::shared_ptr<Clause> selectClause) {
-    RawResult rawResultTable;
+RawResult Evaluator::evaluateHasSelectSynonymClauses(std::vector<GroupedClause> hasSelectSynonymPresent, std::string selectSynonym) {
+    RawResult combinedResultTable;
     for (GroupedClause gc : hasSelectSynonymPresent) {
-        for (auto c : gc.getClauses()) {
-            RawResult result = c->evaluateClause();
-            if (result.isEmptyResult() || result.getIsFalseResult()) {
-                return rawResultTable;
-            }
-            // Merge tables
-            // rawResultTable.combine(result);
+        RawResult result = Evaluator::evaluateWithinGroupSelectSynonymClauses(gc);
+        if (result.isEmptyResult() || result.getIsFalseResult()) {
+            return result;
         }
+        // Filter for Select synonyms
+        result.filterBySelectSynonym(selectSynonym);
+        combinedResultTable.combineResult(result);
     }
-    return rawResultTable;
+    return combinedResultTable;
+}
+
+RawResult Evaluator::evaluateWithinGroupSelectSynonymClauses(GroupedClause currentGroupedClause) {
+    RawResult withinGroupResultTable;
+    for (auto c : currentGroupedClause.getClauses()) {
+        RawResult result = c->evaluateClause();
+        if (result.isEmptyResult() || result.getIsFalseResult()) {
+            return withinGroupResultTable;
+        }
+        // Merge tables
+        withinGroupResultTable.combineResult(result);
+    }
+    return withinGroupResultTable;
 }
 
 
