@@ -18,8 +18,6 @@ protected:
         {TokenType::ENTREF, std::vector<TokenType>{TokenType::SYNONYM, TokenType::WILDCARD, TokenType::NAME_WITH_QUOTATION}},
         {TokenType::SYNONYM, std::vector<TokenType>{TokenType::NAME, TokenType::STMT, TokenType::READ, TokenType::PRINT, TokenType::CALL, TokenType::WHILE, TokenType::IF, TokenType::ASSIGN, TokenType::VARIABLE, TokenType::CONSTANT, TokenType::PROCEDURE}}
 
-        // add for each rs type
-
     };
 public:
     virtual bool isSyntacticallyCorrect(std::vector<TokenObject> tokenizedClause) = 0;

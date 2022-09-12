@@ -23,6 +23,7 @@ static std::string procedure_value_one = "procedure_value_one";
 static std::string read_value_one = "5";
 static std::string variable_value_one = "variable_value_one";
 static std::string while_value_one = "6";
+static std::string statement_value_one = "19";
 
 static std::string assign_value_two = "7";
 static std::string call_value_two = "8";
@@ -33,6 +34,7 @@ static std::string procedure_value_two = "procedure_value_two";
 static std::string read_value_two = "11";
 static std::string variable_value_two = "variable_value_two";
 static std::string while_value_two = "12";
+static std::string statement_value_two = "20";
 
 static std::string assign_value_three = "13";
 static std::string call_value_three = "14";
@@ -43,6 +45,7 @@ static std::string procedure_value_three = "procedure_value_three";
 static std::string read_value_three = "17";
 static std::string variable_value_three = "variable_value_three";
 static std::string while_value_three = "18";
+static std::string statement_value_three= "20";
 
 static Entity* entity = new Entity(entity_value);
 static Entity* assignEntity = new AssignEntity(assign_value_one);
@@ -54,6 +57,7 @@ static Entity* procedureEntity = new ProcedureEntity(procedure_value_one);
 static Entity* readEntity = new ReadEntity(read_value_one);
 static Entity* variableEntity = new VariableEntity(variable_value_one);
 static Entity* whileEntity = new WhileEntity(while_value_one);
+static Entity* statementEntity = new StatementEntity(statement_value_one);
 
 static Entity* assignEntityTwo = new AssignEntity(assign_value_two);
 static Entity* callEntityTwo = new CallEntity(call_value_two);
@@ -64,6 +68,7 @@ static Entity* procedureEntityTwo = new ProcedureEntity(procedure_value_two);
 static Entity* readEntityTwo = new ReadEntity(read_value_two);
 static Entity* variableEntityTwo = new VariableEntity(variable_value_two);
 static Entity* whileEntityTwo = new WhileEntity(while_value_two);
+static Entity* statementEntityTwo = new StatementEntity(statement_value_two);
 
 static Entity* assignEntityThree = new AssignEntity(assign_value_three);
 static Entity* callEntityThree = new CallEntity(call_value_three);
@@ -74,6 +79,7 @@ static Entity* procedureEntityThree = new ProcedureEntity(procedure_value_three)
 static Entity* readEntityThree = new ReadEntity(read_value_three);
 static Entity* variableEntityThree = new VariableEntity(variable_value_three);
 static Entity* whileEntityThree = new WhileEntity(while_value_three);
+static Entity* statementEntityThree = new StatementEntity(statement_value_three);
 
 static Entity* assignEntityDuplicate = new AssignEntity(assign_value_one);
 static Entity* callEntityDuplicate = new CallEntity(call_value_one);
