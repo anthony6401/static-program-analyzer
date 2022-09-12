@@ -123,8 +123,6 @@ std::vector<std::shared_ptr<Clause>> Evaluator::extractClausesToEvaluate(QueryOb
     }
 }
 
-
-
 // Assuming maximum of 2 clauses
 std::vector<std::string> Evaluator::findCommonSynonyms(std::vector<std::string> firstSynonymList, std::vector<std::string> secSynonymList) {
     std::vector<std::string> commonSynonyms;
@@ -149,129 +147,129 @@ int Evaluator::getSelectSynonymIndex(std::vector<std::string> synonymList, std::
 // UNUSED
 // Might be boolean result, {{x}, {y}..} or {{1. x}, {2, y}..}
 // {{x}, {y}, {z}} -> {x, y, z}
-std::unordered_set<std::string> Evaluator::joinRawResults(std::vector<RawResult> rawResultsList, std::string selectSynonym, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) {
-    std::unordered_set<std::string> joinedResults;
-    // Single clause or Select clause query
-    if (rawResultsList.size() == 1) {
-        std::vector<std::vector<std::string>> results = rawResultsList.front().resultsList;
-
-        // No synonyms clauses
-        if (rawResultsList.front().getIsBooleanResult()) {
-            // True result, fetch all select synonym design entity
-            std::shared_ptr<Clause> selectAllClause = ClauseCreator::createClause(selectSynonym, synonymToDesignEntityMap, qpsClient);
-            RawResult selectAllResult = selectAllClause->evaluateClause();
-            for (auto singleValue : selectAllResult.resultsList) {
-                joinedResults.insert(singleValue.front());
-            }
-            return joinedResults;
-        }
-        // Select synonym present
-        if (find(rawResultsList.front().synonymsList.begin(),
-                 rawResultsList.front().synonymsList.end(), selectSynonym) != rawResultsList.front().synonymsList.end()) {
-            // 1 Synonym present, {{x}, {y}...}
-            if (rawResultsList.front().getSynonymCount() == 1) {
-                if (rawResultsList.front().synonymsList.front() == selectSynonym) {
-                    for (auto singleValue : results) {
-                        joinedResults.insert(singleValue.front());
-                    }
-                }
-                return joinedResults;
-            }
-            // 2 synonyms present, {{1, y}, {2, x}}
-            if (rawResultsList.front().getSynonymCount() == 2) {
-                // Get index of select synonym from synonymList, 0 or 1
-                int indexOfSelectSynonym = Evaluator::getSelectSynonymIndex(rawResultsList.front().synonymsList, selectSynonym);
-                for (auto result: results) {
-                    joinedResults.insert(result.at(indexOfSelectSynonym));
-                }
-                return joinedResults;
-            }
-        }
-        // Select synonym not present, check for empty result or false clause
-        // Not empty, fetch all select synonym design entity
-        if (!rawResultsList.front().isEmptyResult()) {
-            std::shared_ptr<Clause> selectAllClause = ClauseCreator::createClause(selectSynonym, synonymToDesignEntityMap, qpsClient);
-            RawResult selectAllResult = selectAllClause->evaluateClause();
-            for (auto singleValue : selectAllResult.resultsList) {
-                joinedResults.insert(singleValue.front());
-            }
-            return joinedResults;
-        }
-    // Multi-clause queries
-    } else {
-        RawResult firstClauseResults = rawResultsList.front();
-        RawResult secondClauseResults = rawResultsList.back();
-        bool isSelectFoundInFirst = find(firstClauseResults.synonymsList.begin(),
-                                         firstClauseResults.synonymsList.end(), selectSynonym) != firstClauseResults.synonymsList.end();
-        bool isSelectFoundInSecond = find(secondClauseResults.synonymsList.begin(),
-                                          secondClauseResults.synonymsList.end(), selectSynonym) != secondClauseResults.synonymsList.end();
-        std::vector<std::string> commonSynonyms = Evaluator::findCommonSynonyms(
-                firstClauseResults.synonymsList, secondClauseResults.synonymsList);
-        // No Synonym clauses, Both boolean true
-        if (firstClauseResults.getIsBooleanResult() && secondClauseResults.getIsBooleanResult()) {
-            std::shared_ptr<Clause> selectAllClause = ClauseCreator::createClause(
-                    selectSynonym, synonymToDesignEntityMap, qpsClient);
-            RawResult selectAllResult = selectAllClause->evaluateClause();
-            for (auto singleValue : selectAllResult.resultsList) {
-                joinedResults.insert(singleValue.front());
-            }
-            return joinedResults;
-        }
-        // Select synonym not found in both clauses
-        if (!isSelectFoundInFirst && !isSelectFoundInSecond) {
-            std::shared_ptr<Clause> selectAllClause = ClauseCreator::createClause(
-                    selectSynonym, synonymToDesignEntityMap, qpsClient);
-            RawResult selectAllResult = selectAllClause->evaluateClause();
-            for (auto singleValue : selectAllResult.resultsList) {
-                joinedResults.insert(singleValue.front());
-            }
-            return joinedResults;
-        }
-
-        // Select synonym only present in one clause
-        if (isSelectFoundInFirst && !isSelectFoundInSecond) {
-            if (!commonSynonyms.empty()) {
-                for (auto c : commonSynonyms) {
-                    if (firstClauseResults.getIsSingleConstraints()) {
-                        if (secondClauseResults.getIsSingleConstraints()) {
-
-                        }
-                    } else {
-
-                    }
-
-
-                }
-            }
-        }
-
-//        if (!isSelectFoundInFirst && isSelectFoundInSecond) {
+//std::unordered_set<std::string> Evaluator::joinRawResults(std::vector<RawResult> rawResultsList, std::string selectSynonym, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) {
+//    std::unordered_set<std::string> joinedResults;
+//    // Single clause or Select clause query
+//    if (rawResultsList.size() == 1) {
+//        std::vector<std::vector<std::string>> results = rawResultsList.front().resultsList;
+//
+//        // No synonyms clauses
+//        if (rawResultsList.front().getIsBooleanResult()) {
+//            // True result, fetch all select synonym design entity
+//            std::shared_ptr<Clause> selectAllClause = ClauseCreator::createClause(selectSynonym, synonymToDesignEntityMap, qpsClient);
+//            RawResult selectAllResult = selectAllClause->evaluateClause();
+//            for (auto singleValue : selectAllResult.resultsList) {
+//                joinedResults.insert(singleValue.front());
+//            }
+//            return joinedResults;
+//        }
+//        // Select synonym present
+//        if (find(rawResultsList.front().synonymsList.begin(),
+//                 rawResultsList.front().synonymsList.end(), selectSynonym) != rawResultsList.front().synonymsList.end()) {
+//            // 1 Synonym present, {{x}, {y}...}
+//            if (rawResultsList.front().getSynonymCount() == 1) {
+//                if (rawResultsList.front().synonymsList.front() == selectSynonym) {
+//                    for (auto singleValue : results) {
+//                        joinedResults.insert(singleValue.front());
+//                    }
+//                }
+//                return joinedResults;
+//            }
+//            // 2 synonyms present, {{1, y}, {2, x}}
+//            if (rawResultsList.front().getSynonymCount() == 2) {
+//                // Get index of select synonym from synonymList, 0 or 1
+//                int indexOfSelectSynonym = Evaluator::getSelectSynonymIndex(rawResultsList.front().synonymsList, selectSynonym);
+//                for (auto result: results) {
+//                    joinedResults.insert(result.at(indexOfSelectSynonym));
+//                }
+//                return joinedResults;
+//            }
+//        }
+//        // Select synonym not present, check for empty result or false clause
+//        // Not empty, fetch all select synonym design entity
+//        if (!rawResultsList.front().isEmptyResult()) {
+//            std::shared_ptr<Clause> selectAllClause = ClauseCreator::createClause(selectSynonym, synonymToDesignEntityMap, qpsClient);
+//            RawResult selectAllResult = selectAllClause->evaluateClause();
+//            for (auto singleValue : selectAllResult.resultsList) {
+//                joinedResults.insert(singleValue.front());
+//            }
+//            return joinedResults;
+//        }
+//    // Multi-clause queries
+//    } else {
+//        RawResult firstClauseResults = rawResultsList.front();
+//        RawResult secondClauseResults = rawResultsList.back();
+//        bool isSelectFoundInFirst = find(firstClauseResults.synonymsList.begin(),
+//                                         firstClauseResults.synonymsList.end(), selectSynonym) != firstClauseResults.synonymsList.end();
+//        bool isSelectFoundInSecond = find(secondClauseResults.synonymsList.begin(),
+//                                          secondClauseResults.synonymsList.end(), selectSynonym) != secondClauseResults.synonymsList.end();
+//        std::vector<std::string> commonSynonyms = Evaluator::findCommonSynonyms(
+//                firstClauseResults.synonymsList, secondClauseResults.synonymsList);
+//        // No Synonym clauses, Both boolean true
+//        if (firstClauseResults.getIsBooleanResult() && secondClauseResults.getIsBooleanResult()) {
+//            std::shared_ptr<Clause> selectAllClause = ClauseCreator::createClause(
+//                    selectSynonym, synonymToDesignEntityMap, qpsClient);
+//            RawResult selectAllResult = selectAllClause->evaluateClause();
+//            for (auto singleValue : selectAllResult.resultsList) {
+//                joinedResults.insert(singleValue.front());
+//            }
+//            return joinedResults;
+//        }
+//        // Select synonym not found in both clauses
+//        if (!isSelectFoundInFirst && !isSelectFoundInSecond) {
+//            std::shared_ptr<Clause> selectAllClause = ClauseCreator::createClause(
+//                    selectSynonym, synonymToDesignEntityMap, qpsClient);
+//            RawResult selectAllResult = selectAllClause->evaluateClause();
+//            for (auto singleValue : selectAllResult.resultsList) {
+//                joinedResults.insert(singleValue.front());
+//            }
+//            return joinedResults;
+//        }
+//
+//        // Select synonym only present in one clause
+//        if (isSelectFoundInFirst && !isSelectFoundInSecond) {
 //            if (!commonSynonyms.empty()) {
 //                for (auto c : commonSynonyms) {
-//                    if ()
+//                    if (firstClauseResults.getIsSingleConstraints()) {
+//                        if (secondClauseResults.getIsSingleConstraints()) {
+//
+//                        }
+//                    } else {
+//
+//                    }
+//
 //
 //                }
 //            }
 //        }
-
-        // 1 Synonym present, {{x}, {y}...}
-        // 2 synonyms present, {{1, y}, {2, x}}
-
-
-        // Select synonym present in both clauses
-
-        // no synonym clauses -> evaluate select / select not present in both -> evaluate select
-        // Select present in first
-            // check if second has results
-            // check for common synonyms
-            // return corresponding select based on synonyms present
-        // Select present in second
-        // check if first has results
-        // check for common synonyms
-        // return corresponding select based on synonyms present
-
-        //
-    }
-
-    return joinedResults;
-}
+//
+////        if (!isSelectFoundInFirst && isSelectFoundInSecond) {
+////            if (!commonSynonyms.empty()) {
+////                for (auto c : commonSynonyms) {
+////                    if ()
+////
+////                }
+////            }
+////        }
+//
+//        // 1 Synonym present, {{x}, {y}...}
+//        // 2 synonyms present, {{1, y}, {2, x}}
+//
+//
+//        // Select synonym present in both clauses
+//
+//        // no synonym clauses -> evaluate select / select not present in both -> evaluate select
+//        // Select present in first
+//            // check if second has results
+//            // check for common synonyms
+//            // return corresponding select based on synonyms present
+//        // Select present in second
+//        // check if first has results
+//        // check for common synonyms
+//        // return corresponding select based on synonyms present
+//
+//        //
+//    }
+//
+//    return joinedResults;
+//}

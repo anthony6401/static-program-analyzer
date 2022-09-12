@@ -10,9 +10,8 @@ class RawResult {
 private:
     //  Query results returns false
     bool isFalseResult = false;
-    bool isBooleanResult = false;
+    bool isBooleanResult;
     bool isSynonymResult = false;
-    bool isSingleConstraints = false;
 
 
 public:
@@ -37,8 +36,6 @@ public:
     bool getIsBooleanResult();
     void setIsBooleanResult();
     int getSynonymCount();
-    bool getIsSingleConstraints();
-    void setIsSingleConstraints();
 
 };
 

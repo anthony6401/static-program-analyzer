@@ -4,15 +4,15 @@
 #include <map>
 #include <initializer_list>
 
-RawResult::RawResult() : resultsList({}), isFalseResult(false), isBooleanResult(false), isSingleConstraints(false), synonymsList({}) {}
+RawResult::RawResult() : resultsList({}), isFalseResult(false), isBooleanResult(true), synonymsList({}) {}
 
 RawResult::RawResult(const std::string& synonym, const std::unordered_set<std::string>& results) {
     synonymsList.emplace_back(synonym);
-    setIsSingleConstraints();
     for (auto singleResult : results) {
         // {{x}, {y}, {z}}
         resultsList.emplace_back(std::initializer_list<std::string>{singleResult});
     }
+    setIsBooleanResult();
 }
 
 RawResult::RawResult(std::string leftSynonym, std::string rightSynonym,
@@ -23,6 +23,7 @@ RawResult::RawResult(std::string leftSynonym, std::string rightSynonym,
         // {{1, x}, {3, y}, {5, z}}
         resultsList.emplace_back(std::initializer_list<std::string>{result.first, result.second});
     }
+    setIsBooleanResult();
 }
 
 void RawResult::filterBySelectSynonym(std::string synonym) {
@@ -38,21 +39,16 @@ void RawResult::combineResult(RawResult nextResult) {
     if (nextResult.isFalseResult || nextResult.isEmptyResult()) {
         setIsFalseResult();
     }
-
     // find common synonyms, maximum 2 since there are only 2 parameters / pattern takes in 1 synonym at max
     // {x, y} {s, x} -> {0, 1} index pair -> go to resultsList
-
     std::vector<std::pair<size_t, size_t>> commonSynonymsIndexPairs = RawResult::findCommonSynonymsIndexPairs(
             nextResult.synonymsList);
-
     // Combining clause groups and combining within clause groups
     if (commonSynonymsIndexPairs.empty()) {
         RawResult::joinResultsListWithNoCommonSynonym(nextResult);
     } else {
         RawResult::joinResultsListWithCommonSynonym(nextResult, commonSynonymsIndexPairs);
     }
-
-    if ()
 }
 
 void RawResult::joinResultsListWithNoCommonSynonym(RawResult nextResult) {
@@ -67,8 +63,8 @@ void RawResult::joinResultsListWithNoCommonSynonym(RawResult nextResult) {
     }
 
     std::vector<std::vector<std::string>> newResultsList;
-    for (const auto resultPair : resultsList) {
-        for (const auto nextResultPair : nextResult.resultsList) {
+    for (auto resultPair : resultsList) {
+        for (auto nextResultPair : nextResult.resultsList) {
             auto newPair = resultPair;
             newPair.reserve(resultPair.size() + nextResultPair.size());
             newPair.insert(newPair.end(), nextResultPair.begin(), nextResultPair.end());
@@ -160,7 +156,7 @@ bool RawResult::getIsBooleanResult() {
 }
 
 void RawResult::setIsBooleanResult() {
-    isBooleanResult = true;
+    isBooleanResult = false;
 }
 
 bool RawResult::getIsSynonymResult() {
@@ -171,13 +167,6 @@ void RawResult::setIsSynonymResult() {
     isSynonymResult = true;
 }
 
-bool RawResult::getIsSingleConstraints() {
-    return isSingleConstraints;
-}
-
-void RawResult::setIsSingleConstraints() {
-    isSingleConstraints = true;
-}
 
 
 
