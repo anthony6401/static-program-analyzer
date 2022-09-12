@@ -67,8 +67,6 @@ bool Evaluator::evaluateNoSelectSynonymClauses(std::vector<GroupedClause> noSele
     return false;
 }
 
-
-
 // Each grouped clause has connected synonyms, and each group clause is related to Select synonym
 // Evaluate each grouped clause in a loop, find common synonyms and combine results
 // Combine all grouped clauses and filter values by select synonym
@@ -148,7 +146,7 @@ int Evaluator::getSelectSynonymIndex(std::vector<std::string> synonymList, std::
     return index;
 }
 
-
+// UNUSED
 // Might be boolean result, {{x}, {y}..} or {{1. x}, {2, y}..}
 // {{x}, {y}, {z}} -> {x, y, z}
 std::unordered_set<std::string> Evaluator::joinRawResults(std::vector<RawResult> rawResultsList, std::string selectSynonym, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) {
