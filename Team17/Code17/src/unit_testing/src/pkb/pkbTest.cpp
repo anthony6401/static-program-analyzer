@@ -215,7 +215,7 @@ TEST_CASE("PKB Relationship Manager test") {
 	REQUIRE(pkb.getAllRelationship(RelationshipType::FOLLOWS_T, DesignEntity::READ, DesignEntity::PRINT) == expectedResultFollowsTAll);
 
 }
-
+//Integration testing between managers.
 TEST_CASE("All Manager Test") {
 	PKB pkb = PKB();
 
