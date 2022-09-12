@@ -1,12 +1,12 @@
 #ifndef SPA_PATTERN_H
 #define SPA_PATTERN_H
 
-#include "string"
+#include "components/qps/query_preprocessor/query_tokenizer/TokenType.h"
 #include "components/qps/query_preprocessor/query_tokenizer/TokenObject.h"
 
 using namespace qps;
 
-// Only assign pattern
+
 class Pattern {
 private:
     std::string synonym;
@@ -16,9 +16,9 @@ private:
 public:
     Pattern();
     Pattern(std::string synonym, TokenObject left, TokenObject right);
-    static std::string getSynonym();
-    static TokenObject getLeft();
-    static TokenObject getRight();
+    std::string getSynonym();
+    TokenObject getLeft();
+    TokenObject getRight();
     bool operator==(const Pattern& other) const {
         return synonym == other.synonym
             && left == other.left
