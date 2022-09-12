@@ -17,6 +17,7 @@ public:
     AssignPatternClause(std::string assignSynonym, TokenObject left, TokenObject right, QPSClient qpsClient, Select synonym);
     RawResult evaluateClause() override;
     size_t getNumberOfSynonyms() override;
+    std::unordered_set<std::string> getAllSynonyms() override;
     RawResult evaluateSynonymWildcard();
     RawResult evaluateSynonymExpression();
     RawResult evaluateSynonymNameQuotes();

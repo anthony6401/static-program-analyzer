@@ -36,6 +36,17 @@ size_t ModifiesPClause::getNumberOfSynonyms() {
     return numberOfSynonyms;
 }
 
+std::unordered_set<std::string> ModifiesPClause::getAllSynonyms() {
+    std::unordered_set<std::string> synonyms = {};
+    if (left.getTokenType() == TokenType::SYNONYM) {
+        synonyms.emplace(left.getValue());
+    }
+    if (right.getTokenType() == TokenType::SYNONYM) {
+        synonyms.emplace(right.getValue());
+    }
+    return synonyms;
+}
+
 TokenType ModifiesPClause::getRelationshipType() {
     return TokenType::MODIFIES;
 }

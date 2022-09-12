@@ -29,8 +29,6 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
 
 
 
-
-
 std::vector<std::shared_ptr<Clause>> Evaluator::extractClausesToEvaluate(QueryObject queryObject, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) {
     std::vector<std::shared_ptr<Clause>> clausesToEvaluate;
     std::vector<SuchThat> relationships = queryObject.getRelationships();

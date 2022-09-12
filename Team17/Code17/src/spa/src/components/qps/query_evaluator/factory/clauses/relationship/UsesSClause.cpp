@@ -37,6 +37,17 @@ size_t UsesSClause::getNumberOfSynonyms() {
     return numberOfSynonyms;
 }
 
+std::unordered_set<std::string> UsesSClause::getAllSynonyms() {
+    std::unordered_set<std::string> synonyms = {};
+    if (left.getTokenType() == TokenType::SYNONYM) {
+        synonyms.emplace(left.getValue());
+    }
+    if (right.getTokenType() == TokenType::SYNONYM) {
+        synonyms.emplace(right.getValue());
+    }
+    return synonyms;
+}
+
 RawResult UsesSClause::evaluateSynonymSynonym() {
     DesignEntity stmtType = synonymToDesignEntityMap[left.getValue()];
     DesignEntity rightType = synonymToDesignEntityMap[right.getValue()];

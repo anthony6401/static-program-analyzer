@@ -6,6 +6,8 @@
 #include "components/qps/query_evaluator/factory/clauses/relationship/ParentClause.h"
 #include "components/qps/query_evaluator/factory/clauses/relationship/ParentTClause.h"
 #include "components/qps/query_evaluator/factory/clauses/patterns/AssignPatternClause.h"
+#include "components/qps/query_evaluator/factory/clauses/relationship/UsesSClause.h"
+#include "components/qps/query_evaluator/factory/clauses/relationship/UsesPClause.h"
 #include <memory>
 
 std::shared_ptr<Clause> ClauseCreator::createClause(Select synonym, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) {
@@ -36,11 +38,11 @@ std::shared_ptr<Clause> ClauseCreator::createClause(SuchThat relationship, Selec
 
     } else if (relationshipType == TokenType::USES) {
         if (isStmtRelationship(left, synonymToDesignEntityMap)) {
-            return std::make_shared<ModifiesSClause>(left, right, synonym, synonymToDesignEntityMap, qpsClient);
+            return std::make_shared<UsesSClause>(left, right, synonym, synonymToDesignEntityMap, qpsClient);
         }
 
         if (isProcRelationship(left, synonymToDesignEntityMap)) {
-            return std::make_shared<ModifiesSClause>(left, right, synonym, synonymToDesignEntityMap, qpsClient);
+            return std::make_shared<UsesPClause>(left, right, synonym, synonymToDesignEntityMap, qpsClient);
         }
     } else if (relationshipType == TokenType::FOLLOWS) {
         return std::make_shared<FollowsClause>(left, right, synonym, synonymToDesignEntityMap, qpsClient);

@@ -10,3 +10,13 @@ RawResult SelectClause::evaluateClause() {
     // std::unordered_set<std::string> results = qpsClient.getAllEntity(returnType);
     return {};
 }
+
+size_t SelectClause::getNumberOfSynonyms() {
+    return 1;
+}
+
+std::unordered_set<std::string> SelectClause::getAllSynonyms() {
+    std::unordered_set<std::string> synonyms = {};
+    synonyms.emplace(synonym.getSynonym());
+    return synonyms;
+}

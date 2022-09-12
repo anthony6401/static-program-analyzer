@@ -25,6 +25,17 @@ RawResult ModifiesSClause::evaluateClause() {
     }
 }
 
+std::unordered_set<std::string> ModifiesSClause::getAllSynonyms() {
+    std::unordered_set<std::string> synonyms = {};
+    if (left.getTokenType() == TokenType::SYNONYM) {
+        synonyms.emplace(left.getValue());
+    }
+    if (right.getTokenType() == TokenType::SYNONYM) {
+        synonyms.emplace(right.getValue());
+    }
+    return synonyms;
+}
+
 size_t ModifiesSClause::getNumberOfSynonyms() {
     size_t numberOfSynonyms = 0;
     if (left.getTokenType() == TokenType::SYNONYM) {

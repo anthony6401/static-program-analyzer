@@ -36,6 +36,23 @@ RawResult AssignPatternClause::evaluateClause() {
     }
 }
 
+size_t AssignPatternClause::getNumberOfSynonyms() {
+    size_t numberOfSynonyms = 0;
+    if (left.getTokenType() == TokenType::SYNONYM) {
+        numberOfSynonyms++;
+    }
+
+    return numberOfSynonyms + 1;
+}
+
+std::unordered_set<std::string> AssignPatternClause::getAllSynonyms() {
+    std::unordered_set<std::string> synonyms = {assignSynonym};
+    if (left.getTokenType() == TokenType::SYNONYM) {
+        synonyms.emplace(left.getValue());
+    }
+    return synonyms;
+}
+
 RawResult AssignPatternClause::evaluateSynonymWildcard() {
     return {};
 }

@@ -20,6 +20,7 @@ public:
     std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
     RawResult evaluateClause() override;
     size_t getNumberOfSynonyms() override;
+    std::unordered_set<std::string> getAllSynonyms() override;
     RawResult evaluateSynonymSynonym();
     RawResult evaluateSynonymWildcard();
     RawResult evaluateSynonymInteger();
