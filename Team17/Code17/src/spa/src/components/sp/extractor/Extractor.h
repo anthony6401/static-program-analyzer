@@ -31,7 +31,7 @@ public:
 	void extractCall();
 	void extractWhile();
 	void extractIf();
-	void extractAssign();
+	void extractAssign(SimpleToken simpleToken);
 	void extractCondExpr();
 	void extractVariable();
 	void extractConstant();
