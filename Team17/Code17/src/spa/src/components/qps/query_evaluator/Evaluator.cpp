@@ -26,20 +26,42 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
     std::vector<RawResult> evaluatedResultsList;
     bool isNoneResult = false;
 
-    for (auto clause : clausesToEvaluate) {
-        RawResult evaluatedResult = clause->evaluateClause();
-        if (evaluatedResult.getIsFalseResult() || evaluatedResult.isEmptyResult()) {
-            results.emplace_back("none");
-            isNoneResult = true;
-            break;
-        }
-        evaluatedResultsList.push_back(evaluatedResult);
-    }
+    // For no synonyms clauses -> Evaluates to boolean value
 
-    if (!isNoneResult) {
-        std::unordered_set<std::string> joinedRawResults = joinRawResults(
-                evaluatedResultsList, queryObject.getSelect().getSynonym(), synonymToDesignEntityMap, qpsClient);
+
+}
+
+// Returns boolean, check for False or Empty Clauses
+bool Evaluator::evaluateNoSynonymClauses(GroupedClause noSynonymsClauses) {
+    if (noSynonymsClauses.isEmpty()) {
+        return false;
+    } else {
+        std::vector<std::shared_ptr<Clause>> clauses = noSynonymsClauses.getClauses();
+        for (auto c : clauses) {
+            RawResult result = c->evaluateClause();
+            if (result.getIsFalseResult() || result.isEmptyResult()) {
+                return true;
+            }
+        }
+        return false;
     }
+}
+
+// Returns boolean, check for False or Empty Clauses
+bool evaluateNoSelectSynonymClauses(std::vector<GroupedClause> noSelectSynonymPresent) {
+    for (GroupedClause gc : noSelectSynonymPresent) {
+        for (auto c : gc.getClauses()) {
+            RawResult result = c->evaluateClause();
+            if (result.getIsFalseResult() || result.isEmptyResult()) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+RawResult evaluateHasSelectSynonymClauses(std::vector<GroupedClause> hasSelectSynonymPresent) {
+    return {};
 }
 
 

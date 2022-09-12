@@ -10,13 +10,14 @@
 
 class GroupedClause {
 private:
-    std::unordered_set<std::string> synonyms;
+    std::set<std::string> synonyms;
     std::vector<std::shared_ptr<Clause>> clauses;
 
 public:
     GroupedClause();
     void addClauseToGroup(std::shared_ptr<Clause> clause);
     bool isEmpty();
+    std::vector<std::shared_ptr<Clause>> getClauses();
     bool hasCommonSynonymWithClause(std::shared_ptr<Clause> clause);
 };
 
