@@ -1,5 +1,5 @@
 #include "ParentTRelationshipStorage.h"
-#include "models/Relationship/ParentRelationship.h"
+#include "models/Relationship/ParentTRelationship.h"
 #include "models/Relationship/RelationshipType.h"
 #include "models/Entity/ProcedureEntity.h"
 #include "models/Entity/AssignEntity.h"
@@ -46,11 +46,11 @@ ParentTRelationshipStorage::ParentTRelationshipStorage() : RelationshipStorage()
 
 
 bool ParentTRelationshipStorage::storeRelationship(Relationship* rel) {
-	ParentRelationship* parentRelationship = dynamic_cast<ParentRelationship*>(rel);
+	ParentTRelationship* parentTRelationship = dynamic_cast<ParentTRelationship*>(rel);
 
-	if (parentRelationship) {
-		Entity* leftEntity = parentRelationship->getLeftEntity();
-		Entity* rightEntity = parentRelationship->getRightEntity();
+	if (parentTRelationship) {
+		Entity* leftEntity = parentTRelationship->getLeftEntity();
+		Entity* rightEntity = parentTRelationship->getRightEntity();
 
 		std::string leftValue = leftEntity->getValue();
 		std::string rightValue = rightEntity->getValue();
@@ -139,9 +139,9 @@ bool ParentTRelationshipStorage::storeRelationship(Relationship* rel) {
 	return false;
 }
 
-// Answer Parent(1,2)
+// Answer ParentT(1,2)
 bool ParentTRelationshipStorage::getRelationship(RelationshipType relType, TokenObject firstArgument, TokenObject secondArgument) {
-	if (relType == RelationshipType::PARENT) {
+	if (relType == RelationshipType::PARENT_T) {
 		std::unordered_map<std::string, std::unordered_set<std::string>>* storage{};
 
 		storage = &this->stmtToStmtForwardMap;
@@ -157,9 +157,9 @@ bool ParentTRelationshipStorage::getRelationship(RelationshipType relType, Token
 	return false;
 }
 
-// Answer Parent(1,a)
+// Answer ParentT(1,a)
 std::unordered_set<std::string> ParentTRelationshipStorage::getRelationshipByFirst(RelationshipType relType, TokenObject firstArgument, DesignEntity returnType) {
-	if (relType == RelationshipType::PARENT) {
+	if (relType == RelationshipType::PARENT_T) {
 		std::unordered_map<std::string, std::unordered_set<std::string>>* storage{};
 
 		if (returnType == DesignEntity::READ) {
@@ -196,9 +196,9 @@ std::unordered_set<std::string> ParentTRelationshipStorage::getRelationshipByFir
 	return std::unordered_set<std::string>();
 }
 
-// Answer Parent(s,2), Parent(w,2), or Parent(if, 2)
+// Answer ParentT(s,2), ParentT(w,2), or ParentT(if, 2)
 std::unordered_set<std::string> ParentTRelationshipStorage::getRelationshipBySecond(RelationshipType relType, DesignEntity returnType, TokenObject secondArgument) {
-	if (relType == RelationshipType::PARENT) {
+	if (relType == RelationshipType::PARENT_T) {
 		std::unordered_map<std::string, std::unordered_set<std::string>> storage{};
 
 		if (returnType == DesignEntity::STMT) {
@@ -226,9 +226,9 @@ std::unordered_set<std::string> ParentTRelationshipStorage::getRelationshipBySec
 	return std::unordered_set<std::string>();
 }
 
-//Answer Parent(s,w),...., Parent(w,a),..., Parent(if, a)
+//Answer ParentT(s,w),...., ParentT(w,a),..., ParentT(if, a)
 std::unordered_map<std::string, std::unordered_set<std::string>> ParentTRelationshipStorage::getAllRelationship(RelationshipType relType, DesignEntity returnType1, DesignEntity returnType2) {
-	if (relType == RelationshipType::PARENT) {
+	if (relType == RelationshipType::PARENT_T) {
 		if (returnType1 == DesignEntity::STMT) {
 
 			if (returnType2 == DesignEntity::READ) {
@@ -306,8 +306,3 @@ std::unordered_map<std::string, std::unordered_set<std::string>> ParentTRelation
 	}
 	return std::unordered_map<std::string, std::unordered_set<std::string>>();
 }
-
-
-
-
-
