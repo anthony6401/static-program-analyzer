@@ -25,6 +25,10 @@ public:
               std::vector<std::pair<std::string, std::string>> results);
     void filterBySelectSynonym(std::string synonym);
     void combineResult(RawResult nextResult);
+    std::vector<std::pair<size_t, size_t>> findCommonSynonymsIndexPairs(std::vector<std::string> nextSynonymsList);
+    void joinResultsListWithCommonSynonym(RawResult nextResult, std::vector<std::pair<size_t, size_t>> commonSynonymsIndexPairs);
+    void joinResultsListWithNoCommonSynonym(RawResult nextResult);
+    std::vector<size_t> findNotCommonSynonymsIndex(std::vector<std::string> nextSynonymsList);
     bool getIsSynonymResult();
     void setIsSynonymResult();
     bool getIsFalseResult();
