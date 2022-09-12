@@ -25,8 +25,8 @@ class Extractor {
 public:
 	SPClient* client;
 	Extractor(SPClient* client);
-	void extractRead(SimpleToken simpleToken, std::vector<std::string> tokens);
-	void extractPrint(SimpleToken simpleToken, std::vector<std::string> tokens);
+	void extractRead(SimpleToken simpleToken);
+	void extractPrint(SimpleToken simpleToken);
 	void extractProcedure();
 	void extractCall();
 	void extractWhile(SimpleToken simpleToken);

@@ -6,10 +6,10 @@ Extractor::Extractor(SPClient* client) {
 	this->client = client;
 }
 
-void Extractor::extractRead(SimpleToken simpleToken, std::vector<std::string> tokens) {
+void Extractor::extractRead(SimpleToken simpleToken) {
 	if (simpleToken.type == SpTokenType::TREAD) {
 		ReadEntity* leftEntity = new ReadEntity(std::to_string(simpleToken.statementNumber));
-		VariableEntity* rightEntity = new VariableEntity(tokens.at(0));
+		VariableEntity* rightEntity = new VariableEntity(simpleToken.getChildren().at(0).value);
 		ModifyRelationship* modifyRelationship = new ModifyRelationship(leftEntity, rightEntity);
 		this->client->storeRelationship(modifyRelationship);
 	} else {
@@ -17,10 +17,10 @@ void Extractor::extractRead(SimpleToken simpleToken, std::vector<std::string> to
 	}
 }
 
-void Extractor::extractPrint(SimpleToken simpleToken, std::vector<std::string> tokens) {
+void Extractor::extractPrint(SimpleToken simpleToken) {
 	if (simpleToken.type == SpTokenType::TPRINT) {
 		PrintEntity* leftEntity = new PrintEntity(std::to_string(simpleToken.statementNumber));
-		VariableEntity* rightEntity = new VariableEntity(tokens.at(0));
+		VariableEntity* rightEntity = new VariableEntity(simpleToken.getChildren().at(0).value);
 		UsesRelationship* usesRelationship = new UsesRelationship(leftEntity, rightEntity);
 		this->client->storeRelationship(usesRelationship);
 	}
@@ -68,9 +68,9 @@ void Extractor::extractWhile(SimpleToken simpleToken) {
 	WhileEntity* whileEntity = new WhileEntity(std::to_string(simpleToken.statementNumber));
 	std::vector<SimpleToken> children = simpleToken.getChildren();
 
-	SimpleToken condExpr = children.at(0);
+	SimpleToken condExpr = children.at(0); // Condirion expression
 	extractCondExpr(condExpr);
-	SimpleToken stmtLst = children.at(1);
+	SimpleToken stmtLst = children.at(1); // Statement list in while loop
 	extractStmtLst(stmtLst);
 }
 
@@ -82,11 +82,11 @@ void Extractor::extractIf(SimpleToken simpleToken) {
 	IfEntity* ifEntity = new IfEntity(std::to_string(simpleToken.statementNumber));
 	std::vector<SimpleToken> children = simpleToken.getChildren();
 
-	SimpleToken condExpr = children.at(0);
+	SimpleToken condExpr = children.at(0); // Condition expression
 	extractCondExpr(condExpr);
-	SimpleToken stmtLst1 = children.at(1);
+	SimpleToken stmtLst1 = children.at(1); // If statement
 	extractStmtLst(stmtLst1);
-	SimpleToken stmtLst2 = children.at(2);
+	SimpleToken stmtLst2 = children.at(2); // Else statement
 	extractStmtLst(stmtLst2);
 }
 
@@ -104,6 +104,23 @@ void Extractor::extractStmtLst(SimpleToken simpleToken) {
 	}
 
 	std::vector<SimpleToken> children = simpleToken.getChildren();
+	while (children.size() != 0) {
+		SimpleToken token = children.at(0);
+		if (token.type == SpTokenType::TREAD) {
+			extractRead(token);
+		} else if (token.type == SpTokenType::TPRINT) {
+			extractPrint(token);
+		} else if (token.type == SpTokenType::TASSIGN) {
+			extractAssign(token);
+		} else if (token.type == SpTokenType::TWHILE) {
+			extractWhile(token);
+		} else if (token.type == SpTokenType::TIF) {
+			extractIf(token);
+		} else if (token.type == SpTokenType::TCALL) {
+			// code here
+		}
+		children.erase(children.begin());
+	}
 }
 
 void Extractor::extractProcedure() {
