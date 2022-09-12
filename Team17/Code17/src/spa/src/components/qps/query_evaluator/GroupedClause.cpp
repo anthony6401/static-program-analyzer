@@ -12,8 +12,6 @@ bool GroupedClause::isEmpty() {
     return clauses.empty();
 }
 
-
-
 bool GroupedClause::hasCommonSynonymWithClause(std::shared_ptr<Clause> clause) {
     std::set<std::string> synonymsOfClause = clause->getAllSynonyms();
     auto synonymsOfClauseIterator = synonymsOfClause.begin();

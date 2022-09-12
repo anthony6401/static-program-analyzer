@@ -51,6 +51,7 @@ std::set<std::string> UsesSClause::getAllSynonyms() {
 RawResult UsesSClause::evaluateSynonymSynonym() {
     DesignEntity stmtType = synonymToDesignEntityMap[left.getValue()];
     DesignEntity rightType = synonymToDesignEntityMap[right.getValue()];
+    std::unordered_map<std::string, std::unordered_set<std::string>> result;
     // API CALL
     return {};
 }
