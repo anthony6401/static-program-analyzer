@@ -29,12 +29,11 @@ public:
 	void extractPrint(SimpleToken simpleToken, std::vector<std::string> tokens);
 	void extractProcedure();
 	void extractCall();
-	void extractWhile();
-	void extractIf();
+	void extractWhile(SimpleToken simpleToken);
+	void extractIf(SimpleToken simpleToken);
 	void extractAssign(SimpleToken simpleToken);
-	void extractCondExpr();
-	void extractVariable();
-	void extractConstant();
+	void extractCondExpr(SimpleToken simpleToken);
+	void extractStmtLst(SimpleToken simpleToken);
 	void extractClose();
 	void extractOpr();
 	void extractError();

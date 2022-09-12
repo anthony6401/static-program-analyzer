@@ -18,12 +18,6 @@ void Extractor::extractPrint(SimpleToken simpleToken, std::vector<std::string> t
 	this->client->storeRelationship(usesRelationship);
 }
 
-void Extractor::extractProcedure() {
-	ProcedureEntity* procedureEntity = new ProcedureEntity("");
-	VariableEntity* variableEntity = new VariableEntity("");
-	// implement stack in the future for further processing
-}
-
 void Extractor::extractAssign(SimpleToken simpleToken) {
 	AssignEntity* assignEntity = new AssignEntity(std::to_string(simpleToken.statementNumber));
 	std::vector<SimpleToken> children = simpleToken.getChildren();
@@ -51,34 +45,42 @@ void Extractor::extractAssign(SimpleToken simpleToken) {
 	}
 }
 
+void Extractor::extractWhile(SimpleToken simpleToken) {
+	WhileEntity* whileEntity = new WhileEntity(std::to_string(simpleToken.statementNumber));
+	std::vector<SimpleToken> children = simpleToken.getChildren();
+
+	SimpleToken condExpr = children.at(0);
+	extractCondExpr(condExpr);
+	SimpleToken stmtLst = children.at(1);
+	extractStmtLst(stmtLst);
+}
+
+void Extractor::extractIf(SimpleToken simpleToken) {
+	IfEntity* ifEntity = new IfEntity(std::to_string(simpleToken.statementNumber));
+	std::vector<SimpleToken> children = simpleToken.getChildren();
+
+	SimpleToken condExpr = children.at(0);
+	extractCondExpr(condExpr);
+	SimpleToken stmtLst1 = children.at(1);
+	extractStmtLst(stmtLst1);
+	SimpleToken stmtLst2 = children.at(2);
+	extractStmtLst(stmtLst2);
+}
+
+void Extractor::extractCondExpr(SimpleToken simpleToken) {}
+
+void Extractor::extractStmtLst(SimpleToken simpleToken) {}
+
+void Extractor::extractProcedure() {
+	ProcedureEntity* procedureEntity = new ProcedureEntity("");
+	VariableEntity* variableEntity = new VariableEntity("");
+	// implement stack in the future for further processing
+}
+
 void Extractor::extractCall() {
 	CallEntity* callEntity = new CallEntity("");
 	VariableEntity* variableEntity = new VariableEntity("");
 	// implement stack in the future for further processing
-}
-
-/* TO BE IMPLEMENTED */
-// ================= //
-void Extractor::extractWhile() {
-	WhileEntity* whileEntity = new WhileEntity("");
-	VariableEntity* variableEntity = new VariableEntity("");
-	// implement stack in the future for further processing
-}
-
-void Extractor::extractIf() {
-	IfEntity* ifEntity = new IfEntity("");
-	VariableEntity* variableEntity = new VariableEntity("");
-	// implement stack in the future for further processing
-}
-
-void Extractor::extractCondExpr() {}
-
-void Extractor::extractVariable() {
-	VariableEntity* variableEntity = new VariableEntity("");
-}
-
-void Extractor::extractConstant() {
-	ConstantEntity* constantEntity = new ConstantEntity("");
 }
 
 void Extractor::extractClose() {}
