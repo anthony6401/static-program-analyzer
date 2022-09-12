@@ -45,8 +45,6 @@ namespace qps {
         RELREF,
         STMTREF,
         ENTREF,
-        STMT_ENT_PARAMS,
-        ENT_ENT_PARAMS,
     };
 }
 
