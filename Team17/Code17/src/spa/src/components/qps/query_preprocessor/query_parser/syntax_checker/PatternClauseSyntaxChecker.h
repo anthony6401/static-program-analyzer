@@ -13,9 +13,8 @@ using namespace qps;
 class PatternClauseSyntaxChecker : public SyntaxChecker {
 private:
     std::stack<TokenType> patternSyntax;
-    std::unordered_map<std::string, DesignEntity> mappedSynonymsToDesignEntity;
 public:
-    PatternClauseSyntaxChecker(std::unordered_map<std::string, DesignEntity> mappedSynonymsToDesignEntity);
+    PatternClauseSyntaxChecker();
     ~PatternClauseSyntaxChecker();
     bool isSyntacticallyCorrect(std::vector<TokenObject> tokenizedClause);
 };
