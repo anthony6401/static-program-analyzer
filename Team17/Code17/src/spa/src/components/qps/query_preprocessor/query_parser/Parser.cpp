@@ -277,6 +277,7 @@ std::vector<Pattern> Parser::parseTokensIntoPatternObjects(std::vector<TokenObje
 		if (currTokenType == TokenType::CLOSED_BRACKET) {
 			// For multi such that clauses in advanced SPA
 			isFirstPatternToken = true;
+			isFirstParam = true;
 			assignSynonym = "";
 			continue;
 		}
@@ -293,7 +294,8 @@ std::vector<Pattern> Parser::parseTokensIntoPatternObjects(std::vector<TokenObje
 
 		// Return vector with only empty Pattern object if parameter value is not declared for now
 		// SemanticError should be caught in PQL validator
-		if ((currTokenType != TokenType::WILDCARD) && (currTokenType != TokenType::NAME_WITH_QUOTATION)) {
+		if ((currTokenType != TokenType::WILDCARD) && (currTokenType != TokenType::NAME_WITH_QUOTATION) && 
+			(currTokenType != TokenType::EXPRESSION) && (currTokenType != TokenType::SUBEXPRESSION)) {
 			std::string synonymValue = token.getValue();
 
 			if (mappedSynonyms.find(synonymValue) == mappedSynonyms.end()) {
