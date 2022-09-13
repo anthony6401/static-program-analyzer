@@ -78,7 +78,7 @@ RawResult ModifiesSClause::evaluateIntegerSynonym() {
 }
 
 RawResult ModifiesSClause::evaluateIntegerWildcard() {
-    std::cout << "In Integer WildCard" << std::endl;
+    // Returns boolean
     return {};
 }
 

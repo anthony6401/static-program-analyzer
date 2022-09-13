@@ -7,6 +7,8 @@
 
 RawResult::RawResult() : resultsList({}), isFalseResult(false), isBooleanResult(true), synonymsList({}) {}
 
+RawResult::RawResult(bool pkbBooleanResult) : resultsList({}), isFalseResult(pkbBooleanResult), isBooleanResult(true), synonymsList({}) {};
+
 RawResult::RawResult(const std::string& synonym, const std::unordered_set<std::string>& results) {
     synonymsList.emplace_back(synonym);
     for (auto singleResult : results) {
