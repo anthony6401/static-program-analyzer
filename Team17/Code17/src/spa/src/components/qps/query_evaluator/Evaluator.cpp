@@ -8,8 +8,8 @@
 
 void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &results, QPSClient qpsClient) {
     std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap = queryObject.getSynonymToDesignEntityMap();
-    Select synonym = queryObject.getSelect();
-    std::shared_ptr<Clause> selectClause = ClauseCreator::createClause(synonym, synonymToDesignEntityMap, qpsClient);
+    Select select = queryObject.getSelect();
+    std::shared_ptr<Clause> selectClause = ClauseCreator::createClause(select, synonymToDesignEntityMap, qpsClient);
 
     std::vector<std::shared_ptr<Clause>> clausesToEvaluate = extractClausesToEvaluate(queryObject, synonymToDesignEntityMap, qpsClient);
 
@@ -23,19 +23,37 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
     std::vector<GroupedClause> hasSelectSynonymPresent = pairBySelect.first;
     std::vector<GroupedClause> noSelectSynonymPresent = pairBySelect.second;
 
-    std::vector<RawResult> evaluatedResultsList;
-    bool isNoneResult = false;
+    RawResult evaluatedResults;
     bool isFalseNoSynonymClauseEvaluation = Evaluator::evaluateNoSynonymClauses(noSynonymsClauses);
     bool isFalseNoSelectSynonymEvaluation = Evaluator::evaluateNoSelectSynonymClauses(noSelectSynonymPresent);
 
     if (isFalseNoSynonymClauseEvaluation || isFalseNoSelectSynonymEvaluation) {
-        isNoneResult = true;
+        evaluatedResults.setIsFalseResult();
+        std::cout << "isFalseNoSynonymClauseEvaluation: " << isFalseNoSynonymClauseEvaluation << std::endl;
+        std::cout << "isFalseNoSelectSynonymEvaluation: " << isFalseNoSelectSynonymEvaluation << std::endl;
         results.emplace_back("none");
     } else {
-        Evaluator::evaluateHasSelectSynonymClauses(hasSelectSynonymPresent, synonym.getSynonym());
+        evaluatedResults = Evaluator::evaluateHasSelectSynonymClauses(hasSelectSynonymPresent, select.getSynonym());
+        Evaluator::populateResults(evaluatedResults, select.getSynonym(), results);
     }
 
-    // else, Evaluate hasSelectSynonym Clauses
+
+}
+
+void Evaluator::populateResults(RawResult finalResult, std::string selectSynonym, std::list<std::string> &results) {
+    std::cout << "_________________Populate Results___________________" << std::endl;
+    if (finalResult.getIsFalseResult() || finalResult.isEmptyResult()) {
+        std::cout << "False Result: " << finalResult.getIsFalseResult() << std::endl;
+        std::cout << "Empty result: " << finalResult.isEmptyResult() << std::endl;
+        results.emplace_back("none");
+    }
+
+    std::cout << finalResult << std::endl;
+    std::unordered_set<std::string> resultsToPopulate = finalResult.getResultsToBePopulated(selectSynonym);
+
+    for (std::string result : resultsToPopulate) {
+        results.emplace_back(result);
+    }
 }
 
 // Returns boolean, check for False or Empty Clauses

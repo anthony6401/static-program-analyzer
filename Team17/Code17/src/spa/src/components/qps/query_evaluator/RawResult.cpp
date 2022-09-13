@@ -27,7 +27,18 @@ RawResult::RawResult(std::string leftSynonym, std::string rightSynonym,
     setIsBooleanResult();
 }
 
-// From a table of results, remove all
+std::unordered_set<std::string> RawResult::getResultsToBePopulated(std::string selectSynonym) {
+    std::unordered_set<std::string> result({});
+    auto itr = std::find(synonymsList.begin(), synonymsList.end(), selectSynonym);
+    if (itr!=synonymsList.cend()) {
+        int index = std::distance(synonymsList.begin(), itr);
+        for (auto row : resultsList) {
+            result.insert(row[index]);
+        }
+    }
+    return result;
+}
+
 void RawResult::filterBySelectSynonym(std::string selectSynonym) {
     std::vector<std::string> newSynonymsList;
     std::vector<size_t> indexes; // Index of select synonym
