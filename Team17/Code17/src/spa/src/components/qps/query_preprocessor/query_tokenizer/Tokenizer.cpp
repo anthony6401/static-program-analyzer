@@ -251,14 +251,14 @@ bool Tokenizer::isExpression(std::string s) {
     return true;
 }
 
-// _"x+1"_, _"x"_
+// _"x+1"_, _"x"_, _"1"_
 bool Tokenizer::isSubExpression(std::string s) {
     if (s.size() < 5) {
         return false;
     } else {
         if (s.front() == '_' && s.back() == '_') {
             std::string withoutWildcard = trimQuotesOrWildcard(s);
-           if (isIdentity(withoutWildcard) || isExpression(withoutWildcard)) {
+           if (isIdentity(withoutWildcard) || isExpression(withoutWildcard) || isInteger(trimQuotesOrWildcard(withoutWildcard))) {
                return true;
            }
         }
@@ -284,24 +284,24 @@ std::vector<TokenObject> Tokenizer::tokenize(std::string query) {
         s = trimString(s);
         // Token value exists in list
         if (stringToTokenMap.find(s) != stringToTokenMap.end()) {
-            TokenObject object = *new TokenObject(stringToTokenMap[s], s);
+            TokenObject object = TokenObject(stringToTokenMap[s], s);
             tokenList.push_back(object);
         } else {
             if (isName(s)) {
-                TokenObject object = *new TokenObject(TokenType::NAME, s);
+                TokenObject object = TokenObject(TokenType::NAME, s);
                 tokenList.push_back(object);
             } else if (isInteger(s)) {
-                TokenObject object = *new TokenObject(TokenType::INTEGER, s);
+                TokenObject object = TokenObject(TokenType::INTEGER, s);
                 tokenList.push_back(object);
             } else if (isIdentity(s)) {
-                TokenObject object = *new TokenObject(TokenType::NAME_WITH_QUOTATION, s);
+                TokenObject object = TokenObject(TokenType::NAME_WITH_QUOTATION, s);
                 tokenList.push_back(object);
             } else if (isExpression(s)) {
                 // Return trimmed string
-                TokenObject object = *new TokenObject(TokenType::EXPRESSION, s);
+                TokenObject object = TokenObject(TokenType::EXPRESSION, s);
                 tokenList.push_back(object);
             } else if (isSubExpression(s)) {
-                TokenObject object = *new TokenObject(TokenType::SUBEXPRESSION, s);
+                TokenObject object = TokenObject(TokenType::SUBEXPRESSION, s);
                 tokenList.push_back(object);
             } else {
                 // throw exception
