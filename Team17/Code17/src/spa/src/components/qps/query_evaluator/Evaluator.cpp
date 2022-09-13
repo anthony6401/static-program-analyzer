@@ -31,6 +31,8 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
     if (isFalseNoSynonymClauseEvaluation || isFalseNoSelectSynonymEvaluation) {
         isNoneResult = true;
         results.emplace_back("none");
+    } else {
+        Evaluator::evaluateHasSelectSynonymClauses(hasSelectSynonymPresent, synonym.getSynonym());
     }
 
     // else, Evaluate hasSelectSynonym Clauses

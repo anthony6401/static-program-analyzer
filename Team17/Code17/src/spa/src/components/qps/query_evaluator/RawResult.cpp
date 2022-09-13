@@ -27,8 +27,28 @@ RawResult::RawResult(std::string leftSynonym, std::string rightSynonym,
     setIsBooleanResult();
 }
 
-void RawResult::filterBySelectSynonym(std::string synonym) {
+// From a table of results, remove all
+void RawResult::filterBySelectSynonym(std::string selectSynonym) {
+    std::vector<std::string> newSynonymsList;
+    std::vector<size_t> indexes; // Index of select synonym
+    for (size_t i = 0; i < synonymsList.size(); i++) {
+        std::string currentSynonym = synonymsList.at(i);
+        if (currentSynonym == selectSynonym) {
+            indexes.emplace_back(i);
+            newSynonymsList.emplace_back(currentSynonym);
+        }
+    }
 
+    std::vector<std::vector<std::string>> newResultsList;
+    for (auto resultsSublist : resultsList) {
+        std::vector<std::string> newResultSublist;
+        for (size_t i : indexes) {
+            newResultSublist.emplace_back(resultsSublist.at(i));
+        }
+        newResultsList.emplace_back(newResultSublist);
+    }
+    synonymsList = std::move(newSynonymsList);
+    resultsList = std::move(newResultsList);
 }
 
 // Find common synonyms and merge resultsLists
