@@ -28,7 +28,6 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
     std::cout << "commonSynonymsGroupedClauses count: " << commonSynonymsGroupedClauses.size() << std::endl;
     std::cout << "hasSelectSynonymPresent count: " << hasSelectSynonymPresent.size() << std::endl;
     std::cout << "noSelectSynonymPresent count: " << noSelectSynonymPresent.size() << std::endl;
-    std::cout << "___________________End_________________________" << std::endl;
 
     RawResult evaluatedResults;
     bool isFalseNoSynonymClauseEvaluation = Evaluator::evaluateNoSynonymClauses(noSynonymsClauses);
@@ -36,11 +35,13 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
 
     std::cout << "isFalseNoSynonymClauseEvaluation: " << isFalseNoSynonymClauseEvaluation << std::endl;
     std::cout << "isFalseNoSelectSynonymEvaluation: " << isFalseNoSelectSynonymEvaluation << std::endl;
+    std::cout << "___________________End_________________________" << std::endl;
 
     if (isFalseNoSynonymClauseEvaluation || isFalseNoSelectSynonymEvaluation) {
         evaluatedResults.setIsFalseResultToTrue();
         std::cout << "_________________Populate None___________________" << std::endl;
         results.emplace_back("none");
+        std::cout << "__________________End_________________________" << std::endl;
     } else {
         evaluatedResults = Evaluator::evaluateHasSelectSynonymClauses(hasSelectSynonymPresent, select.getSynonym());
         std::shared_ptr<Clause> selectClauseToEvaluate = ClauseCreator::createClause(select.getSynonym(), synonymToDesignEntityMap, qpsClient);

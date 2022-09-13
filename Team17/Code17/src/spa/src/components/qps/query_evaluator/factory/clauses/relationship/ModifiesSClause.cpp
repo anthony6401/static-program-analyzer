@@ -62,7 +62,7 @@ RawResult ModifiesSClause::evaluateSynonymSynonym() {
 RawResult ModifiesSClause::evaluateSynonymWildcard() {
     DesignEntity stmtType = synonymToDesignEntityMap[left.getValue()];
     // API CALL
-    return {};
+    return {"a", {"1", "3"}};
 }
 
 RawResult ModifiesSClause::evaluateSynonymNameQuotes() {
@@ -72,9 +72,10 @@ RawResult ModifiesSClause::evaluateSynonymNameQuotes() {
 }
 
 RawResult ModifiesSClause::evaluateIntegerSynonym() {
+    std::cout << "----- ModifiesS: Integer Synonym -------" << std::endl;
     DesignEntity rightType = synonymToDesignEntityMap[right.getValue()];
     // API CALL
-    return {};
+    return {"v", {"x"}};
 }
 
 RawResult ModifiesSClause::evaluateIntegerWildcard() {

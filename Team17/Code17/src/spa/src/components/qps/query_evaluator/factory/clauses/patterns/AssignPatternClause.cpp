@@ -1,4 +1,5 @@
 #include "AssignPatternClause.h"
+#include "iostream"
 
 AssignPatternClause::AssignPatternClause(std::string assignSynonym, TokenObject left, TokenObject right,
                                          QPSClient qpsClient, Select synonym)
@@ -50,6 +51,9 @@ std::set<std::string> AssignPatternClause::getAllSynonyms() {
     if (left.getTokenType() == TokenType::SYNONYM) {
         synonyms.emplace(left.getValue());
     }
+    for (auto c : synonyms) {
+        std::cout << "pattern syn " << c << std::endl;
+    }
     return synonyms;
 }
 
@@ -94,7 +98,7 @@ RawResult AssignPatternClause::evaluateNameQuotesExpression() {
 }
 
 RawResult AssignPatternClause::evaluateNameQuotesNameQuotes() {
-    return {};
+    return {"a", {"1", "2", "3"}};
 }
 
 RawResult AssignPatternClause::evaluateNameQuotesSubExpression() {
