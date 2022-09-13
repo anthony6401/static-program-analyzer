@@ -248,7 +248,7 @@ bool Tokenizer::isExpression(std::string s) {
             }
         }
     }
-    return true;
+    return false;
 }
 
 // _"x+1"_, _"x"_, _"1"_
@@ -258,7 +258,7 @@ bool Tokenizer::isSubExpression(std::string s) {
     } else {
         if (s.front() == '_' && s.back() == '_') {
             std::string withoutWildcard = trimQuotesOrWildcard(s);
-           if (isIdentity(withoutWildcard) || isExpression(withoutWildcard) || isInteger(trimQuotesOrWildcard(withoutWildcard))) {
+           if (Tokenizer::isIdentity(withoutWildcard) || Tokenizer::isExpression(withoutWildcard) || Tokenizer::isInteger(trimQuotesOrWildcard(withoutWildcard))) {
                return true;
            }
         }
@@ -280,6 +280,10 @@ std::vector<TokenObject> Tokenizer::tokenize(std::string query) {
     // Remove empty strings from tokenized values
     tokenValues.erase(std::remove_if(tokenValues.begin(), tokenValues.end(), isEmptyOrBlank), tokenValues.end());
 
+//    for (auto s : tokenValues) {
+//        std::cout << s <<  std::endl;
+//    }
+
     for (std::string s : tokenValues) {
         s = trimString(s);
         // Token value exists in list
@@ -288,19 +292,24 @@ std::vector<TokenObject> Tokenizer::tokenize(std::string query) {
             tokenList.push_back(object);
         } else {
             if (isName(s)) {
+                std::cout << s << " is name" << std::endl;
                 TokenObject object = TokenObject(TokenType::NAME, s);
                 tokenList.push_back(object);
             } else if (isInteger(s)) {
+                std::cout << s << " is int" << std::endl;
                 TokenObject object = TokenObject(TokenType::INTEGER, s);
                 tokenList.push_back(object);
             } else if (isIdentity(s)) {
+                std::cout << s << " is ident" << std::endl;
                 TokenObject object = TokenObject(TokenType::NAME_WITH_QUOTATION, s);
                 tokenList.push_back(object);
             } else if (isExpression(s)) {
+                std::cout << s << " is expr" << std::endl;
                 // Return trimmed string
                 TokenObject object = TokenObject(TokenType::EXPRESSION, s);
                 tokenList.push_back(object);
             } else if (isSubExpression(s)) {
+                std::cout << s << " is subexpression" << std::endl;
                 TokenObject object = TokenObject(TokenType::SUBEXPRESSION, s);
                 tokenList.push_back(object);
             } else {

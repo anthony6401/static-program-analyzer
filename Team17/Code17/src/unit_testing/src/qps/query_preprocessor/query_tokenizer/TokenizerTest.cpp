@@ -5,8 +5,6 @@
 #include <catch.hpp>
 #include <iostream>
 
-
-// To be added
 TEST_CASE("Declarations - Single") {
     std::string testQuery = "variable v;";
     std::vector<TokenObject> expectedResult {variableTokenObject, v_nameTokenObject, semicolonTokenObject};
@@ -34,7 +32,7 @@ TEST_CASE("Declarations - Multiple") {
     REQUIRE(testResult == expectedResult);
 }
 
-TEST_CASE("DEMO - Select v") {
+TEST_CASE("No relationship") {
     std::string testQuery = "variable v; Select v";
     std::vector<TokenObject> expectedResult {variableTokenObject, v_nameTokenObject, semicolonTokenObject,
     selectTokenObject, v_nameTokenObject};
@@ -44,7 +42,7 @@ TEST_CASE("DEMO - Select v") {
     REQUIRE(testResult == expectedResult);
 }
 
-TEST_CASE("DEMO - Modifies") {
+TEST_CASE("Modifies Relationship with integer") {
     std::string testQuery = "variable v;\n"
                             "Select v such that Modifies (6, v)";
     std::vector<TokenObject> expectedResult {variableTokenObject, v_nameTokenObject, semicolonTokenObject,
@@ -57,7 +55,7 @@ TEST_CASE("DEMO - Modifies") {
     REQUIRE(testResult == expectedResult);
 }
 
-TEST_CASE("DEMO - Uses") {
+TEST_CASE("Uses Relationship with integer") {
     std::string testQuery = "variable v;\n"
                             "Select v such that Uses (14, v)";
     std::vector<TokenObject> expectedResult {variableTokenObject, v_nameTokenObject, semicolonTokenObject,
@@ -68,4 +66,55 @@ TEST_CASE("DEMO - Uses") {
     std::vector<TokenObject> testResult = Tokenizer().tokenize(testQuery);
 
     REQUIRE(testResult == expectedResult);
+}
+
+TEST_CASE("Follows Relationship") {
+    std::string testQuery = "stmt s;\n"
+                            "Select s such that Follows (6, s)";
+    std::vector<TokenObject> expectedResult {stmtTokenObject, s_nameTokenObject, semicolonTokenObject,
+                                             selectTokenObject, s_nameTokenObject, suchTokenObject, thatTokenObject,
+                                             followsTokenObject, openBracketTokenObject, six_intTokenObject, commaTokenObject,
+                                             s_nameTokenObject, closedBracketTokenObject};
+    Tokenizer tokenizer = Tokenizer();
+    std::vector<TokenObject> testResult = Tokenizer().tokenize(testQuery);
+
+    REQUIRE(testResult == expectedResult);
+}
+
+TEST_CASE("Follows* Relationship") {
+    std::string testQuery = "stmt s;\n"
+                            "Select s such that Follows* (6, s)";
+    std::vector<TokenObject> expectedResult {stmtTokenObject, s_nameTokenObject, semicolonTokenObject,
+                                             selectTokenObject, s_nameTokenObject, suchTokenObject, thatTokenObject,
+                                             followsTTokenObject, openBracketTokenObject, six_intTokenObject, commaTokenObject,
+                                             s_nameTokenObject, closedBracketTokenObject};
+    Tokenizer tokenizer = Tokenizer();
+    std::vector<TokenObject> testResult = Tokenizer().tokenize(testQuery);
+
+    REQUIRE(testResult == expectedResult);
+}
+
+TEST_CASE("Parent Relationship") {
+
+}
+
+TEST_CASE("Parent* Relationship") {
+
+}
+
+TEST_CASE("Pattern Clause with expressions") {
+    std::string testQuery = "assign newa;\n"
+                            "Select newa pattern newa ( \"normSq\" , _\"cenX\"_)";
+    std::vector<TokenObject> expectedResult {assignTokenObject, newa_nameTokenObject, semicolonTokenObject,
+                                             selectTokenObject, newa_nameTokenObject, patternTokenObject, newa_nameTokenObject,
+                                             openBracketTokenObject, normsq_nameWithQuotesTokenObject, commaTokenObject,
+                                             cenX_subexpressionTokenObject, closedBracketTokenObject};
+    Tokenizer tokenizer = Tokenizer();
+    std::vector<TokenObject> testResult = Tokenizer().tokenize(testQuery);
+
+    REQUIRE(testResult == expectedResult);
+}
+
+TEST_CASE("Pattern Clause with subexpressions") {
+
 }
