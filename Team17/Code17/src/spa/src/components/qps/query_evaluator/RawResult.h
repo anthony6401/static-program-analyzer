@@ -34,7 +34,8 @@ public:
     bool getIsSynonymResult();
     void setIsSynonymResult();
     bool getIsFalseResult();
-    void setIsFalseResult();
+    void setIsFalseResult(bool pkbBooleanResult);
+    void setIsFalseResultToTrue();
     bool isEmptyResult();
     bool getIsBooleanResult();
     void setIsBooleanResult();

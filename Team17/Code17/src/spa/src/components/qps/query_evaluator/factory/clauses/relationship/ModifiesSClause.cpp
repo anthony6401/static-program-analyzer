@@ -79,12 +79,14 @@ RawResult ModifiesSClause::evaluateIntegerSynonym() {
 
 RawResult ModifiesSClause::evaluateIntegerWildcard() {
     // Returns boolean
-    return {};
+    std::cout << "----- ModifiesS: Integer Wildcard -------" << std::endl;
+    return {true};
 }
 
 RawResult ModifiesSClause::evaluateIntegerNameQuotes() {
-    std::cout << "In Integer Name Quotes" << std::endl;
+    // Returns boolean
+    std::cout << "----- ModifiesS: Integer Name Quotes -------" << std::endl;
     // API CALL
-    return {};
+    return {false};
 }
 

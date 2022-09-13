@@ -7,7 +7,9 @@
 
 RawResult::RawResult() : resultsList({}), isFalseResult(false), isBooleanResult(true), synonymsList({}) {}
 
-RawResult::RawResult(bool pkbBooleanResult) : resultsList({}), isFalseResult(pkbBooleanResult), isBooleanResult(true), synonymsList({}) {};
+RawResult::RawResult(bool pkbBooleanResult) : resultsList({}), isBooleanResult(true), synonymsList({}) {
+    setIsFalseResult(pkbBooleanResult);
+};
 
 RawResult::RawResult(const std::string& synonym, const std::unordered_set<std::string>& results) {
     synonymsList.emplace_back(synonym);
@@ -71,7 +73,7 @@ void RawResult::combineResult(RawResult nextResult) {
     }
 
     if (nextResult.isFalseResult || nextResult.isEmptyResult()) {
-        setIsFalseResult();
+        setIsFalseResultToTrue();
     }
     // find common synonyms, maximum 2 since there are only 2 parameters / pattern takes in 1 synonym at max
     // {x, y} {s, x} -> {0, 1} index pair -> go to resultsList
@@ -86,7 +88,7 @@ void RawResult::combineResult(RawResult nextResult) {
 
     // Merging two tables with common attributes but there are no common results
     if (isEmptyResult() && !synonymsList.empty()) {
-        setIsFalseResult();
+        setIsFalseResultToTrue();
     }
 }
 
@@ -182,7 +184,11 @@ bool RawResult::isEmptyResult() {
     return resultsList.empty();
 }
 
-void RawResult::setIsFalseResult() {
+void RawResult::setIsFalseResult(bool pkbBooleanResult) {
+    isFalseResult = !pkbBooleanResult;
+}
+
+void RawResult::setIsFalseResultToTrue() {
     isFalseResult = true;
 }
 

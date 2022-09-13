@@ -23,17 +23,29 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
     std::vector<GroupedClause> hasSelectSynonymPresent = pairBySelect.first;
     std::vector<GroupedClause> noSelectSynonymPresent = pairBySelect.second;
 
+    std::cout << "_________________Divided Clauses___________________" << std::endl;
+    std::cout << "noSynonymsClauses count: " << noSynonymsClauses.getClauses().size() << std::endl;
+    std::cout << "commonSynonymsGroupedClauses count: " << commonSynonymsGroupedClauses.size() << std::endl;
+    std::cout << "hasSelectSynonymPresent count: " << hasSelectSynonymPresent.size() << std::endl;
+    std::cout << "noSelectSynonymPresent count: " << noSelectSynonymPresent.size() << std::endl;
+    std::cout << "___________________End_________________________" << std::endl;
+
     RawResult evaluatedResults;
     bool isFalseNoSynonymClauseEvaluation = Evaluator::evaluateNoSynonymClauses(noSynonymsClauses);
     bool isFalseNoSelectSynonymEvaluation = Evaluator::evaluateNoSelectSynonymClauses(noSelectSynonymPresent);
 
+    std::cout << "isFalseNoSynonymClauseEvaluation: " << isFalseNoSynonymClauseEvaluation << std::endl;
+    std::cout << "isFalseNoSelectSynonymEvaluation: " << isFalseNoSelectSynonymEvaluation << std::endl;
+
     if (isFalseNoSynonymClauseEvaluation || isFalseNoSelectSynonymEvaluation) {
-        evaluatedResults.setIsFalseResult();
-        std::cout << "isFalseNoSynonymClauseEvaluation: " << isFalseNoSynonymClauseEvaluation << std::endl;
-        std::cout << "isFalseNoSelectSynonymEvaluation: " << isFalseNoSelectSynonymEvaluation << std::endl;
+        evaluatedResults.setIsFalseResultToTrue();
+        std::cout << "_________________Populate None___________________" << std::endl;
         results.emplace_back("none");
     } else {
         evaluatedResults = Evaluator::evaluateHasSelectSynonymClauses(hasSelectSynonymPresent, select.getSynonym());
+        std::shared_ptr<Clause> selectClauseToEvaluate = ClauseCreator::createClause(select.getSynonym(), synonymToDesignEntityMap, qpsClient);
+        RawResult selectResult = selectClauseToEvaluate->evaluateClause();
+        evaluatedResults.combineResult(selectResult);
         Evaluator::populateResults(evaluatedResults, select.getSynonym(), results);
     }
 
@@ -41,33 +53,41 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
 }
 
 void Evaluator::populateResults(RawResult finalResult, std::string selectSynonym, std::list<std::string> &results) {
-    std::cout << "_________________Populate Results___________________" << std::endl;
-    if (finalResult.getIsFalseResult() || finalResult.isEmptyResult()) {
+    std::cout << "\n_________________Populate Results___________________" << std::endl;
+    if (finalResult.getIsFalseResult()) {
         std::cout << "False Result: " << finalResult.getIsFalseResult() << std::endl;
         std::cout << "Empty result: " << finalResult.isEmptyResult() << std::endl;
+        std::cout << "__________________End_________________________" << std::endl;
         results.emplace_back("none");
     }
 
     std::cout << finalResult << std::endl;
+
     std::unordered_set<std::string> resultsToPopulate = finalResult.getResultsToBePopulated(selectSynonym);
 
     for (std::string result : resultsToPopulate) {
         results.emplace_back(result);
     }
+    std::cout << "__________________End_________________________" << std::endl;
 }
 
 // Returns boolean, check for False or Empty Clauses
 bool Evaluator::evaluateNoSynonymClauses(GroupedClause noSynonymsClauses) {
+    std::cout << "\n_________________Evaluate No synonym clauses___________________" << std::endl;
     if (noSynonymsClauses.isEmpty()) {
+        std::cout << "Empty Clause" << std::endl;
         return false;
     } else {
         std::vector<std::shared_ptr<Clause>> clauses = noSynonymsClauses.getClauses();
         for (auto c : clauses) {
-            RawResult result = c->evaluateClause();
-            if (result.getIsFalseResult() || result.isEmptyResult()) {
+            RawResult result = c->evaluateClause(); // {false} -> getIsFalseResult -> true
+            if (result.getIsFalseResult()) {
+                std::cout << "getIsFalseResult is True" << std::endl;
                 return true;
             }
+            std::cout << "getIsFalseResult is False" << std::endl;
         }
+        std::cout << "_________________End___________________" << std::endl;
         return false;
     }
 }
@@ -128,6 +148,8 @@ std::vector<std::shared_ptr<Clause>> Evaluator::extractClausesToEvaluate(QueryOb
         clausesToEvaluate.push_back(selectClauseToEvaluate);
         return clausesToEvaluate;
     } else {
+//        std::shared_ptr<Clause> selectClauseToEvaluate = ClauseCreator::createClause(synonym, synonymToDesignEntityMap, qpsClient);
+//        clausesToEvaluate.push_back(selectClauseToEvaluate);
         for (const auto& r : relationships) {
             std::shared_ptr<Clause> relationshipClauseToEvaluate = ClauseCreator::createClause(r, synonym, synonymToDesignEntityMap, qpsClient);
             clausesToEvaluate.push_back(relationshipClauseToEvaluate);
