@@ -21,6 +21,11 @@
 #include "../../../models/Relationship/FollowsRelationship.h"
 #include "../../../models/Relationship/ParentRelationship.h"
 
+#include "UsesExtractor.h"
+#include "ModifyExtractor.h"
+#include "FollowsExtractor.h"
+#include "ParentExtractor.h"
+
 #include "../../pkb/clients/SPClient.h"
 
 #include <vector>
@@ -30,18 +35,21 @@ public:
 	SPClient* client;
 	Extractor(SPClient* client);
 
-	void extractRead(SimpleToken simpleToken);
-	void extractPrint(SimpleToken simpleToken);
-	void extractAssign(SimpleToken simpleToken);
-	void extractWhile(SimpleToken simpleToken);
-	void extractIf(SimpleToken simpleToken);
+	void extractProcedure(SimpleToken simpleToken);
 
-	void extractCondExpr(Entity* entity, SimpleToken simpleToken);
-	void extractStmtLst(Entity* entity, SimpleToken simpleToken);
-	void extractReadInStmtLst(Entity* entity, SimpleToken simpleToken);
-	void extractPrintInStmtLst(Entity* entity, SimpleToken simpleToken);
-	void extractAssignInStmtLst(Entity* entity, SimpleToken simpleToken);
+	void extractParentRelationships(SimpleToken simpleToken, std::vector<SimpleToken> children);
+	void extractFollowsRelationships(std::vector<SimpleToken> children);
+	void extractSeriesOfStmts(std::vector<SimpleToken> seriesOfStmts);
 
-	void extractProcedure();
+	void extractReadStmt(SimpleToken simpleToken);
+	void extractPrintStmt(SimpleToken simpleToken);
+	void extractAssignStmt(SimpleToken simpleToken);
+
+	void extractWhileStmt(SimpleToken simpleToken);
+	void extractIfStmt(SimpleToken simpleToken);
+
+	void extractCondExpr(SimpleToken simpleToken, SimpleToken condExpr);
+	void extractStmtLst(SimpleToken simpleToken);
+
 	void extractCall();
 };
