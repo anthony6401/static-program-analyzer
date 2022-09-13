@@ -8,13 +8,13 @@ AssignPatternClause::AssignPatternClause(std::string assignSynonym, TokenObject 
 RawResult AssignPatternClause::evaluateClause() {
     TokenType leftType = left.getTokenType();
     TokenType rightType = right.getTokenType();
-    if (leftType == TokenType::SYNONYM && rightType == TokenType::EXPRESSION) {
+    if (leftType == TokenType::NAME && rightType == TokenType::EXPRESSION) {
         return AssignPatternClause::evaluateSynonymExpression();
-    } else if (leftType == TokenType::SYNONYM && rightType == TokenType::WILDCARD) {
+    } else if (leftType == TokenType::NAME && rightType == TokenType::WILDCARD) {
         return AssignPatternClause::evaluateSynonymWildcard();
-    } else if (leftType == TokenType::SYNONYM && rightType == TokenType::NAME_WITH_QUOTATION) {
+    } else if (leftType == TokenType::NAME && rightType == TokenType::NAME_WITH_QUOTATION) {
         return AssignPatternClause::evaluateSynonymNameQuotes();
-    } else if (leftType == TokenType::SYNONYM && rightType == TokenType::SUBEXPRESSION) {
+    } else if (leftType == TokenType::NAME && rightType == TokenType::SUBEXPRESSION) {
         return AssignPatternClause::evaluateSynonymSubExpression();
     } else if (leftType == TokenType::WILDCARD && rightType == TokenType::WILDCARD) {
         return AssignPatternClause::evaluateWildcardWildcard();
@@ -39,7 +39,7 @@ RawResult AssignPatternClause::evaluateClause() {
 
 size_t AssignPatternClause::getNumberOfSynonyms() {
     size_t numberOfSynonyms = 0;
-    if (left.getTokenType() == TokenType::SYNONYM) {
+    if (left.getTokenType() == TokenType::NAME) {
         numberOfSynonyms++;
     }
 
@@ -48,7 +48,7 @@ size_t AssignPatternClause::getNumberOfSynonyms() {
 
 std::set<std::string> AssignPatternClause::getAllSynonyms() {
     std::set<std::string> synonyms = {assignSynonym};
-    if (left.getTokenType() == TokenType::SYNONYM) {
+    if (left.getTokenType() == TokenType::NAME) {
         synonyms.emplace(left.getValue());
     }
     for (auto c : synonyms) {

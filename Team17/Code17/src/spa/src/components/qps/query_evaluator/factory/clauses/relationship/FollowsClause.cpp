@@ -9,19 +9,19 @@ FollowsClause::FollowsClause(TokenObject left, TokenObject right, Select synonym
 RawResult FollowsClause::evaluateClause() {
     TokenType leftType = left.getTokenType();
     TokenType rightType = right.getTokenType();
-    if (leftType == TokenType::SYNONYM && rightType == TokenType::SYNONYM) {
+    if (leftType == TokenType::NAME && rightType == TokenType::NAME) {
         return FollowsClause::evaluateSynonymSynonym();
-    } else if (leftType == TokenType::SYNONYM && rightType == TokenType::WILDCARD) {
+    } else if (leftType == TokenType::NAME && rightType == TokenType::WILDCARD) {
         return FollowsClause::evaluateSynonymWildcard();
-    } else if (leftType == TokenType::SYNONYM && rightType == TokenType::INTEGER) {
+    } else if (leftType == TokenType::NAME && rightType == TokenType::INTEGER) {
         return FollowsClause::evaluateSynonymInteger();
-    } else if (leftType == TokenType::INTEGER && rightType == TokenType::SYNONYM) {
+    } else if (leftType == TokenType::INTEGER && rightType == TokenType::NAME) {
         return FollowsClause::evaluateIntegerSynonym();
     } else if (leftType == TokenType::INTEGER && rightType == TokenType::WILDCARD) {
         return FollowsClause::evaluateIntegerWildcard();
     } else if (leftType == TokenType::INTEGER && rightType == TokenType::INTEGER) {
         return FollowsClause::evaluateIntegerInteger();
-    } else if (leftType == TokenType::WILDCARD && rightType == TokenType::SYNONYM) {
+    } else if (leftType == TokenType::WILDCARD && rightType == TokenType::NAME) {
         return FollowsClause::evaluateWildcardSynonym();
     } else if (leftType == TokenType::WILDCARD && rightType == TokenType::WILDCARD) {
         return FollowsClause::evaluateWildcardWildcard();
@@ -34,10 +34,10 @@ RawResult FollowsClause::evaluateClause() {
 
 size_t FollowsClause::getNumberOfSynonyms() {
     size_t numberOfSynonyms = 0;
-    if (left.getTokenType() == TokenType::SYNONYM) {
+    if (left.getTokenType() == TokenType::NAME) {
         numberOfSynonyms++;
     }
-    if (right.getTokenType() == TokenType::SYNONYM) {
+    if (right.getTokenType() == TokenType::NAME) {
         numberOfSynonyms++;
     }
     return numberOfSynonyms;

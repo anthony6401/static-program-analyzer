@@ -9,13 +9,13 @@ ModifiesSClause::ModifiesSClause(TokenObject left, TokenObject right, Select syn
 RawResult ModifiesSClause::evaluateClause() {
     TokenType leftType = left.getTokenType();
     TokenType rightType = right.getTokenType();
-    if (leftType == TokenType::SYNONYM && rightType == TokenType::SYNONYM) {
+    if (leftType == TokenType::NAME && rightType == TokenType::NAME) {
         return ModifiesSClause::evaluateSynonymSynonym();
-    } else if (leftType == TokenType::SYNONYM && rightType == TokenType::WILDCARD) {
+    } else if (leftType == TokenType::NAME && rightType == TokenType::WILDCARD) {
         return ModifiesSClause::evaluateSynonymWildcard();
-    } else if (leftType == TokenType::SYNONYM && rightType == TokenType::NAME_WITH_QUOTATION) {
+    } else if (leftType == TokenType::NAME && rightType == TokenType::NAME_WITH_QUOTATION) {
         return ModifiesSClause::evaluateSynonymNameQuotes();
-    } else if (leftType == TokenType::INTEGER && rightType == TokenType::SYNONYM) {
+    } else if (leftType == TokenType::INTEGER && rightType == TokenType::NAME) {
         return ModifiesSClause::evaluateIntegerSynonym();
     } else if (leftType == TokenType::INTEGER && rightType == TokenType::WILDCARD) {
         return ModifiesSClause::evaluateIntegerWildcard();
@@ -28,10 +28,10 @@ RawResult ModifiesSClause::evaluateClause() {
 
 std::set<std::string> ModifiesSClause::getAllSynonyms() {
     std::set<std::string> synonyms = {};
-    if (left.getTokenType() == TokenType::SYNONYM) {
+    if (left.getTokenType() == TokenType::NAME) {
         synonyms.emplace(left.getValue());
     }
-    if (right.getTokenType() == TokenType::SYNONYM) {
+    if (right.getTokenType() == TokenType::NAME) {
         synonyms.emplace(right.getValue());
     }
     return synonyms;
@@ -39,10 +39,10 @@ std::set<std::string> ModifiesSClause::getAllSynonyms() {
 
 size_t ModifiesSClause::getNumberOfSynonyms() {
     size_t numberOfSynonyms = 0;
-    if (left.getTokenType() == TokenType::SYNONYM) {
+    if (left.getTokenType() == TokenType::NAME) {
         numberOfSynonyms++;
     }
-    if (right.getTokenType() == TokenType::SYNONYM) {
+    if (right.getTokenType() == TokenType::NAME) {
         numberOfSynonyms++;
     }
     return numberOfSynonyms;

@@ -9,13 +9,13 @@ UsesSClause::UsesSClause(TokenObject left, TokenObject right, Select synonym,
 RawResult UsesSClause::evaluateClause() {
     TokenType leftType = left.getTokenType();
     TokenType rightType = right.getTokenType();
-    if (leftType == TokenType::SYNONYM && rightType == TokenType::SYNONYM) {
+    if (leftType == TokenType::NAME && rightType == TokenType::NAME) {
         return UsesSClause::evaluateSynonymSynonym();
-    } else if (leftType == TokenType::SYNONYM && rightType == TokenType::WILDCARD) {
+    } else if (leftType == TokenType::NAME && rightType == TokenType::WILDCARD) {
         return UsesSClause::evaluateSynonymWildcard();
-    } else if (leftType == TokenType::SYNONYM && rightType == TokenType::NAME_WITH_QUOTATION) {
+    } else if (leftType == TokenType::NAME && rightType == TokenType::NAME_WITH_QUOTATION) {
         return UsesSClause::evaluateSynonymNameQuotes();
-    } else if (leftType == TokenType::INTEGER && rightType == TokenType::SYNONYM) {
+    } else if (leftType == TokenType::INTEGER && rightType == TokenType::NAME) {
         return UsesSClause::evaluateIntegerSynonym();
     } else if (leftType == TokenType::INTEGER && rightType == TokenType::WILDCARD) {
         return UsesSClause::evaluateIntegerWildcard();
@@ -28,10 +28,10 @@ RawResult UsesSClause::evaluateClause() {
 
 size_t UsesSClause::getNumberOfSynonyms() {
     size_t numberOfSynonyms = 0;
-    if (left.getTokenType() == TokenType::SYNONYM) {
+    if (left.getTokenType() == TokenType::NAME) {
         numberOfSynonyms++;
     }
-    if (right.getTokenType() == TokenType::SYNONYM) {
+    if (right.getTokenType() == TokenType::NAME) {
         numberOfSynonyms++;
     }
     return numberOfSynonyms;
@@ -39,10 +39,10 @@ size_t UsesSClause::getNumberOfSynonyms() {
 
 std::set<std::string> UsesSClause::getAllSynonyms() {
     std::set<std::string> synonyms = {};
-    if (left.getTokenType() == TokenType::SYNONYM) {
+    if (left.getTokenType() == TokenType::NAME) {
         synonyms.emplace(left.getValue());
     }
-    if (right.getTokenType() == TokenType::SYNONYM) {
+    if (right.getTokenType() == TokenType::NAME) {
         synonyms.emplace(right.getValue());
     }
     return synonyms;
@@ -71,7 +71,7 @@ RawResult UsesSClause::evaluateSynonymNameQuotes() {
 RawResult UsesSClause::evaluateIntegerSynonym() {
     DesignEntity rightType = synonymToDesignEntityMap[right.getValue()];
     // API CALL
-    return {};
+    return {"v", {}};
 }
 
 RawResult UsesSClause::evaluateIntegerWildcard() {

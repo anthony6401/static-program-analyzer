@@ -8,13 +8,13 @@ UsesPClause::UsesPClause(TokenObject left, TokenObject right, Select synonym,
 RawResult UsesPClause::evaluateClause() {
     TokenType leftType = left.getTokenType();
     TokenType rightType = right.getTokenType();
-    if (leftType == TokenType::SYNONYM && rightType == TokenType::SYNONYM) {
+    if (leftType == TokenType::NAME && rightType == TokenType::NAME) {
         return UsesPClause::evaluateSynonymSynonym();
-    } else if (leftType == TokenType::SYNONYM && rightType == TokenType::WILDCARD) {
+    } else if (leftType == TokenType::NAME && rightType == TokenType::WILDCARD) {
         return UsesPClause::evaluateSynonymWildcard();
-    } else if (leftType == TokenType::SYNONYM && rightType == TokenType::NAME_WITH_QUOTATION) {
+    } else if (leftType == TokenType::NAME && rightType == TokenType::NAME_WITH_QUOTATION) {
         return UsesPClause::evaluateSynonymNameQuotes();
-    } else if (leftType == TokenType::NAME_WITH_QUOTATION && rightType == TokenType::SYNONYM) {
+    } else if (leftType == TokenType::NAME_WITH_QUOTATION && rightType == TokenType::NAME) {
         return UsesPClause::evaluateNameQuotesSynonym();
     } else if (leftType == TokenType::NAME_WITH_QUOTATION && rightType == TokenType::WILDCARD) {
         return UsesPClause::evaluateNameQuotesWildcard();
@@ -27,10 +27,10 @@ RawResult UsesPClause::evaluateClause() {
 
 size_t UsesPClause::getNumberOfSynonyms() {
     size_t numberOfSynonyms = 0;
-    if (left.getTokenType() == TokenType::SYNONYM) {
+    if (left.getTokenType() == TokenType::NAME) {
         numberOfSynonyms++;
     }
-    if (right.getTokenType() == TokenType::SYNONYM) {
+    if (right.getTokenType() == TokenType::NAME) {
         numberOfSynonyms++;
     }
     return numberOfSynonyms;
@@ -38,10 +38,10 @@ size_t UsesPClause::getNumberOfSynonyms() {
 
 std::set<std::string> UsesPClause::getAllSynonyms() {
     std::set<std::string> synonyms = {};
-    if (left.getTokenType() == TokenType::SYNONYM) {
+    if (left.getTokenType() == TokenType::NAME) {
         synonyms.emplace(left.getValue());
     }
-    if (right.getTokenType() == TokenType::SYNONYM) {
+    if (right.getTokenType() == TokenType::NAME) {
         synonyms.emplace(right.getValue());
     }
     return synonyms;

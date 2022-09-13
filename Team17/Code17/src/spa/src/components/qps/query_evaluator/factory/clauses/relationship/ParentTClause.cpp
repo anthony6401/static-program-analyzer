@@ -8,19 +8,19 @@ ParentTClause::ParentTClause(TokenObject left, TokenObject right, Select synonym
 RawResult ParentTClause::evaluateClause() {
     TokenType leftType = left.getTokenType();
     TokenType rightType = right.getTokenType();
-    if (leftType == TokenType::SYNONYM && rightType == TokenType::SYNONYM) {
+    if (leftType == TokenType::NAME && rightType == TokenType::NAME) {
         return ParentTClause::evaluateSynonymSynonym();
-    } else if (leftType == TokenType::SYNONYM && rightType == TokenType::WILDCARD) {
+    } else if (leftType == TokenType::NAME && rightType == TokenType::WILDCARD) {
         return ParentTClause::evaluateSynonymWildcard();
-    } else if (leftType == TokenType::SYNONYM && rightType == TokenType::INTEGER) {
+    } else if (leftType == TokenType::NAME && rightType == TokenType::INTEGER) {
         return ParentTClause::evaluateSynonymInteger();
-    } else if (leftType == TokenType::INTEGER && rightType == TokenType::SYNONYM) {
+    } else if (leftType == TokenType::INTEGER && rightType == TokenType::NAME) {
         return ParentTClause::evaluateIntegerSynonym();
     } else if (leftType == TokenType::INTEGER && rightType == TokenType::WILDCARD) {
         return ParentTClause::evaluateIntegerWildcard();
     } else if (leftType == TokenType::INTEGER && rightType == TokenType::INTEGER) {
         return ParentTClause::evaluateIntegerInteger();
-    } else if (leftType == TokenType::WILDCARD && rightType == TokenType::SYNONYM) {
+    } else if (leftType == TokenType::WILDCARD && rightType == TokenType::NAME) {
         return ParentTClause::evaluateWildcardSynonym();
     } else if (leftType == TokenType::WILDCARD && rightType == TokenType::WILDCARD) {
         return ParentTClause::evaluateWildcardWildcard();
@@ -33,10 +33,10 @@ RawResult ParentTClause::evaluateClause() {
 
 std::set<std::string> ParentTClause::getAllSynonyms() {
     std::set<std::string> synonyms = {};
-    if (left.getTokenType() == TokenType::SYNONYM) {
+    if (left.getTokenType() == TokenType::NAME) {
         synonyms.emplace(left.getValue());
     }
-    if (right.getTokenType() == TokenType::SYNONYM) {
+    if (right.getTokenType() == TokenType::NAME) {
         synonyms.emplace(right.getValue());
     }
     return synonyms;
@@ -44,10 +44,10 @@ std::set<std::string> ParentTClause::getAllSynonyms() {
 
 size_t ParentTClause::getNumberOfSynonyms() {
     size_t numberOfSynonyms = 0;
-    if (left.getTokenType() == TokenType::SYNONYM) {
+    if (left.getTokenType() == TokenType::NAME) {
         numberOfSynonyms++;
     }
-    if (right.getTokenType() == TokenType::SYNONYM) {
+    if (right.getTokenType() == TokenType::NAME) {
         numberOfSynonyms++;
     }
     return numberOfSynonyms;
