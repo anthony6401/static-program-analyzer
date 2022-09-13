@@ -1,5 +1,6 @@
-#ifndef SPA_MODIFIESSCLAUSE_H
-#define SPA_MODIFIESSCLAUSE_H
+#ifndef SPA_USESPCLAUSE_H
+#define SPA_USESPCLAUSE_H
+
 #include "components/qps/query_preprocessor/query_tokenizer/TokenObject.h"
 #include "components/qps/query_evaluator/factory/interface/Clause.h"
 #include "components/qps/abstract_query_object/Select.h"
@@ -7,7 +8,7 @@
 #include <unordered_map>
 #include <list>
 
-class ModifiesSClause : public Clause {
+class UsesPClause : public Clause {
 private:
     std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap;
     Select synonym;
@@ -16,7 +17,7 @@ private:
     TokenObject right;
 
 public:
-    ModifiesSClause(TokenObject left, TokenObject right, Select synonym,
+    UsesPClause(TokenObject left, TokenObject right, Select synonym,
                     std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
     RawResult evaluateClause() override;
     size_t getNumberOfSynonyms() override;
@@ -25,9 +26,9 @@ public:
     RawResult evaluateSynonymSynonym();
     RawResult evaluateSynonymWildcard();
     RawResult evaluateSynonymNameQuotes();
-    RawResult evaluateIntegerSynonym();
-    RawResult evaluateIntegerWildcard();
-    RawResult evaluateIntegerNameQuotes();
+    RawResult evaluateNameQuotesSynonym();
+    RawResult evaluateNameQuotesWildcard();
+    RawResult evaluateNameQuotesNameQuotes();
 };
 
-#endif //SPA_MODIFIESSCLAUSE_H
+#endif //SPA_USESPCLAUSE_H
