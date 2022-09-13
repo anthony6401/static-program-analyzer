@@ -1,5 +1,4 @@
 #include "Extractor.h"
-#include "PatternExtractor.h"
 
 #include <iostream>
 
@@ -19,11 +18,13 @@ void Extractor::extractProcedure(SimpleToken procedureToken) {
 }
 
 void Extractor::extractParentRelationships(SimpleToken parentToken, std::vector<SimpleToken> children) {
-	// call ParentExtractor
+	ParentExtractor::extractParent(*this, parentToken, children);
+	ParentExtractor::extractParentT(*this, parentToken, children);
 }
 
 void Extractor::extractFollowsRelationships(std::vector<SimpleToken> seriesOfStmts) {
-	// call Follows Extractor
+	FollowsExtractor::extractFollows(*this, seriesOfStmts);
+	FollowsExtractor::extractFollowsT(*this, seriesOfStmts);
 }
 
 void Extractor::extractSeriesOfStmts(std::vector<SimpleToken> seriesOfStmts) {

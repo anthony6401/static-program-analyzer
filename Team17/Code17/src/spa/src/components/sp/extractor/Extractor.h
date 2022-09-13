@@ -25,10 +25,9 @@
 #include "ModifyExtractor.h"
 #include "FollowsExtractor.h"
 #include "ParentExtractor.h"
+#include "PatternExtractor.h"
 
 #include "../../pkb/clients/SPClient.h"
-
-#include <vector>
 
 class Extractor {
 public:
