@@ -4,7 +4,6 @@ Pattern::Pattern() {}
 
 Pattern::Pattern(std::string synonym, TokenObject left, TokenObject right) : synonym(synonym), left(left), right(right) {}
 
-// to be amended
 std::string Pattern::getSynonym() {
     return synonym;
 }
