@@ -28,6 +28,7 @@ public:
     void joinResultsListWithCommonSynonym(RawResult nextResult, std::vector<std::pair<size_t, size_t>> commonSynonymsIndexPairs);
     void joinResultsListWithNoCommonSynonym(RawResult nextResult);
     std::vector<size_t> findNotCommonSynonymsIndex(std::vector<std::string> nextSynonymsList);
+    friend std::ostream &operator<<(std::ostream &os, const RawResult &table);
     bool getIsSynonymResult();
     void setIsSynonymResult();
     bool getIsFalseResult();

@@ -34,8 +34,6 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
     }
 
     // else, Evaluate hasSelectSynonym Clauses
-
-
 }
 
 // Returns boolean, check for False or Empty Clauses

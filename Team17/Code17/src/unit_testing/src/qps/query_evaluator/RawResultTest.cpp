@@ -1,7 +1,10 @@
 #include <catch.hpp>
 #include <list>
+#include "iostream"
 #include "components/qps/abstract_query_object/QueryObject.h"
 #include "components/qps/query_evaluator/Evaluator.h"
+
+// Debugger: std::cout << firstRawResult;
 
 TEST_CASE("Instantiate empty constructor") {
     RawResult emptyRawResult;
@@ -66,12 +69,91 @@ TEST_CASE("Merge non-empty result with empty result") {
     REQUIRE(singleSynonymResult.resultsList == expectedResultsList);
 }
 
-TEST_CASE("Merge results with common synonyms") {
-    RawResult rawResult;
-
+TEST_CASE("Merge results with common synonyms - single common synonyms in single synonym clauses") {
+    // Common synonym a
+    RawResult firstRawResult = RawResult("a", {"1", "2", "3", "4"});
+    RawResult secondRawResult = RawResult("a", {"1", "3", "5"});
+    std::vector<std::string> expectedSynonymsList = {"a"};
+    std::vector<std::vector<std::string>> expectedResultsList = {{"3"}, {"1"}};
+    firstRawResult.combineResult(secondRawResult);
+    REQUIRE(firstRawResult.synonymsList == expectedSynonymsList);
+    REQUIRE(firstRawResult.resultsList == expectedResultsList);
 }
 
-TEST_CASE("Merge results with no common synonyms") {
-    RawResult rawResult;
+TEST_CASE("Merge results with common synonyms - single common synonyms in single/multiple synonym clauses") {
+    // Common synonym a
+    RawResult firstRawResult = RawResult("a", {"1", "2", "3", "4"});
+    RawResult secondRawResult = RawResult("a", "v", {{"1", "x"}, {"3", "y"}, {"5", "z"}});
+    std::vector<std::string> expectedSynonymsList = {"a", "v"};
+    std::vector<std::vector<std::string>> expectedResultsList = {{"3", "y"}, {"1", "x"}};
+    firstRawResult.combineResult(secondRawResult);
+    REQUIRE(firstRawResult.synonymsList == expectedSynonymsList);
+    REQUIRE(firstRawResult.resultsList == expectedResultsList);
+}
 
+TEST_CASE("Merge results with common synonyms - single common synonym in multiple synonyms clauses") {
+    // Common synonym a in multiple synonyms
+    RawResult firstRawResult = RawResult("s", "v", {{"1", "x"}, {"1", "y"}, {"3", "z"}});
+    RawResult secondRawResult = RawResult("a", "v", {{"1", "x"}, {"2", "z"}});
+    // common values are x and z
+    std::vector<std::string> expectedSynonymsList = {"s", "v", "a"};
+    std::vector<std::vector<std::string>> expectedResultsList = {{"1", "x", "1"}, {"3", "z", "2"}};
+    firstRawResult.combineResult(secondRawResult);
+    REQUIRE(firstRawResult.synonymsList == expectedSynonymsList);
+    REQUIRE(firstRawResult.resultsList == expectedResultsList);
+}
+
+TEST_CASE("Merge results with common synonyms - multiple common synonyms in multiple synonyms clauses") {
+    // Common synonym a, v
+    RawResult firstRawResult = RawResult("a", "v", {{"1", "x"}, {"1", "y"}, {"3", "z"}});
+    RawResult secondRawResult = RawResult("a", "v", {{"1", "x"}, {"2", "z"}});
+    std::vector<std::string> expectedSynonymsList = {"a", "v"};
+    std::vector<std::vector<std::string>> expectedResultsList = {{"1", "x"}};
+    firstRawResult.combineResult(secondRawResult);
+    REQUIRE(firstRawResult.synonymsList == expectedSynonymsList);
+    REQUIRE(firstRawResult.resultsList == expectedResultsList);
+}
+
+// Cross join
+TEST_CASE("Merge results with no common synonyms - single synonym clauses") {
+    RawResult firstRawResult = RawResult("a", {"1", "2", "3", "4"});
+    RawResult secondRawResult = RawResult("v", {"x", "y", "z", "k"});
+    std::vector<std::string> expectedSynonymsList = {"a", "v"};
+    std::vector<std::vector<std::string>> expectedResultsList = { { "4", "k" },
+                                                                  { "4", "z" },
+                                                                  { "4", "y" },
+                                                                  { "4", "x" },
+                                                                  { "3", "k" },
+                                                                  { "3", "z" },
+                                                                  { "3", "y" },
+                                                                  { "3", "x" },
+                                                                  { "2", "k" },
+                                                                  { "2", "z" },
+                                                                  { "2", "y" },
+                                                                  { "2", "x" },
+                                                                  { "1", "k" },
+                                                                  { "1", "z" },
+                                                                  { "1", "y" },
+                                                                  { "1", "x" } };
+    firstRawResult.combineResult(secondRawResult);
+    REQUIRE(firstRawResult.synonymsList == expectedSynonymsList);
+    REQUIRE(firstRawResult.resultsList == expectedResultsList);
+}
+
+TEST_CASE("Merge results with no common synonyms - multiple synonym clauses") {
+    RawResult firstRawResult = RawResult("a", "v", {{"1", "x"}, {"3", "y"}, {"5", "z"}});
+    RawResult secondRawResult = RawResult("a1", "v1", {{"2", "i"}, {"4", "j"}, {"6", "k"}});
+    std::vector<std::string> expectedSynonymsList = {"a", "v", "a1", "v1"};
+    std::vector<std::vector<std::string>> expectedResultsList = { { "1", "x", "2", "i" },
+                                                                  { "1", "x", "4", "j" },
+                                                                  { "1", "x", "6", "k" },
+                                                                  { "3", "y", "2", "i" },
+                                                                  { "3", "y", "4", "j" },
+                                                                  { "3", "y", "6", "k" },
+                                                                  { "5", "z", "2", "i" },
+                                                                  { "5", "z", "4", "j" },
+                                                                  { "5", "z", "6", "k" }};
+    firstRawResult.combineResult(secondRawResult);
+    REQUIRE(firstRawResult.synonymsList == expectedSynonymsList);
+    REQUIRE(firstRawResult.resultsList == expectedResultsList);
 }
