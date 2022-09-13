@@ -1,5 +1,5 @@
-#ifndef SPA_MODIFIESSCLAUSE_H
-#define SPA_MODIFIESSCLAUSE_H
+#ifndef SPA_USESSCLAUSE_H
+#define SPA_USESSCLAUSE_H
 #include "components/qps/query_preprocessor/query_tokenizer/TokenObject.h"
 #include "components/qps/query_evaluator/factory/interface/Clause.h"
 #include "components/qps/abstract_query_object/Select.h"
@@ -7,7 +7,7 @@
 #include <unordered_map>
 #include <list>
 
-class ModifiesSClause : public Clause {
+class UsesSClause : public Clause {
 private:
     std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap;
     Select synonym;
@@ -16,7 +16,7 @@ private:
     TokenObject right;
 
 public:
-    ModifiesSClause(TokenObject left, TokenObject right, Select synonym,
+    UsesSClause(TokenObject left, TokenObject right, Select synonym,
                     std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
     RawResult evaluateClause() override;
     size_t getNumberOfSynonyms() override;
@@ -30,4 +30,4 @@ public:
     RawResult evaluateIntegerNameQuotes();
 };
 
-#endif //SPA_MODIFIESSCLAUSE_H
+#endif //SPA_USESSCLAUSE_H

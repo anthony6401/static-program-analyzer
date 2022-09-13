@@ -16,9 +16,9 @@ private:
 public:
     Pattern();
     Pattern(std::string synonym, TokenObject left, TokenObject right);
-    static std::string getSynonym();
-    static TokenObject getLeft();
-    static TokenObject getRight();
+    std::string getSynonym();
+    TokenObject getLeft();
+    TokenObject getRight();
     bool operator==(const Pattern& other) const {
         return synonym == other.synonym
             && left == other.left
