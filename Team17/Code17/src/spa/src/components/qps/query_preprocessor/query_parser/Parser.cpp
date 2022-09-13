@@ -237,10 +237,16 @@ std::vector<SuchThat> Parser::parseTokensIntoSuchThatObjects(std::vector<TokenOb
 		if ((currTokenType != TokenType::WILDCARD) && (currTokenType != TokenType::INTEGER) && (currTokenType != TokenType::NAME_WITH_QUOTATION)) {
 			std::string paramValue = token.getValue();
 
+			// Check synonym is declared
 			if (mappedSynonyms.find(paramValue) == mappedSynonyms.end()) {
 				relationships.clear();
 				relationships.push_back(SuchThat());
 				return relationships;
+			}
+
+			// Change TokenType of synonyms tokenized to design entity tokens etc to NAME
+			if (token.getTokenType() != TokenType::NAME) {
+				token.setTokenType(TokenType::NAME);
 			}
 		}
 
@@ -298,10 +304,16 @@ std::vector<Pattern> Parser::parseTokensIntoPatternObjects(std::vector<TokenObje
 			(currTokenType != TokenType::EXPRESSION) && (currTokenType != TokenType::SUBEXPRESSION)) {
 			std::string synonymValue = token.getValue();
 
+			// Check synonym is declared
 			if (mappedSynonyms.find(synonymValue) == mappedSynonyms.end()) {
 				patterns.clear();
 				patterns.push_back(Pattern());
 				return patterns;
+			}
+
+			// Change TokenType of synonyms tokenized to design entity tokens etc to NAME
+			if (token.getTokenType() != TokenType::NAME) {
+				token.setTokenType(TokenType::NAME);
 			}
 		}
 

@@ -18,3 +18,8 @@ TokenType TokenObject::getTokenType() {
 std::string TokenObject::getValue() {
     return this->tokenValue;
 }
+
+void TokenObject::setTokenType(TokenType newTokenType) {
+    this->tokenType = newTokenType;
+}
+

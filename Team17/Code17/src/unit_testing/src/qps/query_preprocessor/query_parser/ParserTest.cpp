@@ -172,6 +172,47 @@ TEST_CASE("Multi clause query") {
     REQUIRE(expectedResult == actualResult);
 };
 
+TEST_CASE("Muti-clause query - synonym name is same as design entity") {
+    std::vector<TokenObject> testTokenObject{
+        TokenObject(TokenType::VARIABLE, std::string("variable")),
+        TokenObject(TokenType::VARIABLE, std::string("variable")),
+        TokenObject(TokenType::SEMI_COLON, std::string(";")),
+        TokenObject(TokenType::ASSIGN, std::string("assign")),
+        TokenObject(TokenType::ASSIGN, std::string("assign")),
+        TokenObject(TokenType::SEMI_COLON, std::string(";")),
+        TokenObject(TokenType::SELECT, std::string("Select")),
+        TokenObject(TokenType::VARIABLE, std::string("variable")),
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::THAT, "that"),
+        TokenObject(TokenType::USES, "Uses"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::INTEGER, "6"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::VARIABLE, std::string("variable")),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::ASSIGN, std::string("assign")),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::VARIABLE, std::string("variable")),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+
+    Select expectedSelect = Select("variable");
+    std::vector<SuchThat> expectedSuchThat{ SuchThat(TokenType::USES, TokenObject(TokenType::INTEGER, "6"), TokenObject(TokenType::NAME, "variable")) };
+    std::vector<Pattern> expectedPattern{ Pattern("assign", TokenObject(TokenType::NAME, std::string("variable")), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
+    std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"variable", DesignEntity::VARIABLE}, {"assign", DesignEntity::ASSIGN} };
+
+    QueryObject expectedResult = QueryObject(expectedSelect, expectedSuchThat, expectedPattern, expectedMappedSynonyms);
+
+    Parser parser = Parser(testTokenObject);
+    QueryObject actualResult = parser.parse();
+    std::cout << (actualResult.getRelationships().at(0).getRight().getTokenType() == TokenType::VARIABLE);
+
+    REQUIRE(expectedResult == actualResult);
+};
+
 TEST_CASE("SyntaxError - No return value") {
     std::vector<TokenObject> testTokenObject{
         TokenObject(TokenType::VARIABLE, std::string("variable")),
