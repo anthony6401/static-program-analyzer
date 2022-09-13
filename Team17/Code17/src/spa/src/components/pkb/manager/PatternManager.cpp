@@ -19,7 +19,7 @@ std::vector<PatternStorage*> PatternManager::getPatternStorage() {
 }
 
 //Returns true, if it manage to stored, else false
-bool PatternManager::storePattern(Pattern* pattern) {
+bool PatternManager::storePattern(kb::Pattern* pattern) {
 	bool ret = false;
 	for (auto& pt : patternStorage) {
 		ret = ret || pt->storePattern(pattern);

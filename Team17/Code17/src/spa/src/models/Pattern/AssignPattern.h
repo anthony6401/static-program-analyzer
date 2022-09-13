@@ -2,6 +2,8 @@
 #include "Pattern.h"
 #include <string>
 
+using namespace kb;
+
 class AssignPattern : public Pattern {
 
 public:
