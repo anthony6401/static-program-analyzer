@@ -1,6 +1,7 @@
 #include "RawResult.h"
 #include "vector"
 #include "string"
+#include "iostream"
 #include <map>
 #include <initializer_list>
 
@@ -48,6 +49,11 @@ void RawResult::combineResult(RawResult nextResult) {
         RawResult::joinResultsListWithNoCommonSynonym(nextResult);
     } else {
         RawResult::joinResultsListWithCommonSynonym(nextResult, commonSynonymsIndexPairs);
+    }
+
+    // Merging two tables with common attributes but there are no common results
+    if (isEmptyResult() && !synonymsList.empty()) {
+        setIsFalseResult();
     }
 }
 
@@ -168,7 +174,22 @@ void RawResult::setIsSynonymResult() {
 }
 
 
+std::ostream &operator<<(std::ostream &os, const RawResult &result) {
+    for (const auto syn : result.synonymsList) {
+        os << syn << "\t";
+    }
+    os << std::endl;
+    os << "_______________________________________________________" << std::endl;
 
+    for (const auto &record : result.resultsList) {
+        for (const auto &value : record) {
+            os << value << "\t";
+        }
+        os << std::endl;
+    }
+
+    return os;
+}
 
 
 

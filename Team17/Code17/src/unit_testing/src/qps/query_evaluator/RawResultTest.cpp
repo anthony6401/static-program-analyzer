@@ -36,12 +36,24 @@ TEST_CASE("Instantiate constructor with two synonyms") {
     std::pair<std::string, std::string> p2("3","x");
     RawResult doubleSynonymResult = RawResult("a", "v", {p1, p2});
     std::vector<std::string> expectedSynonymsList = {"a", "v"};
-    std::vector<std::vector<std::string>> expectedResultsList = {{p2.first, p2.second}, {p1.first, p1.second}};
+    std::vector<std::vector<std::string>> expectedResultsList = {{p1.first, p1.second}, {p2.first, p2.second}};
     REQUIRE(doubleSynonymResult.synonymsList == expectedSynonymsList);
+    REQUIRE(doubleSynonymResult.resultsList == expectedResultsList);
     REQUIRE(doubleSynonymResult.isEmptyResult() == false);
     REQUIRE(doubleSynonymResult.synonymsList.empty() == false);
     REQUIRE(doubleSynonymResult.getIsBooleanResult() == false);
     REQUIRE(doubleSynonymResult.getIsFalseResult() == false);
+}
+
+TEST_CASE("Merge empty result with non-empty result") {
+    RawResult emptyRawResult;
+    RawResult singleSynonymResult = RawResult("a", {"1", "2", "3", "4"});
+    emptyRawResult.combineResult(singleSynonymResult);
+    RawResult expectedResult = RawResult();
+    std::vector<std::string> expectedSynonymsList = {"a"};
+    std::vector<std::vector<std::string>> expectedResultsList = {{"4"}, {"3"}, {"2"}, {"1"}};
+    REQUIRE(emptyRawResult.synonymsList == expectedSynonymsList);
+    REQUIRE(emptyRawResult.resultsList == expectedResultsList);
 }
 
 TEST_CASE("Merge results with common synonyms") {

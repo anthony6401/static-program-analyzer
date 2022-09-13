@@ -10,7 +10,7 @@ class RawResult {
 private:
     //  Query results returns false
     bool isFalseResult = false;
-    bool isBooleanResult;
+    bool isBooleanResult = true;
     bool isSynonymResult = false;
 
 
