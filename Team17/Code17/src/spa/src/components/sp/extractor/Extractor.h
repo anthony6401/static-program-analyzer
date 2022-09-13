@@ -29,6 +29,8 @@
 
 #include "../../pkb/clients/SPClient.h"
 
+#include <vector>
+
 class Extractor {
 public:
 	SPClient* client;

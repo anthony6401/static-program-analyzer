@@ -3,6 +3,8 @@
 #include "Extractor.h"
 #include "../SimpleToken.h"
 
+#include <vector>
+
 class FollowsExtractor {
 public:
 	void static extractFollows(Extractor extractor, std::vector<SimpleToken> seriesOfStmts);

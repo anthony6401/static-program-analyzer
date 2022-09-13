@@ -3,6 +3,8 @@
 #include "Extractor.h"
 #include "../SimpleToken.h"
 
+#include <vector>
+
 class ParentExtractor {
 public:
 	void static extractParent(Extractor extractor, SimpleToken parent, std::vector<SimpleToken> seriesOfStmts);
