@@ -33,7 +33,7 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
         results.emplace_back("none");
     }
 
-    // Evaluate hasSelectSynonym Clauses
+    // else, Evaluate hasSelectSynonym Clauses
 
 
 }

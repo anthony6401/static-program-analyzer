@@ -56,6 +56,16 @@ TEST_CASE("Merge empty result with non-empty result") {
     REQUIRE(emptyRawResult.resultsList == expectedResultsList);
 }
 
+TEST_CASE("Merge non-empty result with empty result") {
+    RawResult emptyRawResult = RawResult();
+    RawResult singleSynonymResult = RawResult("a", {"1", "2", "3", "4"});
+    singleSynonymResult.combineResult(emptyRawResult);
+    std::vector<std::string> expectedSynonymsList = {"a"};
+    std::vector<std::vector<std::string>> expectedResultsList = {{"4"}, {"3"}, {"2"}, {"1"}};
+    REQUIRE(singleSynonymResult.synonymsList == expectedSynonymsList);
+    REQUIRE(singleSynonymResult.resultsList == expectedResultsList);
+}
+
 TEST_CASE("Merge results with common synonyms") {
     RawResult rawResult;
 
