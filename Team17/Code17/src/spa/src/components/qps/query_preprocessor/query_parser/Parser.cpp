@@ -5,6 +5,7 @@
 #include "components/qps/abstract_query_object/SuchThat.h"
 #include "components/qps/abstract_query_object/Pattern.h"
 #include <unordered_map>
+#include <stdexcept>
 #include <memory>
 
 using namespace qps;
@@ -54,51 +55,94 @@ std::vector<std::vector<TokenObject>> Parser::groupQueryIntoClause() {
 	std::vector<TokenObject> relationshipTokenObjects;
 	std::vector<TokenObject> patternTokenObjects;
 
-	// Get vector of token types of objects
-	std::vector<TokenType> tokenTypes = getTokenTypes(this->tokenizedQuery);
-	
-	// Find where each clause starts and ends
-	auto beginIndex = this->tokenizedQuery.begin();
-	int endIndex = this->tokenizedQuery.size();
-	int selectIndex = getTokenIndex(TokenType::SELECT, tokenTypes);
-	int suchIndex = getTokenIndex(TokenType::SUCH, tokenTypes);
-	int patternIndex = getTokenIndex(TokenType::PATTERN, tokenTypes);
+	bool isEndOfDeclaration = true;
+	bool isSelectClause = false;
+	bool isSuchThatClause = false;
+	bool isPatternClause = false;
 
-	// Group declarations
-	// One or more declarations present
-	if (selectIndex > 0) {
-		std::vector<TokenObject> declarationTokens(beginIndex, beginIndex + selectIndex);
-		declarationTokenObjects = declarationTokens;
-	}
+	for (TokenObject token : this->getTokenizedQuery()) {
+		TokenType tokenType = token.getTokenType();
 
-	// Group Select clause
-	// Such that clause present
-	if (suchIndex < endIndex) {
-		std::vector<TokenObject> selectTokens(beginIndex + selectIndex, beginIndex + suchIndex);
-		selectTokenObjects = selectTokens;
-	}
-	// Only pattern clause present
-	else if (patternIndex < endIndex) {
-		std::vector<TokenObject> selectTokens(beginIndex + selectIndex, beginIndex + patternIndex);
-		selectTokenObjects = selectTokens;
-	}
-	// Neither such that nor pattern clause present
-	else {
-		std::vector<TokenObject> selectTokens(beginIndex + selectIndex, beginIndex + endIndex);
-		selectTokenObjects = selectTokens;
-	}
+		if (isDesignEntityToken(tokenType) && isEndOfDeclaration && !isSelectClause && !isSuchThatClause && !isPatternClause) {
+			declarationTokenObjects.push_back(token);
+			isEndOfDeclaration = false;
+			continue;
+		}
 
-	// Group such that clause
-	if (suchIndex < endIndex) {
-		// If no pattern clause, patternIndex == this->tokenizedQuery.end()
-		std::vector<TokenObject> relationshipTokens(beginIndex + suchIndex, beginIndex + patternIndex);
-		relationshipTokenObjects = relationshipTokens;
-	}
+		// Any extra semi-colons shall be taken as a declaration token
+		if (tokenType == TokenType::SEMI_COLON) {
+			declarationTokenObjects.push_back(token);
+			isEndOfDeclaration = true;
+			continue;
+		}
 
-	// Group pattern clause
-	if (patternIndex < endIndex) {
-		std::vector<TokenObject> patternTokens(beginIndex + patternIndex, beginIndex + endIndex);
-		patternTokenObjects = patternTokens;
+		if (!isEndOfDeclaration) {
+			declarationTokenObjects.push_back(token);
+			continue;
+		}
+
+		// Start of such that clause
+		if (tokenType == TokenType::SUCH && !isSuchThatClause && !isPatternClause) {
+			if (isSelectClause && selectTokenObjects.size() < 2) {
+				selectTokenObjects.push_back(token);
+				continue;
+			}
+			relationshipTokenObjects.push_back(token);
+			isSelectClause = false;
+			isSuchThatClause = true;
+			continue;
+		}
+
+		// End of such that clause
+		if (tokenType == TokenType::CLOSED_BRACKET && !isSelectClause && isSuchThatClause && !isPatternClause) {
+			relationshipTokenObjects.push_back(token);
+			isSuchThatClause = false;
+			continue;
+		}
+
+		// Start of pattern clause
+		if (tokenType == TokenType::PATTERN && !isSuchThatClause && !isPatternClause) {
+			if (isSelectClause && selectTokenObjects.size() < 2) {
+				selectTokenObjects.push_back(token);
+				continue;
+			}
+			patternTokenObjects.push_back(token);
+			isPatternClause = true;
+			isSelectClause = false;
+			continue;
+		}
+
+		// End of pattern clause
+		if (tokenType == TokenType::CLOSED_BRACKET && !isSelectClause && !isSuchThatClause && isPatternClause) {
+			patternTokenObjects.push_back(token);
+			isPatternClause = false;
+			continue;
+		}
+
+		// Start of select clause
+		if (isEndOfDeclaration && !isSelectClause && !isSuchThatClause && !isPatternClause) {
+			selectTokenObjects.push_back(token);
+				isSelectClause = true;
+				continue;
+		}
+
+		if (isSelectClause) {
+			selectTokenObjects.push_back(token);
+			continue;
+		}
+
+		if (isSuchThatClause) {
+			relationshipTokenObjects.push_back(token);
+			continue;
+		}
+
+		if (isPatternClause) {
+			patternTokenObjects.push_back(token);
+			continue;
+		}
+
+		// Throw generalized exception for now, will change in the future
+		throw std::exception("Error parsing query");
 	}
 
 	std::vector<std::vector<TokenObject>> groupedQuery{
@@ -111,25 +155,9 @@ std::vector<std::vector<TokenObject>> Parser::groupQueryIntoClause() {
 	return groupedQuery;
 };
 
-int Parser::getTokenIndex(TokenType token, std::vector<TokenType> tokenTypes) {
-	auto index = std::find(tokenTypes.begin(), tokenTypes.end(), token);
-
-	return index - tokenTypes.begin();
-};
-
 bool Parser::isSyntacticallyCorrect(std::vector<TokenObject> tokenizedClause, SyntaxChecker* checker) {
 	return checker->isSyntacticallyCorrect(tokenizedClause);
 }
-
-std::vector<TokenType> Parser::getTokenTypes(std::vector<TokenObject> tokenObjects) {
-	std::vector<TokenType> tokenTypes;
-
-	for (TokenObject token : tokenObjects) {
-		tokenTypes.push_back(token.getTokenType());
-	}
-
-	return tokenTypes;
-};
 
 std::vector<TokenObject> Parser::getTokenizedQuery() {
 	return this->tokenizedQuery;
@@ -348,6 +376,19 @@ bool Parser::isRelationshipToken(TokenType token) {
 		TokenType::PARENT_T, TokenType::USES, TokenType::MODIFIES };
 
 	if (std::find(relationshipTokens.begin(), relationshipTokens.end(), token) == relationshipTokens.end()) {
+		return false;
+	}
+
+	return true;
+};
+
+bool Parser::isDesignEntityToken(TokenType token) {
+	std::vector<TokenType> designEntityTokens{
+		TokenType::STMT, TokenType::READ, TokenType::PRINT, TokenType::CALL, TokenType::WHILE, 
+		TokenType::IF, TokenType::ASSIGN, TokenType::VARIABLE, TokenType::CONSTANT, TokenType::PROCEDURE 
+};
+
+	if (std::find(designEntityTokens.begin(), designEntityTokens.end(), token) == designEntityTokens.end()) {
 		return false;
 	}
 

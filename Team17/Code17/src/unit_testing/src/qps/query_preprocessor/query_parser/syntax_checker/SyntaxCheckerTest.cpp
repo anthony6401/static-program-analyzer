@@ -200,6 +200,16 @@ TEST_CASE("Syntactically correct Select with synonym with same name as a design 
     REQUIRE(actualResult == true);
 };
 
+TEST_CASE("Syntactically correct Select with synonym name as SELECT") {
+    SelectClauseSyntaxChecker checker = SelectClauseSyntaxChecker();
+    std::vector<TokenObject> validSelectTokens{
+        TokenObject(TokenType::SELECT, "Select"),
+        TokenObject(TokenType::SELECT, "Select"),
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validSelectTokens);
+    REQUIRE(actualResult == true);
+};
+
 TEST_CASE("Syntactically incorrect Select with synonym") {
     SelectClauseSyntaxChecker checker = SelectClauseSyntaxChecker();
     std::vector<TokenObject> invalidSelectTokens{
@@ -305,6 +315,38 @@ TEST_CASE("Modifies relationship - ENTREF_ENTREF") {
         TokenObject(TokenType::MODIFIES, "Modifies"),
         TokenObject(TokenType::OPEN_BRACKET, "("),
         TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validSuchThatTokens);
+    REQUIRE(actualResult == true);
+};
+
+TEST_CASE("Synonyms with same name as such or that types") {
+    SuchThatClauseSyntaxChecker checker = SuchThatClauseSyntaxChecker();
+    std::vector<TokenObject> validSuchThatTokens{
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::THAT, "that"),
+        TokenObject(TokenType::MODIFIES, "Modifies"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::THAT, "that"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validSuchThatTokens);
+    REQUIRE(actualResult == true);
+};
+
+TEST_CASE("Synonyms with same name as relationship types") {
+    SuchThatClauseSyntaxChecker checker = SuchThatClauseSyntaxChecker();
+    std::vector<TokenObject> validSuchThatTokens{
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::THAT, "that"),
+        TokenObject(TokenType::MODIFIES, "Modifies"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::MODIFIES, "Modifies"),
         TokenObject(TokenType::COMMA, ","),
         TokenObject(TokenType::NAME, "x"),
         TokenObject(TokenType::CLOSED_BRACKET, ")")
@@ -460,6 +502,21 @@ TEST_CASE("Valid pattern clause - multiple declaration") {
         TokenObject(TokenType::NAME, "a"),
         TokenObject(TokenType::OPEN_BRACKET, "("),
         TokenObject(TokenType::NAME, "v"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::EXPRESSION, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validPatternTokens);
+    REQUIRE(actualResult == true);
+};
+
+TEST_CASE("Valid pattern clause - synonym name is pattern") {
+    PatternClauseSyntaxChecker checker = PatternClauseSyntaxChecker();
+    std::vector<TokenObject> validPatternTokens{
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::NAME, "a"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::PATTERN, "pattern"),
         TokenObject(TokenType::COMMA, ","),
         TokenObject(TokenType::EXPRESSION, "x"),
         TokenObject(TokenType::CLOSED_BRACKET, ")")
