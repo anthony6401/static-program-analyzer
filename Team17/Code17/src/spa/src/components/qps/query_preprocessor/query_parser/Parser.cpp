@@ -142,7 +142,7 @@ std::vector<std::vector<TokenObject>> Parser::groupQueryIntoClause() {
 		}
 
 		// Throw generalized exception for now, will change in the future
-		throw std::exception("Error parsing query");
+		throw std::runtime_error("Error parsing query");
 	}
 
 	std::vector<std::vector<TokenObject>> groupedQuery{
@@ -304,7 +304,7 @@ std::vector<Pattern> Parser::parseTokensIntoPatternObjects(std::vector<TokenObje
 	for (TokenObject token : patternTokens) {
 		TokenType currTokenType = token.getTokenType();
 
-		if ((currTokenType == TokenType::OPEN_BRACKET)) {
+		if (currTokenType == TokenType::OPEN_BRACKET) {
 			continue;
 		}
 
