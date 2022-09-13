@@ -7,7 +7,7 @@
 
 AssignPatternStorage::AssignPatternStorage() : PatternStorage(), assignPatternStorage(std::unordered_map<std::string, std::unordered_set<std::pair<std::string, std::string>, pair_hash>>()) {}
 
-bool AssignPatternStorage::storePattern(Pattern* pattern) {
+bool AssignPatternStorage::storePattern(kb::Pattern* pattern) {
 	AssignPattern* assignPattern = dynamic_cast<AssignPattern*>(pattern);
 	if (assignPattern) {
 		std::string lineNum = assignPattern->getLineNum();
