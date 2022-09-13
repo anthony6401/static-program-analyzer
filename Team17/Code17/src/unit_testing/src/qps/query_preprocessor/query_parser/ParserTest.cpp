@@ -115,13 +115,13 @@ TEST_CASE("Single clause query - pattern") {
         TokenObject(TokenType::OPEN_BRACKET, "("),
         TokenObject(TokenType::WILDCARD, "_"),
         TokenObject(TokenType::COMMA, ","),
-        TokenObject(TokenType::EXPRESSION, "x"),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
         TokenObject(TokenType::CLOSED_BRACKET, ")")
     };
 
     Select expectedSelect = Select("v");
     std::vector<SuchThat> expectedSuchThat{};
-    std::vector<Pattern> expectedPattern{ Pattern("a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::EXPRESSION, "x"))};
+    std::vector<Pattern> expectedPattern{ Pattern("a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x"))};
     std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"v", DesignEntity::VARIABLE}, {"a", DesignEntity::ASSIGN}};
 
     QueryObject expectedResult = QueryObject(expectedSelect, expectedSuchThat, expectedPattern, expectedMappedSynonyms);
@@ -155,13 +155,13 @@ TEST_CASE("Multi clause query") {
         TokenObject(TokenType::OPEN_BRACKET, "("),
         TokenObject(TokenType::WILDCARD, "_"),
         TokenObject(TokenType::COMMA, ","),
-        TokenObject(TokenType::EXPRESSION, "x"),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
         TokenObject(TokenType::CLOSED_BRACKET, ")")
     };
 
     Select expectedSelect = Select("v");
     std::vector<SuchThat> expectedSuchThat{ SuchThat(TokenType::USES, TokenObject(TokenType::INTEGER, "6"), TokenObject(TokenType::NAME, "v")) };
-    std::vector<Pattern> expectedPattern{ Pattern("a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::EXPRESSION, "x")) };
+    std::vector<Pattern> expectedPattern{ Pattern("a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
     std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"v", DesignEntity::VARIABLE}, {"a", DesignEntity::ASSIGN} };
 
     QueryObject expectedResult = QueryObject(expectedSelect, expectedSuchThat, expectedPattern, expectedMappedSynonyms);
@@ -357,14 +357,14 @@ TEST_CASE("SyntaxError - more than one pattern") {
         TokenObject(TokenType::OPEN_BRACKET, "("),
         TokenObject(TokenType::WILDCARD, "_"),
         TokenObject(TokenType::COMMA, ","),
-        TokenObject(TokenType::EXPRESSION, "x"),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
         TokenObject(TokenType::CLOSED_BRACKET, ")"),
         TokenObject(TokenType::PATTERN, "pattern"),
         TokenObject(TokenType::NAME, "a"),
         TokenObject(TokenType::OPEN_BRACKET, "("),
         TokenObject(TokenType::WILDCARD, "_"),
         TokenObject(TokenType::COMMA, ","),
-        TokenObject(TokenType::EXPRESSION, "x"),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
         TokenObject(TokenType::CLOSED_BRACKET, ")")
     };
 
@@ -466,7 +466,7 @@ TEST_CASE("Single clause query - pattern with non-assign synonym") {
         TokenObject(TokenType::OPEN_BRACKET, "("),
         TokenObject(TokenType::WILDCARD, "_"),
         TokenObject(TokenType::COMMA, ","),
-        TokenObject(TokenType::EXPRESSION, "x"),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
         TokenObject(TokenType::CLOSED_BRACKET, ")")
     };
     Select expectedSelect = Select("v");
@@ -494,7 +494,7 @@ TEST_CASE("Syntactically incorrect - no assign declaration") {
         TokenObject(TokenType::OPEN_BRACKET, "("),
         TokenObject(TokenType::WILDCARD, "_"),
         TokenObject(TokenType::COMMA, ","),
-        TokenObject(TokenType::EXPRESSION, "x"),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
         TokenObject(TokenType::CLOSED_BRACKET, ")")
     };
 
