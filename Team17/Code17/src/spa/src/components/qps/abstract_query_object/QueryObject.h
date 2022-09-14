@@ -31,6 +31,7 @@ public:
     std::vector<Pattern> getPattern();
     Select getSelect();
     std::unordered_map<std::string, DesignEntity> getSynonymToDesignEntityMap();
+    int getNumOfDeclaredSynonyms();
     void setSemanticallyInvalid();
     bool operator==(const QueryObject& other) const {
         return relationships == other.relationships

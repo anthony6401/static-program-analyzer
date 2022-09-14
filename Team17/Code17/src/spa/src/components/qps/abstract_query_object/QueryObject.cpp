@@ -49,6 +49,10 @@ std::unordered_map<std::string, DesignEntity> QueryObject::getSynonymToDesignEnt
 	return this->synonymToDesignEntityMap;
 }
 
+int QueryObject::getNumOfDeclaredSynonyms() {
+	return this->numOfDeclaredSynonyms;
+}
+
 void QueryObject::setSemanticallyInvalid() {
 	this->hasNoSemanticError = false;
 }

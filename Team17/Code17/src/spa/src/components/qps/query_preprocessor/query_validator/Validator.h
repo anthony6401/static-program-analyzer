@@ -16,6 +16,16 @@ using namespace qps;
 class Validator {
 private:
 	QueryObject parsedQuery;
+	bool selectClauseIsSemanticallyCorrect();
+	bool suchThatClauseIsSemanticallyCorrect();
+	bool patternClauseIsSemanticallyCorrect();
+	bool isDeclaredSynonym(std::string synonym);
+	bool isValidUsesAndModifies(SuchThat relationship);
+	bool isValidFollowsAndParent(SuchThat relationship);
+	bool isStatement(std::string synonym);
+	bool isVariable(std::string synonym);
+	bool isAssign(std::string synonym);
+	bool isValidUsesAndModifiesLeftParameter(std::string synonym);
 
 public:
 	Validator(QueryObject parsedQuery);
