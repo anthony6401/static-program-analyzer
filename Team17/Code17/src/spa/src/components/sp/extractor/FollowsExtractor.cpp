@@ -33,4 +33,5 @@ Entity* FollowsExtractor::generateEntity(SimpleToken token) {
 	} else if (token.type == SpTokenType::TCALL) {
 		return new CallEntity(std::to_string(token.statementNumber));
 	}
+	return new Entity(std::to_string(token.statementNumber));
 }

@@ -17,7 +17,7 @@ void ParentExtractor::extractParentT(Extractor extractor, SimpleToken parent, st
 	// code here
 }
 
-Entity* FollowsExtractor::generateEntity(SimpleToken token) {
+Entity* ParentExtractor::generateEntity(SimpleToken token) {
 	if (token.type == SpTokenType::TREAD) {
 		return new ReadEntity(std::to_string(token.statementNumber));
 	} else if (token.type == SpTokenType::TPRINT) {
@@ -31,4 +31,5 @@ Entity* FollowsExtractor::generateEntity(SimpleToken token) {
 	} else if (token.type == SpTokenType::TCALL) {
 		return new CallEntity(std::to_string(token.statementNumber));
 	}
+	return new Entity(std::to_string(token.statementNumber));
 }
