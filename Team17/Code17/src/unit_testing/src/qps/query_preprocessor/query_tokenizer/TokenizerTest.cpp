@@ -161,14 +161,46 @@ TEST_CASE("Pattern Clause with constant subexpressions") {
 }
 
 // Invalid tokens
-TEST_CASE("Incomplete expression token") {
+TEST_CASE("Invalid name token") {
+    std::string testQuery = "assign 0x1;\n";
+    Tokenizer tokenizer = Tokenizer();
+    REQUIRE_THROWS_WITH(tokenizer.tokenize(testQuery), "Token Exception Caught");
+}
+
+TEST_CASE("Invalid integer token") {
+    std::string testQuery = "stmt s;\n"
+                            "Select s such that Parent (s, 01)";
+    Tokenizer tokenizer = Tokenizer();
+    REQUIRE_THROWS_WITH(tokenizer.tokenize(testQuery), "Token Exception Caught");
+}
+
+TEST_CASE("Invalid expression token") {
     std::string testQuery = "assign a1;\n"
                             "Select s such that Uses (s, \"x\") pattern a (\"x\", \"y)";
     Tokenizer tokenizer = Tokenizer();
     REQUIRE_THROWS_WITH(tokenizer.tokenize(testQuery), "Token Exception Caught");
 }
 
-// Edge cases
+TEST_CASE("Invalid subexpression token") {
+    std::string testQuery = "assign a1;\n"
+                            "Select s such that Uses (s, \"x\") pattern a (_\"x\", _\"y\"_)";
+    Tokenizer tokenizer = Tokenizer();
+    REQUIRE_THROWS_WITH(tokenizer.tokenize(testQuery), "Token Exception Caught");
+}
 
+
+// Edge cases
+TEST_CASE("Presence of white spaces") {
+    std::string testQuery = "stmt       s;    \n"
+                            "Select s    such   that Follows*    (6,   s)";
+    std::vector<TokenObject> expectedResult {stmtTokenObject, s_nameTokenObject, semicolonTokenObject,
+                                             selectTokenObject, s_nameTokenObject, suchTokenObject, thatTokenObject,
+                                             followsTTokenObject, openBracketTokenObject, six_intTokenObject, commaTokenObject,
+                                             s_nameTokenObject, closedBracketTokenObject};
+    Tokenizer tokenizer = Tokenizer();
+    std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
+
+    REQUIRE(testResult == expectedResult);
+}
 
 
