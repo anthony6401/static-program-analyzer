@@ -541,7 +541,7 @@ TEST_CASE("No declaration") {
         TokenObject(TokenType::NAME, std::string("v"))
     };
 
-    Select expectedSelect = Select();
+    Select expectedSelect = Select("v");
     std::vector<SuchThat> expectedSuchThat;
     std::vector<Pattern> expectedPattern;
     std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms;
@@ -603,6 +603,28 @@ TEST_CASE("Multiple declarations with the same name but different design entity"
     REQUIRE(expectedResult == actualResult);
 };
 
+TEST_CASE("Semantically incorrect - return type not declared") {
+    std::vector<TokenObject> testTokenObject{
+        TokenObject(TokenType::VARIABLE, std::string("variable")),
+        TokenObject(TokenType::NAME, std::string("v")),
+        TokenObject(TokenType::SEMI_COLON, std::string(";")),
+        TokenObject(TokenType::SELECT, std::string("Select")),
+        TokenObject(TokenType::NAME, std::string("v1"))
+    };
+
+    Select expectedSelect = Select("v1");
+    std::vector<SuchThat> expectedSuchThat;
+    std::vector<Pattern> expectedPattern;
+    std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"v", DesignEntity::VARIABLE} };
+    int expectedNumOfDeclaredSynonyms = 1;
+
+    QueryObject expectedResult = QueryObject(expectedSelect, expectedSuchThat, expectedPattern, expectedMappedSynonyms, expectedNumOfDeclaredSynonyms);
+
+    Parser parser = Parser(testTokenObject);
+    QueryObject actualResult = parser.parse();
+    REQUIRE(expectedResult == actualResult);
+};
+
 TEST_CASE("Semantically incorrect - such that with no declaration") {
     std::vector<TokenObject> testTokenObject{
         TokenObject(TokenType::SELECT, std::string("Select")),
@@ -618,8 +640,8 @@ TEST_CASE("Semantically incorrect - such that with no declaration") {
 
     };
 
-    Select expectedSelect = Select();
-    std::vector<SuchThat> expectedSuchThat{ SuchThat() };
+    Select expectedSelect = Select("v");
+    std::vector<SuchThat> expectedSuchThat{ SuchThat(TokenType::USES, TokenObject(TokenType::INTEGER, "6"),TokenObject(TokenType::NAME, "v")) };
     std::vector<Pattern> expectedPattern{};
     std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms;
     int expectedNumOfDeclaredSynonyms = 0;
@@ -651,9 +673,72 @@ TEST_CASE("Semantically incorect- such that with param not declaration") {
     };
 
     Select expectedSelect = Select("v");
-    std::vector<SuchThat> expectedSuchThat{ SuchThat() };
+    std::vector<SuchThat> expectedSuchThat{ SuchThat(TokenType::USES, TokenObject(TokenType::INTEGER, "6"),TokenObject(TokenType::NAME, "v1")) };
     std::vector<Pattern> expectedPattern{};
     std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"v", DesignEntity::VARIABLE} };
+    int expectedNumOfDeclaredSynonyms = 1;
+
+    QueryObject expectedResult = QueryObject(expectedSelect, expectedSuchThat, expectedPattern, expectedMappedSynonyms, expectedNumOfDeclaredSynonyms);
+
+    Parser parser = Parser(testTokenObject);
+    QueryObject actualResult = parser.parse();
+
+    REQUIRE(expectedResult == actualResult);
+};
+
+TEST_CASE("Semantically incorect- Uses with wildcard as first parameter") {
+    std::vector<TokenObject> testTokenObject{
+        TokenObject(TokenType::VARIABLE, std::string("variable")),
+        TokenObject(TokenType::NAME, std::string("v")),
+        TokenObject(TokenType::SEMI_COLON, std::string(";")),
+        TokenObject(TokenType::SELECT, std::string("Select")),
+        TokenObject(TokenType::NAME, std::string("v")),
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::THAT, "that"),
+        TokenObject(TokenType::USES, "Uses"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME, "v"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+
+    };
+
+    Select expectedSelect = Select("v");
+    std::vector<SuchThat> expectedSuchThat{ SuchThat(TokenType::USES, TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME, "v")) };
+    std::vector<Pattern> expectedPattern{};
+    std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"v", DesignEntity::VARIABLE} };
+    int expectedNumOfDeclaredSynonyms = 1;
+
+    QueryObject expectedResult = QueryObject(expectedSelect, expectedSuchThat, expectedPattern, expectedMappedSynonyms, expectedNumOfDeclaredSynonyms);
+
+    Parser parser = Parser(testTokenObject);
+    QueryObject actualResult = parser.parse();
+
+    REQUIRE(expectedResult == actualResult);
+};
+
+TEST_CASE("Semantically incorect- Modifies where second param is not variable") {
+    std::vector<TokenObject> testTokenObject{
+        TokenObject(TokenType::ASSIGN, std::string("assign")),
+        TokenObject(TokenType::NAME, std::string("a")),
+        TokenObject(TokenType::SEMI_COLON, std::string(";")),
+        TokenObject(TokenType::SELECT, std::string("Select")),
+        TokenObject(TokenType::NAME, std::string("a")),
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::THAT, "that"),
+        TokenObject(TokenType::USES, "Uses"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::INTEGER, "6"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME, "a"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+
+    Select expectedSelect = Select("a");
+    std::vector<SuchThat> expectedSuchThat{ SuchThat(TokenType::USES, TokenObject(TokenType::INTEGER, "6"), TokenObject(TokenType::NAME, "a")) };
+    std::vector<Pattern> expectedPattern{};
+    std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"a", DesignEntity::ASSIGN} };
     int expectedNumOfDeclaredSynonyms = 1;
 
     QueryObject expectedResult = QueryObject(expectedSelect, expectedSuchThat, expectedPattern, expectedMappedSynonyms, expectedNumOfDeclaredSynonyms);
@@ -684,7 +769,7 @@ TEST_CASE("Semantically incorrect - pattern with non-assign synonym") {
     };
     Select expectedSelect = Select("v");
     std::vector<SuchThat> expectedSuchThat{};
-    std::vector<Pattern> expectedPattern{ Pattern{} };
+    std::vector<Pattern> expectedPattern{ Pattern("v", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x"))};
     std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"v", DesignEntity::VARIABLE}, {"a", DesignEntity::ASSIGN}};
     int expectedNumOfDeclaredSynonyms = 2;
 
@@ -696,7 +781,7 @@ TEST_CASE("Semantically incorrect - pattern with non-assign synonym") {
     REQUIRE(expectedResult == actualResult);
 };
 
-TEST_CASE("Semantically incorrect - no assign declaration") {
+TEST_CASE("Semantically incorrect - pattern with no assign declaration") {
     std::vector<TokenObject> testTokenObject{
         TokenObject(TokenType::VARIABLE, std::string("variable")),
         TokenObject(TokenType::NAME, std::string("v")),
@@ -714,7 +799,7 @@ TEST_CASE("Semantically incorrect - no assign declaration") {
 
     Select expectedSelect = Select("v");
     std::vector<SuchThat> expectedSuchThat{};
-    std::vector<Pattern> expectedPattern{Pattern()};
+    std::vector<Pattern> expectedPattern{Pattern("a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x"))};
     std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"v", DesignEntity::VARIABLE}};
     int expectedNumOfDeclaredSynonyms = 1;
 
@@ -746,7 +831,39 @@ TEST_CASE("Semantically incorrect - pattern with param not declared") {
     };
     Select expectedSelect = Select("v");
     std::vector<SuchThat> expectedSuchThat{};
-    std::vector<Pattern> expectedPattern{ Pattern{} };
+    std::vector<Pattern> expectedPattern{ Pattern("a", TokenObject(TokenType::NAME, "s"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x"))};
+    std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"v", DesignEntity::VARIABLE}, {"a", DesignEntity::ASSIGN} };
+    int expectedNumOfDeclaredSynonyms = 2;
+
+    QueryObject expectedResult = QueryObject(expectedSelect, expectedSuchThat, expectedPattern, expectedMappedSynonyms, expectedNumOfDeclaredSynonyms);
+
+    Parser parser = Parser(testTokenObject);
+    QueryObject actualResult = parser.parse();
+
+    REQUIRE(expectedResult == actualResult);
+};
+
+TEST_CASE("Semantically incorrect - first param of pattern not variable") {
+    std::vector<TokenObject> testTokenObject{
+        TokenObject(TokenType::VARIABLE, std::string("variable")),
+        TokenObject(TokenType::NAME, std::string("v")),
+        TokenObject(TokenType::SEMI_COLON, std::string(";")),
+        TokenObject(TokenType::ASSIGN, std::string("assign")),
+        TokenObject(TokenType::NAME, std::string("a")),
+        TokenObject(TokenType::SEMI_COLON, std::string(";")),
+        TokenObject(TokenType::SELECT, std::string("Select")),
+        TokenObject(TokenType::NAME, std::string("v")),
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::NAME, "a"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::NAME, "a"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+    Select expectedSelect = Select("v");
+    std::vector<SuchThat> expectedSuchThat{};
+    std::vector<Pattern> expectedPattern{ Pattern("a", TokenObject(TokenType::NAME, "a"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
     std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"v", DesignEntity::VARIABLE}, {"a", DesignEntity::ASSIGN} };
     int expectedNumOfDeclaredSynonyms = 2;
 

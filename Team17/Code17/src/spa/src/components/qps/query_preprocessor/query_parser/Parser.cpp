@@ -42,9 +42,9 @@ QueryObject Parser::parse() {
 	}
 
 	auto [numOfDeclaredSynonyms, mappedSynonyms] = mapSynonymToDesignEntity(declarationTokenObjects);
-	Select select = parseTokensIntoSelectObject(selectTokenObjects, mappedSynonyms);
-	std::vector<SuchThat> relationships = parseTokensIntoSuchThatObjects(relationshipTokenObjects, mappedSynonyms);
-	std::vector<Pattern> patterns = parseTokensIntoPatternObjects(patternTokenObjects, mappedSynonyms);
+	Select select = parseTokensIntoSelectObject(selectTokenObjects);
+	std::vector<SuchThat> relationships = parseTokensIntoSuchThatObjects(relationshipTokenObjects);
+	std::vector<Pattern> patterns = parseTokensIntoPatternObjects(patternTokenObjects);
 
 	return QueryObject(select, relationships, patterns, mappedSynonyms, numOfDeclaredSynonyms);
 };
@@ -195,7 +195,7 @@ std::tuple<int, std::unordered_map<std::string, DesignEntity>> Parser::mapSynony
 	return { numOfDeclaredSynonyms, mappedSynonyms };
 }
 
-Select Parser::parseTokensIntoSelectObject(std::vector<TokenObject> selectTokens, std::unordered_map<std::string, DesignEntity> mappedSynonyms) {
+Select Parser::parseTokensIntoSelectObject(std::vector<TokenObject> selectTokens) {
 	bool isFirstSelectToken = true;
 
 	for (TokenObject token : selectTokens) {
@@ -206,11 +206,6 @@ Select Parser::parseTokensIntoSelectObject(std::vector<TokenObject> selectTokens
 
 		std::string returnValue = token.getValue();
 
-		// Return empty Select object if return value is not declared for now
-		if (mappedSynonyms.find(returnValue) == mappedSynonyms.end()) {
-			return Select();
-		}
-
 		return Select(returnValue);
 
 	}
@@ -218,7 +213,7 @@ Select Parser::parseTokensIntoSelectObject(std::vector<TokenObject> selectTokens
 	return Select();
 };
 
-std::vector<SuchThat> Parser::parseTokensIntoSuchThatObjects(std::vector<TokenObject> relationshipTokens, std::unordered_map<std::string, DesignEntity> mappedSynonyms) {
+std::vector<SuchThat> Parser::parseTokensIntoSuchThatObjects(std::vector<TokenObject> relationshipTokens) {
 	std::vector<SuchThat> relationships;
 	bool isFirstSuchToken = true;
 	bool isFirstThatToken = true;
@@ -262,19 +257,9 @@ std::vector<SuchThat> Parser::parseTokensIntoSuchThatObjects(std::vector<TokenOb
 		}
 
 
-		// Return vector with only empty SuchThat object if parameter value is not declared for now
-		// SemanticError should be caught in PQL validator
+		// Change TokenType of synonyms tokenized to design entity tokens etc to NAME
 		if ((currTokenType != TokenType::WILDCARD) && (currTokenType != TokenType::INTEGER) && (currTokenType != TokenType::NAME_WITH_QUOTATION)) {
-			std::string paramValue = token.getValue();
-
-			// Check synonym is declared
-			if (mappedSynonyms.find(paramValue) == mappedSynonyms.end()) {
-				relationships.clear();
-				relationships.push_back(SuchThat());
-				return relationships;
-			}
-
-			// Change TokenType of synonyms tokenized to design entity tokens etc to NAME
+			
 			if (token.getTokenType() != TokenType::NAME) {
 				token.setTokenType(TokenType::NAME);
 			}
@@ -295,7 +280,7 @@ std::vector<SuchThat> Parser::parseTokensIntoSuchThatObjects(std::vector<TokenOb
 	return relationships;
 };
 
-std::vector<Pattern> Parser::parseTokensIntoPatternObjects(std::vector<TokenObject> patternTokens, std::unordered_map<std::string, DesignEntity> mappedSynonyms) {
+std::vector<Pattern> Parser::parseTokensIntoPatternObjects(std::vector<TokenObject> patternTokens) {
 	std::vector<Pattern> patterns;
 	bool isFirstPatternToken = true;
 	bool isFirstParam = true;
@@ -328,33 +313,16 @@ std::vector<Pattern> Parser::parseTokensIntoPatternObjects(std::vector<TokenObje
 			continue;
 		}
 
-		// Return vector with only empty Pattern object if parameter value is not declared for now
-		// SemanticError should be caught in PQL validator
+		// Change TokenType of synonyms tokenized to design entity tokens etc to NAME
 		if ((currTokenType != TokenType::WILDCARD) && (currTokenType != TokenType::NAME_WITH_QUOTATION) && 
 			(currTokenType != TokenType::EXPRESSION) && (currTokenType != TokenType::SUBEXPRESSION)) {
-			std::string synonymValue = token.getValue();
 
-			// Check synonym is declared
-			if (mappedSynonyms.find(synonymValue) == mappedSynonyms.end()) {
-				patterns.clear();
-				patterns.push_back(Pattern());
-				return patterns;
-			}
-
-			// Change TokenType of synonyms tokenized to design entity tokens etc to NAME
 			if (token.getTokenType() != TokenType::NAME) {
 				token.setTokenType(TokenType::NAME);
 			}
 		}
 
 		if (assignSynonym.empty()) {
-			// Semantic Error as synonym has to be of declared as ASSIGN
-			if (mappedSynonyms.at(token.getValue()) != DesignEntity::ASSIGN) {
-				patterns.clear();
-				patterns.push_back(Pattern());
-				return patterns;
-			}
-
 			assignSynonym = token.getValue();
 			continue;
 		}
