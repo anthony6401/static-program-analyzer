@@ -14,6 +14,14 @@ Validator::Validator(QueryObject parsedQuery) {
 	this->parsedQuery = parsedQuery;
 };
 
+QueryObject Validator::validate() {
+	if (!isSemanticallyValid()) {
+		this->parsedQuery.setSemanticallyInvalid();
+	}
+
+	return this->parsedQuery;
+}
+
 bool Validator::isSemanticallyValid() {
 	// If query has SyntaxError, do not proceed with checking for SemanticError
 	if (!this->parsedQuery.isSyntacticallyCorrect()) {

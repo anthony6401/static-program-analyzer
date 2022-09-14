@@ -16,6 +16,7 @@ using namespace qps;
 class Validator {
 private:
 	QueryObject parsedQuery;
+	bool isSemanticallyValid();
 	bool selectClauseIsSemanticallyCorrect();
 	bool suchThatClauseIsSemanticallyCorrect();
 	bool patternClauseIsSemanticallyCorrect();
@@ -29,7 +30,7 @@ private:
 
 public:
 	Validator(QueryObject parsedQuery);
-	bool isSemanticallyValid();
+	QueryObject validate();
 
 };
 
