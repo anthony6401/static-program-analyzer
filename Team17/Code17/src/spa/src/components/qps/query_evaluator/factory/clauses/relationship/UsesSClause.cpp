@@ -73,7 +73,7 @@ RawResult UsesSClause::evaluateIntegerSynonym() {
     DesignEntity rightType = synonymToDesignEntityMap[right.getValue()];
     std::cout << "----- UsesS: Integer synonym -------" << std::endl;
     // API CALL
-    return {"v", {}};
+    return {"v", {"x"}};
 }
 
 RawResult UsesSClause::evaluateIntegerWildcard() {

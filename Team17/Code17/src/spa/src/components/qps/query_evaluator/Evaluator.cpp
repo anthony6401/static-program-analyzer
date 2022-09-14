@@ -44,7 +44,9 @@ void Evaluator::populateResults(RawResult finalResult, std::string selectSynonym
 
     std::unordered_set<std::string> resultsToPopulate = finalResult.getResultsToBePopulated(selectSynonym);
 
+    std::cout << "---------POPULATING-----------" << std::endl;
     for (std::string result : resultsToPopulate) {
+        std::cout << result << std::endl;
         results.emplace_back(result);
     }
 }

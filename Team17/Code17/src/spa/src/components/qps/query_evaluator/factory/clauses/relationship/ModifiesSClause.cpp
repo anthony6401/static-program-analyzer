@@ -53,10 +53,11 @@ TokenType ModifiesSClause::getRelationshipType() {
 }
 
 RawResult ModifiesSClause::evaluateSynonymSynonym() {
+    std::cout << "----- ModifiesS: Synonym Synonym -------" << std::endl;
     DesignEntity stmtType = synonymToDesignEntityMap[left.getValue()];
     DesignEntity rightType = synonymToDesignEntityMap[right.getValue()];
     // API CALL
-    return {};
+    return {"a", "v", {{"1", "x"}, {"2", "y"}}};
 }
 
 RawResult ModifiesSClause::evaluateSynonymWildcard() {

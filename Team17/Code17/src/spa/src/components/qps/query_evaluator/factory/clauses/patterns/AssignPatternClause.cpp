@@ -58,7 +58,8 @@ std::set<std::string> AssignPatternClause::getAllSynonyms() {
 }
 
 RawResult AssignPatternClause::evaluateSynonymWildcard() {
-    return {};
+    std::cout << "----- Assign: synonym wild card -------" << std::endl;
+    return {"a", "v", {{"1", "x"}, {"2", "y"}}};
 }
 
 RawResult AssignPatternClause::evaluateSynonymExpression() {
@@ -74,7 +75,8 @@ RawResult AssignPatternClause::evaluateSynonymSubExpression() {
 }
 
 RawResult AssignPatternClause::evaluateWildcardWildcard() {
-    return {};
+    std::cout << "----- Assign: wild card wild card -------" << std::endl;
+    return {"a", {"11", "22", "33", "44"}};
 }
 
 RawResult AssignPatternClause::evaluateWildcardExpression() {
