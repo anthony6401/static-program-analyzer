@@ -95,14 +95,33 @@ TEST_CASE("Follows* Relationship") {
 }
 
 TEST_CASE("Parent Relationship") {
+    std::string testQuery = "stmt s;\n"
+                            "Select s such that Parent (s, 6)";
+    std::vector<TokenObject> expectedResult {stmtTokenObject, s_nameTokenObject, semicolonTokenObject,
+                                             selectTokenObject, s_nameTokenObject, suchTokenObject, thatTokenObject,
+                                             parentTokenObject, openBracketTokenObject, s_nameTokenObject, commaTokenObject,
+                                             six_intTokenObject, closedBracketTokenObject};
+    Tokenizer tokenizer = Tokenizer();
+    std::vector<TokenObject> testResult = Tokenizer().tokenize(testQuery);
 
+    REQUIRE(testResult == expectedResult);
 }
 
 TEST_CASE("Parent* Relationship") {
+    std::string testQuery = "assign a; while w;\n"
+                            "Select a such that Parent* (w, a)";
+    std::vector<TokenObject> expectedResult {assignTokenObject, a_nameTokenObject, semicolonTokenObject,
+                                             whileTokenObject, w_nameTokenObject, semicolonTokenObject,
+                                             selectTokenObject, a_nameTokenObject, suchTokenObject, thatTokenObject,
+                                             parentTTokenObject, openBracketTokenObject, w_nameTokenObject, commaTokenObject,
+                                             a_nameTokenObject, closedBracketTokenObject};
+    Tokenizer tokenizer = Tokenizer();
+    std::vector<TokenObject> testResult = Tokenizer().tokenize(testQuery);
 
+    REQUIRE(testResult == expectedResult);
 }
 
-TEST_CASE("Pattern Clause with expressions") {
+TEST_CASE("Pattern Clause with expressions and subexpressions") {
     std::string testQuery = "assign newa;\n"
                             "Select newa pattern newa ( \"normSq\" , _\"cenX\"_)";
     std::vector<TokenObject> expectedResult {assignTokenObject, newa_nameTokenObject, semicolonTokenObject,
@@ -115,6 +134,42 @@ TEST_CASE("Pattern Clause with expressions") {
     REQUIRE(testResult == expectedResult);
 }
 
-TEST_CASE("Pattern Clause with subexpressions") {
+TEST_CASE("Pattern Clause with constant expressions") {
+    std::string testQuery = "assign newa;\n"
+                            "Select newa pattern newa ( \"normSq\" , \"1\")";
+    std::vector<TokenObject> expectedResult {assignTokenObject, newa_nameTokenObject, semicolonTokenObject,
+                                             selectTokenObject, newa_nameTokenObject, patternTokenObject, newa_nameTokenObject,
+                                             openBracketTokenObject, normsq_nameWithQuotesTokenObject, commaTokenObject,
+                                             one_constantExpressionTokenObject, closedBracketTokenObject};
+    Tokenizer tokenizer = Tokenizer();
+    std::vector<TokenObject> testResult = Tokenizer().tokenize(testQuery);
 
+    REQUIRE(testResult == expectedResult);
 }
+
+TEST_CASE("Pattern Clause with constant subexpressions") {
+    std::string testQuery = "assign a1;\n"
+                            "Select a1 pattern a1 ( \"x\" , _\"11\"_)";
+    std::vector<TokenObject> expectedResult {assignTokenObject, a1_nameTokenObject, semicolonTokenObject,
+                                             selectTokenObject, a1_nameTokenObject, patternTokenObject, a1_nameTokenObject,
+                                             openBracketTokenObject, x_nameWithQuotesTokenObject, commaTokenObject,
+                                             eleven_constantSubexpressionTokenObject, closedBracketTokenObject};
+    Tokenizer tokenizer = Tokenizer();
+    std::vector<TokenObject> testResult = Tokenizer().tokenize(testQuery);
+
+    REQUIRE(testResult == expectedResult);
+}
+
+// Invalid tokens
+//TEST_CASE("Incomplete expression token") {
+//    std::string testQuery = "assign a1;\n"
+//                            "Select s such that Uses (s, \"x\") pattern a (\"x\", \"y)";
+//    Tokenizer tokenizer = Tokenizer();
+//    std::vector<TokenObject> testResult = Tokenizer().tokenize(testQuery);
+//    REQUIRE_THROWS_WITH(testResult == "error");
+//}
+
+// Edge cases
+
+
+

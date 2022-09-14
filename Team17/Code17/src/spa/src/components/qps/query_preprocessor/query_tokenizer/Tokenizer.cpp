@@ -235,10 +235,10 @@ bool Tokenizer::isIdentity(std::string s) {
 }
 
 // INCOMPLETE!!!
-// "x+(x+2)" // "x+1"
+// "x+(x+2)" // "x+1" // "1"
 bool Tokenizer::isExpression(std::string s) {
     std::cout << s << " in expr" << std::endl;
-    if (s.size() < 5) { // Perhaps add in expression symbol checking
+    if (s.size() < 3) { // Perhaps add in expression symbol checking
         return false;
     } else {
         if (s.front() == '"' && s.back() == '"') {

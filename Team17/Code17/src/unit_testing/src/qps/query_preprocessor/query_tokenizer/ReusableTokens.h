@@ -7,7 +7,7 @@
 
 TokenObject modifiesTokenObject = TokenObject(TokenType::MODIFIES, "Modifies");
 TokenObject usesTokenObject = TokenObject(TokenType::USES, "Uses");
-TokenObject parentTokenObject = TokenObject(TokenType::PARENT, "Follows");
+TokenObject parentTokenObject = TokenObject(TokenType::PARENT, "Parent");
 TokenObject parentTTokenObject = TokenObject(TokenType::PARENT_T, "Parent*");
 TokenObject followsTokenObject = TokenObject(TokenType::FOLLOWS, "Follows");
 TokenObject followsTTokenObject = TokenObject(TokenType::FOLLOWS_T, "Follows*");
@@ -33,7 +33,10 @@ TokenObject semicolonTokenObject = TokenObject(TokenType::SEMI_COLON, ";");
 TokenObject commaTokenObject = TokenObject(TokenType::COMMA, ",");
 
 TokenObject normsq_nameWithQuotesTokenObject = TokenObject(TokenType::NAME_WITH_QUOTATION, "normSq");
+TokenObject x_nameWithQuotesTokenObject = TokenObject(TokenType::NAME_WITH_QUOTATION, "x");
 TokenObject cenX_subexpressionTokenObject = TokenObject(TokenType::SUBEXPRESSION, "cenX");
+TokenObject one_constantExpressionTokenObject = TokenObject(TokenType::EXPRESSION, "1");
+TokenObject eleven_constantSubexpressionTokenObject = TokenObject(TokenType::SUBEXPRESSION, "11");
 
 TokenObject v_nameTokenObject = TokenObject(TokenType::NAME, "v");
 TokenObject v1_nameTokenObject = TokenObject(TokenType::NAME, "v1");
