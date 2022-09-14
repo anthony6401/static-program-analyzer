@@ -7,6 +7,11 @@
 
 TokenObject modifiesTokenObject = TokenObject(TokenType::MODIFIES, "Modifies");
 TokenObject usesTokenObject = TokenObject(TokenType::USES, "Uses");
+TokenObject parentTokenObject = TokenObject(TokenType::PARENT, "Parent");
+TokenObject parentTTokenObject = TokenObject(TokenType::PARENT_T, "Parent*");
+TokenObject followsTokenObject = TokenObject(TokenType::FOLLOWS, "Follows");
+TokenObject followsTTokenObject = TokenObject(TokenType::FOLLOWS_T, "Follows*");
+TokenObject patternTokenObject = TokenObject(TokenType::PATTERN, "pattern");
 TokenObject selectTokenObject = TokenObject(TokenType::SELECT, "Select");
 TokenObject suchTokenObject = TokenObject(TokenType::SUCH, "such");
 TokenObject thatTokenObject = TokenObject(TokenType::THAT, "that");
@@ -27,6 +32,12 @@ TokenObject constantTokenObject = TokenObject(TokenType::CONSTANT, "constant");
 TokenObject semicolonTokenObject = TokenObject(TokenType::SEMI_COLON, ";");
 TokenObject commaTokenObject = TokenObject(TokenType::COMMA, ",");
 
+TokenObject normsq_nameWithQuotesTokenObject = TokenObject(TokenType::NAME_WITH_QUOTATION, "normSq");
+TokenObject x_nameWithQuotesTokenObject = TokenObject(TokenType::NAME_WITH_QUOTATION, "x");
+TokenObject cenX_subexpressionTokenObject = TokenObject(TokenType::SUBEXPRESSION, "cenX");
+TokenObject one_constantExpressionTokenObject = TokenObject(TokenType::EXPRESSION, "1");
+TokenObject eleven_constantSubexpressionTokenObject = TokenObject(TokenType::SUBEXPRESSION, "11");
+
 TokenObject v_nameTokenObject = TokenObject(TokenType::NAME, "v");
 TokenObject v1_nameTokenObject = TokenObject(TokenType::NAME, "v1");
 TokenObject s_nameTokenObject = TokenObject(TokenType::NAME, "s");
@@ -41,6 +52,9 @@ TokenObject c_nameTokenObject = TokenObject(TokenType::NAME, "c");
 TokenObject re_nameTokenObject = TokenObject(TokenType::NAME, "re");
 TokenObject pn_nameTokenObject = TokenObject(TokenType::NAME, "pn");
 TokenObject cl_nameTokenObject = TokenObject(TokenType::NAME, "cl");
+TokenObject newa_nameTokenObject = TokenObject(TokenType::NAME, "newa");
+TokenObject capital_nameTokenObject = TokenObject(TokenType::NAME, "Statement");
+TokenObject capitalEntity_nameTokenObject = TokenObject(TokenType::NAME, "Variable");
 
 TokenObject six_intTokenObject = TokenObject(TokenType::INTEGER, "6");
 TokenObject fourteen_intTokenObject = TokenObject(TokenType::INTEGER, "14");
