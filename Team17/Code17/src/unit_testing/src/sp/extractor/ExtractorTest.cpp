@@ -1,39 +1,33 @@
 #include "components/sp/extractor/Extractor.h"
-#include "components/sp/parser/SimpleParser.h"
 
 #include <catch.hpp>
 
-TEST_CASE("extract read") {
-	// to be implemented
-	
-	// Extractor* extractorTest = new Extractor();
-	// std::vector<std::string> test_tokens;
-	// test_tokens.push_back("test");
-	// test_tokens.push_back(";");
-
-	// std::string code = "read test;";
-	// SimpleToken simpleToken = SimpleToken(TokenType::TREAD, code,
-	// 	1, SimpleParser::parseRead);
-	// extractorTest->extractRead(simpleToken, test_tokens);
-
-	// PKB* test_result = extractorTest->client->getPKB();
-
+Extractor generateExtractor() {
+	PKB* pkb = new PKB();
+	SPClient* client = new SPClient(pkb);
+	Extractor testExtractor = Extractor(client);
 }
 
-TEST_CASE("extract print") {
-	// to be implemented
-	// 
-	// Extractor* extractorTest = new Extractor();
-
-	// std::vector<std::string> test_tokens;
-	// test_tokens.push_back("test");
-	// test_tokens.push_back(";");
-
-	// std::string code = "print test;";
-	// SimpleToken simpleToken = SimpleToken(TokenType::TPRINT, code,
-	//	1, SimpleParser::parseRead);
-	// extractorTest->extractRead(simpleToken, test_tokens);
-
-	// PKB* test_result = extractorTest->client->getPKB();
-
+TEST_CASE("Unit test - extractReadStmt for valid tokentype variable a") {
+	Extractor testExtractor = generateExtractor();
 }
+TEST_CASE("Unit test - extractReadStmt for invalid tokentype constant 1") {}
+TEST_CASE("Unit test - extractReadStmt for invalid tokentype procedure proc") {}
+
+TEST_CASE("Unit test - extractPrintStmt for valid tokentype variable a") {}
+TEST_CASE("Unit test - extractPrintStmt for invalid tokentype constant 1 ") {}
+TEST_CASE("Unit test - extractPrintStmt for invalid tokentype procedure proc") {}
+
+TEST_CASE("Unit test - extractAssignStmt") {}
+
+TEST_CASE("Integration test - extractProcedure") {}
+TEST_CASE("Integration test - extractParentRelationships") {}
+TEST_CASE("Integration test - extractFollowsRelationships") {}
+TEST_CASE("Integration test - extractSeriesOfStmts") {}
+TEST_CASE("Integration test - extractWhileStmt") {}
+TEST_CASE("Integration test - extractIfStmt") {}
+TEST_CASE("Integration test - extractStmtLst") {}
+
+// TO BE IMPLEMENTED
+TEST_CASE("extractCondExpr") {}
+TEST_CASE("extractCall") {}
