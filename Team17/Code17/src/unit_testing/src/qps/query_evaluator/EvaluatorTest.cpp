@@ -156,36 +156,20 @@ TEST_CASE("Evaluation for multiple common synonym - assign a; variable v; Select
     REQUIRE(testResults == expectedResults);
 }
 
-TEST_CASE("Evaluation for multiple common synonym - assign a; variable v; Select a such that Modifies(a, v) pattern a(v, _)") { // common synonym
-    PKB* pkb = new PKB();
-    auto qpsClient = QPSClient(pkb);
-    std::list<std::string> testResults;
-    std::vector<SuchThat> relationships {SuchThat(TokenType::MODIFIES, TokenObject(TokenType::NAME, "a"),
-                                                  TokenObject(TokenType::NAME, "v"))};
-    std::vector<Pattern> patterns {Pattern("a", TokenObject(TokenType::NAME, "v"),
-                                           TokenObject(TokenType::WILDCARD, "_"))};
-    Select select = Select( "a");
-    std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap = {{"a", DesignEntity::ASSIGN},
-                                                                              {"v", DesignEntity::VARIABLE}};
-    QueryObject testQuery = QueryObject(select, relationships, patterns, synonymToDesignEntityMap);
-    Evaluator::evaluateQuery(testQuery, testResults, qpsClient);
-    std::list<std::string> expectedResults = {"2", "1"};
-    REQUIRE(testResults == expectedResults);
-}
 
-TEST_CASE("Evaluation for 2 empty clauses - assign a; variable v; Select a such that Follows*(a, v) pattern a(v, _)") { // common synonym
+TEST_CASE("Evaluation for 2 empty clauses - assign a; variable v; Select a such that Follows*(1, v) pattern a(_, \"x\")") {
     PKB* pkb = new PKB();
     auto qpsClient = QPSClient(pkb);
     std::list<std::string> testResults;
-    std::vector<SuchThat> relationships {SuchThat(TokenType::MODIFIES, TokenObject(TokenType::NAME, "a"),
+    std::vector<SuchThat> relationships {SuchThat(TokenType::FOLLOWS_T, TokenObject(TokenType::INTEGER, "1"),
                                                   TokenObject(TokenType::NAME, "v"))};
-    std::vector<Pattern> patterns {Pattern("a", TokenObject(TokenType::NAME, "v"),
-                                           TokenObject(TokenType::WILDCARD, "_"))};
+    std::vector<Pattern> patterns {Pattern("a", TokenObject(TokenType::WILDCARD, "_"),
+                                           TokenObject(TokenType::NAME_WITH_QUOTATION, "x"))};
     Select select = Select( "a");
     std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap = {{"a", DesignEntity::ASSIGN},
                                                                               {"v", DesignEntity::VARIABLE}};
     QueryObject testQuery = QueryObject(select, relationships, patterns, synonymToDesignEntityMap);
     Evaluator::evaluateQuery(testQuery, testResults, qpsClient);
-    std::list<std::string> expectedResults = {"2", "1"};
+    std::list<std::string> expectedResults = {"none"};
     REQUIRE(testResults == expectedResults);
 }

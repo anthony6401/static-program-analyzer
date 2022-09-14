@@ -1,4 +1,5 @@
 #include "FollowsTClause.h"
+#include "iostream"
 
 FollowsTClause::FollowsTClause(TokenObject left, TokenObject right, Select synonym,
                              std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap,
@@ -70,6 +71,8 @@ RawResult FollowsTClause::evaluateSynonymInteger() {
 }
 
 RawResult FollowsTClause::evaluateIntegerSynonym() {
+    std::cout << "----- Follows*: integer synonym -------" << std::endl;
+    return {"v", {}};
     return {};
 }
 

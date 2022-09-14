@@ -4,7 +4,7 @@
 ClauseDivider::ClauseDivider() : noSynonymsPresent({}), commonSynonymsGroups({}) {}
 
 void ClauseDivider::addClauseToDivider(std::shared_ptr<Clause> clause) {
-    if (clause->getNumberOfSynonyms() == 0) {
+    if (clause -> getNumberOfSynonyms() == 0) {
         noSynonymsPresent.addClauseToGroup(clause);
     } else {
         for (auto &clause_group : commonSynonymsGroups) {
