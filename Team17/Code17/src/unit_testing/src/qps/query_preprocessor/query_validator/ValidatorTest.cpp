@@ -19,11 +19,11 @@ TEST_CASE("No declaration declared - Select v") {
     int numOfDeclaredSynonyms = 0;
 
     QueryObject testParsedQuery = QueryObject(select, suchThat, pattern, mappedSynonyms, numOfDeclaredSynonyms);
-    QueryObject expectedResult = testParsedQuery.setSemanticallyInvalid();
+    testParsedQuery.setSemanticallyInvalid();
 
     Validator validator = Validator(testParsedQuery);
     QueryObject actualResult = validator.validate();
-    REQUIRE(expectedResult == actualResult);
+    REQUIRE(testParsedQuery == actualResult);
 };
 
 TEST_CASE("Declarations with the same name and same design entity - variable v, v; Select v") {
@@ -34,11 +34,11 @@ TEST_CASE("Declarations with the same name and same design entity - variable v, 
     int numOfDeclaredSynonyms = 2;
 
     QueryObject testParsedQuery = QueryObject(select, suchThat, pattern, mappedSynonyms, numOfDeclaredSynonyms);
-    QueryObject expectedResult = testParsedQuery.setSemanticallyInvalid();
+    testParsedQuery.setSemanticallyInvalid();
 
     Validator validator = Validator(testParsedQuery);
     QueryObject actualResult = validator.validate();
-    REQUIRE(expectedResult == actualResult);
+    REQUIRE(testParsedQuery == actualResult);
 };
 
 TEST_CASE("Declarations with the same name but different design entity - variable v; assign v; Select v") {
@@ -49,11 +49,11 @@ TEST_CASE("Declarations with the same name but different design entity - variabl
     int numOfDeclaredSynonyms = 2;
 
     QueryObject testParsedQuery = QueryObject(select, suchThat, pattern, mappedSynonyms, numOfDeclaredSynonyms);
-    QueryObject expectedResult = testParsedQuery.setSemanticallyInvalid();
+    testParsedQuery.setSemanticallyInvalid();
 
     Validator validator = Validator(testParsedQuery);
     QueryObject actualResult = validator.validate();
-    REQUIRE(expectedResult == actualResult);
+    REQUIRE(testParsedQuery == actualResult);
 };
 
 TEST_CASE("Return type not declared - variable v; Select v1") {
@@ -64,11 +64,11 @@ TEST_CASE("Return type not declared - variable v; Select v1") {
     int numOfDeclaredSynonyms = 1;
 
     QueryObject testParsedQuery = QueryObject(select, suchThat, pattern, mappedSynonyms, numOfDeclaredSynonyms);
-    QueryObject expectedResult = testParsedQuery.setSemanticallyInvalid();
+    testParsedQuery.setSemanticallyInvalid();
 
     Validator validator = Validator(testParsedQuery);
     QueryObject actualResult = validator.validate();
-    REQUIRE(expectedResult == actualResult);
+    REQUIRE(testParsedQuery == actualResult);
 };
 
 TEST_CASE("Such that with no declaration - Select v such that Uses(6, v)") {
@@ -79,12 +79,12 @@ TEST_CASE("Such that with no declaration - Select v such that Uses(6, v)") {
     int numOfDeclaredSynonyms = 0;
 
     QueryObject testParsedQuery = QueryObject(select, suchThat, pattern, mappedSynonyms, numOfDeclaredSynonyms);
-    QueryObject expectedResult = testParsedQuery.setSemanticallyInvalid();
+    testParsedQuery.setSemanticallyInvalid();
 
     Validator validator = Validator(testParsedQuery);
     QueryObject actualResult = validator.validate();
 
-    REQUIRE(expectedResult == actualResult);
+    REQUIRE(testParsedQuery == actualResult);
 };
 
 TEST_CASE("Such that with param not declaration - variable v; Select v such that Uses(6, v1)") {
@@ -95,12 +95,12 @@ TEST_CASE("Such that with param not declaration - variable v; Select v such that
     int numOfDeclaredSynonyms = 1;
 
     QueryObject testParsedQuery = QueryObject(select, suchThat, pattern, mappedSynonyms, numOfDeclaredSynonyms);
-    QueryObject expectedResult = testParsedQuery.setSemanticallyInvalid();
+    testParsedQuery.setSemanticallyInvalid();
 
     Validator validator = Validator(testParsedQuery);
     QueryObject actualResult = validator.validate();
 
-    REQUIRE(expectedResult == actualResult);
+    REQUIRE(testParsedQuery == actualResult);
 };
 
 TEST_CASE("Uses with wildcard as first parameter - variable v; Select v such that Uses(_, v)") {
@@ -111,12 +111,12 @@ TEST_CASE("Uses with wildcard as first parameter - variable v; Select v such tha
     int numOfDeclaredSynonyms = 1;
 
     QueryObject testParsedQuery = QueryObject(select, suchThat, pattern, mappedSynonyms, numOfDeclaredSynonyms);
-    QueryObject expectedResult = testParsedQuery.setSemanticallyInvalid();
+    testParsedQuery.setSemanticallyInvalid();
 
     Validator validator = Validator(testParsedQuery);
     QueryObject actualResult = validator.validate();
 
-    REQUIRE(expectedResult == actualResult);
+    REQUIRE(testParsedQuery == actualResult);
 };
 
 TEST_CASE("Modifies where second param is not variable - assign a; Select a such that Uses(6, a)") {
@@ -127,12 +127,12 @@ TEST_CASE("Modifies where second param is not variable - assign a; Select a such
     int numOfDeclaredSynonyms = 1;
 
     QueryObject testParsedQuery = QueryObject(select, suchThat, pattern, mappedSynonyms, numOfDeclaredSynonyms);
-    QueryObject expectedResult = testParsedQuery.setSemanticallyInvalid();
+    testParsedQuery.setSemanticallyInvalid();
 
     Validator validator = Validator(testParsedQuery);
     QueryObject actualResult = validator.validate();
 
-    REQUIRE(expectedResult == actualResult);
+    REQUIRE(testParsedQuery == actualResult);
 };
 
 TEST_CASE("Pattern with non-assign synonym - variable v; assign a; Select v pattern v(\"_\", \"x\")") {
@@ -143,12 +143,12 @@ TEST_CASE("Pattern with non-assign synonym - variable v; assign a; Select v patt
     int numOfDeclaredSynonyms = 2;
 
     QueryObject testParsedQuery = QueryObject(select, suchThat, pattern, mappedSynonyms, numOfDeclaredSynonyms);
-    QueryObject expectedResult = testParsedQuery.setSemanticallyInvalid();
+    testParsedQuery.setSemanticallyInvalid();
 
     Validator validator = Validator(testParsedQuery);
     QueryObject actualResult = validator.validate();
 
-    REQUIRE(expectedResult == actualResult);
+    REQUIRE(testParsedQuery == actualResult);
 };
 
 TEST_CASE("Pattern with no assign declaration variable v; Select v pattern v(\"_\", \"x\")") {
@@ -159,12 +159,12 @@ TEST_CASE("Pattern with no assign declaration variable v; Select v pattern v(\"_
     int numOfDeclaredSynonyms = 1;
 
     QueryObject testParsedQuery = QueryObject(select, suchThat, pattern, mappedSynonyms, numOfDeclaredSynonyms);
-    QueryObject expectedResult = testParsedQuery.setSemanticallyInvalid();
+    testParsedQuery.setSemanticallyInvalid();
 
     Validator validator = Validator(testParsedQuery);
     QueryObject actualResult = validator.validate();
 
-    REQUIRE(expectedResult == actualResult);
+    REQUIRE(testParsedQuery == actualResult);
 };
 
 TEST_CASE("Pattern with param not declared - variable v; assign a; Select v pattern v(s, \"x\")") {
@@ -175,12 +175,12 @@ Select select = Select("v");
     int numOfDeclaredSynonyms = 2;
 
     QueryObject testParsedQuery = QueryObject(select, suchThat, pattern, mappedSynonyms, numOfDeclaredSynonyms);
-    QueryObject expectedResult = testParsedQuery.setSemanticallyInvalid();
+    testParsedQuery.setSemanticallyInvalid();
 
     Validator validator = Validator(testParsedQuery);
     QueryObject actualResult = validator.validate();
 
-    REQUIRE(expectedResult == actualResult);
+    REQUIRE(testParsedQuery == actualResult);
 };
 
 TEST_CASE("First param of pattern not variable - variable v; assign a; Select v pattern v(a, \"x\")") {
@@ -191,10 +191,10 @@ TEST_CASE("First param of pattern not variable - variable v; assign a; Select v 
     int numOfDeclaredSynonyms = 2;
 
     QueryObject testParsedQuery = QueryObject(select, suchThat, pattern, mappedSynonyms, numOfDeclaredSynonyms);
-    QueryObject expectedResult = testParsedQuery.setSemanticallyInvalid();
+    testParsedQuery.setSemanticallyInvalid();
 
     Validator validator = Validator(testParsedQuery);
     QueryObject actualResult = validator.validate();
 
-    REQUIRE(expectedResult == actualResult);
+    REQUIRE(testParsedQuery == actualResult);
 };
