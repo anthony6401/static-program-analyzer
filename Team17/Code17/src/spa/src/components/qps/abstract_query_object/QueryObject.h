@@ -17,23 +17,29 @@ private:
     std::vector<Pattern> patterns;
     Select select;
     bool hasNoSyntaxError = false;
+    bool hasNoSemanticError = true; // Assumed true till QueryObject is passed into the Validator
     std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap;
+    int numOfDeclaredSynonyms;
 
 
 public:
     QueryObject();
-    QueryObject(Select select, std::vector<SuchThat> relationship, std::vector<Pattern> pattern, std::unordered_map<std::string, DesignEntity> synonymToDesignEntity);
+    QueryObject(Select select, std::vector<SuchThat> relationship, std::vector<Pattern> pattern, std::unordered_map<std::string, DesignEntity> synonymToDesignEntity, int numOfDeclaredSynonyms);
     bool isSyntacticallyCorrect();
+    bool isSemanticallyValid();
     std::vector<SuchThat> getRelationships();
     std::vector<Pattern> getPattern();
     Select getSelect();
     std::unordered_map<std::string, DesignEntity> getSynonymToDesignEntityMap();
+    void setSemanticallyInvalid();
     bool operator==(const QueryObject& other) const {
         return relationships == other.relationships
             && patterns == other.patterns
             && select == other.select
             && hasNoSyntaxError == other.hasNoSyntaxError
-            && synonymToDesignEntityMap == other.synonymToDesignEntityMap;
+            && hasNoSemanticError == other.hasNoSemanticError
+            && synonymToDesignEntityMap == other.synonymToDesignEntityMap
+            && numOfDeclaredSynonyms == other.numOfDeclaredSynonyms;
     }
 
 };

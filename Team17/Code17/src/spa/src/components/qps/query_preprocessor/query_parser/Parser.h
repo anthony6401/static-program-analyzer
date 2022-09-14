@@ -14,6 +14,7 @@
 #include "components/qps/abstract_query_object/Pattern.h"
 #include "models/Entity/DesignEntity.h"
 #include <vector>
+#include <tuple>
 
 #ifndef INC_22S1_CP_SPA_TEAM_17_PARSER_H
 #define INC_22S1_CP_SPA_TEAM_17_PARSER_H
@@ -40,7 +41,7 @@ private:
     Select parseTokensIntoSelectObject(std::vector<TokenObject> selectTokens, std::unordered_map<std::string, DesignEntity> mappedSynonyms);
     std::vector<SuchThat> parseTokensIntoSuchThatObjects(std::vector<TokenObject> relationshipTokens, std::unordered_map<std::string, DesignEntity> mappedSynonyms);
     std::vector<Pattern> parseTokensIntoPatternObjects(std::vector<TokenObject> patternTokens, std::unordered_map<std::string, DesignEntity> mappedSynonyms);
-    std::unordered_map<std::string, DesignEntity> mapSynonymToDesignEntity(std::vector<TokenObject> declarations);
+    std::tuple<int, std::unordered_map<std::string, DesignEntity>> mapSynonymToDesignEntity(std::vector<TokenObject> declarations);
     bool isRelationshipToken(TokenType token);
     bool isDesignEntityToken(TokenType token);
 

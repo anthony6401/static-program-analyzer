@@ -41,12 +41,12 @@ QueryObject Parser::parse() {
 		return QueryObject();
 	}
 
-	std::unordered_map<std::string, DesignEntity> mappedSynonyms = mapSynonymToDesignEntity(declarationTokenObjects);
+	auto [numOfDeclaredSynonyms, mappedSynonyms] = mapSynonymToDesignEntity(declarationTokenObjects);
 	Select select = parseTokensIntoSelectObject(selectTokenObjects, mappedSynonyms);
 	std::vector<SuchThat> relationships = parseTokensIntoSuchThatObjects(relationshipTokenObjects, mappedSynonyms);
 	std::vector<Pattern> patterns = parseTokensIntoPatternObjects(patternTokenObjects, mappedSynonyms);
 
-	return QueryObject(select, relationships, patterns, mappedSynonyms);
+	return QueryObject(select, relationships, patterns, mappedSynonyms, numOfDeclaredSynonyms);
 };
 
 std::vector<std::vector<TokenObject>> Parser::groupQueryIntoClause() {
@@ -163,10 +163,11 @@ std::vector<TokenObject> Parser::getTokenizedQuery() {
 	return this->tokenizedQuery;
 }
 
-std::unordered_map<std::string, DesignEntity> Parser::mapSynonymToDesignEntity(std::vector<TokenObject> declarations) {
+std::tuple<int, std::unordered_map<std::string, DesignEntity>> Parser::mapSynonymToDesignEntity(std::vector<TokenObject> declarations) {
 	std::unordered_map<std::string, DesignEntity> mappedSynonyms;
 	DesignEntity currDesignEntity;
 	bool newDeclaration = true;
+	int numOfDeclaredSynonyms = 0;
 
 	for (TokenObject token : declarations) {
 		TokenType currTokenType = token.getTokenType();
@@ -187,10 +188,11 @@ std::unordered_map<std::string, DesignEntity> Parser::mapSynonymToDesignEntity(s
 		}
 
 		mappedSynonyms.insert({ token.getValue(), currDesignEntity });
+		++numOfDeclaredSynonyms;
 
 	}
 
-	return mappedSynonyms;
+	return { numOfDeclaredSynonyms, mappedSynonyms };
 }
 
 Select Parser::parseTokensIntoSelectObject(std::vector<TokenObject> selectTokens, std::unordered_map<std::string, DesignEntity> mappedSynonyms) {
