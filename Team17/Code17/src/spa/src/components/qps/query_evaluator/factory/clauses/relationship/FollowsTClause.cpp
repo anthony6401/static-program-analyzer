@@ -44,10 +44,10 @@ size_t FollowsTClause::getNumberOfSynonyms() {
 
 std::set<std::string> FollowsTClause::getAllSynonyms() {
     std::set<std::string> synonyms = {};
-    if (left.getTokenType() == TokenType::SYNONYM) {
+    if (left.getTokenType() == TokenType::NAME) {
         synonyms.emplace(left.getValue());
     }
-    if (right.getTokenType() == TokenType::SYNONYM) {
+    if (right.getTokenType() == TokenType::NAME) {
         synonyms.emplace(right.getValue());
     }
     return synonyms;
