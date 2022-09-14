@@ -1,12 +1,11 @@
 #include "NestedStack.h"
-#include <iostream>
 
 NestedStack::NestedStack(SimpleToken parent) : parent(parent) {
 }
 
 void NestedStack::put(SimpleToken token) {
     if (token.type == SpTokenType::TPROCEDURE) {
-        throw std::invalid_argument("Received invalid SIMPLE code line " + token.statementNumber);
+        throw std::invalid_argument("Received invalid SIMPLE code line " + std::to_string(token.statementNumber));
     }
     if (token.type == SpTokenType::TCLOSE) {
         std::vector<SimpleToken> children = parent.getChildren();

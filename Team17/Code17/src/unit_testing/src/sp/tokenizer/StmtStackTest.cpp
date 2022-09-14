@@ -29,7 +29,7 @@ TEST_CASE("Procedure stack") {
     stmtStack.pop();
     REQUIRE(procedure.getChildren().at(0).getChildren().size() == 2);
     REQUIRE(procedure.getChildren().at(0).getChildren().at(0).type == SpTokenType::TASSIGN);
-}*/
+}
 
 TEST_CASE("if else stack") {
     std::stack<StmtStack*> stmtStack;
@@ -38,14 +38,16 @@ TEST_CASE("if else stack") {
     SimpleToken procedure = SimpleToken(SpTokenType::TPROCEDURE, "test2", 1, NULL);
     SimpleToken assign = SimpleToken(SpTokenType::TASSIGN, "", 4, NULL);
     SimpleToken whileToken = SimpleToken(SpTokenType::TWHILE, "", 4, NULL);
-    //SimpleToken ifToken = SimpleToken(SpTokenType::TIF, "", 1, NULL);
-    //SimpleToken elseToken = SimpleToken(SpTokenType::TELSE, "", 1, NULL);
-    SimpleToken close = SimpleToken(SpTokenType::TCLOSE, "", 5, NULL);
+    SimpleToken ifToken = SimpleToken(SpTokenType::TIF, "", 1, NULL);
+    SimpleToken elseToken = SimpleToken(SpTokenType::TELSE, "else", 5, NULL);
+    SimpleToken close = SimpleToken(SpTokenType::TCLOSE, "}", 5, NULL);
     std::vector<SimpleToken> tokenStack;
     tokenStack.push_back(procedure);
     tokenStack.push_back(assign);
-    tokenStack.push_back(whileToken);
+    tokenStack.push_back(ifToken);
     tokenStack.push_back(assign);
+    tokenStack.push_back(close);
+    tokenStack.push_back(elseToken);
     tokenStack.push_back(close);
     tokenStack.push_back(close);
     for (SimpleToken lineToken : tokenStack) {
@@ -60,14 +62,14 @@ TEST_CASE("if else stack") {
         else if (lineToken.type == SpTokenType::TIF) {
             isIf = true;
             stmtStack.push(currentStack);
-            //currentStack = &IfStack(&lineToken);
+            currentStack = &IfStack(lineToken);
         }
         else if (lineToken.type == SpTokenType::TCLOSE) {
+            currentStack->put(lineToken);
             if (isIf) {
                 isIf = false;
             }
             else {
-                currentStack->put(lineToken);
                 StmtStack* parentStack = stmtStack.top();
                 parentStack->put(currentStack->dump());
                 currentStack = parentStack;
@@ -77,7 +79,7 @@ TEST_CASE("if else stack") {
             currentStack->put(lineToken);
         }
     }
-    REQUIRE(currentStack->dump().getChildren().size() == 1);
+    REQUIRE(currentStack->dump().getChildren().at(0).getChildren().at(0).getChildren().at(1).type == SpTokenType::TIF);
     REQUIRE(currentStack->dump().getChildren().at(0).type == SpTokenType::TPROCEDURE);
-}
+}*/
 

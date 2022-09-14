@@ -6,7 +6,6 @@
 enum class SpTokenType {
     TPROCEDURE,
     TELSE,
-    TSTMT,
     TREAD,
     TPRINT,
     TCALL,

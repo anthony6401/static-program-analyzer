@@ -69,7 +69,7 @@ SimpleToken SimpleParser::parseLine(std::vector<std::string>& tokens, std::strin
             SimpleParser::statementNumber++;
             return token;
         }
-        throw std::invalid_argument("Received invalid SIMPLE code line " + SimpleParser::statementNumber);
+        throw std::invalid_argument("Received invalid SIMPLE code line " + std::to_string(SimpleParser::statementNumber));
     }
 }
 
@@ -81,7 +81,7 @@ void SimpleParser::parseProcedure(SimpleToken& procStmt, std::vector<std::string
         procStmt.setChildren(children);
     }
     else {
-        throw std::invalid_argument("Received invalid Procedure:Line " + procStmt.statementNumber);
+        throw std::invalid_argument("Received invalid Procedure:Line " + std::to_string(procStmt.statementNumber));
     }
 }
 
@@ -98,7 +98,7 @@ void SimpleParser::parsePrint(SimpleToken& printStmt, std::vector<std::string>& 
         printStmt.setChildren(children);
         extractor->extractPrint(printStmt, tokens); //pass to extractor
     } else {
-        throw std::invalid_argument("Received invalid Print:Line " + printStmt.statementNumber);
+        throw std::invalid_argument("Received invalid Print:Line " + std::to_string(printStmt.statementNumber));
     }
 }
 
@@ -115,7 +115,7 @@ void SimpleParser::parseRead(SimpleToken& readStmt, std::vector<std::string>& to
         readStmt.setChildren(children);
         extractor->extractRead(readStmt, tokens); //pass to extractor
     } else {
-        throw std::invalid_argument("Received invalid Read:Line " + readStmt.statementNumber);
+        throw std::invalid_argument("Received invalid Read:Line " + std::to_string(readStmt.statementNumber));
     }
 }
 
@@ -127,7 +127,7 @@ void SimpleParser::parseCall(SimpleToken& callStmt, std::vector<std::string>& to
         callStmt.setChildren(children);
     }
     else {
-        throw std::invalid_argument("Received invalid Call:Line " + callStmt.statementNumber);
+        throw std::invalid_argument("Received invalid Call:Line " + std::to_string(callStmt.statementNumber));
     }
 }
 
@@ -141,7 +141,7 @@ void SimpleParser::parseAssign(SimpleToken& assign, std::vector<std::string>& to
         children.push_back(SimpleParser::parseExpr(tokens));
         assign.setChildren(children);
     } else {
-        throw std::invalid_argument("Received invalid assign:Line " + assign.statementNumber);
+        throw std::invalid_argument("Received invalid assign:Line " + std::to_string(assign.statementNumber));
     }
 }
 

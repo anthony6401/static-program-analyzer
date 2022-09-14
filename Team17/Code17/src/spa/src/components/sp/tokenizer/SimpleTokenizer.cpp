@@ -22,10 +22,10 @@ void SimpleTokenizer::tokenizeCode(std::string code) {
     if (codeLines.empty()) {
         throw std::invalid_argument("Received invalid SIMPLE code");
     }
-    /*
-    std::stack<StmtStack> stmtStack;
-    StmtStack currentStack = ProgramStack(SimpleToken(SpTokenType::TPROGRAM, "", 0, NULL));
+    
+    std::stack<StmtStack*> stmtStack;
     bool isIf = false;
+    StmtStack* currentStack;
 
     for (std::string line : codeLines) {
         line = std::regex_replace(line, tokenDelimiters, " $& ");
@@ -35,21 +35,27 @@ void SimpleTokenizer::tokenizeCode(std::string code) {
         currentStack->put(lineToken);
         if (lineToken.type == SpTokenType::TPROCEDURE) {
             stmtStack.push(currentStack);
-            currentStack = &NestedStack(&lineToken);
+            currentStack = &NestedStack(lineToken);
         } else if (lineToken.type == SpTokenType::TWHILE) {
             stmtStack.push(currentStack);
-            currentStack = &NestedStack(&lineToken);
+            currentStack = &NestedStack(lineToken);
         } else if (lineToken.type == SpTokenType::TIF) {
             isIf = true;
             stmtStack.push(currentStack);
-            currentStack = &IfStack(&lineToken);
+            currentStack = &IfStack(lineToken);
         } else if (lineToken.type == SpTokenType::TCLOSE) {
+            currentStack->put(lineToken);
             if (isIf) {
                 isIf = false;
-            } else {
-                currentStack = stmtStack.top();
+            }
+            else {
+                StmtStack* parentStack = stmtStack.top();
+                parentStack->put(currentStack->dump());
+                currentStack = parentStack;
                 stmtStack.pop();
             }
+        } else {
+            currentStack->put(lineToken);
         }
-    }*/
+    }
 }

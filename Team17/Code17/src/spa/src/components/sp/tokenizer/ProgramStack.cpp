@@ -1,5 +1,4 @@
 #include "ProgramStack.h"
-#include <iostream>
 
 ProgramStack::ProgramStack(SimpleToken parent) : parent(parent) {
 
@@ -10,7 +9,7 @@ void ProgramStack::put(SimpleToken token) {
         stmtList.push_back(token);
     }
     else {
-        throw std::invalid_argument("Received invalid SIMPLE code line " + token.statementNumber);
+        throw std::invalid_argument("Received invalid SIMPLE code line " + std::to_string(token.statementNumber));
     }
 }
 
