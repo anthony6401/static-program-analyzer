@@ -18,3 +18,15 @@ std::vector<std::string> SpUtils::split(std::string code, std::regex delimiters)
     }
     return tokens;
 }
+
+std::string SpUtils::join(std::vector<std::string> tokens) {
+    std::string output = "";
+    for (std::vector<std::string>::const_iterator i = tokens.begin(); i != tokens.end(); ++i) {
+        output += *i;
+        output += " ";
+    }
+    if (!(output.empty())) {
+        output.pop_back();
+    }
+    return output;
+}

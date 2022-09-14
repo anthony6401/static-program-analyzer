@@ -17,7 +17,8 @@ enum class SpTokenType {
     TVARIABLE,
     TCONSTANT,
     TCLOSE,
-    TOPR
+    TOPR,
+    TEXPR
 };
 
 class Extractor;

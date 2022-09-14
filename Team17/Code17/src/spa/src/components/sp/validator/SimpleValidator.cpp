@@ -1,9 +1,20 @@
+#include <locale>
+#include <regex>
+#include <stack>
 #include "SimpleValidator.h"
+#include "../utils/SpUtils.h"
 
-/// <summary>Validates lexically token</summary>
-/// <param name="token">Pointer to token to validate lexically</param>
-/// <returns>True if valid lexically and false if not</returns>
-bool SimpleValidator::validateLexical(std::string& token) {
-    return std::find_if(token.begin(), token.end(), 
-        [](char c) { return !(std::isalnum(c)); }) == token.end();
+bool SimpleValidator::validateVariable(std::string& token) {
+    std::regex constant = std::regex("[a-zA-Z][a-zA-Z0-9]*");
+    return std::regex_match(token, std::regex(constant));
+}
+
+bool SimpleValidator::validateConstant(std::string& token) {
+    std::regex numeric = std::regex("(0|[1-9][0-9]*)");
+    return std::regex_match(token, numeric);
+}
+
+bool SimpleValidator::validateExprOpr(std::string& token) {
+    std::regex operand = std::regex("([+-/*%])");
+    return std::regex_match(token, operand);
 }
