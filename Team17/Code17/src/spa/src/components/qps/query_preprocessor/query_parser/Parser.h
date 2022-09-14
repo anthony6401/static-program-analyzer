@@ -37,13 +37,12 @@ private:
     };
     std::vector<std::vector<TokenObject>> groupQueryIntoClause();
     bool isSyntacticallyCorrect(std::vector<TokenObject> tokenizedClause, SyntaxChecker* checker);
-    int getTokenIndex(TokenType token, std::vector<TokenType> tokenTypes);
-    std::vector<TokenType> getTokenTypes(std::vector<TokenObject> tokenObjects);
     Select parseTokensIntoSelectObject(std::vector<TokenObject> selectTokens, std::unordered_map<std::string, DesignEntity> mappedSynonyms);
     std::vector<SuchThat> parseTokensIntoSuchThatObjects(std::vector<TokenObject> relationshipTokens, std::unordered_map<std::string, DesignEntity> mappedSynonyms);
     std::vector<Pattern> parseTokensIntoPatternObjects(std::vector<TokenObject> patternTokens, std::unordered_map<std::string, DesignEntity> mappedSynonyms);
     std::unordered_map<std::string, DesignEntity> mapSynonymToDesignEntity(std::vector<TokenObject> declarations);
     bool isRelationshipToken(TokenType token);
+    bool isDesignEntityToken(TokenType token);
 
 public:
     Parser(std::vector<TokenObject> tokenizedQuery);
