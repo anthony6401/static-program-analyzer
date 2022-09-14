@@ -221,6 +221,7 @@ std::string trimQuotesOrWildcard(std::string s) {
  * Checks that string s follows the IDENTITY lexical syntax with Quotation Marks
  */
 bool Tokenizer::isIdentity(std::string s) {
+    std::cout << s << " in ident" << std::endl;
     if (s.size() <= 2) {
         return false;
     } else {
@@ -236,6 +237,7 @@ bool Tokenizer::isIdentity(std::string s) {
 // INCOMPLETE!!!
 // "x+(x+2)" // "x+1"
 bool Tokenizer::isExpression(std::string s) {
+    std::cout << s << " in expr" << std::endl;
     if (s.size() < 5) { // Perhaps add in expression symbol checking
         return false;
     } else {
@@ -253,12 +255,14 @@ bool Tokenizer::isExpression(std::string s) {
 
 // _"x+1"_, _"x"_, _"1"_
 bool Tokenizer::isSubExpression(std::string s) {
+    std::cout << s << " in subexpr" << std::endl;
     if (s.size() < 5) {
         return false;
     } else {
         if (s.front() == '_' && s.back() == '_') {
             std::string withoutWildcard = trimQuotesOrWildcard(s);
-           if (Tokenizer::isIdentity(withoutWildcard) || Tokenizer::isExpression(withoutWildcard) || Tokenizer::isInteger(trimQuotesOrWildcard(withoutWildcard))) {
+            bool isIdentity = Tokenizer::isIdentity(withoutWildcard);
+           if (isIdentity || Tokenizer::isExpression(withoutWildcard) || Tokenizer::isInteger(trimQuotesOrWildcard(withoutWildcard))) {
                return true;
            }
         }
@@ -301,16 +305,20 @@ std::vector<TokenObject> Tokenizer::tokenize(std::string query) {
                 tokenList.push_back(object);
             } else if (isIdentity(s)) {
                 std::cout << s << " is ident" << std::endl;
-                TokenObject object = TokenObject(TokenType::NAME_WITH_QUOTATION, s);
+                std::string trimmedQuotesFromIdentity = trimQuotesOrWildcard(s);
+                TokenObject object = TokenObject(TokenType::NAME_WITH_QUOTATION, trimmedQuotesFromIdentity);
                 tokenList.push_back(object);
             } else if (isExpression(s)) {
                 std::cout << s << " is expr" << std::endl;
                 // Return trimmed string
-                TokenObject object = TokenObject(TokenType::EXPRESSION, s);
+                std::string trimmedQuotesFromExpression = trimQuotesOrWildcard(s);
+                TokenObject object = TokenObject(TokenType::EXPRESSION, trimmedQuotesFromExpression);
                 tokenList.push_back(object);
             } else if (isSubExpression(s)) {
                 std::cout << s << " is subexpression" << std::endl;
-                TokenObject object = TokenObject(TokenType::SUBEXPRESSION, s);
+                std::string trimmedQuotesFromSubExpression = trimQuotesOrWildcard(s);
+                std::string trimmedWildcardAndQuotesFromSubExpression = trimQuotesOrWildcard(trimmedQuotesFromSubExpression);
+                TokenObject object = TokenObject(TokenType::SUBEXPRESSION, trimmedWildcardAndQuotesFromSubExpression);
                 tokenList.push_back(object);
             } else {
                 // throw exception
