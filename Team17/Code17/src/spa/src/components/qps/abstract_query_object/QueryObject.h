@@ -14,7 +14,7 @@
 class QueryObject {
 private:
     std::vector<SuchThat> relationships;
-    std::vector<Pattern> patterns;
+    std::vector<qps::Pattern> patterns;
     Select select;
     bool hasNoSyntaxError = false;
     std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap;
@@ -22,10 +22,10 @@ private:
 
 public:
     QueryObject();
-    QueryObject(Select select, std::vector<SuchThat> relationship, std::vector<Pattern> pattern, std::unordered_map<std::string, DesignEntity> synonymToDesignEntity);
+    QueryObject(Select select, std::vector<SuchThat> relationship, std::vector<qps::Pattern> pattern, std::unordered_map<std::string, DesignEntity> synonymToDesignEntity);
     bool isSyntacticallyCorrect();
     std::vector<SuchThat> getRelationships();
-    std::vector<Pattern> getPattern();
+    std::vector<qps::Pattern> getPattern();
     Select getSelect();
     std::unordered_map<std::string, DesignEntity> getSynonymToDesignEntityMap();
     bool operator==(const QueryObject& other) const {
