@@ -18,3 +18,8 @@ bool SimpleValidator::validateExprOpr(std::string& token) {
     std::regex operand = std::regex("([+-/*%])");
     return std::regex_match(token, operand);
 }
+
+bool SimpleValidator::isAndOrCenter(std::vector<std::string> tokens, int connectorPosition) {
+    return (SpUtils::findOpenBracket(tokens, connectorPosition - 1) == 0 &&
+        SpUtils::findCloseBracket(tokens, connectorPosition + 1) == tokens.size() - 1);
+}

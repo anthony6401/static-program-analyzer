@@ -32,3 +32,10 @@ TEST_CASE("invalid constant") {
     test_string = "000";
     REQUIRE(!(SimpleValidator::validateConstant(test_string)));
 }
+
+TEST_CASE("valid center") {
+    std::vector<std::string> strings {  "(", "(", "15", "<", "20", ")", " && ", "(", "5", " == ","10",")"
+        , ")", "||", "(", "5", "<=", "10", ")"};
+    REQUIRE(SimpleValidator::isAndOrCenter(strings, 13));
+    REQUIRE(!(SimpleValidator::isAndOrCenter(strings, 7)));
+}

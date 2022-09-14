@@ -47,8 +47,13 @@ SimpleToken SimpleParser::parseLine(std::vector<std::string>& tokens, std::strin
     } else if (first == "while") {
         tokens.erase(tokens.begin());
         SimpleToken token = SimpleToken(SpTokenType::TWHILE, code,
-            SimpleParser::statementNumber, &SimpleParser::parseHolder);
+            SimpleParser::statementNumber, &SimpleParser::parseWhile);
         SimpleParser::statementNumber++;
+        return token;
+    } else if (first == "if") {
+        tokens.erase(tokens.begin());
+        SimpleToken token = SimpleToken(SpTokenType::TIF, code,
+            0, &SimpleParser::parseHolder);
         return token;
     } else if (first == "else") {
         tokens.erase(tokens.begin());
@@ -131,6 +136,15 @@ void SimpleParser::parseCall(SimpleToken& callStmt, std::vector<std::string>& to
     }
 }
 
+void SimpleParser::parseWhile(SimpleToken& whileStmt, std::vector<std::string>& tokens,
+    Extractor* extractor) {
+    if (tokens.size() < 6 || tokens.back() != "{") {
+        throw std::invalid_argument("Received invalid While:Line " + std::to_string(whileStmt.statementNumber));
+    }
+    tokens.erase(tokens.end());
+
+}
+
 void SimpleParser::parseAssign(SimpleToken& assign, std::vector<std::string>& tokens,
     Extractor* extractor) {
     if (SimpleValidator::validateVariable(tokens.front()) && tokens.back() == ";") {
@@ -143,6 +157,62 @@ void SimpleParser::parseAssign(SimpleToken& assign, std::vector<std::string>& to
     } else {
         throw std::invalid_argument("Received invalid assign:Line " + std::to_string(assign.statementNumber));
     }
+}
+
+std::vector<SimpleToken> parseCondition(std::vector<std::string> tokens) {
+    if (tokens.front() != "(" || tokens.back() != ")") {
+        throw std::invalid_argument("Received invalid condition");
+    }
+    tokens.erase(tokens.begin());
+    tokens.erase(tokens.end());
+    std::string condition = SpUtils::join(tokens);
+    if (condition.find("&&") != std::string::npos || condition.find("||") != std::string::npos) {
+        int indice = 0;
+        for (std::string token : tokens) {
+            if (token == "&&" || token == "||") {
+                if (SimpleValidator::isAndOrCenter(tokens, indice)) {
+                    break;
+                }
+            }
+            indice++;
+        }
+        if (indice == tokens.size()) {
+            throw std::invalid_argument("Received invalid condition");
+        }
+        std::vector<std::string> firstTokens(tokens.begin(), tokens.begin() + indice - 1);
+        std::vector<SimpleToken> firstCondition = parseCondition(firstTokens);
+        std::vector<std::string> secondTokens(tokens.begin() + indice + 1, tokens.end());
+        std::vector<SimpleToken> secondCondition = parseCondition(secondTokens);
+        firstCondition.insert(firstCondition.end(), secondCondition.begin(), secondCondition.end());
+        return firstCondition;
+    } else {
+        return SimpleParser::parseRelExpr(tokens);
+    }
+
+}
+
+std::vector<SimpleToken> SimpleParser::parseRelExpr(std::vector<std::string>& tokens) {
+    int indice = 0;
+    int endIndice = tokens.size();
+    int comparatorCount = 0;
+    std::regex comparators = std::regex("(==)|(!=)|(>=)|(<=)|[<>]");
+    for (int i = 0; i < endIndice; i++) {
+        if (std::regex_match(tokens.at(i), comparators)) {
+            indice = i;
+            comparatorCount++;
+        }
+    }
+    if (comparatorCount != 1) {
+        throw std::invalid_argument("Received invalid RelExpr");
+    }
+    std::vector<std::string> firstTokens(tokens.begin(), tokens.begin() + indice - 1);
+    SimpleToken firstRelFactor = parseExpr(firstTokens);
+    std::vector<SimpleToken> firstContents = firstRelFactor.getChildren();
+    std::vector<std::string> secondTokens(tokens.begin() + indice + 1, tokens.end());
+    SimpleToken secondRelFactor = parseExpr(secondTokens);
+    std::vector<SimpleToken> secondContents = secondRelFactor.getChildren();
+    firstContents.insert(firstContents.end(), secondContents.begin(), secondContents.end());
+    return firstContents;
 }
 
 SimpleToken SimpleParser::parseExpr(std::vector<std::string>& tokens) {

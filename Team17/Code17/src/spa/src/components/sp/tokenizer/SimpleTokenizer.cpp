@@ -25,7 +25,7 @@ void SimpleTokenizer::tokenizeCode(std::string code) {
     
     std::stack<StmtStack*> stmtStack;
     bool isIf = false;
-    StmtStack* currentStack;
+    StmtStack* currentStack = &ProgramStack(SimpleToken(SpTokenType::TPROGRAM, "", 0, NULL));
 
     for (std::string line : codeLines) {
         line = std::regex_replace(line, tokenDelimiters, " $& ");
