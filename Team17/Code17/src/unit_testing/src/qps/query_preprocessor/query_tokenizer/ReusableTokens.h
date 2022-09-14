@@ -53,6 +53,8 @@ TokenObject re_nameTokenObject = TokenObject(TokenType::NAME, "re");
 TokenObject pn_nameTokenObject = TokenObject(TokenType::NAME, "pn");
 TokenObject cl_nameTokenObject = TokenObject(TokenType::NAME, "cl");
 TokenObject newa_nameTokenObject = TokenObject(TokenType::NAME, "newa");
+TokenObject capital_nameTokenObject = TokenObject(TokenType::NAME, "Statement");
+TokenObject capitalEntity_nameTokenObject = TokenObject(TokenType::NAME, "Variable");
 
 TokenObject six_intTokenObject = TokenObject(TokenType::INTEGER, "6");
 TokenObject fourteen_intTokenObject = TokenObject(TokenType::INTEGER, "14");

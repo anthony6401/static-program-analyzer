@@ -134,6 +134,19 @@ TEST_CASE("Pattern Clause with expressions and subexpressions") {
     REQUIRE(testResult == expectedResult);
 }
 
+TEST_CASE("Queries with synonyms as design entities") {
+    std::string testQuery = "assign variable;\n"
+                            "Select variable pattern variable ( \"normSq\" , _\"cenX\"_)";
+    std::vector<TokenObject> expectedResult {assignTokenObject, variableTokenObject, semicolonTokenObject,
+                                             selectTokenObject, variableTokenObject, patternTokenObject, variableTokenObject,
+                                             openBracketTokenObject, normsq_nameWithQuotesTokenObject, commaTokenObject,
+                                             cenX_subexpressionTokenObject, closedBracketTokenObject};
+    Tokenizer tokenizer = Tokenizer();
+    std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
+
+    REQUIRE(testResult == expectedResult);
+}
+
 TEST_CASE("Pattern Clause with constant expressions") {
     std::string testQuery = "assign newa;\n"
                             "Select newa pattern newa ( \"normSq\" , \"1\")";
@@ -159,6 +172,34 @@ TEST_CASE("Pattern Clause with constant subexpressions") {
 
     REQUIRE(testResult == expectedResult);
 }
+
+TEST_CASE("Capital letter synonyms") {
+    std::string testQuery = "stmt Statement;\n"
+                            "Select Statement such that Parent (s, 6)";
+    std::vector<TokenObject> expectedResult {stmtTokenObject, capital_nameTokenObject, semicolonTokenObject,
+                                             selectTokenObject, capital_nameTokenObject, suchTokenObject, thatTokenObject,
+                                             parentTokenObject, openBracketTokenObject, s_nameTokenObject, commaTokenObject,
+                                             six_intTokenObject, closedBracketTokenObject};
+    Tokenizer tokenizer = Tokenizer();
+    std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
+
+    REQUIRE(testResult == expectedResult);
+}
+
+TEST_CASE("Capital letter design entity synonyms ") {
+    std::string testQuery = "variable Variable;\n"
+                            "Select Variable such that Modifies (6, Variable)";
+    std::vector<TokenObject> expectedResult {variableTokenObject, capitalEntity_nameTokenObject, semicolonTokenObject,
+                                             selectTokenObject, capitalEntity_nameTokenObject, suchTokenObject, thatTokenObject,
+                                             modifiesTokenObject, openBracketTokenObject, six_intTokenObject, commaTokenObject,
+                                             capitalEntity_nameTokenObject, closedBracketTokenObject};
+    Tokenizer tokenizer = Tokenizer();
+    std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
+
+    REQUIRE(testResult == expectedResult);
+}
+
+
 
 // Invalid tokens
 TEST_CASE("Invalid name token") {
@@ -188,6 +229,13 @@ TEST_CASE("Invalid subexpression token") {
     REQUIRE_THROWS_WITH(tokenizer.tokenize(testQuery), "Token Exception Caught");
 }
 
+TEST_CASE("Invalid symbols token") {
+    std::string testQuery = "assign *;\n"
+                            "Select * such that Uses (*, \"x\")";
+    Tokenizer tokenizer = Tokenizer();
+    REQUIRE_THROWS_WITH(tokenizer.tokenize(testQuery), "Token Exception Caught");
+}
+
 
 // Edge cases
 TEST_CASE("Presence of white spaces") {
@@ -206,6 +254,30 @@ TEST_CASE("Presence of white spaces") {
 TEST_CASE("Presence of white spaces in Name with Quotes and Subexpressions") {
     std::string testQuery = "assign newa;\n"
                             "Select newa pattern newa ( \"     normSq\" , _\"   cenX  \"_)";
+    std::vector<TokenObject> expectedResult {assignTokenObject, newa_nameTokenObject, semicolonTokenObject,
+                                             selectTokenObject, newa_nameTokenObject, patternTokenObject, newa_nameTokenObject,
+                                             openBracketTokenObject, normsq_nameWithQuotesTokenObject, commaTokenObject,
+                                             cenX_subexpressionTokenObject, closedBracketTokenObject};
+    Tokenizer tokenizer = Tokenizer();
+    std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
+
+    REQUIRE(testResult == expectedResult);
+}
+
+TEST_CASE("Single line queries with space") {
+    std::string testQuery = "assign newa; Select newa pattern newa ( \"     normSq\" , _\"   cenX  \"_)";
+    std::vector<TokenObject> expectedResult {assignTokenObject, newa_nameTokenObject, semicolonTokenObject,
+                                             selectTokenObject, newa_nameTokenObject, patternTokenObject, newa_nameTokenObject,
+                                             openBracketTokenObject, normsq_nameWithQuotesTokenObject, commaTokenObject,
+                                             cenX_subexpressionTokenObject, closedBracketTokenObject};
+    Tokenizer tokenizer = Tokenizer();
+    std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
+
+    REQUIRE(testResult == expectedResult);
+}
+
+TEST_CASE("Single line queries without space") {
+    std::string testQuery = "assign newa;Select newa pattern newa ( \"     normSq\" , _\"   cenX  \"_)";
     std::vector<TokenObject> expectedResult {assignTokenObject, newa_nameTokenObject, semicolonTokenObject,
                                              selectTokenObject, newa_nameTokenObject, patternTokenObject, newa_nameTokenObject,
                                              openBracketTokenObject, normsq_nameWithQuotesTokenObject, commaTokenObject,
