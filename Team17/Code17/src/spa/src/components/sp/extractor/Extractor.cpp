@@ -28,8 +28,9 @@ void Extractor::extractFollowsRelationships(std::vector<SimpleToken> seriesOfStm
 }
 
 void Extractor::extractSeriesOfStmts(std::vector<SimpleToken> seriesOfStmts) {
-	while (seriesOfStmts.size() != 0) {
-		SimpleToken stmtToken = seriesOfStmts.at(0);
+	int i = 0;
+	while (i < seriesOfStmts.size()) {
+		SimpleToken stmtToken = seriesOfStmts.at(i);
 		if (stmtToken.type == SpTokenType::TREAD) {
 			extractReadStmt(stmtToken);
 		} else if (stmtToken.type == SpTokenType::TPRINT) {
@@ -43,7 +44,7 @@ void Extractor::extractSeriesOfStmts(std::vector<SimpleToken> seriesOfStmts) {
 		} else if (stmtToken.type == SpTokenType::TCALL) {
 			// code here
 		}
-		seriesOfStmts.erase(seriesOfStmts.begin());
+		i++;
 	}
 }
 
