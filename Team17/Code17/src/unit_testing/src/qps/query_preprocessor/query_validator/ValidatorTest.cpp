@@ -11,12 +11,7 @@
 #include <iostream>
 
 // SemanticError
-TEST_CASE("No declaration declared") {
-    std::vector<TokenObject> test
-        TokenObject(TokenType::SELECT, std::string("Select")),
-        TokenObject(TokenType::NAME, std::string("v"))
-    };
-
+TEST_CASE("No declaration declared - Select v") {
     Select select = Select("v");
     std::vector<SuchThat> suchThat;
     std::vector<Pattern> pattern;
@@ -31,17 +26,7 @@ TEST_CASE("No declaration declared") {
     REQUIRE(expectedResult == actualResult);
 };
 
-TEST_CASE("Declarations with the same name and same design entity") {
-    std::vector<TokenObject> test
-        TokenObject(TokenType::VARIABLE, std::string("variable")),
-        TokenObject(TokenType::NAME, std::string("v")),
-        TokenObject(TokenType::COMMA, std::string(",")),
-        TokenObject(TokenType::NAME, std::string("v")),
-        TokenObject(TokenType::SEMI_COLON, std::string(";")),
-        TokenObject(TokenType::SELECT, std::string("Select")),
-        TokenObject(TokenType::NAME, std::string("v"))
-    };
-
+TEST_CASE("Declarations with the same name and same design entity - variable v, v; Select v") {
     Select select = Select("v");
     std::vector<SuchThat> suchThat;
     std::vector<Pattern> pattern;
@@ -56,18 +41,7 @@ TEST_CASE("Declarations with the same name and same design entity") {
     REQUIRE(expectedResult == actualResult);
 };
 
-TEST_CASE("Declarations with the same name but different design entity") {
-    std::vector<TokenObject> test
-        TokenObject(TokenType::VARIABLE, std::string("variable")),
-        TokenObject(TokenType::NAME, std::string("v")),
-        TokenObject(TokenType::SEMI_COLON, std::string(";")),
-        TokenObject(TokenType::ASSIGN, std::string("assign")),
-        TokenObject(TokenType::NAME, std::string("v")),
-        TokenObject(TokenType::SEMI_COLON, std::string(";")),
-        TokenObject(TokenType::SELECT, std::string("Select")),
-        TokenObject(TokenType::NAME, std::string("v"))
-    };
-
+TEST_CASE("Declarations with the same name but different design entity - variable v; assign v; Select v") {
     Select select = Select("v");
     std::vector<SuchThat> suchThat;
     std::vector<Pattern> pattern;
@@ -82,15 +56,7 @@ TEST_CASE("Declarations with the same name but different design entity") {
     REQUIRE(expectedResult == actualResult);
 };
 
-TEST_CASE("Return type not declared") {
-    std::vector<TokenObject> test
-        TokenObject(TokenType::VARIABLE, std::string("variable")),
-        TokenObject(TokenType::NAME, std::string("v")),
-        TokenObject(TokenType::SEMI_COLON, std::string(";")),
-        TokenObject(TokenType::SELECT, std::string("Select")),
-        TokenObject(TokenType::NAME, std::string("v1"))
-    };
-
+TEST_CASE("Return type not declared - variable v; Select v1") {
     Select select = Select("v1");
     std::vector<SuchThat> suchThat;
     std::vector<Pattern> pattern;
@@ -105,21 +71,7 @@ TEST_CASE("Return type not declared") {
     REQUIRE(expectedResult == actualResult);
 };
 
-TEST_CASE("Such that with no declaration") {
-    std::vector<TokenObject> test
-        TokenObject(TokenType::SELECT, std::string("Select")),
-        TokenObject(TokenType::NAME, std::string("v")),
-        TokenObject(TokenType::SUCH, "such"),
-        TokenObject(TokenType::THAT, "that"),
-        TokenObject(TokenType::USES, "Uses"),
-        TokenObject(TokenType::OPEN_BRACKET, "("),
-        TokenObject(TokenType::INTEGER, "6"),
-        TokenObject(TokenType::COMMA, ","),
-        TokenObject(TokenType::NAME, "v"),
-        TokenObject(TokenType::CLOSED_BRACKET, ")")
-
-    };
-
+TEST_CASE("Such that with no declaration - Select v such that Uses(6, v)") {
     Select select = Select("v");
     std::vector<SuchThat> suchThat{ SuchThat(TokenType::USES, TokenObject(TokenType::INTEGER, "6"),TokenObject(TokenType::NAME, "v")) };
     std::vector<Pattern> pattern{};
@@ -135,24 +87,7 @@ TEST_CASE("Such that with no declaration") {
     REQUIRE(expectedResult == actualResult);
 };
 
-TEST_CASE("Such that with param not declaration") {
-    std::vector<TokenObject> test
-        TokenObject(TokenType::VARIABLE, std::string("variable")),
-        TokenObject(TokenType::NAME, std::string("v")),
-        TokenObject(TokenType::SEMI_COLON, std::string(";")),
-        TokenObject(TokenType::SELECT, std::string("Select")),
-        TokenObject(TokenType::NAME, std::string("v")),
-        TokenObject(TokenType::SUCH, "such"),
-        TokenObject(TokenType::THAT, "that"),
-        TokenObject(TokenType::USES, "Uses"),
-        TokenObject(TokenType::OPEN_BRACKET, "("),
-        TokenObject(TokenType::INTEGER, "6"),
-        TokenObject(TokenType::COMMA, ","),
-        TokenObject(TokenType::NAME, "v1"),
-        TokenObject(TokenType::CLOSED_BRACKET, ")")
-
-    };
-
+TEST_CASE("Such that with param not declaration - variable v; Select v such that Uses(6, v1)") {
     Select select = Select("v");
     std::vector<SuchThat> suchThat{ SuchThat(TokenType::USES, TokenObject(TokenType::INTEGER, "6"),TokenObject(TokenType::NAME, "v1")) };
     std::vector<Pattern> pattern{};
@@ -168,24 +103,7 @@ TEST_CASE("Such that with param not declaration") {
     REQUIRE(expectedResult == actualResult);
 };
 
-TEST_CASE("Uses with wildcard as first parameter") {
-    std::vector<TokenObject> test
-        TokenObject(TokenType::VARIABLE, std::string("variable")),
-        TokenObject(TokenType::NAME, std::string("v")),
-        TokenObject(TokenType::SEMI_COLON, std::string(";")),
-        TokenObject(TokenType::SELECT, std::string("Select")),
-        TokenObject(TokenType::NAME, std::string("v")),
-        TokenObject(TokenType::SUCH, "such"),
-        TokenObject(TokenType::THAT, "that"),
-        TokenObject(TokenType::USES, "Uses"),
-        TokenObject(TokenType::OPEN_BRACKET, "("),
-        TokenObject(TokenType::WILDCARD, "_"),
-        TokenObject(TokenType::COMMA, ","),
-        TokenObject(TokenType::NAME, "v"),
-        TokenObject(TokenType::CLOSED_BRACKET, ")")
-
-    };
-
+TEST_CASE("Uses with wildcard as first parameter - variable v; Select v such that Uses(_, v)") {
     Select select = Select("v");
     std::vector<SuchThat> suchThat{ SuchThat(TokenType::USES, TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME, "v")) };
     std::vector<Pattern> pattern{};
@@ -201,23 +119,7 @@ TEST_CASE("Uses with wildcard as first parameter") {
     REQUIRE(expectedResult == actualResult);
 };
 
-TEST_CASE("Modifies where second param is not variable") {
-    std::vector<TokenObject> test
-        TokenObject(TokenType::ASSIGN, std::string("assign")),
-        TokenObject(TokenType::NAME, std::string("a")),
-        TokenObject(TokenType::SEMI_COLON, std::string(";")),
-        TokenObject(TokenType::SELECT, std::string("Select")),
-        TokenObject(TokenType::NAME, std::string("a")),
-        TokenObject(TokenType::SUCH, "such"),
-        TokenObject(TokenType::THAT, "that"),
-        TokenObject(TokenType::USES, "Uses"),
-        TokenObject(TokenType::OPEN_BRACKET, "("),
-        TokenObject(TokenType::INTEGER, "6"),
-        TokenObject(TokenType::COMMA, ","),
-        TokenObject(TokenType::NAME, "a"),
-        TokenObject(TokenType::CLOSED_BRACKET, ")")
-    };
-
+TEST_CASE("Modifies where second param is not variable - assign a; Select a such that Uses(6, a)") {
     Select select = Select("a");
     std::vector<SuchThat> suchThat{ SuchThat(TokenType::USES, TokenObject(TokenType::INTEGER, "6"), TokenObject(TokenType::NAME, "a")) };
     std::vector<Pattern> pattern{};
@@ -233,24 +135,7 @@ TEST_CASE("Modifies where second param is not variable") {
     REQUIRE(expectedResult == actualResult);
 };
 
-TEST_CASE("Pattern with non-assign synonym") {
-    std::vector<TokenObject> test
-        TokenObject(TokenType::VARIABLE, std::string("variable")),
-        TokenObject(TokenType::NAME, std::string("v")),
-        TokenObject(TokenType::SEMI_COLON, std::string(";")),
-        TokenObject(TokenType::ASSIGN, std::string("assign")),
-        TokenObject(TokenType::NAME, std::string("a")),
-        TokenObject(TokenType::SEMI_COLON, std::string(";")),
-        TokenObject(TokenType::SELECT, std::string("Select")),
-        TokenObject(TokenType::NAME, std::string("v")),
-        TokenObject(TokenType::PATTERN, "pattern"),
-        TokenObject(TokenType::NAME, "v"),
-        TokenObject(TokenType::OPEN_BRACKET, "("),
-        TokenObject(TokenType::WILDCARD, "_"),
-        TokenObject(TokenType::COMMA, ","),
-        TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
-        TokenObject(TokenType::CLOSED_BRACKET, ")")
-    };
+TEST_CASE("Pattern with non-assign synonym - variable v; assign a; Select v pattern v(\"_\", \"x\")") {
     Select select = Select("v");
     std::vector<SuchThat> suchThat{};
     std::vector<Pattern> pattern{ Pattern("v", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
@@ -266,22 +151,7 @@ TEST_CASE("Pattern with non-assign synonym") {
     REQUIRE(expectedResult == actualResult);
 };
 
-TEST_CASE("Pattern with no assign declaration") {
-    std::vector<TokenObject> test
-        TokenObject(TokenType::VARIABLE, std::string("variable")),
-        TokenObject(TokenType::NAME, std::string("v")),
-        TokenObject(TokenType::SEMI_COLON, std::string(";")),
-        TokenObject(TokenType::SELECT, std::string("Select")),
-        TokenObject(TokenType::NAME, std::string("v")),
-        TokenObject(TokenType::PATTERN, "pattern"),
-        TokenObject(TokenType::NAME, "a"),
-        TokenObject(TokenType::OPEN_BRACKET, "("),
-        TokenObject(TokenType::WILDCARD, "_"),
-        TokenObject(TokenType::COMMA, ","),
-        TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
-        TokenObject(TokenType::CLOSED_BRACKET, ")")
-    };
-
+TEST_CASE("Pattern with no assign declaration variable v; Select v pattern v(\"_\", \"x\")") {
     Select select = Select("v");
     std::vector<SuchThat> suchThat{};
     std::vector<Pattern> pattern{ Pattern("a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
@@ -297,25 +167,8 @@ TEST_CASE("Pattern with no assign declaration") {
     REQUIRE(expectedResult == actualResult);
 };
 
-TEST_CASE("Pattern with param not declared") {
-    std::vector<TokenObject> test
-        TokenObject(TokenType::VARIABLE, std::string("variable")),
-        TokenObject(TokenType::NAME, std::string("v")),
-        TokenObject(TokenType::SEMI_COLON, std::string(";")),
-        TokenObject(TokenType::ASSIGN, std::string("assign")),
-        TokenObject(TokenType::NAME, std::string("a")),
-        TokenObject(TokenType::SEMI_COLON, std::string(";")),
-        TokenObject(TokenType::SELECT, std::string("Select")),
-        TokenObject(TokenType::NAME, std::string("v")),
-        TokenObject(TokenType::PATTERN, "pattern"),
-        TokenObject(TokenType::NAME, "a"),
-        TokenObject(TokenType::OPEN_BRACKET, "("),
-        TokenObject(TokenType::NAME, "s"),
-        TokenObject(TokenType::COMMA, ","),
-        TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
-        TokenObject(TokenType::CLOSED_BRACKET, ")")
-    };
-    Select select = Select("v");
+TEST_CASE("Pattern with param not declared - variable v; assign a; Select v pattern v(s, \"x\")") {
+Select select = Select("v");
     std::vector<SuchThat> suchThat{};
     std::vector<Pattern> pattern{ Pattern("a", TokenObject(TokenType::NAME, "s"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
     std::unordered_map<std::string, DesignEntity> mappedSynonyms{ {"v", DesignEntity::VARIABLE}, {"a", DesignEntity::ASSIGN} };
@@ -330,25 +183,8 @@ TEST_CASE("Pattern with param not declared") {
     REQUIRE(expectedResult == actualResult);
 };
 
-TEST_CASE("First param of pattern not variable") {
-    std::vector<TokenObject> test
-        TokenObject(TokenType::VARIABLE, std::string("variable")),
-        TokenObject(TokenType::NAME, std::string("v")),
-        TokenObject(TokenType::SEMI_COLON, std::string(";")),
-        TokenObject(TokenType::ASSIGN, std::string("assign")),
-        TokenObject(TokenType::NAME, std::string("a")),
-        TokenObject(TokenType::SEMI_COLON, std::string(";")),
-        TokenObject(TokenType::SELECT, std::string("Select")),
-        TokenObject(TokenType::NAME, std::string("v")),
-        TokenObject(TokenType::PATTERN, "pattern"),
-        TokenObject(TokenType::NAME, "a"),
-        TokenObject(TokenType::OPEN_BRACKET, "("),
-        TokenObject(TokenType::NAME, "a"),
-        TokenObject(TokenType::COMMA, ","),
-        TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
-        TokenObject(TokenType::CLOSED_BRACKET, ")")
-    };
-    Select select = Select("v");
+TEST_CASE("First param of pattern not variable - variable v; assign a; Select v pattern v(a, \"x\")") {
+ Select select = Select("v");
     std::vector<SuchThat> suchThat{};
     std::vector<Pattern> pattern{ Pattern("a", TokenObject(TokenType::NAME, "a"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
     std::unordered_map<std::string, DesignEntity> mappedSynonyms{ {"v", DesignEntity::VARIABLE}, {"a", DesignEntity::ASSIGN} };
