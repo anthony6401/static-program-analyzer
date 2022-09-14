@@ -60,6 +60,7 @@ RawResult ModifiesSClause::evaluateSynonymSynonym() {
 }
 
 RawResult ModifiesSClause::evaluateSynonymWildcard() {
+    std::cout << "----- ModifiesS: Synonym Wildcard -------" << std::endl;
     DesignEntity stmtType = synonymToDesignEntityMap[left.getValue()];
     // API CALL
     return {"a", {"1", "3"}};
@@ -81,7 +82,7 @@ RawResult ModifiesSClause::evaluateIntegerSynonym() {
 RawResult ModifiesSClause::evaluateIntegerWildcard() {
     // Returns boolean
     std::cout << "----- ModifiesS: Integer Wildcard -------" << std::endl;
-    return {true};
+    return {false};
 }
 
 RawResult ModifiesSClause::evaluateIntegerNameQuotes() {

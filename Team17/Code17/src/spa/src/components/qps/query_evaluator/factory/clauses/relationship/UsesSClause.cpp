@@ -1,4 +1,5 @@
 #include "UsesSClause.h"
+#include "iostream"
 
 UsesSClause::UsesSClause(TokenObject left, TokenObject right, Select synonym,
                          std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient)
@@ -70,13 +71,15 @@ RawResult UsesSClause::evaluateSynonymNameQuotes() {
 
 RawResult UsesSClause::evaluateIntegerSynonym() {
     DesignEntity rightType = synonymToDesignEntityMap[right.getValue()];
+    std::cout << "----- UsesS: Integer synonym -------" << std::endl;
     // API CALL
     return {"v", {}};
 }
 
 RawResult UsesSClause::evaluateIntegerWildcard() {
     // API CALL
-    return {};
+    std::cout << "----- UsesS: Integer wildcard -------" << std::endl;
+    return {true};
 }
 
 RawResult UsesSClause::evaluateIntegerNameQuotes() {

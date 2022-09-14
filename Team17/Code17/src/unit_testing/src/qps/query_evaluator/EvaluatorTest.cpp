@@ -25,7 +25,7 @@ TEST_CASE("Evaluation for No relationship and pattern clauses") {
     REQUIRE(testResults == expectedResults);
 }
 
-TEST_CASE("Evaluation for No synonym Clause - variable v; Select v such that Modifies(1, _)") {
+TEST_CASE("Evaluation for No synonym Clause - variable v; Select v such that Modifies(1, _)") { // false
     PKB* pkb = new PKB();
     auto qpsClient = QPSClient(pkb);
     std::list<std::string> testResults;
@@ -36,22 +36,37 @@ TEST_CASE("Evaluation for No synonym Clause - variable v; Select v such that Mod
     std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap = {{"v", DesignEntity::VARIABLE}};
     QueryObject testQuery = QueryObject(select, relationships, patterns, synonymToDesignEntityMap);
     Evaluator::evaluateQuery(testQuery, testResults, qpsClient);
+    std::list<std::string> expectedResults = {"none"};
+    REQUIRE(testResults == expectedResults);
+}
+
+TEST_CASE("Evaluation for No synonym Clause - variable v; Select v such that Uses(1, _)") { // true
+    PKB* pkb = new PKB();
+    auto qpsClient = QPSClient(pkb);
+    std::list<std::string> testResults;
+    std::vector<SuchThat> relationships {SuchThat(TokenType::USES, TokenObject(TokenType::INTEGER, "1"),
+                                                  TokenObject(TokenType::WILDCARD, "_"))};
+    std::vector<Pattern> patterns {};
+    Select select = Select( "v");
+    std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap = {{"v", DesignEntity::VARIABLE}};
+    QueryObject testQuery = QueryObject(select, relationships, patterns, synonymToDesignEntityMap);
+    Evaluator::evaluateQuery(testQuery, testResults, qpsClient);
     std::list<std::string> expectedResults = {"x", "y", "z"};
     REQUIRE(testResults == expectedResults);
 }
 
-TEST_CASE("Evaluation for single synonym Clause - variable v; Select v such that Modifies(1, v)") {
+TEST_CASE("Single synonym, has select - variable v; Select v such that Uses(1, v)") {
     PKB* pkb = new PKB();
     auto qpsClient = QPSClient(pkb);
     std::list<std::string> testResults;
-    std::vector<SuchThat> relationships {SuchThat(TokenType::MODIFIES, TokenObject(TokenType::INTEGER, "1"),
+    std::vector<SuchThat> relationships {SuchThat(TokenType::USES, TokenObject(TokenType::INTEGER, "1"),
                                                   TokenObject(TokenType::NAME, "v"))};
     std::vector<Pattern> patterns {};
     Select select = Select( "v");
     std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap = {{"v", DesignEntity::VARIABLE}};
     QueryObject testQuery = QueryObject(select, relationships, patterns, synonymToDesignEntityMap);
     Evaluator::evaluateQuery(testQuery, testResults, qpsClient);
-    std::list<std::string> expectedResults = {"x"};
+    std::list<std::string> expectedResults = {"none"};
     REQUIRE(testResults == expectedResults);
 }
 

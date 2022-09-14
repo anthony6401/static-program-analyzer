@@ -98,7 +98,7 @@ RawResult AssignPatternClause::evaluateNameQuotesExpression() {
 }
 
 RawResult AssignPatternClause::evaluateNameQuotesNameQuotes() {
-    return {"a", {"1", "2", "3"}};
+    return {"a", {"1", "2", "3", "4"}};
 }
 
 RawResult AssignPatternClause::evaluateNameQuotesSubExpression() {

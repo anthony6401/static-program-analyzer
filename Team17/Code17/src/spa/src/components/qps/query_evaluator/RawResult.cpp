@@ -12,6 +12,10 @@ RawResult::RawResult(bool pkbBooleanResult) : resultsList({}), isBooleanResult(t
 };
 
 RawResult::RawResult(const std::string& synonym, const std::unordered_set<std::string>& results) {
+    if (results.empty()) {
+        setIsFalseResultToTrue();
+    }
+
     synonymsList.emplace_back(synonym);
     for (auto singleResult : results) {
         // {{x}, {y}, {z}}
@@ -22,6 +26,9 @@ RawResult::RawResult(const std::string& synonym, const std::unordered_set<std::s
 
 RawResult::RawResult(std::string leftSynonym, std::string rightSynonym,
                      std::vector<std::pair<std::string, std::string>> results) {
+    if (results.empty()) {
+        setIsFalseResultToTrue();
+    }
     synonymsList.emplace_back(leftSynonym);
     synonymsList.emplace_back(rightSynonym);
     for (auto result : results) {
