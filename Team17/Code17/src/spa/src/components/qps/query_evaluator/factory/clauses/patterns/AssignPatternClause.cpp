@@ -98,6 +98,7 @@ RawResult AssignPatternClause::evaluateNameQuotesExpression() {
 }
 
 RawResult AssignPatternClause::evaluateNameQuotesNameQuotes() {
+    std::cout << "----- Assign: Name quote name quote -------" << std::endl;
     return {"a", {"1", "2", "3", "4"}};
 }
 
