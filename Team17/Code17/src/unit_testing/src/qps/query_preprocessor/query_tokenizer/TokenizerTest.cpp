@@ -9,7 +9,7 @@ TEST_CASE("Declarations - Single") {
     std::string testQuery = "variable v;";
     std::vector<TokenObject> expectedResult {variableTokenObject, v_nameTokenObject, semicolonTokenObject};
     Tokenizer tokenizer = Tokenizer();
-    std::vector<TokenObject> testResult = Tokenizer().tokenize(testQuery);
+    std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
     REQUIRE(testResult == expectedResult);
 }
 
@@ -27,7 +27,7 @@ TEST_CASE("Declarations - Multiple") {
         printTokenObject, pn_nameTokenObject, semicolonTokenObject,
         callTokenObject, cl_nameTokenObject, semicolonTokenObject};
     Tokenizer tokenizer = Tokenizer();
-    std::vector<TokenObject> testResult = Tokenizer().tokenize(testQuery);
+    std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
 
     REQUIRE(testResult == expectedResult);
 }
@@ -37,7 +37,7 @@ TEST_CASE("No relationship") {
     std::vector<TokenObject> expectedResult {variableTokenObject, v_nameTokenObject, semicolonTokenObject,
     selectTokenObject, v_nameTokenObject};
     Tokenizer tokenizer = Tokenizer();
-    std::vector<TokenObject> testResult = Tokenizer().tokenize(testQuery);
+    std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
 
     REQUIRE(testResult == expectedResult);
 }
@@ -50,7 +50,7 @@ TEST_CASE("Modifies Relationship with integer") {
                                              modifiesTokenObject, openBracketTokenObject, six_intTokenObject, commaTokenObject,
                                              v_nameTokenObject, closedBracketTokenObject};
     Tokenizer tokenizer = Tokenizer();
-    std::vector<TokenObject> testResult = Tokenizer().tokenize(testQuery);
+    std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
 
     REQUIRE(testResult == expectedResult);
 }
@@ -63,7 +63,7 @@ TEST_CASE("Uses Relationship with integer") {
                                              usesTokenObject, openBracketTokenObject, fourteen_intTokenObject, commaTokenObject,
                                              v_nameTokenObject, closedBracketTokenObject};
     Tokenizer tokenizer = Tokenizer();
-    std::vector<TokenObject> testResult = Tokenizer().tokenize(testQuery);
+    std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
 
     REQUIRE(testResult == expectedResult);
 }
@@ -76,7 +76,7 @@ TEST_CASE("Follows Relationship") {
                                              followsTokenObject, openBracketTokenObject, six_intTokenObject, commaTokenObject,
                                              s_nameTokenObject, closedBracketTokenObject};
     Tokenizer tokenizer = Tokenizer();
-    std::vector<TokenObject> testResult = Tokenizer().tokenize(testQuery);
+    std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
 
     REQUIRE(testResult == expectedResult);
 }
@@ -89,7 +89,7 @@ TEST_CASE("Follows* Relationship") {
                                              followsTTokenObject, openBracketTokenObject, six_intTokenObject, commaTokenObject,
                                              s_nameTokenObject, closedBracketTokenObject};
     Tokenizer tokenizer = Tokenizer();
-    std::vector<TokenObject> testResult = Tokenizer().tokenize(testQuery);
+    std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
 
     REQUIRE(testResult == expectedResult);
 }
@@ -102,7 +102,7 @@ TEST_CASE("Parent Relationship") {
                                              parentTokenObject, openBracketTokenObject, s_nameTokenObject, commaTokenObject,
                                              six_intTokenObject, closedBracketTokenObject};
     Tokenizer tokenizer = Tokenizer();
-    std::vector<TokenObject> testResult = Tokenizer().tokenize(testQuery);
+    std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
 
     REQUIRE(testResult == expectedResult);
 }
@@ -116,7 +116,7 @@ TEST_CASE("Parent* Relationship") {
                                              parentTTokenObject, openBracketTokenObject, w_nameTokenObject, commaTokenObject,
                                              a_nameTokenObject, closedBracketTokenObject};
     Tokenizer tokenizer = Tokenizer();
-    std::vector<TokenObject> testResult = Tokenizer().tokenize(testQuery);
+    std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
 
     REQUIRE(testResult == expectedResult);
 }
@@ -129,7 +129,7 @@ TEST_CASE("Pattern Clause with expressions and subexpressions") {
                                              openBracketTokenObject, normsq_nameWithQuotesTokenObject, commaTokenObject,
                                              cenX_subexpressionTokenObject, closedBracketTokenObject};
     Tokenizer tokenizer = Tokenizer();
-    std::vector<TokenObject> testResult = Tokenizer().tokenize(testQuery);
+    std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
 
     REQUIRE(testResult == expectedResult);
 }
@@ -142,7 +142,7 @@ TEST_CASE("Pattern Clause with constant expressions") {
                                              openBracketTokenObject, normsq_nameWithQuotesTokenObject, commaTokenObject,
                                              one_constantExpressionTokenObject, closedBracketTokenObject};
     Tokenizer tokenizer = Tokenizer();
-    std::vector<TokenObject> testResult = Tokenizer().tokenize(testQuery);
+    std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
 
     REQUIRE(testResult == expectedResult);
 }
@@ -155,19 +155,18 @@ TEST_CASE("Pattern Clause with constant subexpressions") {
                                              openBracketTokenObject, x_nameWithQuotesTokenObject, commaTokenObject,
                                              eleven_constantSubexpressionTokenObject, closedBracketTokenObject};
     Tokenizer tokenizer = Tokenizer();
-    std::vector<TokenObject> testResult = Tokenizer().tokenize(testQuery);
+    std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
 
     REQUIRE(testResult == expectedResult);
 }
 
 // Invalid tokens
-//TEST_CASE("Incomplete expression token") {
-//    std::string testQuery = "assign a1;\n"
-//                            "Select s such that Uses (s, \"x\") pattern a (\"x\", \"y)";
-//    Tokenizer tokenizer = Tokenizer();
-//    std::vector<TokenObject> testResult = Tokenizer().tokenize(testQuery);
-//    REQUIRE_THROWS_WITH(testResult == "error");
-//}
+TEST_CASE("Incomplete expression token") {
+    std::string testQuery = "assign a1;\n"
+                            "Select s such that Uses (s, \"x\") pattern a (\"x\", \"y)";
+    Tokenizer tokenizer = Tokenizer();
+    REQUIRE_THROWS_WITH(tokenizer.tokenize(testQuery), "Token Exception Caught");
+}
 
 // Edge cases
 
