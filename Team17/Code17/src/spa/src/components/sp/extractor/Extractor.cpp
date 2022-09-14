@@ -52,20 +52,28 @@ void Extractor::extractReadStmt(SimpleToken simpleToken) {
 	if (simpleToken.type != SpTokenType::TREAD) {
 		throw std::invalid_argument("Invalid token type for extractRead");
 	}
+	ModifyRelationship* modifyRelationship = getModifyRelationshipForRead(simpleToken);
+	this->client->storeRelationship(modifyRelationship);
+}
+
+ModifyRelationship* Extractor::getModifyRelationshipForRead(SimpleToken simpleToken) {
 	ReadEntity* leftEntity = new ReadEntity(std::to_string(simpleToken.statementNumber));
 	VariableEntity* rightEntity = new VariableEntity(simpleToken.getChildren().at(0).value);
-	ModifyRelationship* modifyRelationship = new ModifyRelationship(leftEntity, rightEntity);
-	this->client->storeRelationship(modifyRelationship);
+	return new ModifyRelationship(leftEntity, rightEntity);
 }
 
 void Extractor::extractPrintStmt(SimpleToken simpleToken) {
 	if (simpleToken.type != SpTokenType::TPRINT) {
 		throw std::invalid_argument("Invalid token type for extractPrint");
 	}
+	UsesRelationship* usesRelationship = getUsesRelationshipForPrint(simpleToken);
+	this->client->storeRelationship(usesRelationship);
+}
+
+UsesRelationship* Extractor::getUsesRelationshipForPrint(SimpleToken simpleToken) {
 	PrintEntity* leftEntity = new PrintEntity(std::to_string(simpleToken.statementNumber));
 	VariableEntity* rightEntity = new VariableEntity(simpleToken.getChildren().at(0).value);
-	UsesRelationship* usesRelationship = new UsesRelationship(leftEntity, rightEntity);
-	this->client->storeRelationship(usesRelationship);
+	return new UsesRelationship(leftEntity, rightEntity);
 }
 
 void Extractor::extractAssignStmt(SimpleToken simpleToken) {

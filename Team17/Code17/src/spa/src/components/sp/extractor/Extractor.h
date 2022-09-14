@@ -40,6 +40,8 @@ public:
 	void extractFollowsRelationships(std::vector<SimpleToken> children);
 	void extractSeriesOfStmts(std::vector<SimpleToken> seriesOfStmts);
 
+	ModifyRelationship* getModifyRelationshipForRead(SimpleToken simpleToken);
+	UsesRelationship* getUsesRelationshipForPrint(SimpleToken simpleToken);
 	void extractReadStmt(SimpleToken simpleToken);
 	void extractPrintStmt(SimpleToken simpleToken);
 	void extractAssignStmt(SimpleToken simpleToken);
