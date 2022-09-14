@@ -101,7 +101,11 @@ bool Validator::patternClauseIsSemanticallyCorrect() {
 		TokenObject leftParam = pattern.getLeft();
 
 		// Check that synonym is declared and declared as assign design entity
-		if (!isDeclaredSynonym(assignSynonym) && !isAssign(assignSynonym)) {
+		if (!isDeclaredSynonym(assignSynonym)) {
+			return false;
+		}
+
+		if (!isAssign(assignSynonym)) {
 			return false;
 		}
 
@@ -110,7 +114,11 @@ bool Validator::patternClauseIsSemanticallyCorrect() {
 			std::string synonymName = leftParam.getValue();
 
 			// Synonym name is not declared or does not have the appropriate design entity
-			if (!isDeclaredSynonym(synonymName) || !isVariable(synonymName)) {
+			if (!isDeclaredSynonym(synonymName)) {
+				return false;
+			}
+
+			if (!isVariable(synonymName)) {
 				return false;
 			}
 
@@ -135,7 +143,11 @@ bool Validator::isValidUsesAndModifies(SuchThat relationship) {
 		std::string synonymName = leftParam.getValue();
 
 		// Synonym name is not declared or does not have the appropriate design entity
-		if (!isDeclaredSynonym(synonymName) || !isValidUsesAndModifiesLeftParameter(synonymName)) {
+		if (!isDeclaredSynonym(synonymName)) {
+			return false;
+		}
+
+		if (!isValidUsesAndModifiesLeftParameter(synonymName)) {
 			return false;
 		}
 
@@ -146,7 +158,11 @@ bool Validator::isValidUsesAndModifies(SuchThat relationship) {
 		std::string synonymName = rightParam.getValue();
 
 		// Synonym name is not declared or does not have the appropriate design entity
-		if (!isDeclaredSynonym(synonymName) || !isVariable(synonymName)) {
+		if (!isDeclaredSynonym(synonymName)) {
+			return false;
+		}
+
+		if (!isVariable(synonymName)) {
 			return false;
 		}
 
@@ -164,7 +180,11 @@ bool Validator::isValidFollowsAndParent(SuchThat relationship) {
 		std::string synonymName = leftParam.getValue();
 
 		// Synonym name is not declared or does not have the appropriate design entity
-		if (!isDeclaredSynonym(synonymName) || !isStatement(synonymName)) {
+		if (!isDeclaredSynonym(synonymName)) {
+			return false;
+		}
+
+		if (!isStatement(synonymName)) {
 			return false;
 		}
 
@@ -175,7 +195,11 @@ bool Validator::isValidFollowsAndParent(SuchThat relationship) {
 		std::string synonymName = rightParam.getValue();
 
 		// Synonym name is not declared or does not have the appropriate design entity
-		if (!isDeclaredSynonym(synonymName) || !isStatement(synonymName)) {
+		if (!isDeclaredSynonym(synonymName)) {
+			return false;
+		}
+
+		if (!isStatement(synonymName)) {
 			return false;
 		}
 

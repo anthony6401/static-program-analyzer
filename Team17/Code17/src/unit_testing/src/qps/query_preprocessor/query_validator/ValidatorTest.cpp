@@ -151,7 +151,7 @@ TEST_CASE("Pattern with non-assign synonym - variable v; assign a; Select v patt
     REQUIRE(testParsedQuery == actualResult);
 };
 
-TEST_CASE("Pattern with no assign declaration variable v; Select v pattern v(\"_\", \"x\")") {
+TEST_CASE("Pattern with no assign declaration variable v; Select v pattern a(\"_\", \"x\")") {
     Select select = Select("v");
     std::vector<SuchThat> suchThat{};
     std::vector<Pattern> pattern{ Pattern("a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
@@ -167,7 +167,7 @@ TEST_CASE("Pattern with no assign declaration variable v; Select v pattern v(\"_
     REQUIRE(testParsedQuery == actualResult);
 };
 
-TEST_CASE("Pattern with param not declared - variable v; assign a; Select v pattern v(s, \"x\")") {
+TEST_CASE("Pattern with param not declared - variable v; assign a; Select v pattern a(s, \"x\")") {
 Select select = Select("v");
     std::vector<SuchThat> suchThat{};
     std::vector<Pattern> pattern{ Pattern("a", TokenObject(TokenType::NAME, "s"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };

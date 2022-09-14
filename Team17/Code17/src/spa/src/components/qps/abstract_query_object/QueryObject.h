@@ -19,7 +19,7 @@ private:
     bool hasNoSyntaxError = false;
     bool hasNoSemanticError = true; // Assumed true till QueryObject is passed into the Validator
     std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap;
-    int numOfDeclaredSynonyms;
+    int numOfDeclaredSynonyms = 0;
 
 
 public:
