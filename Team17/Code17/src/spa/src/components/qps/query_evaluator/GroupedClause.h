@@ -17,6 +17,7 @@ private:
 public:
     GroupedClause();
     void addClauseToGroup(std::shared_ptr<Clause> clause);
+    RawResult evaluateGroupedClause();
     bool isEmpty();
     std::vector<std::shared_ptr<Clause>> getClauses();
     std::set<std::string> getAllSynonyms();

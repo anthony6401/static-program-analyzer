@@ -55,7 +55,6 @@ TEST_CASE("Evaluation for single synonym Clause - variable v; Select v such that
     REQUIRE(testResults == expectedResults);
 }
 
-
 TEST_CASE("Evaluation for single synonym Clause - assign a; Select a such that Modifies(a, _) pattern a(\"x\",\"y\")") {
     PKB* pkb = new PKB();
     auto qpsClient = QPSClient(pkb);
@@ -72,7 +71,7 @@ TEST_CASE("Evaluation for single synonym Clause - assign a; Select a such that M
     REQUIRE(testResults == expectedResults);
 }
 
-// Returns empty clause -> result should be none
+//// Returns empty clause -> result should be none
 TEST_CASE("Evaluation for unrelated to select - assign a; Select a such that Uses (6, v)") {
     PKB* pkb = new PKB();
     auto qpsClient = QPSClient(pkb);

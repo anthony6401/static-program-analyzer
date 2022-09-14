@@ -29,6 +29,18 @@ bool GroupedClause::hasCommonSynonymWithClause(std::shared_ptr<Clause> clause) {
     return false;
 }
 
+RawResult GroupedClause::evaluateGroupedClause() {
+    RawResult rawResult;
+   for (auto c : clauses) {
+       RawResult intermediate = c->evaluateClause();
+       if (intermediate.getIsFalseResult()) {
+           return intermediate;
+       }
+       rawResult.combineResult(intermediate);
+   }
+   return rawResult;
+}
+
 std::vector<std::shared_ptr<Clause>> GroupedClause::getClauses() {
     return clauses;
 }
