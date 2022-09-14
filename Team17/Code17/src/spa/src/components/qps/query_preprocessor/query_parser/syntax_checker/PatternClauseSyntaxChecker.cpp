@@ -3,7 +3,7 @@
 
 using namespace qps;
 
-PatternClauseSyntaxChecker::PatternClauseSyntaxChecker(std::unordered_map<std::string, DesignEntity> mappedSynonymsToDesignEntity) {
+PatternClauseSyntaxChecker::PatternClauseSyntaxChecker() {
 	this->patternSyntax.push(TokenType::CLOSED_BRACKET);
 	this->patternSyntax.push(TokenType::EXPRESSION_SPEC);
 	this->patternSyntax.push(TokenType::COMMA);
@@ -12,7 +12,6 @@ PatternClauseSyntaxChecker::PatternClauseSyntaxChecker(std::unordered_map<std::s
 	this->patternSyntax.push(TokenType::SYNONYM);
 	this->patternSyntax.push(TokenType::PATTERN);
 
-	this->mappedSynonymsToDesignEntity = mappedSynonymsToDesignEntity;
 };
 
 PatternClauseSyntaxChecker::~PatternClauseSyntaxChecker() {};
@@ -82,27 +81,10 @@ bool PatternClauseSyntaxChecker::isSyntacticallyCorrect(std::vector<TokenObject>
 		for (int j = 0; j < possibleTokenTypes.size(); j++) {
 			TokenType possibleTokenType = possibleTokenTypes.at(j);
 
-			if (tokenType != possibleTokenType) {
-				continue;
-			}
-
-			// Valid EXPRESSION_SPEC token
-			if (syntax != TokenType::SYNONYM) {
+			if (tokenType == possibleTokenType) {
 				foundToken = true;
 				break;
 			}
-
-			if (this->mappedSynonymsToDesignEntity.find(token.getValue()) == this->mappedSynonymsToDesignEntity.end()) {
-				continue;
-			}
-
-			bool isAssignSynonym = this->mappedSynonymsToDesignEntity.at(token.getValue()) == DesignEntity::ASSIGN;
-
-			if (isAssignSynonym) {
-				foundToken = true;
-				break;
-			}
-
 		}
 
 		if (!foundToken) {

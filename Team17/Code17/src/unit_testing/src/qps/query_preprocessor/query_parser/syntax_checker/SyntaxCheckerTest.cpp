@@ -432,19 +432,14 @@ TEST_CASE("Syntactically incorrect - Missing parameters") {
 
 // Tests for PatternClauseSyntaxChecker
 TEST_CASE("Instantiate PatternClauseSyntaxChecker") {
-    std::unordered_map<std::string, DesignEntity> mappedSynonymsToDesignEntity;
-    PatternClauseSyntaxChecker checker = PatternClauseSyntaxChecker(mappedSynonymsToDesignEntity);
+    PatternClauseSyntaxChecker checker = PatternClauseSyntaxChecker();
     std::vector<TokenObject> emptyDeclaration{};
     bool patternSyntaxIsEmpty = checker.isSyntacticallyCorrect(emptyDeclaration);
     REQUIRE(patternSyntaxIsEmpty == false);
 };
 
 TEST_CASE("Valid pattern clause - single declaration") {
-    std::unordered_map<std::string, DesignEntity> mappedSynonymsToDesignEntity{
-        {"a", DesignEntity::ASSIGN}
-    };
-
-    PatternClauseSyntaxChecker checker = PatternClauseSyntaxChecker(mappedSynonymsToDesignEntity);
+    PatternClauseSyntaxChecker checker = PatternClauseSyntaxChecker();
     std::vector<TokenObject> validPatternTokens{
         TokenObject(TokenType::PATTERN, "pattern"),
         TokenObject(TokenType::NAME, "a"),
@@ -459,13 +454,7 @@ TEST_CASE("Valid pattern clause - single declaration") {
 };
 
 TEST_CASE("Valid pattern clause - multiple declaration") {
-    std::unordered_map<std::string, DesignEntity> mappedSynonymsToDesignEntity{
-        {"a", DesignEntity::ASSIGN},
-        {"v", DesignEntity::VARIABLE},
-        {"s", DesignEntity::STMT},
-    };
-
-    PatternClauseSyntaxChecker checker = PatternClauseSyntaxChecker(mappedSynonymsToDesignEntity);
+    PatternClauseSyntaxChecker checker = PatternClauseSyntaxChecker();
     std::vector<TokenObject> validPatternTokens{
         TokenObject(TokenType::PATTERN, "pattern"),
         TokenObject(TokenType::NAME, "a"),
@@ -480,11 +469,7 @@ TEST_CASE("Valid pattern clause - multiple declaration") {
 };
 
 TEST_CASE("Syntactically incorrect - Invalid parameters") {
-    std::unordered_map<std::string, DesignEntity> mappedSynonymsToDesignEntity{
-        {"a", DesignEntity::ASSIGN}
-    };
-
-    PatternClauseSyntaxChecker checker = PatternClauseSyntaxChecker(mappedSynonymsToDesignEntity);
+    PatternClauseSyntaxChecker checker = PatternClauseSyntaxChecker();
     std::vector<TokenObject> validPatternTokens{
         TokenObject(TokenType::PATTERN, "pattern"),
         TokenObject(TokenType::NAME, "a"),
@@ -498,48 +483,8 @@ TEST_CASE("Syntactically incorrect - Invalid parameters") {
     REQUIRE(actualResult == false);
 };
 
-TEST_CASE("Syntactically incorrect - non-assign synonym") {
-    std::unordered_map<std::string, DesignEntity> mappedSynonymsToDesignEntity{
-        {"a", DesignEntity::VARIABLE}
-    };
-
-    PatternClauseSyntaxChecker checker = PatternClauseSyntaxChecker(mappedSynonymsToDesignEntity);
-    std::vector<TokenObject> validPatternTokens{
-        TokenObject(TokenType::PATTERN, "pattern"),
-        TokenObject(TokenType::NAME, "a"),
-        TokenObject(TokenType::OPEN_BRACKET, "("),
-        TokenObject(TokenType::WILDCARD, "_"),
-        TokenObject(TokenType::COMMA, ","),
-        TokenObject(TokenType::EXPRESSION, "x"),
-        TokenObject(TokenType::CLOSED_BRACKET, ")")
-    };
-    bool actualResult = checker.isSyntacticallyCorrect(validPatternTokens);
-    REQUIRE(actualResult == false);
-};
-
-TEST_CASE("Syntactically incorrect - empty declaration") {
-    std::unordered_map<std::string, DesignEntity> mappedSynonymsToDesignEntity{};
-
-    PatternClauseSyntaxChecker checker = PatternClauseSyntaxChecker(mappedSynonymsToDesignEntity);
-    std::vector<TokenObject> validPatternTokens{
-        TokenObject(TokenType::PATTERN, "pattern"),
-        TokenObject(TokenType::NAME, "a"),
-        TokenObject(TokenType::OPEN_BRACKET, "("),
-        TokenObject(TokenType::WILDCARD, "_"),
-        TokenObject(TokenType::COMMA, ","),
-        TokenObject(TokenType::EXPRESSION, "x"),
-        TokenObject(TokenType::CLOSED_BRACKET, ")")
-    };
-    bool actualResult = checker.isSyntacticallyCorrect(validPatternTokens);
-    REQUIRE(actualResult == false);
-};
-
 TEST_CASE("Syntactically incorrect - missing pattern token") {
-    std::unordered_map<std::string, DesignEntity> mappedSynonymsToDesignEntity{
-        {"a", DesignEntity::ASSIGN}
-    };
-
-    PatternClauseSyntaxChecker checker = PatternClauseSyntaxChecker(mappedSynonymsToDesignEntity);
+    PatternClauseSyntaxChecker checker = PatternClauseSyntaxChecker();
     std::vector<TokenObject> validPatternTokens{
         TokenObject(TokenType::NAME, "a"),
         TokenObject(TokenType::OPEN_BRACKET, "("),
@@ -553,11 +498,7 @@ TEST_CASE("Syntactically incorrect - missing pattern token") {
 };
 
 TEST_CASE("Syntactically incorrect - extra tokens") {
-    std::unordered_map<std::string, DesignEntity> mappedSynonymsToDesignEntity{
-        {"a", DesignEntity::ASSIGN}
-    };
-
-    PatternClauseSyntaxChecker checker = PatternClauseSyntaxChecker(mappedSynonymsToDesignEntity);
+    PatternClauseSyntaxChecker checker = PatternClauseSyntaxChecker();
     std::vector<TokenObject> validPatternTokens{
         TokenObject(TokenType::PATTERN, "pattern"),
         TokenObject(TokenType::NAME, "a"),
