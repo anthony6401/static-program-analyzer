@@ -79,7 +79,8 @@ RawResult AssignPatternClause::evaluateSynonymExpression() {
 }
 
 RawResult AssignPatternClause::evaluateSynonymNameQuotes() {
-    return {};
+    std::cout << "----- Assign: synonym name quotes -------" << std::endl;
+    return {"a", "v", {{"11", "x"}, {"31", "a"}}};
 }
 
 RawResult AssignPatternClause::evaluateSynonymSubExpression() {
@@ -88,7 +89,7 @@ RawResult AssignPatternClause::evaluateSynonymSubExpression() {
 
 RawResult AssignPatternClause::evaluateWildcardWildcard() {
     std::cout << "----- Assign: wild card wild card -------" << std::endl;
-    return {"a", {"10", "11", "12", "13"}};
+    return {"a1", {"1", "2"}};
 }
 
 RawResult AssignPatternClause::evaluateWildcardExpression() {
@@ -114,7 +115,7 @@ RawResult AssignPatternClause::evaluateNameQuotesExpression() {
 
 RawResult AssignPatternClause::evaluateNameQuotesNameQuotes() {
     std::cout << "----- Assign: Name quote name quote -------" << std::endl;
-    return {"a", {}};
+    return {"a", {"1", "3", "4"}};
 }
 
 RawResult AssignPatternClause::evaluateNameQuotesSubExpression() {

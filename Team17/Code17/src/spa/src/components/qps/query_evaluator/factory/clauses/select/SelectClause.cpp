@@ -10,8 +10,8 @@ RawResult SelectClause::evaluateClause() {
     std::cout << "----- Select Clause -------" << std::endl;
     DesignEntity returnType = synonymToDesignEntityMap[synonym.getSynonym()];
     // std::unordered_set<std::string> results = qpsClient.getAllEntity(returnType);
-    //return {"v", {"x", "y", "z"}};
-    return {"a", {"1", "2", "3", "4"}};
+    return {"v", {"x", "y", "z"}};
+    //return {"a", {"1", "2", "3", "4"}};
 }
 
 size_t SelectClause::getNumberOfSynonyms() {

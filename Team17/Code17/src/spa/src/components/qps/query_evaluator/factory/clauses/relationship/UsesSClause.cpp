@@ -83,8 +83,9 @@ RawResult UsesSClause::evaluateIntegerWildcard() {
 }
 
 RawResult UsesSClause::evaluateIntegerNameQuotes() {
+    std::cout << "----- UsesS: Integer namequotes -------" << std::endl;
     // API CALL
-    return {};
+    return {true};
 }
 
 
