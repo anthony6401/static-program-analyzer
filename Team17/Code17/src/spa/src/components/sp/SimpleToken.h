@@ -18,7 +18,9 @@ enum class SpTokenType {
     TCONSTANT,
     TCLOSE,
     TOPR,
-    TEXPR
+    TEXPR,
+    TSTMTLIST,
+    TPROGRAM
 };
 
 class Extractor;

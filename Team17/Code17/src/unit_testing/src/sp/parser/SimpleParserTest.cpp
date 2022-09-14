@@ -9,14 +9,12 @@ bool equalToken(SimpleToken& test, SimpleToken& result) {
 
 bool equalChildren(std::vector<SimpleToken> test, std::vector<SimpleToken> result) {
     if (test.size() != result.size()) {
-        std::cout << 1;
         return false;
     }
     for (int i = 0; i < test.size(); i++) {
         SimpleToken a = test.at(i);
         SimpleToken b = result.at(i);
         if (!(equalToken(a, b))) {
-            std::cout << 2;
             return false;
         }
         if (test.empty() == result.empty() && !(test.empty())) {
