@@ -203,4 +203,15 @@ TEST_CASE("Presence of white spaces") {
     REQUIRE(testResult == expectedResult);
 }
 
+TEST_CASE("Presence of white spaces in Name with Quotes and Subexpressions") {
+    std::string testQuery = "assign newa;\n"
+                            "Select newa pattern newa ( \"     normSq\" , _\"   cenX  \"_)";
+    std::vector<TokenObject> expectedResult {assignTokenObject, newa_nameTokenObject, semicolonTokenObject,
+                                             selectTokenObject, newa_nameTokenObject, patternTokenObject, newa_nameTokenObject,
+                                             openBracketTokenObject, normsq_nameWithQuotesTokenObject, commaTokenObject,
+                                             cenX_subexpressionTokenObject, closedBracketTokenObject};
+    Tokenizer tokenizer = Tokenizer();
+    std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
 
+    REQUIRE(testResult == expectedResult);
+}
