@@ -1,5 +1,6 @@
 #include "Pattern.h"
 
+using namespace kb;
 
 Pattern::Pattern(std::string lineNum, std::string firstValue, std::string secondValue) : lineNum(lineNum), firstValue(firstValue), secondValue(secondValue) {}
 

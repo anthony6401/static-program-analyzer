@@ -22,6 +22,7 @@ static TokenObject stmtTokenObject15 = TokenObject(TokenType::INTEGER, if_value_
 static TokenObject stmtTokenObject16 = TokenObject(TokenType::INTEGER, print_value_three);
 static TokenObject stmtTokenObject17 = TokenObject(TokenType::INTEGER, read_value_three);
 static TokenObject stmtTokenObject18 = TokenObject(TokenType::INTEGER, while_value_three);
+static TokenObject stmtTokenObject19 = TokenObject(TokenType::INTEGER, statement_value_one);
 static TokenObject procedureTokenObject = TokenObject(TokenType::NAME_WITH_QUOTATION, procedure_value_one);
 static TokenObject variableTokenObject = TokenObject(TokenType::NAME_WITH_QUOTATION, variable_value_one);
 static TokenObject procedureTokenObjectTwo = TokenObject(TokenType::NAME_WITH_QUOTATION, procedure_value_two);

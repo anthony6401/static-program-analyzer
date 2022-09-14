@@ -6,13 +6,20 @@
 #include "components/qps/abstract_query_object/QueryObject.h"
 #include "components/qps/query_evaluator/factory/interface/Clause.h"
 #include "components/pkb/clients/QPSClient.h"
+#include "GroupedClause.h"
 
 class Evaluator {
 public:
     static void evaluateQuery(QueryObject queryObject, std::list<std::string> &results, QPSClient qpsClient);
-    // std::vector<std::shared_ptr<Clause>> extractClausesToEvaluate(QueryObject queryObject);
-    static std::shared_ptr<Clause> extractSelectClauseToEvaluate(Select synonym, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
-    static std::unordered_set<std::string> evaluateSelectClause(std::vector<std::shared_ptr<Clause>> clausesToEvaluate, QPSClient qpsClient);
+    static std::vector<std::shared_ptr<Clause>> extractClausesToEvaluate(QueryObject queryObject, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
+    static bool evaluateNoSynonymClauses(GroupedClause noSynonymsClauses);
+    static bool evaluateNoSelectSynonymClauses(std::vector<GroupedClause> noSelectSynonymPresent);
+    static RawResult evaluateHasSelectSynonymClauses(std::vector<GroupedClause> hasSelectSynonymPresent, std::string selectSynonym);
+    static RawResult evaluateWithinGroupSelectSynonymClauses(GroupedClause currentGroupedClause);
+    static void populateResults(RawResult finalResult, std::string selectSynonym, std::list<std::string> &results);
+    static std::unordered_set<std::string> joinRawResults(std::vector<RawResult> rawResultsList, std::string selectSynonym, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
+    static std::vector<std::string> findCommonSynonyms(std::vector<std::string> firstSynonymList, std::vector<std::string> secSynonymList);
+    static int getSelectSynonymIndex(std::vector<std::string> synonymList, std::string selectSynonym);
 };
 
 #endif //SPA_EVALUATOR_H

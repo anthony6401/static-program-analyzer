@@ -9,7 +9,6 @@
 #include "components/pkb/clients/QPSClient.h"
 #include "models/Entity/DesignEntity.h"
 
-// Select v; Have to determine entity type of v
 class SelectClause : public Clause {
 private:
     std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap;
@@ -18,7 +17,9 @@ private:
 
 public:
     SelectClause(Select synonym, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
-    std::unordered_set<std::string> evaluateClause() override;
+    RawResult evaluateClause() override;
+    size_t getNumberOfSynonyms() override;
+    std::set<std::string> getAllSynonyms() override;
 };
 
 #endif //SPA_SELECTCLAUSE_H
