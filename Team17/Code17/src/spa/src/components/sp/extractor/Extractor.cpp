@@ -84,8 +84,7 @@ void Extractor::extractAssignStmt(SimpleToken simpleToken) {
 	std::vector<SimpleToken> exprChildren = expression.getChildren();
 
 	// Populate PKB with Patterns
-	AssignPattern assignPattern = PatternExtractor::extractPattern(variable, expression);
-	// this->client->storePattern(assignPattern);
+	PatternExtractor::extractPattern(*this, variable, expression);
 
 	// Populate PKB with UsesRelationship
 	while (exprChildren.size() != 0) {

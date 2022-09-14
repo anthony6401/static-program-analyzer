@@ -2,12 +2,12 @@
 
 #include <stdio.h>
 
-AssignPattern PatternExtractor::extractPattern(SimpleToken variable, SimpleToken expression) {
+AssignPattern PatternExtractor::extractPattern(Extractor extractor, SimpleToken variable, SimpleToken expression) {
 	std::string lineNum = std::to_string(variable.statementNumber);
 	std::string firstValue = variable.value;
-	std::string secondValue = "";
+	std::string secondValue = expression.value;
 
 	AssignPattern* assignPattern = new AssignPattern(lineNum, firstValue, secondValue);
 
-	return *assignPattern;
+	extractor.client->storePattern(assignPattern);
 }
