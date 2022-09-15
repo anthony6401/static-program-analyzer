@@ -365,7 +365,17 @@ TEST_CASE("Unit test - getUsesRelationshipForAssign: a = a + 1 - ( b * c )") {
 	REQUIRE_NOTHROW(testExtractor.extractAssignStmt(assign));
 }
 
-TEST_CASE("Integration test - extractProcedure") {}
+TEST_CASE("Integration test - extractProcedure (basic)") {
+	Extractor testExtractor = generateExtractor();
+
+	SimpleToken procedure  = generateSimpleToken(SpTokenType::TPROCEDURE, "proc", 1);
+	SimpleToken readStmt   = generateSimpleToken(SpTokenType::TREAD, "read a", 2);
+	SimpleToken printStmt  = generateSimpleToken(SpTokenType::TPRINT, "print a", 3);
+	SimpleToken assignStmt = generateSimpleToken(SpTokenType::TASSIGN, "a = a + 1", 4);
+	SimpleToken whileStmt  = generateSimpleToken(SpTokenType::TWHILE, "", 5);
+	SimpleToken ifStmt     = generateSimpleToken(SpTokenType::TIF, "", 7);
+}
+
 TEST_CASE("Integration test - extractParentRelationships") {}
 TEST_CASE("Integration test - extractFollowsRelationships") {}
 TEST_CASE("Integration test - extractSeriesOfStmts") {}
