@@ -81,25 +81,6 @@ Entity* ParentExtractor::generateEntity(SimpleToken token) {
 	return new Entity(std::to_string(token.statementNumber)); // Should not happen
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /*
 void ParentExtractor::extractParent(Extractor extractor, SimpleToken parentToken, std::vector<SimpleToken> seriesOfStmts) {
 	while (seriesOfStmts.size() > 0) {

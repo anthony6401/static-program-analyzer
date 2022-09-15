@@ -56,16 +56,6 @@ Entity* FollowsExtractor::generateEntity(SimpleToken token) {
 	return new Entity(std::to_string(token.statementNumber)); // Should not happen
 }
 
-
-
-
-
-
-
-
-
-
-
 /*
 void FollowsExtractor::extractFollows(Extractor extractor, std::vector<SimpleToken> seriesOfStmts) {
 	while (seriesOfStmts.size() > 1) {
