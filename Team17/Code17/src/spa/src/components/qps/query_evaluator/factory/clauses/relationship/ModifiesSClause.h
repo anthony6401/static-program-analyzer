@@ -21,7 +21,8 @@ public:
     RawResult evaluateClause() override;
     size_t getNumberOfSynonyms() override;
     std::set<std::string> getAllSynonyms() override;
-    TokenType getRelationshipType();
+    std::vector<std::pair<std::string, std::string>> processMap(std::unordered_map<std::string, std::unordered_set<std::string>> results);
+    static RelationshipType getRelationshipType();
     RawResult evaluateSynonymSynonym();
     RawResult evaluateSynonymWildcard();
     RawResult evaluateSynonymNameQuotes();

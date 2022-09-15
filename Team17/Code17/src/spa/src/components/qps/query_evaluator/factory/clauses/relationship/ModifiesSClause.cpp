@@ -48,15 +48,27 @@ size_t ModifiesSClause::getNumberOfSynonyms() {
     return numberOfSynonyms;
 }
 
-TokenType ModifiesSClause::getRelationshipType() {
-    return TokenType::MODIFIES;
+RelationshipType ModifiesSClause::getRelationshipType() {
+    return RelationshipType::MODIFIES;
+}
+
+std::vector<std::pair<std::string, std::string>> processMap(std::unordered_map<std::string, std::unordered_set<std::string>> results) {
+    std::vector<std::pair<std::string, std::string>> processedResult;
+    for (auto entry : results) {
+        std::string firstSynonym = entry.first;
+        std::unordered_set<std::string> secondSynonymList = entry.second;
+        for (auto secondSynonym : secondSynonymList) {
+            std::pair<std::string, std::string> newPair = {firstSynonym, secondSynonym};
+            processedResult.emplace_back(newPair);
+        }
+    }
+    return processedResult;
 }
 
 RawResult ModifiesSClause::evaluateSynonymSynonym() {
-    std::cout << "----- ModifiesS: Synonym Synonym -------" << std::endl;
     DesignEntity stmtType = synonymToDesignEntityMap[left.getValue()];
     DesignEntity rightType = synonymToDesignEntityMap[right.getValue()];
-    // API CALL
+    std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(getRelationshipType(), stmtType, rightType);
     return {"a", "v", {{"1", "x"}, {"2", "y"}}};
 }
 
