@@ -115,7 +115,7 @@ TEST_CASE("Unit test - extractPrintStmt for invalid tokentype procedure proc") {
 	REQUIRE_THROWS(testExtractor.extractPrintStmt(simpleToken));
 }
 
-TEST_CASE("Unit test - extractAssignStmt: a = 1") {
+TEST_CASE("Unit test - getModifyRelationshipForAssign: a = 1") {
 	Extractor testExtractor = generateExtractor();
 
 	SimpleToken assign = generateSimpleToken(SpTokenType::TASSIGN, "a = 1", 1);
@@ -127,24 +127,83 @@ TEST_CASE("Unit test - extractAssignStmt: a = 1") {
 	children.push_back(expr_1);
 	assign.setChildren(children);
 
+	AssignEntity* assignEntity = new AssignEntity("1");
+	VariableEntity* variableEntity = new VariableEntity("a");
+	Relationship* expectedRelationship = new ModifyRelationship(assignEntity, variableEntity);
+	Relationship* generatedRelationship = testExtractor.getModifyRelationshipForAssign(assign);
+
+	REQUIRE(equalRelationship(generatedRelationship, expectedRelationship));
+	REQUIRE_NOTHROW(testExtractor.extractAssignStmt(assign));
+}
+
+TEST_CASE("Unit test - getModifyRelationshipForAssign: a = b") {
+	Extractor testExtractor = generateExtractor();
+
+	SimpleToken assign = generateSimpleToken(SpTokenType::TASSIGN, "a = b", 1);
+	SimpleToken varNam = generateSimpleToken(SpTokenType::TVARIABLE, "a", 1);
+	SimpleToken expr_1 = generateSimpleToken(SpTokenType::TVARIABLE, "b", 1);
+
+	std::vector<SimpleToken> children;
+	children.push_back(varNam);
+	children.push_back(expr_1);
+	assign.setChildren(children);
+
 	// code here
 }
 
-TEST_CASE("Unit test - extractAssignStmt: a = b") {}
-
-TEST_CASE("Unit test - extractAssignStmt: a = a + 1") {
+TEST_CASE("Unit test - getModifyRelationshipForAssign: a = a + 1") {
 	Extractor testExtractor = generateExtractor();
 
-	SimpleToken assign = generateSimpleToken(SpTokenType::TASSIGN, "a", 1);
+	SimpleToken assign = generateSimpleToken(SpTokenType::TASSIGN, "a = a + 1", 1);
 	SimpleToken varNam = generateSimpleToken(SpTokenType::TVARIABLE, "a", 1);
 	SimpleToken expr_1 = generateSimpleToken(SpTokenType::TVARIABLE, "a", 1);
+	SimpleToken expr_2 = generateSimpleToken(SpTokenType::TOPR, "+", 1);
+	SimpleToken expr_3 = generateSimpleToken(SpTokenType::TCONSTANT, "1", 1);
 
 	std::vector<SimpleToken> children;
-	children.push_back(child);
-	simpleToken.setChildren(children);
+	children.push_back(varNam);
+	children.push_back(expr_1);
+	children.push_back(expr_2);
+	children.push_back(expr_3);
+	assign.setChildren(children);
+
+	// code here
 }
 
-TEST_CASE("Unit test - extractAssignStmt: a = a + 1 - ( b * c )") {}
+TEST_CASE("Unit test - getModifyRelationshipForAssign: a = a + 1 - ( b * c )") {
+	Extractor testExtractor = generateExtractor();
+
+	SimpleToken assign = generateSimpleToken(SpTokenType::TASSIGN, "a = a + 1 - ( b * c )", 1);
+	SimpleToken varNam = generateSimpleToken(SpTokenType::TVARIABLE, "a", 1);
+	SimpleToken expr_1 = generateSimpleToken(SpTokenType::TVARIABLE, "a", 1);
+	SimpleToken expr_2 = generateSimpleToken(SpTokenType::TOPR, "+", 1);
+	SimpleToken expr_3 = generateSimpleToken(SpTokenType::TCONSTANT, "1", 1);
+	SimpleToken expr_4 = generateSimpleToken(SpTokenType::TOPR, "-", 1);
+	SimpleToken expr_5 = generateSimpleToken(SpTokenType::TVARIABLE, "b", 1);
+	SimpleToken expr_6 = generateSimpleToken(SpTokenType::TOPR, "*", 1);
+	SimpleToken expr_7 = generateSimpleToken(SpTokenType::TVARIABLE, "c", 1);
+
+	std::vector<SimpleToken> children;
+	children.push_back(varNam);
+	children.push_back(expr_1);
+	children.push_back(expr_2);
+	children.push_back(expr_3);
+	children.push_back(expr_4);
+	children.push_back(expr_5);
+	children.push_back(expr_6);
+	children.push_back(expr_7);
+	assign.setChildren(children);
+
+	// code here
+}
+
+TEST_CASE("Unit test - getUsesRelationshipForAssign: a = 1") {}
+
+TEST_CASE("Unit test - getUsesRelationshipForAssign: a = b") {}
+
+TEST_CASE("Unit test - getUsesRelationshipForAssign: a = a + 1") {}
+
+TEST_CASE("Unit test - getUsesRelationshipForAssign: a = a + 1 - ( b * c )") {}
 
 TEST_CASE("Integration test - extractProcedure") {}
 TEST_CASE("Integration test - extractParentRelationships") {}

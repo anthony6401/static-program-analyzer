@@ -42,6 +42,8 @@ public:
 
 	ModifyRelationship* getModifyRelationshipForRead(SimpleToken simpleToken);
 	UsesRelationship* getUsesRelationshipForPrint(SimpleToken simpleToken);
+	ModifyRelationship* getModifyRelationshipForAssign(SimpleToken simpleToken);
+	UsesRelationship* getUsesRelationshipsForAssign(SimpleToken simpleToken);
 	void extractReadStmt(SimpleToken simpleToken);
 	void extractPrintStmt(SimpleToken simpleToken);
 	void extractAssignStmt(SimpleToken simpleToken);
