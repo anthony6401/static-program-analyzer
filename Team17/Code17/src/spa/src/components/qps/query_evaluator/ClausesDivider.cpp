@@ -25,10 +25,6 @@ GroupedClause ClauseDivider::getNoSynonymsPresent() {
     return noSynonymsPresent;
 }
 
-//std::vector<GroupedClause> ClauseDivider::getCommonSynonymsPresent() {
-//    return commonSynonymsGroups;
-//}
-
 std::vector<GroupedClause> ClauseDivider::getSelectSynonymPresentGroups() {
     return selectSynonymPresentGroups;
 }
@@ -54,8 +50,6 @@ std::pair<GroupedClause, std::vector<GroupedClause>> ClauseDivider::divideClause
     GroupedClause noSynonymsPresent;
     std::vector<GroupedClause> commonSynonymsGroups;
 
-    std::cout << "Clauses to evaluate count: " << clausesToEvaluate.size() << std::endl;
-
     for (auto clause : clausesToEvaluate) {
         if (clause->getNumberOfSynonyms() == 0) {
             // Without synonyms, to return boolean
@@ -65,19 +59,14 @@ std::pair<GroupedClause, std::vector<GroupedClause>> ClauseDivider::divideClause
             if (commonSynonymsGroups.empty()) { // vector<GroupedClause>
                 GroupedClause firstGroup;
                 firstGroup.addClauseToGroup(clause);
-                 for (auto s : firstGroup.getAllSynonyms()) {
-                     std::cout << "Group 1:" << s << std::endl;
-                 }
                 commonSynonymsGroups.emplace_back(firstGroup);
             } else {
                 for (GroupedClause gc : commonSynonymsGroups) {
                     if (gc.hasCommonSynonymWithClause(clause)) {
-                        std::cout << "Add clause to existing group" << std::endl;
                         gc.addClauseToGroup(clause);
                         break;
                     } else {
                         // Create a new group
-                        std::cout << "create new group" << std::endl;
                         GroupedClause newGroup;
                         newGroup.addClauseToGroup(clause);
                         commonSynonymsGroups.emplace_back(newGroup);

@@ -230,23 +230,6 @@ void RawResult::setIsSynonymResult() {
 }
 
 
-std::ostream &operator<<(std::ostream &os, const RawResult &result) {
-    for (const auto syn : result.synonymsList) {
-        os << syn << "\t";
-    }
-    os << std::endl;
-    os << "_______________________________________________________" << std::endl;
-
-    for (const auto &record : result.resultsList) {
-        for (const auto &value : record) {
-            os << value << "\t";
-        }
-        os << std::endl;
-    }
-
-    return os;
-}
-
 
 
 

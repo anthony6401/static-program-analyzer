@@ -39,12 +39,10 @@ std::shared_ptr<Clause> ClauseCreator::createClause(SuchThat relationship, Selec
 
     } else if (relationshipType == TokenType::USES) {
         if (isProcRelationship(left, synonymToDesignEntityMap)) {
-            std::cout << "----- create usesp -------" << std::endl;
             return std::make_shared<UsesPClause>(left, right, synonym, synonymToDesignEntityMap, qpsClient);
         }
 
         if (isStmtRelationship(left, synonymToDesignEntityMap)) {
-            std::cout << "----- create usesS -------" << std::endl;
             return std::make_shared<UsesSClause>(left, right, synonym, synonymToDesignEntityMap, qpsClient);
         }
     } else if (relationshipType == TokenType::FOLLOWS) {
