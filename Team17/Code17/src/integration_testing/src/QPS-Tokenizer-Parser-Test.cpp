@@ -1,11 +1,11 @@
 #include <string>
 #include <list>
 #include <vector>
-#include <components/qps/query_evaluator/Evaluator.h>
+#include "components/qps/query_evaluator/Evaluator.h"
 #include "components/qps/QPS.h"
 #include "components/qps/abstract_query_object/QueryObject.h"
 
-#include <catch.hpp>
+#include "catch.hpp"
 #include <iostream>
 
 // Valid queries
