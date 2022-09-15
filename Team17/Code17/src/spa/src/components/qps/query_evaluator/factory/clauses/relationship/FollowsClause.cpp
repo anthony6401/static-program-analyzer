@@ -85,6 +85,9 @@ RawResult FollowsClause::evaluateSynonymSynonym() {
     DesignEntity rightType = synonymToDesignEntityMap[right.getValue()];
     std::string leftValue = left.getValue();
     std::string rightValue = right.getValue();
+    if (leftValue == rightValue) {
+        return {false};
+    }
     std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(getRelationshipType(), leftType, rightType);
     std::vector<std::pair<std::string, std::string>> processedMap = FollowsClause::processMapToVectorPair(results); // {{"1", "x"}, {"2", "y"}}
     return {leftValue, rightValue, processedMap};
@@ -119,7 +122,7 @@ RawResult FollowsClause::evaluateIntegerWildcard() {
     std::unordered_set<std::string> results = qpsClient.getRelationshipByFirst(getRelationshipType(), left, rightType);
     bool booleanResult = !results.empty();
     // {1,2,3} -> boolean result = true
-    return {booleanResult}; //true
+    return {booleanResult};
 }
 
 RawResult FollowsClause::evaluateIntegerInteger() {
@@ -142,7 +145,6 @@ RawResult FollowsClause::evaluateWildcardWildcard() {
     DesignEntity stmtType = DesignEntity::STMT;
     std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(getRelationshipType(), stmtType, stmtType);
     bool booleanResult = !results.empty();
-    //std::unordered_set<std::string> processedMap = FollowsClause::processMapToSet(results);
     return {booleanResult};
 }
 
