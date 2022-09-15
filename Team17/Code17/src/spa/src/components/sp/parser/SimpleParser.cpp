@@ -1,6 +1,5 @@
 #include <stack>
 #include <stdexcept>
-#include <iostream>
 #include "SimpleParser.h"
 #include "../validator/SimpleValidator.h"
 #include "../SimpleToken.h"

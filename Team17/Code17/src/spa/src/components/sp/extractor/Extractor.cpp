@@ -160,7 +160,7 @@ void Extractor::extractIfStmt(SimpleToken ifToken) {
 }
 
 void Extractor::extractStmtLst(SimpleToken stmtLstToken) {
-	if (stmtLstToken.type != SpTokenType::TSTMT) {
+	if (stmtLstToken.type != SpTokenType::TSTMTLIST) {
 		throw std::invalid_argument("Invalid token type for extractStmtLst");
 	}
 	std::vector<SimpleToken> seriesOfStmts = stmtLstToken.getChildren();
