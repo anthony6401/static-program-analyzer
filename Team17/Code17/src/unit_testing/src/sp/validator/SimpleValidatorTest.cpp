@@ -38,4 +38,7 @@ TEST_CASE("valid center") {
         , ")", "||", "(", "5", "<=", "10", ")"};
     REQUIRE(SimpleValidator::isAndOrCenter(strings, 13));
     REQUIRE(!(SimpleValidator::isAndOrCenter(strings, 7)));
+    std::vector<std::string> tstrings{ "(", "15", "<", "20", ")", " && ", "(", "5", " == ","10",")" };
+    REQUIRE(SimpleValidator::isAndOrCenter(tstrings, 5));
+    REQUIRE(!(SimpleValidator::isAndOrCenter(tstrings, 7)));
 }

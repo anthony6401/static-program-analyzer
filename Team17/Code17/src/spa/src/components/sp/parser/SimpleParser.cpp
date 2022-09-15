@@ -1,5 +1,6 @@
 #include <stack>
 #include <stdexcept>
+#include <iostream>
 #include "SimpleParser.h"
 #include "../validator/SimpleValidator.h"
 #include "../SimpleToken.h"
@@ -20,7 +21,13 @@ int SimpleParser::statementNumber = 1;
 /// <returns>SimpleToken identifying line type and value containing code</returns>
 SimpleToken SimpleParser::parseLine(std::vector<std::string>& tokens, std::string code) {
     std::string first = tokens.front();
-    if (first == "procedure") {
+    if (tokens.at(1) == "=") {
+        SimpleToken token = SimpleToken(SpTokenType::TASSIGN, code,
+            SimpleParser::statementNumber, &SimpleParser::parseAssign);
+        tokens.erase(tokens.begin() + 1);
+        SimpleParser::statementNumber++;
+        return token;
+    } else if (first == "procedure") {
         tokens.erase(tokens.begin());
         SimpleToken token = SimpleToken(SpTokenType::TPROCEDURE, code,
             SimpleParser::statementNumber, &SimpleParser::parseProcedure);
@@ -67,13 +74,6 @@ SimpleToken SimpleParser::parseLine(std::vector<std::string>& tokens, std::strin
         SimpleParser::statementNumber++;
         return token;
     } else {
-        if (tokens.at(1) == "=") {
-            SimpleToken token = SimpleToken(SpTokenType::TASSIGN, code,
-                SimpleParser::statementNumber, &SimpleParser::parseAssign);
-            tokens.erase(tokens.begin() + 1);
-            SimpleParser::statementNumber++;
-            return token;
-        }
         throw std::invalid_argument("Received invalid SIMPLE code line " + std::to_string(SimpleParser::statementNumber));
     }
 }
@@ -141,7 +141,7 @@ void SimpleParser::parseWhile(SimpleToken& whileStmt, std::vector<std::string>& 
     if (tokens.size() < 6 || tokens.back() != "{") {
         throw std::invalid_argument("Received invalid While:Line " + std::to_string(whileStmt.statementNumber));
     }
-    tokens.erase(tokens.end());
+    tokens.pop_back();
     SimpleToken stmtList = SimpleToken(SpTokenType::TCONDEXPR, "", 0, NULL);
     stmtList.setChildren(parseCondition(tokens));
     std::vector<SimpleToken> children;
@@ -154,11 +154,11 @@ void SimpleParser::parseIf(SimpleToken& ifStmt, std::vector<std::string>& tokens
     if (tokens.size() < 7 || tokens.back() != "{") {
         throw std::invalid_argument("Received invalid If:Line " + std::to_string(ifStmt.statementNumber));
     }
-    tokens.erase(tokens.end());
+    tokens.pop_back();
     if (tokens.back() != "then") {
         throw std::invalid_argument("Received invalid If:Line " + std::to_string(ifStmt.statementNumber));
     }
-    tokens.erase(tokens.end());
+    tokens.pop_back();
     SimpleToken stmtList = SimpleToken(SpTokenType::TCONDEXPR, "", 0, NULL);
     stmtList.setChildren(parseCondition(tokens));
     std::vector<SimpleToken> children;
@@ -182,10 +182,10 @@ void SimpleParser::parseAssign(SimpleToken& assign, std::vector<std::string>& to
 
 std::vector<SimpleToken> SimpleParser::parseCondition(std::vector<std::string> tokens) {
     if (tokens.front() != "(" || tokens.back() != ")") {
-        throw std::invalid_argument("Received invalid condition");
+        throw std::invalid_argument("Received invalid condition. Missing brackets");
     }
     tokens.erase(tokens.begin());
-    tokens.erase(tokens.end());
+    tokens.pop_back();
     std::string condition = SpUtils::join(tokens);
     if (condition.find("&&") != std::string::npos || condition.find("||") != std::string::npos) {
         int indice = 0;
@@ -198,9 +198,9 @@ std::vector<SimpleToken> SimpleParser::parseCondition(std::vector<std::string> t
             indice++;
         }
         if (indice == tokens.size()) {
-            throw std::invalid_argument("Received invalid condition");
+            throw std::invalid_argument("Received invalid condition. invalid && or ||");
         }
-        std::vector<std::string> firstTokens(tokens.begin(), tokens.begin() + indice - 1);
+        std::vector<std::string> firstTokens(tokens.begin(), tokens.begin() + indice);
         std::vector<SimpleToken> firstCondition = parseCondition(firstTokens);
         std::vector<std::string> secondTokens(tokens.begin() + indice + 1, tokens.end());
         std::vector<SimpleToken> secondCondition = parseCondition(secondTokens);
@@ -226,7 +226,7 @@ std::vector<SimpleToken> SimpleParser::parseRelExpr(std::vector<std::string>& to
     if (comparatorCount != 1) {
         throw std::invalid_argument("Received invalid RelExpr");
     }
-    std::vector<std::string> firstTokens(tokens.begin(), tokens.begin() + indice - 1);
+    std::vector<std::string> firstTokens(tokens.begin(), tokens.begin() + indice);
     SimpleToken firstRelFactor = parseExpr(firstTokens);
     std::vector<SimpleToken> firstContents = firstRelFactor.getChildren();
     std::vector<std::string> secondTokens(tokens.begin() + indice + 1, tokens.end());
@@ -239,7 +239,7 @@ std::vector<SimpleToken> SimpleParser::parseRelExpr(std::vector<std::string>& to
 SimpleToken SimpleParser::parseExpr(std::vector<std::string>& tokens) {
     ExprStack stack = ExprStack();
     if (tokens.size() == 0) {
-        throw std::invalid_argument("Received invalid expression ");
+        throw std::invalid_argument("Received invalid expression. No tokens ");
     }
     for (std::string i : tokens) {
         stack.put(i);
@@ -249,7 +249,7 @@ SimpleToken SimpleParser::parseExpr(std::vector<std::string>& tokens) {
         expr.setChildren(stack.get());
         return expr;
     } else {
-        throw std::invalid_argument("Received invalid expression ");
+        throw std::invalid_argument("Received invalid expression. Wrong tokens. ");
     }
 }
 
