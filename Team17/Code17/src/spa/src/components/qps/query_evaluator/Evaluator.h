@@ -7,11 +7,12 @@
 #include "components/qps/query_evaluator/factory/interface/Clause.h"
 #include "components/pkb/clients/QPSClient.h"
 #include "GroupedClause.h"
+#include "ClausesDivider.h"
 
 class Evaluator {
 public:
     static void evaluateQuery(QueryObject queryObject, std::list<std::string> &results, QPSClient qpsClient);
-    static std::vector<std::shared_ptr<Clause>> extractClausesToEvaluate(QueryObject queryObject, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
+    static ClauseDivider extractClausesToEvaluate(QueryObject queryObject, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
     static bool evaluateNoSynonymClauses(GroupedClause noSynonymsClauses);
     static bool evaluateNoSelectSynonymClauses(std::vector<GroupedClause> noSelectSynonymPresent);
     static RawResult evaluateHasSelectSynonymClauses(std::vector<GroupedClause> hasSelectSynonymPresent, std::string selectSynonym);

@@ -7,7 +7,7 @@
 
 // Represents Groups with common areas in:
 // 1. No Synonym
-// 2. Common synonyms
+// 2. Common synonyms (with and without select synonym)
 
 class GroupedClause {
 private:
@@ -17,6 +17,7 @@ private:
 public:
     GroupedClause();
     void addClauseToGroup(std::shared_ptr<Clause> clause);
+    RawResult evaluateGroupedClause();
     bool isEmpty();
     std::vector<std::shared_ptr<Clause>> getClauses();
     std::set<std::string> getAllSynonyms();
