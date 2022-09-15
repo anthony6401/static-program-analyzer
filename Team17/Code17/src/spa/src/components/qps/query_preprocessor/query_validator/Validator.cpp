@@ -60,8 +60,9 @@ bool Validator::isSemanticallyValid() {
 bool Validator::selectClauseIsSemanticallyCorrect() {
 	Select selectClause = this->parsedQuery.getSelect();
 	std::string returnValue = selectClause.getSynonym();
+	std::unordered_map<std::string, DesignEntity> mappedSynonyms = this->parsedQuery.getSynonymToDesignEntityMap();
 	
-	if (this->parsedQuery.getSynonymToDesignEntityMap().find(returnValue) == this->parsedQuery.getSynonymToDesignEntityMap().end()) {
+	if (mappedSynonyms.find(returnValue) == mappedSynonyms.end()) {
 		return false;
 	}
 
@@ -210,7 +211,8 @@ bool Validator::isValidFollowsAndParent(SuchThat relationship) {
 
 
 bool Validator::isDeclaredSynonym(std::string synonym) {
-	if (this->parsedQuery.getSynonymToDesignEntityMap().find(synonym) == this->parsedQuery.getSynonymToDesignEntityMap().end()) {
+	std::unordered_map<std::string, DesignEntity> mappedSynonyms = this->parsedQuery.getSynonymToDesignEntityMap();
+	if (mappedSynonyms.find(synonym) == mappedSynonyms.end()) {
 		return false;
 	}
 
@@ -219,14 +221,10 @@ bool Validator::isDeclaredSynonym(std::string synonym) {
 
 
 bool Validator::isStatement(std::string synonym) {
-	std::vector<DesignEntity> statementDesignEntities = {
-		DesignEntity::STMT, DesignEntity::READ, DesignEntity::PRINT, DesignEntity::CALL,
-		DesignEntity::WHILE, DesignEntity::IF, DesignEntity::ASSIGN
-	};
-
+	std::vector<DesignEntity> validDesignEntities = this->statementDesignEntities;
 	DesignEntity designEntityOfSynonym = this->parsedQuery.getSynonymToDesignEntityMap().at(synonym);
 
-	if (std::find(statementDesignEntities.begin(), statementDesignEntities.end(), designEntityOfSynonym) == statementDesignEntities.end()) {
+	if (std::find(validDesignEntities.begin(), validDesignEntities.end(), designEntityOfSynonym) == validDesignEntities.end()) {
 		return false;
 	}
 
@@ -255,10 +253,7 @@ bool Validator::isAssign(std::string synonym) {
 
 bool Validator::isValidUsesAndModifiesLeftParameter(std::string synonym) {
 	// Removed READ since according to the slides, READ is not a valid parameter for Uses and Modifies
-	std::vector<DesignEntity> validDesignEntities = {
-		DesignEntity::STMT, DesignEntity::PRINT, DesignEntity::CALL,
-		DesignEntity::WHILE, DesignEntity::IF, DesignEntity::ASSIGN, DesignEntity::PROCEDURE
-	};
+	std::vector<DesignEntity> validDesignEntities = this->validDesignEntitiesForUsesAndModifies;
 
 	DesignEntity designEntityOfSynonym = this->parsedQuery.getSynonymToDesignEntityMap().at(synonym);
 

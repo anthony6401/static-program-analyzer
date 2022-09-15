@@ -16,6 +16,14 @@ using namespace qps;
 class Validator {
 private:
 	QueryObject parsedQuery;
+	std::vector<DesignEntity> validDesignEntitiesForUsesAndModifies = {
+		DesignEntity::STMT, DesignEntity::PRINT, DesignEntity::CALL,
+		DesignEntity::WHILE, DesignEntity::IF, DesignEntity::ASSIGN, DesignEntity::PROCEDURE
+	};
+	std::vector<DesignEntity> statementDesignEntities = {
+		DesignEntity::STMT, DesignEntity::READ, DesignEntity::PRINT, DesignEntity::CALL,
+		DesignEntity::WHILE, DesignEntity::IF, DesignEntity::ASSIGN
+	};
 	bool isSemanticallyValid();
 	bool selectClauseIsSemanticallyCorrect();
 	bool suchThatClauseIsSemanticallyCorrect();

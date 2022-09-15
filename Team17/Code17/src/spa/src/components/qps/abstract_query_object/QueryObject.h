@@ -24,7 +24,7 @@ private:
 
 public:
     QueryObject();
-    QueryObject(Select select, std::vector<SuchThat> relationship, std::vector<Pattern> pattern, std::unordered_map<std::string, DesignEntity> synonymToDesignEntity, int numOfDeclaredSynonyms);
+    QueryObject(Select select, std::vector<SuchThat> relationship, std::vector<qps::Pattern> pattern, std::unordered_map<std::string, DesignEntity> synonymToDesignEntity, int numOfDeclaredSynonyms);
     bool isSyntacticallyCorrect();
     bool isSemanticallyValid();
     std::vector<SuchThat> getRelationships();

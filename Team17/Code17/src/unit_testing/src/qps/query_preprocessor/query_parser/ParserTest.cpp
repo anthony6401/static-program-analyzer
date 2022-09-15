@@ -330,6 +330,53 @@ TEST_CASE("Muti-clause query - synonym name is same as other clause tokens") {
     REQUIRE(expectedResult == actualResult);
 };
 
+TEST_CASE("Multi clause query - return type is not used in other clauses") {
+    std::vector<TokenObject> testTokenObject{
+    TokenObject(TokenType::VARIABLE, std::string("variable")),
+    TokenObject(TokenType::NAME, std::string("v")),
+    TokenObject(TokenType::COMMA, std::string(",")),
+    TokenObject(TokenType::NAME, std::string("v1")),
+    TokenObject(TokenType::SEMI_COLON, std::string(";")),
+    TokenObject(TokenType::ASSIGN, std::string("assign")),
+    TokenObject(TokenType::NAME, std::string("a")),
+    TokenObject(TokenType::SEMI_COLON, std::string(";")),
+    TokenObject(TokenType::CALL, std::string("call")),
+    TokenObject(TokenType::NAME, std::string("c")),
+    TokenObject(TokenType::SEMI_COLON, std::string(";")),
+    TokenObject(TokenType::SELECT, std::string("Select")),
+    TokenObject(TokenType::NAME, std::string("v")),
+    TokenObject(TokenType::SUCH, "such"),
+    TokenObject(TokenType::THAT, "that"),
+    TokenObject(TokenType::FOLLOWS, "Follows"),
+    TokenObject(TokenType::OPEN_BRACKET, "("),
+    TokenObject(TokenType::INTEGER, "6"),
+    TokenObject(TokenType::COMMA, ","),
+    TokenObject(TokenType::WILDCARD, std::string("_")),
+    TokenObject(TokenType::CLOSED_BRACKET, ")"),
+    TokenObject(TokenType::PATTERN, "pattern"),
+    TokenObject(TokenType::NAME, std::string("a")),
+    TokenObject(TokenType::OPEN_BRACKET, "("),
+    TokenObject(TokenType::NAME, std::string("v1")),
+    TokenObject(TokenType::COMMA, ","),
+    TokenObject(TokenType::WILDCARD, "_"),
+    TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+
+
+    Select expectedSelect = Select("v");
+    std::vector<SuchThat> expectedSuchThat{ SuchThat(TokenType::FOLLOWS, TokenObject(TokenType::INTEGER, "6"),TokenObject(TokenType::WILDCARD, "_")) };
+    std::vector<Pattern> expectedPattern{ Pattern("a", TokenObject(TokenType::NAME, "v1"), TokenObject(TokenType::WILDCARD, "_")) };
+    std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"v", DesignEntity::VARIABLE}, {"v1", DesignEntity::VARIABLE}, {"a", DesignEntity::ASSIGN}, {"c", DesignEntity::CALL} };
+    int expectedNumOfDeclaredSynonyms = 4;
+
+    QueryObject expectedResult = QueryObject(expectedSelect, expectedSuchThat, expectedPattern, expectedMappedSynonyms, expectedNumOfDeclaredSynonyms);
+
+    Parser parser = Parser(testTokenObject);
+    QueryObject actualResult = parser.parse();
+
+    REQUIRE(expectedResult == actualResult);
+};
+
 TEST_CASE("SyntaxError - No return value") {
     std::vector<TokenObject> testTokenObject{
         TokenObject(TokenType::VARIABLE, std::string("variable")),
