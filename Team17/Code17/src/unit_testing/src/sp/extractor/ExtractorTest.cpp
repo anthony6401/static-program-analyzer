@@ -276,6 +276,7 @@ TEST_CASE("Unit test - getUsesRelationshipForAssign: a = b") {
 	expectedRelationships.push_back(expectedRelationship);
 	std::vector<UsesRelationship*> generatedRelationships = testExtractor.getUsesRelationshipsForAssign(assign);
 
+	REQUIRE(generatedRelationships.size() == expectedRelationships.size());
 	for (int i = 0; i < expectedRelationships.size(); i++) {
 		REQUIRE(equalRelationship(expectedRelationships.at(i), generatedRelationships.at(i)));
 	}
@@ -309,6 +310,7 @@ TEST_CASE("Unit test - getUsesRelationshipForAssign: a = a + 1") {
 	expectedRelationships.push_back(expectedRelationship);
 	std::vector<UsesRelationship*> generatedRelationships = testExtractor.getUsesRelationshipsForAssign(assign);
 
+	REQUIRE(generatedRelationships.size() == expectedRelationships.size());
 	for (int i = 0; i < expectedRelationships.size(); i++) {
 		REQUIRE(equalRelationship(expectedRelationships.at(i), generatedRelationships.at(i)));
 	}
@@ -356,6 +358,7 @@ TEST_CASE("Unit test - getUsesRelationshipForAssign: a = a + 1 - ( b * c )") {
 	expectedRelationships.push_back(expectedRelationship_3);
 	std::vector<UsesRelationship*> generatedRelationships = testExtractor.getUsesRelationshipsForAssign(assign);
 
+	REQUIRE(generatedRelationships.size() == expectedRelationships.size());
 	for (int i = 0; i < expectedRelationships.size(); i++) {
 		REQUIRE(equalRelationship(expectedRelationships.at(i), generatedRelationships.at(i)));
 	}
