@@ -53,7 +53,7 @@ SimpleToken SimpleParser::parseLine(std::vector<std::string>& tokens, std::strin
     } else if (first == "if") {
         tokens.erase(tokens.begin());
         SimpleToken token = SimpleToken(SpTokenType::TIF, code,
-            0, &SimpleParser::parseHolder);
+            0, &SimpleParser::parseIf);
         return token;
     } else if (first == "else") {
         tokens.erase(tokens.begin());
@@ -142,7 +142,28 @@ void SimpleParser::parseWhile(SimpleToken& whileStmt, std::vector<std::string>& 
         throw std::invalid_argument("Received invalid While:Line " + std::to_string(whileStmt.statementNumber));
     }
     tokens.erase(tokens.end());
+    SimpleToken stmtList = SimpleToken(SpTokenType::TCONDEXPR, "", 0, NULL);
+    stmtList.setChildren(parseCondition(tokens));
+    std::vector<SimpleToken> children;
+    children.push_back(stmtList);
+    whileStmt.setChildren(children);
+}
 
+void SimpleParser::parseIf(SimpleToken& ifStmt, std::vector<std::string>& tokens,
+    Extractor* extractor) {
+    if (tokens.size() < 7 || tokens.back() != "{") {
+        throw std::invalid_argument("Received invalid If:Line " + std::to_string(ifStmt.statementNumber));
+    }
+    tokens.erase(tokens.end());
+    if (tokens.back() != "then") {
+        throw std::invalid_argument("Received invalid If:Line " + std::to_string(ifStmt.statementNumber));
+    }
+    tokens.erase(tokens.end());
+    SimpleToken stmtList = SimpleToken(SpTokenType::TCONDEXPR, "", 0, NULL);
+    stmtList.setChildren(parseCondition(tokens));
+    std::vector<SimpleToken> children;
+    children.push_back(stmtList);
+    ifStmt.setChildren(children);
 }
 
 void SimpleParser::parseAssign(SimpleToken& assign, std::vector<std::string>& tokens,
