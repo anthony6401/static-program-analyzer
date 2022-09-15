@@ -69,7 +69,7 @@ TEST_CASE("Multi clause queries") {
 
 TEST_CASE("Multi clause queries where return type is not used in other clauses -  variable v, v1; call c; assign a; Select v such that Follows(c, _) pattern a(v1, _)") {
     Select select = Select("v");
-    std::vector<SuchThat> suchThat{ SuchThat(TokenType::FOLLOWS, TokenObject(TokenType::INTEGER, "6"),TokenObject(TokenType::WILDCARD, "_")) };
+    std::vector<SuchThat> suchThat{ SuchThat(TokenType::FOLLOWS, TokenObject(TokenType::NAME, "c"),TokenObject(TokenType::WILDCARD, "_")) };
     std::vector<qps::Pattern> pattern{ Pattern("a", TokenObject(TokenType::NAME, "v1"), TokenObject(TokenType::WILDCARD, "_")) };
     std::unordered_map<std::string, DesignEntity> mappedSynonyms{ {"v", DesignEntity::VARIABLE}, {"v1", DesignEntity::VARIABLE}, {"a", DesignEntity::ASSIGN}, {"c", DesignEntity::CALL} };
     int numOfDeclaredSynonyms = 4;
