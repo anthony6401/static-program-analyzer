@@ -23,8 +23,10 @@ public:
     void addClauseToDivider(std::shared_ptr<Clause> clause);
     GroupedClause getNoSynonymsPresent();
     std::vector<GroupedClause> getCommonSynonymsPresent();
+    std::vector<GroupedClause> getSelectSynonymPresentGroups();
+    std::vector<GroupedClause> getSelectSynonymNotPresentGroups();
     std::pair<GroupedClause, std::vector<GroupedClause>> divideClausesBySynonyms(std::vector<std::shared_ptr<Clause>> clausesToEvaluate);
-    std::pair<std::vector<GroupedClause>, std::vector<GroupedClause>> divideCommonSynonymGroupsBySelect(std::shared_ptr<Clause> selectClause);
+    void divideCommonSynonymGroupsBySelect(std::shared_ptr<Clause> selectClause);
 
 };
 

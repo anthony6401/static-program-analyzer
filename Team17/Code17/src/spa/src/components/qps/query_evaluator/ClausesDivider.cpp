@@ -29,7 +29,34 @@ std::vector<GroupedClause> ClauseDivider::getCommonSynonymsPresent() {
     return commonSynonymsGroups;
 }
 
-std::pair<std::vector<GroupedClause>, std::vector<GroupedClause>> ClauseDivider::divideCommonSynonymGroupsBySelect(std::shared_ptr<Clause> selectClause) {
+//std::vector<GroupedClause> ClauseDivider::getSelectSynonymPresentGroups(std::shared_ptr<Clause> selectClause) {
+//    for (auto gc : commonSynonymsGroups) {
+//        if (gc.hasCommonSynonymWithClause(selectClause)) {
+//            selectSynonymPresentGroups.emplace_back(gc);
+//        }
+//    }
+//    return selectSynonymPresentGroups;
+//}
+//
+//std::vector<GroupedClause> ClauseDivider::getSelectSynonymNotPresentGroups(std::shared_ptr<Clause> selectClause) {
+//    for (auto gc : commonSynonymsGroups) {
+//        if (!gc.hasCommonSynonymWithClause(selectClause)) {
+//            selectSynonymNotPresentGroups.emplace_back(gc);
+//        }
+//    }
+//    return selectSynonymNotPresentGroups;
+//}
+
+std::vector<GroupedClause> ClauseDivider::getSelectSynonymPresentGroups() {
+    return selectSynonymPresentGroups;
+}
+
+std::vector<GroupedClause> ClauseDivider::getSelectSynonymNotPresentGroups() {
+    return selectSynonymNotPresentGroups;
+}
+
+
+void ClauseDivider::divideCommonSynonymGroupsBySelect(std::shared_ptr<Clause> selectClause) {
     for (auto gc : commonSynonymsGroups) {
         if (gc.hasCommonSynonymWithClause(selectClause)) {
             selectSynonymPresentGroups.emplace_back(gc);
@@ -38,7 +65,7 @@ std::pair<std::vector<GroupedClause>, std::vector<GroupedClause>> ClauseDivider:
         }
     }
 
-    return {selectSynonymPresentGroups, selectSynonymNotPresentGroups};
+    //return {selectSynonymPresentGroups, selectSynonymNotPresentGroups};
 }
 
 

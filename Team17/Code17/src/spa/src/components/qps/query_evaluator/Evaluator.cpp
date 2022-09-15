@@ -12,13 +12,14 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
     std::shared_ptr<Clause> selectClause = ClauseCreator::createClause(select.getSynonym(), synonymToDesignEntityMap, qpsClient);
 
     ClauseDivider clausesToEvaluate = extractClausesToEvaluate(queryObject, synonymToDesignEntityMap, qpsClient);
-
     GroupedClause noSynonymsClauses = clausesToEvaluate.getNoSynonymsPresent();
 
-    std::pair<std::vector<GroupedClause>, std::vector<GroupedClause>> pairBySelect = clausesToEvaluate.divideCommonSynonymGroupsBySelect(selectClause);
-
-    std::vector<GroupedClause> hasSelectSynonymPresent = pairBySelect.first;
-    std::vector<GroupedClause> noSelectSynonymPresent = pairBySelect.second;
+    clausesToEvaluate.divideCommonSynonymGroupsBySelect(selectClause);
+    std::vector<GroupedClause> hasSelectSynonymPresent = clausesToEvaluate.getSelectSynonymPresentGroups();
+    std::vector<GroupedClause> noSelectSynonymPresent = clausesToEvaluate.getSelectSynonymNotPresentGroups();
+//
+//    std::vector<GroupedClause> hasSelectSynonymPresent = pairBySelect.first;
+//    std::vector<GroupedClause> noSelectSynonymPresent = pairBySelect.second;
 
     RawResult evaluatedResults;
     bool isFalseNoSynonymClauseEvaluation = Evaluator::evaluateNoSynonymClauses(noSynonymsClauses);
@@ -33,6 +34,7 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
         evaluatedResults = Evaluator::evaluateHasSelectSynonymClauses(hasSelectSynonymPresent, select.getSynonym());
     }
 
+    // For unrelated to select synonyms, if both tables are true/not empty, return all results
     RawResult selectResults = selectClause->evaluateClause();
     evaluatedResults.combineResult(selectResults);
     Evaluator::populateResults(evaluatedResults, select.getSynonym(), results);
@@ -43,7 +45,7 @@ void Evaluator::populateResults(RawResult finalResult, std::string selectSynonym
         results.emplace_back("none");
     }
 
-    std::cout << finalResult << std::endl;
+    std::cout << "Final Table:\n" << finalResult << std::endl;
 
     std::unordered_set<std::string> resultsToPopulate = finalResult.getResultsToBePopulated(selectSynonym);
 
@@ -56,9 +58,9 @@ void Evaluator::populateResults(RawResult finalResult, std::string selectSynonym
 
 // Returns boolean, check for False or Empty Clauses
 bool Evaluator::evaluateNoSynonymClauses(GroupedClause noSynonymsClauses) {
-    std::cout << "in evaluate no synonym" << std::endl;
+    std::cout << "----In evaluate no synonym method----" << std::endl;
     if (noSynonymsClauses.isEmpty()) {
-        std::cout << "no synonym clause" << std::endl;
+        std::cout << "----noSynonymsClauses is empty----" << std::endl;
         return false;
     } else {
         std::vector<std::shared_ptr<Clause>> clauses = noSynonymsClauses.getClauses();
@@ -74,7 +76,7 @@ bool Evaluator::evaluateNoSynonymClauses(GroupedClause noSynonymsClauses) {
 
 // Returns boolean, check for False or Empty Clauses
 bool Evaluator::evaluateNoSelectSynonymClauses(std::vector<GroupedClause> noSelectSynonymPresent) {
-    std::cout << "in evaluate no select synonym" << std::endl;
+    std::cout << "----In evaluate no select synonym method----" << std::endl;
     for (GroupedClause gc : noSelectSynonymPresent) {
         RawResult rawResult = gc.evaluateGroupedClause(); // Combined result within a grouped clause
         if (rawResult.getIsFalseResult()) {
@@ -88,16 +90,18 @@ bool Evaluator::evaluateNoSelectSynonymClauses(std::vector<GroupedClause> noSele
 // Evaluate each grouped clause in a loop, find common synonyms and combine results
 // Combine all grouped clauses and filter values by select synonym
 RawResult Evaluator::evaluateHasSelectSynonymClauses(std::vector<GroupedClause> hasSelectSynonymPresent, std::string selectSynonym) {
-    std::cout << "in evaluate has select synonym" << std::endl;
+    std::cout << "----In evaluate has select synonym method----" << std::endl;
     RawResult combinedResultTable;
     for (GroupedClause gc : hasSelectSynonymPresent) {
-        std::cout << "in evaluate has select synonym loop" << std::endl;
+        std::cout << "----In evaluate has select synonym GC loop----" << std::endl;
       RawResult intermediate = gc.evaluateGroupedClause();
+        std::cout << "Results of evaluated grouped clause: \n" << intermediate << std::endl;
       if (intermediate.getIsFalseResult()) {
           combinedResultTable = std::move(intermediate);
           break;
       }
       intermediate.filterBySelectSynonym(selectSynonym);
+      std::cout << "After filtering for select synonym: \n" << intermediate << std::endl;
       combinedResultTable.combineResult(intermediate);
     }
     return combinedResultTable;
