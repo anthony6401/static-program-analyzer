@@ -9,40 +9,28 @@ RawResult AssignPatternClause::evaluateClause() {
     TokenType leftType = left.getTokenType();
     TokenType rightType = right.getTokenType();
     if (leftType == TokenType::NAME && rightType == TokenType::EXPRESSION) {
-        std::cout << "----- in evaluate clause method for assign name expr -------" << std::endl;
         return AssignPatternClause::evaluateSynonymExpression();
     } else if (leftType == TokenType::NAME && rightType == TokenType::WILDCARD) {
-        std::cout << "----- in evaluate clause method for assign name wildcard -------" << std::endl;
         return AssignPatternClause::evaluateSynonymWildcard();
     } else if (leftType == TokenType::NAME && rightType == TokenType::NAME_WITH_QUOTATION) {
-        std::cout << "----- in evaluate clause method for assign name name quote -------" << std::endl;
         return AssignPatternClause::evaluateSynonymNameQuotes();
     } else if (leftType == TokenType::NAME && rightType == TokenType::SUBEXPRESSION) {
-        std::cout << "----- in evaluate clause method for assign name subexpr -------" << std::endl;
         return AssignPatternClause::evaluateSynonymSubExpression();
     } else if (leftType == TokenType::WILDCARD && rightType == TokenType::WILDCARD) {
-        std::cout << "----- in evaluate clause method for assign wildcard wildcard -------" << std::endl;
         return AssignPatternClause::evaluateWildcardWildcard();
     } else if (leftType == TokenType::WILDCARD && rightType == TokenType::EXPRESSION) {
-        std::cout << "----- in evaluate clause method for assign wildcard expr -------" << std::endl;
         return AssignPatternClause::evaluateWildcardExpression();
     } else if (leftType == TokenType::WILDCARD && rightType == TokenType::NAME_WITH_QUOTATION) {
-        std::cout << "----- in evaluate clause method for assign wildcard name quote -------" << std::endl;
         return AssignPatternClause::evaluateWildcardNameQuotes();
     } else if (leftType == TokenType::WILDCARD && rightType == TokenType::SUBEXPRESSION) {
-        std::cout << "----- in evaluate clause method for assign wildcard subexpr -------" << std::endl;
         return AssignPatternClause::evaluateWildcardSubExpression();
     } else if (leftType == TokenType::NAME_WITH_QUOTATION && rightType == TokenType::WILDCARD) {
-        std::cout << "----- in evaluate clause method for assign name quote wildcard -------" << std::endl;
         return AssignPatternClause::evaluateNameQuotesWildcard();
     } else if (leftType == TokenType::NAME_WITH_QUOTATION && rightType == TokenType::EXPRESSION) {
-        std::cout << "----- in evaluate clause method for assign name quote expr -------" << std::endl;
         return AssignPatternClause::evaluateNameQuotesExpression();
     } else if (leftType == TokenType::NAME_WITH_QUOTATION && rightType == TokenType::NAME_WITH_QUOTATION) {
-        std::cout << "----- in evaluate clause method for assign name quote name quote -------" << std::endl;
         return AssignPatternClause::evaluateNameQuotesNameQuotes();
     } else if (leftType == TokenType::NAME_WITH_QUOTATION && rightType == TokenType::SUBEXPRESSION) {
-        std::cout << "----- in evaluate clause method for assign name quote subexpr -------" << std::endl;
         return AssignPatternClause::evaluateNameQuotesSubExpression();
     } else {
         return {};
@@ -54,7 +42,6 @@ size_t AssignPatternClause::getNumberOfSynonyms() {
     if (left.getTokenType() == TokenType::NAME) {
         numberOfSynonyms++;
     }
-
     return numberOfSynonyms + 1;
 }
 
@@ -63,61 +50,87 @@ std::set<std::string> AssignPatternClause::getAllSynonyms() {
     if (left.getTokenType() == TokenType::NAME) {
         synonyms.emplace(left.getValue());
     }
-    for (auto c : synonyms) {
-        std::cout << "pattern syn " << c << std::endl;
-    }
     return synonyms;
 }
 
+
+
 RawResult AssignPatternClause::evaluateSynonymWildcard() {
-    std::cout << "----- Assign: synonym wild card -------" << std::endl;
-    return {"a", "v", {{"1", "x"}, {"2", "y"}}};
+    std::vector<std::pair<std::string, std::string>> results = qpsClient.getPatternPair(DesignEntity::ASSIGN, right);
+    std::string leftValue = left.getValue();
+    return {assignSynonym, leftValue, results};
 }
 
 RawResult AssignPatternClause::evaluateSynonymExpression() {
-    return {};
+    std::vector<std::pair<std::string, std::string>> results = qpsClient.getPatternPair(DesignEntity::ASSIGN, right);
+    std::string leftValue = left.getValue();
+    return {assignSynonym, leftValue, results};
 }
 
 RawResult AssignPatternClause::evaluateSynonymNameQuotes() {
-    std::cout << "----- Assign: synonym name quotes -------" << std::endl;
-    return {"a", "v", {{"11", "x"}, {"31", "a"}}};
+    std::vector<std::pair<std::string, std::string>> results = qpsClient.getPatternPair(DesignEntity::ASSIGN, right);
+    std::string leftValue = left.getValue();
+    return {assignSynonym, leftValue, results};
 }
 
 RawResult AssignPatternClause::evaluateSynonymSubExpression() {
-    return {};
+    std::vector<std::pair<std::string, std::string>> results = qpsClient.getPatternPair(DesignEntity::ASSIGN, right);
+    std::string leftValue = left.getValue();
+    return {assignSynonym, leftValue, results};
 }
 
 RawResult AssignPatternClause::evaluateWildcardWildcard() {
-    std::cout << "----- Assign: wild card wild card -------" << std::endl;
-    return {"a1", {"1", "2"}};
+    std::vector<std::pair<std::string, std::string>> results = qpsClient.getPatternPair(DesignEntity::ASSIGN, right);
+    std::unordered_set<std::string> extractedAssignments; // {"1", "2", "3"....}
+    for (auto pair : results) {
+        extractedAssignments.insert(pair.first);
+    }
+    return {assignSynonym,  extractedAssignments};
 }
 
 RawResult AssignPatternClause::evaluateWildcardExpression() {
-    return {};
+    std::vector<std::pair<std::string, std::string>> results = qpsClient.getPatternPair(DesignEntity::ASSIGN, right);
+    std::unordered_set<std::string> extractedAssignments; // {"1", "2", "3"....}
+    for (auto pair : results) {
+        extractedAssignments.insert(pair.first);
+    }
+    return {assignSynonym,  extractedAssignments};
 }
 
 RawResult AssignPatternClause::evaluateWildcardNameQuotes() {
-    std::cout << "----- Assign: wild card name quotes -------" << std::endl;
-    return {"a", {}};
+    std::vector<std::pair<std::string, std::string>> results = qpsClient.getPatternPair(DesignEntity::ASSIGN, right);
+    std::unordered_set<std::string> extractedAssignments; // {"1", "2", "3"....}
+    for (auto pair : results) {
+        extractedAssignments.insert(pair.first);
+    }
+    return {assignSynonym,  extractedAssignments};
 }
 
 RawResult AssignPatternClause::evaluateWildcardSubExpression() {
-    return {};
+    std::vector<std::pair<std::string, std::string>> results = qpsClient.getPatternPair(DesignEntity::ASSIGN, right);
+    std::unordered_set<std::string> extractedAssignments; // {"1", "2", "3"....}
+    for (auto pair : results) {
+        extractedAssignments.insert(pair.first);
+    }
+    return {assignSynonym,  extractedAssignments};
 }
 
 RawResult AssignPatternClause::evaluateNameQuotesWildcard() {
-    return {};
+    std::unordered_set<std::string> results = qpsClient.getPattern(DesignEntity::ASSIGN, left, right);
+    return {assignSynonym,  results};
 }
 
 RawResult AssignPatternClause::evaluateNameQuotesExpression() {
-    return {};
+    std::unordered_set<std::string> results = qpsClient.getPattern(DesignEntity::ASSIGN, left, right);
+    return {assignSynonym,  results};
 }
 
 RawResult AssignPatternClause::evaluateNameQuotesNameQuotes() {
-    std::cout << "----- Assign: Name quote name quote -------" << std::endl;
-    return {"a", {"1", "3", "4"}};
+    std::unordered_set<std::string> results = qpsClient.getPattern(DesignEntity::ASSIGN, left, right);
+    return {assignSynonym,  results};
 }
 
 RawResult AssignPatternClause::evaluateNameQuotesSubExpression() {
-    return {};
+    std::unordered_set<std::string> results = qpsClient.getPattern(DesignEntity::ASSIGN, left, right);
+    return {assignSynonym,  results};
 }
