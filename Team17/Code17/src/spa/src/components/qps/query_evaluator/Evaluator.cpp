@@ -7,30 +7,36 @@
 #include "ClausesDivider.h"
 
 void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &results, QPSClient qpsClient) {
-    RawResult evaluatedResults;
-    std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap = queryObject.getSynonymToDesignEntityMap();
-    Select select = queryObject.getSelect();
-    std::shared_ptr<Clause> selectClause = ClauseCreator::createClause(select.getSynonym(), synonymToDesignEntityMap, qpsClient);
-
-    ClauseDivider clausesToEvaluate = extractClausesToEvaluate(queryObject, synonymToDesignEntityMap, qpsClient);
-    clausesToEvaluate.divideCommonSynonymGroupsBySelect(selectClause);
-    GroupedClause noSynonymsClauses = clausesToEvaluate.getNoSynonymsPresent();
-    std::vector<GroupedClause> hasSelectSynonymPresent = clausesToEvaluate.getSelectSynonymPresentGroups();
-    std::vector<GroupedClause> noSelectSynonymPresent = clausesToEvaluate.getSelectSynonymNotPresentGroups();
-
-    bool isFalseNoSynonymClauseEvaluation = Evaluator::evaluateNoSynonymClauses(noSynonymsClauses);
-    bool isFalseNoSelectSynonymEvaluation = Evaluator::evaluateNoSelectSynonymClauses(noSelectSynonymPresent);
-
-    if (isFalseNoSynonymClauseEvaluation || isFalseNoSelectSynonymEvaluation) {
-        evaluatedResults.setIsFalseResultToTrue();
+    if (!queryObject.isSyntacticallyCorrect()) {
+        results.emplace_back("SyntaxError");
+    } else if (!queryObject.isSemanticallyValid()) {
+        results.emplace_back("SemanticError");
     } else {
-        evaluatedResults = Evaluator::evaluateHasSelectSynonymClauses(hasSelectSynonymPresent, select.getSynonym());
-    }
+        RawResult evaluatedResults;
+        std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap = queryObject.getSynonymToDesignEntityMap();
+        Select select = queryObject.getSelect();
+        std::shared_ptr<Clause> selectClause = ClauseCreator::createClause(select.getSynonym(), synonymToDesignEntityMap, qpsClient);
 
-    // For unrelated to select synonyms, if both tables are true/not empty, return all results
-    RawResult selectResults = selectClause -> evaluateClause();
-    evaluatedResults.combineResult(selectResults);
-    Evaluator::populateResults(evaluatedResults, select.getSynonym(), results);
+        ClauseDivider clausesToEvaluate = extractClausesToEvaluate(queryObject, synonymToDesignEntityMap, qpsClient);
+        clausesToEvaluate.divideCommonSynonymGroupsBySelect(selectClause);
+        GroupedClause noSynonymsClauses = clausesToEvaluate.getNoSynonymsPresent();
+        std::vector<GroupedClause> hasSelectSynonymPresent = clausesToEvaluate.getSelectSynonymPresentGroups();
+        std::vector<GroupedClause> noSelectSynonymPresent = clausesToEvaluate.getSelectSynonymNotPresentGroups();
+
+        bool isFalseNoSynonymClauseEvaluation = Evaluator::evaluateNoSynonymClauses(noSynonymsClauses);
+        bool isFalseNoSelectSynonymEvaluation = Evaluator::evaluateNoSelectSynonymClauses(noSelectSynonymPresent);
+
+        if (isFalseNoSynonymClauseEvaluation || isFalseNoSelectSynonymEvaluation) {
+            evaluatedResults.setIsFalseResultToTrue();
+        } else {
+            evaluatedResults = Evaluator::evaluateHasSelectSynonymClauses(hasSelectSynonymPresent, select.getSynonym());
+        }
+
+        // For unrelated to select synonyms, if both tables are true/not empty, return all results
+        RawResult selectResults = selectClause -> evaluateClause();
+        evaluatedResults.combineResult(selectResults);
+        Evaluator::populateResults(evaluatedResults, select.getSynonym(), results);
+    }
 }
 
 void Evaluator::populateResults(RawResult finalResult, std::string selectSynonym, std::list<std::string> &results) {
