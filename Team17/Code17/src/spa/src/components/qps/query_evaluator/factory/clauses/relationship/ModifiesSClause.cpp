@@ -52,7 +52,7 @@ RelationshipType ModifiesSClause::getRelationshipType() {
     return RelationshipType::MODIFIES;
 }
 
-std::vector<std::pair<std::string, std::string>> processMap(std::unordered_map<std::string, std::unordered_set<std::string>> results) {
+std::vector<std::pair<std::string, std::string>> ModifiesSClause::processMapToVectorPair(std::unordered_map<std::string, std::unordered_set<std::string>> results) {
     std::vector<std::pair<std::string, std::string>> processedResult;
     for (auto entry : results) {
         std::string firstSynonym = entry.first;
@@ -65,18 +65,32 @@ std::vector<std::pair<std::string, std::string>> processMap(std::unordered_map<s
     return processedResult;
 }
 
+std::unordered_set<std::string> ModifiesSClause::processMapToSet(std::unordered_map<std::string, std::unordered_set<std::string>> results) {
+    std::unordered_set<std::string> processedResult;
+    for (auto entry : results) {
+        std::string firstSynonym = entry.first;
+        processedResult.insert(firstSynonym);
+    }
+    return processedResult;
+}
+
 RawResult ModifiesSClause::evaluateSynonymSynonym() {
     DesignEntity stmtType = synonymToDesignEntityMap[left.getValue()];
     DesignEntity rightType = synonymToDesignEntityMap[right.getValue()];
+    std::string leftValue = left.getValue();
+    std::string rightValue = right.getValue();
     std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(getRelationshipType(), stmtType, rightType);
-    return {"a", "v", {{"1", "x"}, {"2", "y"}}};
+    std::vector<std::pair<std::string, std::string>> processedMap = ModifiesSClause::processMapToVectorPair(results); // {{"1", "x"}, {"2", "y"}}
+    return {leftValue, rightValue, processedMap};
 }
 
 RawResult ModifiesSClause::evaluateSynonymWildcard() {
-    std::cout << "----- ModifiesS: Synonym Wildcard -------" << std::endl;
     DesignEntity stmtType = synonymToDesignEntityMap[left.getValue()];
-    // API CALL
-    return {"a", {"1", "3"}};
+    DesignEntity rightType = DesignEntity::VARIABLE;
+    std::string leftValue = left.getValue();
+    std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(getRelationshipType(), stmtType, rightType);
+    std::unordered_set<std::string> processedMap = ModifiesSClause::processMapToSet(results);
+    return {leftValue, processedMap};
 }
 
 RawResult ModifiesSClause::evaluateSynonymNameQuotes() {
