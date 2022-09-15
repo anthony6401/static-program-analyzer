@@ -2,18 +2,24 @@
 
 #include <stdio.h>
 
-void PatternExtractor::extractPattern(Extractor extractor, SimpleToken simpleToken) {
-	std::string lineNum = std::to_string(simpleToken.statementNumber);
-	std::vector<SimpleToken> children = simpleToken.getChildren();
-	SimpleToken variable = children.at(0);
-	SimpleToken expression = children.at(1);
+std::vector<AssignPattern*> PatternExtractor::extractPattern(SimpleToken procOrStmtLstToken) {
+	std::vector<AssignPattern*> assignPatternVector;
 
-	std::string firstValue = variable.value;
-	std::string secondValue = getExpressionAsString(expression);
+	std::vector<SimpleToken> stmtSeries = procOrStmtLstToken.getChildren();
 
-	AssignPattern* assignPattern = new AssignPattern(lineNum, firstValue, secondValue);
+	for (int i = 0; i < stmtSeries.size(); i++) {
+		SimpleToken current = stmtSeries.at(i);
+		if (current.type == SpTokenType::TASSIGN) {
+			std::vector<SimpleToken> assignChildren = current.getChildren();
+			std::string lineNum = std::to_string(current.statementNumber);
+			std::string firstVal = assignChildren.at(0).value;
+			std::string seconVal = getExpressionAsString(assignChildren.at(1));
+			AssignPattern* assignPattern = new AssignPattern(lineNum, firstVal, seconVal);
+			assignPatternVector.push_back(assignPattern);
+		}
+	}
 
-	extractor.client->storePattern(assignPattern);
+	return assignPatternVector;
 }
 
 std::string PatternExtractor::getExpressionAsString(SimpleToken expression) {

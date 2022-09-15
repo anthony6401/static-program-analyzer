@@ -6,6 +6,6 @@
 
 class PatternExtractor {
 public:
-	static void extractPattern(Extractor extractor, SimpleToken simpleToken);
+	static std::vector<AssignPattern*> extractPattern(SimpleToken procOrStmtLstToken);
 	static std::string getExpressionAsString(SimpleToken expression);
 };

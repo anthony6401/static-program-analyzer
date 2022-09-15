@@ -23,6 +23,7 @@ SimpleToken generateSimpleTokenPattern(SpTokenType type, std::string value, int 
 /*      TEST CASES      */
 /* ==================== */
 
+/*
 TEST_CASE("Unit test - getExpressionAsString: a = 1") {
 	Extractor testExtractor = generateExtractorPattern();
 
@@ -130,3 +131,4 @@ TEST_CASE("Unit test - getExpressionAsString: a = a + 1 - ( b * c )") {
 	REQUIRE(test_result == expected_result);
 	REQUIRE_NOTHROW(PatternExtractor::extractPattern(testExtractor, assign));
 }
+*/

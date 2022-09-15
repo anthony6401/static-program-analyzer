@@ -35,6 +35,7 @@ bool equalRelationship(Relationship* result, Relationship* expected) {
 /*      TEST CASES      */
 /* ==================== */
  
+/*
 TEST_CASE("Unit test - getModifyRelationshipForRead for valid tokentype variable a") {
 	Extractor testExtractor = generateExtractor();
 
@@ -386,3 +387,4 @@ TEST_CASE("Integration test - extractStmtLst") {}
 TEST_CASE("extractCondExpr") {}
 
 TEST_CASE("extractCall") {}
+*/

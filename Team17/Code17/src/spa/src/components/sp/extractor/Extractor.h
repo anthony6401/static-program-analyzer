@@ -21,11 +21,13 @@
 #include "../../../models/Relationship/FollowsRelationship.h"
 #include "../../../models/Relationship/ParentRelationship.h"
 
-#include "UsesExtractor.h"
-#include "ModifyExtractor.h"
 #include "FollowsExtractor.h"
 #include "ParentExtractor.h"
+#include "UsesExtractor.h"
+#include "ModifyExtractor.h"
 #include "PatternExtractor.h"
+
+#include "../../../models/Pattern/AssignPattern.h"
 
 #include "../../pkb/clients/SPClient.h"
 
@@ -34,10 +36,26 @@ public:
 	SPClient* client;
 	Extractor(SPClient* client);
 
+	void extractAll(SimpleToken procedureToken);
+	void extractFollows(SimpleToken procOrStmtLstToken);
+	void extractParent(SimpleToken procOrWhileIfToken);
+	void extractUses(SimpleToken procOrStmtLstToken);
+	void extractModify(SimpleToken procOrStmtLstToken);
+	void extractPattern(SimpleToken procOrStmtLstToken);
+
+	void storeFollowsRelationships(std::vector<FollowsRelationship*>);
+	void storeParentRelationships(std::vector<ParentRelationship*>);
+	void storeUsesRelationships(std::vector<UsesRelationship*>);
+	void storeModifyRelationships(std::vector<ModifyRelationship*>);
+	void storeAssignPatterns(std::vector<AssignPattern*>);
+
+	/*
 	void extractProcedure(SimpleToken simpleToken);
 
 	void extractParentRelationships(SimpleToken simpleToken, std::vector<SimpleToken> children);
 	void extractFollowsRelationships(std::vector<SimpleToken> children);
+	void extractUsesRelationshipsForProcedure(SimpleToken simpleToken);
+	void extractModifyRelationshipsForProcedure(SimpleToken simpleToken);
 	void extractSeriesOfStmts(std::vector<SimpleToken> seriesOfStmts);
 
 	ModifyRelationship* getModifyRelationshipForRead(SimpleToken simpleToken);
@@ -56,4 +74,5 @@ public:
 	void extractStmtLst(SimpleToken simpleToken);
 
 	void extractCall();
+	*/
 };

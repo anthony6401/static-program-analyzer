@@ -2,10 +2,84 @@
 
 #include <iostream>
 
+// Constructor
 Extractor::Extractor(SPClient* client) {
 	this->client = client;
 }
 
+// Parser only needs to call Extractor::extractAll
+void Extractor::extractAll(SimpleToken procedureToken) {
+	extractFollows(procedureToken);
+	extractParent(procedureToken);
+	extractUses(procedureToken);
+	extractModify(procedureToken);
+	extractPattern(procedureToken);
+}
+
+// =============================== //
+// HELPER FUNCTIONS FOR EXTRACTION //
+// =============================== //
+
+void Extractor::extractFollows(SimpleToken procOrStmtLstToken) {
+	std::vector<FollowsRelationship*> followsVector = FollowsExtractor::extractFollows(procOrStmtLstToken);
+	storeFollowsRelationships(followsVector);
+}
+
+void Extractor::extractParent(SimpleToken procOrWhileIfToken) {
+	std::vector<ParentRelationship*> parentVector = ParentExtractor::extractParent(procOrWhileIfToken);
+	storeParentRelationships(parentVector);
+}
+
+void Extractor::extractUses(SimpleToken procOrStmtLstToken) {
+	std::vector<UsesRelationship*> usesVector = UsesExtractor::extractUses(procOrStmtLstToken);
+	storeUsesRelationships(usesVector);
+}
+
+void Extractor::extractModify(SimpleToken procOrStmtLstToken) {
+	std::vector<ModifyRelationship*> modifyVector = ModifyExtractor::extractModify(procOrStmtLstToken);
+	storeModifyRelationships(modifyVector);
+}
+
+void Extractor::extractPattern(SimpleToken procOrStmtLstToken) {
+	std::vector<AssignPattern*> assignPatternVector = PatternExtractor::extractPattern(procOrStmtLstToken);
+	storeAssignPatterns(assignPatternVector);
+}
+
+// ============================ //
+// HELPER FUNCTIONS FOR STORING //
+// ============================ //
+
+void Extractor::storeFollowsRelationships(std::vector<FollowsRelationship*> vector) {
+	for (int i = 0; i < vector.size(); i++) {
+		this->client->storeRelationship(vector.at(i));
+	}
+}
+
+void Extractor::storeParentRelationships(std::vector<ParentRelationship*> vector) {
+	for (int i = 0; i < vector.size(); i++) {
+		this->client->storeRelationship(vector.at(i));
+	}
+}
+
+void Extractor::storeUsesRelationships(std::vector<UsesRelationship*> vector) {
+	for (int i = 0; i < vector.size(); i++) {
+		this->client->storeRelationship(vector.at(i));
+	}
+}
+
+void Extractor::storeModifyRelationships(std::vector<ModifyRelationship*> vector) {
+	for (int i = 0; i < vector.size(); i++) {
+		this->client->storeRelationship(vector.at(i));
+	}
+}
+
+void Extractor::storeAssignPatterns(std::vector<AssignPattern*> vector) {
+	for (int i = 0; i < vector.size(); i++) {
+		this->client->storePattern(vector.at(i));
+	}
+}
+
+/*
 void Extractor::extractProcedure(SimpleToken procedureToken) {
 	if (procedureToken.type != SpTokenType::TPROCEDURE) {
 		throw std::invalid_argument("Invalid token type for extractProcedure");
@@ -13,6 +87,9 @@ void Extractor::extractProcedure(SimpleToken procedureToken) {
 	std::vector<SimpleToken> childrenOfProcedureToken = procedureToken.getChildren();
 	extractParentRelationships(procedureToken, childrenOfProcedureToken);
 	extractFollowsRelationships(childrenOfProcedureToken);
+
+	extractUsesRelationshipsForProcedure(procedureToken);
+	extractModifyRelationshipsForProcedure(procedureToken);
 
 	extractSeriesOfStmts(childrenOfProcedureToken);
 }
@@ -25,6 +102,14 @@ void Extractor::extractParentRelationships(SimpleToken parentToken, std::vector<
 void Extractor::extractFollowsRelationships(std::vector<SimpleToken> seriesOfStmts) {
 	FollowsExtractor::extractFollows(*this, seriesOfStmts);
 	FollowsExtractor::extractFollowsT(*this, seriesOfStmts);
+}
+
+void Extractor::extractUsesRelationshipsForProcedure(SimpleToken procedureToken) {
+
+}
+
+void Extractor::extractModifyRelationshipsForProcedure(SimpleToken procedureToken) {
+
 }
 
 void Extractor::extractSeriesOfStmts(std::vector<SimpleToken> seriesOfStmts) {
@@ -210,3 +295,4 @@ void Extractor::extractCall() {
 
 	// To be implemented
 }
+*/
