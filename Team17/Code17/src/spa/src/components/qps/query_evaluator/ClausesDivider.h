@@ -16,6 +16,8 @@ class ClauseDivider {
 private:
     GroupedClause noSynonymsPresent;
     std::vector<GroupedClause> commonSynonymsGroups;
+    std::vector<GroupedClause> selectSynonymPresentGroups;
+    std::vector<GroupedClause> selectSynonymNotPresentGroups;;
 public:
     ClauseDivider();
     void addClauseToDivider(std::shared_ptr<Clause> clause);

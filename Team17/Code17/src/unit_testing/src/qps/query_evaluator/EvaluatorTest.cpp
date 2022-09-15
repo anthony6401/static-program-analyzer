@@ -89,7 +89,7 @@ TEST_CASE("Evaluation for single synonym Clause - assign a; Select a such that M
 
     std::list<std::string> expectedResults = {"1", "3"};
     // TO CHECK, COMMENT OUT RETURN VARIABLE FROM SELECT CLAUSE AND UNCOMMENT ASSIGN
-    // REQUIRE(testResults == expectedResults);
+    //REQUIRE(testResults == expectedResults);
 }
 
 TEST_CASE("Evaluation for unrelated to select - assign a; Select a such that Uses (6, v)") { // unrelated to select

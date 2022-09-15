@@ -1,7 +1,7 @@
 #include "ClausesDivider.h"
 #include "iostream"
 
-ClauseDivider::ClauseDivider() : noSynonymsPresent({}), commonSynonymsGroups({}) {}
+ClauseDivider::ClauseDivider() : noSynonymsPresent({}), commonSynonymsGroups({}), selectSynonymPresentGroups({}), selectSynonymNotPresentGroups({}) {}
 
 void ClauseDivider::addClauseToDivider(std::shared_ptr<Clause> clause) {
     if (clause -> getNumberOfSynonyms() == 0) {
@@ -30,9 +30,6 @@ std::vector<GroupedClause> ClauseDivider::getCommonSynonymsPresent() {
 }
 
 std::pair<std::vector<GroupedClause>, std::vector<GroupedClause>> ClauseDivider::divideCommonSynonymGroupsBySelect(std::shared_ptr<Clause> selectClause) {
-    std::vector<GroupedClause> selectSynonymPresentGroups;
-    std::vector<GroupedClause> selectSynonymNotPresentGroups;
-
     for (auto gc : commonSynonymsGroups) {
         if (gc.hasCommonSynonymWithClause(selectClause)) {
             selectSynonymPresentGroups.emplace_back(gc);
