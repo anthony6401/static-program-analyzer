@@ -25,7 +25,7 @@ void SimpleTokenizer::tokenizeCode(std::string code) {
     
     std::stack<StmtStack*> stmtStack;
     bool isIf = false;
-    StmtStack* currentStack = &ProgramStack(SimpleToken(SpTokenType::TPROGRAM, "", 0, NULL));
+    StmtStack* currentStack = new ProgramStack(SimpleToken(SpTokenType::TPROGRAM, "", 0, NULL));
 
     for (std::string line : codeLines) {
         line = std::regex_replace(line, tokenDelimiters, " $& ");
@@ -35,14 +35,14 @@ void SimpleTokenizer::tokenizeCode(std::string code) {
         currentStack->put(lineToken);
         if (lineToken.type == SpTokenType::TPROCEDURE) {
             stmtStack.push(currentStack);
-            currentStack = &NestedStack(lineToken);
+            currentStack = new NestedStack(lineToken);
         } else if (lineToken.type == SpTokenType::TWHILE) {
             stmtStack.push(currentStack);
-            currentStack = &NestedStack(lineToken);
+            currentStack = new NestedStack(lineToken);
         } else if (lineToken.type == SpTokenType::TIF) {
             isIf = true;
             stmtStack.push(currentStack);
-            currentStack = &IfStack(lineToken);
+            currentStack = new IfStack(lineToken);
         } else if (lineToken.type == SpTokenType::TCLOSE) {
             currentStack->put(lineToken);
             if (isIf) {
@@ -51,6 +51,7 @@ void SimpleTokenizer::tokenizeCode(std::string code) {
             else {
                 StmtStack* parentStack = stmtStack.top();
                 parentStack->put(currentStack->dump());
+                delete currentStack;
                 currentStack = parentStack;
                 stmtStack.pop();
             }
