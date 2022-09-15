@@ -9,41 +9,41 @@
 #include <iostream>
 
 // Valid queries
-//TEST_CASE("Query with single declaration and no such that or pattern clause") {
-//    std::string testQuery = "variable v; Select v";
-//
-//    Select expectedSelect = Select("v");
-//    std::vector<SuchThat> expectedSuchThat{};
-//    std::vector<Pattern> expectedPattern{};
-//    std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"v", DesignEntity::VARIABLE} };
-//    int expectedNumOfDeclaredSynonyms = 1;
-//
-//    QueryObject expectedResult = QueryObject(expectedSelect, expectedSuchThat, expectedPattern, expectedMappedSynonyms, expectedNumOfDeclaredSynonyms);
-//    QueryObject testResult = QPS::tokenizeAndParseQuery(testQuery);
-//
-//    REQUIRE(testResult == expectedResult);
-//}
-//
-//TEST_CASE("Query with multiple declarations") {
-//    std::string testQuery = "stmt s, s1; variable v, v1; procedure p, q; assign a, a1; while w; if ifs; constant c; read re; print pn; call cl; Select re";
-//    Select expectedSelect = Select("v");
-//    std::vector<SuchThat> expectedSuchThat{};
-//    std::vector<Pattern> expectedPattern{};
-//    std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ 
-//        {"s", DesignEntity::STMT}, {"s1", DesignEntity::STMT}, {"v", DesignEntity::VARIABLE}, 
-//        {"v1", DesignEntity::VARIABLE}, {"p", DesignEntity::PROCEDURE}, {"q", DesignEntity::PROCEDURE}, 
-//        {"a", DesignEntity::ASSIGN}, {"a1", DesignEntity::ASSIGN}, {"w", DesignEntity::WHILE}, 
-//        {"ifs", DesignEntity::IF}, {"c", DesignEntity::CONSTANT}, {"re", DesignEntity::READ}, 
-//        {"pn", DesignEntity::PRINT}, {"cl", DesignEntity::CALL}
-//    };
-//    int expectedNumOfDeclaredSynonyms = 14;
-//
-//    QueryObject expectedResult = QueryObject(expectedSelect, expectedSuchThat, expectedPattern, expectedMappedSynonyms, expectedNumOfDeclaredSynonyms);
-//    QueryObject testResult = QPS::tokenizeAndParseQuery(testQuery);
-//
-//
-//    REQUIRE(testResult == expectedResult);
-//}
+TEST_CASE("Query with single declaration and no such that or pattern clause") {
+    std::string testQuery = "variable v; Select v";
+
+    Select expectedSelect = Select("v");
+    std::vector<SuchThat> expectedSuchThat{};
+    std::vector<Pattern> expectedPattern{};
+    std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"v", DesignEntity::VARIABLE} };
+    int expectedNumOfDeclaredSynonyms = 1;
+
+    QueryObject expectedResult = QueryObject(expectedSelect, expectedSuchThat, expectedPattern, expectedMappedSynonyms, expectedNumOfDeclaredSynonyms);
+    QueryObject testResult = QPS::tokenizeAndParseQuery(testQuery);
+
+    REQUIRE(testResult == expectedResult);
+}
+
+TEST_CASE("Query with multiple declarations") {
+    std::string testQuery = "stmt s, s1; variable v, v1; procedure p, q; assign a, a1; while w; if ifs; constant c; read re; print pn; call cl; Select re";
+    Select expectedSelect = Select("re");
+    std::vector<SuchThat> expectedSuchThat{};
+    std::vector<Pattern> expectedPattern{};
+    std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{
+        {"s", DesignEntity::STMT}, {"s1", DesignEntity::STMT}, {"v", DesignEntity::VARIABLE},
+        {"v1", DesignEntity::VARIABLE}, {"p", DesignEntity::PROCEDURE}, {"q", DesignEntity::PROCEDURE},
+        {"a", DesignEntity::ASSIGN}, {"a1", DesignEntity::ASSIGN}, {"w", DesignEntity::WHILE},
+        {"ifs", DesignEntity::IF}, {"c", DesignEntity::CONSTANT}, {"re", DesignEntity::READ},
+        {"pn", DesignEntity::PRINT}, {"cl", DesignEntity::CALL}
+    };
+    int expectedNumOfDeclaredSynonyms = 14;
+
+    QueryObject expectedResult = QueryObject(expectedSelect, expectedSuchThat, expectedPattern, expectedMappedSynonyms, expectedNumOfDeclaredSynonyms);
+    QueryObject testResult = QPS::tokenizeAndParseQuery(testQuery);
+
+
+    REQUIRE(testResult == expectedResult);
+}
 //
 //TEST_CASE("Query with synonyms in declaration clause with same name as design entity") {
 //    std::string testQuery = "variable variable; Select variable";
