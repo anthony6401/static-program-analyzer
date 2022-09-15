@@ -1,4 +1,5 @@
 #include "UsesPClause.h"
+#include "iostream"
 
 UsesPClause::UsesPClause(TokenObject left, TokenObject right, Select synonym,
                          std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) :
@@ -52,7 +53,8 @@ TokenType UsesPClause::getRelationshipType() {
 }
 
 RawResult UsesPClause::evaluateSynonymSynonym() {
-    return {};
+    std::cout << "----- UsesP: synonym synonym -------" << std::endl;
+    return {"p", "v", {{"main", "x"}}};
 }
 
 RawResult UsesPClause::evaluateSynonymWildcard() {

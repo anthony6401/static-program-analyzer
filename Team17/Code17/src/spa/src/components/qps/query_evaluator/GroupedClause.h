@@ -7,7 +7,7 @@
 
 // Represents Groups with common areas in:
 // 1. No Synonym
-// 2. Common synonyms
+// 2. Common synonyms (with and without select synonym)
 
 class GroupedClause {
 private:

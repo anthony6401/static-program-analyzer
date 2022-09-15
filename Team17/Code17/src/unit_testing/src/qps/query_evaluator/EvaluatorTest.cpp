@@ -76,6 +76,23 @@ TEST_CASE("Single synonym, has select - variable v; Select v such that Uses(1, v
     REQUIRE(testResults == expectedResults);
 }
 
+TEST_CASE("Single synonym, has select - variable v; assign p; Select v such that Uses(p, v)") { // common synonym
+    PKB* pkb = new PKB();
+    auto qpsClient = QPSClient(pkb);
+    std::list<std::string> testResults;
+    std::vector<SuchThat> relationships {SuchThat(TokenType::USES, TokenObject(TokenType::NAME, "p"),
+                                                  TokenObject(TokenType::NAME, "v"))};
+    std::vector<Pattern> patterns {};
+    Select select = Select( "v");
+    std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap = {{"v", DesignEntity::VARIABLE},
+                                                                              {"p", DesignEntity::PROCEDURE}};
+    QueryObject testQuery = QueryObject(select, relationships, patterns, synonymToDesignEntityMap);
+    Evaluator::evaluateQuery(testQuery, testResults, qpsClient);
+
+    std::list<std::string> expectedResults = {"x"};
+    REQUIRE(testResults == expectedResults);
+}
+
 // Modifies returns {"1", "3"}
 // Pattern returns {"1", "3", "4"}
 // Select returns {"1", "2", "3", "4"}
@@ -97,7 +114,7 @@ TEST_CASE("Evaluation for single synonym Clause - assign a; Select a such that M
     //REQUIRE(testResults == expectedResults);
 }
 
-TEST_CASE("Evaluation for unrelated to select - variable v; Select a such that Uses (6, v)") { // unrelated to select
+TEST_CASE("Evaluation for unrelated to select - assign a; variable v; Select a such that Uses (6, v)") { // unrelated to select
     PKB* pkb = new PKB();
     auto qpsClient = QPSClient(pkb);
     std::list<std::string> testResults;
@@ -105,14 +122,15 @@ TEST_CASE("Evaluation for unrelated to select - variable v; Select a such that U
                                                   TokenObject(TokenType::INTEGER, "6"),
                                                   TokenObject(TokenType::NAME, "v"))};
     std::vector<Pattern> patterns {};
-    Select select = Select( "v");
-    std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap = {{"v", DesignEntity::VARIABLE}};
+    Select select = Select( "a");
+    std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap = {{"v", DesignEntity::VARIABLE},
+                                                                              {"a", DesignEntity::ASSIGN}};
     QueryObject testQuery = QueryObject(select, relationships, patterns, synonymToDesignEntityMap);
     Evaluator::evaluateQuery(testQuery, testResults, qpsClient);
 
     std::list<std::string> expectedResults = {"1", "2", "3", "4"};
     // TO CHECK, COMMENT OUT RETURN VARIABLE FROM SELECT CLAUSE AND UNCOMMENT ASSIGN
-    //REQUIRE(testResults == expectedResults);
+   // REQUIRE(testResults == expectedResults);
 }
 
 TEST_CASE("Evaluation for unrelated to select - assign a, a1; Select a such that Uses (6, v) pattern a1(_, _)") { // unrelated to select
@@ -124,7 +142,7 @@ TEST_CASE("Evaluation for unrelated to select - assign a, a1; Select a such that
                                                   TokenObject(TokenType::NAME, "v"))};
     std::vector<Pattern> patterns {Pattern("a1", TokenObject(TokenType::WILDCARD, "_"),
                                            TokenObject(TokenType::WILDCARD, "_"))};
-    Select select = Select( "a");
+    Select select = Select( "a1");
     std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap = {{"a", DesignEntity::ASSIGN},
                                                                               {"a1", DesignEntity::ASSIGN}};
     QueryObject testQuery = QueryObject(select, relationships, patterns, synonymToDesignEntityMap);

@@ -9,6 +9,7 @@
 #include "components/qps/query_evaluator/factory/clauses/relationship/UsesSClause.h"
 #include "components/qps/query_evaluator/factory/clauses/relationship/UsesPClause.h"
 #include <memory>
+#include "iostream"
 
 std::shared_ptr<Clause> ClauseCreator::createClause(Select synonym, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) {
     return std::make_shared<SelectClause>(synonym, synonymToDesignEntityMap, qpsClient);
@@ -37,12 +38,14 @@ std::shared_ptr<Clause> ClauseCreator::createClause(SuchThat relationship, Selec
         }
 
     } else if (relationshipType == TokenType::USES) {
-        if (isStmtRelationship(left, synonymToDesignEntityMap)) {
-            return std::make_shared<UsesSClause>(left, right, synonym, synonymToDesignEntityMap, qpsClient);
+        if (isProcRelationship(left, synonymToDesignEntityMap)) {
+            std::cout << "----- create usesp -------" << std::endl;
+            return std::make_shared<UsesPClause>(left, right, synonym, synonymToDesignEntityMap, qpsClient);
         }
 
-        if (isProcRelationship(left, synonymToDesignEntityMap)) {
-            return std::make_shared<UsesPClause>(left, right, synonym, synonymToDesignEntityMap, qpsClient);
+        if (isStmtRelationship(left, synonymToDesignEntityMap)) {
+            std::cout << "----- create usesS -------" << std::endl;
+            return std::make_shared<UsesSClause>(left, right, synonym, synonymToDesignEntityMap, qpsClient);
         }
     } else if (relationshipType == TokenType::FOLLOWS) {
         return std::make_shared<FollowsClause>(left, right, synonym, synonymToDesignEntityMap, qpsClient);
@@ -55,14 +58,14 @@ std::shared_ptr<Clause> ClauseCreator::createClause(SuchThat relationship, Selec
     } else {
         return nullptr;
     };
-    return {};
+    return nullptr;
 }
 
 bool ClauseCreator::isStmtRelationship(TokenObject left,
                                        std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap) {
     TokenType leftTokenType = left.getTokenType();
     DesignEntity leftDesignEntityType = synonymToDesignEntityMap[left.getValue()];
-    bool isLeftStmtEntity = (leftTokenType == TokenType::SYNONYM) &&
+    bool isLeftStmtEntity = (leftTokenType == TokenType::NAME) &&
             leftDesignEntityType == DesignEntity::STMT ||
             leftDesignEntityType == DesignEntity::READ ||
             leftDesignEntityType == DesignEntity::PRINT ||
@@ -78,7 +81,7 @@ bool ClauseCreator::isProcRelationship(TokenObject left,
                                        std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap) {
     TokenType leftTokenType = left.getTokenType();
     DesignEntity leftDesignEntityType = synonymToDesignEntityMap[left.getValue()];
-    bool isLeftProcEntity = (leftTokenType == TokenType::SYNONYM) &&
+    bool isLeftProcEntity = (leftTokenType == TokenType::NAME) &&
                             leftDesignEntityType == DesignEntity::PROCEDURE;
 
     return (leftTokenType == TokenType::NAME_WITH_QUOTATION) || isLeftProcEntity;
