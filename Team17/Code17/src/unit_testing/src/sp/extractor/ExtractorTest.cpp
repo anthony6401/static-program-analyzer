@@ -383,6 +383,6 @@ TEST_CASE("Integration test - extractWhileStmt") {}
 TEST_CASE("Integration test - extractIfStmt") {}
 TEST_CASE("Integration test - extractStmtLst") {}
 
-// TO BE IMPLEMENTED
 TEST_CASE("extractCondExpr") {}
+
 TEST_CASE("extractCall") {}
