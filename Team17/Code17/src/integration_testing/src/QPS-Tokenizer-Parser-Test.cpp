@@ -44,38 +44,38 @@ TEST_CASE("Query with multiple declarations") {
 
     REQUIRE(testResult == expectedResult);
 }
-//
-//TEST_CASE("Query with synonyms in declaration clause with same name as design entity") {
-//    std::string testQuery = "variable variable; Select variable";
-//    Select expectedSelect = Select("variable");
-//    std::vector<SuchThat> expectedSuchThat{};
-//    std::vector<Pattern> expectedPattern{};
-//    std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"variable", DesignEntity::VARIABLE} };
-//    int expectedNumOfDeclaredSynonyms = 1;
-//
-//    QueryObject expectedResult = QueryObject(expectedSelect, expectedSuchThat, expectedPattern, expectedMappedSynonyms, expectedNumOfDeclaredSynonyms);
-//    QueryObject testResult = QPS::tokenizeAndParseQuery(testQuery);
-//
-//
-//    REQUIRE(testResult == expectedResult);
-//}
-//
-//TEST_CASE("Modifies Relationship with integer") {
-//    std::string testQuery = "variable v;\n"
-//        "Select v such that Modifies (6, v)";
-// 
-//    Select expectedSelect = Select("v");
-//    std::vector<SuchThat> expectedSuchThat{};
-//    std::vector<Pattern> expectedPattern{};
-//    std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"v", DesignEntity::VARIABLE} };
-//    int expectedNumOfDeclaredSynonyms = 1;
-//
-//    QueryObject expectedResult = QueryObject(expectedSelect, expectedSuchThat, expectedPattern, expectedMappedSynonyms, expectedNumOfDeclaredSynonyms);
-//    QueryObject testResult = QPS::tokenizeAndParseQuery(testQuery);
-//
-//
-//    REQUIRE(testResult == expectedResult);
-//}
+
+TEST_CASE("Query with synonyms in declaration clause with same name as design entity") {
+    std::string testQuery = "variable variable; Select variable";
+    Select expectedSelect = Select("variable");
+    std::vector<SuchThat> expectedSuchThat{};
+    std::vector<Pattern> expectedPattern{};
+    std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"variable", DesignEntity::VARIABLE} };
+    int expectedNumOfDeclaredSynonyms = 1;
+
+    QueryObject expectedResult = QueryObject(expectedSelect, expectedSuchThat, expectedPattern, expectedMappedSynonyms, expectedNumOfDeclaredSynonyms);
+    QueryObject testResult = QPS::tokenizeAndParseQuery(testQuery);
+
+
+    REQUIRE(testResult == expectedResult);
+}
+
+TEST_CASE("Modifies Relationship with integer") {
+    std::string testQuery = "variable v;\n"
+        "Select v such that Modifies (6, v)";
+
+    Select expectedSelect = Select("v");
+    std::vector<SuchThat> expectedSuchThat{SuchThat(TokenType::MODIFIES, TokenObject(TokenType::INTEGER, "6"), TokenObject(TokenType::NAME, "v"))};
+    std::vector<Pattern> expectedPattern{};
+    std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"v", DesignEntity::VARIABLE} };
+    int expectedNumOfDeclaredSynonyms = 1;
+
+    QueryObject expectedResult = QueryObject(expectedSelect, expectedSuchThat, expectedPattern, expectedMappedSynonyms, expectedNumOfDeclaredSynonyms);
+    QueryObject testResult = QPS::tokenizeAndParseQuery(testQuery);
+
+
+    REQUIRE(testResult == expectedResult);
+}
 //
 //TEST_CASE("Uses Relationship with integer") {
 //    std::string testQuery = "variable v;\n"
