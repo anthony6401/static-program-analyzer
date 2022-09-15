@@ -16,7 +16,7 @@ void PatternExtractor::extractPattern(Extractor extractor, SimpleToken simpleTok
 	extractor.client->storePattern(assignPattern);
 }
 
-std::string getExpressionAsString(SimpleToken expression) {
+std::string PatternExtractor::getExpressionAsString(SimpleToken expression) {
 	std::string expressionString;
 	// code here
 	return expressionString;

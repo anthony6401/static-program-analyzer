@@ -120,12 +120,16 @@ TEST_CASE("Unit test - getModifyRelationshipForAssign: a = 1") {
 
 	SimpleToken assign = generateSimpleToken(SpTokenType::TASSIGN, "a = 1", 1);
 	SimpleToken varNam = generateSimpleToken(SpTokenType::TVARIABLE, "a", 1);
+	SimpleToken expres = generateSimpleToken(SpTokenType::TEXPR, "1", 1);
 	SimpleToken expr_1 = generateSimpleToken(SpTokenType::TCONSTANT, "1", 1);
 
-	std::vector<SimpleToken> children;
-	children.push_back(varNam);
-	children.push_back(expr_1);
-	assign.setChildren(children);
+	std::vector<SimpleToken> exprChildren;
+	exprChildren.push_back(expr_1);
+	expres.setChildren(exprChildren);
+	std::vector<SimpleToken> assChildren;
+	assChildren.push_back(varNam);
+	assChildren.push_back(expres);
+	assign.setChildren(assChildren);
 
 	AssignEntity* assignEntity = new AssignEntity("1");
 	VariableEntity* variableEntity = new VariableEntity("a");
@@ -141,14 +145,24 @@ TEST_CASE("Unit test - getModifyRelationshipForAssign: a = b") {
 
 	SimpleToken assign = generateSimpleToken(SpTokenType::TASSIGN, "a = b", 1);
 	SimpleToken varNam = generateSimpleToken(SpTokenType::TVARIABLE, "a", 1);
+	SimpleToken expres = generateSimpleToken(SpTokenType::TEXPR, "b", 1);
 	SimpleToken expr_1 = generateSimpleToken(SpTokenType::TVARIABLE, "b", 1);
 
-	std::vector<SimpleToken> children;
-	children.push_back(varNam);
-	children.push_back(expr_1);
-	assign.setChildren(children);
+	std::vector<SimpleToken> exprChildren;
+	exprChildren.push_back(expr_1);
+	expres.setChildren(exprChildren);
+	std::vector<SimpleToken> assChildren;
+	assChildren.push_back(varNam);
+	assChildren.push_back(expres);
+	assign.setChildren(assChildren);
 
-	// code here
+	AssignEntity* assignEntity = new AssignEntity("1");
+	VariableEntity* variableEntity = new VariableEntity("a");
+	Relationship* expectedRelationship = new ModifyRelationship(assignEntity, variableEntity);
+	Relationship* generatedRelationship = testExtractor.getModifyRelationshipForAssign(assign);
+
+	REQUIRE(equalRelationship(generatedRelationship, expectedRelationship));
+	REQUIRE_NOTHROW(testExtractor.extractAssignStmt(assign));
 }
 
 TEST_CASE("Unit test - getModifyRelationshipForAssign: a = a + 1") {
@@ -156,18 +170,28 @@ TEST_CASE("Unit test - getModifyRelationshipForAssign: a = a + 1") {
 
 	SimpleToken assign = generateSimpleToken(SpTokenType::TASSIGN, "a = a + 1", 1);
 	SimpleToken varNam = generateSimpleToken(SpTokenType::TVARIABLE, "a", 1);
+	SimpleToken expres = generateSimpleToken(SpTokenType::TEXPR, "a + 1", 1);
 	SimpleToken expr_1 = generateSimpleToken(SpTokenType::TVARIABLE, "a", 1);
 	SimpleToken expr_2 = generateSimpleToken(SpTokenType::TOPR, "+", 1);
 	SimpleToken expr_3 = generateSimpleToken(SpTokenType::TCONSTANT, "1", 1);
 
-	std::vector<SimpleToken> children;
-	children.push_back(varNam);
-	children.push_back(expr_1);
-	children.push_back(expr_2);
-	children.push_back(expr_3);
-	assign.setChildren(children);
+	std::vector<SimpleToken> exprChildren;
+	exprChildren.push_back(expr_1);
+	exprChildren.push_back(expr_2);
+	exprChildren.push_back(expr_3);
+	expres.setChildren(exprChildren);
+	std::vector<SimpleToken> assChildren;
+	assChildren.push_back(varNam);
+	assChildren.push_back(expres);
+	assign.setChildren(assChildren);
 
-	// code here
+	AssignEntity* assignEntity = new AssignEntity("1");
+	VariableEntity* variableEntity = new VariableEntity("a");
+	Relationship* expectedRelationship = new ModifyRelationship(assignEntity, variableEntity);
+	Relationship* generatedRelationship = testExtractor.getModifyRelationshipForAssign(assign);
+
+	REQUIRE(equalRelationship(generatedRelationship, expectedRelationship));
+	REQUIRE_NOTHROW(testExtractor.extractAssignStmt(assign));
 }
 
 TEST_CASE("Unit test - getModifyRelationshipForAssign: a = a + 1 - ( b * c )") {
@@ -175,6 +199,7 @@ TEST_CASE("Unit test - getModifyRelationshipForAssign: a = a + 1 - ( b * c )") {
 
 	SimpleToken assign = generateSimpleToken(SpTokenType::TASSIGN, "a = a + 1 - ( b * c )", 1);
 	SimpleToken varNam = generateSimpleToken(SpTokenType::TVARIABLE, "a", 1);
+	SimpleToken expres = generateSimpleToken(SpTokenType::TEXPR, "a + 1 - ( b * c )", 1);
 	SimpleToken expr_1 = generateSimpleToken(SpTokenType::TVARIABLE, "a", 1);
 	SimpleToken expr_2 = generateSimpleToken(SpTokenType::TOPR, "+", 1);
 	SimpleToken expr_3 = generateSimpleToken(SpTokenType::TCONSTANT, "1", 1);
@@ -183,27 +208,159 @@ TEST_CASE("Unit test - getModifyRelationshipForAssign: a = a + 1 - ( b * c )") {
 	SimpleToken expr_6 = generateSimpleToken(SpTokenType::TOPR, "*", 1);
 	SimpleToken expr_7 = generateSimpleToken(SpTokenType::TVARIABLE, "c", 1);
 
-	std::vector<SimpleToken> children;
-	children.push_back(varNam);
-	children.push_back(expr_1);
-	children.push_back(expr_2);
-	children.push_back(expr_3);
-	children.push_back(expr_4);
-	children.push_back(expr_5);
-	children.push_back(expr_6);
-	children.push_back(expr_7);
-	assign.setChildren(children);
+	std::vector<SimpleToken> exprChildren;
+	exprChildren.push_back(expr_1);
+	exprChildren.push_back(expr_2);
+	exprChildren.push_back(expr_3);
+	exprChildren.push_back(expr_4);
+	exprChildren.push_back(expr_5);
+	exprChildren.push_back(expr_6);
+	exprChildren.push_back(expr_7);
+	expres.setChildren(exprChildren);
+	std::vector<SimpleToken> assChildren;
+	assChildren.push_back(varNam);
+	assChildren.push_back(expres);
+	assign.setChildren(assChildren);
 
-	// code here
+	AssignEntity* assignEntity = new AssignEntity("1");
+	VariableEntity* variableEntity = new VariableEntity("a");
+	Relationship* expectedRelationship = new ModifyRelationship(assignEntity, variableEntity);
+	Relationship* generatedRelationship = testExtractor.getModifyRelationshipForAssign(assign);
+
+	REQUIRE(equalRelationship(generatedRelationship, expectedRelationship));
+	REQUIRE_NOTHROW(testExtractor.extractAssignStmt(assign));
 }
 
-TEST_CASE("Unit test - getUsesRelationshipForAssign: a = 1") {}
+TEST_CASE("Unit test - getUsesRelationshipForAssign: a = 1") {
+	Extractor testExtractor = generateExtractor();
 
-TEST_CASE("Unit test - getUsesRelationshipForAssign: a = b") {}
+	SimpleToken assign = generateSimpleToken(SpTokenType::TASSIGN, "a = 1", 1);
+	SimpleToken varNam = generateSimpleToken(SpTokenType::TVARIABLE, "a", 1);
+	SimpleToken expres = generateSimpleToken(SpTokenType::TEXPR, "1", 1);
+	SimpleToken expr_1 = generateSimpleToken(SpTokenType::TCONSTANT, "1", 1);
 
-TEST_CASE("Unit test - getUsesRelationshipForAssign: a = a + 1") {}
+	std::vector<SimpleToken> exprChildren;
+	exprChildren.push_back(expr_1);
+	expres.setChildren(exprChildren);
+	std::vector<SimpleToken> assChildren;
+	assChildren.push_back(varNam);
+	assChildren.push_back(expres);
+	assign.setChildren(assChildren);
 
-TEST_CASE("Unit test - getUsesRelationshipForAssign: a = a + 1 - ( b * c )") {}
+	std::vector<UsesRelationship*> generatedRelationships = testExtractor.getUsesRelationshipsForAssign(assign);
+
+	REQUIRE(generatedRelationships.empty());
+	REQUIRE_NOTHROW(testExtractor.extractAssignStmt(assign));
+}
+
+TEST_CASE("Unit test - getUsesRelationshipForAssign: a = b") {
+	Extractor testExtractor = generateExtractor();
+
+	SimpleToken assign = generateSimpleToken(SpTokenType::TASSIGN, "a = 1", 1);
+	SimpleToken varNam = generateSimpleToken(SpTokenType::TVARIABLE, "a", 1);
+	SimpleToken expres = generateSimpleToken(SpTokenType::TEXPR, "b", 1);
+	SimpleToken expr_1 = generateSimpleToken(SpTokenType::TVARIABLE, "b", 1);
+
+	std::vector<SimpleToken> exprChildren;
+	exprChildren.push_back(expr_1);
+	expres.setChildren(exprChildren);
+	std::vector<SimpleToken> assChildren;
+	assChildren.push_back(varNam);
+	assChildren.push_back(expres);
+	assign.setChildren(assChildren);
+
+	AssignEntity* assignEntity = new AssignEntity("1");
+	VariableEntity* variableEntity = new VariableEntity("b");
+	Relationship* expectedRelationship = new UsesRelationship(assignEntity, variableEntity);
+	std::vector<Relationship*> expectedRelationships;
+	expectedRelationships.push_back(expectedRelationship);
+	std::vector<UsesRelationship*> generatedRelationships = testExtractor.getUsesRelationshipsForAssign(assign);
+
+	for (int i = 0; i < expectedRelationships.size(); i++) {
+		REQUIRE(equalRelationship(expectedRelationships.at(i), generatedRelationships.at(i)));
+	}
+	REQUIRE_NOTHROW(testExtractor.extractAssignStmt(assign));
+}
+
+TEST_CASE("Unit test - getUsesRelationshipForAssign: a = a + 1") {
+	Extractor testExtractor = generateExtractor();
+
+	SimpleToken assign = generateSimpleToken(SpTokenType::TASSIGN, "a = a + 1", 1);
+	SimpleToken varNam = generateSimpleToken(SpTokenType::TVARIABLE, "a", 1);
+	SimpleToken expres = generateSimpleToken(SpTokenType::TEXPR, "a + 1", 1);
+	SimpleToken expr_1 = generateSimpleToken(SpTokenType::TVARIABLE, "a", 1);
+	SimpleToken expr_2 = generateSimpleToken(SpTokenType::TOPR, "+", 1);
+	SimpleToken expr_3 = generateSimpleToken(SpTokenType::TCONSTANT, "1", 1);
+
+	std::vector<SimpleToken> exprChildren;
+	exprChildren.push_back(expr_1);
+	exprChildren.push_back(expr_2);
+	exprChildren.push_back(expr_3);
+	expres.setChildren(exprChildren);
+	std::vector<SimpleToken> assChildren;
+	assChildren.push_back(varNam);
+	assChildren.push_back(expres);
+	assign.setChildren(assChildren);
+
+	AssignEntity* assignEntity = new AssignEntity("1");
+	VariableEntity* variableEntity = new VariableEntity("a");
+	Relationship* expectedRelationship = new UsesRelationship(assignEntity, variableEntity);
+	std::vector<Relationship*> expectedRelationships;
+	expectedRelationships.push_back(expectedRelationship);
+	std::vector<UsesRelationship*> generatedRelationships = testExtractor.getUsesRelationshipsForAssign(assign);
+
+	for (int i = 0; i < expectedRelationships.size(); i++) {
+		REQUIRE(equalRelationship(expectedRelationships.at(i), generatedRelationships.at(i)));
+	}
+	REQUIRE_NOTHROW(testExtractor.extractAssignStmt(assign));
+}
+
+TEST_CASE("Unit test - getUsesRelationshipForAssign: a = a + 1 - ( b * c )") {
+	Extractor testExtractor = generateExtractor();
+
+	SimpleToken assign = generateSimpleToken(SpTokenType::TASSIGN, "a = a + 1 - ( b * c )", 1);
+	SimpleToken varNam = generateSimpleToken(SpTokenType::TVARIABLE, "a", 1);
+	SimpleToken expres = generateSimpleToken(SpTokenType::TEXPR, "a + 1 - ( b * c )", 1);
+	SimpleToken expr_1 = generateSimpleToken(SpTokenType::TVARIABLE, "a", 1);
+	SimpleToken expr_2 = generateSimpleToken(SpTokenType::TOPR, "+", 1);
+	SimpleToken expr_3 = generateSimpleToken(SpTokenType::TCONSTANT, "1", 1);
+	SimpleToken expr_4 = generateSimpleToken(SpTokenType::TOPR, "-", 1);
+	SimpleToken expr_5 = generateSimpleToken(SpTokenType::TVARIABLE, "b", 1);
+	SimpleToken expr_6 = generateSimpleToken(SpTokenType::TOPR, "*", 1);
+	SimpleToken expr_7 = generateSimpleToken(SpTokenType::TVARIABLE, "c", 1);
+
+	std::vector<SimpleToken> exprChildren;
+	exprChildren.push_back(expr_1);
+	exprChildren.push_back(expr_2);
+	exprChildren.push_back(expr_3);
+	exprChildren.push_back(expr_4);
+	exprChildren.push_back(expr_5);
+	exprChildren.push_back(expr_6);
+	exprChildren.push_back(expr_7);
+	expres.setChildren(exprChildren);
+	std::vector<SimpleToken> assChildren;
+	assChildren.push_back(varNam);
+	assChildren.push_back(expres);
+	assign.setChildren(assChildren);
+
+	AssignEntity* assignEntity = new AssignEntity("1");
+	VariableEntity* variableEntity_1 = new VariableEntity("a");
+	VariableEntity* variableEntity_2 = new VariableEntity("b");
+	VariableEntity* variableEntity_3 = new VariableEntity("c");
+	Relationship* expectedRelationship_1 = new UsesRelationship(assignEntity, variableEntity_1);
+	Relationship* expectedRelationship_2 = new UsesRelationship(assignEntity, variableEntity_2);
+	Relationship* expectedRelationship_3 = new UsesRelationship(assignEntity, variableEntity_3);
+	std::vector<Relationship*> expectedRelationships;
+	expectedRelationships.push_back(expectedRelationship_1);
+	expectedRelationships.push_back(expectedRelationship_2);
+	expectedRelationships.push_back(expectedRelationship_3);
+	std::vector<UsesRelationship*> generatedRelationships = testExtractor.getUsesRelationshipsForAssign(assign);
+
+	for (int i = 0; i < expectedRelationships.size(); i++) {
+		REQUIRE(equalRelationship(expectedRelationships.at(i), generatedRelationships.at(i)));
+	}
+	REQUIRE_NOTHROW(testExtractor.extractAssignStmt(assign));
+}
 
 TEST_CASE("Integration test - extractProcedure") {}
 TEST_CASE("Integration test - extractParentRelationships") {}

@@ -91,7 +91,7 @@ void Extractor::extractAssignStmt(SimpleToken simpleToken) {
 	PatternExtractor::extractPattern(*this, simpleToken);
 }
 
-ModifyRelationship* getModifyRelationshipForAssign(SimpleToken simpleToken) {
+ModifyRelationship* Extractor::getModifyRelationshipForAssign(SimpleToken simpleToken) {
 	AssignEntity* assignEntity = new AssignEntity(std::to_string(simpleToken.statementNumber));
 	std::vector<SimpleToken> children = simpleToken.getChildren();
 
@@ -101,7 +101,7 @@ ModifyRelationship* getModifyRelationshipForAssign(SimpleToken simpleToken) {
 	return new ModifyRelationship(assignEntity, variableEntity);
 }
 
-std::vector<UsesRelationship*> getUsesRelationshipsForAssign(SimpleToken simpleToken) {
+std::vector<UsesRelationship*> Extractor::getUsesRelationshipsForAssign(SimpleToken simpleToken) {
 	AssignEntity* assignEntity = new AssignEntity(std::to_string(simpleToken.statementNumber));
 	std::vector<SimpleToken> children = simpleToken.getChildren();
 
@@ -117,12 +117,9 @@ std::vector<UsesRelationship*> getUsesRelationshipsForAssign(SimpleToken simpleT
 			UsesRelationship* usesRelationship = new UsesRelationship(assignEntity, variableEntityInExpression);
 			usesRelationships.push_back(usesRelationship);
 		}
-		else if (token.type == SpTokenType::TCONSTANT) {
-			ConstantEntity* constantEntityInExpression = new ConstantEntity(token.value);
-			UsesRelationship* usesRelationship = new UsesRelationship(assignEntity, constantEntityInExpression);
-			usesRelationships.push_back(usesRelationship);
-		}
 	}
+
+	return usesRelationships;
 }
 
 void Extractor::extractWhileStmt(SimpleToken whileToken) {
