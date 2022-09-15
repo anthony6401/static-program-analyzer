@@ -16,7 +16,7 @@ std::shared_ptr<Clause> ClauseCreator::createClause(Select synonym, std::unorder
 }
 
 // To be amended for evaluating pattern clauses
-std::shared_ptr<Clause> ClauseCreator::createClause(Pattern pattern, Select synonym, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) {
+std::shared_ptr<Clause> ClauseCreator::createClause(qps::Pattern pattern, Select synonym, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) {
     TokenObject left = pattern.getLeft();
     TokenObject right = pattern.getRight();
     std::string assignSynonym = pattern.getSynonym();
