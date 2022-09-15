@@ -51,6 +51,7 @@ public:
 	void extractWhileStmt(SimpleToken simpleToken);
 	void extractIfStmt(SimpleToken simpleToken);
 
+	std::vector<UsesRelationship*> getUsesRelationshipsForCondExpr(SimpleToken condToken, SimpleToken condExpr);
 	void extractCondExpr(SimpleToken simpleToken, SimpleToken condExpr);
 	void extractStmtLst(SimpleToken simpleToken);
 

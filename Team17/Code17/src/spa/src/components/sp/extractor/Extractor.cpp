@@ -171,13 +171,42 @@ void Extractor::extractCondExpr(SimpleToken condToken, SimpleToken condExpr) {
 	if (condExpr.type != SpTokenType::TCONDEXPR) {
 		throw std::invalid_argument("Invalid token type for extractCondExpr");
 	}
+	std::vector<UsesRelationship*> usesRelationships = getUsesRelationshipsForCondExpr(condToken, condExpr);
+	for (int i = 0; i < usesRelationships.size(); i++) {
+		this->client->storeRelationship(usesRelationships.at(i));
+	}
+}
 
-	// code here
+std::vector<UsesRelationship*> Extractor::getUsesRelationshipsForCondExpr(SimpleToken condToken, SimpleToken condExpr) {
+	if (condToken.type != SpTokenType::TWHILE && condToken.type != SpTokenType::TIF) {
+		throw std::invalid_argument("Invalid token type for Condiional Token");
+	}
+	Entity* condEntity;
+	if (condToken.type == SpTokenType::TWHILE) {
+		condEntity = new WhileEntity(std::to_string(condToken.statementNumber));
+	}
+	if (condToken.type == SpTokenType::TIF) {
+		condEntity = new IfEntity(std::to_string(condToken.statementNumber));
+	}
+
+	std::vector<UsesRelationship*> usesRelationships;
+
+	std::vector<SimpleToken> childrenOfCondExpr = condExpr.getChildren();
+	for (int i = 0; i < childrenOfCondExpr.size(); i++) {
+		SimpleToken current = childrenOfCondExpr.at(i);
+		if (current.type == SpTokenType::TVARIABLE) {
+			VariableEntity* variableEntity = new VariableEntity(current.value);
+			UsesRelationship* usesRelationship = new UsesRelationship(condEntity, variableEntity);
+			usesRelationships.push_back(usesRelationship);
+		}
+	}
+	
+	return usesRelationships;
 }
 
 void Extractor::extractCall() {
 	CallEntity* callEntity = new CallEntity("");
 	VariableEntity* variableEntity = new VariableEntity("");
 
-	// code here
+	// To be implemented
 }
