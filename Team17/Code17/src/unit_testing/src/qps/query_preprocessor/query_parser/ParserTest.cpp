@@ -391,6 +391,22 @@ TEST_CASE("SyntaxError - No return value") {
     REQUIRE(expectedResult == actualResult);
 };
 
+TEST_CASE("SyntaxError - Return value is not a synonym") {
+    std::vector<TokenObject> testTokenObject{
+        TokenObject(TokenType::VARIABLE, std::string("variable")),
+        TokenObject(TokenType::NAME, std::string("v")),
+        TokenObject(TokenType::SEMI_COLON, std::string(";")),
+        TokenObject(TokenType::SELECT, std::string("Select")),
+        TokenObject(TokenType::INTEGER, std::string("5"))
+    };
+
+    QueryObject expectedResult = QueryObject();
+
+    Parser parser = Parser(testTokenObject);
+    QueryObject actualResult = parser.parse();
+    REQUIRE(expectedResult == actualResult);
+};
+
 TEST_CASE("SyntaxError - Select clause ends in semi-colon") {
     std::vector<TokenObject> testTokenObject{
         TokenObject(TokenType::VARIABLE, std::string("variable")),
