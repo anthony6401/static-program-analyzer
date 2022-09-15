@@ -18,6 +18,11 @@ void PatternExtractor::extractPattern(Extractor extractor, SimpleToken simpleTok
 
 std::string PatternExtractor::getExpressionAsString(SimpleToken expression) {
 	std::string expressionString;
-	// code here
+	std::vector<SimpleToken> expressionChildren = expression.getChildren();
+	for (int i = 0; i < expressionChildren.size(); i++) {
+		std::string nextString = expressionChildren.at(i).value;
+		expressionString = expressionString + nextString;
+	}
+
 	return expressionString;
 }
