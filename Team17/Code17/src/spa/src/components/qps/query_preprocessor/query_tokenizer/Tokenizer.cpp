@@ -224,6 +224,7 @@ bool Tokenizer::isIdentity(std::string s) {
     if (s.size() <= 2) {
         return false;
     } else {
+        s = trimString(s);
         if (s.front() == '"' && s.back() == '"') {
             if (isName(trimQuotesOrWildcard(s))) {
                 return true;
