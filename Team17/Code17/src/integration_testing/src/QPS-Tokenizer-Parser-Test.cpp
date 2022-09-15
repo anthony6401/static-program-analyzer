@@ -65,7 +65,8 @@ TEST_CASE("Modifies Relationship with integer") {
         "Select v such that Modifies (6, v)";
 
     Select expectedSelect = Select("v");
-    std::vector<SuchThat> expectedSuchThat{SuchThat(TokenType::MODIFIES, TokenObject(TokenType::INTEGER, "6"), TokenObject(TokenType::NAME, "v"))};
+    std::vector<SuchThat> expectedSuchThat{SuchThat(TokenType::MODIFIES, TokenObject(TokenType::INTEGER, "6"),
+                                                    TokenObject(TokenType::NAME, "v"))};
     std::vector<Pattern> expectedPattern{};
     std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"v", DesignEntity::VARIABLE} };
     int expectedNumOfDeclaredSynonyms = 1;
@@ -76,23 +77,24 @@ TEST_CASE("Modifies Relationship with integer") {
 
     REQUIRE(testResult == expectedResult);
 }
-//
-//TEST_CASE("Uses Relationship with integer") {
-//    std::string testQuery = "variable v;\n"
-//        "Select v such that Uses (14, v)";
-//
-//    Select expectedSelect = Select("v");
-//    std::vector<SuchThat> expectedSuchThat{};
-//    std::vector<Pattern> expectedPattern{};
-//    std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"v", DesignEntity::VARIABLE} };
-//    int expectedNumOfDeclaredSynonyms = 1;
-//
-//    QueryObject expectedResult = QueryObject(expectedSelect, expectedSuchThat, expectedPattern, expectedMappedSynonyms, expectedNumOfDeclaredSynonyms);
-//    QueryObject testResult = QPS::tokenizeAndParseQuery(testQuery);
-//
-//
-//    REQUIRE(testResult == expectedResult);
-//}
+
+TEST_CASE("Uses Relationship with integer") {
+    std::string testQuery = "assign a;\n"
+        "Select a such that Uses (2, \"x\")";
+
+    Select expectedSelect = Select("a");
+    std::vector<SuchThat> expectedSuchThat{SuchThat(TokenType::USES, TokenObject(TokenType::INTEGER, "2"),
+                                                    TokenObject(TokenType::NAME_WITH_QUOTATION, "x"))};
+    std::vector<Pattern> expectedPattern{};
+    std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"a", DesignEntity::ASSIGN} };
+    int expectedNumOfDeclaredSynonyms = 1;
+
+    QueryObject expectedResult = QueryObject(expectedSelect, expectedSuchThat, expectedPattern, expectedMappedSynonyms, expectedNumOfDeclaredSynonyms);
+    QueryObject testResult = QPS::tokenizeAndParseQuery(testQuery);
+
+
+    REQUIRE(testResult == expectedResult);
+}
 //
 //TEST_CASE("Follows Relationship") {
 //    std::string testQuery = "stmt s;\n"
