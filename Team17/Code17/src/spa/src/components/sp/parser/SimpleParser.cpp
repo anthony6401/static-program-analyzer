@@ -180,7 +180,7 @@ void SimpleParser::parseAssign(SimpleToken& assign, std::vector<std::string>& to
     }
 }
 
-std::vector<SimpleToken> parseCondition(std::vector<std::string> tokens) {
+std::vector<SimpleToken> SimpleParser::parseCondition(std::vector<std::string> tokens) {
     if (tokens.front() != "(" || tokens.back() != ")") {
         throw std::invalid_argument("Received invalid condition");
     }
