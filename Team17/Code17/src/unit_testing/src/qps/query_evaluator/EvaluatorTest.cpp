@@ -19,7 +19,8 @@ TEST_CASE("Evaluation for No relationship and pattern clauses") {
     std::vector<Pattern> patterns {};
     Select select = Select( "v");
     std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap = {{"v", DesignEntity::VARIABLE}};
-    QueryObject testQuery = QueryObject(select, relationships, patterns, synonymToDesignEntityMap);
+    int numOfDeclaredSynonyms = 1;
+    QueryObject testQuery = QueryObject(select, relationships, patterns, synonymToDesignEntityMap, numOfDeclaredSynonyms);
     Evaluator::evaluateQuery(testQuery, testResults, qpsClient);
     std::list<std::string> expectedResults = {"x", "y", "z"};
     REQUIRE(testResults == expectedResults);
@@ -34,7 +35,8 @@ TEST_CASE("Evaluation for No synonym Clause - variable v; Select v such that Mod
     std::vector<Pattern> patterns {};
     Select select = Select( "v");
     std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap = {{"v", DesignEntity::VARIABLE}};
-    QueryObject testQuery = QueryObject(select, relationships, patterns, synonymToDesignEntityMap);
+    int numOfDeclaredSynonyms = 1;
+    QueryObject testQuery = QueryObject(select, relationships, patterns, synonymToDesignEntityMap, numOfDeclaredSynonyms);
     Evaluator::evaluateQuery(testQuery, testResults, qpsClient);
     std::list<std::string> expectedResults = {"x", "y", "z"};
     REQUIRE(testResults == expectedResults);
@@ -49,7 +51,8 @@ TEST_CASE("Evaluation for single synonym Clause - variable v; Select v such that
     std::vector<Pattern> patterns {};
     Select select = Select( "v");
     std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap = {{"v", DesignEntity::VARIABLE}};
-    QueryObject testQuery = QueryObject(select, relationships, patterns, synonymToDesignEntityMap);
+    int numOfDeclaredSynonyms = 1;
+    QueryObject testQuery = QueryObject(select, relationships, patterns, synonymToDesignEntityMap, numOfDeclaredSynonyms);
     Evaluator::evaluateQuery(testQuery, testResults, qpsClient);
     std::list<std::string> expectedResults = {"x"};
     REQUIRE(testResults == expectedResults);
@@ -66,7 +69,8 @@ TEST_CASE("Evaluation for single synonym Clause - assign a; Select a such that M
                                            TokenObject(TokenType::NAME_WITH_QUOTATION, "y"))};
     Select select = Select( "a");
     std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap = {{"a", DesignEntity::ASSIGN}};
-    QueryObject testQuery = QueryObject(select, relationships, patterns, synonymToDesignEntityMap);
+    int numOfDeclaredSynonyms = 1;
+    QueryObject testQuery = QueryObject(select, relationships, patterns, synonymToDesignEntityMap, numOfDeclaredSynonyms);
     Evaluator::evaluateQuery(testQuery, testResults, qpsClient);
     std::list<std::string> expectedResults = {"1", "3"};
     REQUIRE(testResults == expectedResults);
@@ -83,7 +87,8 @@ TEST_CASE("Evaluation for unrelated to select - assign a; Select a such that Use
     std::vector<Pattern> patterns {};
     Select select = Select( "a");
     std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap = {{"a", DesignEntity::ASSIGN}};
-    QueryObject testQuery = QueryObject(select, relationships, patterns, synonymToDesignEntityMap);
+    int numOfDeclaredSynonyms = 1;
+    QueryObject testQuery = QueryObject(select, relationships, patterns, synonymToDesignEntityMap, numOfDeclaredSynonyms);
     Evaluator::evaluateQuery(testQuery, testResults, qpsClient);
     std::list<std::string> expectedResults = {"none"};
     REQUIRE(testResults == expectedResults);
