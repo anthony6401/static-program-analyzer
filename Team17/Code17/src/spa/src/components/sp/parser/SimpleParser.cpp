@@ -101,7 +101,7 @@ void SimpleParser::parsePrint(SimpleToken& printStmt, std::vector<std::string>& 
         std::vector<SimpleToken> children;
         children.push_back(parseVariable(tokens.at(0)));
         printStmt.setChildren(children);
-        extractor->extractPrint(printStmt, tokens); //pass to extractor
+        extractor->extractPrintStmt(printStmt); //pass to extractor
     } else {
         throw std::invalid_argument("Received invalid Print:Line " + std::to_string(printStmt.statementNumber));
     }
@@ -118,7 +118,7 @@ void SimpleParser::parseRead(SimpleToken& readStmt, std::vector<std::string>& to
         std::vector<SimpleToken> children;
         children.push_back(parseVariable(tokens.at(0)));
         readStmt.setChildren(children);
-        extractor->extractRead(readStmt, tokens); //pass to extractor
+        extractor->extractReadStmt(readStmt); //pass to extractor
     } else {
         throw std::invalid_argument("Received invalid Read:Line " + std::to_string(readStmt.statementNumber));
     }
