@@ -6,5 +6,5 @@
 
 class PatternExtractor {
 public:
-	static void extractPattern(Extractor extractor, SimpleToken variable, SimpleToken expression);
+	static void extractPattern(Extractor extractor, SimpleToken simpleToken);
 };

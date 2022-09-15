@@ -80,35 +80,48 @@ void Extractor::extractAssignStmt(SimpleToken simpleToken) {
 	if (simpleToken.type != SpTokenType::TASSIGN) {
 		throw std::invalid_argument("Invalid token type for extractAssign");
 	}
+	ModifyRelationship* modifyRelationship = getModifyRelationshipForAssign(simpleToken);
+	this->client->storeRelationship(modifyRelationship);
 
+	std::vector<UsesRelationship*> usesRelationships = getUsesRelationshipsForAssign(simpleToken);
+	for (int i = 0; i < usesRelationships.size(); i++) {
+		this->client->storeRelationship(usesRelationships.at(i));
+	}
+
+	PatternExtractor::extractPattern(*this, simpleToken);
+}
+
+ModifyRelationship* getModifyRelationshipForAssign(SimpleToken simpleToken) {
 	AssignEntity* assignEntity = new AssignEntity(std::to_string(simpleToken.statementNumber));
 	std::vector<SimpleToken> children = simpleToken.getChildren();
 
 	SimpleToken variable = children.at(0);
 	VariableEntity* variableEntity = new VariableEntity(variable.value);
-	ModifyRelationship* modifyRelationship = new ModifyRelationship(assignEntity, variableEntity);
-	this->client->storeRelationship(modifyRelationship);
+
+	return new ModifyRelationship(assignEntity, variableEntity);
+}
+
+std::vector<UsesRelationship*> getUsesRelationshipsForAssign(SimpleToken simpleToken) {
+	AssignEntity* assignEntity = new AssignEntity(std::to_string(simpleToken.statementNumber));
+	std::vector<SimpleToken> children = simpleToken.getChildren();
 
 	SimpleToken expression = children.at(1);
-	std::vector<SimpleToken> exprChildren = expression.getChildren();
+	std::vector<SimpleToken> expressionChildren = expression.getChildren();
 
-	// Populate PKB with Patterns
-	PatternExtractor::extractPattern(*this, variable, expression);
+	std::vector<UsesRelationship*> usesRelationships;
 
-	// Populate PKB with UsesRelationship
-	while (exprChildren.size() != 0) {
-		SimpleToken token = exprChildren.at(0);
+	for (int i = 0; i < expressionChildren.size(); i++) {
+		SimpleToken token = expressionChildren.at(i);
 		if (token.type == SpTokenType::TVARIABLE) {
 			VariableEntity* variableEntityInExpression = new VariableEntity(token.value);
 			UsesRelationship* usesRelationship = new UsesRelationship(assignEntity, variableEntityInExpression);
-			this->client->storeRelationship(usesRelationship);
+			usesRelationships.push_back(usesRelationship);
 		}
 		else if (token.type == SpTokenType::TCONSTANT) {
 			ConstantEntity* constantEntityInExpression = new ConstantEntity(token.value);
 			UsesRelationship* usesRelationship = new UsesRelationship(assignEntity, constantEntityInExpression);
-			this->client->storeRelationship(usesRelationship);
+			usesRelationships.push_back(usesRelationship);
 		}
-		exprChildren.erase(exprChildren.begin());
 	}
 }
 
