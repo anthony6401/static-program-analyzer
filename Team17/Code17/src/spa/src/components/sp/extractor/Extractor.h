@@ -2,6 +2,7 @@
 
 #include "../SimpleToken.h"
 
+#include "../../../models/Entity/Entity.h"
 #include "../../../models/Entity/ReadEntity.h"
 #include "../../../models/Entity/PrintEntity.h"
 #include "../../../models/Entity/VariableEntity.h"
@@ -17,25 +18,41 @@
 #include "../../../models/Relationship/Relationship.h"
 #include "../../../models/Relationship/ModifyRelationship.h"
 #include "../../../models/Relationship/UsesRelationship.h"
-#include "../../pkb/clients/SPClient.h"
+#include "../../../models/Relationship/FollowsRelationship.h"
+#include "../../../models/Relationship/ParentRelationship.h"
 
-#include <vector>
+#include "UsesExtractor.h"
+#include "ModifyExtractor.h"
+#include "FollowsExtractor.h"
+#include "ParentExtractor.h"
+#include "PatternExtractor.h"
+
+#include "../../pkb/clients/SPClient.h"
 
 class Extractor {
 public:
 	SPClient* client;
 	Extractor(SPClient* client);
-	void extractRead(SimpleToken simpleToken, std::vector<std::string> tokens);
-	void extractPrint(SimpleToken simpleToken, std::vector<std::string> tokens);
-	void extractProcedure();
+
+	void extractProcedure(SimpleToken simpleToken);
+
+	void extractParentRelationships(SimpleToken simpleToken, std::vector<SimpleToken> children);
+	void extractFollowsRelationships(std::vector<SimpleToken> children);
+	void extractSeriesOfStmts(std::vector<SimpleToken> seriesOfStmts);
+
+	ModifyRelationship* getModifyRelationshipForRead(SimpleToken simpleToken);
+	UsesRelationship* getUsesRelationshipForPrint(SimpleToken simpleToken);
+	ModifyRelationship* getModifyRelationshipForAssign(SimpleToken simpleToken);
+	std::vector<UsesRelationship*> getUsesRelationshipsForAssign(SimpleToken simpleToken);
+	void extractReadStmt(SimpleToken simpleToken);
+	void extractPrintStmt(SimpleToken simpleToken);
+	void extractAssignStmt(SimpleToken simpleToken);
+
+	void extractWhileStmt(SimpleToken simpleToken);
+	void extractIfStmt(SimpleToken simpleToken);
+
+	void extractCondExpr(SimpleToken simpleToken, SimpleToken condExpr);
+	void extractStmtLst(SimpleToken simpleToken);
+
 	void extractCall();
-	void extractWhile();
-	void extractIf();
-	void extractAssign();
-	void extractCondExpr();
-	void extractVariable();
-	void extractConstant();
-	void extractClose();
-	void extractOpr();
-	void extractError();
 };

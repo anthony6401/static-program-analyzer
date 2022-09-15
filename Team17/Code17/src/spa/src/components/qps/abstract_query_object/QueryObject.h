@@ -14,7 +14,7 @@
 class QueryObject {
 private:
     std::vector<SuchThat> relationships;
-    std::vector<Pattern> patterns;
+    std::vector<qps::Pattern> patterns;
     Select select;
     bool hasNoSyntaxError = false;
     bool hasNoSemanticError = true; // Assumed true till QueryObject is passed into the Validator
@@ -28,7 +28,7 @@ public:
     bool isSyntacticallyCorrect();
     bool isSemanticallyValid();
     std::vector<SuchThat> getRelationships();
-    std::vector<Pattern> getPattern();
+    std::vector<qps::Pattern> getPattern();
     Select getSelect();
     std::unordered_map<std::string, DesignEntity> getSynonymToDesignEntityMap();
     int getNumOfDeclaredSynonyms();
