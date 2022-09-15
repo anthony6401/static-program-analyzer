@@ -33,15 +33,20 @@ void Extractor::extractSeriesOfStmts(std::vector<SimpleToken> seriesOfStmts) {
 		SimpleToken stmtToken = seriesOfStmts.at(i);
 		if (stmtToken.type == SpTokenType::TREAD) {
 			extractReadStmt(stmtToken);
-		} else if (stmtToken.type == SpTokenType::TPRINT) {
+		}
+		if (stmtToken.type == SpTokenType::TPRINT) {
 			extractPrintStmt(stmtToken);
-		} else if (stmtToken.type == SpTokenType::TASSIGN) {
+		}
+		if (stmtToken.type == SpTokenType::TASSIGN) {
 			extractAssignStmt(stmtToken);
-		} else if (stmtToken.type == SpTokenType::TWHILE) {
+		}
+		if (stmtToken.type == SpTokenType::TWHILE) {
 			extractWhileStmt(stmtToken);
-		} else if (stmtToken.type == SpTokenType::TIF) {
+		}
+		if (stmtToken.type == SpTokenType::TIF) {
 			extractIfStmt(stmtToken);
-		} else if (stmtToken.type == SpTokenType::TCALL) {
+		}
+		if (stmtToken.type == SpTokenType::TCALL) {
 			// code here
 		}
 		i++;
@@ -173,5 +178,6 @@ void Extractor::extractCondExpr(SimpleToken condToken, SimpleToken condExpr) {
 void Extractor::extractCall() {
 	CallEntity* callEntity = new CallEntity("");
 	VariableEntity* variableEntity = new VariableEntity("");
-	// implement stack in the future for further processing
+
+	// code here
 }
