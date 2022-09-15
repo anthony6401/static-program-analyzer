@@ -95,27 +95,31 @@ RawResult ModifiesSClause::evaluateSynonymWildcard() {
 
 RawResult ModifiesSClause::evaluateSynonymNameQuotes() {
     DesignEntity stmtType = synonymToDesignEntityMap[left.getValue()];
-    // API CALL
-    return {};
+    std::string leftValue = left.getValue();
+    std::unordered_set<std::string> results = qpsClient.getRelationshipBySecond(getRelationshipType(), stmtType, right);
+    return {leftValue, results};
 }
 
 RawResult ModifiesSClause::evaluateIntegerSynonym() {
-    std::cout << "----- ModifiesS: Integer Synonym -------" << std::endl;
+    std::string rightValue = right.getValue();
     DesignEntity rightType = synonymToDesignEntityMap[right.getValue()];
-    // API CALL
-    return {"v", {"x"}};
+    std::unordered_set<std::string> results = qpsClient.getRelationshipByFirst(getRelationshipType(), left, rightType);
+    return {rightValue, results};
 }
 
 RawResult ModifiesSClause::evaluateIntegerWildcard() {
     // Returns boolean
-    std::cout << "----- ModifiesS: Integer Wildcard -------" << std::endl;
-    return {false};
+    DesignEntity rightType = DesignEntity::VARIABLE;
+    std::unordered_set<std::string> results = qpsClient.getRelationshipByFirst(getRelationshipType(), left, rightType);
+    bool booleanResult = !results.empty();
+    // {1,2,3} -> boolean result = true
+    return {booleanResult}; //true
 }
 
 RawResult ModifiesSClause::evaluateIntegerNameQuotes() {
     // Returns boolean
-    std::cout << "----- ModifiesS: Integer Name Quotes -------" << std::endl;
-    // API CALL
-    return {false};
+    bool result = qpsClient.getRelationship(getRelationshipType(), left, right);
+    // result = true -> setIsFalseResult(true) -> isFalseResult = false
+    return {result};
 }
 
