@@ -1,6 +1,5 @@
 #include "Validator.h"
 #include "components/qps/abstract_query_object/QueryObject.h"
-#include "components/qps/abstract_query_object/Declaration.h"
 #include "components/qps/abstract_query_object/Select.h"
 #include "components/qps/abstract_query_object/SuchThat.h"
 #include "components/qps/abstract_query_object/Pattern.h"
