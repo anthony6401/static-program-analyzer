@@ -8,6 +8,7 @@
 class ModifyExtractor {
 public:
 	static std::vector<ModifyRelationship*> extractModify(SimpleToken procOrWhileIfToken);
-	static std::vector<ModifyRelationship*> getModifyRelationships(std::vector<SimpleToken> stmtSeries);
+	static std::vector<ModifyRelationship*> getModifyRelationshipsProc(SimpleToken procOrWhileIfToken, std::vector<SimpleToken> stmtSeries);
+	static std::vector<ModifyRelationship*> getModifyRelationships(SimpleToken procOrWhileIfToken, std::vector<SimpleToken> stmtSeries);
 	static Entity* generateEntity(SimpleToken token);
 };

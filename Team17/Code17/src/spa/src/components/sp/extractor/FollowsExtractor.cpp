@@ -15,7 +15,7 @@ std::vector<FollowsRelationship*> FollowsExtractor::extractFollows(SimpleToken p
 			followsVector.push_back(follows);
 		}
 	}
-
+	
 	if (procOrWhileIfToken.type == SpTokenType::TWHILE) {
 		SimpleToken stmtLstToken = stmtSeries.at(1);
 		std::vector<SimpleToken> stmtSeriesInStmtLst = stmtLstToken.getChildren();
@@ -28,7 +28,7 @@ std::vector<FollowsRelationship*> FollowsExtractor::extractFollows(SimpleToken p
 			followsVector.push_back(follows);
 		}
 	}
-
+	
 	if (procOrWhileIfToken.type == SpTokenType::TIF) {
 		SimpleToken stmtLstToken_1 = stmtSeries.at(1);
 		SimpleToken stmtLstToken_2 = stmtSeries.at(2);
@@ -51,10 +51,10 @@ std::vector<FollowsRelationship*> FollowsExtractor::extractFollows(SimpleToken p
 			followsVector.push_back(follows);
 		}
 	}
-
+	
 	for (int i = 0; i < stmtSeries.size(); i++) {
 		SimpleToken current = stmtSeries.at(i);
-		if (current.type == SpTokenType::TWHILE || current.type == SpTokenType::TIF || current.type == SpTokenType::TSTMTLIST) {
+		if (current.type == SpTokenType::TWHILE || current.type == SpTokenType::TIF) {
 			std::vector<FollowsRelationship*> moreFollowsVector = FollowsExtractor::extractFollows(current);
 			followsVector.insert(followsVector.end(), moreFollowsVector.begin(), moreFollowsVector.end());
 		}
@@ -100,7 +100,7 @@ std::vector<FollowsTRelationship*> FollowsExtractor::extractFollowsT(SimpleToken
 		SimpleToken stmtLstToken_1 = stmtSeries.at(1);
 		SimpleToken stmtLstToken_2 = stmtSeries.at(2);
 		std::vector<SimpleToken> stmtSeriesInStmtLst_1 = stmtLstToken_1.getChildren();
-		std::vector<SimpleToken> stmtSeriesInStmtLst_2 = stmtLstToken_1.getChildren();
+		std::vector<SimpleToken> stmtSeriesInStmtLst_2 = stmtLstToken_2.getChildren();
 		for (int i = 0; i < stmtSeriesInStmtLst_1.size(); i++) {
 			for (int j = i + 1; j < stmtSeriesInStmtLst_1.size(); j++) {
 				SimpleToken formerToken = stmtSeriesInStmtLst_1.at(i);
@@ -125,7 +125,7 @@ std::vector<FollowsTRelationship*> FollowsExtractor::extractFollowsT(SimpleToken
 
 	for (int i = 0; i < stmtSeries.size(); i++) {
 		SimpleToken current = stmtSeries.at(i);
-		if (current.type == SpTokenType::TWHILE || current.type == SpTokenType::TIF || current.type == SpTokenType::TSTMTLIST) {
+		if (current.type == SpTokenType::TWHILE || current.type == SpTokenType::TIF) {
 			std::vector<FollowsTRelationship*> moreFollowsTVector = FollowsExtractor::extractFollowsT(current);
 			followsTVector.insert(followsTVector.end(), moreFollowsTVector.begin(), moreFollowsTVector.end());
 		}
