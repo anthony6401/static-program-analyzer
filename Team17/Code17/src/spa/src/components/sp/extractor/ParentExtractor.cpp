@@ -50,7 +50,7 @@ std::vector<ParentRelationship*> ParentExtractor::extractParent(SimpleToken proc
 
 	for (int i = 0; i < stmtSeries.size(); i++) {
 		SimpleToken current = stmtSeries.at(i);
-		if (current.type == SpTokenType::TWHILE || current.type == SpTokenType::TIF || current.type == SpTokenType::TSTMTLST) {
+		if (current.type == SpTokenType::TWHILE || current.type == SpTokenType::TIF || current.type == SpTokenType::TSTMT) {
 			std::vector<ParentRelationship*> moreParentVector = ParentExtractor::extractParent(current);
 			parentVector.insert(parentVector.end(), moreParentVector.begin(), moreParentVector.end());
 		}
