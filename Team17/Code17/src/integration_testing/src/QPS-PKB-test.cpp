@@ -393,7 +393,7 @@ TEST_CASE("Relationships and patterns") {
         REQUIRE(testResults.size() == expectedResults.size());
     }
 
-    SECTION("Single synonym Clause") {
+    SECTION("Single synonym Clause - Modifies") {
         std::string testQuery = "assign a; Select a such that Modifies(a, _)";
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"1", "2", "3", "5", "6", "7", "9", "10", "11", "12"};
@@ -401,7 +401,7 @@ TEST_CASE("Relationships and patterns") {
         REQUIRE(testResults.size() == expectedResults.size());
     }
 
-    SECTION("Single synonym Clause") {
+    SECTION("Single synonym Clause - Pattern") {
         std::string testQuery = "assign a; Select a pattern a(\"count\",\"0\")";
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"1"};
@@ -417,33 +417,93 @@ TEST_CASE("Relationships and patterns") {
         REQUIRE(testResults == expectedResults);
     }
 
-//    SECTION("Single synonym Clause") {
-//        std::string testQuery = "assign a; variable v; Select v such that Modifies(a, _) pattern a(\"count\",\"0\")";
-//        std::list<std::string> testResults;
-//        std::list<std::string> expectedResults = {"count", "cenX", "cenY", "x", "y", "flag", "normSq"};
-//        QPS::processQueryResult(testQuery, testResults, qpsClient);
-//        REQUIRE(testResults.size() == expectedResults.size());
-//    }
-//
-//    SECTION("Single synonym Clause - stmt s; Select s such that Follows(1, s) pattern a(_,_)") {
-//
-//    }
-//
-//    SECTION("Single synonym Clause - assign a; Select v such that Modifies(1, v) pattern a(v,_\"x\"_)") {
-//
-//    }
-//
-//    SECTION("Multiple common synonym - assign a; variable v; Select v such that Modifies(a, v) pattern a(v, _)\"") {
-//
-//    }
-//
-//    SECTION("Single synonym Clause - stmt s; Select s such that Follows*(1, s)") {
-//
-//    }
-//
-//    SECTION("Single synonym Clause - stmt s, s1; Select s such that Parent*(s, s1)") {
-//
-//    }
+    SECTION("Multi Clause - Unrelated to Select") {
+        std::string testQuery = "assign a; variable v; Select v such that Modifies(a, _) pattern a(\"count\",\"0\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"count", "cenX", "cenY", "x", "y", "flag", "normSq"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults.size() == expectedResults.size());
+    }
+
+    SECTION("Single synonym Clause - Follows") {
+        std::string testQuery = "stmt s; Select s such that Follows(1, s)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"2"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Multi Clause - One clause related to Select") {
+        std::string testQuery = "stmt s; variable v; Select s such that Modifies(s, v)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"1", "2", "3", "12", "6", "9", "11", "5", "7", "10"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Multi Clause - One clause related to Select") {
+        std::string testQuery = "assign a; Select a pattern a(_,\"1\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"9"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Multi Clause - One clause related to Select") {
+        std::string testQuery = "stmt s; variable v; assign a; Select a such that Modifies(s, v) pattern a(_,\"1\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"9"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Multi Clause - common synonym") {
+        std::string testQuery = "variable v; Select v such that Modifies(1, v)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"count"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Multi Clause - common synonym") {
+        std::string testQuery = "variable v; assign a; Select v pattern a(v,\"1\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"flag"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Multi Clause - common synonym") {
+        std::string testQuery = "assign a; variable v; Select v such that Modifies(1, v) pattern a(v,\"1\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"none"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Multiple common synonym") {
+        std::string testQuery = "assign a; variable v; Select v such that Modifies(a, v) pattern a(v, \"x\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"none"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Follows* Clause") {
+        std::string testQuery = "stmt s; Select s such that Follows*(1, s)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"12", "8", "4", "3", "2"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Single synonym Clause - ") {
+        std::string testQuery = "stmt s, s1; Select s such that Parent*(s, s1)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"4", "8"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
 
 }
 
