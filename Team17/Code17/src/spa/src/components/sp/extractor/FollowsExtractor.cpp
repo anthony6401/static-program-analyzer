@@ -64,8 +64,68 @@ std::vector<FollowsRelationship*> FollowsExtractor::extractFollows(SimpleToken p
 std::vector<FollowsTRelationship*> FollowsExtractor::extractFollowsT(SimpleToken procOrWhileIfToken) {
 	std::vector<FollowsTRelationship*> followsTVector;
 
-	// for each stmtlst, just iterate for i then for j
-	// then search and do the same for any while/ifs
+	std::vector<SimpleToken> stmtSeries = procOrWhileIfToken.getChildren();
+
+	if (procOrWhileIfToken.type == SpTokenType::TPROCEDURE) {
+		for (int i = 0; i < stmtSeries.size(); i++) {
+			for (int j = i + 1; j < stmtSeries.size(); j++) {
+				SimpleToken formerToken = stmtSeries.at(i);
+				SimpleToken latterToken = stmtSeries.at(j);
+				Entity* formerEntity = generateEntity(formerToken);
+				Entity* latterEntity = generateEntity(latterToken);
+				FollowsTRelationship* followsT = new FollowsTRelationship(formerEntity, latterEntity);
+				followsTVector.push_back(followsT);
+			}
+		}
+	}
+	if (procOrWhileIfToken.type == SpTokenType::TWHILE) {
+		SimpleToken stmtLst = stmtSeries.at(1);
+		std::vector<SimpleToken> stmtSeries = stmtLst.getChildren();
+		for (int i = 0; i < stmtSeries.size(); i++) {
+			for (int j = i + 1; j < stmtSeries.size(); j++) {
+				SimpleToken formerToken = stmtSeries.at(i);
+				SimpleToken latterToken = stmtSeries.at(j);
+				Entity* formerEntity = generateEntity(formerToken);
+				Entity* latterEntity = generateEntity(latterToken);
+				FollowsTRelationship* followsT = new FollowsTRelationship(formerEntity, latterEntity);
+				followsTVector.push_back(followsT);
+			}
+		}
+	}
+	if (procOrWhileIfToken.type == SpTokenType::TIF) {
+		SimpleToken stmtLst_1 = stmtSeries.at(1);
+		SimpleToken stmtLst_2 = stmtSeries.at(2);
+		std::vector<SimpleToken> stmtSeries_1 = stmtLst_1.getChildren();
+		std::vector<SimpleToken> stmtSeries_2 = stmtLst_2.getChildren();
+		for (int i = 0; i < stmtSeries_1.size(); i++) {
+			for (int j = i + 1; j < stmtSeries_1.size(); j++) {
+				SimpleToken formerToken = stmtSeries_1.at(i);
+				SimpleToken latterToken = stmtSeries_1.at(j);
+				Entity* formerEntity = generateEntity(formerToken);
+				Entity* latterEntity = generateEntity(latterToken);
+				FollowsTRelationship* followsT = new FollowsTRelationship(formerEntity, latterEntity);
+				followsTVector.push_back(followsT);
+			}
+		}
+		for (int i = 0; i < stmtSeries_2.size(); i++) {
+			for (int j = i + 1; j < stmtSeries_2.size(); j++) {
+				SimpleToken formerToken = stmtSeries_2.at(i);
+				SimpleToken latterToken = stmtSeries_2.at(j);
+				Entity* formerEntity = generateEntity(formerToken);
+				Entity* latterEntity = generateEntity(latterToken);
+				FollowsTRelationship* followsT = new FollowsTRelationship(formerEntity, latterEntity);
+				followsTVector.push_back(followsT);
+			}
+		}
+	}
+
+	for (int i = 0; i < stmtSeries.size(); i++) {
+		SimpleToken current = stmtSeries.at(i);
+		if (current.type == SpTokenType::TWHILE || current.type == SpTokenType::TIF || current.type == SpTokenType::TSTMT) {
+			std::vector<FollowsTRelationship*> moreFollowsTVector = FollowsExtractor::extractFollowsT(current);
+			followsTVector.insert(followsTVector.end(), moreFollowsTVector.begin(), moreFollowsTVector.end());
+		}
+	}
 
 	return followsTVector;
 }
