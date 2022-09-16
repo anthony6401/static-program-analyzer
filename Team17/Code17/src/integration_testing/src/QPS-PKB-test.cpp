@@ -401,21 +401,29 @@ TEST_CASE("Relationships and patterns") {
         REQUIRE(testResults.size() == expectedResults.size());
     }
 
-//    SECTION("Single synonym Clause") {
-//        std::string testQuery = "assign a; Select a pattern a(\"count\",\"0\")";
-//        std::list<std::string> testResults;
-//        std::list<std::string> expectedResults = {"1"};
-//        QPS::processQueryResult(testQuery, testResults, qpsClient);
-//        REQUIRE(testResults == expectedResults);
-//    }
+    SECTION("Single synonym Clause") {
+        std::string testQuery = "assign a; Select a pattern a(\"count\",\"0\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"1"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
 
-//    SECTION("Single synonym Clause") {
-//        std::string testQuery = "assign a; Select a such that Modifies(a, _) pattern a(\"x\",\"y\")";
-//        std::list<std::string> testResults;
-//        std::list<std::string> expectedResults = {"cenX", "cenY"};
-//        QPS::processQueryResult(testQuery, testResults, qpsClient);
-//        REQUIRE(testResults == expectedResults);
-//    }
+    SECTION("Multi Clause - common synonym") {
+        std::string testQuery = "assign a; Select a such that Modifies(a, _) pattern a(\"count\",\"0\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"1"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Single synonym Clause") {
+        std::string testQuery = "assign a; variable v; Select v such that Modifies(a, _) pattern a(\"count\",\"0\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"count", "cenX", "cenY", "x", "y", "flag", "normSq"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults.size() == expectedResults.size());
+    }
 //
 //    SECTION("Single synonym Clause - stmt s; Select s such that Follows(1, s) pattern a(_,_)") {
 //
