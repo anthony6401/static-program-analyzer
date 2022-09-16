@@ -60,11 +60,13 @@ std::vector<ParentRelationship*> ParentExtractor::extractParent(SimpleToken proc
 }
 
 std::vector<ParentTRelationship*> ParentExtractor::extractParentT(SimpleToken procOrWhileIfToken) {
+	std::vector<ParentTRelationship*> parentTVector;
+		
 	// set as parent current for all stmts in stmtlst
 	// then trot down to any while/ifs and set those stmts to be children as well, recurse
 	// once done, trot again and repeat for any while/ifs
-	std::vector<ParentTRelationship*> test;
-	return test;
+
+	return parentTVector;
 }
 
 Entity* ParentExtractor::generateEntity(SimpleToken token) {
