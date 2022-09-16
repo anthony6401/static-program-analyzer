@@ -364,6 +364,14 @@ TEST_CASE("Syntax and Semantics Checks") {
     }
 }
 
+TEST_CASE("Refactor multiclause test") {
+    std::string testQuery = R"(assign a; Select a such that Modifies(a, _) pattern a("count","0"))";
+    std::list<std::string> testResults;
+    std::list<std::string> expectedResults = {"1"};
+    QPS::processQueryResult(testQuery, testResults, qpsClient);
+    REQUIRE(testResults == expectedResults);
+}
+
 TEST_CASE("Relationships and patterns") {
     SECTION("No synonym Clause - return true") {
         std::string testQuery = "variable v; Select v such that Modifies(1, _)";

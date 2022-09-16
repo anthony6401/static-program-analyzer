@@ -121,6 +121,7 @@ RawResult AssignPatternClause::evaluateNameQuotesWildcard() {
 }
 
 RawResult AssignPatternClause::evaluateNameQuotesExpression() {
+    std::cout << "--------IN ASSIGN: NAME QUOTES EXPRESSION--------" << std::endl;
     std::unordered_set<std::string> results = qpsClient.getPattern(DesignEntity::ASSIGN, left, right);
     return {assignSynonym,  results};
 }
