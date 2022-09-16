@@ -38,6 +38,43 @@ RawResult::RawResult(std::string leftSynonym, std::string rightSynonym, std::vec
     setIsBooleanResultToFalse();
 }
 
+bool RawResult::getIsFalseResult() {
+    return isFalseResult;
+}
+
+bool RawResult::isEmptyResult() {
+    return resultsList.empty();
+}
+
+void RawResult::setIsFalseResult(bool pkbBooleanResult) {
+    isFalseResult = !pkbBooleanResult;
+}
+
+void RawResult::setIsFalseResultToTrue() {
+    isFalseResult = true;
+}
+
+int RawResult::getSynonymCount() {
+    return synonymsList.size();
+}
+
+bool RawResult::getIsBooleanResult() {
+    return isBooleanResult;
+}
+
+void RawResult::setIsBooleanResultToFalse() {
+    isBooleanResult = false;
+}
+
+bool RawResult::getIsSynonymResult() {
+    return isSynonymResult;
+}
+
+void RawResult::setIsSynonymResult() {
+    isSynonymResult = true;
+}
+
+
 std::unordered_set<std::string> RawResult::getResultsToBePopulated(std::string selectSynonym) {
     std::unordered_set<std::string> result({});
     auto iterator = std::find(synonymsList.begin(), synonymsList.end(), selectSynonym);
@@ -78,29 +115,41 @@ void RawResult::filterBySelectSynonym(std::string selectSynonym) {
 void RawResult::combineResult(RawResult nextResult) {
     if (isFalseResult) {
         return;
-    }
-
-    if (nextResult.isFalseResult || nextResult.isEmptyResult()) {
-        setIsFalseResultToTrue();
-    }
-    // find common synonyms, maximum 2 since there are only 2 parameters / pattern takes in 1 synonym at max
-    // {x, y} {s, x} -> {0, 1} index pair -> go to resultsList
-    std::map<std::string, size_t> synonymToIndexMap = RawResult::computeSynonymToIndexMap();
-    std::vector<std::pair<size_t, size_t>> commonSynonymsIndexPairs = RawResult::findCommonSynonymsIndexPairs(
-            nextResult.synonymsList, synonymToIndexMap);
-
-    // Combining clause groups and combining within clause groups
-    if (!commonSynonymsIndexPairs.empty()) {
-        std::vector<size_t> notCommonNextSynonymIndex = RawResult::findNotCommonSynonymsIndex(nextResult.synonymsList, synonymToIndexMap);
-        RawResult::joinResultsListWithCommonSynonym(nextResult, commonSynonymsIndexPairs, notCommonNextSynonymIndex);
     } else {
-        RawResult::joinResultsListWithNoCommonSynonym(nextResult);
-    }
+        if (nextResult.isFalseResult || nextResult.isEmptyResult()) {
+            setIsFalseResultToTrue();
+        }
+        // find common synonyms, maximum 2 since there are only 2 parameters / pattern takes in 1 synonym at max
+        // {x, y} {s, x} -> {0, 1} index pair -> go to resultsList
+        std::map<std::string, size_t> synonymToIndexMap = RawResult::computeSynonymToIndexMap();
+        std::vector<std::pair<size_t, size_t>> commonSynonymsIndexPairs = RawResult::findCommonSynonymsIndexPairs(
+                nextResult.synonymsList, synonymToIndexMap);
 
-    // Joining two results with common synonyms but there are no common results
-    if (isEmptyResult() && !synonymsList.empty()) {
-        setIsFalseResultToTrue();
+        // Combining clause groups and combining within clause groups
+        if (!commonSynonymsIndexPairs.empty()) {
+            std::vector<size_t> notCommonNextSynonymIndex = RawResult::findNotCommonSynonymsIndex(nextResult.synonymsList, synonymToIndexMap);
+            RawResult::joinResultsListWithCommonSynonym(nextResult, commonSynonymsIndexPairs, notCommonNextSynonymIndex);
+        } else {
+            RawResult::joinResultsListWithNoCommonSynonym(nextResult);
+        }
+
+        // Joining two results with common synonyms but there are no common results
+        if (isEmptyResult() && !synonymsList.empty()) {
+            setIsFalseResultToTrue();
+        }
     }
+}
+
+std::vector<size_t> RawResult::findNotCommonSynonymsIndex(std::vector<std::string> nextSynonymsList, std::map<std::string, size_t> synonymToIndexMap) {
+    std::vector<size_t> nextSynonymsIndexes;
+    for (size_t i = 0; i < nextSynonymsList.size(); i++) {
+        auto it = synonymToIndexMap.find(nextSynonymsList.at(i));
+        // No common synonyms
+        if (it == synonymToIndexMap.end()) {
+            nextSynonymsIndexes.emplace_back(i);
+        }
+    }
+    return nextSynonymsIndexes;
 }
 
 void RawResult::joinResultsListWithNoCommonSynonym(RawResult nextResult) {
@@ -110,23 +159,21 @@ void RawResult::joinResultsListWithNoCommonSynonym(RawResult nextResult) {
 
     if (nextResult.isEmptyResult()) {
         return;
-    }
-
-    if (isEmptyResult()) {
+    } else if (isEmptyResult()) {
         resultsList = std::move(nextResult.resultsList);
         return;
-    }
-
-    for (auto resultSublist : resultsList) {
-        for (auto nextResultSublist : nextResultsList) {
-            std::vector<std::string> newSublist;
-            newSublist.reserve(resultSublist.size() + nextResultSublist.size());
-            newSublist.insert(newSublist.end(), resultSublist.begin(), resultSublist.end());
-            newSublist.insert(newSublist.end(), nextResultSublist.begin(), nextResultSublist.end());
-            newResultsList.emplace_back(newSublist);
+    } else {
+        for (auto resultSublist : resultsList) {
+            for (auto nextResultSublist : nextResultsList) {
+                std::vector<std::string> newSublist;
+                newSublist.reserve(resultSublist.size() + nextResultSublist.size());
+                newSublist.insert(newSublist.end(), resultSublist.begin(), resultSublist.end());
+                newSublist.insert(newSublist.end(), nextResultSublist.begin(), nextResultSublist.end());
+                newResultsList.emplace_back(newSublist);
+            }
         }
+        resultsList = std::move(newResultsList);
     }
-    resultsList = std::move(newResultsList);
 }
 
 void RawResult::joinResultsListWithCommonSynonym(RawResult nextResult, std::vector<std::pair<size_t, size_t>> commonSynonymsIndexPairs, std::vector<size_t> notCommonNextSynonymIndex) {
@@ -169,18 +216,6 @@ std::map<std::string, size_t> RawResult::computeSynonymToIndexMap() {
 }
 
 
-std::vector<size_t> RawResult::findNotCommonSynonymsIndex(std::vector<std::string> nextSynonymsList, std::map<std::string, size_t> synonymToIndexMap) {
-    std::vector<size_t> nextSynonymsIndexes;
-    for (size_t i = 0; i < nextSynonymsList.size(); i++) {
-        auto it = synonymToIndexMap.find(nextSynonymsList.at(i));
-        // No common synonyms
-        if (it == synonymToIndexMap.end()) {
-            nextSynonymsIndexes.emplace_back(i);
-        }
-    }
-    return nextSynonymsIndexes;
-}
-
 std::vector<std::pair<size_t, size_t>> RawResult::findCommonSynonymsIndexPairs(std::vector<std::string> nextSynonymsList, std::map<std::string, size_t> synonymToIndexMap) {
     std::vector<std::pair<size_t, size_t>> indexPairs; // Common synonyms between both raw results
     for (size_t i = 0; i < nextSynonymsList.size(); i++) {
@@ -191,59 +226,6 @@ std::vector<std::pair<size_t, size_t>> RawResult::findCommonSynonymsIndexPairs(s
         }
     }
     return indexPairs;
-}
-
-bool RawResult::getIsFalseResult() {
-    return isFalseResult;
-}
-
-bool RawResult::isEmptyResult() {
-    return resultsList.empty();
-}
-
-void RawResult::setIsFalseResult(bool pkbBooleanResult) {
-    isFalseResult = !pkbBooleanResult;
-}
-
-void RawResult::setIsFalseResultToTrue() {
-    isFalseResult = true;
-}
-
-int RawResult::getSynonymCount() {
-    return synonymsList.size();
-}
-
-bool RawResult::getIsBooleanResult() {
-    return isBooleanResult;
-}
-
-void RawResult::setIsBooleanResultToFalse() {
-    isBooleanResult = false;
-}
-
-bool RawResult::getIsSynonymResult() {
-    return isSynonymResult;
-}
-
-void RawResult::setIsSynonymResult() {
-    isSynonymResult = true;
-}
-
-std::ostream &operator<<(std::ostream &os, const RawResult &result) {
-    for (const auto syn : result.synonymsList) {
-        os << syn << "\t";
-    }
-    os << std::endl;
-    os << "_______________________________________________________" << std::endl;
-
-    for (const auto &record : result.resultsList) {
-        for (const auto &value : record) {
-            os << value << "\t";
-        }
-        os << std::endl;
-    }
-
-    return os;
 }
 
 

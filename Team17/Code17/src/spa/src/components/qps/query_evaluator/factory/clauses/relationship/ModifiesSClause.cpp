@@ -85,7 +85,6 @@ RawResult ModifiesSClause::evaluateSynonymSynonym() {
 }
 
 RawResult ModifiesSClause::evaluateSynonymWildcard() {
-    std::cout << "--------IN MODIFIESS: SYNONYM WILDCARD--------" << std::endl;
     DesignEntity stmtType = synonymToDesignEntityMap[left.getValue()];
     DesignEntity rightType = DesignEntity::VARIABLE;
     std::string leftValue = left.getValue();
