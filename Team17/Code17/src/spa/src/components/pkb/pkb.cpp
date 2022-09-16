@@ -36,6 +36,10 @@ bool PKB::storeRelationship(Relationship* rel) {
 	return ret;
 }
 
+bool PKB::storeConstant(Entity* entity) {
+	return entityManager->storeEntity(entity);
+}
+
 bool PKB::getRelationship(RelationshipType relType, TokenObject firstArgument, TokenObject secondArgument) {
 	return relManager->getRelationship(relType, firstArgument, secondArgument);
 }

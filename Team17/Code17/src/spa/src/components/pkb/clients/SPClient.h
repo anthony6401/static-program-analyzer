@@ -13,4 +13,5 @@ public:
 	SPClient(PKB* knowledge);
 	bool storeRelationship(Relationship* rel);
 	bool storePattern(kb::Pattern* pattern);
+	bool storeConstant(Entity* entity);
 };

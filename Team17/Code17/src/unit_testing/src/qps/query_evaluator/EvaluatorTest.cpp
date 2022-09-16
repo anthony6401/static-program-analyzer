@@ -11,6 +11,37 @@
 // 5) Synonym clauses - does not have Select Synonym
 // 6) Empty / False clauses
 
+TEST_CASE("Syntactically Invalid queries") {
+    PKB* pkb = new PKB();
+    auto qpsClient = QPSClient(pkb);
+    std::list<std::string> testResults;
+    QueryObject testQuery = QueryObject();
+    Evaluator::evaluateQuery(testQuery, testResults, qpsClient);
+
+    std::list<std::string> expectedResults = {"SyntaxError"};
+    REQUIRE(testResults == expectedResults);
+}
+
+TEST_CASE("Semantically Invalid queries") {
+    PKB* pkb = new PKB();
+    auto qpsClient = QPSClient(pkb);
+    std::list<std::string> testResults;
+    std::vector<SuchThat> relationships = {SuchThat(TokenType::MODIFIES, TokenObject(TokenType::INTEGER, "1"),
+                                                  TokenObject(TokenType::WILDCARD, "_"))};
+    std::vector<Pattern> patterns {Pattern("a", TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
+                                           TokenObject(TokenType::NAME_WITH_QUOTATION, "y"))};
+    Select select = Select( "v");
+    std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap = {{"a", DesignEntity::ASSIGN}};
+
+    QueryObject testQuery = QueryObject(select, relationships, patterns, synonymToDesignEntityMap, 2);
+    testQuery.setSemanticallyInvalid();
+    Evaluator::evaluateQuery(testQuery, testResults, qpsClient);
+
+    std::list<std::string> expectedResults = {"SemanticError"};
+    REQUIRE(testResults == expectedResults);
+}
+
+
 //TEST_CASE("Evaluation for No relationship and pattern clauses") {
 //    PKB* pkb = new PKB();
 //    auto qpsClient = QPSClient(pkb);

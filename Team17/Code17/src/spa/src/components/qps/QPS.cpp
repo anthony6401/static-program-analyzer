@@ -1,6 +1,7 @@
 #include <string>
 #include <list>
 #include <vector>
+#include "iostream"
 #include <components/qps/query_preprocessor/query_tokenizer/Tokenizer.h>
 #include <components/qps/query_preprocessor/query_tokenizer/TokenObject.h>
 #include <components/qps/query_preprocessor/query_parser/Parser.h>
@@ -19,7 +20,12 @@ QueryObject QPS::tokenizeAndParseQuery(std::string query) {
 }
 
 void QPS::processQueryResult(std::string query, std::list<std::string> &results, QPSClient qpsClient) {
-    QueryObject parsedQuery = tokenizeAndParseQuery(query);
-    Evaluator::evaluateQuery(parsedQuery, results, qpsClient);
+    try {
+        QueryObject parsedQuery = tokenizeAndParseQuery(query);
+        Evaluator::evaluateQuery(parsedQuery, results, qpsClient);
+    } catch (std::exception &e) {
+        std::cout << e.what() << std::endl;
+        results.emplace_back("SyntaxError");
+    }
 }
 

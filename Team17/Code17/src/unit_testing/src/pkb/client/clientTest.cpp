@@ -24,6 +24,7 @@ TEST_CASE("SP Client test") {
 	SPClient spClient = SPClient(pkb);
 
 	REQUIRE(spClient.storeRelationship(usesRel));
+	REQUIRE(spClient.storeConstant(constantEntity));
 
 	//Pattern
 	REQUIRE(spClient.storePattern(assignPatternOne));
@@ -84,8 +85,12 @@ TEST_CASE("QPS Client test") {
 	std::unordered_set<std::string> var_set;
 	var_set.insert(variable_value_one);
 
+	std::unordered_set<std::string> const_set;
+	const_set.insert(constant_value_one);
+
 	REQUIRE(qpsClient.getAllEntity(DesignEntity::ASSIGN) == ass_set);
 	REQUIRE(qpsClient.getAllEntity(DesignEntity::VARIABLE) == var_set);
+	REQUIRE(qpsClient.getAllEntity(DesignEntity::CONSTANT) == const_set);
 
 	//Pattern
 	std::unordered_set<std::string> assignGetPatternNameNameOne = qpsClient.getPattern(DesignEntity::ASSIGN, assignPatternTokenObjectFirstOne, assignPatternTokenObjectSecondOne);
