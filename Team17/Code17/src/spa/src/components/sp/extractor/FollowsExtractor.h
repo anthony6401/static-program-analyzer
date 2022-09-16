@@ -7,9 +7,7 @@
 
 class FollowsExtractor {
 public:
-	void static extractFollows(Extractor extractor, std::vector<SimpleToken> seriesOfStmts);
-	void static extractFollowsT(Extractor extractor, std::vector<SimpleToken> seriesOfStmts);
-
-private:
+	static std::vector<FollowsRelationship*> extractFollows(SimpleToken procOrWhileIfToken);
+	static std::vector<FollowsTRelationship*> extractFollowsT(SimpleToken procOrWhileIfToken);
 	static Entity* generateEntity(SimpleToken token);
 };

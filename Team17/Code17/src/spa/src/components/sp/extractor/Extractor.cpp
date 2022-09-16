@@ -2,10 +2,100 @@
 
 #include <iostream>
 
+// Constructor
 Extractor::Extractor(SPClient* client) {
 	this->client = client;
 }
 
+// Parser only needs to call Extractor::extractAll
+void Extractor::extractAll(SimpleToken procedureToken) {
+	extractFollows(procedureToken);
+	extractParent(procedureToken);
+	extractUses(procedureToken);
+	extractModify(procedureToken);
+	extractPattern(procedureToken);
+}
+
+// =============================== //
+// HELPER FUNCTIONS FOR EXTRACTION //
+// =============================== //
+
+void Extractor::extractFollows(SimpleToken procOrWhileIfToken) {
+	std::vector<FollowsRelationship*> followsVector = FollowsExtractor::extractFollows(procOrWhileIfToken);
+	std::vector<FollowsTRelationship*> followsTVector = FollowsExtractor::extractFollowsT(procOrWhileIfToken);
+	storeFollowsRelationships(followsVector);
+	storeFollowsTRelationships(followsTVector);
+}
+
+void Extractor::extractParent(SimpleToken procOrWhileIfToken) {
+	std::vector<ParentRelationship*> parentVector = ParentExtractor::extractParent(procOrWhileIfToken);
+	std::vector<ParentTRelationship*> parentTVector = ParentExtractor::extractParentT(procOrWhileIfToken);
+	storeParentRelationships(parentVector);
+	storeParentTRelationships(parentTVector);
+}
+
+void Extractor::extractUses(SimpleToken procOrWhileIfToken) {
+	std::vector<UsesRelationship*> usesVector = UsesExtractor::extractUses(procOrWhileIfToken);
+	storeUsesRelationships(usesVector);
+}
+
+void Extractor::extractModify(SimpleToken procOrWhileIfToken) {
+	std::vector<ModifyRelationship*> modifyVector = ModifyExtractor::extractModify(procOrWhileIfToken);
+	storeModifyRelationships(modifyVector);
+}
+
+void Extractor::extractPattern(SimpleToken procOrWhileIfToken) {
+	std::vector<AssignPattern*> assignPatternVector = PatternExtractor::extractPattern(procOrWhileIfToken);
+	storeAssignPatterns(assignPatternVector);
+}
+
+// ============================ //
+// HELPER FUNCTIONS FOR STORING //
+// ============================ //
+
+void Extractor::storeFollowsRelationships(std::vector<FollowsRelationship*> vector) {
+	for (int i = 0; i < vector.size(); i++) {
+		this->client->storeRelationship(vector.at(i));
+	}
+}
+
+void Extractor::storeFollowsTRelationships(std::vector<FollowsTRelationship*> vector) {
+	for (int i = 0; i < vector.size(); i++) {
+		this->client->storeRelationship(vector.at(i));
+	}
+}
+
+void Extractor::storeParentRelationships(std::vector<ParentRelationship*> vector) {
+	for (int i = 0; i < vector.size(); i++) {
+		this->client->storeRelationship(vector.at(i));
+	}
+}
+
+void Extractor::storeParentTRelationships(std::vector<ParentTRelationship*> vector) {
+	for (int i = 0; i < vector.size(); i++) {
+		this->client->storeRelationship(vector.at(i));
+	}
+}
+
+void Extractor::storeUsesRelationships(std::vector<UsesRelationship*> vector) {
+	for (int i = 0; i < vector.size(); i++) {
+		this->client->storeRelationship(vector.at(i));
+	}
+}
+
+void Extractor::storeModifyRelationships(std::vector<ModifyRelationship*> vector) {
+	for (int i = 0; i < vector.size(); i++) {
+		this->client->storeRelationship(vector.at(i));
+	}
+}
+
+void Extractor::storeAssignPatterns(std::vector<AssignPattern*> vector) {
+	for (int i = 0; i < vector.size(); i++) {
+		this->client->storePattern(vector.at(i));
+	}
+}
+
+/*
 void Extractor::extractProcedure(SimpleToken procedureToken) {
 	if (procedureToken.type != SpTokenType::TPROCEDURE) {
 		throw std::invalid_argument("Invalid token type for extractProcedure");
@@ -13,6 +103,9 @@ void Extractor::extractProcedure(SimpleToken procedureToken) {
 	std::vector<SimpleToken> childrenOfProcedureToken = procedureToken.getChildren();
 	extractParentRelationships(procedureToken, childrenOfProcedureToken);
 	extractFollowsRelationships(childrenOfProcedureToken);
+
+	extractUsesRelationshipsForProcedure(procedureToken);
+	extractModifyRelationshipsForProcedure(procedureToken);
 
 	extractSeriesOfStmts(childrenOfProcedureToken);
 }
@@ -25,6 +118,14 @@ void Extractor::extractParentRelationships(SimpleToken parentToken, std::vector<
 void Extractor::extractFollowsRelationships(std::vector<SimpleToken> seriesOfStmts) {
 	FollowsExtractor::extractFollows(*this, seriesOfStmts);
 	FollowsExtractor::extractFollowsT(*this, seriesOfStmts);
+}
+
+void Extractor::extractUsesRelationshipsForProcedure(SimpleToken procedureToken) {
+
+}
+
+void Extractor::extractModifyRelationshipsForProcedure(SimpleToken procedureToken) {
+
 }
 
 void Extractor::extractSeriesOfStmts(std::vector<SimpleToken> seriesOfStmts) {
@@ -171,13 +272,43 @@ void Extractor::extractCondExpr(SimpleToken condToken, SimpleToken condExpr) {
 	if (condExpr.type != SpTokenType::TCONDEXPR) {
 		throw std::invalid_argument("Invalid token type for extractCondExpr");
 	}
+	std::vector<UsesRelationship*> usesRelationships = getUsesRelationshipsForCondExpr(condToken, condExpr);
+	for (int i = 0; i < usesRelationships.size(); i++) {
+		this->client->storeRelationship(usesRelationships.at(i));
+	}
+}
 
-	// code here
+std::vector<UsesRelationship*> Extractor::getUsesRelationshipsForCondExpr(SimpleToken condToken, SimpleToken condExpr) {
+	if (condToken.type != SpTokenType::TWHILE && condToken.type != SpTokenType::TIF) {
+		throw std::invalid_argument("Invalid token type for Condiional Token");
+	}
+	Entity* condEntity;
+	if (condToken.type == SpTokenType::TWHILE) {
+		condEntity = new WhileEntity(std::to_string(condToken.statementNumber));
+	}
+	if (condToken.type == SpTokenType::TIF) {
+		condEntity = new IfEntity(std::to_string(condToken.statementNumber));
+	}
+
+	std::vector<UsesRelationship*> usesRelationships;
+
+	std::vector<SimpleToken> childrenOfCondExpr = condExpr.getChildren();
+	for (int i = 0; i < childrenOfCondExpr.size(); i++) {
+		SimpleToken current = childrenOfCondExpr.at(i);
+		if (current.type == SpTokenType::TVARIABLE) {
+			VariableEntity* variableEntity = new VariableEntity(current.value);
+			UsesRelationship* usesRelationship = new UsesRelationship(condEntity, variableEntity);
+			usesRelationships.push_back(usesRelationship);
+		}
+	}
+	
+	return usesRelationships;
 }
 
 void Extractor::extractCall() {
 	CallEntity* callEntity = new CallEntity("");
 	VariableEntity* variableEntity = new VariableEntity("");
 
-	// code here
+	// To be implemented
 }
+*/
