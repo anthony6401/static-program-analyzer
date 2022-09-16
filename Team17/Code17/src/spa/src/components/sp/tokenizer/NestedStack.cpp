@@ -1,4 +1,5 @@
 #include "NestedStack.h"
+#include <stdexcept>
 
 NestedStack::NestedStack(SimpleToken parent) : parent(parent) {
 }
@@ -20,4 +21,8 @@ void NestedStack::put(SimpleToken token) {
 
 SimpleToken NestedStack::dump() {
     return parent;
+}
+
+bool NestedStack::isIf() {
+    return false;
 }
