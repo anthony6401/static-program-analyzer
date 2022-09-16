@@ -30,17 +30,17 @@ std::vector<ParentRelationship*> ParentExtractor::extractParent(SimpleToken proc
 	if (procOrWhileIfToken.type == SpTokenType::TIF) {
 		SimpleToken stmtLstToken_1 = stmtSeries.at(1);
 		SimpleToken stmtLstToken_2 = stmtSeries.at(2);
-		std::vector<SimpleToken> stmtSeriesForStmtLst_1 = stmtLstToken_1.getChildren();
-		std::vector<SimpleToken> stmtSeriesForStmtLst_2 = stmtLstToken_1.getChildren();
-		for (int i = 0; i < stmtSeriesForStmtLst_1.size(); i++) {
-			SimpleToken childToken = stmtSeriesForStmtLst_1.at(i);
+		std::vector<SimpleToken> stmtSeriesInStmtLst_1 = stmtLstToken_1.getChildren();
+		std::vector<SimpleToken> stmtSeriesInStmtLst_2 = stmtLstToken_1.getChildren();
+		for (int i = 0; i < stmtSeriesInStmtLst_1.size(); i++) {
+			SimpleToken childToken = stmtSeriesInStmtLst_1.at(i);
 			Entity* parentEntity = generateEntity(procOrWhileIfToken);
 			Entity* childEntity = generateEntity(childToken);
 			ParentRelationship* parent = new ParentRelationship(parentEntity, childEntity);
 			parentVector.push_back(parent);
 		}
-		for (int i = 0; i < stmtSeriesForStmtLst_2.size(); i++) {
-			SimpleToken childToken = stmtSeriesForStmtLst_2.at(i);
+		for (int i = 0; i < stmtSeriesInStmtLst_2.size(); i++) {
+			SimpleToken childToken = stmtSeriesInStmtLst_2.at(i);
 			Entity* parentEntity = generateEntity(procOrWhileIfToken);
 			Entity* childEntity = generateEntity(childToken);
 			ParentRelationship* parent = new ParentRelationship(parentEntity, childEntity);
@@ -61,10 +61,147 @@ std::vector<ParentRelationship*> ParentExtractor::extractParent(SimpleToken proc
 
 std::vector<ParentTRelationship*> ParentExtractor::extractParentT(SimpleToken procOrWhileIfToken) {
 	std::vector<ParentTRelationship*> parentTVector;
-		
-	// set as parent current for all stmts in stmtlst
-	// then trot down to any while/ifs and set those stmts to be children as well, recurse
-	// once done, trot again and repeat for any while/ifs
+	
+	std::vector<SimpleToken> stmtSeries = procOrWhileIfToken.getChildren();
+
+	if (procOrWhileIfToken.type == SpTokenType::TPROCEDURE) {
+		for (int i = 0; i < stmtSeries.size(); i++) {
+			SimpleToken childToken = stmtSeries.at(i);
+			Entity* parentEntity = generateEntity(procOrWhileIfToken);
+			Entity* childEntity = generateEntity(childToken);
+			ParentTRelationship* parent = new ParentTRelationship(parentEntity, childEntity);
+			parentTVector.push_back(parent);
+		}
+		for (int i = 0; i < stmtSeries.size(); i++) {
+			SimpleToken childToken = stmtSeries.at(i);
+			if (childToken.type == SpTokenType::TWHILE || childToken.type == SpTokenType::TIF) {
+				std::vector<ParentTRelationship*> nestedParentTVector = getNestedParentT(procOrWhileIfToken, childToken);
+				parentTVector.insert(parentTVector.end(), nestedParentTVector.begin(), nestedParentTVector.end());
+			}
+		}
+	}
+
+	if (procOrWhileIfToken.type == SpTokenType::TWHILE) {
+		SimpleToken stmtLstToken = stmtSeries.at(1);
+		std::vector<SimpleToken> stmtSeriesInStmtLst = stmtLstToken.getChildren();
+		for (int i = 0; i < stmtSeriesInStmtLst.size(); i++) {
+			SimpleToken childToken = stmtSeriesInStmtLst.at(i);
+			Entity* parentEntity = generateEntity(procOrWhileIfToken);
+			Entity* childEntity = generateEntity(childToken);
+			ParentTRelationship* parent = new ParentTRelationship(parentEntity, childEntity);
+			parentTVector.push_back(parent);
+		}
+		for (int i = 0; i < stmtSeriesInStmtLst.size(); i++) {
+			SimpleToken childToken = stmtSeriesInStmtLst.at(i);
+			if (childToken.type == SpTokenType::TWHILE || childToken.type == SpTokenType::TIF) {
+				std::vector<ParentTRelationship*> nestedParentTVector = getNestedParentT(procOrWhileIfToken, childToken);
+				parentTVector.insert(parentTVector.end(), nestedParentTVector.begin(), nestedParentTVector.end());
+			}
+		}
+	}
+
+	if (procOrWhileIfToken.type == SpTokenType::TIF) {
+		SimpleToken stmtLstToken_1 = stmtSeries.at(1);
+		SimpleToken stmtLstToken_2 = stmtSeries.at(2);
+		std::vector<SimpleToken> stmtSeriesInStmtLst_1 = stmtLstToken_1.getChildren();
+		std::vector<SimpleToken> stmtSeriesInStmtLst_2 = stmtLstToken_1.getChildren();
+		for (int i = 0; i < stmtSeriesInStmtLst_1.size(); i++) {
+			SimpleToken childToken = stmtSeriesInStmtLst_1.at(i);
+			Entity* parentEntity = generateEntity(procOrWhileIfToken);
+			Entity* childEntity = generateEntity(childToken);
+			ParentTRelationship* parent = new ParentTRelationship(parentEntity, childEntity);
+			parentTVector.push_back(parent);
+		}
+		for (int i = 0; i < stmtSeriesInStmtLst_2.size(); i++) {
+			SimpleToken childToken = stmtSeriesInStmtLst_2.at(i);
+			Entity* parentEntity = generateEntity(procOrWhileIfToken);
+			Entity* childEntity = generateEntity(childToken);
+			ParentTRelationship* parent = new ParentTRelationship(parentEntity, childEntity);
+			parentTVector.push_back(parent);
+		}
+		for (int i = 0; i < stmtSeriesInStmtLst_1.size(); i++) {
+			SimpleToken childToken = stmtSeriesInStmtLst_1.at(i);
+			if (childToken.type == SpTokenType::TWHILE || childToken.type == SpTokenType::TIF) {
+				std::vector<ParentTRelationship*> nestedParentTVector = getNestedParentT(procOrWhileIfToken, childToken);
+				parentTVector.insert(parentTVector.end(), nestedParentTVector.begin(), nestedParentTVector.end());
+			}
+		}
+		for (int i = 0; i < stmtSeriesInStmtLst_2.size(); i++) {
+			SimpleToken childToken = stmtSeriesInStmtLst_2.at(i);
+			if (childToken.type == SpTokenType::TWHILE || childToken.type == SpTokenType::TIF) {
+				std::vector<ParentTRelationship*> nestedParentTVector = getNestedParentT(procOrWhileIfToken, childToken);
+				parentTVector.insert(parentTVector.end(), nestedParentTVector.begin(), nestedParentTVector.end());
+			}
+		}
+	}
+
+	for (int i = 0; i < stmtSeries.size(); i++) {
+		SimpleToken current = stmtSeries.at(i);
+		if (current.type == SpTokenType::TWHILE || current.type == SpTokenType::TIF || current.type == SpTokenType::TSTMT) {
+			std::vector<ParentTRelationship*> moreParentTVector = ParentExtractor::extractParentT(current);
+			parentTVector.insert(parentTVector.end(), moreParentTVector.begin(), moreParentTVector.end());
+		}
+	}
+
+	return parentTVector;
+}
+
+std::vector<ParentTRelationship*> ParentExtractor::getNestedParentT(SimpleToken procOrWhileIfToken, SimpleToken whileOrIfToken) {
+	std::vector<ParentTRelationship*> parentTVector;
+
+	if (whileOrIfToken.type == SpTokenType::TWHILE) {
+		SimpleToken stmtLstToken = whileOrIfToken.getChildren().at(1);
+		std::vector<SimpleToken> stmtSeriesInStmtLst = stmtLstToken.getChildren();
+		for (int i = 0; i < stmtSeriesInStmtLst.size(); i++) {
+			SimpleToken childToken = stmtSeriesInStmtLst.at(i);
+			Entity* parentEntity = generateEntity(procOrWhileIfToken);
+			Entity* childEntity = generateEntity(childToken);
+			ParentTRelationship* parent = new ParentTRelationship(parentEntity, childEntity);
+			parentTVector.push_back(parent);
+		}
+		for (int i = 0; i < stmtSeriesInStmtLst.size(); i++) {
+			SimpleToken current = stmtSeriesInStmtLst.at(i);
+			if (current.type == SpTokenType::TWHILE || current.type == SpTokenType::TIF) {
+				std::vector<ParentTRelationship*> moreParentTVector = ParentExtractor::getNestedParentT(procOrWhileIfToken, current);
+				parentTVector.insert(parentTVector.end(), moreParentTVector.begin(), moreParentTVector.end());
+			}
+		}
+	}
+
+	if (whileOrIfToken.type == SpTokenType::TIF) {
+		SimpleToken stmtLstToken_1 = whileOrIfToken.getChildren().at(1);
+		SimpleToken stmtLstToken_2 = whileOrIfToken.getChildren().at(2);
+		std::vector<SimpleToken> stmtSeriesInStmtLst_1 = stmtLstToken_1.getChildren();
+		std::vector<SimpleToken> stmtSeriesInStmtLst_2 = stmtLstToken_2.getChildren();
+		for (int i = 0; i < stmtSeriesInStmtLst_1.size(); i++) {
+			SimpleToken childToken = stmtSeriesInStmtLst_1.at(i);
+			Entity* parentEntity = generateEntity(procOrWhileIfToken);
+			Entity* childEntity = generateEntity(childToken);
+			ParentTRelationship* parent = new ParentTRelationship(parentEntity, childEntity);
+			parentTVector.push_back(parent);
+		}
+		for (int i = 0; i < stmtSeriesInStmtLst_2.size(); i++) {
+			SimpleToken childToken = stmtSeriesInStmtLst_2.at(i);
+			Entity* parentEntity = generateEntity(procOrWhileIfToken);
+			Entity* childEntity = generateEntity(childToken);
+			ParentTRelationship* parent = new ParentTRelationship(parentEntity, childEntity);
+			parentTVector.push_back(parent);
+		}
+		for (int i = 0; i < stmtSeriesInStmtLst_1.size(); i++) {
+			SimpleToken current = stmtSeriesInStmtLst_1.at(i);
+			if (current.type == SpTokenType::TWHILE || current.type == SpTokenType::TIF) {
+				std::vector<ParentTRelationship*> moreParentTVector = ParentExtractor::getNestedParentT(procOrWhileIfToken, current);
+				parentTVector.insert(parentTVector.end(), moreParentTVector.begin(), moreParentTVector.end());
+			}
+		}
+		for (int i = 0; i < stmtSeriesInStmtLst_2.size(); i++) {
+			SimpleToken current = stmtSeriesInStmtLst_2.at(i);
+			if (current.type == SpTokenType::TWHILE || current.type == SpTokenType::TIF) {
+				std::vector<ParentTRelationship*> moreParentTVector = ParentExtractor::getNestedParentT(procOrWhileIfToken, current);
+				parentTVector.insert(parentTVector.end(), moreParentTVector.begin(), moreParentTVector.end());
+			}
+		}
+	}
 
 	return parentTVector;
 }
