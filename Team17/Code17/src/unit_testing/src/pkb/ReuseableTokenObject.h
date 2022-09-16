@@ -34,9 +34,9 @@ static TokenObject assignPatternTokenObjectFirstOne = TokenObject(TokenType::NAM
 static TokenObject assignPatternTokenObjectFirstTwo = TokenObject(TokenType::NAME_WITH_QUOTATION, assignFirstValueTwo);
 static TokenObject assignPatternTokenObjectFirstThree = TokenObject(TokenType::NAME_WITH_QUOTATION, assignFirstValueThree);
 
-static TokenObject assignPatternTokenObjectSecondOne = TokenObject(TokenType::NAME_WITH_QUOTATION, assignSecondValueForTokenOne);
-static TokenObject assignPatternTokenObjectSecondTwo = TokenObject(TokenType::NAME_WITH_QUOTATION, assignSecondValueForTokenTwo);
-static TokenObject assignPatternTokenObjectSecondThree = TokenObject(TokenType::NAME_WITH_QUOTATION, assignSecondValueForTokenThree);
+static TokenObject assignPatternTokenObjectSecondOne = TokenObject(TokenType::EXPRESSION, assignSecondValueForTokenOne);
+static TokenObject assignPatternTokenObjectSecondTwo = TokenObject(TokenType::EXPRESSION, assignSecondValueForTokenTwo);
+static TokenObject assignPatternTokenObjectSecondThree = TokenObject(TokenType::EXPRESSION, assignSecondValueForTokenThree);
 
 static TokenObject assignPatternTokenObjectSubexprOne = TokenObject(TokenType::SUBEXPRESSION, assignSubexprOne);
 static TokenObject assignPatternTokenObjectSubexprTwo = TokenObject(TokenType::SUBEXPRESSION, assignSubexprTwo);
