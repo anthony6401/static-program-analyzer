@@ -19,7 +19,7 @@ TEST_CASE("incorrect Programstack") {
     SimpleToken printToken = SimpleToken(SpTokenType::TPRINT, "", 6, NULL);
     SimpleToken readToken = SimpleToken(SpTokenType::TREAD, "", 7, NULL);
     SimpleToken callToken = SimpleToken(SpTokenType::TCALL, "", 8, NULL);
-    StmtStack* stack = &ProgramStack(programToken);
+    StmtStack* stack = new ProgramStack(programToken);
     std::vector<SimpleToken> tokens{ ifToken, elseToken, whileToken, assignToken, printToken, readToken, callToken };
     for (SimpleToken token : tokens) {
         try {
@@ -32,4 +32,5 @@ TEST_CASE("incorrect Programstack") {
             std::cout << e.what() << std::endl;
         }
     }
+    delete stack;
 }
