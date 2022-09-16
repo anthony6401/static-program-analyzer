@@ -64,6 +64,8 @@ std::vector<FollowsRelationship*> FollowsExtractor::extractFollows(SimpleToken p
 std::vector<FollowsTRelationship*> FollowsExtractor::extractFollowsT(SimpleToken procOrStmtLstToken) {
 	// for each stmtlst, just iterate for i then for j
 	// then search and do the same for any while/ifs
+	std::vector<FollowsTRelationship*> test;
+	return test;
 }
 
 Entity* FollowsExtractor::generateEntity(SimpleToken token) {

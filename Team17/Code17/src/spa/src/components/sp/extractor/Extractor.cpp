@@ -45,7 +45,7 @@ void Extractor::extractModify(SimpleToken procOrWhileIfToken) {
 }
 
 void Extractor::extractPattern(SimpleToken procOrWhileIfToken) {
-	std::vector<AssignPattern*> assignPatternVector = PatternExtractor::extractPattern(procOrStmtLstToken);
+	std::vector<AssignPattern*> assignPatternVector = PatternExtractor::extractPattern(procOrWhileIfToken);
 	storeAssignPatterns(assignPatternVector);
 }
 
