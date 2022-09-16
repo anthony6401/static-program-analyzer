@@ -493,10 +493,18 @@ TEST_CASE("Relationships and patterns") {
         REQUIRE(testResults == expectedResults);
     }
 
-    SECTION("Single synonym Clause - ") {
+    SECTION("Parent* Clause") {
         std::string testQuery = "stmt s, s1; Select s such that Parent*(s, s1)";
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"4", "8"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Same synonym as parameters in Follows") {
+        std::string testQuery = "stmt s; Select s such that Follows(s, s)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"none"};
         QPS::processQueryResult(testQuery, testResults, qpsClient);
         REQUIRE(testResults == expectedResults);
     }
