@@ -18,3 +18,7 @@ bool SPClient::storeRelationship(Relationship* rel) {
 bool SPClient::storePattern(kb::Pattern* pattern) {
 	return pkb->storePattern(pattern);
 }
+
+bool SPClient::storeConstant(Entity* entity) {
+	return pkb->storeConstant(entity);
+}
