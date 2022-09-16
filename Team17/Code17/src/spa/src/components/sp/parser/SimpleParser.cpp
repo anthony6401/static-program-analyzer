@@ -34,8 +34,7 @@ SimpleToken SimpleParser::parseLine(std::vector<std::string>& tokens, std::strin
     } else if (first == "procedure") {
         tokens.erase(tokens.begin());
         SimpleToken token = SimpleToken(SpTokenType::TPROCEDURE, code,
-            SimpleParser::statementNumber, &SimpleParser::parseProcedure);
-        SimpleParser::statementNumber++;
+            0, &SimpleParser::parseProcedure);
         return token;
     } else if (first == "read") {
         tokens.erase(tokens.begin());
