@@ -24,7 +24,6 @@ void SimpleTokenizer::tokenizeCode(std::string code) {
     }
     
     std::stack<StmtStack*> stmtStack;
-    bool isIf = false;
     StmtStack* currentStack = new ProgramStack(SimpleToken(SpTokenType::TPROGRAM, "", 0, NULL));
 
     for (std::string line : codeLines) {
@@ -32,7 +31,6 @@ void SimpleTokenizer::tokenizeCode(std::string code) {
         std::vector<std::string> lineTokens = SpUtils::split(line, whiteSpace);
         SimpleToken lineToken = SimpleParser::parseLine(lineTokens, line);
         (lineToken.parseFunction)(lineToken, lineTokens, extractor);
-        currentStack->put(lineToken);
         if (lineToken.type == SpTokenType::TPROCEDURE) {
             stmtStack.push(currentStack);
             currentStack = new NestedStack(lineToken);
@@ -40,15 +38,14 @@ void SimpleTokenizer::tokenizeCode(std::string code) {
             stmtStack.push(currentStack);
             currentStack = new NestedStack(lineToken);
         } else if (lineToken.type == SpTokenType::TIF) {
-            isIf = true;
             stmtStack.push(currentStack);
             currentStack = new IfStack(lineToken);
         } else if (lineToken.type == SpTokenType::TCLOSE) {
-            currentStack->put(lineToken);
-            if (isIf) {
-                isIf = false;
+            if (stmtStack.size() == 0) {
+                throw std::invalid_argument("Received invalid SIMPLE code. Extra }");
             }
-            else {
+            currentStack->put(lineToken);
+            if (!(currentStack->isIf())) {
                 StmtStack* parentStack = stmtStack.top();
                 parentStack->put(currentStack->dump());
                 delete currentStack;
@@ -58,5 +55,10 @@ void SimpleTokenizer::tokenizeCode(std::string code) {
         } else {
             currentStack->put(lineToken);
         }
+    }
+    if (stmtStack.size() == 0) {
+        extractor->extractAll(currentStack->dump());
+    } else {
+        throw std::invalid_argument("Received incomplete SIMPLE code");
     }
 }

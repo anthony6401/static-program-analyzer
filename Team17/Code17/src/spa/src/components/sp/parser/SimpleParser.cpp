@@ -20,7 +20,12 @@ int SimpleParser::statementNumber = 1;
 /// <returns>SimpleToken identifying line type and value containing code</returns>
 SimpleToken SimpleParser::parseLine(std::vector<std::string>& tokens, std::string code) {
     std::string first = tokens.front();
-    if (tokens.at(1) == "=") {
+    if (first == "}") {
+        tokens.erase(tokens.begin());
+        SimpleToken token = SimpleToken(SpTokenType::TCLOSE, code,
+        SimpleParser::statementNumber, &SimpleParser::parseHolder);
+        return token;
+    } else if (tokens.at(1) == "=") {
         SimpleToken token = SimpleToken(SpTokenType::TASSIGN, code,
             SimpleParser::statementNumber, &SimpleParser::parseAssign);
         tokens.erase(tokens.begin() + 1);
@@ -29,8 +34,7 @@ SimpleToken SimpleParser::parseLine(std::vector<std::string>& tokens, std::strin
     } else if (first == "procedure") {
         tokens.erase(tokens.begin());
         SimpleToken token = SimpleToken(SpTokenType::TPROCEDURE, code,
-            SimpleParser::statementNumber, &SimpleParser::parseProcedure);
-        SimpleParser::statementNumber++;
+            0, &SimpleParser::parseProcedure);
         return token;
     } else if (first == "read") {
         tokens.erase(tokens.begin());
@@ -59,18 +63,16 @@ SimpleToken SimpleParser::parseLine(std::vector<std::string>& tokens, std::strin
     } else if (first == "if") {
         tokens.erase(tokens.begin());
         SimpleToken token = SimpleToken(SpTokenType::TIF, code,
-            0, &SimpleParser::parseIf);
+            SimpleParser::statementNumber, &SimpleParser::parseIf);
+        SimpleParser::statementNumber++;
         return token;
     } else if (first == "else") {
+        if (tokens.at(1) != "{") {
+            throw std::invalid_argument("Received invalid SIMPLE code line " + std::to_string(SimpleParser::statementNumber));
+        }
         tokens.erase(tokens.begin());
         SimpleToken token = SimpleToken(SpTokenType::TELSE, code,
             0, &SimpleParser::parseHolder);
-        return token;
-    } else if (first == "}") {
-        tokens.erase(tokens.begin());
-        SimpleToken token = SimpleToken(SpTokenType::TCLOSE, code,
-            SimpleParser::statementNumber, &SimpleParser::parseHolder);
-        SimpleParser::statementNumber++;
         return token;
     } else {
         throw std::invalid_argument("Received invalid SIMPLE code line " + std::to_string(SimpleParser::statementNumber));
@@ -79,7 +81,7 @@ SimpleToken SimpleParser::parseLine(std::vector<std::string>& tokens, std::strin
 
 void SimpleParser::parseProcedure(SimpleToken& procStmt, std::vector<std::string>& tokens,
     Extractor* extractor) {
-    if (tokens.size() == 2 && tokens.at(1) == ";") {
+    if (tokens.size() == 2 && tokens.at(1) == "{") {
         std::vector<SimpleToken> children;
         children.push_back(parseVariable(tokens.at(0)));
         procStmt.setChildren(children);

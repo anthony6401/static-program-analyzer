@@ -1,4 +1,5 @@
 #include "ProgramStack.h"
+#include <stdexcept>
 
 ProgramStack::ProgramStack(SimpleToken parent) : parent(parent) {
 
@@ -16,4 +17,8 @@ void ProgramStack::put(SimpleToken token) {
 SimpleToken ProgramStack::dump() {
     parent.setChildren(stmtList);
     return parent;
+}
+
+bool ProgramStack::isIf() {
+    return false;
 }

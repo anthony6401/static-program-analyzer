@@ -7,6 +7,7 @@ public:
     ProgramStack(SimpleToken parent);
     void put(SimpleToken token);
     SimpleToken dump();
+    bool isIf();
 
 private:
     SimpleToken parent;
