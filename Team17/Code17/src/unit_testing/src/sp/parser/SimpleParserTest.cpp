@@ -9,14 +9,12 @@ bool equalToken(SimpleToken& test, SimpleToken& result) {
 
 bool equalChildren(std::vector<SimpleToken> test, std::vector<SimpleToken> result) {
     if (test.size() != result.size()) {
-        std::cout << 1;
         return false;
     }
     for (int i = 0; i < test.size(); i++) {
         SimpleToken a = test.at(i);
         SimpleToken b = result.at(i);
         if (!(equalToken(a, b))) {
-            std::cout << 2;
             return false;
         }
         if (test.empty() == result.empty() && !(test.empty())) {
@@ -76,14 +74,7 @@ TEST_CASE("parse expr") {
 
 TEST_CASE("parse assign") {
     SimpleParser::statementNumber = 1;
-    std::vector<std::string> test_tokens;
-    test_tokens.push_back("a");
-    test_tokens.push_back("(");
-    test_tokens.push_back("1");
-    test_tokens.push_back("+");
-    test_tokens.push_back("1");
-    test_tokens.push_back(")");
-    test_tokens.push_back(";");
+    std::vector<std::string> test_tokens{ "a", "(", "1", "+","1", ")",";" };
     SimpleToken test = SimpleToken(SpTokenType::TASSIGN, "", 1, SimpleParser::parseAssign);
     SimpleParser::parseAssign(test, test_tokens, NULL);
 
@@ -95,6 +86,56 @@ TEST_CASE("parse assign") {
     resultTokens.push_back(SimpleToken(SpTokenType::TCONSTANT, "1", 0, NULL));
     resultTokens.push_back(SimpleToken(SpTokenType::TOPR, "+", 0, NULL));
     resultTokens.push_back(SimpleToken(SpTokenType::TCONSTANT, "1", 0, NULL));
+    expr.setChildren(resultTokens);
+    children.push_back(expr);
+    result.setChildren(children);
+
+    REQUIRE(equalToken(test, result));
+    REQUIRE(equalChildren(test.getChildren(), result.getChildren()));
+}
+
+TEST_CASE("parse while") {
+    SimpleParser::statementNumber = 1;
+    std::vector<std::string> test_tokens{ "(", "(", "(", "15", "<", "20", ")", "&&", "(", "abc", "==","10",")"
+        , ")", "||", "(", "5", "<=", "10", ")", ")" , "{"};
+    SimpleToken test = SimpleToken(SpTokenType::TWHILE, "", 1, SimpleParser::parseWhile);
+    SimpleParser::parseWhile(test, test_tokens, NULL);
+
+    std::vector<SimpleToken> children;
+    std::vector<SimpleToken> resultTokens;
+    SimpleToken result = SimpleToken(SpTokenType::TWHILE, "", 1, NULL);
+    SimpleToken expr = SimpleToken(SpTokenType::TCONDEXPR, "", 0, NULL);
+    resultTokens.push_back(SimpleToken(SpTokenType::TCONSTANT, "15", 0, NULL));
+    resultTokens.push_back(SimpleToken(SpTokenType::TCONSTANT, "20", 0, NULL));
+    resultTokens.push_back(SimpleToken(SpTokenType::TVARIABLE, "abc", 0, NULL));
+    resultTokens.push_back(SimpleToken(SpTokenType::TCONSTANT, "10", 0, NULL));
+    resultTokens.push_back(SimpleToken(SpTokenType::TCONSTANT, "5", 0, NULL));
+    resultTokens.push_back(SimpleToken(SpTokenType::TCONSTANT, "10", 0, NULL));
+    expr.setChildren(resultTokens);
+    children.push_back(expr);
+    result.setChildren(children);
+
+    REQUIRE(equalToken(test, result));
+    REQUIRE(equalChildren(test.getChildren(), result.getChildren()));
+}
+
+TEST_CASE("parse if") {
+    SimpleParser::statementNumber = 1;
+    std::vector<std::string> test_tokens{ "(", "(", "(", "15", "<", "20", ")", "&&", "(", "abc", "==","10",")"
+        , ")", "||", "(", "5", "<=", "10", ")", ")" , "then", "{" };
+    SimpleToken test = SimpleToken(SpTokenType::TIF, "", 1, SimpleParser::parseIf);
+    SimpleParser::parseIf(test, test_tokens, NULL);
+
+    std::vector<SimpleToken> children;
+    std::vector<SimpleToken> resultTokens;
+    SimpleToken result = SimpleToken(SpTokenType::TIF, "", 1, NULL);
+    SimpleToken expr = SimpleToken(SpTokenType::TCONDEXPR, "", 0, NULL);
+    resultTokens.push_back(SimpleToken(SpTokenType::TCONSTANT, "15", 0, NULL));
+    resultTokens.push_back(SimpleToken(SpTokenType::TCONSTANT, "20", 0, NULL));
+    resultTokens.push_back(SimpleToken(SpTokenType::TVARIABLE, "abc", 0, NULL));
+    resultTokens.push_back(SimpleToken(SpTokenType::TCONSTANT, "10", 0, NULL));
+    resultTokens.push_back(SimpleToken(SpTokenType::TCONSTANT, "5", 0, NULL));
+    resultTokens.push_back(SimpleToken(SpTokenType::TCONSTANT, "10", 0, NULL));
     expr.setChildren(resultTokens);
     children.push_back(expr);
     result.setChildren(children);

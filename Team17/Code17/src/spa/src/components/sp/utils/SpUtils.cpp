@@ -30,3 +30,44 @@ std::string SpUtils::join(std::vector<std::string> tokens) {
     }
     return output;
 }
+
+int SpUtils::findOpenBracket(std::vector<std::string>& tokens, int end) {
+    if (tokens.at(end) != ")") {
+        return -1;
+    }
+    int bracketStack = 1;
+    for (int i = end - 1; i >= 0; i--) {
+        std::string token = tokens.at(i);
+        if (token == ")") {
+            bracketStack++;
+        } else if (token == "(") {
+            bracketStack--;
+            if (bracketStack == 0) {
+                return i;
+            }
+        } 
+    }
+    return -1;
+}
+
+int SpUtils::findCloseBracket(std::vector<std::string>& tokens, int start) {
+    if (tokens.at(start) != "(") {
+        return -1;
+    }
+    int bracketStack = 1;
+    int endIndice = tokens.size();
+    for (int i = start + 1; i < endIndice; i++) {
+        std::string token = tokens.at(i);
+        if (token == "(") {
+            bracketStack++;
+        }
+        else if (token == ")") {
+            bracketStack--;
+            if (bracketStack == 0) {
+                return i;
+            }
+        }
+    }
+    return -1;
+}
+
