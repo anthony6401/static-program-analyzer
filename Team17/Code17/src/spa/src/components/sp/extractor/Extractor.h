@@ -16,10 +16,12 @@
 #include "../../../models/Entity/ConstantEntity.h"
 
 #include "../../../models/Relationship/Relationship.h"
-#include "../../../models/Relationship/ModifyRelationship.h"
-#include "../../../models/Relationship/UsesRelationship.h"
 #include "../../../models/Relationship/FollowsRelationship.h"
+#include "../../../models/Relationship/FollowsTRelationship.h"
 #include "../../../models/Relationship/ParentRelationship.h"
+#include "../../../models/Relationship/ParentTRelationship.h"
+#include "../../../models/Relationship/UsesRelationship.h"
+#include "../../../models/Relationship/ModifyRelationship.h"
 
 #include "FollowsExtractor.h"
 #include "ParentExtractor.h"
@@ -37,14 +39,16 @@ public:
 	Extractor(SPClient* client);
 
 	void extractAll(SimpleToken procedureToken);
-	void extractFollows(SimpleToken procOrStmtLstToken);
+	void extractFollows(SimpleToken procOrWhileIfToken);
 	void extractParent(SimpleToken procOrWhileIfToken);
-	void extractUses(SimpleToken procOrStmtLstToken);
-	void extractModify(SimpleToken procOrStmtLstToken);
-	void extractPattern(SimpleToken procOrStmtLstToken);
+	void extractUses(SimpleToken procOrWhileIfToken);
+	void extractModify(SimpleToken procOrWhileIfToken);
+	void extractPattern(SimpleToken procOrWhileIfToken);
 
 	void storeFollowsRelationships(std::vector<FollowsRelationship*>);
+	void storeFollowsTRelationships(std::vector<FollowsTRelationship*>);
 	void storeParentRelationships(std::vector<ParentRelationship*>);
+	void storeParentTRelationships(std::vector<ParentTRelationship*>);
 	void storeUsesRelationships(std::vector<UsesRelationship*>);
 	void storeModifyRelationships(std::vector<ModifyRelationship*>);
 	void storeAssignPatterns(std::vector<AssignPattern*>);

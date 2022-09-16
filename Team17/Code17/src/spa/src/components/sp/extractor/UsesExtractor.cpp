@@ -1,9 +1,36 @@
 #include "UsesExtractor.h"
 
-std::vector<UsesRelationship*> UsesExtractor::extractUses(SimpleToken procOrStmtLstToken) {
+std::vector<UsesRelationship*> UsesExtractor::extractUses(SimpleToken procOrWhileIfToken) {
 	std::vector<UsesRelationship*> usesVector;
 
-	std::vector<SimpleToken> stmtSeries = procOrStmtLstToken.getChildren();
+	std::vector<SimpleToken> children = procOrWhileIfToken.getChildren();
+	std::vector<SimpleToken> stmtSeries;
+	std::vector<SimpleToken> stmtSeries_1;
+	std::vector<SimpleToken> stmtSeries_2;
+
+	if (procOrWhileIfToken.type == SpTokenType::TPROCEDURE) {
+		stmtSeries = children;
+	}
+	if (procOrWhileIfToken.type == SpTokenType::TWHILE) {
+		stmtSeries = children.at(1).getChildren();
+	}
+	if (procOrWhileIfToken.type == SpTokenType::TIF) {
+		stmtSeries_1 = children.at(1).getChildren();
+		stmtSeries_2 = children.at(2).getChildren();
+	}
+
+	std::vector<UsesRelationship*> moreUsesVector = getUsesRelationships(stmtSeries);
+	std::vector<UsesRelationship*> moreUsesVector_1 = getUsesRelationships(stmtSeries_1);
+	std::vector<UsesRelationship*> moreUsesVector_2 = getUsesRelationships(stmtSeries_2);
+	usesVector.insert(usesVector.end(), moreUsesVector.begin(), moreUsesVector.end());
+	usesVector.insert(usesVector.end(), moreUsesVector_1.begin(), moreUsesVector_1.end());
+	usesVector.insert(usesVector.end(), moreUsesVector_2.begin(), moreUsesVector_2.end());
+
+	return usesVector;
+}
+
+std::vector<UsesRelationship*> UsesExtractor::getUsesRelationships(std::vector<SimpleToken> stmtSeries) {
+	std::vector<UsesRelationship*> usesVector;
 
 	for (int i = 0; i < stmtSeries.size(); i++) {
 		SimpleToken current = stmtSeries.at(i);
@@ -43,8 +70,7 @@ std::vector<UsesRelationship*> UsesExtractor::extractUses(SimpleToken procOrStmt
 				}
 			}
 
-			SimpleToken stmtLst = current.getChildren().at(1);
-			std::vector<UsesRelationship*> moreUsesVector = UsesExtractor::extractUses(stmtLst);
+			std::vector<UsesRelationship*> moreUsesVector = UsesExtractor::extractUses(current);
 			usesVector.insert(usesVector.end(), moreUsesVector.begin(), moreUsesVector.end());
 		}
 		if (current.type == SpTokenType::TIF) {
@@ -60,15 +86,11 @@ std::vector<UsesRelationship*> UsesExtractor::extractUses(SimpleToken procOrStmt
 				}
 			}
 
-			SimpleToken stmtLst_1 = current.getChildren().at(1);
-			SimpleToken stmtLst_2 = current.getChildren().at(2);
-			std::vector<UsesRelationship*> moreUsesVector_1 = UsesExtractor::extractUses(stmtLst_1);
-			std::vector<UsesRelationship*> moreUsesVector_2 = UsesExtractor::extractUses(stmtLst_2);
-			usesVector.insert(usesVector.end(), moreUsesVector_1.begin(), moreUsesVector_1.end());
-			usesVector.insert(usesVector.end(), moreUsesVector_2.begin(), moreUsesVector_2.end());
+			std::vector<UsesRelationship*> moreUsesVector = UsesExtractor::extractUses(current);
+			usesVector.insert(usesVector.end(), moreUsesVector.begin(), moreUsesVector.end());
 		}
 	}
-
+	
 	return usesVector;
 }
 

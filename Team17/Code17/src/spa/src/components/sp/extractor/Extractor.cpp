@@ -20,27 +20,31 @@ void Extractor::extractAll(SimpleToken procedureToken) {
 // HELPER FUNCTIONS FOR EXTRACTION //
 // =============================== //
 
-void Extractor::extractFollows(SimpleToken procOrStmtLstToken) {
-	std::vector<FollowsRelationship*> followsVector = FollowsExtractor::extractFollows(procOrStmtLstToken);
+void Extractor::extractFollows(SimpleToken procOrWhileIfToken) {
+	std::vector<FollowsRelationship*> followsVector = FollowsExtractor::extractFollows(procOrWhileIfToken);
+	std::vector<FollowsTRelationship*> followsTVector = FollowsExtractor::extractFollowsT(procOrWhileIfToken);
 	storeFollowsRelationships(followsVector);
+	storeFollowsTRelationships(followsTVector);
 }
 
 void Extractor::extractParent(SimpleToken procOrWhileIfToken) {
 	std::vector<ParentRelationship*> parentVector = ParentExtractor::extractParent(procOrWhileIfToken);
+	std::vector<ParentTRelationship*> parentTVector = ParentExtractor::extractParentT(procOrWhileIfToken);
 	storeParentRelationships(parentVector);
+	storeParentTRelationships(parentTVector);
 }
 
-void Extractor::extractUses(SimpleToken procOrStmtLstToken) {
-	std::vector<UsesRelationship*> usesVector = UsesExtractor::extractUses(procOrStmtLstToken);
+void Extractor::extractUses(SimpleToken procOrWhileIfToken) {
+	std::vector<UsesRelationship*> usesVector = UsesExtractor::extractUses(procOrWhileIfToken);
 	storeUsesRelationships(usesVector);
 }
 
-void Extractor::extractModify(SimpleToken procOrStmtLstToken) {
-	std::vector<ModifyRelationship*> modifyVector = ModifyExtractor::extractModify(procOrStmtLstToken);
+void Extractor::extractModify(SimpleToken procOrWhileIfToken) {
+	std::vector<ModifyRelationship*> modifyVector = ModifyExtractor::extractModify(procOrWhileIfToken);
 	storeModifyRelationships(modifyVector);
 }
 
-void Extractor::extractPattern(SimpleToken procOrStmtLstToken) {
+void Extractor::extractPattern(SimpleToken procOrWhileIfToken) {
 	std::vector<AssignPattern*> assignPatternVector = PatternExtractor::extractPattern(procOrStmtLstToken);
 	storeAssignPatterns(assignPatternVector);
 }
@@ -55,7 +59,19 @@ void Extractor::storeFollowsRelationships(std::vector<FollowsRelationship*> vect
 	}
 }
 
+void Extractor::storeFollowsTRelationships(std::vector<FollowsTRelationship*> vector) {
+	for (int i = 0; i < vector.size(); i++) {
+		this->client->storeRelationship(vector.at(i));
+	}
+}
+
 void Extractor::storeParentRelationships(std::vector<ParentRelationship*> vector) {
+	for (int i = 0; i < vector.size(); i++) {
+		this->client->storeRelationship(vector.at(i));
+	}
+}
+
+void Extractor::storeParentTRelationships(std::vector<ParentTRelationship*> vector) {
 	for (int i = 0; i < vector.size(); i++) {
 		this->client->storeRelationship(vector.at(i));
 	}

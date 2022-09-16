@@ -50,13 +50,19 @@ std::vector<ParentRelationship*> ParentExtractor::extractParent(SimpleToken proc
 
 	for (int i = 0; i < stmtSeries.size(); i++) {
 		SimpleToken current = stmtSeries.at(i);
-		if (current.type == SpTokenType::TWHILE || current.type == SpTokenType::TIF) {
+		if (current.type == SpTokenType::TWHILE || current.type == SpTokenType::TIF || current.type == SpTokenType::TSTMTLST) {
 			std::vector<ParentRelationship*> moreParentVector = ParentExtractor::extractParent(current);
 			parentVector.insert(parentVector.end(), moreParentVector.begin(), moreParentVector.end());
 		}
 	}
 
 	return parentVector;
+}
+
+std::vector<ParentTRelationship*> ParentExtractor::extractParentT(SimpleToken procOrWhileIfToken) {
+	// set as parent current for all stmts in stmtlst
+	// then trot down to any while/ifs and set those stmts to be children as well, recurse
+	// once done, trot again and repeat for any while/ifs
 }
 
 Entity* ParentExtractor::generateEntity(SimpleToken token) {

@@ -1,9 +1,36 @@
 #include "ModifyExtractor.h"
 
-std::vector<ModifyRelationship*> ModifyExtractor::extractModify(SimpleToken procOrStmtLstToken) {
+std::vector<ModifyRelationship*> ModifyExtractor::extractModify(SimpleToken procOrWhileIfToken) {
 	std::vector<ModifyRelationship*> modifyVector;
 
-	std::vector<SimpleToken> stmtSeries = procOrStmtLstToken.getChildren();
+	std::vector<SimpleToken> children = procOrWhileIfToken.getChildren();
+	std::vector<SimpleToken> stmtSeries;
+	std::vector<SimpleToken> stmtSeries_1;
+	std::vector<SimpleToken> stmtSeries_2;
+
+	if (procOrWhileIfToken.type == SpTokenType::TPROCEDURE) {
+		stmtSeries = children;
+	}
+	if (procOrWhileIfToken.type == SpTokenType::TWHILE) {
+		stmtSeries = children.at(1).getChildren();
+	}
+	if (procOrWhileIfToken.type == SpTokenType::TIF) {
+		stmtSeries_1 = children.at(1).getChildren();
+		stmtSeries_2 = children.at(2).getChildren();
+	}
+
+	std::vector<ModifyRelationship*> moreModifyVector = getModifyRelationships(stmtSeries);
+	std::vector<ModifyRelationship*> moreModifyVector_1 = getModifyRelationships(stmtSeries_1);
+	std::vector<ModifyRelationship*> moreModifyVector_2 = getModifyRelationships(stmtSeries_2);
+	modifyVector.insert(modifyVector.end(), moreModifyVector.begin(), moreModifyVector.end());
+	modifyVector.insert(modifyVector.end(), moreModifyVector_1.begin(), moreModifyVector_1.end());
+	modifyVector.insert(modifyVector.end(), moreModifyVector_2.begin(), moreModifyVector_2.end());
+
+	return modifyVector;
+}
+
+std::vector<ModifyRelationship*> ModifyExtractor::getModifyRelationships(std::vector<SimpleToken> stmtSeries) {
+	std::vector<ModifyRelationship*> modifyVector;
 
 	for (int i = 0; i < stmtSeries.size(); i++) {
 		SimpleToken current = stmtSeries.at(i);
@@ -25,17 +52,12 @@ std::vector<ModifyRelationship*> ModifyExtractor::extractModify(SimpleToken proc
 			modifyVector.push_back(modify);
 		}
 		if (current.type == SpTokenType::TWHILE) {
-			SimpleToken stmtLst = current.getChildren().at(1);
-			std::vector<ModifyRelationship*> moreModifyVector = ModifyExtractor::extractModify(stmtLst);
+			std::vector<ModifyRelationship*> moreModifyVector = ModifyExtractor::extractModify(current);
 			modifyVector.insert(modifyVector.end(), moreModifyVector.begin(), moreModifyVector.end());
 		}
 		if (current.type == SpTokenType::TIF) {
-			SimpleToken stmtLst_1 = current.getChildren().at(1);
-			SimpleToken stmtLst_2 = current.getChildren().at(2);
-			std::vector<ModifyRelationship*> moreModifyVector_1 = ModifyExtractor::extractModify(stmtLst_1);
-			std::vector<ModifyRelationship*> moreModifyVector_2 = ModifyExtractor::extractModify(stmtLst_2);
-			modifyVector.insert(modifyVector.end(), moreModifyVector_1.begin(), moreModifyVector_1.end());
-			modifyVector.insert(modifyVector.end(), moreModifyVector_2.begin(), moreModifyVector_2.end());
+			std::vector<ModifyRelationship*> moreModifyVector = ModifyExtractor::extractModify(current);
+			modifyVector.insert(modifyVector.end(), moreModifyVector.begin(), moreModifyVector.end());
 		}
 	}
 
