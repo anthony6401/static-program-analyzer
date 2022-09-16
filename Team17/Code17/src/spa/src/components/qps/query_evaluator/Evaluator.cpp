@@ -18,13 +18,10 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
         std::shared_ptr<Clause> selectClause = ClauseCreator::createClause(select.getSynonym(), synonymToDesignEntityMap, qpsClient);
 
         ClauseDivider clausesToEvaluate = extractClausesToEvaluate(queryObject, synonymToDesignEntityMap, qpsClient);
-
+        clausesToEvaluate.divideCommonSynonymGroupsBySelect(selectClause);
         GroupedClause noSynonymsClauses = clausesToEvaluate.getNoSynonymsPresent();
-
-        std::pair<std::vector<GroupedClause>, std::vector<GroupedClause>> pairBySelect = clausesToEvaluate.divideCommonSynonymGroupsBySelect(selectClause);
-
-        std::vector<GroupedClause> hasSelectSynonymPresent = pairBySelect.first;
-        std::vector<GroupedClause> noSelectSynonymPresent = pairBySelect.second;
+        std::vector<GroupedClause> hasSelectSynonymPresent = clausesToEvaluate.getSelectSynonymPresentGroups();
+        std::vector<GroupedClause> noSelectSynonymPresent = clausesToEvaluate.getSelectSynonymNotPresentGroups();
 
         bool isFalseNoSynonymClauseEvaluation = Evaluator::evaluateNoSynonymClauses(noSynonymsClauses);
         bool isFalseNoSelectSynonymEvaluation = Evaluator::evaluateNoSelectSynonymClauses(noSelectSynonymPresent);
