@@ -13,10 +13,20 @@
 // 3) Checks for select synonym present inside common synonyms list
 
 class ClauseDivider {
+private:
+    GroupedClause noSynonymsPresent;
+    std::vector<GroupedClause> commonSynonymsGroups;
+    std::vector<GroupedClause> selectSynonymPresentGroups;
+    std::vector<GroupedClause> selectSynonymNotPresentGroups;;
 public:
     ClauseDivider();
-    static std::pair<GroupedClause, std::vector<GroupedClause>> divideClausesBySynonyms(std::vector<std::shared_ptr<Clause>> clausesToEvaluate);
-    static std::pair<std::vector<GroupedClause>, std::vector<GroupedClause>> divideCommonSynonymGroupsBySelect(std::shared_ptr<Clause> selectClause, std::vector<GroupedClause> commonSynonymsGroups);
+    void addClauseToDivider(std::shared_ptr<Clause> clause);
+    GroupedClause getNoSynonymsPresent();
+    //std::vector<GroupedClause> getCommonSynonymsPresent();
+    std::vector<GroupedClause> getSelectSynonymPresentGroups();
+    std::vector<GroupedClause> getSelectSynonymNotPresentGroups();
+    std::pair<GroupedClause, std::vector<GroupedClause>> divideClausesBySynonyms(std::vector<std::shared_ptr<Clause>> clausesToEvaluate);
+    void divideCommonSynonymGroupsBySelect(std::shared_ptr<Clause> selectClause);
 
 };
 

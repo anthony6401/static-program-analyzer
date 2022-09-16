@@ -22,6 +22,9 @@ public:
     RawResult evaluateClause() override;
     size_t getNumberOfSynonyms() override;
     std::set<std::string> getAllSynonyms() override;
+    std::vector<std::pair<std::string, std::string>> processMapToVectorPair(std::unordered_map<std::string, std::unordered_set<std::string>> results);
+    std::unordered_set<std::string> processMapToSet(std::unordered_map<std::string, std::unordered_set<std::string>> results);
+    static RelationshipType getRelationshipType();
     RawResult evaluateSynonymSynonym();
     RawResult evaluateSynonymWildcard();
     RawResult evaluateSynonymInteger();
@@ -31,7 +34,6 @@ public:
     RawResult evaluateWildcardSynonym();
     RawResult evaluateWildcardWildcard();
     RawResult evaluateWildcardInteger();
-    TokenType getRelationshipType();
 };
 
 #endif //SPA_PARENTTCLAUSE_H
