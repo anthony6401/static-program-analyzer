@@ -64,7 +64,7 @@ std::vector<AssignPattern*> PatternExtractor::extractPattern(SimpleToken procOrW
 	
 	for (int i = 0; i < children.size(); i++) {
 		SimpleToken current = children.at(i);
-		if (current.type == SpTokenType::TWHILE || current.type == SpTokenType::TIF || current.type == SpTokenType::TSTMT) {
+		if (current.type == SpTokenType::TWHILE || current.type == SpTokenType::TIF || current.type == SpTokenType::TSTMTLIST) {
 			std::vector<AssignPattern*> moreAssignPatternVector = PatternExtractor::extractPattern(current);
 			assignPatternVector.insert(assignPatternVector.end(), moreAssignPatternVector.begin(), moreAssignPatternVector.end());
 		}
