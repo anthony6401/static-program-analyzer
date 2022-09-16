@@ -261,7 +261,7 @@ int dummyForRun = initPKB();
 TEST_CASE("Select all queries") {
 
     SECTION("Select if statements") {
-        std::string testQuery = "if ifs; Select if";
+        std::string testQuery = "if ifs; Select ifs";
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"8"};
         QPS::processQueryResult(testQuery, testResults, qpsClient);
@@ -301,54 +301,98 @@ TEST_CASE("Select all queries") {
     }
 
     SECTION("Select while statements") {
-
+        std::string testQuery = "while w; Select w";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"4"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
     }
 
     SECTION("Select variables") {
-
+        std::string testQuery = "variable v; Select v";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"count", "cenX", "cenY", "x", "y", "flag", "normSq"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults.size() == expectedResults.size());
     }
 
     SECTION("Select constants") {
-
+        std::string testQuery = "constant c; Select c";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"0", "1"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults.size() == expectedResults.size());
     }
 }
 
 TEST_CASE("Relationships and patterns") {
-    SECTION("No synonym Clause - variable v; Select v such that Modifies(1, _)") {
-
+    SECTION("No synonym Clause - return true") {
+        std::string testQuery = "variable v; Select v such that Modifies(1, _)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"normSq", "flag", "cenY", "cenX", "count", "y", "x"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
     }
 
-    SECTION("No synonym Clause - variable v; Select v such that Uses(1, _)") {
-
+    SECTION("No synonym Clause - return false") {
+        std::string testQuery = "variable v; Select v such that Uses(1, _)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"none"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
     }
 
-    SECTION("Single synonym, has select - variable v; Select v such that Uses(1, v)") {
-
+    SECTION("Single synonym, has select") {
+        std::string testQuery = "variable v; Select v such that Uses(12, v)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"cenX", "cenY"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults.size() == expectedResults.size());
     }
 
-    SECTION("Single synonym Clause - assign a; Select a such that Modifies(a, _) pattern a(\"x\",\"y\")") {
-
+    SECTION("Single synonym Clause") {
+        std::string testQuery = "assign a; Select a such that Modifies(a, _)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"1", "2", "3", "5", "6", "7", "9", "10", "11", "12"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults.size() == expectedResults.size());
     }
 
-    SECTION("Single synonym Clause - stmt s; Select s such that Follows(1, s) pattern a(_,_)") {
-
+    SECTION("Single synonym Clause") {
+        std::string testQuery = "assign a; Select a pattern a(\"count\",\"0\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"1"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
     }
 
-    SECTION("Single synonym Clause - assign a; Select v such that Modifies(1, v) pattern a(v,_\"x\"_)") {
-
-    }
-
-    SECTION("Multiple common synonym - assign a; variable v; Select v such that Modifies(a, v) pattern a(v, _)\"") {
-
-    }
-
-    SECTION("Single synonym Clause - stmt s; Select s such that Follows*(1, s)") {
-
-    }
-
-    SECTION("Single synonym Clause - stmt s, s1; Select s such that Parent*(s, s1)") {
-
-    }
+//    SECTION("Single synonym Clause") {
+//        std::string testQuery = "assign a; Select a such that Modifies(a, _) pattern a(\"x\",\"y\")";
+//        std::list<std::string> testResults;
+//        std::list<std::string> expectedResults = {"cenX", "cenY"};
+//        QPS::processQueryResult(testQuery, testResults, qpsClient);
+//        REQUIRE(testResults == expectedResults);
+//    }
+//
+//    SECTION("Single synonym Clause - stmt s; Select s such that Follows(1, s) pattern a(_,_)") {
+//
+//    }
+//
+//    SECTION("Single synonym Clause - assign a; Select v such that Modifies(1, v) pattern a(v,_\"x\"_)") {
+//
+//    }
+//
+//    SECTION("Multiple common synonym - assign a; variable v; Select v such that Modifies(a, v) pattern a(v, _)\"") {
+//
+//    }
+//
+//    SECTION("Single synonym Clause - stmt s; Select s such that Follows*(1, s)") {
+//
+//    }
+//
+//    SECTION("Single synonym Clause - stmt s, s1; Select s such that Parent*(s, s1)") {
+//
+//    }
 
 }
 
