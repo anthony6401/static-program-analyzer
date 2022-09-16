@@ -20,6 +20,7 @@
 #include "models/Relationship/ParentTRelationship.h"
 #include "models/Pattern/Pattern.h"
 #include "models/Pattern/AssignPattern.h"
+#include "components/qps/QPS.h"
 #include <iostream>
 
 // Integration test for QPS and PKB
@@ -44,7 +45,7 @@ Entity* stmt11 = new AssignEntity("11");
 Entity* stmt12 = new AssignEntity("12");
 
 // Proc Entity
-Entity* proc1 = new ProcedureEntity("ComputeCentroid");
+Entity* proc1 = new ProcedureEntity("computeCentroid");
 
 // Variable Entity
 Entity* variableCount = new VariableEntity("count");
@@ -258,33 +259,46 @@ int dummyForRun = initPKB();
 
 // PQL queries
 TEST_CASE("Select all queries") {
-    SECTION("Select if statements") {
 
+    SECTION("Select if statements") {
+        std::string testQuery = "if ifs; Select if";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"8"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
     }
 
     SECTION("Select assign statements") {
-
+        std::string testQuery = "assign a; Select a";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"1", "2", "3", "5", "6", "7", "9", "10", "11", "12"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults.size() == expectedResults.size());
     }
 
     SECTION("Select read statements") {
-
+        std::string testQuery = "read re; Select re";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"none"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
     }
 
     SECTION("Select print statements") {
-
+        std::string testQuery = "print p; Select p";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"none"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
     }
 
     SECTION("Select procedures") {
-
+        std::string testQuery = "procedure p; Select p";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"computeCentroid"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
     }
-
-    SECTION("Select stmt statements") {
-
-    }
-
-    SECTION("Select call statements") {
-
-    } // might want to delete since call is not included in milestone 1
 
     SECTION("Select while statements") {
 
