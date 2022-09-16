@@ -21,10 +21,9 @@ public:
     void addClauseToDivider(std::shared_ptr<Clause> clause);
     GroupedClause getNoSynonymsPresent();
     std::vector<GroupedClause> getCommonSynonymsPresent();
-    std::vector<GroupedClause> getSelectSynonymPresentGroups();
-    std::vector<GroupedClause> getSelectSynonymNotPresentGroups();
     std::pair<std::vector<GroupedClause>, std::vector<GroupedClause>> divideCommonSynonymGroupsBySelect(std::shared_ptr<Clause> selectClause);
 
 };
+
 
 #endif //SPA_CLAUSESDIVIDER_H

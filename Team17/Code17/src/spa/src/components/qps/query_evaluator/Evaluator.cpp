@@ -25,6 +25,7 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
 
         std::vector<GroupedClause> hasSelectSynonymPresent = pairBySelect.first;
         std::vector<GroupedClause> noSelectSynonymPresent = pairBySelect.second;
+
         bool isFalseNoSynonymClauseEvaluation = Evaluator::evaluateNoSynonymClauses(noSynonymsClauses);
         bool isFalseNoSelectSynonymEvaluation = Evaluator::evaluateNoSelectSynonymClauses(noSelectSynonymPresent);
 
@@ -47,7 +48,6 @@ void Evaluator::populateResults(RawResult finalResult, std::string selectSynonym
     }
 
     std::unordered_set<std::string> resultsToPopulate = finalResult.getResultsToBePopulated(selectSynonym);
-
     for (std::string result : resultsToPopulate) {
         results.emplace_back(result);
     }

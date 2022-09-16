@@ -6,21 +6,20 @@ ClauseDivider::ClauseDivider() : noSynonymsPresent({}), commonSynonymsGroups({})
 void ClauseDivider::addClauseToDivider(std::shared_ptr<Clause> clause) {
     if (clause -> getNumberOfSynonyms() == 0) {
         noSynonymsPresent.addClauseToGroup(clause);
-    } else {
-        for (auto &clause_group : commonSynonymsGroups) {
-            if (clause_group.hasCommonSynonymWithClause(clause)) {
-                clause_group.addClauseToGroup(clause);
+    } else { // 1 or 2 synonyms
+        for (auto &gc : commonSynonymsGroups) {
+            if (gc.hasCommonSynonymWithClause(clause)) {
+                gc.addClauseToGroup(clause);
                 return;
             }
         }
 
         // Create new group if it has no common synonym with existing groups
-        GroupedClause newGroup;
-        newGroup.addClauseToGroup(clause);
-        commonSynonymsGroups.emplace_back(newGroup);
+        GroupedClause clauseGroup;
+        clauseGroup.addClauseToGroup(clause);
+        commonSynonymsGroups.emplace_back(clauseGroup);
     }
 }
-
 GroupedClause ClauseDivider::getNoSynonymsPresent() {
     return noSynonymsPresent;
 }
