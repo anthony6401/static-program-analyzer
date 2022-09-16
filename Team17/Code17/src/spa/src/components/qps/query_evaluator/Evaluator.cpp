@@ -33,10 +33,15 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
         }
 
         // For unrelated to select synonyms, if both tables are true/not empty, return all results
-        RawResult selectResults = selectClause -> evaluateClause();
-        evaluatedResults.combineResult(selectResults);
-        Evaluator::populateResults(evaluatedResults, select.getSynonym(), results);
+        RawResult finalResultTable = Evaluator::combineResultsWithSelect(selectClause, evaluatedResults);
+        Evaluator::populateResults(finalResultTable, select.getSynonym(), results);
     }
+}
+
+RawResult Evaluator::combineResultsWithSelect(std::shared_ptr<Clause> selectClause, RawResult evaluatedResults) {
+    RawResult selectResults = selectClause -> evaluateClause();
+    evaluatedResults.combineResult(selectResults);
+    return evaluatedResults;
 }
 
 void Evaluator::populateResults(RawResult finalResult, std::string selectSynonym, std::list<std::string> &results) {
