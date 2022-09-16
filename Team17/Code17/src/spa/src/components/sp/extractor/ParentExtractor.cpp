@@ -5,6 +5,7 @@ std::vector<ParentRelationship*> ParentExtractor::extractParent(SimpleToken proc
 
 	std::vector<SimpleToken> stmtSeries = procOrWhileIfToken.getChildren();
 
+	/*
 	if (procOrWhileIfToken.type == SpTokenType::TPROCEDURE) {
 		for (int i = 0; i < stmtSeries.size(); i++) {
 			SimpleToken childToken = stmtSeries.at(i);
@@ -14,6 +15,7 @@ std::vector<ParentRelationship*> ParentExtractor::extractParent(SimpleToken proc
 			parentVector.push_back(parent);
 		}
 	}
+	*/
 	
 	if (procOrWhileIfToken.type == SpTokenType::TWHILE) {
 		SimpleToken stmtLstToken = stmtSeries.at(1);
@@ -31,7 +33,7 @@ std::vector<ParentRelationship*> ParentExtractor::extractParent(SimpleToken proc
 		SimpleToken stmtLstToken_1 = stmtSeries.at(1);
 		SimpleToken stmtLstToken_2 = stmtSeries.at(2);
 		std::vector<SimpleToken> stmtSeriesInStmtLst_1 = stmtLstToken_1.getChildren();
-		std::vector<SimpleToken> stmtSeriesInStmtLst_2 = stmtLstToken_1.getChildren();
+		std::vector<SimpleToken> stmtSeriesInStmtLst_2 = stmtLstToken_2.getChildren();
 		for (int i = 0; i < stmtSeriesInStmtLst_1.size(); i++) {
 			SimpleToken childToken = stmtSeriesInStmtLst_1.at(i);
 			Entity* parentEntity = generateEntity(procOrWhileIfToken);
@@ -64,6 +66,7 @@ std::vector<ParentTRelationship*> ParentExtractor::extractParentT(SimpleToken pr
 	
 	std::vector<SimpleToken> stmtSeries = procOrWhileIfToken.getChildren();
 
+	/*
 	if (procOrWhileIfToken.type == SpTokenType::TPROCEDURE) {
 		for (int i = 0; i < stmtSeries.size(); i++) {
 			SimpleToken childToken = stmtSeries.at(i);
@@ -80,6 +83,7 @@ std::vector<ParentTRelationship*> ParentExtractor::extractParentT(SimpleToken pr
 			}
 		}
 	}
+	*/
 
 	if (procOrWhileIfToken.type == SpTokenType::TWHILE) {
 		SimpleToken stmtLstToken = stmtSeries.at(1);
@@ -104,7 +108,7 @@ std::vector<ParentTRelationship*> ParentExtractor::extractParentT(SimpleToken pr
 		SimpleToken stmtLstToken_1 = stmtSeries.at(1);
 		SimpleToken stmtLstToken_2 = stmtSeries.at(2);
 		std::vector<SimpleToken> stmtSeriesInStmtLst_1 = stmtLstToken_1.getChildren();
-		std::vector<SimpleToken> stmtSeriesInStmtLst_2 = stmtLstToken_1.getChildren();
+		std::vector<SimpleToken> stmtSeriesInStmtLst_2 = stmtLstToken_2.getChildren();
 		for (int i = 0; i < stmtSeriesInStmtLst_1.size(); i++) {
 			SimpleToken childToken = stmtSeriesInStmtLst_1.at(i);
 			Entity* parentEntity = generateEntity(procOrWhileIfToken);
