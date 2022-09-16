@@ -325,6 +325,49 @@ TEST_CASE("Select all queries") {
     }
 }
 
+TEST_CASE("Syntax and Semantics Checks") {
+    SECTION("Syntax error - invalid synonym") {
+        std::string testQuery = "variable 1; Select v such that Modifies(1, _)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"SyntaxError"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    // Semantically invalid also, but syntax is caught first
+    SECTION("Syntax error - invalid subexpression") {
+        std::string testQuery = "variable v; Select s such that Uses (s, \"x\") pattern a (_\"x\", _\"y\"_)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"SyntaxError"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Syntax error - end with semicolon") {
+        std::string testQuery = "variable v; Select v such that Modifies(1, _);";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"SyntaxError"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Semantics error - synonym not declared") {
+        std::string testQuery = "variable v; Select s such that Uses (1, v)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"SemanticError"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Semantics error - ambiguity in first argument") {
+        std::string testQuery = "variable v; Select v such that Uses (_, v)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"SemanticError"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
+}
+
 TEST_CASE("Relationships and patterns") {
     SECTION("No synonym Clause - return true") {
         std::string testQuery = "variable v; Select v such that Modifies(1, _)";
