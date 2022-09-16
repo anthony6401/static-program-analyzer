@@ -1,7 +1,6 @@
 #include <catch.hpp>
 #include "components/qps/abstract_query_object/QueryObject.h"
 #include "components/qps/query_evaluator/Evaluator.h"
-#include "components/pkb/PKB.h"
 #include "models/Entity/Entity.h"
 #include "models/Entity/AssignEntity.h"
 #include "models/Entity/IfEntity.h"
@@ -9,8 +8,6 @@
 #include "models/Entity/ProcedureEntity.h"
 #include "models/Entity/ConstantEntity.h"
 #include "models/Entity/VariableEntity.h"
-#include "models/Entity/PrintEntity.h"
-#include "models/Entity/ReadEntity.h"
 #include "models/Relationship/Relationship.h"
 #include "models/Relationship/UsesRelationship.h"
 #include "models/Relationship/ModifyRelationship.h"
@@ -24,7 +21,6 @@
 #include <iostream>
 
 // Integration test for QPS and PKB
-// Sample source code:
 
 // Populating data in PKB
 PKB* pkb = new PKB();
@@ -336,7 +332,7 @@ TEST_CASE("Syntax and Semantics Checks") {
 
     // Semantically invalid also, but syntax is caught first
     SECTION("Syntax error - invalid subexpression") {
-        std::string testQuery = "variable v; Select s such that Uses (s, \"x\") pattern a (_\"x\", _\"y\"_)";
+        std::string testQuery = R"(variable v; Select s such that Uses (s, "x") pattern a (_"x", _"y"_))";
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"SyntaxError"};
         QPS::processQueryResult(testQuery, testResults, qpsClient);
@@ -402,7 +398,7 @@ TEST_CASE("Relationships and patterns") {
     }
 
     SECTION("Single synonym Clause - Pattern") {
-        std::string testQuery = "assign a; Select a pattern a(\"count\",\"0\")";
+        std::string testQuery = R"(assign a; Select a pattern a("count","0"))";
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"1"};
         QPS::processQueryResult(testQuery, testResults, qpsClient);
@@ -410,7 +406,7 @@ TEST_CASE("Relationships and patterns") {
     }
 
     SECTION("Multi Clause - common synonym") {
-        std::string testQuery = "assign a; Select a such that Modifies(a, _) pattern a(\"count\",\"0\")";
+        std::string testQuery = R"(assign a; Select a such that Modifies(a, _) pattern a("count","0"))";
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"1"};
         QPS::processQueryResult(testQuery, testResults, qpsClient);
@@ -418,7 +414,7 @@ TEST_CASE("Relationships and patterns") {
     }
 
     SECTION("Multi Clause - Unrelated to Select") {
-        std::string testQuery = "assign a; variable v; Select v such that Modifies(a, _) pattern a(\"count\",\"0\")";
+        std::string testQuery = R"(assign a; variable v; Select v such that Modifies(a, _) pattern a("count","0"))";
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"count", "cenX", "cenY", "x", "y", "flag", "normSq"};
         QPS::processQueryResult(testQuery, testResults, qpsClient);
