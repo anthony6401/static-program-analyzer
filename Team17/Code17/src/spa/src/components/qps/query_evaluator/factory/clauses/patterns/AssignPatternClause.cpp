@@ -42,7 +42,6 @@ size_t AssignPatternClause::getNumberOfSynonyms() {
     if (left.getTokenType() == TokenType::NAME) {
         numberOfSynonyms++;
     }
-
     return numberOfSynonyms + 1;
 }
 
@@ -51,56 +50,87 @@ std::set<std::string> AssignPatternClause::getAllSynonyms() {
     if (left.getTokenType() == TokenType::NAME) {
         synonyms.emplace(left.getValue());
     }
-    for (auto c : synonyms) {
-        std::cout << "pattern syn " << c << std::endl;
-    }
     return synonyms;
 }
 
+
+
 RawResult AssignPatternClause::evaluateSynonymWildcard() {
-    return {};
+    std::vector<std::pair<std::string, std::string>> results = qpsClient.getPatternPair(DesignEntity::ASSIGN, right);
+    std::string leftValue = left.getValue();
+    return {assignSynonym, leftValue, results};
 }
 
 RawResult AssignPatternClause::evaluateSynonymExpression() {
-    return {};
+    std::vector<std::pair<std::string, std::string>> results = qpsClient.getPatternPair(DesignEntity::ASSIGN, right);
+    std::string leftValue = left.getValue();
+    return {assignSynonym, leftValue, results};
 }
 
 RawResult AssignPatternClause::evaluateSynonymNameQuotes() {
-    return {};
+    std::vector<std::pair<std::string, std::string>> results = qpsClient.getPatternPair(DesignEntity::ASSIGN, right);
+    std::string leftValue = left.getValue();
+    return {assignSynonym, leftValue, results};
 }
 
 RawResult AssignPatternClause::evaluateSynonymSubExpression() {
-    return {};
+    std::vector<std::pair<std::string, std::string>> results = qpsClient.getPatternPair(DesignEntity::ASSIGN, right);
+    std::string leftValue = left.getValue();
+    return {assignSynonym, leftValue, results};
 }
 
 RawResult AssignPatternClause::evaluateWildcardWildcard() {
-    return {};
+    std::vector<std::pair<std::string, std::string>> results = qpsClient.getPatternPair(DesignEntity::ASSIGN, right);
+    std::unordered_set<std::string> extractedAssignments; // {"1", "2", "3"....}
+    for (auto pair : results) {
+        extractedAssignments.insert(pair.first);
+    }
+    return {assignSynonym,  extractedAssignments};
 }
 
 RawResult AssignPatternClause::evaluateWildcardExpression() {
-    return {};
+    std::vector<std::pair<std::string, std::string>> results = qpsClient.getPatternPair(DesignEntity::ASSIGN, right);
+    std::unordered_set<std::string> extractedAssignments; // {"1", "2", "3"....}
+    for (auto pair : results) {
+        extractedAssignments.insert(pair.first);
+    }
+    return {assignSynonym,  extractedAssignments};
 }
 
 RawResult AssignPatternClause::evaluateWildcardNameQuotes() {
-    return {};
+    std::vector<std::pair<std::string, std::string>> results = qpsClient.getPatternPair(DesignEntity::ASSIGN, right);
+    std::unordered_set<std::string> extractedAssignments; // {"1", "2", "3"....}
+    for (auto pair : results) {
+        extractedAssignments.insert(pair.first);
+    }
+    return {assignSynonym,  extractedAssignments};
 }
 
 RawResult AssignPatternClause::evaluateWildcardSubExpression() {
-    return {};
+    std::vector<std::pair<std::string, std::string>> results = qpsClient.getPatternPair(DesignEntity::ASSIGN, right);
+    std::unordered_set<std::string> extractedAssignments; // {"1", "2", "3"....}
+    for (auto pair : results) {
+        extractedAssignments.insert(pair.first);
+    }
+    return {assignSynonym,  extractedAssignments};
 }
 
 RawResult AssignPatternClause::evaluateNameQuotesWildcard() {
-    return {};
+    std::unordered_set<std::string> results = qpsClient.getPattern(DesignEntity::ASSIGN, left, right);
+    return {assignSynonym,  results};
 }
 
 RawResult AssignPatternClause::evaluateNameQuotesExpression() {
-    return {};
+    std::unordered_set<std::string> results = qpsClient.getPattern(DesignEntity::ASSIGN, left, right);
+    return {assignSynonym,  results};
 }
 
 RawResult AssignPatternClause::evaluateNameQuotesNameQuotes() {
-    return {"a", {"1", "2", "3"}};
+    std::unordered_set<std::string> results = qpsClient.getPattern(DesignEntity::ASSIGN, left, right);
+    return {assignSynonym,  results};
 }
 
 RawResult AssignPatternClause::evaluateNameQuotesSubExpression() {
-    return {};
+    std::unordered_set<std::string> results = qpsClient.getPattern(DesignEntity::ASSIGN, left, right);
+    return {assignSynonym,  results};
 }
