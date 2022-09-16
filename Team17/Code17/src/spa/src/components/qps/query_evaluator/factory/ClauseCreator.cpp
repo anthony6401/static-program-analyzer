@@ -19,9 +19,6 @@ std::shared_ptr<Clause> ClauseCreator::createClause(Select synonym, std::unorder
 std::shared_ptr<Clause> ClauseCreator::createClause(qps::Pattern pattern, Select synonym, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) {
     TokenObject left = pattern.getLeft();
     TokenObject right = pattern.getRight();
-//    std::cout << "IN PATTERN CLAUSE CREATOR" << std::endl;
-//    std::cout << "LEFT TYPE: " << (left.getTokenType() == TokenType::NAME_WITH_QUOTATION) << std::endl;
-//    std::cout << "RIGHT TYPE: " << (right.getTokenType() == TokenType::EXPRESSION) << std::endl;
     std::string assignSynonym = pattern.getSynonym();
     return std::make_shared<AssignPatternClause>(assignSynonym, left, right, qpsClient, synonym);
 }
