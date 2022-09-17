@@ -30,7 +30,7 @@ auto spClient = new SPClient(pkbSP);
 TEST_CASE("test SP PKB integration") {
 	auto pkb = new PKB();
 	SPClient* client = new SPClient(pkb);
-	Extractor extractor = Extractor(client);
+	Extractor extractor = Extractor(spClient);
 	SimpleTokenizer simpleTokenizer = SimpleTokenizer(&extractor);
 	simpleTokenizer.tokenizeCode("    procedure computeCentroid {\
 		      count = 0;\
