@@ -370,6 +370,24 @@ TEST_CASE("Refactor multiclause test") {
     std::list<std::string> expectedResults = {"1"};
     QPS::processQueryResult(testQuery, testResults, qpsClient);
     REQUIRE(testResults == expectedResults);
+
+//    SECTION("Test 2") {
+//        std::string testQuery = R"(assign a; Select a such that Uses(a, "b") pattern a(_,_"30"_ ))";
+//        std::list<std::string> testResults;
+//        std::list<std::string> expectedResults = {"1"};
+//        QPS::processQueryResult(testQuery, testResults, qpsClient);
+//        REQUIRE(testResults == expectedResults);
+//    }
+}
+
+TEST_CASE("More multiclause test") {
+    SECTION("Test 1") {
+        std::string testQuery = R"(assign a; stmt s; Select a such that Parent(s, a) pattern a(_, _))";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"11", "6", "9", "5", "7", "10"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
 }
 
 TEST_CASE("Relationships and patterns") {
