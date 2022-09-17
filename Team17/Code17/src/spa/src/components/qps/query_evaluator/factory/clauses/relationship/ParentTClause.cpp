@@ -79,6 +79,15 @@ std::unordered_set<std::string> ParentTClause::processMapToSetFromFirst(std::uno
     return processedResult;
 }
 
+std::unordered_set<std::string> ParentTClause::processMapToSetFromSecond(std::unordered_map<std::string, std::unordered_set<std::string>> results) {
+    std::unordered_set<std::string> processedResult;
+    for (auto entry : results) {
+        std::unordered_set<std::string> valuesInRow = entry.second;
+        processedResult.insert(valuesInRow.begin(), valuesInRow.end());
+    }
+    return processedResult;
+}
+
 RawResult ParentTClause::evaluateSynonymSynonym() {
     DesignEntity leftType = synonymToDesignEntityMap[left.getValue()];
     DesignEntity rightType = synonymToDesignEntityMap[right.getValue()];
@@ -136,7 +145,7 @@ RawResult ParentTClause::evaluateWildcardSynonym() {
     DesignEntity rightType = synonymToDesignEntityMap[right.getValue()];
     std::string rightValue = right.getValue();
     std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(getRelationshipType(), leftType, rightType);
-    std::unordered_set<std::string> processedMap = ParentTClause::processMapToSetFromFirst(results);
+    std::unordered_set<std::string> processedMap = ParentTClause::processMapToSetFromSecond(results);
     return {rightValue, processedMap};
 }
 
