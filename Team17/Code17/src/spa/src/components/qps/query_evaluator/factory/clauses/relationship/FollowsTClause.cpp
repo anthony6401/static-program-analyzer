@@ -71,7 +71,7 @@ std::vector<std::pair<std::string, std::string>> FollowsTClause::processMapToVec
     return processedResult;
 }
 
-std::unordered_set<std::string> FollowsTClause::processMapToSet(std::unordered_map<std::string, std::unordered_set<std::string>> results) {
+std::unordered_set<std::string> FollowsTClause::processMapToSetFromFirst(std::unordered_map<std::string, std::unordered_set<std::string>> results) {
     std::unordered_set<std::string> processedResult;
     for (auto entry : results) {
         std::string firstSynonym = entry.first;
@@ -98,7 +98,7 @@ RawResult FollowsTClause::evaluateSynonymWildcard() {
     DesignEntity rightType = DesignEntity::STMT;
     std::string leftValue = left.getValue();
     std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(getRelationshipType(), leftType, rightType);
-    std::unordered_set<std::string> processedMap = FollowsTClause::processMapToSet(results);
+    std::unordered_set<std::string> processedMap = FollowsTClause::processMapToSetFromFirst(results);
     return {leftValue, processedMap};
 }
 
@@ -137,7 +137,7 @@ RawResult FollowsTClause::evaluateWildcardSynonym() {
     DesignEntity rightType = synonymToDesignEntityMap[right.getValue()];
     std::string rightValue = right.getValue();
     std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(getRelationshipType(), leftType, rightType);
-    std::unordered_set<std::string> processedMap = FollowsTClause::processMapToSet(results);
+    std::unordered_set<std::string> processedMap = FollowsTClause::processMapToSetFromFirst(results);
     return {rightValue, processedMap};
 }
 
