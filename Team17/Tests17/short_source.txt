@@ -1,0 +1,19 @@
+procedure shortProcedure {
+    print a;
+    read b;
+    a = b + 1;
+    if (a < b) then {
+        print a;
+        read b;
+        a = (b + 1) - (a) * 30;
+    } else {
+        print a;
+        read b;
+        a = (b + 1);
+    }
+    while (12 > 15) {
+        print a;
+        read b;
+        a = b + 1;
+    }
+}
