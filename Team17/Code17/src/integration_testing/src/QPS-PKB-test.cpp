@@ -394,26 +394,29 @@ TEST_CASE("More multiclause test") {
     SECTION("Test") {
         std::string testQuery = R"(stmt s; Select s such that Follows(s, s))";
         std::list<std::string> testResults;
-        std::list<std::string> expectedResults = {"none"};
+        std::list<std::string> expectedResults = {};
         QPS::processQueryResult(testQuery, testResults, qpsClient);
         REQUIRE(testResults == expectedResults);
+        REQUIRE(testResults.empty());
     }
 
     SECTION("Test 2") {
         std::string testQuery = R"(assign a; Select a such that Uses(a, "cenX") pattern a(_,_"1"_))";
         std::list<std::string> testResults;
-        std::list<std::string> expectedResults = {"none"};
+        std::list<std::string> expectedResults = {};
         QPS::processQueryResult(testQuery, testResults, qpsClient);
         REQUIRE(testResults == expectedResults);
+        REQUIRE(testResults.empty());
     }
 
     // a = 1, 5 || a = 6
     SECTION("Test 3") {
         std::string testQuery = R"(assign a; Select a such that Uses(a, "count") pattern a("cenX",_"x"_))";
         std::list<std::string> testResults;
-        std::list<std::string> expectedResults = {"none"};
+        std::list<std::string> expectedResults = {};
         QPS::processQueryResult(testQuery, testResults, qpsClient);
         REQUIRE(testResults == expectedResults);
+        REQUIRE(testResults.empty());
     }
 
 
@@ -445,9 +448,10 @@ TEST_CASE("More multiclause test") {
     SECTION("Test 6") {
         std::string testQuery = R"(assign a; Select a such that Modifies(5, "flag") pattern a(_,_"1"_))";
         std::list<std::string> testResults;
-        std::list<std::string> expectedResults = {"none"};
+        std::list<std::string> expectedResults = {};
         QPS::processQueryResult(testQuery, testResults, qpsClient);
         REQUIRE(testResults == expectedResults);
+        REQUIRE(testResults.empty());
     }
 }
 
