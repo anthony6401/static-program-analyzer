@@ -277,6 +277,14 @@ std::string printResultPattern(std::vector<AssignPattern*> vector) {
 	return s;
 }
 
+std::string printResultConstant(std::vector<ConstantEntity*> vector) {
+	std::string s;
+	for (int i = 0; i < vector.size(); i++) {
+		s = s + vector.at(i)->getValue() + "\n";
+	}
+	return s;
+}
+
 /* ==================== */
 /*      TEST CASES      */
 /* ==================== */
@@ -328,6 +336,16 @@ TEST_CASE("Unit test - PatternExtractor::extractPattern for computeCentroid") {
 	std::vector<AssignPattern*> testResult = PatternExtractor::extractPattern(testProcedure);
 	std::string s = printResultPattern(testResult);
 	REQUIRE(s == "1count0\n2cenX0\n3cenY0\n12normSqcenX*cenX+cenY*cenY\n5countcount+1\n6cenXcenX+x\n7cenYcenY+y\n9flag1\n10cenXcenX/count\n11cenYcenY/count\n");
+}
+
+TEST_CASE("Unit test - Extractor::extractConstants for computeCentroid") {
+	SimpleToken testProcedure = generateProcedure(4);
+	PKB* pkb = new PKB();
+	SPClient* client = new SPClient(pkb);
+	Extractor extractor = Extractor(client);
+	std::vector<ConstantEntity*> testResult = extractor.extractConstantsVector(testProcedure);
+	std::string s = printResultConstant(testResult);
+	REQUIRE(s == "0\n0\n0\n0\n0\n1\n0\n1\n");
 }
 
 TEST_CASE("Unit test - FollowsExtractor::extractFollows for while token") {}

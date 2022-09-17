@@ -57,7 +57,9 @@ void SimpleTokenizer::tokenizeCode(std::string code) {
         }
     }
     if (stmtStack.size() == 0) {
-        extractor->extractAll(currentStack->dump());
+        SimpleToken procedure = currentStack->dump().getChildren().at(0);
+        procedure.setChildren(procedure.getChildren().at(1).getChildren());
+        extractor->extractAll(procedure);
     } else {
         throw std::invalid_argument("Received incomplete SIMPLE code");
     }
