@@ -14,6 +14,7 @@ void Extractor::extractAll(SimpleToken procedureToken) {
 	extractUses(procedureToken);
 	extractModify(procedureToken);
 	extractPattern(procedureToken);
+	extractConstants(procedureToken);
 }
 
 // =============================== //
@@ -47,6 +48,30 @@ void Extractor::extractModify(SimpleToken procOrWhileIfToken) {
 void Extractor::extractPattern(SimpleToken procOrWhileIfToken) {
 	std::vector<AssignPattern*> assignPatternVector = PatternExtractor::extractPattern(procOrWhileIfToken);
 	storeAssignPatterns(assignPatternVector);
+}
+
+void Extractor::extractConstants(SimpleToken procedureToken) {
+	std::vector<ConstantEntity*> constantVector = extractConstantsVector(procedureToken);
+	for (int i = 0; i < constantVector.size(); i++) {
+		this->client->storeConstant(constantVector.at(i));
+	}
+}
+
+std::vector<ConstantEntity*> Extractor::extractConstantsVector(SimpleToken procedureToken) {
+	std::vector<ConstantEntity*> constantVector;
+
+	for (int i = 0; i < procedureToken.getChildren().size(); i++) {
+		SimpleToken current = procedureToken.getChildren().at(i);
+		if (current.type == SpTokenType::TCONSTANT) {
+			ConstantEntity* constantEntity = new ConstantEntity(current.value);
+			constantVector.push_back(constantEntity);
+		}
+
+		std::vector<ConstantEntity*> moreConstantVector = extractConstantsVector(current);
+		constantVector.insert(constantVector.end(), moreConstantVector.begin(), moreConstantVector.end());
+	}
+
+	return constantVector;
 }
 
 // ============================ //

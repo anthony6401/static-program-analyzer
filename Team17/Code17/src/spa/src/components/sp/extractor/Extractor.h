@@ -53,6 +53,9 @@ public:
 	void storeModifyRelationships(std::vector<ModifyRelationship*>);
 	void storeAssignPatterns(std::vector<AssignPattern*>);
 
+	void extractConstants(SimpleToken procedureToken);
+	std::vector<ConstantEntity*> extractConstantsVector(SimpleToken procedureToken);
+
 	/*
 	void extractProcedure(SimpleToken simpleToken);
 
