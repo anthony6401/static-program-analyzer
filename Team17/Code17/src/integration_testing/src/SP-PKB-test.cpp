@@ -247,7 +247,7 @@ TEST_CASE("Relationships and patterns for SP") {
     SECTION("Parent with synonym first argument") {
         // Parent(w, 6)
         std::unordered_set<std::string> testResults = pkbSP->getRelationshipBySecond(RelationshipType::PARENT, DesignEntity::WHILE, TokenObject(TokenType::INTEGER, "6"));
-        std::unordered_set<std::string> expectedResults = { "4" };
+        std::unordered_set<std::string> expectedResults = { "5" };
         REQUIRE(testResults == expectedResults);
     }
 
@@ -274,7 +274,7 @@ TEST_CASE("Relationships and patterns for SP") {
     SECTION("Parent* with synonym first argument") {
         // Parent*(w, 6)
         std::unordered_set<std::string> testResults = pkbSP->getRelationshipBySecond(RelationshipType::PARENT_T, DesignEntity::WHILE, TokenObject(TokenType::INTEGER, "6"));
-        std::unordered_set<std::string> expectedResults = { "4" };
+        std::unordered_set<std::string> expectedResults = { "5" };
         REQUIRE(testResults == expectedResults);
     }
 
