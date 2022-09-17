@@ -32,7 +32,7 @@ std::vector<UsesRelationship*> UsesExtractor::extractUses(SimpleToken procOrWhil
 std::vector<UsesRelationship*> UsesExtractor::getUsesRelationships(SimpleToken procOrWhileIfToken, std::vector<SimpleToken> stmtSeries) {
 	std::vector<UsesRelationship*> usesVector;
 
-	if (procOrWhileIfToken.type != SpTokenType::TPROCEDURE) {
+	if (procOrWhileIfToken.type != SpTokenType::TPROCEDURE && procOrWhileIfToken.type != SpTokenType::TWHILE && procOrWhileIfToken.type != SpTokenType::TIF) {
 		for (int i = 0; i < stmtSeries.size(); i++) {
 			SimpleToken current = stmtSeries.at(i);
 			if (current.type == SpTokenType::TREAD) {
