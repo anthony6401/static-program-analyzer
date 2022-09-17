@@ -1,6 +1,5 @@
 #include "Parser.h"
 #include "components/qps/abstract_query_object/QueryObject.h"
-#include "components/qps/abstract_query_object/Declaration.h"
 #include "components/qps/abstract_query_object/Select.h"
 #include "components/qps/abstract_query_object/SuchThat.h"
 #include "components/qps/abstract_query_object/Pattern.h"
@@ -122,8 +121,8 @@ std::vector<std::vector<TokenObject>> Parser::groupQueryIntoClause() {
 		// Start of select clause
 		if (isEndOfDeclaration && !isSelectClause && !isSuchThatClause && !isPatternClause) {
 			selectTokenObjects.push_back(token);
-				isSelectClause = true;
-				continue;
+			isSelectClause = true;
+			continue;
 		}
 
 		if (isSelectClause) {

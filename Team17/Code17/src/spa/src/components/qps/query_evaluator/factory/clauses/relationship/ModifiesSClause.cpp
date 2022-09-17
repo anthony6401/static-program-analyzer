@@ -65,7 +65,7 @@ std::vector<std::pair<std::string, std::string>> ModifiesSClause::processMapToVe
     return processedResult;
 }
 
-std::unordered_set<std::string> ModifiesSClause::processMapToSet(std::unordered_map<std::string, std::unordered_set<std::string>> results) {
+std::unordered_set<std::string> ModifiesSClause::processMapToSetFromFirst(std::unordered_map<std::string, std::unordered_set<std::string>> results) {
     std::unordered_set<std::string> processedResult;
     for (auto entry : results) {
         std::string firstSynonym = entry.first;
@@ -89,7 +89,7 @@ RawResult ModifiesSClause::evaluateSynonymWildcard() {
     DesignEntity rightType = DesignEntity::VARIABLE;
     std::string leftValue = left.getValue();
     std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(getRelationshipType(), stmtType, rightType);
-    std::unordered_set<std::string> processedMap = ModifiesSClause::processMapToSet(results);
+    std::unordered_set<std::string> processedMap = ModifiesSClause::processMapToSetFromFirst(results);
     return {leftValue, processedMap};
 }
 
