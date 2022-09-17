@@ -1,0 +1,80 @@
+1 - Follows Test 1
+stmt s;
+Select s such that Follows(4,s)
+none
+5000
+2 - Follows Test 2
+stmt s;
+Select s such that Follows(5,s)
+6
+5000
+3 - Follows Test 3
+stmt s;
+Select s such that Follows(s,2)
+1
+5000
+4 - Follows Test 4
+stmt s;
+Select s such that Follows(8,s)
+9, 10
+5000
+5 - Follows Test 5 (Follows self)
+stmt s;
+Select s such that Follows(s,s)
+none
+5000
+6 - Follows* Test 1
+stmt s;
+Select s such that Follows*(1, s)
+2, 3, 4, 11
+5000
+7 - Follows* Test 2
+stmt s;
+Select s such that Follows*(4, s)
+11
+5000
+8 - Follows* Test 3
+stmt s;
+Select s such that Follows*(s, 11)
+1, 2, 3, 4
+5000
+9 - Follows* Test 4
+stmt s;
+Select s such that Follows*(s, 14)
+12, 13
+5000
+10 - Parent Test 1
+stmt s;
+Select s such that Parent(1, s)
+none
+5000
+11 - Parent Test 2
+stmt s;
+Select s such that Parent(4, s)
+5, 6, 7, 8, 9, 10
+5000
+12 - Parent Test 3
+stmt s;
+Select s such that Parent(s, 9)
+4
+5000
+13 - Parent Test 4
+stmt s;
+Select s such that Parent(s, 14)
+11
+5000
+14 - Parent Test 5 (Parent of self)
+stmt s;
+Select s such that Parent(s,s)
+none
+5000
+15 - Parent* Test 1 (Parent of self)
+stmt s;
+Select s such that Parent*(s,s)
+none
+5000
+16 - Parent* Test 2 (False query)
+stmt s;
+Select s such that Parent*(1,2)
+none
+5000
