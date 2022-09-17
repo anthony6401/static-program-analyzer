@@ -15,10 +15,16 @@ std::vector<ModifyRelationship*> ModifyExtractor::extractModify(SimpleToken proc
 	}
 	if (procOrWhileIfToken.type == SpTokenType::TWHILE) {
 		stmtSeries = children.at(1).getChildren();
+		std::vector<ModifyRelationship*> modifyVectorProc = getModifyRelationshipsProc(procOrWhileIfToken, stmtSeries);
+		modifyVector.insert(modifyVector.end(), modifyVectorProc.begin(), modifyVectorProc.end());
 	}
 	if (procOrWhileIfToken.type == SpTokenType::TIF) {
 		stmtSeries_1 = children.at(1).getChildren();
 		stmtSeries_2 = children.at(2).getChildren();
+		std::vector<ModifyRelationship*> modifyVectorProc_1 = getModifyRelationshipsProc(procOrWhileIfToken, stmtSeries_1);
+		modifyVector.insert(modifyVector.end(), modifyVectorProc_1.begin(), modifyVectorProc_1.end());
+		std::vector<ModifyRelationship*> modifyVectorProc_2 = getModifyRelationshipsProc(procOrWhileIfToken, stmtSeries_2);
+		modifyVector.insert(modifyVector.end(), modifyVectorProc_2.begin(), modifyVectorProc_2.end());
 	}
 
 	std::vector<ModifyRelationship*> moreModifyVector = getModifyRelationships(procOrWhileIfToken, stmtSeries);

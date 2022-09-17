@@ -116,7 +116,7 @@ SemanticError
 25 - Modifies Test 7
 stmt s;
 Select s such that Modifies(s, _)
-2, 3, 6, 7, 9, 10, 13, 14
+2, 3, 4, 6, 7, 9, 10, 11, 13, 14
 5000
 26 - Modifies Test 8
 if ifs;
@@ -196,12 +196,12 @@ Select a such that Uses(a, "b") pattern a(_,_"30"_ )
 41 - Multi Clause Test 3 (False)
 assign a; variable v;
 Select a such that Modifies(4, v) pattern a(_,_)
-none
+3, 7, 10, 14
 5000
 42 - Multi Clause Test 4 (False, clauses swap places)
 assign a; variable v;
 Select a pattern a(_,_) such that Modifies(4, v)
-none
+3, 7, 10, 14
 5000
 43 - Multi Clause Test 5
 assign a; stmt s;
