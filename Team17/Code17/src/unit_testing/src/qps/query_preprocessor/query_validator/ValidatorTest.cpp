@@ -389,3 +389,53 @@ TEST_CASE("First param of pattern not variable - variable v; assign a; Select v 
 
     REQUIRE(validatedQuery.isSemanticallyValid() == false);
 };
+
+TEST_CASE("Parent takes in cosntant as param") {
+    Select select = Select("v");
+    std::vector<SuchThat> suchThat{SuchThat(TokenType::PARENT, TokenObject(TokenType::NAME, "c"), TokenObject(TokenType::WILDCARD, "_"))};
+    std::vector<qps::Pattern> pattern{ Pattern("a", TokenObject(TokenType::NAME, "a"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
+    std::unordered_map<std::string, DesignEntity> mappedSynonyms{ {"v", DesignEntity::VARIABLE}, {"a", DesignEntity::ASSIGN}, {"c", DesignEntity::CONSTANT}};
+    int numOfDeclaredSynonyms = 2;
+
+    QueryObject testParsedQuery = QueryObject(select, suchThat, pattern, mappedSynonyms, numOfDeclaredSynonyms);
+
+
+    Validator validator = Validator(testParsedQuery);
+    QueryObject validatedQuery = validator.validate();
+
+    REQUIRE(validatedQuery.isSemanticallyValid() == false);
+};
+
+
+TEST_CASE("Uses takes in cosntant as param") {
+    Select select = Select("v");
+    std::vector<SuchThat> suchThat{ SuchThat(TokenType::USES, TokenObject(TokenType::NAME, "c"), TokenObject(TokenType::WILDCARD, "_")) };
+    std::vector<qps::Pattern> pattern{ Pattern("a", TokenObject(TokenType::NAME, "a"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
+    std::unordered_map<std::string, DesignEntity> mappedSynonyms{ {"v", DesignEntity::VARIABLE}, {"a", DesignEntity::ASSIGN}, {"c", DesignEntity::CONSTANT} };
+    int numOfDeclaredSynonyms = 2;
+
+    QueryObject testParsedQuery = QueryObject(select, suchThat, pattern, mappedSynonyms, numOfDeclaredSynonyms);
+
+
+    Validator validator = Validator(testParsedQuery);
+    QueryObject validatedQuery = validator.validate();
+
+    REQUIRE(validatedQuery.isSemanticallyValid() == false);
+};
+
+TEST_CASE("Modifies takes in cosntant as param") {
+    Select select = Select("v");
+    std::vector<SuchThat> suchThat{ SuchThat(TokenType::MODIFIES, TokenObject(TokenType::NAME, "c"), TokenObject(TokenType::WILDCARD, "_")) };
+    std::vector<qps::Pattern> pattern{ Pattern("a", TokenObject(TokenType::NAME, "a"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
+    std::unordered_map<std::string, DesignEntity> mappedSynonyms{ {"v", DesignEntity::VARIABLE}, {"a", DesignEntity::ASSIGN}, {"c", DesignEntity::CONSTANT} };
+    int numOfDeclaredSynonyms = 2;
+
+    QueryObject testParsedQuery = QueryObject(select, suchThat, pattern, mappedSynonyms, numOfDeclaredSynonyms);
+
+
+    Validator validator = Validator(testParsedQuery);
+    QueryObject validatedQuery = validator.validate();
+
+    REQUIRE(validatedQuery.isSemanticallyValid() == false);
+};
+
