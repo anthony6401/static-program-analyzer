@@ -18,6 +18,9 @@ public:
 	//For getting entity
 	std::unordered_set<std::string> getAllEntity(DesignEntity returnType);
 	
+	// For constant
+	bool storeConstant(Entity* entity);
+
 	//For relationship
 	bool storeRelationship(Relationship* rel);
 	bool getRelationship(RelationshipType relType, TokenObject firstArgument, TokenObject secondArgument);

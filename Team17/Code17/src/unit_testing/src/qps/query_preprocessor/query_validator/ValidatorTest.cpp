@@ -81,6 +81,38 @@ TEST_CASE("Multi clause queries where return type is not used in other clauses -
     REQUIRE(validatedQuery.isSemanticallyValid() == true);
 };
 
+TEST_CASE("Uses with print as first parameter - variable v; print pn; Select v such that Uses(pn, v)") {
+    Select select = Select("v");
+    std::vector<SuchThat> suchThat{ SuchThat(TokenType::USES, TokenObject(TokenType::NAME, "pn"), TokenObject(TokenType::NAME, "v")) };
+    std::vector<qps::Pattern> pattern{};
+    std::unordered_map<std::string, DesignEntity> mappedSynonyms{ {"v", DesignEntity::VARIABLE}, {"pn", DesignEntity::PRINT} };
+    int numOfDeclaredSynonyms = 2;
+
+    QueryObject testParsedQuery = QueryObject(select, suchThat, pattern, mappedSynonyms, numOfDeclaredSynonyms);
+
+
+    Validator validator = Validator(testParsedQuery);
+    QueryObject validatedQuery = validator.validate();
+
+    REQUIRE(validatedQuery.isSemanticallyValid() == true);
+};
+
+TEST_CASE("Modifies where first param is read statement - read r; Select r such that Modifies(r, _)") {
+    Select select = Select("r");
+    std::vector<SuchThat> suchThat{ SuchThat(TokenType::MODIFIES, TokenObject(TokenType::NAME, "r"), TokenObject(TokenType::WILDCARD, "_")) };
+    std::vector<qps::Pattern> pattern{};
+    std::unordered_map<std::string, DesignEntity> mappedSynonyms{ {"r", DesignEntity::READ} };
+    int numOfDeclaredSynonyms = 1;
+
+    QueryObject testParsedQuery = QueryObject(select, suchThat, pattern, mappedSynonyms, numOfDeclaredSynonyms);
+
+
+    Validator validator = Validator(testParsedQuery);
+    QueryObject validatedQuery = validator.validate();
+
+    REQUIRE(validatedQuery.isSemanticallyValid() == true);
+};
+
 TEST_CASE("SyntaxError - query should be deemed as semantically valid") {
     QueryObject testParsedQuery = QueryObject();
 
@@ -213,6 +245,22 @@ TEST_CASE("Uses with wildcard as first parameter - variable v; Select v such tha
     REQUIRE(validatedQuery.isSemanticallyValid() == false);
 };
 
+TEST_CASE("Uses with read as first parameter - variable v; read r; Select v such that Uses(r, v)") {
+    Select select = Select("v");
+    std::vector<SuchThat> suchThat{ SuchThat(TokenType::USES, TokenObject(TokenType::NAME, "r"), TokenObject(TokenType::NAME, "v")) };
+    std::vector<qps::Pattern> pattern{};
+    std::unordered_map<std::string, DesignEntity> mappedSynonyms{ {"v", DesignEntity::VARIABLE}, {"r", DesignEntity::READ}};
+    int numOfDeclaredSynonyms = 2;
+
+    QueryObject testParsedQuery = QueryObject(select, suchThat, pattern, mappedSynonyms, numOfDeclaredSynonyms);
+
+
+    Validator validator = Validator(testParsedQuery);
+    QueryObject validatedQuery = validator.validate();
+
+    REQUIRE(validatedQuery.isSemanticallyValid() == false);
+};
+
 TEST_CASE("Modifies where second param is not variable - assign a; Select a such that Modifies(6, a)") {
     Select select = Select("a");
     std::vector<SuchThat> suchThat{ SuchThat(TokenType::MODIFIES, TokenObject(TokenType::INTEGER, "6"), TokenObject(TokenType::NAME, "a")) };
@@ -229,11 +277,11 @@ TEST_CASE("Modifies where second param is not variable - assign a; Select a such
     REQUIRE(validatedQuery.isSemanticallyValid() == false);
 };
 
-TEST_CASE("Modifies where first param is read statement - read r; Select r such that Modifies(r, _)") {
-    Select select = Select("r");
-    std::vector<SuchThat> suchThat{ SuchThat(TokenType::MODIFIES, TokenObject(TokenType::NAME, "r"), TokenObject(TokenType::WILDCARD, "_")) };
+TEST_CASE("Modifies where first param is print statement - print pn; Select pn such that Modifies(pn, _)") {
+    Select select = Select("pn");
+    std::vector<SuchThat> suchThat{ SuchThat(TokenType::MODIFIES, TokenObject(TokenType::NAME, "pn"), TokenObject(TokenType::WILDCARD, "_")) };
     std::vector<qps::Pattern> pattern{};
-    std::unordered_map<std::string, DesignEntity> mappedSynonyms{ {"r", DesignEntity::READ} };
+    std::unordered_map<std::string, DesignEntity> mappedSynonyms{ {"pn", DesignEntity::PRINT} };
     int numOfDeclaredSynonyms = 1;
 
     QueryObject testParsedQuery = QueryObject(select, suchThat, pattern, mappedSynonyms, numOfDeclaredSynonyms);

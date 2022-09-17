@@ -35,7 +35,8 @@ std::unordered_set<std::string> AssignPatternStorage::getPattern(DesignEntity de
 			std::unordered_set<std::pair<std::string, std::string>, pair_hash>* set = &this->assignPatternStorage.find(firstArgument.getValue())->second;
 			std::string secondArgumentValue = secondArgument.getValue();
 
-			if (secondArgument.getTokenType() == qps::TokenType::NAME_WITH_QUOTATION) {
+
+			if ((secondArgument.getTokenType() == qps::TokenType::EXPRESSION) || (secondArgument.getTokenType() == qps::TokenType::NAME_WITH_QUOTATION)) {
 				for (auto it = set->begin(); it != set->end(); ++it) {
 					if (it->second == secondArgumentValue) {
 						result.insert(it->first);
@@ -69,7 +70,7 @@ std::vector<std::pair<std::string, std::string>> AssignPatternStorage::getPatter
 		for (auto it = this->assignPatternStorage.begin(); it != this->assignPatternStorage.end(); it++) {
 			std::string variable = it->first;
 
-			if (secondArgument.getTokenType() == qps::TokenType::NAME_WITH_QUOTATION) {
+			if ((secondArgument.getTokenType() == qps::TokenType::EXPRESSION) || (secondArgument.getTokenType() == qps::TokenType::NAME_WITH_QUOTATION)) {
 				for (auto it_set = it->second.begin(); it_set != it->second.end(); ++it_set) {
 					if (it_set->second == secondArgumentValue) {
 						result.push_back({ it_set->first, variable });

@@ -53,42 +53,103 @@ size_t ParentTClause::getNumberOfSynonyms() {
     return numberOfSynonyms;
 }
 
-TokenType ParentTClause::getRelationshipType() {
-    return TokenType::PARENT_T;
+RelationshipType ParentTClause::getRelationshipType() {
+    return RelationshipType::PARENT_T;
+}
+
+std::vector<std::pair<std::string, std::string>> ParentTClause::processMapToVectorPair(std::unordered_map<std::string, std::unordered_set<std::string>> results) {
+    std::vector<std::pair<std::string, std::string>> processedResult;
+    for (auto entry : results) {
+        std::string firstSynonym = entry.first;
+        std::unordered_set<std::string> secondSynonymList = entry.second;
+        for (auto secondSynonym : secondSynonymList) {
+            std::pair<std::string, std::string> newPair = {firstSynonym, secondSynonym};
+            processedResult.emplace_back(newPair);
+        }
+    }
+    return processedResult;
+}
+
+std::unordered_set<std::string> ParentTClause::processMapToSet(std::unordered_map<std::string, std::unordered_set<std::string>> results) {
+    std::unordered_set<std::string> processedResult;
+    for (auto entry : results) {
+        std::string firstSynonym = entry.first;
+        processedResult.insert(firstSynonym);
+    }
+    return processedResult;
 }
 
 RawResult ParentTClause::evaluateSynonymSynonym() {
-    return {};
+    DesignEntity leftType = synonymToDesignEntityMap[left.getValue()];
+    DesignEntity rightType = synonymToDesignEntityMap[right.getValue()];
+    std::string leftValue = left.getValue();
+    std::string rightValue = right.getValue();
+    if (leftValue == rightValue) {
+        return {false};
+    }
+    std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(getRelationshipType(), leftType, rightType);
+    std::vector<std::pair<std::string, std::string>> processedMap = ParentTClause::processMapToVectorPair(results); // {{"1", "x"}, {"2", "y"}}
+    return {leftValue, rightValue, processedMap};
 }
 
 RawResult ParentTClause::evaluateSynonymWildcard() {
-    return {};
+    DesignEntity leftType = synonymToDesignEntityMap[left.getValue()];
+    DesignEntity rightType = DesignEntity::STMT;
+    std::string leftValue = left.getValue();
+    std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(getRelationshipType(), leftType, rightType);
+    std::unordered_set<std::string> processedMap = ParentTClause::processMapToSet(results);
+    return {leftValue, processedMap};
 }
 
 RawResult ParentTClause::evaluateSynonymInteger() {
-    return {};
+    DesignEntity leftType = synonymToDesignEntityMap[left.getValue()];
+    std::string leftValue = left.getValue();
+    std::unordered_set<std::string> results = qpsClient.getRelationshipBySecond(getRelationshipType(), leftType, right);
+    return {leftValue, results};
 }
 
 RawResult ParentTClause::evaluateIntegerSynonym() {
-    return {};
+    std::string rightValue = right.getValue();
+    DesignEntity rightType = synonymToDesignEntityMap[right.getValue()];
+    std::unordered_set<std::string> results = qpsClient.getRelationshipByFirst(getRelationshipType(), left, rightType);
+    return {rightValue, results};
 }
 
 RawResult ParentTClause::evaluateIntegerWildcard() {
-    return {};
+    // Returns boolean
+    DesignEntity rightType = DesignEntity::STMT;
+    std::unordered_set<std::string> results = qpsClient.getRelationshipByFirst(getRelationshipType(), left, rightType);
+    bool booleanResult = !results.empty();
+    // {1,2,3} -> boolean result = true
+    return {booleanResult};
 }
 
 RawResult ParentTClause::evaluateIntegerInteger() {
-    return {};
+    // Returns boolean
+    bool result = qpsClient.getRelationship(getRelationshipType(), left, right);
+    // result = true -> setIsFalseResult(true) -> isFalseResult = false
+    return {result};
 }
 
 RawResult ParentTClause::evaluateWildcardSynonym() {
-    return {};
+    DesignEntity leftType = DesignEntity::STMT;
+    DesignEntity rightType = synonymToDesignEntityMap[right.getValue()];
+    std::string rightValue = right.getValue();
+    std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(getRelationshipType(), leftType, rightType);
+    std::unordered_set<std::string> processedMap = ParentTClause::processMapToSet(results);
+    return {rightValue, processedMap};
 }
 
 RawResult ParentTClause::evaluateWildcardWildcard() {
-    return {};
+    DesignEntity stmtType = DesignEntity::STMT;
+    std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(getRelationshipType(), stmtType, stmtType);
+    bool booleanResult = !results.empty();
+    return {booleanResult};
 }
 
 RawResult ParentTClause::evaluateWildcardInteger() {
-    return {};
+    DesignEntity leftType = DesignEntity::STMT;
+    std::unordered_set<std::string> results = qpsClient.getRelationshipBySecond(getRelationshipType(), leftType, right);
+    bool booleanResult = !results.empty();
+    return {booleanResult};
 }

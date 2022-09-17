@@ -10,4 +10,5 @@ class SimpleValidator {
         static bool validateExprOpr(std::string& token);
         static bool validateFactorState(std::string& token);
         static bool validateOperandState(std::string& token);
+        static bool isAndOrCenter(std::vector<std::string> tokens, int connectorPosition);
 };

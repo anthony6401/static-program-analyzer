@@ -7,9 +7,8 @@
 
 class ParentExtractor {
 public:
-	void static extractParent(Extractor extractor, SimpleToken parent, std::vector<SimpleToken> seriesOfStmts);
-	void static extractParentT(Extractor extractor, SimpleToken parent, std::vector<SimpleToken> seriesOfStmts);
-
-private:
+	static std::vector<ParentRelationship*> extractParent(SimpleToken procOrWhileIfToken);
+	static std::vector<ParentTRelationship*> extractParentT(SimpleToken procOrWhileIfToken);
+	static std::vector<ParentTRelationship*> getNestedParentT(SimpleToken procOrWhileIfToken, SimpleToken whileOrIfToken);
 	static Entity* generateEntity(SimpleToken token);
 };

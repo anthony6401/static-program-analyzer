@@ -1,0 +1,36 @@
+procedure if {
+    print a;
+    if (((a <12) && (123     >      d)) || ((12 == 123)          || (qwerty != 999))) then{
+        N0t = b + c/ (N0t*a);
+        read abc;
+        while            ((a <=12) && (123 >= d)) {
+            read        abc;
+            if (123 >= d) then {CS3219 = fail;}            else {
+                a=b%c+(CS3219/50);
+            }
+            print b00t;
+        }
+        b00T = 1 + 2%(50/pass);
+    } else         
+    
+     {
+        while ((a <=12)         &&           (123 >= d)) {
+
+
+
+
+            read abc;
+            if(a == 12)then{
+                CS3219 = fail;
+            } else {
+                a =b *             c        ;
+            }
+            procedure           = (program + call); 
+        }
+        if =         (while +                    print) * 5000 / (while%procedure);
+    }
+    while = (a) + (b) + (c);
+}
+
+
+

@@ -24,6 +24,7 @@ TEST_CASE("PKB Entity Managertest") {
 
 	//Currenty one test is sufficient
 	REQUIRE(pkb.storeRelationship(usesRel));
+	REQUIRE(pkb.storeConstant(constantEntity));
 
 	std::unordered_set<std::string> ass_set;
 	ass_set.insert(assign_value_one);
@@ -31,8 +32,12 @@ TEST_CASE("PKB Entity Managertest") {
 	std::unordered_set<std::string> var_set;
 	var_set.insert(variable_value_one);
 
+	std::unordered_set<std::string> const_set;
+	const_set.insert(constant_value_one);
+
 	REQUIRE(pkb.getAllEntity(DesignEntity::ASSIGN) == ass_set);
 	REQUIRE(pkb.getAllEntity(DesignEntity::VARIABLE) == var_set);
+	REQUIRE(pkb.getAllEntity(DesignEntity::CONSTANT) == const_set);
 
 	
 }
@@ -228,6 +233,7 @@ TEST_CASE("All Manager Test") {
 	REQUIRE(pkb.storePattern(assignPatternSix));
 	REQUIRE(pkb.storePattern(assignPatternSeven));
 	REQUIRE(pkb.storePattern(assignPatternEight));
+	REQUIRE(pkb.storeConstant(constantEntity));
 
 	//Relationship + Entity
 	REQUIRE(pkb.storeRelationship(usesRelationshipAssignOne));
@@ -274,8 +280,12 @@ TEST_CASE("All Manager Test") {
 	std::unordered_set<std::string> var_set;
 	var_set.insert(variable_value_one);
 
+	std::unordered_set<std::string> const_set;
+	const_set.insert(constant_value_one);
+
 	REQUIRE(pkb.getAllEntity(DesignEntity::ASSIGN) == ass_set);
 	REQUIRE(pkb.getAllEntity(DesignEntity::VARIABLE) == var_set);
+	REQUIRE(pkb.getAllEntity(DesignEntity::CONSTANT) == const_set);
 
 	//Relationship
 	REQUIRE(pkb.getRelationship(RelationshipType::USES, stmtTokenObject1, variableTokenObject));
