@@ -210,6 +210,16 @@ TEST_CASE("Syntactically correct Select with synonym name as SELECT") {
     REQUIRE(actualResult == true);
 };
 
+TEST_CASE("Syntactically correct Select with synonym name as pattern") {
+    SelectClauseSyntaxChecker checker = SelectClauseSyntaxChecker();
+    std::vector<TokenObject> validSelectTokens{
+        TokenObject(TokenType::SELECT, "Select"),
+        TokenObject(TokenType::PATTERN, "pattern"),
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validSelectTokens);
+    REQUIRE(actualResult == true);
+};
+
 TEST_CASE("Syntactically incorrect Select with synonym") {
     SelectClauseSyntaxChecker checker = SelectClauseSyntaxChecker();
     std::vector<TokenObject> invalidSelectTokens{
@@ -515,6 +525,21 @@ TEST_CASE("Valid pattern clause - synonym name is pattern") {
     std::vector<TokenObject> validPatternTokens{
         TokenObject(TokenType::PATTERN, "pattern"),
         TokenObject(TokenType::NAME, "a"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::EXPRESSION, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validPatternTokens);
+    REQUIRE(actualResult == true);
+};
+
+TEST_CASE("Valid pattern clause - assign synonym name is pattern") {
+    PatternClauseSyntaxChecker checker = PatternClauseSyntaxChecker();
+    std::vector<TokenObject> validPatternTokens{
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::PATTERN, "pattern"),
         TokenObject(TokenType::OPEN_BRACKET, "("),
         TokenObject(TokenType::PATTERN, "pattern"),
         TokenObject(TokenType::COMMA, ","),

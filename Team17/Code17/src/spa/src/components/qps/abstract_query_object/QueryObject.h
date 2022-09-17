@@ -1,7 +1,6 @@
 #include <vector>
 #include <unordered_map>
 #include "SuchThat.h"
-#include "Declaration.h"
 #include "Pattern.h"
 #include "Select.h"
 #include "components/qps/query_preprocessor/query_tokenizer/TokenType.h"

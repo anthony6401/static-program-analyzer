@@ -2,7 +2,6 @@
 #include "components/qps/query_preprocessor/query_tokenizer/TokenObject.h"
 #include "components/qps/query_preprocessor/query_tokenizer/TokenType.h"
 #include "components/qps/abstract_query_object/QueryObject.h"
-#include "components/qps/abstract_query_object/Declaration.h"
 #include "components/qps/abstract_query_object/Select.h"
 #include "components/qps/abstract_query_object/SuchThat.h"
 #include "components/qps/abstract_query_object/Pattern.h"
@@ -392,6 +391,22 @@ TEST_CASE("SyntaxError - No return value") {
     REQUIRE(expectedResult == actualResult);
 };
 
+TEST_CASE("SyntaxError - Return value is not a synonym") {
+    std::vector<TokenObject> testTokenObject{
+        TokenObject(TokenType::VARIABLE, std::string("variable")),
+        TokenObject(TokenType::NAME, std::string("v")),
+        TokenObject(TokenType::SEMI_COLON, std::string(";")),
+        TokenObject(TokenType::SELECT, std::string("Select")),
+        TokenObject(TokenType::INTEGER, std::string("5"))
+    };
+
+    QueryObject expectedResult = QueryObject();
+
+    Parser parser = Parser(testTokenObject);
+    QueryObject actualResult = parser.parse();
+    REQUIRE(expectedResult == actualResult);
+};
+
 TEST_CASE("SyntaxError - Select clause ends in semi-colon") {
     std::vector<TokenObject> testTokenObject{
         TokenObject(TokenType::VARIABLE, std::string("variable")),
@@ -649,6 +664,70 @@ TEST_CASE("Multiple declarations with the same name but different design entity"
     QueryObject actualResult = parser.parse();
     REQUIRE(expectedResult == actualResult);
 };
+
+TEST_CASE("if ifs; Select if") {
+    std::vector<TokenObject> testTokenObject{
+        TokenObject(TokenType::IF, std::string("if")),
+        TokenObject(TokenType::NAME, std::string("ifs")),
+        TokenObject(TokenType::SEMI_COLON, std::string(";")),
+        TokenObject(TokenType::SELECT, std::string("Select")),
+        TokenObject(TokenType::NAME, std::string("if"))
+    };
+
+    Select expectedSelect = Select("if");
+    std::vector<SuchThat> expectedSuchThat;
+    std::vector<Pattern> expectedPattern;
+    std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"ifs", DesignEntity::IF} };
+    int expectedNumOfDeclaredSynonyms = 1;
+
+    QueryObject expectedResult = QueryObject(expectedSelect, expectedSuchThat, expectedPattern, expectedMappedSynonyms, expectedNumOfDeclaredSynonyms);
+
+    Parser parser = Parser(testTokenObject);
+    QueryObject actualResult = parser.parse();
+    REQUIRE(expectedResult == actualResult);
+};
+
+TEST_CASE("Pattern used as name") {
+    //std::string testQuery = "variable v; assign pattern; Select pattern pattern pattern(v, \"expr\")";
+    std::vector<TokenObject> testTokenObject{
+    TokenObject(TokenType::VARIABLE, std::string("variable")),
+    TokenObject(TokenType::NAME, std::string("v")),
+    TokenObject(TokenType::SEMI_COLON, std::string(";")),
+    TokenObject(TokenType::ASSIGN, std::string("assign")),
+    TokenObject(TokenType::PATTERN, std::string("pattern")),
+    TokenObject(TokenType::SEMI_COLON, std::string(";")),
+    TokenObject(TokenType::SELECT, std::string("Select")),
+    TokenObject(TokenType::PATTERN, std::string("pattern")),
+    TokenObject(TokenType::PATTERN, std::string("pattern")),
+    TokenObject(TokenType::PATTERN, std::string("pattern")),
+    TokenObject(TokenType::OPEN_BRACKET, std::string("(")),
+    TokenObject(TokenType::NAME, std::string("v")),
+    TokenObject(TokenType::COMMA, std::string(",")),
+    TokenObject(TokenType::NAME_WITH_QUOTATION, std::string("\"expr\"")),
+    TokenObject(TokenType::CLOSED_BRACKET, std::string(")")),
+    };
+
+
+
+    Select expectedSelect = Select("pattern");
+    std::vector<SuchThat> expectedSuchThat{};
+    std::vector<Pattern> expectedPattern{qps::Pattern("pattern", TokenObject(TokenType::NAME, "v"),
+                                                      TokenObject(TokenType::NAME_WITH_QUOTATION, "\"expr\""))};
+    std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"pattern", DesignEntity::ASSIGN},
+                                                                          {"v", DesignEntity::VARIABLE}};
+    int expectedNumOfDeclaredSynonyms = 2;
+
+    QueryObject expectedResult = QueryObject(expectedSelect, expectedSuchThat, expectedPattern, expectedMappedSynonyms, expectedNumOfDeclaredSynonyms);
+    Parser parser = Parser(testTokenObject);
+    QueryObject actualResult = parser.parse();
+
+    std::cout << actualResult.isSyntacticallyCorrect();
+    std::cout << actualResult.getPattern()[0].getLeft().getValue();
+    std::cout << actualResult.getPattern()[0].getRight().getValue();
+    std::cout << actualResult.getSelect().getSynonym();
+
+    REQUIRE(expectedResult == actualResult);
+}
 
 TEST_CASE("Semantically incorrect - return type not declared") {
     std::vector<TokenObject> testTokenObject{
