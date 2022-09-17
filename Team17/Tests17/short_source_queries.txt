@@ -78,3 +78,33 @@ stmt s;
 Select s such that Parent*(1,2)
 none
 5000
+17 - Modifies Test 1
+variable v;
+Select v such that Modifies(7, v)
+a
+5000
+18 - Modifies Test 2
+while w; variable v;
+Select v such that Modifies(w, v)
+b, a
+5000
+19 - Modifies Test 3
+while w; variable v;
+Select w such that Modifies(w, v)
+11
+5000
+20 - Modifies Test 4
+if ifs; variable v;
+Select v such that Modifies(ifs, v)
+a
+5000
+21 - Modifies Test 5
+assign a;
+Select a such that Modifies(a, "a")
+3, 7, 10, 14
+5000
+22 - Modifies Test 6
+if ifs;
+Select a such that Modifies(ifs, "b")
+none
+5000
