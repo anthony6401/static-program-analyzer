@@ -242,9 +242,6 @@ TEST_CASE("Pattern Clause with constant expressions") {
     QueryObject expectedResult = QueryObject(expectedSelect, expectedSuchThat, expectedPattern, expectedMappedSynonyms, expectedNumOfDeclaredSynonyms);
     QueryObject testResult = QPS::tokenizeAndParseQuery(testQuery);
 
-    std::cout << testResult.getSelect().getSynonym();
-    std::cout << testResult.isSyntacticallyCorrect();
-
     REQUIRE(testResult == expectedResult);
 }
 
@@ -352,8 +349,6 @@ TEST_CASE("Presence of white spaces") {
     QueryObject expectedResult = QueryObject(expectedSelect, expectedSuchThat, expectedPattern, expectedMappedSynonyms, expectedNumOfDeclaredSynonyms);
     QueryObject testResult = QPS::tokenizeAndParseQuery(testQuery);
 
-    //std::cout << testResult.getSelect().getSynonym();
-
     REQUIRE(testResult == expectedResult);
 }
 
@@ -399,5 +394,4 @@ TEST_CASE("Single line queries without space") {
 
     REQUIRE(testResult == expectedResult);
 }
-
 
