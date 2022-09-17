@@ -69,7 +69,8 @@ RawResult Evaluator::combineResultsWithSelect(std::shared_ptr<Clause> selectClau
 
 void Evaluator::populateResults(RawResult finalResult, std::string selectSynonym, std::list<std::string> &results) {
     if (finalResult.getIsFalseResult()) {
-        results.emplace_back("none");
+        // Return empty result
+        return;
     }
 
     std::unordered_set<std::string> resultsToPopulate = finalResult.getResultsToBePopulated(selectSynonym);
