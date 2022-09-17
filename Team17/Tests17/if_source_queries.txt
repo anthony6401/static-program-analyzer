@@ -1,0 +1,65 @@
+1 - Select print
+print pn;
+Select pn
+1, 10
+5000
+2 - Select assign
+assign a;
+Select a
+3, 8, 9, 11, 15, 16, 17, 18, 19
+5000
+3 - Select while
+while w;
+Select w
+5, 12
+5000
+4 - Select if
+if ifs;
+Select ifs
+2, 7, 14
+5000
+5 - Test Follows 1
+variable v;
+Select v such that Follows(1, 2)
+a, d, qwerty, N0t, b, c, abc, CS3219, fail, b00t, pass, b00T, procedure, program, call, while, print, if
+5000
+6 - Test Follows 2
+stmt s;
+Select s such that Follows(s, 2)
+1
+5000
+7 - Test Follows 3
+print pn;
+Select pn such that Follows(_, 16)
+none
+5000
+8 - Test Follows 4
+stmt s;
+Select s such that Follows(12, s)
+18
+5000
+9 - Test Follows 5
+stmt s; assign a;
+Select s such that Follows(s, a)
+2, 5, 12
+5000
+10 - Test Follows 6
+while w;
+Select w such that Follows(_, w)
+5
+5000
+11 - Test Follows 7
+read r;
+Select r such that Follows(14, _)
+4, 6, 13
+5000
+12 - Test Follows 8
+if ifs;
+Select ifs such that Follows(ifs, _)
+2, 14
+5000
+13 - Test Follows 9
+constant c;
+Select c such that Follows(_, _)
+12, 123, 999, 1, 2, 50, 5000
+5000
