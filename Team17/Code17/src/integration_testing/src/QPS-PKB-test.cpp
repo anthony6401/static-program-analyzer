@@ -347,6 +347,14 @@ TEST_CASE("Syntax and Semantics Checks") {
         REQUIRE(testResults == expectedResults);
     }
 
+    SECTION("Syntax error - additional parenthesis") {
+        std::string testQuery = "variable v; Select v such that Modifies((1, _))";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"SyntaxError"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
+
     SECTION("Semantics error - synonym not declared") {
         std::string testQuery = "variable v; Select s such that Uses (1, v)";
         std::list<std::string> testResults;
@@ -370,14 +378,6 @@ TEST_CASE("Refactor multiclause test") {
     std::list<std::string> expectedResults = {"1"};
     QPS::processQueryResult(testQuery, testResults, qpsClient);
     REQUIRE(testResults == expectedResults);
-
-//    SECTION("Test 2") {
-//        std::string testQuery = R"(assign a; Select a such that Uses(a, "b") pattern a(_,_"30"_ ))";
-//        std::list<std::string> testResults;
-//        std::list<std::string> expectedResults = {"1"};
-//        QPS::processQueryResult(testQuery, testResults, qpsClient);
-//        REQUIRE(testResults == expectedResults);
-//    }
 }
 
 TEST_CASE("More multiclause test") {
@@ -385,6 +385,57 @@ TEST_CASE("More multiclause test") {
         std::string testQuery = R"(assign a; stmt s; Select a such that Parent(s, a) pattern a(_, _))";
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"11", "6", "9", "5", "7", "10"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Test 2") {
+        std::string testQuery = R"(assign a; Select a such that Uses(a, "cenX") pattern a(_,_"1"_))";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"none"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    // a = 1, 5 || a = 6
+    SECTION("Test 3") {
+        std::string testQuery = R"(assign a; Select a such that Uses(a, "count") pattern a("cenX",_"x"_))";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"none"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
+
+
+    SECTION("Test 4") {
+        std::string testQuery = R"(assign a; variable v; Select v such that Uses(a, v) pattern a(v,_"x"_))";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"cenX"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    // a = 1, 5 || a = 5
+    SECTION("Test 5") {
+        std::string testQuery = R"(assign a; Select a such that Uses(a, "count") pattern a(_,_"1"_))";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"5"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Test 6") {
+        std::string testQuery = R"(assign a; Select a such that Modifies(5, "count") pattern a(_,_"1"_))";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"9", "5"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Test 6") {
+        std::string testQuery = R"(assign a; Select a such that Modifies(5, "flag") pattern a(_,_"1"_))";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"none"};
         QPS::processQueryResult(testQuery, testResults, qpsClient);
         REQUIRE(testResults == expectedResults);
     }
