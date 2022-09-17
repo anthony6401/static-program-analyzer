@@ -70,11 +70,20 @@ std::vector<std::pair<std::string, std::string>> ParentClause::processMapToVecto
     return processedResult;
 }
 
-std::unordered_set<std::string> ParentClause::processMapToSet(std::unordered_map<std::string, std::unordered_set<std::string>> results) {
+std::unordered_set<std::string> ParentClause::processMapToSetFromFirst(std::unordered_map<std::string, std::unordered_set<std::string>> results) {
     std::unordered_set<std::string> processedResult;
     for (auto entry : results) {
         std::string firstSynonym = entry.first;
         processedResult.insert(firstSynonym);
+    }
+    return processedResult;
+}
+
+std::unordered_set<std::string> ParentClause::processMapToSetFromSecond(std::unordered_map<std::string, std::unordered_set<std::string>> results) {
+    std::unordered_set<std::string> processedResult;
+    for (auto entry : results) {
+        std::unordered_set<std::string> valuesInRow = entry.second;
+        processedResult.insert(valuesInRow.begin(), valuesInRow.end());
     }
     return processedResult;
 }
@@ -97,7 +106,7 @@ RawResult ParentClause::evaluateSynonymWildcard() {
     DesignEntity rightType = DesignEntity::STMT;
     std::string leftValue = left.getValue();
     std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(getRelationshipType(), leftType, rightType);
-    std::unordered_set<std::string> processedMap = ParentClause::processMapToSet(results);
+    std::unordered_set<std::string> processedMap = ParentClause::processMapToSetFromFirst(results);
     return {leftValue, processedMap};
 }
 
@@ -136,7 +145,7 @@ RawResult ParentClause::evaluateWildcardSynonym() {
     DesignEntity rightType = synonymToDesignEntityMap[right.getValue()];
     std::string rightValue = right.getValue();
     std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(getRelationshipType(), leftType, rightType);
-    std::unordered_set<std::string> processedMap = ParentClause::processMapToSet(results);
+    std::unordered_set<std::string> processedMap = ParentClause::processMapToSetFromSecond(results);
     return {rightValue, processedMap};
 }
 
