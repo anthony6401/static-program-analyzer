@@ -389,6 +389,14 @@ TEST_CASE("More multiclause test") {
         REQUIRE(testResults == expectedResults);
     }
 
+    SECTION("Test") {
+        std::string testQuery = R"(stmt s; Select s such that Follows(s, s))";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"none"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
+
     SECTION("Test 2") {
         std::string testQuery = R"(assign a; Select a such that Uses(a, "cenX") pattern a(_,_"1"_))";
         std::list<std::string> testResults;
