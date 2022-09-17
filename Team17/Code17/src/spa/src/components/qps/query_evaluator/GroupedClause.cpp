@@ -5,7 +5,7 @@ GroupedClause::GroupedClause() : synonyms({}), clauses({}) {}
 
 void GroupedClause::addClauseToGroup(std::shared_ptr<Clause> clause) {
     std::set<std::string> synonymsOfClause = clause -> getAllSynonyms();
-    for (std::string synonym : synonymsOfClause) {
+    for (const std::string& synonym : synonymsOfClause) {
         synonyms.insert(synonym);
     }
 
@@ -15,6 +15,27 @@ void GroupedClause::addClauseToGroup(std::shared_ptr<Clause> clause) {
 bool GroupedClause::isEmpty() {
     return clauses.empty();
 }
+
+RawResult GroupedClause::evaluateGroupedClause() {
+    RawResult evaluatedGroupRawResult;
+    for (const auto& c : clauses) {
+        RawResult evaluatedClause = c -> evaluateClause();
+        if (evaluatedClause.getIsFalseResult()) {
+            return evaluatedClause;
+        }
+        evaluatedGroupRawResult.combineResult(evaluatedClause);
+    }
+    return evaluatedGroupRawResult;
+}
+
+std::vector<std::shared_ptr<Clause>> GroupedClause::getClauses() {
+    return clauses;
+}
+
+std::set<std::string> GroupedClause::getAllSynonyms() {
+    return synonyms;
+}
+
 
 bool GroupedClause::hasCommonSynonymWithClause(std::shared_ptr<Clause> clause) {
     std::set<std::string> synonymsOfClause = clause -> getAllSynonyms();
@@ -28,22 +49,3 @@ bool GroupedClause::hasCommonSynonymWithClause(std::shared_ptr<Clause> clause) {
     return false;
 }
 
-RawResult GroupedClause::evaluateGroupedClause() {
-    RawResult evaluatedGroupRawResult;
-   for (auto c : clauses) {
-       RawResult evaluatedClause = c -> evaluateClause();
-       if (evaluatedClause.getIsFalseResult()) {
-           return evaluatedClause;
-       }
-       evaluatedGroupRawResult.combineResult(evaluatedClause);
-   }
-   return evaluatedGroupRawResult;
-}
-
-std::vector<std::shared_ptr<Clause>> GroupedClause::getClauses() {
-    return clauses;
-}
-
-std::set<std::string> GroupedClause::getAllSynonyms() {
-    return synonyms;
-}

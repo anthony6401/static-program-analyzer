@@ -8,6 +8,7 @@
 #include <components/qps/query_evaluator/Evaluator.h>
 #include "QPS.h"
 #include "components/qps/abstract_query_object/QueryObject.h"
+#include "components/qps/query_preprocessor/query_validator/Validator.h"
 
 
 QueryObject QPS::tokenizeAndParseQuery(std::string query) {
@@ -22,7 +23,9 @@ QueryObject QPS::tokenizeAndParseQuery(std::string query) {
 void QPS::processQueryResult(std::string query, std::list<std::string> &results, QPSClient qpsClient) {
     try {
         QueryObject parsedQuery = tokenizeAndParseQuery(query);
-        Evaluator::evaluateQuery(parsedQuery, results, qpsClient);
+        Validator validator = Validator(parsedQuery);
+        QueryObject parsedAndValidatedQuery = validator.validate();
+        Evaluator::evaluateQuery(parsedAndValidatedQuery, results, qpsClient);
     } catch (std::exception &e) {
         std::cout << e.what() << std::endl;
         results.emplace_back("SyntaxError");

@@ -7,7 +7,7 @@ void ClauseDivider::addClauseToDivider(std::shared_ptr<Clause> clause) {
     if (clause -> getNumberOfSynonyms() == 0) {
         noSynonymsPresent.addClauseToGroup(clause);
     } else { // 1 or 2 synonyms
-        for (auto gc : commonSynonymsGroups) {
+        for (auto &gc : commonSynonymsGroups) {
             if (gc.hasCommonSynonymWithClause(clause)) {
                 gc.addClauseToGroup(clause);
                 return;
@@ -20,7 +20,6 @@ void ClauseDivider::addClauseToDivider(std::shared_ptr<Clause> clause) {
         commonSynonymsGroups.emplace_back(clauseGroup);
     }
 }
-
 GroupedClause ClauseDivider::getNoSynonymsPresent() {
     return noSynonymsPresent;
 }
@@ -42,38 +41,4 @@ void ClauseDivider::divideCommonSynonymGroupsBySelect(std::shared_ptr<Clause> se
             selectSynonymNotPresentGroups.emplace_back(gc);
         }
     }
-}
-
-
-// BUGGY
-std::pair<GroupedClause, std::vector<GroupedClause>> ClauseDivider::divideClausesBySynonyms(std::vector<std::shared_ptr<Clause>> clausesToEvaluate) {
-    GroupedClause noSynonymsPresent;
-    std::vector<GroupedClause> commonSynonymsGroups;
-
-    for (auto clause : clausesToEvaluate) {
-        if (clause->getNumberOfSynonyms() == 0) {
-            // Without synonyms, to return boolean
-            noSynonymsPresent.addClauseToGroup(clause);
-        } else {
-            // With synonyms, check for common synonyms within existing groups
-            if (commonSynonymsGroups.empty()) { // vector<GroupedClause>
-                GroupedClause firstGroup;
-                firstGroup.addClauseToGroup(clause);
-                commonSynonymsGroups.emplace_back(firstGroup);
-            } else {
-                for (GroupedClause gc : commonSynonymsGroups) {
-                    if (gc.hasCommonSynonymWithClause(clause)) {
-                        gc.addClauseToGroup(clause);
-                        break;
-                    } else {
-                        // Create a new group
-                        GroupedClause newGroup;
-                        newGroup.addClauseToGroup(clause);
-                        commonSynonymsGroups.emplace_back(newGroup);
-                    }
-                }
-            }
-        }
-    }
-    return {noSynonymsPresent, commonSynonymsGroups};
 }

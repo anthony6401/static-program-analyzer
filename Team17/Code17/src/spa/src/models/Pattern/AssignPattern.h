@@ -4,7 +4,7 @@
 
 using namespace kb;
 
-class AssignPattern : public Pattern {
+class AssignPattern : public kb::Pattern {
 
 public:
 	AssignPattern(std::string lineNum, std::string firstValue, std::string secondValue);
