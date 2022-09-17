@@ -23,8 +23,6 @@ stmt s;
 Select s such that Follows(s,s)
 none
 5000
-
-
 6 - Follows* Test 1
 stmt s;
 Select s such that Follows*(1, s)
@@ -80,8 +78,6 @@ stmt s;
 Select s such that Parent*(1,2)
 none
 5000
-
-
 17 - Modifies Test 1
 variable v;
 Select v such that Modifies(7, v)
@@ -122,8 +118,6 @@ if ifs;
 Select ifs such that Modifies(_, _)
 4
 5000
-
-
 25 - Uses Test 1
 print pn; variable v;
 Select pn such that Uses(pn, v)
@@ -154,8 +148,6 @@ stmt s;
 Select s such that Uses(s, _)
 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14
 5000
-
-
 31 - Pattern Test 1
 assign a;
 Select a pattern a(_, _)
@@ -186,140 +178,117 @@ variable v; assign a;
 Select v pattern a(v, _"30"_)
 a
 5000
-
 37 - Multi Clause Test 1
 assign a; stmt s;
 Select a such that Parent(s, a) pattern a(_, _)
 7, 10, 14
 5000
-
 38 - Multi Clause Test 2
 assign a;
 Select a such that Uses(a, "b") pattern a(_,_"30"_ )
 7
 5000
-
 38 - Multi Clause Test 3 (False)
 assign a; variable v;
 Select a such that Modifies(4, v) pattern a(_,_)
 none
 5000
-
 38 - Multi Clause Test 4 (False, clauses swap places)
 assign a; variable v;
 Select a pattern a(_,_) such that Modifies(4, v)
 none
 5000
-
 40 - Multi Clause Test 5
 assign a; stmt s;
 Select a such that Follows(s, a) pattern a("a", _"b"_)
 3, 7, 10, 14
 5000
-
 41 - Multi Clause Test 6
 assign a; variable v;
 Select v such that Uses(a, v) pattern a(_,_"1"_)
 a, b
 5000
-
 42 - Multi Clause Test 7 (Empty clause)
 assign a; variable v;
 Select v such that Uses(a, v) pattern a(_,_"2"_)
 none
 5000
 
-
 43 - Multi Clause Test 8
 assign a; variable v;
 Select v such that Modifies(10, v) pattern a(v,_)
 a
 5000
-
 44 - Multi Clause Test 9
 variable v; assign a;
 Select a such that Parent(4, a) pattern a(v, _)
 7, 10
 5000
-
 45 - Multi Clause Test 10
 variable v; assign a;
 Select a such that Parent(4, a) pattern a("b", _)
 none
 5000
-
 46 - Select clause 1
 variable v; assign a;
 Select a
 3, 7, 10, 14
 5000
-
 47 - Select clause 2
 stmt s;
 Select s
 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14
 5000
-
 48 - Select clause 3
 variable v;
 Select v
 a, b
 5000
-
 49 - Select clause 4
 constant c;
 Select c
 1, 30, 12, 15
 5000
-
 50 - Follows* Test 5 (Follows self)
 stmt s;
 Select s such that Follows*(s,s)
 none
 5000
-
 51 - SemanticError (Undeclared synonym)
 constant c; stmt s;
 Select a
 SemanticError
 5000
-
 52 - SemanticError (Wildcard invalid use)
 stmt s; assign a; variable v; procedure p;
 Select s such that Modifies(_, v)
 SemanticError
 5000
-
 53 - SemanticError (Wildcard invalid use)
 stmt s; assign a; variable v; procedure p;
 Select s such that Uses(_, v)
 SemanticError
 5000
-
 54 - Whitespaces in query
 stmt s;
 Select s        such     that            Follows      (    4,      s   )
 11
 5000
-
 55 - SyntaxError (Double parenthesis)
 stmt s;
 Select s such that Follows((4, s))
 SyntaxError
 5000
-
 56 - SyntaxError (Additional semicolons in declaration)
 stmt s;;
 Select s such that Follows(4, s)
 SyntaxError
 5000
-
 57 - SyntaxError (Additional semicolons in clause)
 stmt s;
 Select s such that Follows(4, s);
 SyntaxError
 5000
-
 58 - SyntaxError (Invalid token)
 stmt 1aaa;
 Select 1aaa
