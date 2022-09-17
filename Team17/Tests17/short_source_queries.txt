@@ -23,6 +23,8 @@ stmt s;
 Select s such that Follows(s,s)
 none
 5000
+
+
 6 - Follows* Test 1
 stmt s;
 Select s such that Follows*(1, s)
@@ -78,6 +80,8 @@ stmt s;
 Select s such that Parent*(1,2)
 none
 5000
+
+
 17 - Modifies Test 1
 variable v;
 Select v such that Modifies(7, v)
@@ -107,4 +111,78 @@ Select a such that Modifies(a, "a")
 if ifs;
 Select a such that Modifies(ifs, "b")
 none
+5000
+23 - Modifies Test 7
+stmt s;
+Select s such that Modifies(s, _)
+2, 3, 6, 7, 9, 10, 13, 14
+5000
+24 - Modifies Test 8
+if ifs;
+Select ifs such that Modifies(_, _)
+4
+5000
+
+
+25 - Uses Test 1
+print pn; variable v;
+Select pn such that Uses(pn, v)
+1, 5, 8, 12
+5000
+26 - Uses Test 2
+print pn;
+Select pn such that Uses(pn,"b")
+none
+5000
+27 - Uses Test 3
+assign a;
+Select a such that Uses(a, "a")
+7
+5000
+28 - Uses Test 4
+while w; variable v;
+Select v such that Uses(w, v)
+a, b
+5000
+29 - Uses Test 5
+variable v;
+Select v such that Uses(1, v)
+a
+5000
+30 - Uses Test 6
+stmt s;
+Select s such that Uses(s, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14
+5000
+
+
+31 - Pattern Test 1
+assign a;
+Select a pattern a(_, _)
+3, 7, 10, 14
+5000
+32 - Pattern Test 2
+assign a; variable v;
+Select v pattern a(_, _)
+a, b
+5000
+33 - Pattern Test 3
+assign a;
+Select a pattern a("a", _"b"_)
+3, 7, 14
+5000
+34 - Pattern Test 4
+assign a;
+Select a pattern a("a", "b")
+none
+5000
+35 - Pattern Test 5
+variable v; assign a;
+Select a pattern a(v, _"30"_)
+7
+5000
+36 - Pattern Test 6
+variable v; assign a;
+Select v pattern a(v, _"30"_)
+a
 5000
