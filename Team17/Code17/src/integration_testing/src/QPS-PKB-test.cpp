@@ -382,6 +382,25 @@ TEST_CASE("Refactor multiclause test") {
     REQUIRE(testResults == expectedResults);
 }
 
+//while w;
+//Select w such that Follows(_, w)
+
+TEST_CASE("Debug wildcard, synonym") {
+    std::string testQuery = R"(while w; Select w such that Follows(_, w))";
+    std::list<std::string> testResults;
+    std::list<std::string> expectedResults = {"4"};
+    QPS::processQueryResult(testQuery, testResults, qpsClient);
+    REQUIRE(testResults == expectedResults);
+}
+
+TEST_CASE("Debug synonym, wildcard") {
+    std::string testQuery = R"(assign a; Select a such that Follows(a, _))";
+    std::list<std::string> testResults;
+    std::list<std::string> expectedResults = {"10", "3", "2", "1", "6", "5"};
+    QPS::processQueryResult(testQuery, testResults, qpsClient);
+    REQUIRE(testResults == expectedResults);
+}
+
 TEST_CASE("More multiclause test") {
     SECTION("Test 1") {
         std::string testQuery = R"(assign a; stmt s; Select a such that Parent(s, a) pattern a(_, _))";
