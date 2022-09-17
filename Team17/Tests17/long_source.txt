@@ -1,0 +1,101 @@
+procedure longProcedure {
+    print a;
+    read b;
+    a = (b + 1);
+    if (a <b) then {
+        read a;
+        print a;
+    } else{
+        read a;
+        print a;
+    }
+    while(c>d){
+        print c;
+        read d;
+        c = d-2;
+    }
+    print c;
+    read d;
+    c=d-2;
+    if (e==f) then {
+        read e;
+        print f;
+        e=f*3;
+        while(e!=f){
+            e=f*3;
+            print e;
+            read f;
+        }
+        e=f*3;
+        read f;
+        print e;
+    } else{
+        e=f*3;
+        read f;
+        print e;
+        while(f!=e){
+            e=f*3;
+            print e;
+            read f;
+        }
+        read e;
+        print f;
+        e=f*3;
+    }
+    read a;
+    read b;
+    read c;
+    print d;
+    print e;
+    print f;
+    a= b%1;
+    a= b/1;
+    if (a==b) then {
+        if (c==d) then {
+        }   else {
+            if ((c==d)&&(e!=f)) then {
+            }   else {
+                if (c==d) then {
+                    a = b * 10;
+                }   else {
+                }
+            }
+        }
+    }   else {
+        while(a >= b) {
+            while (b >=c) {
+                while(a >b){
+
+                }
+            }
+        }
+    }
+    a =0;
+    b= (123456789);
+    c = 10 * 40;
+    d = 40 / 20;
+    e = 15 % 5;
+    f = 5 + 1000;
+    g = 30 - 500;
+    while(a >= b) {
+        while (b >=c) {
+            while(a >b){
+                if (a <b) then {
+                    read a;
+                    print a;
+                } else{
+                    read a;
+                    print a;
+                }
+            }
+                if (a <b) then {
+                    read a;
+                    print a;
+                } else{
+                    read a;
+                    print a;
+                }
+        }
+    }
+    print done;
+}
