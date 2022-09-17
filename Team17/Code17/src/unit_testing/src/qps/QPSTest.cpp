@@ -9,6 +9,22 @@
 #include <iostream>
 
 // Valid queries
+TEST_CASE("SemanticError - if ifs; Select if") {
+    std::string testQuery = "if ifs; Select if";
+
+    Select expectedSelect = Select("if");
+    std::vector<SuchThat> expectedSuchThat;
+    std::vector<Pattern> expectedPattern;
+    std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"ifs", DesignEntity::IF} };
+    int expectedNumOfDeclaredSynonyms = 1;
+
+    QueryObject expectedResult = QueryObject(expectedSelect, expectedSuchThat, expectedPattern, expectedMappedSynonyms, expectedNumOfDeclaredSynonyms);
+
+    QueryObject testResult = QPS::tokenizeAndParseQuery(testQuery);
+    
+    REQUIRE(testResult == expectedResult);
+};
+
 //TEST_CASE("Query with single declaration and no such that or pattern clause") {
 //    std::string testQuery = "variable v; Select v";
 //

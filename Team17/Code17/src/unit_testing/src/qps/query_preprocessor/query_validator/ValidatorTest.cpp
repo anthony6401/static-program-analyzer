@@ -150,6 +150,21 @@ TEST_CASE("Return type not declared - variable v; Select v1") {
     REQUIRE(validatedQuery.isSemanticallyValid() == false);
 };
 
+TEST_CASE("Return type not declared - if ifs; Select if") {
+    Select select = Select("if");
+    std::vector<SuchThat> suchThat;
+    std::vector<qps::Pattern> pattern;
+    std::unordered_map<std::string, DesignEntity> mappedSynonyms{ {"ifs", DesignEntity::IF} };
+    int numOfDeclaredSynonyms = 1;
+
+    QueryObject testParsedQuery = QueryObject(select, suchThat, pattern, mappedSynonyms, numOfDeclaredSynonyms);
+
+
+    Validator validator = Validator(testParsedQuery);
+    QueryObject validatedQuery = validator.validate();
+    REQUIRE(validatedQuery.isSemanticallyValid() == false);
+};
+
 TEST_CASE("Such that with no declaration - Select v such that Uses(6, v)") {
     Select select = Select("v");
     std::vector<SuchThat> suchThat{ SuchThat(TokenType::USES, TokenObject(TokenType::INTEGER, "6"),TokenObject(TokenType::NAME, "v")) };
@@ -311,7 +326,7 @@ TEST_CASE("Pattern with param not declared - variable v; assign a; Select v patt
     REQUIRE(validatedQuery.isSemanticallyValid() == false);
 };
 
-TEST_CASE("First param of pattern not variable - variable v; assign a; Select v pattern v(a, \"x\")") {
+TEST_CASE("First param of pattern not variable - variable v; assign a; Select v pattern a(a, \"x\")") {
     Select select = Select("v");
     std::vector<SuchThat> suchThat{};
     std::vector<qps::Pattern> pattern{ Pattern("a", TokenObject(TokenType::NAME, "a"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };

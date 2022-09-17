@@ -121,8 +121,8 @@ std::vector<std::vector<TokenObject>> Parser::groupQueryIntoClause() {
 		// Start of select clause
 		if (isEndOfDeclaration && !isSelectClause && !isSuchThatClause && !isPatternClause) {
 			selectTokenObjects.push_back(token);
-				isSelectClause = true;
-				continue;
+			isSelectClause = true;
+			continue;
 		}
 
 		if (isSelectClause) {
