@@ -131,6 +131,7 @@ bool Validator::patternClauseIsSemanticallyCorrect() {
 };
 
 bool Validator::isValidUsesAndModifies(SuchThat relationship) {
+	TokenType relationshipType = relationship.getRelationshipType();
 	TokenObject leftParam = relationship.getLeft();
 	TokenObject rightParam = relationship.getRight();
 
@@ -148,7 +149,11 @@ bool Validator::isValidUsesAndModifies(SuchThat relationship) {
 			return false;
 		}
 
-		if (!isValidUsesAndModifiesLeftParameter(synonymName)) {
+		if (relationshipType == TokenType::USES && !isValidUsesLeftParameter(synonymName)) {
+			return false;
+		}
+
+		if (relationshipType == TokenType::MODIFIES && !isValidModifiesLeftParameter(synonymName)) {
 			return false;
 		}
 
@@ -251,9 +256,9 @@ bool Validator::isAssign(std::string synonym) {
 	return true;
 };
 
-bool Validator::isValidUsesAndModifiesLeftParameter(std::string synonym) {
+bool Validator::isValidUsesLeftParameter(std::string synonym) {
 	// Removed READ since according to the slides, READ is not a valid parameter for Uses and Modifies
-	std::vector<DesignEntity> validDesignEntities = this->validDesignEntitiesForUsesAndModifies;
+	std::vector<DesignEntity> validDesignEntities = this->validDesignEntitiesForUses;
 
 	DesignEntity designEntityOfSynonym = this->parsedQuery.getSynonymToDesignEntityMap().at(synonym);
 
@@ -264,3 +269,16 @@ bool Validator::isValidUsesAndModifiesLeftParameter(std::string synonym) {
 	return true;
 };
 
+
+bool Validator::isValidModifiesLeftParameter(std::string synonym) {
+	// Removed READ since according to the slides, READ is not a valid parameter for Uses and Modifies
+	std::vector<DesignEntity> validDesignEntities = this->validDesignEntitiesForModifies;
+
+	DesignEntity designEntityOfSynonym = this->parsedQuery.getSynonymToDesignEntityMap().at(synonym);
+
+	if (std::find(validDesignEntities.begin(), validDesignEntities.end(), designEntityOfSynonym) == validDesignEntities.end()) {
+		return false;
+	}
+
+	return true;
+};

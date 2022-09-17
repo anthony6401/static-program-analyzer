@@ -275,17 +275,19 @@ TEST_CASE("Select all queries") {
     SECTION("Select read statements") {
         std::string testQuery = "read re; Select re";
         std::list<std::string> testResults;
-        std::list<std::string> expectedResults = {"none"};
+        std::list<std::string> expectedResults = {};
         QPS::processQueryResult(testQuery, testResults, qpsClient);
         REQUIRE(testResults == expectedResults);
+        REQUIRE(testResults.empty());
     }
 
     SECTION("Select print statements") {
         std::string testQuery = "print p; Select p";
         std::list<std::string> testResults;
-        std::list<std::string> expectedResults = {"none"};
+        std::list<std::string> expectedResults = {};
         QPS::processQueryResult(testQuery, testResults, qpsClient);
         REQUIRE(testResults == expectedResults);
+        REQUIRE(testResults.empty());
     }
 
     SECTION("Select procedures") {
@@ -453,9 +455,10 @@ TEST_CASE("Relationships and patterns") {
     SECTION("No synonym Clause - return false") {
         std::string testQuery = "variable v; Select v such that Uses(1, _)";
         std::list<std::string> testResults;
-        std::list<std::string> expectedResults = {"none"};
+        std::list<std::string> expectedResults = {};
         QPS::processQueryResult(testQuery, testResults, qpsClient);
         REQUIRE(testResults == expectedResults);
+        REQUIRE(testResults.empty());
     }
 
     SECTION("Single synonym, has select") {
@@ -549,17 +552,19 @@ TEST_CASE("Relationships and patterns") {
     SECTION("Multi Clause - common synonym") {
         std::string testQuery = "assign a; variable v; Select v such that Modifies(1, v) pattern a(v,\"1\")";
         std::list<std::string> testResults;
-        std::list<std::string> expectedResults = {"none"};
+        std::list<std::string> expectedResults = {};
         QPS::processQueryResult(testQuery, testResults, qpsClient);
         REQUIRE(testResults == expectedResults);
+        REQUIRE(testResults.empty());
     }
 
     SECTION("Multiple common synonym") {
         std::string testQuery = "assign a; variable v; Select v such that Modifies(a, v) pattern a(v, \"x\")";
         std::list<std::string> testResults;
-        std::list<std::string> expectedResults = {"none"};
+        std::list<std::string> expectedResults = {};
         QPS::processQueryResult(testQuery, testResults, qpsClient);
         REQUIRE(testResults == expectedResults);
+        REQUIRE(testResults.empty());
     }
 
     SECTION("Follows* Clause") {
@@ -581,9 +586,10 @@ TEST_CASE("Relationships and patterns") {
     SECTION("Same synonym as parameters in Follows") {
         std::string testQuery = "stmt s; Select s such that Follows(s, s)";
         std::list<std::string> testResults;
-        std::list<std::string> expectedResults = {"none"};
+        std::list<std::string> expectedResults = {};
         QPS::processQueryResult(testQuery, testResults, qpsClient);
         REQUIRE(testResults == expectedResults);
+        REQUIRE(testResults.empty());
     }
 
 }
