@@ -36,12 +36,10 @@ TEST_CASE("test SP PKB integration") {
 		      count = 0;\
 	      cenX = 0;\
 	      cenY = 0;\
-	      call readPoint;\
 	      while ((x != 0) && (y != 0)) {\
 		          count = count + 1;\
 		          cenX = cenX + x;\
 		          cenY = cenY + y;\
-		          call readPoint;\
 	}\
 	      if (count == 0) then{\
 	          flag = 1;\
@@ -247,7 +245,7 @@ TEST_CASE("Relationships and patterns for SP") {
     SECTION("Parent with synonym first argument") {
         // Parent(w, 6)
         std::unordered_set<std::string> testResults = pkbSP->getRelationshipBySecond(RelationshipType::PARENT, DesignEntity::WHILE, TokenObject(TokenType::INTEGER, "6"));
-        std::unordered_set<std::string> expectedResults = { "5" };
+        std::unordered_set<std::string> expectedResults = { "4" };
         REQUIRE(testResults == expectedResults);
     }
 
@@ -274,7 +272,7 @@ TEST_CASE("Relationships and patterns for SP") {
     SECTION("Parent* with synonym first argument") {
         // Parent*(w, 6)
         std::unordered_set<std::string> testResults = pkbSP->getRelationshipBySecond(RelationshipType::PARENT_T, DesignEntity::WHILE, TokenObject(TokenType::INTEGER, "6"));
-        std::unordered_set<std::string> expectedResults = { "5" };
+        std::unordered_set<std::string> expectedResults = { "4" };
         REQUIRE(testResults == expectedResults);
     }
 
