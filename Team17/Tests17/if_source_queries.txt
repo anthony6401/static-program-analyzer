@@ -113,9 +113,6 @@ assign a; stmt s;
 Select a such that Follows*(a, s)
 3
 5000
-
-
-
 24 - Test Parent 1 - first argument not container statement
 assign a; stmt s;
 Select s such that Parent(a, s)
@@ -153,27 +150,76 @@ Select s such that Parent(7, s)
 5000
 31 - Test Parent 8 - return true
 assign a;
-Select s such that Parent(12, _)
-3, 8, 9, 11, 15, 16, 18, 19
+Select a such that Parent(12, _)
+3, 8, 9, 11, 15, 16, 18, 19, 17
 5000
 32 - Test Parent 9 - return false
 assign a;
-Select s such that Parent(18, 19)
+Select a such that Parent(18, 19)
 none
 5000
 33 - Test Parent 10
 print pn;
 Select pn such that Parent(_, pn)
-7
+10
 5000
 34 - Test Parent 11 - return true
 if ifs;
 Select ifs such that Parent(_, _)
 2, 7, 14
 5000
-35 - Test Parent 12 - return true
+35 - Test Parent 12 - return false
 if ifs;
 Select ifs such that Parent(_, 19)
-2, 7, 14
+none
 5000
-
+36 - Test Parent* 1
+stmt s;
+Select s such that Parent*(s, a)
+2, 5, 7, 12, 14
+5000
+37 - Test Parent* 2 (unrelated to select)
+stmt s; variable v;
+Select v such that Parent*(s, _)
+a, d, qwerty, N0t, b, c, abc, CS3219, fail, b00t, pass, b00T, procedure, program, call, while, print, if
+5000
+38 - Test Parent* 3 (related to select)
+stmt s; variable v;
+Select s such that Parent*(s, _)
+2, 5, 7, 12, 14
+5000
+39 - Test Parent* 4
+stmt s;
+Select s such that Parent*(s, 9)
+2, 5, 7
+5000
+40 - Test Parent* 5
+stmt s;
+Select s such that Parent*(2, s)
+3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18
+5000
+41 - Test Parent* 6
+assign a;
+Select a such that Parent*(2, _)
+3, 9, 11, 15, 16, 17, 18, 19
+5000
+42 - Test Parent* 7
+assign a;
+Select a such that Parent*(2, 10) - returns true
+3, 9, 11, 15, 16, 17, 18, 19
+5000
+43 - Test Parent* 8
+if ifs;
+Select ifs such that Parent*(_, ifs) - returns true
+7, 14
+5000
+44 - Test Parent* 9
+while w;
+Select w such that Parent*(_, _) - returns true
+5, 12
+5000
+45 - Test Parent* 10
+while w;
+Select w such that Parent*(_, 2) - returns false
+none
+5000
