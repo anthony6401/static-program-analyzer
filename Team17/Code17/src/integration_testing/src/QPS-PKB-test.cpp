@@ -332,6 +332,38 @@ TEST_CASE("Syntax and Semantics Checks") {
         REQUIRE(testResults == expectedResults);
     }
 
+    SECTION("Syntax error - invalid multiple declaration") {
+        std::string testQuery = "variable v v1; Select v such that Modifies(1, v1)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "SyntaxError" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Syntax error - invalid multiple single declaration") {
+        std::string testQuery = "variable v assign a; Select v such that Modifies(1, v)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "SyntaxError" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Syntax error - invalid design entity") {
+        std::string testQuery = "variable v assign a; statement s; Select v such that Modifies(s, v)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "SyntaxError" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Syntax error - typo in design entity") {
+        std::string testQuery = "var1able v assign a; statement s; Select v such that Modifies(s, v)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "SyntaxError" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
+
     // Semantically invalid also, but syntax is caught first
     SECTION("Syntax error - invalid subexpression") {
         std::string testQuery = R"(variable v; Select s such that Uses (s, "x") pattern a (_"x", _"y"_))";
@@ -341,10 +373,130 @@ TEST_CASE("Syntax and Semantics Checks") {
         REQUIRE(testResults == expectedResults);
     }
 
+    SECTION("Syntax error - missing select clause") {
+        std::string testQuery = R"(variable v; assign a; such that Uses (4, "x") pattern a (_"x"_, _"y"_))";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "SyntaxError" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Syntax error - small letter Select") {
+        std::string testQuery = R"(variable v; assign a; select v such that Uses (6, "x") pattern a (_"x"_, _"y"_))";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "SyntaxError" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Syntax error - typo in Select") {
+        std::string testQuery = R"(variable v; assign a; Seletc v such that Uses (6, "x") pattern a (_"x"_, _"y"_))";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "SyntaxError" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Syntax error - return non-synonym") {
+        std::string testQuery = R"(variable v; assign a; Select 4 such that Uses (6, "x") pattern a (_"x"_, _"y"_))";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "SyntaxError" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
+
     SECTION("Syntax error - end with semicolon") {
         std::string testQuery = "variable v; Select v such that Modifies(1, _);";
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"SyntaxError"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Syntax error - semicolon in middle of select clause") {
+        std::string testQuery = "variable v; Select v such; that Modifies(1, _)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "SyntaxError" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Syntax error - typo in Select") {
+        std::string testQuery = R"(variable v; assign a; Seletc v such that Uses (6, "x") pattern a (_"x"_, _"y"_))";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "SyntaxError" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Syntax error - missing bracket in such that clause") {
+        std::string testQuery = R"(variable v; assign a; Select v such that Uses 6, "x") pattern a (_"x"_, _"y"_))";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "SyntaxError" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Syntax error - missing bracket in pattern clause") {
+        std::string testQuery = R"(variable v; assign a; Select v such that Uses (6, "x") pattern a (_"x"_, _"y"_)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "SyntaxError" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Syntax error - empty second parameter in such that clause") {
+        std::string testQuery = R"(variable v; assign a; Select v such that Uses (6, "") pattern a (_"x"_, _"y"_)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "SyntaxError" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Syntax error - empty first parameter in such that clause") {
+        std::string testQuery = R"(variable v; assign a; Select v such that Uses ("", "x") pattern a (_"x"_, _"y"_)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "SyntaxError" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Syntax error - empty first parameter in pattern clause") {
+        std::string testQuery = R"(variable v; assign a; Select v such that Uses (1, "x") pattern a ("", _"y"_)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "SyntaxError" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Syntax error - empty second parameter in pattern clause") {
+        std::string testQuery = R"(variable v; assign a; Select v such that Uses (1, "x") pattern a ("x", "")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "SyntaxError" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Syntax error - invalid wildcard parameter") {
+        std::string testQuery = R"(variable v; assign a; Select v such that Uses (1, "x") pattern a ("x", "_")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "SyntaxError" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Syntax error - non-existing relationship") {
+        std::string testQuery = R"(variable v; assign a; Select v such that Uses* (1, "x") pattern a ("x", "4")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "SyntaxError" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Syntax error - Uses take in constant value in second param") {
+        std::string testQuery = R"(variable v; assign a; Select v such that Uses (1, "6") pattern a ("x", "4")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "SyntaxError" };
         QPS::processQueryResult(testQuery, testResults, qpsClient);
         REQUIRE(testResults == expectedResults);
     }
@@ -369,6 +521,78 @@ TEST_CASE("Syntax and Semantics Checks") {
         std::string testQuery = "variable v; Select v such that Uses (_, v)";
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"SemanticError"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Semantics error - read as first param for Uses") {
+        std::string testQuery = "variable v; read re; Select v such that Uses (re, v)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "SemanticError" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Semantics error - print as first param for Modifies") {
+        std::string testQuery = "variable v; print pn; Select v such that Modifies (pn, v)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "SemanticError" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Semantics error - ambiguity in first argument for Modifies") {
+        std::string testQuery = "variable v; Select v such that Modifies (_, v)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "SemanticError" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Semantics error - non-variable as second paramter") {
+        std::string testQuery = "constant v; Select v such that Uses (_, v)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "SemanticError" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Semantics error - non-statement for Follows*") {
+        std::string testQuery = "procedure v; Select v such that Follows* (_, v)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "SemanticError" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Semantics error - non-statement for Follows*") {
+        std::string testQuery = "procedure v; Select v such that Follows* (_, v)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "SemanticError" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Semantics error - non-statement for Follows") {
+        std::string testQuery = "constant v; Select v such that Follows (_, v)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "SemanticError" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Semantics error - non-statement for Parent*") {
+        std::string testQuery = "variable v; Select v such that Parent* (_, v)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "SemanticError" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Semantics error - non-statement for Parent") {
+        std::string testQuery = "procedure v; Select v such that Parent (_, v)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "SemanticError" };
         QPS::processQueryResult(testQuery, testResults, qpsClient);
         REQUIRE(testResults == expectedResults);
     }
@@ -532,6 +756,14 @@ TEST_CASE("Relationships and patterns") {
         REQUIRE(testResults.size() == expectedResults.size());
     }
 
+    SECTION("Multi Clause - Unrelated to Select with pattern clause before such that clause") {
+        std::string testQuery = R"(assign a; variable v; Select v pattern a("count","0") such that Modifies(a, _) )";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "count", "cenX", "cenY", "x", "y", "flag", "normSq" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults.size() == expectedResults.size());
+    }
+
     SECTION("Single synonym Clause - Follows") {
         std::string testQuery = "stmt s; Select s such that Follows(1, s)";
         std::list<std::string> testResults;
@@ -598,6 +830,38 @@ TEST_CASE("Relationships and patterns") {
         REQUIRE(testResults.empty());
     }
 
+    SECTION("Multi Clause - query broken up into 2 lines") {
+        std::string testQuery = "stmt s; variable v; assign a;\n Select a such that Modifies(s, v) pattern a(_,\"1\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "9" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Multi Clause - query broken up into 2 lines in middle of pattern clause") {
+        std::string testQuery = "stmt s; variable v; assign a; Select a such that Modifies(s, v) pattern a\n(_,\"1\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "9" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Multi Clause - query broken up into 2 lines in middle of such that clause") {
+        std::string testQuery = "stmt s; variable v; assign a; Select a such that Modifies(\ns, v) pattern a(_,\"1\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "9" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Multi Clause - query broken up into 2 lines in middle of declaration") {
+        std::string testQuery = "stmt s; variable v\n; assign a; Select a such that Modifies(s, v) pattern a(_,\"1\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "9" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
+
     SECTION("Follows* Clause") {
         std::string testQuery = "stmt s; Select s such that Follows*(1, s)";
         std::list<std::string> testResults;
@@ -623,6 +887,14 @@ TEST_CASE("Relationships and patterns") {
         REQUIRE(testResults.empty());
     }
 
+    SECTION("Non-container statement as parameters in Parent") {
+        std::string testQuery = "stmt s; assign a; Select s such that Parent(a, s)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {};
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+        REQUIRE(testResults.empty());
+    }
 }
 
 
