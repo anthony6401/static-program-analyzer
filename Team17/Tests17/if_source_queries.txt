@@ -206,7 +206,7 @@ Select a such that Parent*(2, _)
 42 - Test Parent* 7 - returns true
 assign a;
 Select a such that Parent*(2, 10)
-3, 9, 11, 15, 16, 17, 18, 19
+3, 9, 11, 15, 16, 17, 18, 19, 8
 5000
 43 - Test Parent* 8 - returns true
 if ifs;
