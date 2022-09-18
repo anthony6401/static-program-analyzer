@@ -15,6 +15,9 @@ void ProgramStack::put(SimpleToken token) {
 }
 
 SimpleToken ProgramStack::dump() {
+    if (stmtList.size() == 0) {
+        throw std::invalid_argument("Received blank SIMPLE code");
+    }
     parent.setChildren(stmtList);
     return parent;
 }
