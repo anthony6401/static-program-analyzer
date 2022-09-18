@@ -475,6 +475,6 @@ none
 5000
 95 - Test Multi clause 11 pattern- Uses, pattern false -> such that true, return none
 assign a1,a2; variable v; stmt s;
-Select s pattern a2(v, "b") such that Uses(2,"abc") 
+Select s pattern a2(v, _"abc"_) such that Uses(2,"b") 
 none
 5000
