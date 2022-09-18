@@ -79,9 +79,9 @@ std::unordered_set<std::string> RawResult::getResultsToBePopulated(std::string s
     std::unordered_set<std::string> result({});
     auto iterator = std::find(synonymsList.begin(), synonymsList.end(), selectSynonym);
     if (iterator != synonymsList.cend()) {
-        int index = std::distance(synonymsList.begin(), iterator);
-        for (auto row : resultsList) {
-            result.insert(row[index]);
+        int indexOfSynonym = std::distance(synonymsList.begin(), iterator);
+        for (auto resultSublist : resultsList) {
+            result.insert(resultSublist[indexOfSynonym]);
         }
     }
     return result;
