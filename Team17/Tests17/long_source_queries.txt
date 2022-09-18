@@ -173,3 +173,63 @@ if ifs;
 Select ifs such that Parent(_, 59)
 none
 5000
+36 - Test Pattern 1
+assign a; variable v;
+Select a pattern a(v, "f")
+19, 21, 24, 27, 31, 36
+5000
+37 - Test Pattern 2
+assign a; variable v;
+Select v pattern a(v, _)
+a, c, e, b, d, f, g
+5000
+38 - Test Pattern 3
+assign a; variable v;
+Select v pattern a(v, "b")
+none
+5000
+39 - Test Pattern 4
+assign a; variable v;
+Select a pattern a(v, _"b"_)
+3, 49
+5000
+40 - Test Pattern 5
+constant c; assign a;
+Select c pattern a(_, _)
+1, 2, 3, 123456789, 40, 20, 15, 5, 1000, 30, 500, 10
+5000
+41 - Test Pattern 6
+assign a;
+Select a pattern a(_, "123456789")
+none
+5000
+42 - Test Pattern 7
+assign a;
+Select a pattern a(_, "f")
+none
+5000
+43 - Test Pattern 8
+assign a;
+Select a pattern a(_, _"2"_)
+12, 15, 54, 59
+5000
+44 - Test Pattern 9
+assign a;
+Select a pattern a("c", _)
+72, 69, 58, 15, 12
+5000
+45 - Test Pattern 10
+assign a;
+Select a pattern a("c", "d")
+12, 15
+5000
+46 - Test Pattern 11
+assign a;
+Select a pattern a("c", "x")
+none
+5000
+47 - Test Pattern 12
+assign a;
+Select a pattern a("f", _"5"_)
+61
+5000
