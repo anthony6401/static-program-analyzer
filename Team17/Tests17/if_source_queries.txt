@@ -231,7 +231,7 @@ Select c such that Uses(1, "a")
 47 - Test Uses 2
 variable v;
 Select v such that Uses(2, v)
-a, d, qwerty, N0t, b, c, fail, b00t, pass, program, call, while, procedure, print
+a, d, qwerty, N0t, b, c, fail, b00t, pass, program, call, while, procedure, print, CS3219
 5000
 48 - Test Uses 3
 print pn;
@@ -253,8 +253,28 @@ if ifs; variable v;
 Select ifs such that Uses(ifs, _)
 2, 7, 14
 5000
-52 - Test Uses 2 - returns false
+52 - Test Uses 7 - returns false
 while w;
 Select w such that Uses(1, "b")
 none
+5000
+53 - Test Uses 8 - returns false
+assign a;
+Select a such that Uses(18, "CS3219")
+none
+5000
+54 - Test Uses 9
+assign a;
+Select a such that Uses(a, "b")
+3, 9, 16, 19
+5000
+55 - Test Uses 10
+while w;
+Select w such that Uses(w, "CS3219")
+5
+5000
+56 - Test Uses 11
+if ifs;
+Select ifs such that Uses(ifs, "a")
+2, 14
 5000
