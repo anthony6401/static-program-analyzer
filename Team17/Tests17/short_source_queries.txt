@@ -298,4 +298,208 @@ stmt 1aaa;
 Select 1aaa
 SyntaxError
 5000
-
+62 - Syntax Error (No comma in declaration)
+variable v v1; stmt s;
+Select v such that Follows(4, s);
+SyntaxError
+5000
+63 - Syntax Error (No semicolon between declaration)
+variable v stmt s;
+Select v such that Follows(4, s);
+SyntaxError
+5000
+64 - Syntax Error (Use comma between declaration)
+variable v, stmt s;
+Select v such that Follows(4, s);
+SyntaxError
+5000
+65 - Syntax Error (Use statement instead of stmt)
+variable v; statement s;
+Select v such that Follows(4, s);
+SyntaxError
+5000
+66 - Syntax Error (Typo in declaration)
+v4ariable v; stmt s;
+Select v such that Follows(4, s);
+SyntaxError
+5000
+67 - Syntax Error (Typo in declaration)
+prrint pn; variable v;
+Select v such that Follows(4, pn);
+SyntaxError
+5000
+68 - Syntax Error (Typo in declaration)
+whilee w; variable v;
+Select v such that Follows(4, w);
+SyntaxError
+5000
+69 - Syntax Error (Typo in declaration)
+ifs ifs; variable v;
+Select v such that Follows(4, ifs);
+SyntaxError
+5000
+70 - Syntax Error (Typo in declaration)
+constante c; stmt s;
+Select c such that Follows(4, s);
+SyntaxError
+5000
+71 - Syntax Error (Typo in declaration)
+red r; stmt s;
+Select r such that Follows(4, r);
+SyntaxError
+5000
+72 - Syntax Error (Typo in such that)
+while w; variable v;
+Select v such tahat Uses(w, v)
+SyntaxError
+5000
+73 - Syntax Error (Typo in Select)
+while w; variable v;
+Seleact v such that Uses(w, v)
+SyntaxError
+5000
+74 - Syntax Error (Typo in Relationship)
+while w; stmt s;
+Select v such that Folows(w, s)
+SyntaxError
+5000
+75 - Syntax Error (Typo in Relationship)
+while w; variable v;
+Select v such that FUses(w, v)
+SyntaxError
+5000
+76 - Syntax Error (Typo in Relationship)
+while w; stmt s;
+Select v such that FollowsT(w, s)
+SyntaxError
+5000
+77 - Syntax Error (Typo in Relationship)
+while w; stmt s;
+Select v such that ParentT(w, s)
+SyntaxError
+5000
+78 - Syntax Error (Typo in Relationship)
+while w; stmt s;
+Select v such that Parnt(w, s)
+SyntaxError
+5000
+79 - Syntax Error (Typo in Relationship)
+while w; variable v;
+Select v such that Modify(w, v)
+SyntaxError
+5000
+80 - Syntax Error (Typo in Pattern)
+assign a; variable v;
+Select a patterna a(v, _)
+SyntaxError
+5000
+81 - Syntax Error (Typo in multi-clause)
+assign a; variable v; stmt s1, s2;
+Select a such that Follows(s1, s2) patterna a(v, _)
+SyntaxError
+5000
+82 - Syntax Error (Typo in multi-clause)
+assign a; variable v; stmt s1, s2;
+Select a patterna a(v, _) such that Follows(s1, s2) 
+SyntaxError
+5000
+83 - Syntax Error (No semicolon between declaration)
+variable v stmt s;
+Select v such that Follows(4, s);
+SyntaxError
+5000
+84 - Syntax Error (No select)
+assign a; variable v;
+such that Modifies(10, v) pattern a(v,_)
+SyntaxError
+5000
+85 - Syntax Error (Small case select)
+assign a; variable v;
+select v such that Modifies(10, v) pattern a(v,_)
+SyntaxError
+5000
+86 - Syntax Error (Relationship no name in quote)
+while w; variable v;
+Select v such that Modifies(w, "")
+SyntaxError
+5000
+87 - Syntax Error (Relationship no name in quote)
+while w; variable v;
+Select v such that Modifies("", v)
+SyntaxError
+5000
+88 - Syntax Error (Pattern non synonym for first argument)
+assign a; variable v;
+Select v pattern 1(v,_)
+SyntaxError
+5000
+89 - Syntax Error (Pattern non synonym for first argument)
+assign a; variable v;
+Select v pattern _(v,_)
+SyntaxError
+5000
+90 - Syntax Error (Pattern subxpr second argument)
+assign a; variable v;
+Select v pattern a(_"x"_,_)
+SyntaxError
+5000
+91 - Syntax Error (Pattern synonym third argument)
+assign a; variable v;
+Select v pattern a(v, v)
+SyntaxError
+5000
+92 - Syntax Error (Pattern wildcard with quote third argument)
+assign a; variable v;
+Select v pattern a(v, "_")
+SyntaxError
+5000
+93 - Syntax Error (Pattern no name in quote third argument)
+assign a; variable v;
+Select v pattern a(v, "")
+SyntaxError
+5000
+94 - Syntax Error (Relationship second argument constant)
+assign a; variable v;
+Select v such that Modifies(a, "1")
+SyntaxError
+5000
+95 - Semantic Error (Pattern non-variable for second argument)
+assign a; variable v; stmt s;
+Select v pattern a(s,_)
+SemanticError
+5000
+96 - Semantic Error (Modifies wrong second argument)
+constant v; assign a;
+Select v such that Modifies(a, v)
+SemanticError
+5000
+97 - Semantic Error (Uses wrong second argument)
+procedure v; assign a;
+Select v such that Uses(a, v)
+SemanticError
+5000
+98 - Semantic Error (Follows wrong second argument)
+variable v; assign a;
+Select v such that Follows(a, v)
+SemanticError
+5000
+99 - Semantic Error (Follows* wrong second argument)
+constant v; assign a;
+Select v such that Follows*(a, v)
+SemanticError
+5000
+100 - Semantic Error (Parent wrong second argument)
+variable v; assign a;
+Select v such that Parent(a, v)
+SemanticError
+5000
+101 - Semantic Error (Parent* wrong second argument)
+constant v; assign a;
+Select v such that Parent*(a, v)
+SemanticError
+5000
+102 - Test synonym with name pattern
+assign pattern; variable v;
+Select pattern pattern pattern(v, _"30"_)
+7
+5000
