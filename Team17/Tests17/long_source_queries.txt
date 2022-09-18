@@ -1,0 +1,225 @@
+1 - Select print
+print pn;
+Select pn
+1, 6, 8, 10, 13, 18, 22, 26, 29, 32, 35, 40, 41, 42, 70, 74, 75
+5000
+2 - Select assign
+assign a;
+Select a
+3, 12, 15, 19, 21, 24, 27, 31, 36, 43, 44, 47, 49, 50, 52, 53, 54, 58, 59, 60, 61, 62, 69, 72
+5000
+3 - Select while
+while w;
+Select w
+9, 20, 30, 55, 56, 57, 63, 64, 65, 68, 71
+5000
+4 - Select if
+if ifs;
+procedure p; Select ifs
+4, 16, 45, 46, 48, 51, 66
+5000
+5 - Test Follows 1
+variable v;
+Select v such that Follows(1, 2)
+a, b, c, d, e, f, g
+5000
+6 - Test Follows 2
+stmt s;
+Select s such that Follows(s, 2)
+1
+5000
+7 - Test Follows 3
+print pn;
+Select pn such that Follows(_, 16)
+1, 6, 8, 10, 13, 18, 22, 26, 29, 32, 35, 40, 41, 42, 70, 74, 75
+5000
+8 - Test Follows 4
+stmt s;
+Select s such that Follows(12, s)
+none
+5000
+9 - Test Follows 5
+stmt s; assign a;
+Select s such that Follows(s, a)
+2, 11, 14, 18, 20, 35, 42, 43, 53, 45, 59, 60, 61
+5000
+10 - Test Follows 6
+while w;
+Select w such that Follows(_, w)
+4, 19, 29, 55, 56, 62, 63, 64, 67, 
+5000
+11 - Test Follows 7
+read r;
+Select r such that Follows(14, _)
+4, 6, 13
+5000
+12 - Test Follows 8
+if ifs;
+Select ifs such that Follows(ifs, _)
+2, 14, 7
+5000
+13 - Test Follows 9
+constant c;
+Select c such that Follows(_, _)
+12, 123, 999, 1, 2, 50, 5000
+5000
+14 - Test Follows* 1
+assign a; stmt s;
+Select s such that Follows*(a, s)
+4, 5, 11
+5000
+15 - Test Follows* 2
+while w;
+Select w such that Follows*(w, _)
+5, 12
+5000
+16 - Test Follows* 3 - returns empty
+print pn;
+Select pn such that Follows*(pn, 10)
+none
+5000
+17 - Test Follows* 4 - returns true
+print pn;
+Select pn such that Follows*(6, pn)
+10
+5000
+18 - Test Follows* 5 - returns false
+stmt s;
+Select s such that Follows*(10, _)
+none
+5000
+19 - Test Follows* 6 - returns true
+constant c;
+Select c such that Follows*(2, 19)
+12, 123, 999, 50, 2, 5000, 1
+5000
+20 - Test Follows* 7
+read r;
+Select r such that Follows*(_, r)
+4
+5000
+21 - Test Follows* 8 - returns true
+if ifs;
+Select ifs such that Follows*(_, _)
+2, 7, 14
+5000
+22 - Test Follows* 9 - returns false
+constant c;
+Select c such that Follows*(_, 1)
+none
+5000
+23 - Test Follows* 10
+assign a; stmt s;
+Select a such that Follows*(a, s)
+3
+5000
+24 - Test Parent 1 - first argument not container statement
+assign a; stmt s;
+Select s such that Parent(a, s)
+none
+5000
+25 - Test Parent 2
+assign a; while w;
+Select a such that Parent(w, a)
+17
+5000
+26 - Test Parent 3
+if ifs;
+Select ifs such that Parent(ifs, _)
+2, 14, 7
+5000
+27 - Test Parent 4 - return empty
+stmt s;
+Select s such that Parent(s, 1)
+none
+5000
+28 - Test Parent 5
+stmt s;
+Select s such that Parent(s, 6)
+5
+5000
+29 - Test Parent 6 - return empty
+stmt s;
+Select s such that Parent(11, s)
+none
+5000
+30 - Test Parent 7
+stmt s;
+Select s such that Parent(7, s)
+8, 9
+5000
+31 - Test Parent 8 - return true
+assign a;
+Select a such that Parent(12, _)
+3, 8, 9, 11, 15, 16, 18, 19, 17
+5000
+32 - Test Parent 9 - return false
+assign a;
+Select a such that Parent(18, 19)
+none
+5000
+33 - Test Parent 10
+print pn;
+Select pn such that Parent(_, pn)
+10
+5000
+34 - Test Parent 11 - return true
+if ifs;
+Select ifs such that Parent(_, _)
+2, 7, 14
+5000
+35 - Test Parent 12 - return false
+if ifs;
+Select ifs such that Parent(_, 19)
+none
+5000
+36 - Test Parent* 1
+stmt s; assign a;
+Select s such that Parent*(s, a)
+2, 5, 7, 12, 14
+5000
+37 - Test Parent* 2 (unrelated to select)
+stmt s; variable v;
+Select v such that Parent*(s, _)
+a, d, qwerty, N0t, b, c, abc, CS3219, fail, b00t, pass, b00T, procedure, program, call, while, print, if
+5000
+38 - Test Parent* 3 (related to select)
+stmt s; variable v;
+Select s such that Parent*(s, _)
+2, 5, 7, 12, 14
+5000
+39 - Test Parent* 4
+stmt s;
+Select s such that Parent*(s, 9)
+2, 5, 7
+5000
+40 - Test Parent* 5
+stmt s;
+Select s such that Parent*(2, s)
+3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18
+5000
+41 - Test Parent* 6
+assign a;
+Select a such that Parent*(2, _)
+3, 9, 11, 15, 16, 17, 18, 19, 8
+5000
+42 - Test Parent* 7 - returns true
+assign a;
+Select a such that Parent*(2, 10)
+3, 9, 11, 15, 16, 17, 18, 19, 8
+5000
+43 - Test Parent* 8 - returns true
+if ifs;
+Select ifs such that Parent*(_, ifs)
+7, 14
+5000
+44 - Test Parent* 9 - returns true
+while w;
+Select w such that Parent*(_, _)
+5, 12
+5000
+45 - Test Parent* 10 - returns false
+while w;
+Select w such that Parent*(_, 2)
+none
+5000
