@@ -15,14 +15,11 @@ using namespace qps;
 class Validator {
 private:
 	QueryObject parsedQuery;
-	std::vector<DesignEntity> validDesignEntitiesForUses = {
-		DesignEntity::STMT, DesignEntity::PRINT, DesignEntity::CALL,
+	std::vector<DesignEntity> validDesignEntitiesForUsesAndModifies = {
+		DesignEntity::STMT, DesignEntity::READ, DesignEntity::PRINT, DesignEntity::CALL,
 		DesignEntity::WHILE, DesignEntity::IF, DesignEntity::ASSIGN, DesignEntity::PROCEDURE
 	};
-	std::vector<DesignEntity> validDesignEntitiesForModifies = {
-		DesignEntity::STMT, DesignEntity::READ, DesignEntity::CALL,
-		DesignEntity::WHILE, DesignEntity::IF, DesignEntity::ASSIGN, DesignEntity::PROCEDURE
-	};
+
 	std::vector<DesignEntity> statementDesignEntities = {
 		DesignEntity::STMT, DesignEntity::READ, DesignEntity::PRINT, DesignEntity::CALL,
 		DesignEntity::WHILE, DesignEntity::IF, DesignEntity::ASSIGN
@@ -37,8 +34,7 @@ private:
 	bool isStatement(std::string synonym);
 	bool isVariable(std::string synonym);
 	bool isAssign(std::string synonym);
-	bool isValidUsesLeftParameter(std::string synonym);
-	bool isValidModifiesLeftParameter(std::string synonym);
+	bool isValidUsesAndModifiesLeftParameter(std::string synonym);
 
 public:
 	Validator(QueryObject parsedQuery);

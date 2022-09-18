@@ -520,7 +520,7 @@ TEST_CASE("Syntax and Semantics Checks") {
     SECTION("Semantics error - read as first param for Uses") {
         std::string testQuery = "variable v; read re; Select v such that Uses (re, v)";
         std::list<std::string> testResults;
-        std::list<std::string> expectedResults = { "SemanticError" };
+        std::list<std::string> expectedResults = {};
         QPS::processQueryResult(testQuery, testResults, qpsClient);
         REQUIRE(testResults == expectedResults);
     }
@@ -528,7 +528,7 @@ TEST_CASE("Syntax and Semantics Checks") {
     SECTION("Semantics error - print as first param for Modifies") {
         std::string testQuery = "variable v; print pn; Select v such that Modifies (pn, v)";
         std::list<std::string> testResults;
-        std::list<std::string> expectedResults = { "SemanticError" };
+        std::list<std::string> expectedResults = {};
         QPS::processQueryResult(testQuery, testResults, qpsClient);
         REQUIRE(testResults == expectedResults);
     }
