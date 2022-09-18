@@ -174,7 +174,7 @@ Select ifs such that Parent(_, 19)
 none
 5000
 36 - Test Parent* 1
-stmt s;
+stmt s; assign a;
 Select s such that Parent*(s, a)
 2, 5, 7, 12, 14
 5000
@@ -201,25 +201,25 @@ Select s such that Parent*(2, s)
 41 - Test Parent* 6
 assign a;
 Select a such that Parent*(2, _)
-3, 9, 11, 15, 16, 17, 18, 19
+3, 9, 11, 15, 16, 17, 18, 19, 8
 5000
-42 - Test Parent* 7
+42 - Test Parent* 7 - returns true
 assign a;
-Select a such that Parent*(2, 10) - returns true
+Select a such that Parent*(2, 10)
 3, 9, 11, 15, 16, 17, 18, 19
 5000
-43 - Test Parent* 8
+43 - Test Parent* 8 - returns true
 if ifs;
-Select ifs such that Parent*(_, ifs) - returns true
+Select ifs such that Parent*(_, ifs)
 7, 14
 5000
-44 - Test Parent* 9
+44 - Test Parent* 9 - returns true
 while w;
-Select w such that Parent*(_, _) - returns true
+Select w such that Parent*(_, _)
 5, 12
 5000
-45 - Test Parent* 10
+45 - Test Parent* 10 - returns false
 while w;
-Select w such that Parent*(_, 2) - returns false
+Select w such that Parent*(_, 2)
 none
 5000
