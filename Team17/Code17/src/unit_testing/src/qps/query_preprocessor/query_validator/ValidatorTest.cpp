@@ -258,7 +258,7 @@ TEST_CASE("Uses with read as first parameter - variable v; read r; Select v such
     Validator validator = Validator(testParsedQuery);
     QueryObject validatedQuery = validator.validate();
 
-    REQUIRE(validatedQuery.isSemanticallyValid() == false);
+    REQUIRE(validatedQuery.isSemanticallyValid() == true);
 };
 
 TEST_CASE("Modifies where second param is not variable - assign a; Select a such that Modifies(6, a)") {
@@ -290,7 +290,7 @@ TEST_CASE("Modifies where first param is print statement - print pn; Select pn s
     Validator validator = Validator(testParsedQuery);
     QueryObject validatedQuery = validator.validate();
 
-    REQUIRE(validatedQuery.isSemanticallyValid() == false);
+    REQUIRE(validatedQuery.isSemanticallyValid() == true);
 };
 
 TEST_CASE("Parent where first param is not statement - procedure p; Select p such that Parent(p, _)") {
