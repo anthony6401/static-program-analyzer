@@ -199,6 +199,11 @@ SimpleToken generateProcedure(int code) {
 		SimpleToken var_n = SimpleToken(SpTokenType::TVARIABLE, "n", 0, &parseHolder);
 		SimpleToken con_1 = SimpleToken(SpTokenType::TCONSTANT, "1", 0, &parseHolder);
 
+		SimpleToken var_con1 = SimpleToken(SpTokenType::TVARIABLE, "con1", 0, &parseHolder);
+		SimpleToken var_con2 = SimpleToken(SpTokenType::TVARIABLE, "con2", 0, &parseHolder);
+		SimpleToken var_con3 = SimpleToken(SpTokenType::TVARIABLE, "con3", 0, &parseHolder);
+		SimpleToken var_con4 = SimpleToken(SpTokenType::TVARIABLE, "con4", 0, &parseHolder);
+		SimpleToken var_con5 = SimpleToken(SpTokenType::TVARIABLE, "con5", 0, &parseHolder);
 		SimpleToken opr_plus = SimpleToken(SpTokenType::TOPR, "+", 0, &parseHolder);
 
 		SimpleToken exp_1 = SimpleToken(SpTokenType::TEXPR, "c + d", 0, &parseHolder);
@@ -312,22 +317,25 @@ SimpleToken generateProcedure(int code) {
 		sl_4C.push_back(ass_8);
 		sl_4.setChildren(sl_4C);
 
-		SimpleToken cE_1 = SimpleToken(SpTokenType::TCONDEXPR, "c == 1", 0, &parseHolder);
-		SimpleToken cE_2 = SimpleToken(SpTokenType::TCONDEXPR, "g == 1", 0, &parseHolder);
-		SimpleToken cE_3 = SimpleToken(SpTokenType::TCONDEXPR, "k == 1", 0, &parseHolder);
+		SimpleToken cE_1 = SimpleToken(SpTokenType::TCONDEXPR, "con2 == 1", 0, &parseHolder);
+		SimpleToken cE_2 = SimpleToken(SpTokenType::TCONDEXPR, "con3 == 1", 0, &parseHolder);
+		SimpleToken cE_3 = SimpleToken(SpTokenType::TCONDEXPR, "con5 == 1", 0, &parseHolder);
 		std::vector<SimpleToken> cE_1C;
-		cE_1C.push_back(var_c);
+		cE_1C.push_back(var_con2);
+		cE_1C.push_back(con_1);
 		cE_1.setChildren(cE_1C);
 		std::vector<SimpleToken> cE_2C;
-		cE_2C.push_back(var_g);
+		cE_2C.push_back(var_con3);
+		cE_2C.push_back(con_1);
 		cE_2.setChildren(cE_2C);
 		std::vector<SimpleToken> cE_3C;
-		cE_3C.push_back(var_k);
+		cE_3C.push_back(var_con5);
+		cE_3C.push_back(con_1);
 		cE_3.setChildren(cE_3C);
 
-		SimpleToken if_while_1 = SimpleToken(SpTokenType::TWHILE, "while (c == 1)", 4, &parseHolder);
-		SimpleToken if_while_2 = SimpleToken(SpTokenType::TWHILE, "while (g == 1)", 9, &parseHolder);
-		SimpleToken while_if = SimpleToken(SpTokenType::TIF, "if (k == 1)", 15, &parseHolder);
+		SimpleToken if_while_1 = SimpleToken(SpTokenType::TWHILE, "while (con2 == 1)", 4, &parseHolder);
+		SimpleToken if_while_2 = SimpleToken(SpTokenType::TWHILE, "while (con3 == 1)", 9, &parseHolder);
+		SimpleToken while_if = SimpleToken(SpTokenType::TIF, "if (con5 == 1)", 15, &parseHolder);
 		std::vector<SimpleToken> if_while_1C;
 		if_while_1C.push_back(cE_1);
 		if_while_1C.push_back(sl_1);
@@ -386,17 +394,19 @@ SimpleToken generateProcedure(int code) {
 		while_slC.push_back(while_if);
 		while_sl.setChildren(while_slC);
 
-		SimpleToken if_cE = SimpleToken(SpTokenType::TCONDEXPR, "a == 1", 0, &parseHolder);
-		SimpleToken while_cE = SimpleToken(SpTokenType::TCONDEXPR, "i == 1", 0, &parseHolder);
+		SimpleToken if_cE = SimpleToken(SpTokenType::TCONDEXPR, "con1 == 1", 0, &parseHolder);
+		SimpleToken while_cE = SimpleToken(SpTokenType::TCONDEXPR, "con4 == 1", 0, &parseHolder);
 		std::vector<SimpleToken> if_cEC;
-		if_cEC.push_back(var_a);
+		if_cEC.push_back(var_con1);
+		if_cEC.push_back(con_1);
 		if_cE.setChildren(if_cEC);
 		std::vector<SimpleToken> while_cEC;
-		while_cEC.push_back(var_i);
+		while_cEC.push_back(var_con4);
+		while_cEC.push_back(con_1);
 		while_cE.setChildren(while_cEC);
 
-		SimpleToken ifT = SimpleToken(SpTokenType::TIF, "if (a == 1)", 1, &parseHolder);
-		SimpleToken whileT = SimpleToken(SpTokenType::TWHILE, "while (i == 1)", 12, &parseHolder);
+		SimpleToken ifT = SimpleToken(SpTokenType::TIF, "if (con1 == 1)", 1, &parseHolder);
+		SimpleToken whileT = SimpleToken(SpTokenType::TWHILE, "while (con4 == 1)", 12, &parseHolder);
 		std::vector<SimpleToken> ifTC;
 		ifTC.push_back(if_cE);
 		ifTC.push_back(if_sl_1);
