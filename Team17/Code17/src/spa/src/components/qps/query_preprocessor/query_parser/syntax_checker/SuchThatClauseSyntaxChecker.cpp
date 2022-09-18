@@ -126,14 +126,13 @@ bool SuchThatClauseSyntaxChecker::hasValidFollowsParentSyntax(std::vector<TokenO
 			if (possibleTokenType == TokenType::SYNONYM) {
 				std::vector<TokenType> synonymTokens = this->generalSyntax.at(TokenType::SYNONYM);
 				for (int k = 0; k < synonymTokens.size(); k++) {
-					TokenType synonymToken = synonymTokens.at(j);
+					TokenType synonymToken = synonymTokens.at(k);
 
 					if (tokenType == synonymToken) {
 						foundToken = true;
 						break;
 					}
 				}
-
 			}
 		}
 
