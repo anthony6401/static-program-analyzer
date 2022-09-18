@@ -453,8 +453,28 @@ assign a1,a2; variable v; stmt s;
 Select s such that Follows*(s,a1) pattern a2(v, _"b"_)
 1, 2, 3, 4, 5, 12, 13, 14
 5000
-91 - Test Multi clause 7 Follows*-pattern, fail-> no pattern match
+91 - Test Multi clause 8 Follows*-pattern, fail-> no pattern match
 assign a1,a2; variable v; stmt s;
 Select s such that Follows*(s,a1) pattern a2("abc", _)
+none
+5000
+92 - Test Multi clause 9 pattern- Follows*, fail-> no pattern match
+assign a1,a2; variable v; stmt s;
+Select s pattern a2("abc", _) such that Follows*(s,a1)
+none
+5000
+93 - Test Multi clause 10 pattern- Parent*
+assign a1,a2; variable v; stmt s;
+Select s pattern a2(v, _"b"_) such that Parent*(s,a1) 
+2, 5, 7, 12, 14
+5000
+94 - Test Multi clause 11 pattern- Uses, pattern true -> such that false, return none
+assign a1,a2; variable v; stmt s;
+Select s pattern a2(v, _"b"_) such that Uses(2,"abc") 
+none
+5000
+95 - Test Multi clause 11 pattern- Uses, pattern false -> such that true, return none
+assign a1,a2; variable v; stmt s;
+Select s pattern a2(v, "b") such that Uses(2,"abc") 
 none
 5000
