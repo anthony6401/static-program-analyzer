@@ -103,24 +103,11 @@ RawResult FollowsClause::evaluateSynonymSynonym() {
 }
 
 RawResult FollowsClause::evaluateSynonymWildcard() {
-    std::cout << "------ IN FOLLOWS: SYNONYM WILDCARD--------" << std::endl;
     DesignEntity leftType = synonymToDesignEntityMap[left.getValue()];
     DesignEntity rightType = DesignEntity::STMT;
     std::string leftValue = left.getValue();
     std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(getRelationshipType(), leftType, rightType);
-    std::cout << "Map key values:" << std::endl;
-    for (auto row : results) {
-        auto key = row.first;
-        std::cout << "key: " << key << std::endl;
-        auto values = row.second;
-        for (auto v : values) {
-            std::cout << "values: " << v << std::endl;
-        }
-    }
     std::unordered_set<std::string> processedMap = FollowsClause::processMapToSetFromFirst(results);
-    for (auto s : processedMap) {
-        std::cout << s << std::endl;
-    }
     return {leftValue, processedMap};
 }
 
@@ -139,7 +126,6 @@ RawResult FollowsClause::evaluateIntegerSynonym() {
 }
 
 RawResult FollowsClause::evaluateIntegerWildcard() {
-    std::cout << "------ IN FOLLOWS: INTEGER WILDCARD --------" << std::endl;
     // Returns boolean
     DesignEntity rightType = DesignEntity::STMT;
     std::unordered_set<std::string> results = qpsClient.getRelationshipByFirst(getRelationshipType(), left, rightType);
@@ -157,24 +143,11 @@ RawResult FollowsClause::evaluateIntegerInteger() {
 }
 
 RawResult FollowsClause::evaluateWildcardSynonym() {
-    std::cout << "------ IN FOLLOWS: WILDCARD SYNONYM--------" << std::endl;
     DesignEntity leftType = DesignEntity::STMT;
     DesignEntity rightType = synonymToDesignEntityMap[right.getValue()];
     std::string rightValue = right.getValue();
     std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(getRelationshipType(), leftType, rightType);
-    std::cout << "Map key values:" << std::endl;
-    for (auto row : results) {
-        auto key = row.first;
-        std::cout << "key: " << key << std::endl;
-        auto values = row.second;
-        for (auto v : values) {
-            std::cout << "values: " << v << std::endl;
-        }
-    }
     std::unordered_set<std::string> processedMap = FollowsClause::processMapToSetFromSecond(results);
-    for (auto s : processedMap) {
-        std::cout << s << std::endl;
-    }
     return {rightValue, processedMap};
 }
 
