@@ -278,7 +278,7 @@ if ifs;
 Select ifs such that Uses(ifs, "a")
 2, 14
 5000
-57 - Test Uses 11
+57 - Test Uses 12
 read r; variable v;
 Select r such that Uses(r, v)
 none
