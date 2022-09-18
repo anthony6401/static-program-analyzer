@@ -483,3 +483,8 @@ procedure p;
 Select p
 if
 5000
+97 - Test Modifies 11 - Check for wildcard
+while w;
+Select w such that Modifies(w, _)
+5, 12
+5000
