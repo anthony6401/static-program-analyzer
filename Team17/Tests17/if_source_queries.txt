@@ -223,3 +223,38 @@ while w;
 Select w such that Parent*(_, 2)
 none
 5000
+46 - Test Uses 1 - returns true
+constant c;
+Select c such that Uses(1, "a")
+12, 123, 999, 50, 2, 5000, 1
+5000
+47 - Test Uses 2
+variable v;
+Select v such that Uses(2, v)
+a, d, qwerty, N0t, b, c, fail, b00t, pass, program, call, while, procedure, print
+5000
+48 - Test Uses 3
+print pn;
+Select pn such that Uses(7, _)
+1, 10
+5000
+49 - Test Uses 4
+stmt s;
+Select s such that Uses(s, "a")
+1, 2, 3, 5, 12, 14, 19
+5000
+50 - Test Uses 5
+assign a; variable v;
+Select a such that Uses(a, v)
+3, 8, 9, 11, 15, 16, 17, 18, 19
+5000
+51 - Test Uses 6
+if ifs; variable v;
+Select ifs such that Uses(ifs, _)
+2, 7, 14
+5000
+52 - Test Uses 2 - returns false
+while w;
+Select w such that Uses(1, "b")
+none
+5000
