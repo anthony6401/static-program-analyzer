@@ -25,7 +25,9 @@ void SimpleTokenizer::tokenizeCode(std::string code) {
     
     std::stack<StmtStack*> stmtStack;
     StmtStack* currentStack = new ProgramStack(SimpleToken(SpTokenType::TPROGRAM, "", 0, NULL));
-
+    if (codeLines.size() < 3) {//temporary solution
+        throw std::invalid_argument("Received invalid SIMPLE code. Empty procedure");
+    }
     for (std::string line : codeLines) {
         line = std::regex_replace(line, tokenDelimiters, " $& ");
         std::vector<std::string> lineTokens = SpUtils::split(line, whiteSpace);
