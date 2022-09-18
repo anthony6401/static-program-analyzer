@@ -3,23 +3,6 @@
 
 ClauseDivider::ClauseDivider() : noSynonymsPresent({}), commonSynonymsGroups({}), selectSynonymPresentGroups({}), selectSynonymNotPresentGroups({}) {}
 
-void ClauseDivider::addClauseToDivider(std::shared_ptr<Clause> clause) {
-    if (clause -> getNumberOfSynonyms() == 0) {
-        noSynonymsPresent.addClauseToGroup(clause);
-    } else { // 1 or 2 synonyms
-        for (auto &gc : commonSynonymsGroups) {
-            if (gc.hasCommonSynonymWithClause(clause)) {
-                gc.addClauseToGroup(clause);
-                return;
-            }
-        }
-
-        // Create new group if it has no common synonym with existing groups
-        GroupedClause clauseGroup;
-        clauseGroup.addClauseToGroup(clause);
-        commonSynonymsGroups.emplace_back(clauseGroup);
-    }
-}
 GroupedClause ClauseDivider::getNoSynonymsPresent() {
     return noSynonymsPresent;
 }
@@ -40,5 +23,23 @@ void ClauseDivider::divideCommonSynonymGroupsBySelect(std::shared_ptr<Clause> se
         } else {
             selectSynonymNotPresentGroups.emplace_back(gc);
         }
+    }
+}
+
+void ClauseDivider::addClauseToDivider(std::shared_ptr<Clause> clause) {
+    if (clause -> getNumberOfSynonyms() == 0) {
+        noSynonymsPresent.addClauseToGroup(clause);
+    } else { // 1 or 2 synonyms
+        for (auto &gc : commonSynonymsGroups) {
+            if (gc.hasCommonSynonymWithClause(clause)) {
+                gc.addClauseToGroup(clause);
+                return;
+            }
+        }
+
+        // Create new group if it has no common synonym with existing groups
+        GroupedClause clauseGroup;
+        clauseGroup.addClauseToGroup(clause);
+        commonSynonymsGroups.emplace_back(clauseGroup);
     }
 }
