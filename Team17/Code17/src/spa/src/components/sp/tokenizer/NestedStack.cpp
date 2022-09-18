@@ -21,7 +21,7 @@ void NestedStack::put(SimpleToken token) {
 
 SimpleToken NestedStack::dump() {
     if (stmtList.size() == 0) {
-        throw std::invalid_argument("Received empty stmtlist");
+        throw std::invalid_argument("Received empty stmtlist" + std::to_string(parent.statementNumber));
     }
     return parent;
 }
