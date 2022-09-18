@@ -25,7 +25,6 @@ void SimpleTokenizer::tokenizeCode(std::string code) {
     
     std::stack<StmtStack*> stmtStack;
     StmtStack* currentStack = new ProgramStack(SimpleToken(SpTokenType::TPROGRAM, "", 0, NULL));
-
     for (std::string line : codeLines) {
         line = std::regex_replace(line, tokenDelimiters, " $& ");
         std::vector<std::string> lineTokens = SpUtils::split(line, whiteSpace);
