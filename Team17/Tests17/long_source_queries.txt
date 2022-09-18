@@ -73,3 +73,103 @@ while w;
 Select w such that Follows*(w, _)
 9, 20, 30, 63
 5000
+16 - Test Follows* 3 - returns empty
+print pn;
+Select pn such that Follows*(pn, 10)
+none
+5000
+17 - Test Follows* 4 - returns true
+print pn;
+Select pn such that Follows*(17, pn)
+18, 26
+5000
+18 - Test Follows* 5 - returns false
+stmt s;
+Select s such that Follows*(55, _)
+none
+5000
+19 - Test Follows* 6 - returns true
+constant c;
+Select c such that Follows*(2, 19)
+1, 2, 3
+5000
+20 - Test Follows* 7
+read r;
+Select r such that Follows*(1, r)
+2, 14, 37, 38, 39
+5000
+21 - Test Follows* 8 - returns true
+if ifs;
+Select ifs such that Follows*(_, ifs)
+4, 16, 45, 51
+5000
+22 - Test Follows* 9 - returns false
+constant c;
+Select c such that Follows*(4, 1)
+none
+5000
+23 - Test Follows* 10
+assign a; print pn;Select a such that 
+Follows*(a, pn)
+31
+5000
+24 - Test Parent 1 - first argument not container statement
+read r; stmt s;
+Select s such that Parent(r, s)
+none
+5000
+25 - Test Parent 2
+assign a; while w;
+Select a such that Parent(w, a)
+12, 21, 31, 58, 69
+5000
+26 - Test Parent 3
+if if, ifs;
+Select if such that Parent(ifs, if)
+46, 48, 51
+5000
+27 - Test Parent 4 - return empty
+stmt s;
+Select s such that Parent(s, 75)
+none
+5000
+28 - Test Parent 5
+while w; while w1;
+Select w1 such that Parent(w1, w)
+55, 56, 63, 64
+5000
+29 - Test Parent 6 - return empty
+stmt s;
+Select s such that Parent(26, s)
+none
+5000
+30 - Test Parent 7
+stmt s;
+Select s such that Parent(45, s)
+46, 55
+5000
+31 - Test Parent 8 - return false
+assign a;
+Select a such that Parent(12, _)
+none
+5000
+32 - Test Parent 9 - return false
+assign a;
+Select a such that Parent(49, 53)
+none
+5000
+33 - Test Parent 10
+print pn;
+Select pn such that Parent(_, pn)
+4, 9, 16, 20, 30, 66
+5000
+34 - Test Parent 11 - return true
+if ifs;
+Select ifs such that Parent(_, _)
+4, 16, 45, 46, 48, 51, 66
+5000
+35 - Test Parent 12 - return false
+if ifs;
+Select ifs such that Parent(_, 59)
+none
+5000
