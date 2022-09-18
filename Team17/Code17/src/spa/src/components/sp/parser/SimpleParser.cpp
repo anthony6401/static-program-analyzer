@@ -48,12 +48,6 @@ SimpleToken SimpleParser::parseLine(std::vector<std::string>& tokens, std::strin
             SimpleParser::statementNumber, &SimpleParser::parsePrint);
         SimpleParser::statementNumber++;
         return token;
-    } else if (first == "call") {
-        tokens.erase(tokens.begin());
-        SimpleToken token = SimpleToken(SpTokenType::TCALL, code,
-            SimpleParser::statementNumber, &SimpleParser::parseCall);
-        SimpleParser::statementNumber++;
-        return token;
     } else if (first == "while") {
         tokens.erase(tokens.begin());
         SimpleToken token = SimpleToken(SpTokenType::TWHILE, code,
@@ -139,7 +133,7 @@ void SimpleParser::parseCall(SimpleToken& callStmt, std::vector<std::string>& to
 
 void SimpleParser::parseWhile(SimpleToken& whileStmt, std::vector<std::string>& tokens,
     Extractor* extractor) {
-    if (tokens.size() < 6 || tokens.back() != "{") {
+    if (tokens.size() < 6 || tokens.back() != "{" || tokens.front() == "!") {
         throw std::invalid_argument("Received invalid While:Line " + std::to_string(whileStmt.statementNumber));
     }
     tokens.pop_back();
@@ -152,7 +146,7 @@ void SimpleParser::parseWhile(SimpleToken& whileStmt, std::vector<std::string>& 
 
 void SimpleParser::parseIf(SimpleToken& ifStmt, std::vector<std::string>& tokens,
     Extractor* extractor) {
-    if (tokens.size() < 7 || tokens.back() != "{") {
+    if (tokens.size() < 7 || tokens.back() != "{" || tokens.front() == "!") {
         throw std::invalid_argument("Received invalid If:Line " + std::to_string(ifStmt.statementNumber));
     }
     tokens.pop_back();
@@ -208,6 +202,14 @@ std::vector<SimpleToken> SimpleParser::parseCondition(std::vector<std::string> t
         firstCondition.insert(firstCondition.end(), secondCondition.begin(), secondCondition.end());
         return firstCondition;
     } else {
+        if (tokens.front() == "!") {
+            tokens.erase(tokens.begin());
+            if (tokens.front() != "(" || tokens.back() != ")") {
+                throw std::invalid_argument("Received invalid condition. Missing brackets");
+            }
+            tokens.erase(tokens.begin());
+            tokens.pop_back();
+        }
         return SimpleParser::parseRelExpr(tokens);
     }
 

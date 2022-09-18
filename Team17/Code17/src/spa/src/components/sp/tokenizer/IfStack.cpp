@@ -15,6 +15,9 @@ void IfStack::put(SimpleToken token) {
         stmtToken.setChildren(stmtList);
         children.push_back(stmtToken);
         parent.setChildren(children);
+        if (stmtList.size() == 0) {
+            throw std::invalid_argument("Received empty stmtlist" + std::to_string(parent.statementNumber));
+        }
     } else if (token.type == SpTokenType::TELSE) {
         if (!(expectElse)) {
             throw std::invalid_argument("Received unexpected else line " + std::to_string(token.statementNumber));
