@@ -181,6 +181,14 @@ std::vector<SimpleToken> SimpleParser::parseCondition(std::vector<std::string> t
     }
     tokens.erase(tokens.begin());
     tokens.pop_back();
+    while (tokens.front() == "!") {
+        tokens.erase(tokens.begin());
+        if (tokens.front() != "(" || tokens.back() != ")") {
+            throw std::invalid_argument("Received invalid condition. Missing brackets");
+        }
+        tokens.erase(tokens.begin());
+        tokens.pop_back();
+    }
     std::string condition = SpUtils::join(tokens);
     if (condition.find("&&") != std::string::npos || condition.find("||") != std::string::npos) {
         int indice = 0;
@@ -202,14 +210,6 @@ std::vector<SimpleToken> SimpleParser::parseCondition(std::vector<std::string> t
         firstCondition.insert(firstCondition.end(), secondCondition.begin(), secondCondition.end());
         return firstCondition;
     } else {
-        if (tokens.front() == "!") {
-            tokens.erase(tokens.begin());
-            if (tokens.front() != "(" || tokens.back() != ")") {
-                throw std::invalid_argument("Received invalid condition. Missing brackets");
-            }
-            tokens.erase(tokens.begin());
-            tokens.pop_back();
-        }
         return SimpleParser::parseRelExpr(tokens);
     }
 
