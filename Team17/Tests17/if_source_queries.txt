@@ -278,82 +278,127 @@ if ifs;
 Select ifs such that Uses(ifs, "a")
 2, 14
 5000
-80 - Test Pattern 1
+57 - Test Modifies 1
+variable v;
+Select v such that Modifies(2, "N0t")
+a, d, qwerty, N0t, b, c, abc, CS3219, fail, b00t, b00T, pass, procedure, program, call, if, while, print
+5000
+58 - Test Modifies 2
+variable v;
+Select v such that Modifies(2, v)
+N0t, abc, a, b00T, CS3219, procedure, if
+5000
+59 - Test Modifies 3 -
+assign a;
+Select a such that Modifies(a, "procedure")
+17
+5000
+60 - Test Modifies 4 - Check whether parent statement is considered
+stmt s;
+Select s such that Modifies(s, "abc")
+2, 4, 5, 6, 12, 13
+5000
+61 - Test Modifies 5 - Check for modified variable in nested container statement
+while w; variable v;
+Select v such that Modifies(w, v)
+abc, a, CS3219, procedure
+5000
+62 - Test Modifies 6 - Same ans as test Modifies 5, but check qps for keyword differentiation
+while w; variable Select;
+Select Select such that Modifies(w, Select)
+abc, a, CS3219, procedure
+5000
+63 - Test Modifies 7 - Same ans as test Modifies 6,but unknown variable used before declared.
+while w; variable Select,x;
+Select Select such that Modifies(w, v)
+SemanticError
+5000
+64 - Test Modifies 8 - check for assign stmt that modifies a variable
+assign a; variable v;
+Select a such that Modifies(a, v)
+3, 8, 9, 11, 15, 16, 17,18, 19	
+5000
+65 - Test Modifies 9 - Looking for print stmt in Modifies Relationship
+print pn; variable v;
+Select pn such that Modifies(pn, v)
+none
+5000
+66 - Test Pattern 1
 assign a;
 Select a pattern a("a", _)
 9, 16
 5000
-81 - Test Pattern 2
+67 - Test Pattern 2
 assign a;
 Select a pattern a("a", _"CS3219"_)
 9
 5000
-82 - Test Pattern 3
+68 - Test Pattern 3
 assign a;
 Select a pattern a("a", _"c"_)
 9, 16
 5000
-83 - Test Pattern 4
+69 - Test Pattern 4
 assign a;
 Select a pattern a("a", _"50"_)
 9
 5000
-84 - Test Pattern 5
+70 - Test Pattern 5
 assign a; variable v;
 Select a pattern a(v, _"c"_)
 3, 9, 16, 19
 5000
-85 - Test Pattern 6
+71 - Test Pattern 6
 assign a; variable v;
 Select v pattern a(v, _"c"_)
 N0t, a, while
 5000
-86 - Test Pattern 7
+72 - Test Pattern 7
 assign a; variable v;
 Select v pattern a(v, _)
 N0t, a, b00T, CS3219, procedure, if, while
 5000
-87 - Test Pattern 8
+73 - Test Pattern 8
 assign a; variable v;
 Select a pattern a(v, _"5000"_)
 18
 5000
-88 - Test Pattern 9
+74 - Test Pattern 9
 assign a;
 Select a pattern a(_, _"fail"_)
 8, 15
 5000
-89 - Test Pattern 10
+75 - Test Pattern 10
 assign a; variable v;
 Select v pattern a(_, _"fail"_)
 a, d, qwerty, N0t, b, c, abc, CS3219, fail, b00t, pass, b00T, procedure, program, call, while, print, if
 5000
-90 - Test Pattern 11
+76 - Test Pattern 11
 assign a;
 Select a pattern a(_, _)
 3, 8, 9, 11, 15, 16, 17, 18, 19
 5000
-91 - Test Pattern 12
+77 - Test Pattern 12
 assign a;
 Select a pattern a(_, _"1"_)
 11
 5000
-92 - Test Pattern 13 - empty set
+78 - Test Pattern 13 - empty set
 assign a; variable v;
 Select a pattern a(v, _"3"_)
 none
 5000
-93 - Test Pattern 14 - assign in second argument
+79 - Test Pattern 14 - assign in second argument
 assign a; variable v;
 Select v pattern a(a, _"3"_)
 SemanticError
 5000
-94 - Test Pattern 15 - non empty set
+80 - Test Pattern 15 - non empty set
 print pn; assign a; variable v;
 Select pn pattern a(v, _"b"_)
 1, 10
 5000
-95 - Test Pattern 16 - 2 assigns
+81 - Test Pattern 16 - 2 assigns
 assign a1, a2; variable v;
 Select a1 pattern a2(v, _"b"_)
 3, 8, 9, 11, 15, 16, 17, 18, 19
