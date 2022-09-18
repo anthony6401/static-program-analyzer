@@ -130,7 +130,6 @@ RawResult FollowsClause::evaluateIntegerWildcard() {
     DesignEntity rightType = DesignEntity::STMT;
     std::unordered_set<std::string> results = qpsClient.getRelationshipByFirst(getRelationshipType(), left, rightType);
     bool booleanResult = !results.empty();
-    std::cout << booleanResult << std::endl;
     // {1,2,3} -> boolean result = true
     return {booleanResult};
 }
