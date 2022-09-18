@@ -73,3 +73,5 @@ while w;
 Select w such that Follows*(w, _)
 9, 20, 30, 63
 5000
+
+
