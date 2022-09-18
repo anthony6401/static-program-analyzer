@@ -48,12 +48,6 @@ SimpleToken SimpleParser::parseLine(std::vector<std::string>& tokens, std::strin
             SimpleParser::statementNumber, &SimpleParser::parsePrint);
         SimpleParser::statementNumber++;
         return token;
-    } else if (first == "call") {
-        tokens.erase(tokens.begin());
-        SimpleToken token = SimpleToken(SpTokenType::TCALL, code,
-            SimpleParser::statementNumber, &SimpleParser::parseCall);
-        SimpleParser::statementNumber++;
-        return token;
     } else if (first == "while") {
         tokens.erase(tokens.begin());
         SimpleToken token = SimpleToken(SpTokenType::TWHILE, code,
