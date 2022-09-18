@@ -113,3 +113,67 @@ assign a; stmt s;
 Select a such that Follows*(a, s)
 3
 5000
+
+
+
+24 - Test Parent 1 - first argument not container statement
+assign a; stmt s;
+Select s such that Parent(a, s)
+none
+5000
+25 - Test Parent 2
+assign a; while w;
+Select a such that Parent(w, a)
+17
+5000
+26 - Test Parent 3
+if ifs;
+Select ifs such that Parent(ifs, _)
+2, 14, 7
+5000
+27 - Test Parent 4 - return empty
+stmt s;
+Select s such that Parent(s, 1)
+none
+5000
+28 - Test Parent 5
+stmt s;
+Select s such that Parent(s, 6)
+5
+5000
+29 - Test Parent 6 - return empty
+stmt s;
+Select s such that Parent(11, s)
+none
+5000
+30 - Test Parent 7
+stmt s;
+Select s such that Parent(7, s)
+8, 9
+5000
+31 - Test Parent 8 - return true
+assign a;
+Select s such that Parent(12, _)
+3, 8, 9, 11, 15, 16, 18, 19
+5000
+32 - Test Parent 9 - return false
+assign a;
+Select s such that Parent(18, 19)
+none
+5000
+33 - Test Parent 10
+print pn;
+Select pn such that Parent(_, pn)
+7
+5000
+34 - Test Parent 11 - return true
+if ifs;
+Select ifs such that Parent(_, _)
+2, 7, 14
+5000
+35 - Test Parent 12 - return true
+if ifs;
+Select ifs such that Parent(_, 19)
+2, 7, 14
+5000
+
