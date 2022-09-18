@@ -5,7 +5,7 @@
 
 static std::string assignLineNumOne = "1";
 static std::string assignFirstValueOne = "a";
-static std::string assignSecondValueOne = "a/x+y-1";
+static std::string assignSecondValueOne = "a/x%y-1";
 static std::string assignLineNumTwo = "2";
 static std::string assignFirstValueTwo = "b";
 static std::string assignSecondValueTwo = "a*b-abc+100";
@@ -26,9 +26,9 @@ static std::string assignFirstValueSeven = "c";
 static std::string assignSecondValueSeven = "a";
 static std::string assignLineNumEight = "8";
 static std::string assignFirstValueEight = "a";
-static std::string assignSecondValueEight = "a/x+y-1";
+static std::string assignSecondValueEight = "a/x%y-1";
 
-static std::string assignSecondValueForTokenOne = "a/x+y-1";
+static std::string assignSecondValueForTokenOne = "a/x%y-1";
 static std::string assignSecondValueForTokenTwo = "a";
 static std::string assignSecondValueForTokenThree = "x";
 

@@ -12,7 +12,7 @@ struct pair_hash {
 class PatternUtils {
 public:
     static bool isSubExpression(const std::string& sub_expression, const std::string& full_expression) {
-        size_t idx = full_expression.find_first_of(" *+/-()");
+        size_t idx = full_expression.find_first_of(" *+/-%()");
         size_t prev = 0;
 
         if (idx == std::string::npos) {
@@ -28,13 +28,13 @@ public:
                 str = full_expression.substr(prev + 1, idx - prev - 1);
             }
 
-            if (str.size() > 0 && str.find_first_of(" *+/-()") == std::string::npos && str == sub_expression) {
+            if (str.size() > 0 && str.find_first_of(" *+/-%()") == std::string::npos && str == sub_expression) {
                 return true;
                 
             }
 
             prev = idx;
-            idx = full_expression.find_first_of(" *+/-()", idx + 1);
+            idx = full_expression.find_first_of(" *+/-%()", idx + 1);
         }
         std::string lastString = full_expression.substr(prev + 1, full_expression.size() - prev);
         if (lastString.size() > 0 && lastString.find_first_of(" *+/-()") == std::string::npos && lastString == sub_expression) {
