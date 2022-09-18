@@ -1,0 +1,475 @@
+1 - Select print
+print pn;
+Select pn
+1, 6, 8, 10, 13, 18, 22, 26, 29, 32, 35, 40, 41, 42, 70, 74, 75
+5000
+2 - Select assign
+assign a;
+Select a
+3, 12, 15, 19, 21, 24, 27, 31, 36, 43, 44, 47, 49, 50, 52, 53, 54, 58, 59, 60, 61, 62, 69, 72
+5000
+3 - Select while
+while w;
+Select w
+9, 20, 30, 55, 56, 57, 63, 64, 65, 68, 71
+5000
+4 - Select if
+if ifs;
+procedure p; Select ifs
+4, 16, 45, 46, 48, 51, 66
+5000
+5 - Test Follows 1
+variable v;
+Select v such that Follows(1, 2)
+a, b, c, d, e, f, g, done
+5000
+6 - Test Follows 2
+stmt s;
+Select s such that Follows(s, 2)
+1
+5000
+7 - Test Follows 3
+print pn;
+Select pn such that Follows(_, 16)
+1, 6, 8, 10, 13, 18, 22, 26, 29, 32, 35, 40, 41, 42, 70, 74, 75
+5000
+8 - Test Follows 4
+stmt stmt;
+Select stmt such that Follows(12, stmt)
+none
+5000
+9 - Test Follows 5
+stmt s; assign a;
+Select s such that Follows(s, a)
+2, 11, 14, 18, 20, 35, 42, 43, 53, 45, 59, 60, 61
+5000
+10 - Test Follows 6
+while w;
+Select w such that Follows(_, w)
+9, 20, 30, 63, 68
+5000
+11 - Test Follows 7
+read r;
+Select r such that Follows(14, _)
+2, 5, 7, 11, 14, 17, 23, 25,, 28, 33, 34, 37, 38, 39, 67, 73
+5000
+12 - Test Follows 8
+if if;
+Select if such that Follows(if, _)
+4, 16, 45
+5000
+13 - Test Follows 9
+constant c;
+Select c such that Follows(_, _)
+1, 2, 3, 10, 123456789, 40, 20, 15, 5, 1000, 30, 500, 0
+5000
+14 - Test Follows* 1
+assign a; stmt s
+; procedure p;Select p such that Follows*(a, s)
+longProcedure
+5000
+15 - Test Follows* 2
+while w;
+Select w such that Follows*(w, _)
+9, 20, 30, 63, 68, 71
+5000
+16 - Test Follows* 3 - returns empty
+print pn;
+Select pn such that Follows*(pn, 10)
+none
+5000
+17 - Test Follows* 4 - returns true
+print pn;
+Select pn such that Follows*(17, pn)
+18, 26
+5000
+18 - Test Follows* 5 - returns false
+stmt s;
+Select s such that Follows*(55, _)
+none
+5000
+19 - Test Follows* 6 - returns true
+constant c;
+Select c such that Follows*(2, 9)
+1, 2, 3, 10, 123456789, 40, 20, 15, 5, 1000, 30, 500, 0
+5000
+20 - Test Follows* 7
+read r;
+Select r such that Follows*(1, r)
+2, 14, 37, 38, 39
+5000
+21 - Test Follows* 8 - returns true
+if ifs;
+Select ifs such that Follows*(_, ifs)
+4, 16, 45, 51
+5000
+22 - Test Follows* 9 - returns false
+constant c;
+Select c such that Follows*(4, 1)
+none
+5000
+23 - Test Follows* 10
+assign a; print pn;Select a such that
+Follows*(a, pn)
+3, 15, 19, 21, 24, 27, 31, 43, 44, 59, 60, 61, 62
+5000
+24 - Test Parent 1 - first argument not container statement
+read r; stmt s;
+Select s such that Parent(r, s)
+none
+5000
+25 - Test Parent 2
+assign a; while w;
+Select a such that Parent(w, a)
+12, 21, 31, 58, 69, 72
+5000
+26 - Test Parent 3
+if if1, ifs;
+Select if1 such that Parent(ifs, if1)
+46, 48, 51
+5000
+27 - Test Parent 4 - return empty
+stmt s;
+Select s such that Parent(s, 75)
+none
+5000
+28 - Test Parent 5
+while w; while w1;
+Select w1 such that Parent(w1, w)
+55, 56, 63, 64
+5000
+29 - Test Parent 6 - return empty
+stmt s;
+Select s such that Parent(26, s)
+none
+5000
+30 - Test Parent 7
+stmt s;
+Select s such that Parent(45, s)
+46, 55
+5000
+31 - Test Parent 8 - return false
+assign a;
+Select a such that Parent(12, _)
+none
+5000
+32 - Test Parent 9 - return false
+assign a;
+Select a such that Parent(49, 53)
+none
+5000
+33 - Test Parent 10
+print pn;
+Select pn such that Parent(_, pn)
+6, 8, 10, 18, 22, 26, 29, 32, 35, 70, 74
+5000
+34 - Test Parent 11 - return true
+if ifs;
+Select ifs such that Parent(_, _)
+4, 16, 45, 46, 48, 51, 66
+5000
+35 - Test Parent 12 - return false
+if ifs;
+Select ifs such that Parent(_, 59)
+none
+5000
+36 - Test Parent* 1
+stmt s; assign a;
+Select s such that Parent*(s, a)
+9, 16, 20, 30, 45, 46, 48, 51, 55, 56, 57, 63, 64, 65, 66, 68, 71
+5000
+37 - Test Parent* 2 (unrelated to select)
+stmt s; variable v;
+Select v such that Parent*(s, _)
+a, b, c, d, e, f, g, done
+5000
+38 - Test Parent* 3 (related to select)
+stmt s; variable v;
+Select s such that Parent*(s, _)
+4, 9, 16, 20, 30, 45, 46, 48, 51, 55, 56, 57, 63, 64, 65, 66, 68, 71
+5000
+39 - Test Parent* 4
+stmt s;
+Select s such that Parent*(s, 69)
+63, 64, 65, 66, 68
+5000
+40 - Test Parent* 5
+stmt s;
+Select s such that Parent*(45, s)
+46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58
+5000
+41 - Test Parent* 6
+assign a;
+Select a such that Parent*(45, _)
+3, 12, 15, 19, 21, 24, 27, 31, 36, 43, 44, 47, 49, 50, 52, 53, 54, 58, 59, 60, 61, 62, 69, 72
+5000
+42 - Test Parent* 7 - returns true
+assign a;
+Select a such that Parent*(45, 49)
+3, 12, 15, 19, 21, 24, 27, 31, 36, 43, 44, 47, 49, 50, 52, 53, 54, 58, 59, 60, 61, 62, 69, 72
+5000
+43 - Test Parent* 8 - returns true
+if ifs;
+Select ifs such that Parent*(_, ifs)
+46, 48, 51, 66
+5000
+44 - Test Parent* 9 - returns true
+while w;
+Select w such that Parent*(_, _)
+9, 20, 30, 55, 56, 57, 63, 64, 65, 68, 71
+5000
+45 - Test Parent* 10 - returns false
+while w;
+Select w such that Parent*(_, 2)
+none
+5000
+46 - Test Uses 1 - returns true
+constant c;
+Select c such that Uses(1, "a")
+1, 2, 3, 10, 0, 123456789, 40, 20, 15, 5, 1000, 30, 500
+5000
+47 - Test Uses 2
+variable v;
+Select v such that Uses(3, "b")
+a, b, c, d, e, f, g, done
+5000
+48 - Test Uses 3
+print pn;
+Select pn such that Uses(4, _)
+1, 6, 8, 10, 13, 18, 22, 26, 29, 32, 35, 40, 41, 42, 70, 74, 75
+5000
+49 - Test Uses 4
+stmt s;
+Select s such that Uses(s, "a")
+1, 4, 6, 8, 45, 55, 56, 57, 63, 64, 65, 66, 68, 70, 71, 74
+5000
+50 - Test Uses 5
+assign a; variable v;
+Select a such that Uses(a, v)
+3, 12, 15, 19, 21, 24, 27, 31, 36, 43, 44, 47, 49, 50, 52
+5000
+51 - Test Uses 6
+if ifs; variable v;
+Select ifs such that Uses(ifs, _)
+4, 16, 45, 46, 48, 51, 66
+5000
+52 - Test Uses 7 - returns false
+while w;
+Select w such that Uses(1, "b")
+none
+5000
+53 - Test Uses 8 - returns false
+assign a;
+Select a such that Uses(3, "done")
+none
+5000
+54 - Test Uses 9
+assign a;
+Select a such that Uses(a, "a")
+none
+5000
+55 - Test Uses 10
+assign a;
+Select a such that Uses(a, "b")
+3, 43, 44, 47, 49, 50, 52
+5000
+56 - Test Uses 11
+while w;
+Select w such that Uses(w, "c")
+9, 55, 56, 63, 64
+5000
+57 - Test Uses 12
+if ifs;
+Select ifs such that Uses(ifs, "c")
+45, 46, 48, 51
+5000
+58 - Test Uses 13
+read r; variable v;
+Select r such that Uses(r, v)
+none
+5000
+59 - Test Modifies 1
+variable v;
+Select v such that Modifies(2, "b")
+a, b, c, d, e, f, g, done
+5000
+60 - Test Modifies 2
+variable v;
+Select v such that Modifies(16, v)
+e, f
+5000
+61 - Test Modifies 3
+assign a;
+Select a such that Modifies(a, "a")
+3, 43, 44, 47, 49, 50, 52, 53
+5000
+62 - Test Modifies 4
+stmt s;
+Select s such that Modifies(s, "d")
+9, 11, 14, 59
+5000
+63 - Test Modifies 5
+while w; variable v;
+Select v such that Modifies(w, v)
+d, c, e, f, a
+5000
+64 - Test Modifies 6
+while w; variable Select;
+Select Select such that Modifies(w, Select)
+d, c, e, f, a
+5000
+65 - Test Modifies 7
+while w; variable Select,x;
+Select Select such that Modifies(w, v)
+SemanticError
+5000
+66 - Test Modifies 8
+assign a; variable v;
+Select a such that Modifies(a, v)
+3, 12, 15, 19, 21, 24, 27, 31, 36, 43, 44, 47, 49, 50, 52, 53, 54, 58, 59, 60, 61, 62, 69, 72
+5000
+67 - Test Modifies 9
+print pn; variable v;
+Select pn such that Modifies(pn, v)
+none
+5000
+68 - Test Modifies 10
+if if; variable v;
+Select v such that Modifies(if, v)
+a, e, f, b, c
+5000
+69 - Test Modifies 11 - wildcard
+if if;
+Select if such that Modifies(if, _)
+4, 16, 45, 46, 48, 51, 66
+5000
+70 - Test Pattern 1
+assign a; variable v;
+Select a pattern a(v, _"f"_)
+19, 21, 24, 27, 31, 36
+5000
+71 - Test Pattern 2
+assign a; variable v;
+Select v pattern a(v, _)
+a, c, e, b, d, f, g
+5000
+72 - Test Pattern 3
+assign a; variable v;
+Select v pattern a(v, "b")
+none
+5000
+73 - Test Pattern 4
+assign a; variable v;
+Select a pattern a(v, _"b"_)
+3, 43, 44, 47, 49, 50, 52
+5000
+74 - Test Pattern 5
+constant c; assign a;
+Select c pattern a(_, _)
+1, 2, 3, 123456789, 40, 20, 15, 5, 1000, 30, 500, 10, 0
+5000
+75 - Test Pattern 6
+assign a;
+Select a pattern a(_, "123456789")
+54
+5000
+76 - Test Pattern 7
+assign a;
+Select a pattern a(_, "f")
+none
+5000
+77 - Test Pattern 8
+assign a;
+Select a pattern a(_, _"2"_)
+12, 15
+5000
+78 - Test Pattern 9
+assign a;
+Select a pattern a("c", _)
+72, 69, 58, 15, 12
+5000
+79 - Test Pattern 10
+assign a;
+Select a pattern a("c", _"d"_)
+12, 15
+5000
+80 - Test Pattern 11
+assign a;
+Select a pattern a("c", "x")
+none
+5000
+81 - Test Pattern 12
+assign a;
+Select a pattern a("f", _"5"_)
+61
+5000
+82 - Test Multi clause 1 Uses-pattern
+assign a; variable v; stmt s;
+Select v such that Uses(s,v) pattern a(v, _"b"_)
+a
+5000
+83 - Test Multi clause 2 Modifies-pattern
+assign a; variable v; stmt s;
+Select v such that Modifies(s,v) pattern a(v, _"b"_)
+a
+5000
+84 - Test Multi clause 3 Modifies-pattern
+assign a; variable v1,v2; stmt s;
+Select v1 such that Modifies(s,v1) pattern a(v2, _"b"_)
+a, c, b, e, f, g, d
+5000
+85 - Test Multi clause 3 Follows- pattern
+assign a; variable v; stmt s;
+Select a such that Follows(s,a) pattern a(v, _"b"_)
+3, 43, 44
+5000
+86 - Test Multi clause 4 Parent-pattern
+assign a; variable v; stmt s;
+Select a such that Parent(s,a) pattern a(v, _"b"_)
+47, 49, 50, 52
+5000
+87 - Test Multi clause 5 Parent-pattern, multi assign synonym
+assign a1,a2; variable v; stmt s;
+Select a1 such that Parent(s,a1) pattern a2(v, _"f"_)
+12, 19, 21, 24, 27, 31, 36, 47, 49, 50, 52, 53, 54, 58, 69, 72
+5000
+88 - Test Multi clause 6 Parent*-pattern, multi assign synonym
+assign a1,a2; variable v; stmt s;
+Select s such that Parent*(s,a1) pattern a2(v, _"f"_)
+9, 16, 20, 30, 45, 46, 48, 51, 55, 56, 57, 63, 64, 65, 66, 68, 71
+5000
+89 - Test Multi clause 7 Follows*-pattern, multi assign synonym
+assign a1,a2; variable v; stmt s;
+Select s such that Follows*(s,a1) pattern a2(v, _"f"_)
+1, 2, 3, 4, 9, 10, 11, 13, 14, 15, 16, 17, 18, 19, 20, 27, 28, 29, 30, 34, 35, 37, 38, 39, 40, 41, 42, 43, 44, 45, 53, 59, 60, 61 
+5000
+90 - Test Multi clause 8 Follows*-pattern, fail-> no pattern match
+assign a1,a2; variable v; stmt s;
+Select s such that Follows*(s,a1) pattern a2("abc", _)
+none
+5000
+91 - Test Multi clause 9 pattern- Follows*, fail-> no pattern match
+assign a1,a2; variable v; stmt s;
+Select s pattern a2("abc", _) such that Follows*(s,a1)
+none
+5000
+92 - Test Multi clause 10 pattern- Parent*
+assign a1,a2; variable v; stmt s;
+Select s pattern a2(v, _"f"_) such that Parent*(s,a1) 
+9, 16, 20, 30, 45, 46, 48, 51, 55, 56, 57, 63, 64, 65, 66, 68, 71
+5000
+93 - Test Multi clause 11 pattern- Uses, pattern true -> such that false, return none
+assign a1,a2; variable v; stmt s;
+Select s pattern a2(v, _"b"_) such that Uses(2,"abc") 
+none
+5000
+94 - Test Multi clause 11 pattern- Uses, pattern false -> such that true, return none
+assign a1,a2; variable v; stmt s;
+Select s pattern a2(v, _"abc"_) such that Uses(2,"b") 
+none
+5000
+95 - Select procedure
+procedure p;
+Select p
+longProcedure
+5000

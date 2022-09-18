@@ -1,0 +1,490 @@
+1 - Select print
+print pn;
+Select pn
+1, 10
+5000
+2 - Select assign
+assign a;
+Select a
+3, 8, 9, 11, 15, 16, 17, 18, 19
+5000
+3 - Select while
+while w;
+Select w
+5, 12
+5000
+4 - Select if
+if ifs;
+Select ifs
+2, 7, 14
+5000
+5 - Test Follows 1
+variable v;
+Select v such that Follows(1, 2)
+a, d, qwerty, N0t, b, c, abc, CS3219, fail, b00t, pass, b00T, procedure, program, call, while, print, if
+5000
+6 - Test Follows 2
+stmt s;
+Select s such that Follows(s, 2)
+1
+5000
+7 - Test Follows 3
+print pn;
+Select pn such that Follows(_, 16)
+none
+5000
+8 - Test Follows 4
+stmt s;
+Select s such that Follows(12, s)
+18
+5000
+9 - Test Follows 5
+stmt s; assign a;
+Select s such that Follows(s, a)
+2, 5, 12, 14
+5000
+10 - Test Follows 6
+while w;
+Select w such that Follows(_, w)
+5
+5000
+11 - Test Follows 7
+read r;
+Select r such that Follows(14, _)
+4, 6, 13
+5000
+12 - Test Follows 8
+if ifs;
+Select ifs such that Follows(ifs, _)
+2, 14, 7
+5000
+13 - Test Follows 9
+constant c;
+Select c such that Follows(_, _)
+12, 123, 999, 1, 2, 50, 5000
+5000
+14 - Test Follows* 1
+assign a; stmt s;
+Select s such that Follows*(a, s)
+4, 5, 11
+5000
+15 - Test Follows* 2
+while w;
+Select w such that Follows*(w, _)
+5, 12
+5000
+16 - Test Follows* 3 - returns empty
+print pn;
+Select pn such that Follows*(pn, 10)
+none
+5000
+17 - Test Follows* 4 - returns true
+print pn;
+Select pn such that Follows*(6, pn)
+10
+5000
+18 - Test Follows* 5 - returns false
+stmt s;
+Select s such that Follows*(10, _)
+none
+5000
+19 - Test Follows* 6 - returns true
+constant c;
+Select c such that Follows*(2, 19)
+12, 123, 999, 50, 2, 5000, 1
+5000
+20 - Test Follows* 7
+read r;
+Select r such that Follows*(_, r)
+4
+5000
+21 - Test Follows* 8 - returns true
+if ifs;
+Select ifs such that Follows*(_, _)
+2, 7, 14
+5000
+22 - Test Follows* 9 - returns false
+constant c;
+Select c such that Follows*(_, 1)
+none
+5000
+23 - Test Follows* 10
+assign a; stmt s;
+Select a such that Follows*(a, s)
+3
+5000
+24 - Test Parent 1 - first argument not container statement
+assign a; stmt s;
+Select s such that Parent(a, s)
+none
+5000
+25 - Test Parent 2
+assign a; while w;
+Select a such that Parent(w, a)
+17
+5000
+26 - Test Parent 3
+if ifs;
+Select ifs such that Parent(ifs, _)
+2, 14, 7
+5000
+27 - Test Parent 4 - return empty
+stmt s;
+Select s such that Parent(s, 1)
+none
+5000
+28 - Test Parent 5
+stmt s;
+Select s such that Parent(s, 6)
+5
+5000
+29 - Test Parent 6 - return empty
+stmt s;
+Select s such that Parent(11, s)
+none
+5000
+30 - Test Parent 7
+stmt s;
+Select s such that Parent(7, s)
+8, 9
+5000
+31 - Test Parent 8 - return true
+assign a;
+Select a such that Parent(12, _)
+3, 8, 9, 11, 15, 16, 18, 19, 17
+5000
+32 - Test Parent 9 - return false
+assign a;
+Select a such that Parent(18, 19)
+none
+5000
+33 - Test Parent 10
+print pn;
+Select pn such that Parent(_, pn)
+10
+5000
+34 - Test Parent 11 - return true
+if ifs;
+Select ifs such that Parent(_, _)
+2, 7, 14
+5000
+35 - Test Parent 12 - return false
+if ifs;
+Select ifs such that Parent(_, 19)
+none
+5000
+36 - Test Parent* 1
+stmt s; assign a;
+Select s such that Parent*(s, a)
+2, 5, 7, 12, 14
+5000
+37 - Test Parent* 2 (unrelated to select)
+stmt s; variable v;
+Select v such that Parent*(s, _)
+a, d, qwerty, N0t, b, c, abc, CS3219, fail, b00t, pass, b00T, procedure, program, call, while, print, if
+5000
+38 - Test Parent* 3 (related to select)
+stmt s; variable v;
+Select s such that Parent*(s, _)
+2, 5, 7, 12, 14
+5000
+39 - Test Parent* 4
+stmt s;
+Select s such that Parent*(s, 9)
+2, 5, 7
+5000
+40 - Test Parent* 5
+stmt s;
+Select s such that Parent*(2, s)
+3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18
+5000
+41 - Test Parent* 6
+assign a;
+Select a such that Parent*(2, _)
+3, 9, 11, 15, 16, 17, 18, 19, 8
+5000
+42 - Test Parent* 7 - returns true
+assign a;
+Select a such that Parent*(2, 10)
+3, 9, 11, 15, 16, 17, 18, 19, 8
+5000
+43 - Test Parent* 8 - returns true
+if ifs;
+Select ifs such that Parent*(_, ifs)
+7, 14
+5000
+44 - Test Parent* 9 - returns true
+while w;
+Select w such that Parent*(_, _)
+5, 12
+5000
+45 - Test Parent* 10 - returns false
+while w;
+Select w such that Parent*(_, 2)
+none
+5000
+46 - Test Uses 1 - returns true
+constant c;
+Select c such that Uses(1, "a")
+12, 123, 999, 50, 2, 5000, 1
+5000
+47 - Test Uses 2
+variable v;
+Select v such that Uses(2, v)
+a, d, qwerty, N0t, b, c, fail, b00t, pass, program, call, while, procedure, print, CS3219
+5000
+48 - Test Uses 3
+print pn;
+Select pn such that Uses(7, _)
+1, 10
+5000
+49 - Test Uses 4
+stmt s;
+Select s such that Uses(s, "a")
+1, 2, 3, 5, 12, 14, 19
+5000
+50 - Test Uses 5
+assign a; variable v;
+Select a such that Uses(a, v)
+3, 8, 9, 11, 15, 16, 17, 18, 19
+5000
+51 - Test Uses 6
+if ifs; variable v;
+Select ifs such that Uses(ifs, _)
+2, 7, 14
+5000
+52 - Test Uses 7 - returns false
+while w;
+Select w such that Uses(1, "b")
+none
+5000
+53 - Test Uses 8 - returns false
+assign a;
+Select a such that Uses(18, "CS3219")
+none
+5000
+54 - Test Uses 9
+assign a;
+Select a such that Uses(a, "b")
+3, 9, 16, 19
+5000
+55 - Test Uses 10
+while w;
+Select w such that Uses(w, "CS3219")
+5
+5000
+56 - Test Uses 11
+if ifs;
+Select ifs such that Uses(ifs, "a")
+2, 14
+5000
+57 - Test Uses 12
+read r; variable v;
+Select r such that Uses(r, v)
+none
+5000
+58 - Test Modifies 1
+variable v;
+Select v such that Modifies(2, "N0t")
+a, d, qwerty, N0t, b, c, abc, CS3219, fail, b00t, b00T, pass, procedure, program, call, if, while, print
+5000
+59 - Test Modifies 2
+variable v;
+Select v such that Modifies(2, v)
+N0t, abc, a, b00T, CS3219, procedure, if
+5000
+60 - Test Modifies 3 -
+assign a;
+Select a such that Modifies(a, "procedure")
+17
+5000
+61 - Test Modifies 4 - Check whether parent statement is considered
+stmt s;
+Select s such that Modifies(s, "abc")
+2, 4, 5, 6, 12, 13
+5000
+62 - Test Modifies 5 - Check for modified variable in nested container statement
+while w; variable v;
+Select v such that Modifies(w, v)
+abc, a, CS3219, procedure
+5000
+63 - Test Modifies 6 - Same ans as test Modifies 5, but check qps for keyword differentiation
+while w; variable Select;
+Select Select such that Modifies(w, Select)
+abc, a, CS3219, procedure
+5000
+64 - Test Modifies 7 - Same ans as test Modifies 6,but unknown variable used before declared.
+while w; variable Select,x;
+Select Select such that Modifies(w, v)
+SemanticError
+5000
+65 - Test Modifies 8 - check for assign stmt that modifies a variable
+assign a; variable v;
+Select a such that Modifies(a, v)
+3, 8, 9, 11, 15, 16, 17,18, 19	
+5000
+66 - Test Modifies 9 - Looking for print stmt in Modifies Relationship
+print pn; variable v;
+Select pn such that Modifies(pn, v)
+none
+5000
+67 - Test Modifies 10 - check if qps can differentiate variable and synonym
+if if;
+Select if such that Modifies(if, "if")
+2
+5000
+68 - Test Pattern 1
+assign a;
+Select a pattern a("a", _)
+9, 16
+5000
+69 - Test Pattern 2
+assign a;
+Select a pattern a("a", _"CS3219"_)
+9
+5000
+70 - Test Pattern 3
+assign a;
+Select a pattern a("a", _"c"_)
+9, 16
+5000
+71 - Test Pattern 4
+assign a;
+Select a pattern a("a", _"50"_)
+9
+5000
+72 - Test Pattern 5
+assign a; variable v;
+Select a pattern a(v, _"c"_)
+3, 9, 16, 19
+5000
+73 - Test Pattern 6
+assign a; variable v;
+Select v pattern a(v, _"c"_)
+N0t, a, while
+5000
+74 - Test Pattern 7
+assign a; variable v;
+Select v pattern a(v, _)
+N0t, a, b00T, CS3219, procedure, if, while
+5000
+75 - Test Pattern 8
+assign a; variable v;
+Select a pattern a(v, _"5000"_)
+18
+5000
+76 - Test Pattern 9
+assign a;
+Select a pattern a(_, _"fail"_)
+8, 15
+5000
+77 - Test Pattern 10
+assign a; variable v;
+Select v pattern a(_, _"fail"_)
+a, d, qwerty, N0t, b, c, abc, CS3219, fail, b00t, pass, b00T, procedure, program, call, while, print, if
+5000
+78 - Test Pattern 11
+assign a;
+Select a pattern a(_, _)
+3, 8, 9, 11, 15, 16, 17, 18, 19
+5000
+79 - Test Pattern 12
+assign a;
+Select a pattern a(_, _"1"_)
+11
+5000
+80 - Test Pattern 13 - empty set
+assign a; variable v;
+Select a pattern a(v, _"3"_)
+none
+5000
+81 - Test Pattern 14 - assign in second argument
+assign a; variable v;
+Select v pattern a(a, _"3"_)
+SemanticError
+5000
+82 - Test Pattern 15 - non empty set
+print pn; assign a; variable v;
+Select pn pattern a(v, _"b"_)
+1, 10
+5000
+83 - Test Pattern 16 - 2 assigns
+assign a1, a2; variable v;
+Select a1 pattern a2(v, _"b"_)
+3, 8, 9, 11, 15, 16, 17, 18, 19
+5000
+84 - Test Multi clause 1 Uses-pattern
+assign a; variable v; stmt s;
+Select v such that Uses(s,v) pattern a(v, _"b"_)
+N0t, a, while
+5000
+85 - Test Multi clause 2 Modifies-pattern
+assign a; variable v; stmt s;
+Select v such that Modifies(s,v) pattern a(v, _"b"_)
+N0t, a, while
+5000
+85 - Test Multi clause 3 Modifies-pattern
+assign a; variable v1,v2; stmt s;
+Select v1 such that Modifies(s,v1) pattern a(v2, _"b"_)
+N0t, a, while, abc, b00T, CS3219, procedure, if
+5000
+86 - Test Multi clause 3 Follows- pattern
+assign a; variable v; stmt s;
+Select a such that Follows(s,a) pattern a(v, _"b"_)
+19
+5000
+87 - Test Multi clause 4 Parent-pattern
+assign a; variable v; stmt s;
+Select a such that Parent(s,a) pattern a(v, _"b"_)
+3, 9, 16
+5000
+88 - Test Multi clause 5 Parent-pattern, multi assign synonym
+assign a1,a2; variable v; stmt s;
+Select a1 such that Parent(s,a1) pattern a2(v, _"b"_)
+3, 8, 9, 11, 15, 16, 17, 18
+5000
+89 - Test Multi clause 6 Parent*-pattern, multi assign synonym
+assign a1,a2; variable v; stmt s;
+Select s such that Parent*(s,a1) pattern a2(v, _"b"_)
+2, 5, 7, 12, 14
+5000
+90 - Test Multi clause 7 Follows*-pattern, multi assign synonym
+assign a1,a2; variable v; stmt s;
+Select s such that Follows*(s,a1) pattern a2(v, _"b"_)
+1, 2, 3, 4, 5, 12, 13, 14
+5000
+91 - Test Multi clause 8 Follows*-pattern, fail-> no pattern match
+assign a1,a2; variable v; stmt s;
+Select s such that Follows*(s,a1) pattern a2("abc", _)
+none
+5000
+92 - Test Multi clause 9 pattern- Follows*, fail-> no pattern match
+assign a1,a2; variable v; stmt s;
+Select s pattern a2("abc", _) such that Follows*(s,a1)
+none
+5000
+93 - Test Multi clause 10 pattern- Parent*
+assign a1,a2; variable v; stmt s;
+Select s pattern a2(v, _"b"_) such that Parent*(s,a1) 
+2, 5, 7, 12, 14
+5000
+94 - Test Multi clause 11 pattern- Uses, pattern true -> such that false, return none
+assign a1,a2; variable v; stmt s;
+Select s pattern a2(v, _"b"_) such that Uses(2,"abc") 
+none
+5000
+95 - Test Multi clause 11 pattern- Uses, pattern false -> such that true, return none
+assign a1,a2; variable v; stmt s;
+Select s pattern a2(v, _"abc"_) such that Uses(2,"b") 
+none
+5000
+96 - Select procedure
+procedure p;
+Select p
+if
+5000
+97 - Test Modifies 11 - Check for wildcard
+while w;
+Select w such that Modifies(w, _)
+5, 12
+5000
