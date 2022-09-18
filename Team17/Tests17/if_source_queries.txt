@@ -66,12 +66,12 @@ Select c such that Follows(_, _)
 14 - Test Follows* 1
 assign a; stmt s;
 Select s such that Follows*(a, s)
-4, 5, 11, (????)
+4, 5, 11, (???)
 5000
 15 - Test Follows* 2
 while w;
 Select w such that Follows*(w, _)
-11, 18, 19
+11, 18
 5000
 16 - Test Follows* 3 - returns empty
 print pn;
@@ -101,7 +101,7 @@ Select r such that Follows*(_, r)
 21 - Test Follows* 8 - returns true
 if ifs;
 Select ifs such that Follows*(_, _)
-2, 14
+2, 7, 14
 5000
 22 - Test Follows* 9 - returns false
 constant c;
@@ -111,5 +111,5 @@ none
 23 - Test Follows* 10
 assign a; stmt s;
 Select a such that Follows*(a, s)
-(???)
+3
 5000
