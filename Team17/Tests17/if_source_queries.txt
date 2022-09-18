@@ -478,3 +478,8 @@ assign a1,a2; variable v; stmt s;
 Select s pattern a2(v, _"abc"_) such that Uses(2,"b") 
 none
 5000
+96 - Select procedure
+procedure p;
+Select p
+if
+5000
