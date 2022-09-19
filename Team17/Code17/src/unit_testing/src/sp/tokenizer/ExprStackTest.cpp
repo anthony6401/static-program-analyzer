@@ -98,14 +98,8 @@ TEST_CASE("Correct ExprCloseState") {
     ExprStack stack = ExprStack();
     stack.setState(new ExprCloseState(&stack));
     try {
-        stack.put("1");
-        stack.setState(new ExprCloseState(&stack));
-        stack.put("a");
-        stack.setState(new ExprCloseState(&stack));
         stack.put("+");
         std::vector<SimpleToken> result;
-        result.push_back(SimpleToken(SpTokenType::TCONSTANT, "1", 0, NULL));
-        result.push_back(SimpleToken(SpTokenType::TVARIABLE, "a", 0, NULL));
         result.push_back(SimpleToken(SpTokenType::TOPR, "+", 0, NULL));
         REQUIRE(equalChild(stack.get(), result));
     }
@@ -118,7 +112,7 @@ TEST_CASE("Correct ExprCloseState") {
 TEST_CASE("Incorrect ExprCloseState") {
     ExprStack stack = ExprStack();
     stack.setState(new ExprCloseState(&stack));
-    std::vector<std::string> test_tokens{ ")", "(" };
+    std::vector<std::string> test_tokens{ "1","a", "(" };
     for (std::string test_token : test_tokens) {
         try {
             stack.put(test_token);
