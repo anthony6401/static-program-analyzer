@@ -42,6 +42,7 @@ void TestWrapper::parse(std::string filename) {
 		simpleTokenizer.tokenizeCode(code);
 	} catch(std::invalid_argument e) {
 		std::cout << e.what() << std::endl;
+		exit(1);
 	}
 
 
