@@ -28,7 +28,7 @@ TestWrapper::TestWrapper() {
 void TestWrapper::parse(std::string filename) {
 	SPClient* client = new SPClient(pkb);
 	Extractor extractor = Extractor(client);
-	SimpleTokenizer simpleTokenizer = SimpleTokenizer(&extractor);
+	SimpleParser simpleParser = SimpleParser(&extractor);
 	std::ifstream testFile;
 	testFile.open(filename);
 
@@ -39,7 +39,7 @@ void TestWrapper::parse(std::string filename) {
 	std::string code((std::istreambuf_iterator<char>(testFile)),
 		std::istreambuf_iterator<char>());
 	try {
-		simpleTokenizer.tokenizeCode(code);
+		simpleParser.parseCode(code);
 	} catch(std::invalid_argument e) {
 		std::cout << e.what() << std::endl;
 		exit(1);

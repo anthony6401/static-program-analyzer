@@ -26,12 +26,9 @@ class Extractor;
 
 class SimpleToken {
 public:
-    SimpleToken(SpTokenType type, std::string value,
-        int statementNumber, void (*parseFunction)(SimpleToken&, std::vector<std::string>&,
-            Extractor* extractor));
+    SimpleToken(SpTokenType type, std::string value, int statementNumber);
     SpTokenType type;
     int statementNumber;
-    void (*parseFunction)(SimpleToken&, std::vector<std::string>&, Extractor* extractor);
     std::string value;
     void setChildren(std::vector<SimpleToken> tokens);
     std::vector<SimpleToken> getChildren();
