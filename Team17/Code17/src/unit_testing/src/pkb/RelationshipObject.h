@@ -8,6 +8,7 @@
 #include "models/Relationship/ParentTRelationship.h"
 #include "models/Relationship/FollowsRelationship.h"
 #include "models/Relationship/FollowsTRelationship.h"
+#include "models/Relationship/NextRelationship.h"
 
 static Relationship* usesRelationshipAssignOne = new UsesRelationship(assignEntity, variableEntity);
 static Relationship* usesRelationshipAssignTwo = new UsesRelationship(assignEntityTwo, variableEntityTwo);
@@ -198,7 +199,6 @@ static Relationship* parentTRelationshipIfIfOne = new ParentTRelationship(ifEnti
 static Relationship* parentTRelationshipIfIfTwo = new ParentTRelationship(ifEntityTwo, ifEntityThree);
 static Relationship* parentTRelationshipIfIfDupOne = new ParentTRelationship(ifEntityDuplicate, ifEntityTwoDuplicate);
 static Relationship* parentTRelationshipIfIfDupTwo = new ParentTRelationship(ifEntityTwoDuplicate, ifEntityThreeDuplicate);
-
 
 // Read Entity
 static Relationship* followsRelationshipReadReadOne = new FollowsRelationship(readEntity, readEntityTwo);
@@ -429,3 +429,117 @@ static Relationship* followsTRelationshipIfWhileDupOne = new FollowsTRelationshi
 
 static Relationship* followsTRelationshipIfIfOne = new FollowsTRelationship(ifEntity, ifEntityTwo);
 static Relationship* followsTRelationshipIfIfDupOne = new FollowsTRelationship(ifEntityDuplicate, ifEntityTwoDuplicate);
+
+// Read Entity
+static Relationship* nextRelationshipReadReadOne = new NextRelationship(readEntity, readEntityTwo);
+static Relationship* nextRelationshipReadReadDupOne = new NextRelationship(readEntityDuplicate, readEntityTwoDuplicate);
+
+static Relationship* nextRelationshipReadPrintOne = new NextRelationship(readEntity, printEntity);
+static Relationship* nextRelationshipReadPrintDupOne = new NextRelationship(readEntityDuplicate, printEntityDuplicate);
+
+static Relationship* nextRelationshipReadAssignOne = new NextRelationship(readEntity, assignEntity);
+static Relationship* nextRelationshipReadAssignDupOne = new NextRelationship(readEntityDuplicate, assignEntityDuplicate);
+
+static Relationship* nextRelationshipReadCallOne = new NextRelationship(readEntity, callEntity);
+static Relationship* nextRelationshipReadCallDupOne = new NextRelationship(readEntityDuplicate, callEntityDuplicate);
+
+static Relationship* nextRelationshipReadWhileOne = new NextRelationship(readEntity, whileEntity);
+static Relationship* nextRelationshipReadWhileDupOne = new NextRelationship(readEntityDuplicate, whileEntityDuplicate);
+
+static Relationship* nextRelationshipReadIfOne = new NextRelationship(readEntity, ifEntity);
+static Relationship* nextRelationshipReadIfDupOne = new NextRelationship(readEntityDuplicate, ifEntityDuplicate);
+
+// Print Entity
+static Relationship* nextRelationshipPrintReadOne = new NextRelationship(printEntity, readEntity);
+static Relationship* nextRelationshipPrintReadDupOne = new NextRelationship(printEntityDuplicate, readEntityDuplicate);
+
+static Relationship* nextRelationshipPrintPrintOne = new NextRelationship(printEntity, printEntityTwo);
+static Relationship* nextRelationshipPrintPrintDupOne = new NextRelationship(printEntityDuplicate, printEntityTwoDuplicate);
+
+static Relationship* nextRelationshipPrintAssignOne = new NextRelationship(printEntity, assignEntity);
+static Relationship* nextRelationshipPrintAssignDupOne = new NextRelationship(printEntityDuplicate, assignEntityDuplicate);
+
+
+static Relationship* nextRelationshipPrintCallOne = new NextRelationship(printEntity, callEntity);
+static Relationship* nextRelationshipPrintCallDupOne = new NextRelationship(printEntityDuplicate, callEntityDuplicate);
+static Relationship* nextRelationshipPrintWhileOne = new NextRelationship(printEntity, whileEntity);
+static Relationship* nextRelationshipPrintWhileDupOne = new NextRelationship(printEntityDuplicate, whileEntityDuplicate);
+
+static Relationship* nextRelationshipPrintIfOne = new NextRelationship(printEntity, ifEntity);
+static Relationship* nextRelationshipPrintIfDupOne = new NextRelationship(printEntityDuplicate, ifEntityDuplicate);
+
+// Assign Entity
+static Relationship* nextRelationshipAssignReadOne = new NextRelationship(assignEntity, readEntity);
+static Relationship* nextRelationshipAssignReadDupOne = new NextRelationship(assignEntityDuplicate, readEntityDuplicate);
+
+static Relationship* nextRelationshipAssignPrintOne = new NextRelationship(assignEntity, printEntity);
+static Relationship* nextRelationshipAssignPrintDupOne = new NextRelationship(assignEntityDuplicate, printEntityDuplicate);
+
+static Relationship* nextRelationshipAssignAssignOne = new NextRelationship(assignEntity, assignEntityTwo);
+static Relationship* nextRelationshipAssignAssignDupOne = new NextRelationship(assignEntityDuplicate, assignEntityTwoDuplicate);
+
+static Relationship* nextRelationshipAssignCallOne = new NextRelationship(assignEntity, callEntity);
+static Relationship* nextRelationshipAssignCallDupOne = new NextRelationship(assignEntityDuplicate, callEntityDuplicate);
+
+static Relationship* nextRelationshipAssignWhileOne = new NextRelationship(assignEntity, whileEntity);
+static Relationship* nextRelationshipAssignWhileDupOne = new NextRelationship(assignEntityDuplicate, whileEntityDuplicate);
+
+static Relationship* nextRelationshipAssignIfOne = new NextRelationship(assignEntity, ifEntity);
+static Relationship* nextRelationshipAssignIfDupOne = new NextRelationship(assignEntityDuplicate, ifEntityDuplicate);
+
+// Call Entity
+static Relationship* nextRelationshipCallReadOne = new NextRelationship(callEntity, readEntity);
+static Relationship* nextRelationshipCallReadDupOne = new NextRelationship(callEntityDuplicate, readEntityDuplicate);
+
+static Relationship* nextRelationshipCallPrintOne = new NextRelationship(callEntity, printEntity);
+static Relationship* nextRelationshipCallPrintDupOne = new NextRelationship(callEntityDuplicate, printEntityDuplicate);
+
+static Relationship* nextRelationshipCallAssignOne = new NextRelationship(callEntity, assignEntity);
+static Relationship* nextRelationshipCallAssignDupOne = new NextRelationship(callEntityDuplicate, assignEntityDuplicate);
+
+static Relationship* nextRelationshipCallCallOne = new NextRelationship(callEntity, callEntityTwo);
+static Relationship* nextRelationshipCallCallDupOne = new NextRelationship(callEntityDuplicate, callEntityTwoDuplicate);
+
+static Relationship* nextRelationshipCallWhileOne = new NextRelationship(callEntity, whileEntity);
+static Relationship* nextRelationshipCallWhileDupOne = new NextRelationship(callEntityDuplicate, whileEntityDuplicate);
+
+static Relationship* nextRelationshipCallIfOne = new NextRelationship(callEntity, ifEntity);
+static Relationship* nextRelationshipCallIfDupOne = new NextRelationship(callEntityDuplicate, ifEntityDuplicate);
+
+// While Entity
+static Relationship* nextRelationshipWhileReadOne = new NextRelationship(whileEntity, readEntity);
+static Relationship* nextRelationshipWhileReadDupOne = new NextRelationship(whileEntityDuplicate, readEntityDuplicate);
+
+static Relationship* nextRelationshipWhilePrintOne = new NextRelationship(whileEntity, printEntity);
+static Relationship* nextRelationshipWhilePrintDupOne = new NextRelationship(whileEntityDuplicate, printEntityDuplicate);
+
+static Relationship* nextRelationshipWhileAssignOne = new NextRelationship(whileEntity, assignEntity);
+static Relationship* nextRelationshipWhileAssignDupOne = new NextRelationship(whileEntityDuplicate, assignEntityDuplicate);
+
+static Relationship* nextRelationshipWhileCallOne = new NextRelationship(whileEntity, callEntity);
+static Relationship* nextRelationshipWhileCallDupOne = new NextRelationship(whileEntityDuplicate, callEntityDuplicate);
+
+static Relationship* nextRelationshipWhileWhileOne = new NextRelationship(whileEntity, whileEntityTwo);
+static Relationship* nextRelationshipWhileWhileDupOne = new NextRelationship(whileEntityDuplicate, whileEntityTwoDuplicate);
+
+static Relationship* nextRelationshipWhileIfOne = new NextRelationship(whileEntity, ifEntity);
+static Relationship* nextRelationshipWhileIfDupOne = new NextRelationship(whileEntityDuplicate, ifEntityDuplicate);
+
+// If Entity
+static Relationship* nextRelationshipIfReadOne = new NextRelationship(ifEntity, readEntity);
+static Relationship* nextRelationshipIfReadDupOne = new NextRelationship(ifEntityDuplicate, readEntityDuplicate);
+
+static Relationship* nextRelationshipIfPrintOne = new NextRelationship(ifEntity, printEntity);
+static Relationship* nextRelationshipIfPrintDupOne = new NextRelationship(ifEntityDuplicate, printEntityDuplicate);
+
+static Relationship* nextRelationshipIfAssignOne = new NextRelationship(ifEntity, assignEntity);
+static Relationship* nextRelationshipIfAssignDupOne = new NextRelationship(ifEntityDuplicate, assignEntityDuplicate);
+
+static Relationship* nextRelationshipIfCallOne = new NextRelationship(ifEntity, callEntity);
+static Relationship* nextRelationshipIfCallDupOne = new NextRelationship(ifEntityDuplicate, callEntityDuplicate);
+
+static Relationship* nextRelationshipIfWhileOne = new NextRelationship(ifEntity, whileEntity);
+static Relationship* nextRelationshipIfWhileDupOne = new NextRelationship(ifEntityDuplicate, whileEntityDuplicate);
+
+static Relationship* nextRelationshipIfIfOne = new NextRelationship(ifEntity, ifEntityTwo);
+static Relationship* nextRelationshipIfIfDupOne = new NextRelationship(ifEntityDuplicate, ifEntityTwoDuplicate);
