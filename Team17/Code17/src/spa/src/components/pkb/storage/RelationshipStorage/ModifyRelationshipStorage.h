@@ -19,6 +19,9 @@ public:
 	std::unordered_map<std::string, std::unordered_set<std::string>> getAllRelationship(RelationshipType relType, DesignEntity returnType1, DesignEntity returnType2);
 
 private:
+	std::unordered_map<std::string, std::unordered_set<std::string>>* getRelationshipMap(DesignEntity designEntity, bool isForward);
+	std::unordered_set<std::string>* ModifyRelationshipStorage::getSetByFirst(TokenObject firstArgument);
+	std::unordered_set<std::string>* ModifyRelationshipStorage::getSetBySecond(TokenObject secondArgument);
 	// To answer Uses(1, "x"), Uses(1, v)
 	std::unordered_map<std::string, std::unordered_set<std::string>> assignForwardStorage;
 	std::unordered_map<std::string, std::unordered_set<std::string>> readForwardStorage;
