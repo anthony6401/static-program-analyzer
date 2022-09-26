@@ -16,15 +16,6 @@
 
 class RelationshipUtils {
 public:
-	// OUTDATED FUNCTION
-	static bool insertEntity(std::unordered_map<std::string, std::unordered_set<std::string>>& map, std::string& leftValueTest, std::string& rightValueTest) {
-		if (map.find(leftValueTest) == map.end()) {
-			map.insert({ leftValueTest, std::unordered_set<std::string>() });
-		}
-
-		return map.find(leftValueTest)->second.insert(rightValueTest).second;
-	}
-
 	static bool insertEntity(std::unordered_map<std::string, std::unordered_set<std::string>>* map, std::string& leftValueTest, std::string& rightValueTest) {
 		if (map == nullptr) {
 			return false;
