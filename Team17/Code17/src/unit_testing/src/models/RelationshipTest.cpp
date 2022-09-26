@@ -381,3 +381,4 @@ TEST_CASE("NextT Relationship Test") {
     REQUIRE(*(callWhileRel->getRightEntity()) == *whileEntity);
     REQUIRE(*(ifReadRel->getRightEntity()) == *readEntity);
 }
+
