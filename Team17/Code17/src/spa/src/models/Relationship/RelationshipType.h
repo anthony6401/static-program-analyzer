@@ -6,5 +6,6 @@ enum class RelationshipType {
     FOLLOWS,
     FOLLOWS_T,
     PARENT,
-    PARENT_T
+    PARENT_T,
+    NEXT,
 };
