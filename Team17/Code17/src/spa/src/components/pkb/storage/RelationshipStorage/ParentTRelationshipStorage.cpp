@@ -44,6 +44,84 @@ ParentTRelationshipStorage::ParentTRelationshipStorage() : RelationshipStorage()
 															stmtToStmtBackwardMap(std::unordered_map<std::string, std::unordered_set<std::string>>()) {}
 
 
+std::unordered_map<std::string, std::unordered_set<std::string>>* ParentTRelationshipStorage::getStorage(DesignEntity left, DesignEntity right, bool isForward) {
+	if (left == DesignEntity::WHILE) {
+		//Store Stmt -> stmt forward and backward
+
+		if (right == DesignEntity::READ) {
+			return &(this->whileToReadForwardMap);
+		}
+
+		else if (right == DesignEntity::PRINT) {
+			return &(this->whileToPrintForwardMap);
+		}
+		else if (right == DesignEntity::ASSIGN) {
+			return &(this->whileToAssignForwardMap);
+		}
+		else if (right == DesignEntity::CALL) {
+			return &(this->whileToCallForwardMap);
+		}
+		else if (right == DesignEntity::WHILE) {
+			return &(this->whileToWhileForwardMap);
+		}
+		else if (right == DesignEntity::IF) {
+			return &(this->whileToIfForwardMap);
+		}
+		else if (right == DesignEntity::STMT) {
+			return isForward ? &(this->whileToStmtForwardMap) : &(this->whileToStmtBackwardMap);
+		}
+	}
+	else if (left == DesignEntity::IF) {
+		if (right == DesignEntity::READ) {
+			return &(this->ifToReadForwardMap);
+		}
+
+		else if (right == DesignEntity::PRINT) {
+			return &(this->ifToPrintForwardMap);
+		}
+		else if (right == DesignEntity::ASSIGN) {
+			return &(this->ifToAssignForwardMap);
+		}
+		else if (right == DesignEntity::CALL) {
+			return &(this->ifToCallForwardMap);
+		}
+		else if (right == DesignEntity::WHILE) {
+			return &(this->ifToWhileForwardMap);
+		}
+		else if (right == DesignEntity::IF) {
+			return &(this->ifToIfForwardMap);
+		}
+		else if (right == DesignEntity::STMT) {
+			return isForward ? &(this->ifToStmtForwardMap) : &(this->ifToStmtBackwardMap);
+		}
+	}
+	else if (left == DesignEntity::STMT) {
+		if (right == DesignEntity::READ) {
+			return &(this->stmtToReadForwardMap);
+		}
+
+		else if (right == DesignEntity::PRINT) {
+			return &(this->stmtToPrintForwardMap);
+		}
+		else if (right == DesignEntity::ASSIGN) {
+			return &(this->stmtToAssignForwardMap);
+		}
+		else if (right == DesignEntity::CALL) {
+			return &(this->stmtToCallForwardMap);
+		}
+		else if (right == DesignEntity::WHILE) {
+			return &(this->stmtToWhileForwardMap);
+		}
+		else if (right == DesignEntity::IF) {
+			return &(this->stmtToIfForwardMap);
+		}
+		else if (right == DesignEntity::STMT) {
+			return isForward ? &(this->stmtToStmtForwardMap) : &(this->stmtToStmtBackwardMap);
+		}
+	}
+	return nullptr;
+}
+
 
 bool ParentTRelationshipStorage::storeRelationship(Relationship* rel) {
 	ParentTRelationship* parentTRelationship = dynamic_cast<ParentTRelationship*>(rel);
@@ -52,88 +130,30 @@ bool ParentTRelationshipStorage::storeRelationship(Relationship* rel) {
 		Entity* leftEntity = parentTRelationship->getLeftEntity();
 		Entity* rightEntity = parentTRelationship->getRightEntity();
 
+		DesignEntity left = RelationshipUtils::entityToDesignEntity(leftEntity);
+		DesignEntity right = RelationshipUtils::entityToDesignEntity(rightEntity);
+
 		std::string leftValue = leftEntity->getValue();
 		std::string rightValue = rightEntity->getValue();
 
+		//Get all the neccessary storage
+		std::unordered_map<std::string, std::unordered_set<std::string>>* stmtToStmtForwardStorage = getStorage(DesignEntity::STMT, DesignEntity::STMT, true);
+		std::unordered_map<std::string, std::unordered_set<std::string>>* stmtToStmtBackwardStorage = getStorage(DesignEntity::STMT, DesignEntity::STMT);
+		std::unordered_map<std::string, std::unordered_set<std::string>>* stmtToRightForwardStorage = getStorage(DesignEntity::STMT, right);
+		std::unordered_map<std::string, std::unordered_set<std::string>>* leftToRightForwardStorage = getStorage(left, right);
+		std::unordered_map<std::string, std::unordered_set<std::string>>* leftToStmtForwardStorage = getStorage(left, DesignEntity::STMT, true);
+		std::unordered_map<std::string, std::unordered_set<std::string>>* leftToStmtBackwardStorage = getStorage(left, DesignEntity::STMT);
+
 		bool result = false;
-		bool resultOne = RelationshipUtils::insertEntity(this->stmtToStmtForwardMap, leftValue, rightValue);
-		bool resultTwo = RelationshipUtils::insertEntity(this->stmtToStmtBackwardMap, rightValue, leftValue);
+		bool resultOne = RelationshipUtils::insertEntity(stmtToStmtForwardStorage, leftValue, rightValue);
+		bool resultTwo = RelationshipUtils::insertEntity(stmtToStmtBackwardStorage, rightValue, leftValue);
+		bool resultThree = RelationshipUtils::insertEntity(stmtToRightForwardStorage, leftValue, rightValue);
+		bool resultFour = RelationshipUtils::insertEntity(leftToRightForwardStorage, leftValue, rightValue);
+		bool resultFive = RelationshipUtils::insertEntity(leftToStmtForwardStorage, leftValue, rightValue);
+		bool resultSix = RelationshipUtils::insertEntity(leftToStmtBackwardStorage, rightValue, leftValue);
 
-		result = result || resultOne || resultTwo;
+		result = result || resultOne || resultTwo || resultThree || resultFour || resultFive || resultSix;
 
-		if (typeid(*leftEntity) == typeid(WhileEntity)) {
-			//Store Stmt -> stmt forward and backward
-
-			if (typeid(*rightEntity) == typeid(ReadEntity)) {
-				bool resultOne = RelationshipUtils::insertEntity(this->stmtToReadForwardMap, leftValue, rightValue);
-				bool resultTwo = RelationshipUtils::insertEntity(this->whileToReadForwardMap, leftValue, rightValue);
-
-				result = result || resultOne || resultTwo;
-			}
-			else if (typeid(*rightEntity) == typeid(PrintEntity)) {
-				bool resultOne = RelationshipUtils::insertEntity(this->stmtToPrintForwardMap, leftValue, rightValue);
-				bool resultTwo = RelationshipUtils::insertEntity(this->whileToPrintForwardMap, leftValue, rightValue);
-				result = result || resultOne || resultTwo;
-			}
-			else if (typeid(*rightEntity) == typeid(AssignEntity)) {
-				bool resultOne = RelationshipUtils::insertEntity(this->stmtToAssignForwardMap, leftValue, rightValue);
-				bool resultTwo = RelationshipUtils::insertEntity(this->whileToAssignForwardMap, leftValue, rightValue);
-				result = result || resultOne || resultTwo;
-			}
-			else if (typeid(*rightEntity) == typeid(CallEntity)) {
-				bool resultOne = RelationshipUtils::insertEntity(this->stmtToCallForwardMap, leftValue, rightValue);
-				bool resultTwo = RelationshipUtils::insertEntity(this->whileToCallForwardMap, leftValue, rightValue);
-				result = result || resultOne || resultTwo;
-			}
-			else if (typeid(*rightEntity) == typeid(WhileEntity)) {
-				bool resultOne = RelationshipUtils::insertEntity(this->stmtToWhileForwardMap, leftValue, rightValue);
-				bool resultTwo = RelationshipUtils::insertEntity(this->whileToWhileForwardMap, leftValue, rightValue);
-				result = result || resultOne || resultTwo;
-			}
-			else if (typeid(*rightEntity) == typeid(IfEntity)) {
-				bool resultOne = RelationshipUtils::insertEntity(this->stmtToIfForwardMap, leftValue, rightValue);
-				bool resultTwo = RelationshipUtils::insertEntity(this->whileToIfForwardMap, leftValue, rightValue);
-				result = result || resultOne || resultTwo;
-			}
-			bool resultOne = RelationshipUtils::insertEntity(this->whileToStmtForwardMap, leftValue, rightValue);
-			bool resultTwo = RelationshipUtils::insertEntity(this->whileToStmtBackwardMap, rightValue, leftValue);
-			result = result || resultOne || resultTwo;
-
-		}
-		else if (typeid(*leftEntity) == typeid(IfEntity)) {
-			if (typeid(*rightEntity) == typeid(ReadEntity)) {
-				bool resultOne = RelationshipUtils::insertEntity(this->stmtToReadForwardMap, leftValue, rightValue);
-				bool resultTwo = RelationshipUtils::insertEntity(this->ifToReadForwardMap, leftValue, rightValue);
-				result = result || resultOne || resultTwo;
-			}
-			else if (typeid(*rightEntity) == typeid(PrintEntity)) {
-				bool resultOne = RelationshipUtils::insertEntity(this->stmtToPrintForwardMap, leftValue, rightValue);
-				bool resultTwo = RelationshipUtils::insertEntity(this->ifToPrintForwardMap, leftValue, rightValue);
-				result = result || resultOne || resultTwo;
-			}
-			else if (typeid(*rightEntity) == typeid(AssignEntity)) {
-				bool resultOne = RelationshipUtils::insertEntity(this->stmtToAssignForwardMap, leftValue, rightValue);
-				bool resultTwo = RelationshipUtils::insertEntity(this->ifToAssignForwardMap, leftValue, rightValue);
-				result = result || resultOne || resultTwo;
-			}
-			else if (typeid(*rightEntity) == typeid(CallEntity)) {
-				bool resultOne = RelationshipUtils::insertEntity(this->stmtToCallForwardMap, leftValue, rightValue);
-				bool resultTwo = RelationshipUtils::insertEntity(this->ifToCallForwardMap, leftValue, rightValue);
-			}
-			else if (typeid(*rightEntity) == typeid(WhileEntity)) {
-				bool resultOne = RelationshipUtils::insertEntity(this->stmtToWhileForwardMap, leftValue, rightValue);
-				bool resultTwo = RelationshipUtils::insertEntity(this->ifToWhileForwardMap, leftValue, rightValue);
-				result = result || resultOne || resultTwo;
-			}
-			else if (typeid(*rightEntity) == typeid(IfEntity)) {
-				bool resultOne = RelationshipUtils::insertEntity(this->stmtToIfForwardMap, leftValue, rightValue);
-				bool resultTwo = RelationshipUtils::insertEntity(this->ifToIfForwardMap, leftValue, rightValue);
-				result = result || resultOne || resultTwo;
-			}
-			bool resultOne = RelationshipUtils::insertEntity(this->ifToStmtForwardMap, leftValue, rightValue);
-			bool resultTwo = RelationshipUtils::insertEntity(this->ifToStmtBackwardMap, rightValue, leftValue);
-			result = result || resultOne || resultTwo;
-		}
 		return result;
 	}
 	return false;
@@ -144,7 +164,7 @@ bool ParentTRelationshipStorage::getRelationship(RelationshipType relType, Token
 	if (relType == RelationshipType::PARENT_T) {
 		std::unordered_map<std::string, std::unordered_set<std::string>>* storage{};
 
-		storage = &this->stmtToStmtForwardMap;
+		storage = getStorage(DesignEntity::STMT, DesignEntity::STMT, true);
 
 		if (storage->find(firstArgument.getValue()) == storage->end()) {
 			return false;
@@ -162,26 +182,10 @@ std::unordered_set<std::string> ParentTRelationshipStorage::getRelationshipByFir
 	if (relType == RelationshipType::PARENT_T) {
 		std::unordered_map<std::string, std::unordered_set<std::string>>* storage{};
 
-		if (returnType == DesignEntity::READ) {
-			storage = &this->stmtToReadForwardMap;
-		}
-		else if (returnType == DesignEntity::PRINT) {
-			storage = &this->stmtToPrintForwardMap;
-		}
-		else if (returnType == DesignEntity::ASSIGN) {
-			storage = &this->stmtToAssignForwardMap;
-		}
-		else if (returnType == DesignEntity::CALL) {
-			storage = &this->stmtToCallForwardMap;
-		}
-		else if (returnType == DesignEntity::WHILE) {
-			storage = &this->stmtToWhileForwardMap;
-		}
-		else if (returnType == DesignEntity::IF) {
-			storage = &this->stmtToIfForwardMap;
-		}
-		else if (returnType == DesignEntity::STMT) {
-			storage = &this->stmtToStmtForwardMap;
+		storage = getStorage(DesignEntity::STMT, returnType, true);
+
+		if (storage == nullptr) {
+			return std::unordered_set<std::string>();
 		}
 
 		std::string findValue = firstArgument.getValue();
@@ -191,7 +195,6 @@ std::unordered_set<std::string> ParentTRelationshipStorage::getRelationshipByFir
 		}
 
 		return storage->find(findValue)->second;
-
 	}
 	return std::unordered_set<std::string>();
 }
@@ -199,110 +202,38 @@ std::unordered_set<std::string> ParentTRelationshipStorage::getRelationshipByFir
 // Answer ParentT(s,2), ParentT(w,2), or ParentT(if, 2)
 std::unordered_set<std::string> ParentTRelationshipStorage::getRelationshipBySecond(RelationshipType relType, DesignEntity returnType, TokenObject secondArgument) {
 	if (relType == RelationshipType::PARENT_T) {
-		std::unordered_map<std::string, std::unordered_set<std::string>> storage{};
+		std::unordered_map<std::string, std::unordered_set<std::string>>* storage{};
 
-		if (returnType == DesignEntity::STMT) {
-			storage = this->stmtToStmtBackwardMap;
-		}
-		else if (returnType == DesignEntity::WHILE) {
-			//std::cout << "test" << std::endl;
-			storage = this->whileToStmtBackwardMap;
-		}
-		else if (returnType == DesignEntity::IF) {
-			storage = this->ifToStmtBackwardMap;
-		}
+		storage = getStorage(returnType, DesignEntity::STMT, false);
 
-
-		std::string findValue = secondArgument.getValue();
-
-		if (storage.find(findValue) == storage.end()) {
+		if (storage == nullptr) {
 			return std::unordered_set<std::string>();
 		}
 
-		return storage.find(findValue)->second;
+		std::string findValue = secondArgument.getValue();
 
+		if (storage->find(findValue) == storage->end()) {
+			return std::unordered_set<std::string>();
+		}
+
+		return storage->find(findValue)->second;
 	}
-
 	return std::unordered_set<std::string>();
 }
 
 //Answer ParentT(s,w),...., ParentT(w,a),..., ParentT(if, a)
 std::unordered_map<std::string, std::unordered_set<std::string>> ParentTRelationshipStorage::getAllRelationship(RelationshipType relType, DesignEntity returnType1, DesignEntity returnType2) {
 	if (relType == RelationshipType::PARENT_T) {
-		if (returnType1 == DesignEntity::STMT) {
+		std::unordered_map<std::string, std::unordered_set<std::string>>* storage{};
 
-			if (returnType2 == DesignEntity::READ) {
-				return this->stmtToReadForwardMap;
-			}
-			else if (returnType2 == DesignEntity::PRINT) {
-				return this->stmtToPrintForwardMap;
-			}
-			else if (returnType2 == DesignEntity::ASSIGN) {
-				return this->stmtToAssignForwardMap;
-			}
-			else if (returnType2 == DesignEntity::CALL) {
-				return this->stmtToCallForwardMap;
-			}
-			else if (returnType2 == DesignEntity::WHILE) {
-				return this->stmtToWhileForwardMap;
-			}
-			else if (returnType2 == DesignEntity::IF) {
-				return this->stmtToIfForwardMap;
-			}
-			else if (returnType2 == DesignEntity::STMT) {
-				return this->stmtToStmtForwardMap;
-			}
-		}
-		else if (returnType1 == DesignEntity::WHILE) {
+		storage = getStorage(returnType1, returnType2, true);
 
-			if (returnType2 == DesignEntity::READ) {
-				return this->whileToReadForwardMap;
-			}
-			else if (returnType2 == DesignEntity::PRINT) {
-				return this->whileToPrintForwardMap;
-			}
-			else if (returnType2 == DesignEntity::ASSIGN) {
-				return this->whileToAssignForwardMap;
-			}
-			else if (returnType2 == DesignEntity::CALL) {
-				return this->whileToCallForwardMap;
-			}
-			else if (returnType2 == DesignEntity::WHILE) {
-				return this->whileToWhileForwardMap;
-			}
-			else if (returnType2 == DesignEntity::IF) {
-				return this->whileToIfForwardMap;
-			}
-			else if (returnType2 == DesignEntity::STMT) {
-				return this->whileToStmtForwardMap;
-			}
-		}
-		else if (returnType1 == DesignEntity::IF) {
-
-			if (returnType2 == DesignEntity::READ) {
-				return this->ifToReadForwardMap;
-			}
-			else if (returnType2 == DesignEntity::PRINT) {
-				return this->ifToPrintForwardMap;
-			}
-			else if (returnType2 == DesignEntity::ASSIGN) {
-				return this->ifToAssignForwardMap;
-			}
-			else if (returnType2 == DesignEntity::CALL) {
-				return this->ifToCallForwardMap;
-			}
-			else if (returnType2 == DesignEntity::WHILE) {
-				return this->ifToWhileForwardMap;
-			}
-			else if (returnType2 == DesignEntity::IF) {
-				return this->ifToIfForwardMap;
-			}
-			else if (returnType2 == DesignEntity::STMT) {
-				return this->ifToStmtForwardMap;
-			}
+		if (storage == nullptr) {
+			return std::unordered_map<std::string, std::unordered_set<std::string>>();
 		}
 
-		return std::unordered_map<std::string, std::unordered_set<std::string>>();
+		return *storage;
+
 	}
 	return std::unordered_map<std::string, std::unordered_set<std::string>>();
 }
