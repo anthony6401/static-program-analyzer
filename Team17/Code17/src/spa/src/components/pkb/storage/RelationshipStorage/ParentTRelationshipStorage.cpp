@@ -44,7 +44,7 @@ ParentTRelationshipStorage::ParentTRelationshipStorage() : RelationshipStorage()
 															stmtToStmtBackwardMap(std::unordered_map<std::string, std::unordered_set<std::string>>()) {}
 
 
-std::unordered_map<std::string, std::unordered_set<std::string>>* ParentTRelationshipStorage::getStorage(DesignEntity left, DesignEntity right, bool isForward) {
+std::unordered_map<std::string, std::unordered_set<std::string>>* ParentTRelationshipStorage::getStorage(DesignEntity left, DesignEntity right, bool isForward = false) {
 	if (left == DesignEntity::WHILE) {
 		//Store Stmt -> stmt forward and backward
 
