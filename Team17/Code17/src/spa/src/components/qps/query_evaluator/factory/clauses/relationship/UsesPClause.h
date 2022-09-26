@@ -19,18 +19,18 @@ private:
 public:
     UsesPClause(TokenObject left, TokenObject right, Select synonym,
                     std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
-    RawResult evaluateClause() override;
+    ResultTable evaluateClause() override;
     size_t getNumberOfSynonyms() override;
     std::set<std::string> getAllSynonyms() override;
     std::vector<std::pair<std::string, std::string>> processMapToVectorPair(std::unordered_map<std::string, std::unordered_set<std::string>> results);
     std::unordered_set<std::string> processMapToSetFromFirst(std::unordered_map<std::string, std::unordered_set<std::string>> results);
     static RelationshipType getRelationshipType();
-    RawResult evaluateSynonymSynonym();
-    RawResult evaluateSynonymWildcard();
-    RawResult evaluateSynonymNameQuotes();
-    RawResult evaluateNameQuotesSynonym();
-    RawResult evaluateNameQuotesWildcard();
-    RawResult evaluateNameQuotesNameQuotes();
+    ResultTable evaluateSynonymSynonym();
+    ResultTable evaluateSynonymWildcard();
+    ResultTable evaluateSynonymNameQuotes();
+    ResultTable evaluateNameQuotesSynonym();
+    ResultTable evaluateNameQuotesWildcard();
+    ResultTable evaluateNameQuotesNameQuotes();
 };
 
 #endif //SPA_USESPCLAUSE_H
