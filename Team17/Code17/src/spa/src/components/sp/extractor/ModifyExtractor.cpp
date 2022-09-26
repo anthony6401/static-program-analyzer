@@ -90,10 +90,6 @@ std::vector<ModifyRelationship*> ModifyExtractor::getModifyRelationships(SimpleT
 				Entity* varEntity = generateEntity(readVar);
 				ModifyRelationship* modify = new ModifyRelationship(readEntity, varEntity);
 				modifyVector.push_back(modify);
-				//Entity* procEntity = generateEntity(procOrWhileIfToken);
-				//Entity* varEntity1 = generateEntity(readVar);
-				//ModifyRelationship* modify1 = new ModifyRelationship(procEntity, varEntity1);
-				//modifyVector.push_back(modify1);
 			}
 			if (current.type == SpTokenType::TPRINT) {
 				// Do nothing
@@ -104,10 +100,6 @@ std::vector<ModifyRelationship*> ModifyExtractor::getModifyRelationships(SimpleT
 				Entity* varEntity = generateEntity(assignVar);
 				ModifyRelationship* modify = new ModifyRelationship(assignEntity, varEntity);
 				modifyVector.push_back(modify);
-				//Entity* procEntity = generateEntity(procOrWhileIfToken);
-				//Entity* varEntity1 = generateEntity(assignVar);
-				//ModifyRelationship* modify1 = new ModifyRelationship(procEntity, varEntity1);
-				//modifyVector.push_back(modify1);
 			}
 			if (current.type == SpTokenType::TWHILE) {
 				std::vector<ModifyRelationship*> moreModifyVector = ModifyExtractor::extractModify(current);
@@ -147,8 +139,6 @@ Entity* ModifyExtractor::generateEntity(SimpleToken token) {
 	if (token.type == SpTokenType::TPROCEDURE) {
 		return new ProcedureEntity(token.value);
 	}
-	//if (token.type == SpTokenType::TCALL) {
-	//	return new CallEntity(std::to_string(token.statementNumber));
-	//}
+	// add in call type
 	return new Entity(std::to_string(token.statementNumber)); // Should not happen
 }

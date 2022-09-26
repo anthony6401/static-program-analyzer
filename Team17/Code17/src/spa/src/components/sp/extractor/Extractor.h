@@ -55,31 +55,4 @@ public:
 
 	void extractConstants(SimpleToken procedureToken);
 	std::vector<ConstantEntity*> extractConstantsVector(SimpleToken procedureToken);
-
-	/*
-	void extractProcedure(SimpleToken simpleToken);
-
-	void extractParentRelationships(SimpleToken simpleToken, std::vector<SimpleToken> children);
-	void extractFollowsRelationships(std::vector<SimpleToken> children);
-	void extractUsesRelationshipsForProcedure(SimpleToken simpleToken);
-	void extractModifyRelationshipsForProcedure(SimpleToken simpleToken);
-	void extractSeriesOfStmts(std::vector<SimpleToken> seriesOfStmts);
-
-	ModifyRelationship* getModifyRelationshipForRead(SimpleToken simpleToken);
-	UsesRelationship* getUsesRelationshipForPrint(SimpleToken simpleToken);
-	ModifyRelationship* getModifyRelationshipForAssign(SimpleToken simpleToken);
-	std::vector<UsesRelationship*> getUsesRelationshipsForAssign(SimpleToken simpleToken);
-	void extractReadStmt(SimpleToken simpleToken);
-	void extractPrintStmt(SimpleToken simpleToken);
-	void extractAssignStmt(SimpleToken simpleToken);
-
-	void extractWhileStmt(SimpleToken simpleToken);
-	void extractIfStmt(SimpleToken simpleToken);
-
-	std::vector<UsesRelationship*> getUsesRelationshipsForCondExpr(SimpleToken condToken, SimpleToken condExpr);
-	void extractCondExpr(SimpleToken simpleToken, SimpleToken condExpr);
-	void extractStmtLst(SimpleToken simpleToken);
-
-	void extractCall();
-	*/
 };
