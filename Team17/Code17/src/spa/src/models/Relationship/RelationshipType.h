@@ -8,4 +8,5 @@ enum class RelationshipType {
     PARENT,
     PARENT_T,
     NEXT,
+    NEXT_T
 };
