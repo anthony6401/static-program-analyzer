@@ -7,7 +7,7 @@ UsesSClause::UsesSClause(TokenObject left, TokenObject right, Select synonym,
                          , qpsClient(qpsClient) {};
 
 
-RawResult UsesSClause::evaluateClause() {
+ResultTable UsesSClause::evaluateClause() {
     TokenType leftType = left.getTokenType();
     TokenType rightType = right.getTokenType();
     if (leftType == TokenType::NAME && rightType == TokenType::NAME) {
@@ -75,7 +75,7 @@ std::unordered_set<std::string> UsesSClause::processMapToSetFromFirst(std::unord
     return processedResult;
 }
 
-RawResult UsesSClause::evaluateSynonymSynonym() {
+ResultTable UsesSClause::evaluateSynonymSynonym() {
     DesignEntity stmtType = synonymToDesignEntityMap[left.getValue()];
     DesignEntity rightType = synonymToDesignEntityMap[right.getValue()];
     std::string leftValue = left.getValue();
@@ -85,7 +85,7 @@ RawResult UsesSClause::evaluateSynonymSynonym() {
     return {leftValue, rightValue, processedMap};
 }
 
-RawResult UsesSClause::evaluateSynonymWildcard() {
+ResultTable UsesSClause::evaluateSynonymWildcard() {
     DesignEntity stmtType = synonymToDesignEntityMap[left.getValue()];
     DesignEntity rightType = DesignEntity::VARIABLE;
     std::string leftValue = left.getValue();
@@ -94,21 +94,21 @@ RawResult UsesSClause::evaluateSynonymWildcard() {
     return {leftValue, processedMap};
 }
 
-RawResult UsesSClause::evaluateSynonymNameQuotes() {
+ResultTable UsesSClause::evaluateSynonymNameQuotes() {
     DesignEntity stmtType = synonymToDesignEntityMap[left.getValue()];
     std::string leftValue = left.getValue();
     std::unordered_set<std::string> results = qpsClient.getRelationshipBySecond(getRelationshipType(), stmtType, right);
     return {leftValue, results};
 }
 
-RawResult UsesSClause::evaluateIntegerSynonym() {
+ResultTable UsesSClause::evaluateIntegerSynonym() {
     std::string rightValue = right.getValue();
     DesignEntity rightType = synonymToDesignEntityMap[right.getValue()];
     std::unordered_set<std::string> results = qpsClient.getRelationshipByFirst(getRelationshipType(), left, rightType);
     return {rightValue, results};
 }
 
-RawResult UsesSClause::evaluateIntegerWildcard() {
+ResultTable UsesSClause::evaluateIntegerWildcard() {
     // Returns boolean
     DesignEntity rightType = DesignEntity::VARIABLE;
     std::unordered_set<std::string> results = qpsClient.getRelationshipByFirst(getRelationshipType(), left, rightType);
@@ -117,7 +117,7 @@ RawResult UsesSClause::evaluateIntegerWildcard() {
     return {booleanResult}; //true
 }
 
-RawResult UsesSClause::evaluateIntegerNameQuotes() {
+ResultTable UsesSClause::evaluateIntegerNameQuotes() {
     // Returns boolean
     bool result = qpsClient.getRelationship(getRelationshipType(), left, right);
     // result = true -> setIsFalseResult(true) -> isFalseResult = false

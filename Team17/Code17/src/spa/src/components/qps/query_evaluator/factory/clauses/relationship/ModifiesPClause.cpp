@@ -5,7 +5,7 @@ ModifiesPClause::ModifiesPClause(TokenObject left, TokenObject right, Select syn
                                  QPSClient qpsClient) : left(left), right(right), synonym(synonym),
                                                         synonymToDesignEntityMap(synonymToDesignEntityMap), qpsClient(qpsClient) {};
 
-RawResult ModifiesPClause::evaluateClause() {
+ResultTable ModifiesPClause::evaluateClause() {
     TokenType leftType = left.getTokenType();
     TokenType rightType = right.getTokenType();
     if (leftType == TokenType::NAME && rightType == TokenType::NAME) {
@@ -73,7 +73,7 @@ RelationshipType ModifiesPClause::getRelationshipType() {
     return RelationshipType::MODIFIES;
 }
 
-RawResult ModifiesPClause::evaluateSynonymSynonym() {
+ResultTable ModifiesPClause::evaluateSynonymSynonym() {
     DesignEntity stmtType = synonymToDesignEntityMap[left.getValue()];
     DesignEntity rightType = synonymToDesignEntityMap[right.getValue()];
     std::string leftValue = left.getValue();
@@ -83,7 +83,7 @@ RawResult ModifiesPClause::evaluateSynonymSynonym() {
     return {leftValue, rightValue, processedMap};
 }
 
-RawResult ModifiesPClause::evaluateSynonymWildcard() {
+ResultTable ModifiesPClause::evaluateSynonymWildcard() {
     DesignEntity stmtType = synonymToDesignEntityMap[left.getValue()];
     DesignEntity rightType = DesignEntity::VARIABLE;
     std::string leftValue = left.getValue();
@@ -92,21 +92,21 @@ RawResult ModifiesPClause::evaluateSynonymWildcard() {
     return {leftValue, processedMap};
 }
 
-RawResult ModifiesPClause::evaluateSynonymNameQuotes() {
+ResultTable ModifiesPClause::evaluateSynonymNameQuotes() {
     DesignEntity stmtType = synonymToDesignEntityMap[left.getValue()];
     std::string leftValue = left.getValue();
     std::unordered_set<std::string> results = qpsClient.getRelationshipBySecond(getRelationshipType(), stmtType, right);
     return {leftValue, results};
 }
 
-RawResult ModifiesPClause::evaluateNameQuotesSynonym() {
+ResultTable ModifiesPClause::evaluateNameQuotesSynonym() {
     std::string rightValue = right.getValue();
     DesignEntity rightType = synonymToDesignEntityMap[right.getValue()];
     std::unordered_set<std::string> results = qpsClient.getRelationshipByFirst(getRelationshipType(), left, rightType);
     return {rightValue, results};
 }
 
-RawResult ModifiesPClause::evaluateNameQuotesWildcard() {
+ResultTable ModifiesPClause::evaluateNameQuotesWildcard() {
     DesignEntity rightType = DesignEntity::VARIABLE;
     std::unordered_set<std::string> results = qpsClient.getRelationshipByFirst(getRelationshipType(), left, rightType);
     bool booleanResult = !results.empty();
@@ -114,7 +114,7 @@ RawResult ModifiesPClause::evaluateNameQuotesWildcard() {
     return {booleanResult}; //true
 }
 
-RawResult ModifiesPClause::evaluateNameQuotesNameQuotes() {
+ResultTable ModifiesPClause::evaluateNameQuotesNameQuotes() {
     // Returns boolean
     bool result = qpsClient.getRelationship(getRelationshipType(), left, right);
     // result = true -> setIsFalseResult(true) -> isFalseResult = false

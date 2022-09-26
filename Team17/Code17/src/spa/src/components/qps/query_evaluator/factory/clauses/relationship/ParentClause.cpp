@@ -5,7 +5,7 @@ ParentClause::ParentClause(TokenObject left, TokenObject right, Select synonym,
                              QPSClient qpsClient) : left(left), right(right), synonym(synonym),
                                                     synonymToDesignEntityMap(synonymToDesignEntityMap), qpsClient(qpsClient) {}
 
-RawResult ParentClause::evaluateClause() {
+ResultTable ParentClause::evaluateClause() {
     TokenType leftType = left.getTokenType();
     TokenType rightType = right.getTokenType();
     if (leftType == TokenType::NAME && rightType == TokenType::NAME) {
@@ -88,7 +88,7 @@ std::unordered_set<std::string> ParentClause::processMapToSetFromSecond(std::uno
     return processedResult;
 }
 
-RawResult ParentClause::evaluateSynonymSynonym() {
+ResultTable ParentClause::evaluateSynonymSynonym() {
     DesignEntity leftType = synonymToDesignEntityMap[left.getValue()];
     DesignEntity rightType = synonymToDesignEntityMap[right.getValue()];
     std::string leftValue = left.getValue();
@@ -101,7 +101,7 @@ RawResult ParentClause::evaluateSynonymSynonym() {
     return {leftValue, rightValue, processedMap};
 }
 
-RawResult ParentClause::evaluateSynonymWildcard() {
+ResultTable ParentClause::evaluateSynonymWildcard() {
     DesignEntity leftType = synonymToDesignEntityMap[left.getValue()];
     DesignEntity rightType = DesignEntity::STMT;
     std::string leftValue = left.getValue();
@@ -110,21 +110,21 @@ RawResult ParentClause::evaluateSynonymWildcard() {
     return {leftValue, processedMap};
 }
 
-RawResult ParentClause::evaluateSynonymInteger() {
+ResultTable ParentClause::evaluateSynonymInteger() {
     DesignEntity leftType = synonymToDesignEntityMap[left.getValue()];
     std::string leftValue = left.getValue();
     std::unordered_set<std::string> results = qpsClient.getRelationshipBySecond(getRelationshipType(), leftType, right);
     return {leftValue, results};
 }
 
-RawResult ParentClause::evaluateIntegerSynonym() {
+ResultTable ParentClause::evaluateIntegerSynonym() {
     std::string rightValue = right.getValue();
     DesignEntity rightType = synonymToDesignEntityMap[right.getValue()];
     std::unordered_set<std::string> results = qpsClient.getRelationshipByFirst(getRelationshipType(), left, rightType);
     return {rightValue, results};
 }
 
-RawResult ParentClause::evaluateIntegerWildcard() {
+ResultTable ParentClause::evaluateIntegerWildcard() {
     // Returns boolean
     DesignEntity rightType = DesignEntity::STMT;
     std::unordered_set<std::string> results = qpsClient.getRelationshipByFirst(getRelationshipType(), left, rightType);
@@ -133,14 +133,14 @@ RawResult ParentClause::evaluateIntegerWildcard() {
     return {booleanResult};
 }
 
-RawResult ParentClause::evaluateIntegerInteger() {
+ResultTable ParentClause::evaluateIntegerInteger() {
     // Returns boolean
     bool result = qpsClient.getRelationship(getRelationshipType(), left, right);
     // result = true -> setIsFalseResult(true) -> isFalseResult = false
     return {result};
 }
 
-RawResult ParentClause::evaluateWildcardSynonym() {
+ResultTable ParentClause::evaluateWildcardSynonym() {
     DesignEntity leftType = DesignEntity::STMT;
     DesignEntity rightType = synonymToDesignEntityMap[right.getValue()];
     std::string rightValue = right.getValue();
@@ -149,14 +149,14 @@ RawResult ParentClause::evaluateWildcardSynonym() {
     return {rightValue, processedMap};
 }
 
-RawResult ParentClause::evaluateWildcardWildcard() {
+ResultTable ParentClause::evaluateWildcardWildcard() {
     DesignEntity stmtType = DesignEntity::STMT;
     std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(getRelationshipType(), stmtType, stmtType);
     bool booleanResult = !results.empty();
     return {booleanResult};
 }
 
-RawResult ParentClause::evaluateWildcardInteger() {
+ResultTable ParentClause::evaluateWildcardInteger() {
     DesignEntity leftType = DesignEntity::STMT;
     std::unordered_set<std::string> results = qpsClient.getRelationshipBySecond(getRelationshipType(), leftType, right);
     bool booleanResult = !results.empty();
