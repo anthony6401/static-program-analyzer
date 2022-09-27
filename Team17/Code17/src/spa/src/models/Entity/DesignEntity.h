@@ -13,6 +13,7 @@ enum class DesignEntity {
     VARIABLE,
     CONSTANT,
     PROCEDURE,
+    NOT_FOUND,
 };
 
 

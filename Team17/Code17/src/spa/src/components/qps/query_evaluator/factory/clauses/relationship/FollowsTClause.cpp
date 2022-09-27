@@ -6,7 +6,7 @@ FollowsTClause::FollowsTClause(TokenObject left, TokenObject right, Select synon
                              QPSClient qpsClient) : left(left), right(right), synonym(synonym),
                                                     synonymToDesignEntityMap(synonymToDesignEntityMap), qpsClient(qpsClient) {}
 
-RawResult FollowsTClause::evaluateClause() {
+ResultTable FollowsTClause::evaluateClause() {
     TokenType leftType = left.getTokenType();
     TokenType rightType = right.getTokenType();
     if (leftType == TokenType::NAME && rightType == TokenType::NAME) {
@@ -89,7 +89,7 @@ std::unordered_set<std::string> FollowsTClause::processMapToSetFromSecond(std::u
     return processedResult;
 }
 
-RawResult FollowsTClause::evaluateSynonymSynonym() {
+ResultTable FollowsTClause::evaluateSynonymSynonym() {
     DesignEntity leftType = synonymToDesignEntityMap[left.getValue()];
     DesignEntity rightType = synonymToDesignEntityMap[right.getValue()];
     std::string leftValue = left.getValue();
@@ -102,7 +102,7 @@ RawResult FollowsTClause::evaluateSynonymSynonym() {
     return {leftValue, rightValue, processedMap};
 }
 
-RawResult FollowsTClause::evaluateSynonymWildcard() {
+ResultTable FollowsTClause::evaluateSynonymWildcard() {
     DesignEntity leftType = synonymToDesignEntityMap[left.getValue()];
     DesignEntity rightType = DesignEntity::STMT;
     std::string leftValue = left.getValue();
@@ -111,21 +111,21 @@ RawResult FollowsTClause::evaluateSynonymWildcard() {
     return {leftValue, processedMap};
 }
 
-RawResult FollowsTClause::evaluateSynonymInteger() {
+ResultTable FollowsTClause::evaluateSynonymInteger() {
     DesignEntity leftType = synonymToDesignEntityMap[left.getValue()];
     std::string leftValue = left.getValue();
     std::unordered_set<std::string> results = qpsClient.getRelationshipBySecond(getRelationshipType(), leftType, right);
     return {leftValue, results};
 }
 
-RawResult FollowsTClause::evaluateIntegerSynonym() {
+ResultTable FollowsTClause::evaluateIntegerSynonym() {
     std::string rightValue = right.getValue();
     DesignEntity rightType = synonymToDesignEntityMap[right.getValue()];
     std::unordered_set<std::string> results = qpsClient.getRelationshipByFirst(getRelationshipType(), left, rightType);
     return {rightValue, results};
 }
 
-RawResult FollowsTClause::evaluateIntegerWildcard() {
+ResultTable FollowsTClause::evaluateIntegerWildcard() {
     // Returns boolean
     DesignEntity rightType = DesignEntity::STMT;
     std::unordered_set<std::string> results = qpsClient.getRelationshipByFirst(getRelationshipType(), left, rightType);
@@ -134,14 +134,14 @@ RawResult FollowsTClause::evaluateIntegerWildcard() {
     return {booleanResult};
 }
 
-RawResult FollowsTClause::evaluateIntegerInteger() {
+ResultTable FollowsTClause::evaluateIntegerInteger() {
     // Returns boolean
     bool result = qpsClient.getRelationship(getRelationshipType(), left, right);
     // result = true -> setIsFalseResult(true) -> isFalseResult = false
     return {result};
 }
 
-RawResult FollowsTClause::evaluateWildcardSynonym() {
+ResultTable FollowsTClause::evaluateWildcardSynonym() {
     DesignEntity leftType = DesignEntity::STMT;
     DesignEntity rightType = synonymToDesignEntityMap[right.getValue()];
     std::string rightValue = right.getValue();
@@ -150,14 +150,14 @@ RawResult FollowsTClause::evaluateWildcardSynonym() {
     return {rightValue, processedMap};
 }
 
-RawResult FollowsTClause::evaluateWildcardWildcard() {
+ResultTable FollowsTClause::evaluateWildcardWildcard() {
     DesignEntity stmtType = DesignEntity::STMT;
     std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(getRelationshipType(), stmtType, stmtType);
     bool booleanResult = !results.empty();
     return {booleanResult};
 }
 
-RawResult FollowsTClause::evaluateWildcardInteger() {
+ResultTable FollowsTClause::evaluateWildcardInteger() {
     DesignEntity leftType = DesignEntity::STMT;
     std::unordered_set<std::string> results = qpsClient.getRelationshipBySecond(getRelationshipType(), leftType, right);
     bool booleanResult = !results.empty();

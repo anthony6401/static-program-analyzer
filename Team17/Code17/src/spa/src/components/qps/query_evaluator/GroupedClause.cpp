@@ -37,10 +37,10 @@ bool GroupedClause::isEmpty() {
     return clauses.empty();
 }
 
-RawResult GroupedClause::evaluateGroupedClause() {
-    RawResult evaluatedGroupRawResult;
+ResultTable GroupedClause::evaluateGroupedClause() {
+    ResultTable evaluatedGroupRawResult;
     for (const auto& c : clauses) {
-        RawResult evaluatedClause = c -> evaluateClause();
+        ResultTable evaluatedClause = c -> evaluateClause();
         if (evaluatedClause.getIsFalseResult()) {
             return evaluatedClause;
         }

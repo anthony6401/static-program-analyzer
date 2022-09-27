@@ -15,21 +15,21 @@ private:
 
 public:
     AssignPatternClause(std::string assignSynonym, TokenObject left, TokenObject right, QPSClient qpsClient, Select synonym);
-    RawResult evaluateClause() override;
+    ResultTable evaluateClause() override;
     size_t getNumberOfSynonyms() override;
     std::set<std::string> getAllSynonyms() override;
-    RawResult evaluateSynonymWildcard();
-    RawResult evaluateSynonymExpression();
-    RawResult evaluateSynonymNameQuotes();
-    RawResult evaluateSynonymSubExpression();
-    RawResult evaluateWildcardWildcard();
-    RawResult evaluateWildcardExpression();
-    RawResult evaluateWildcardNameQuotes();
-    RawResult evaluateWildcardSubExpression();
-    RawResult evaluateNameQuotesWildcard();
-    RawResult evaluateNameQuotesExpression();
-    RawResult evaluateNameQuotesNameQuotes();
-    RawResult evaluateNameQuotesSubExpression();
+    ResultTable evaluateSynonymWildcard();
+    ResultTable evaluateSynonymExpression();
+    ResultTable evaluateSynonymNameQuotes();
+    ResultTable evaluateSynonymSubExpression();
+    ResultTable evaluateWildcardWildcard();
+    ResultTable evaluateWildcardExpression();
+    ResultTable evaluateWildcardNameQuotes();
+    ResultTable evaluateWildcardSubExpression();
+    ResultTable evaluateNameQuotesWildcard();
+    ResultTable evaluateNameQuotesExpression();
+    ResultTable evaluateNameQuotesNameQuotes();
+    ResultTable evaluateNameQuotesSubExpression();
 };
 
 #endif //SPA_ASSIGNPATTERNCLAUSE_H

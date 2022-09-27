@@ -1,5 +1,5 @@
-#include "FollowsRelationshipStorage.h"
-#include "models/Relationship/FollowsRelationship.h"
+#include "NextTRelationshipStorage.h"
+#include "models/Relationship/NextTRelationship.h"
 #include "models/Relationship/RelationshipType.h"
 #include "models/Entity/ProcedureEntity.h"
 #include "models/Entity/AssignEntity.h"
@@ -17,7 +17,7 @@
 #include "typeinfo"
 #include <iostream>
 
-FollowsRelationshipStorage::FollowsRelationshipStorage() : RelationshipStorage(),
+NextTRelationshipStorage::NextTRelationshipStorage() : RelationshipStorage(),
 readToReadForwardMap(std::unordered_map<std::string, std::unordered_set<std::string>>()),
 readToPrintForwardMap(std::unordered_map<std::string, std::unordered_set<std::string>>()),
 readToAssignForwardMap(std::unordered_map<std::string, std::unordered_set<std::string>>()),
@@ -81,7 +81,7 @@ stmtToIfForwardMap(std::unordered_map<std::string, std::unordered_set<std::strin
 stmtToStmtForwardMap(std::unordered_map<std::string, std::unordered_set<std::string>>()),
 stmtToStmtBackwardMap(std::unordered_map<std::string, std::unordered_set<std::string>>()) {}
 
-std::unordered_map<std::string, std::unordered_set<std::string>>* FollowsRelationshipStorage::getStorage(DesignEntity left, DesignEntity right, bool isForward = false) {
+std::unordered_map<std::string, std::unordered_set<std::string>>* NextTRelationshipStorage::getStorage(DesignEntity left, DesignEntity right, bool isForward = false) {
 	if (left == DesignEntity::READ) {
 		if (right == DesignEntity::READ) {
 			return &(this->readToReadForwardMap);
@@ -252,8 +252,8 @@ std::unordered_map<std::string, std::unordered_set<std::string>>* FollowsRelatio
 	return nullptr;
 }
 
-bool FollowsRelationshipStorage::storeRelationship(Relationship* rel) {
-	FollowsRelationship* followsRelationship = dynamic_cast<FollowsRelationship*>(rel);
+bool NextTRelationshipStorage::storeRelationship(Relationship* rel) {
+	NextTRelationship* followsRelationship = dynamic_cast<NextTRelationship*>(rel);
 
 	if (followsRelationship) {
 		Entity* leftEntity = followsRelationship->getLeftEntity();
@@ -279,18 +279,18 @@ bool FollowsRelationshipStorage::storeRelationship(Relationship* rel) {
 		bool resultTwo = RelationshipUtils::insertEntity(stmtToStmtBackwardStorage, rightValue, leftValue);
 		bool resultThree = RelationshipUtils::insertEntity(stmtToRightForwardStorage, leftValue, rightValue);
 		bool resultFour = RelationshipUtils::insertEntity(leftToRightForwardStorage, leftValue, rightValue);
-		bool resultFive= RelationshipUtils::insertEntity(leftToStmtForwardStorage, leftValue, rightValue);
+		bool resultFive = RelationshipUtils::insertEntity(leftToStmtForwardStorage, leftValue, rightValue);
 		bool resultSix = RelationshipUtils::insertEntity(leftToStmtBackwardStorage, rightValue, leftValue);
-		
-		result = result || resultOne || resultTwo || resultThree || resultFour || resultFive || resultSix ;
-		
+
+		result = result || resultOne || resultTwo || resultThree || resultFour || resultFive || resultSix;
+
 		return result;
 	}
 	return false;
 }
 
-bool FollowsRelationshipStorage::getRelationship(RelationshipType relType, TokenObject firstArgument, TokenObject secondArgument) {
-	if (relType == RelationshipType::FOLLOWS) {
+bool NextTRelationshipStorage::getRelationship(RelationshipType relType, TokenObject firstArgument, TokenObject secondArgument) {
+	if (relType == RelationshipType::NEXT_T) {
 		std::unordered_map<std::string, std::unordered_set<std::string>>* storage{};
 
 		storage = getStorage(DesignEntity::STMT, DesignEntity::STMT, true);
@@ -307,10 +307,10 @@ bool FollowsRelationshipStorage::getRelationship(RelationshipType relType, Token
 }
 
 // Answer Follows(1,a)
-std::unordered_set<std::string> FollowsRelationshipStorage::getRelationshipByFirst(RelationshipType relType, TokenObject firstArgument, DesignEntity returnType) {
-	if (relType == RelationshipType::FOLLOWS) {
+std::unordered_set<std::string> NextTRelationshipStorage::getRelationshipByFirst(RelationshipType relType, TokenObject firstArgument, DesignEntity returnType) {
+	if (relType == RelationshipType::NEXT_T) {
 		std::unordered_map<std::string, std::unordered_set<std::string>>* storage{};
-		
+
 		storage = getStorage(DesignEntity::STMT, returnType, true);
 
 		if (storage == nullptr) {
@@ -329,8 +329,8 @@ std::unordered_set<std::string> FollowsRelationshipStorage::getRelationshipByFir
 }
 
 // Answer Follows(s,2), Follows(w,2), or Follows(if, 2)
-std::unordered_set<std::string> FollowsRelationshipStorage::getRelationshipBySecond(RelationshipType relType, DesignEntity returnType, TokenObject secondArgument) {
-	if (relType == RelationshipType::FOLLOWS) {
+std::unordered_set<std::string> NextTRelationshipStorage::getRelationshipBySecond(RelationshipType relType, DesignEntity returnType, TokenObject secondArgument) {
+	if (relType == RelationshipType::NEXT_T) {
 		std::unordered_map<std::string, std::unordered_set<std::string>>* storage{};
 
 		storage = getStorage(returnType, DesignEntity::STMT, false);
@@ -350,8 +350,8 @@ std::unordered_set<std::string> FollowsRelationshipStorage::getRelationshipBySec
 	return std::unordered_set<std::string>();
 }
 
-std::unordered_map<std::string, std::unordered_set<std::string>> FollowsRelationshipStorage::getAllRelationship(RelationshipType relType, DesignEntity returnType1, DesignEntity returnType2) {
-	if (relType == RelationshipType::FOLLOWS) {
+std::unordered_map<std::string, std::unordered_set<std::string>> NextTRelationshipStorage::getAllRelationship(RelationshipType relType, DesignEntity returnType1, DesignEntity returnType2) {
+	if (relType == RelationshipType::NEXT_T) {
 		std::unordered_map<std::string, std::unordered_set<std::string>>* storage{};
 
 		storage = getStorage(returnType1, returnType2, true);

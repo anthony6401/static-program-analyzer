@@ -4,10 +4,8 @@
 #include "components/qps/abstract_query_object/QueryObject.h"
 #include "components/qps/query_evaluator/Evaluator.h"
 
-// Debugger: std::cout << firstRawResult;
-
 TEST_CASE("Instantiate empty constructor") {
-    RawResult emptyRawResult;
+    ResultTable emptyRawResult;
     REQUIRE(emptyRawResult.isEmptyResult() == true);
     REQUIRE(emptyRawResult.synonymsList.empty() == true);
     REQUIRE(emptyRawResult.getIsBooleanResult() == true);
@@ -15,7 +13,7 @@ TEST_CASE("Instantiate empty constructor") {
 }
 
 TEST_CASE("Instantiate constructor with 0 synonym") {
-    RawResult zeroSynonymResult = RawResult();
+    ResultTable zeroSynonymResult = ResultTable();
     REQUIRE(zeroSynonymResult.getIsBooleanResult() == true);
     REQUIRE(zeroSynonymResult.isEmptyResult() == true);
     REQUIRE(zeroSynonymResult.synonymsList.empty() == true);
@@ -23,7 +21,7 @@ TEST_CASE("Instantiate constructor with 0 synonym") {
 }
 
 TEST_CASE("Instantiate constructor with one synonym") {
-    RawResult singleSynonymResult = RawResult("a", {"1", "2", "3", "4"});
+    ResultTable singleSynonymResult = ResultTable("a", {"1", "2", "3", "4"});
     std::vector<std::string> expectedSynonymsList = {"a"};
     std::vector<std::vector<std::string>> expectedResultsList = {{"4"}, {"3"}, {"2"}, {"1"}};
     REQUIRE(singleSynonymResult.synonymsList == expectedSynonymsList);
@@ -37,7 +35,7 @@ TEST_CASE("Instantiate constructor with one synonym") {
 TEST_CASE("Instantiate constructor with two synonyms") {
     std::pair<std::string, std::string> p1("1","x");
     std::pair<std::string, std::string> p2("3","x");
-    RawResult doubleSynonymResult = RawResult("a", "v", {p1, p2});
+    ResultTable doubleSynonymResult = ResultTable("a", "v", {p1, p2});
     std::vector<std::string> expectedSynonymsList = {"a", "v"};
     std::vector<std::vector<std::string>> expectedResultsList = {{p1.first, p1.second}, {p2.first, p2.second}};
     REQUIRE(doubleSynonymResult.synonymsList == expectedSynonymsList);
@@ -49,10 +47,10 @@ TEST_CASE("Instantiate constructor with two synonyms") {
 }
 
 TEST_CASE("Merge empty result with non-empty result") {
-    RawResult emptyRawResult;
-    RawResult singleSynonymResult = RawResult("a", {"1", "2", "3", "4"});
+    ResultTable emptyRawResult;
+    ResultTable singleSynonymResult = ResultTable("a", {"1", "2", "3", "4"});
     emptyRawResult.combineResult(singleSynonymResult);
-    RawResult expectedResult = RawResult();
+    ResultTable expectedResult = ResultTable();
     std::vector<std::string> expectedSynonymsList = {"a"};
     std::vector<std::vector<std::string>> expectedResultsList = {{"4"}, {"3"}, {"2"}, {"1"}};
     REQUIRE(emptyRawResult.synonymsList == expectedSynonymsList);
@@ -60,8 +58,8 @@ TEST_CASE("Merge empty result with non-empty result") {
 }
 
 TEST_CASE("Merge non-empty result with empty result") {
-    RawResult emptyRawResult = RawResult();
-    RawResult singleSynonymResult = RawResult("a", {"1", "2", "3", "4"});
+    ResultTable emptyRawResult = ResultTable();
+    ResultTable singleSynonymResult = ResultTable("a", {"1", "2", "3", "4"});
     singleSynonymResult.combineResult(emptyRawResult);
     std::vector<std::string> expectedSynonymsList = {"a"};
     std::vector<std::vector<std::string>> expectedResultsList = {{"4"}, {"3"}, {"2"}, {"1"}};
@@ -71,8 +69,8 @@ TEST_CASE("Merge non-empty result with empty result") {
 
 TEST_CASE("Merge results with common synonyms - single common synonyms in single synonym clauses") {
     // Common synonym a
-    RawResult firstRawResult = RawResult("a", {"1", "2", "3", "4"});
-    RawResult secondRawResult = RawResult("a", {"1", "3", "5"});
+    ResultTable firstRawResult = ResultTable("a", {"1", "2", "3", "4"});
+    ResultTable secondRawResult = ResultTable("a", {"1", "3", "5"});
     std::vector<std::string> expectedSynonymsList = {"a"};
     std::vector<std::vector<std::string>> expectedResultsList = {{"3"}, {"1"}};
     firstRawResult.combineResult(secondRawResult);
@@ -82,8 +80,8 @@ TEST_CASE("Merge results with common synonyms - single common synonyms in single
 
 TEST_CASE("Merge results with common synonyms - single common synonyms in single/multiple synonym clauses") {
     // Common synonym a
-    RawResult firstRawResult = RawResult("a", {"1", "2", "3", "4"});
-    RawResult secondRawResult = RawResult("a", "v", {{"1", "x"}, {"3", "y"}, {"5", "z"}});
+    ResultTable firstRawResult = ResultTable("a", {"1", "2", "3", "4"});
+    ResultTable secondRawResult = ResultTable("a", "v", {{"1", "x"}, {"3", "y"}, {"5", "z"}});
     std::vector<std::string> expectedSynonymsList = {"a", "v"};
     std::vector<std::vector<std::string>> expectedResultsList = {{"3", "y"}, {"1", "x"}};
     firstRawResult.combineResult(secondRawResult);
@@ -93,8 +91,8 @@ TEST_CASE("Merge results with common synonyms - single common synonyms in single
 
 TEST_CASE("Merge results with common synonyms - single common synonym in multiple synonyms clauses") {
     // Common synonym a in multiple synonyms
-    RawResult firstRawResult = RawResult("s", "v", {{"1", "x"}, {"1", "y"}, {"3", "z"}});
-    RawResult secondRawResult = RawResult("a", "v", {{"1", "x"}, {"2", "z"}});
+    ResultTable firstRawResult = ResultTable("s", "v", {{"1", "x"}, {"1", "y"}, {"3", "z"}});
+    ResultTable secondRawResult = ResultTable("a", "v", {{"1", "x"}, {"2", "z"}});
     // common values are x and z
     std::vector<std::string> expectedSynonymsList = {"s", "v", "a"};
     std::vector<std::vector<std::string>> expectedResultsList = {{"1", "x", "1"}, {"3", "z", "2"}};
@@ -105,8 +103,8 @@ TEST_CASE("Merge results with common synonyms - single common synonym in multipl
 
 TEST_CASE("Merge results with common synonyms - multiple common synonyms in multiple synonyms clauses") {
     // Common synonym a, v
-    RawResult firstRawResult = RawResult("a", "v", {{"1", "x"}, {"1", "y"}, {"3", "z"}});
-    RawResult secondRawResult = RawResult("a", "v", {{"1", "x"}, {"2", "z"}});
+    ResultTable firstRawResult = ResultTable("a", "v", {{"1", "x"}, {"1", "y"}, {"3", "z"}});
+    ResultTable secondRawResult = ResultTable("a", "v", {{"1", "x"}, {"2", "z"}});
     std::vector<std::string> expectedSynonymsList = {"a", "v"};
     std::vector<std::vector<std::string>> expectedResultsList = {{"1", "x"}};
     firstRawResult.combineResult(secondRawResult);
@@ -116,8 +114,8 @@ TEST_CASE("Merge results with common synonyms - multiple common synonyms in mult
 
 // Cross join
 TEST_CASE("Merge results with no common synonyms - single synonym clauses") {
-    RawResult firstRawResult = RawResult("a", {"1", "2", "3", "4"});
-    RawResult secondRawResult = RawResult("v", {"x", "y", "z", "k"});
+    ResultTable firstRawResult = ResultTable("a", {"1", "2", "3", "4"});
+    ResultTable secondRawResult = ResultTable("v", {"x", "y", "z", "k"});
     std::vector<std::string> expectedSynonymsList = {"a", "v"};
     std::vector<std::vector<std::string>> expectedResultsList = { { "4", "k" },
                                                                   { "4", "z" },
@@ -141,8 +139,8 @@ TEST_CASE("Merge results with no common synonyms - single synonym clauses") {
 }
 
 TEST_CASE("Merge results with no common synonyms - multiple synonym clauses") {
-    RawResult firstRawResult = RawResult("a", "v", {{"1", "x"}, {"3", "y"}, {"5", "z"}});
-    RawResult secondRawResult = RawResult("a1", "v1", {{"2", "i"}, {"4", "j"}, {"6", "k"}});
+    ResultTable firstRawResult = ResultTable("a", "v", {{"1", "x"}, {"3", "y"}, {"5", "z"}});
+    ResultTable secondRawResult = ResultTable("a1", "v1", {{"2", "i"}, {"4", "j"}, {"6", "k"}});
     std::vector<std::string> expectedSynonymsList = {"a", "v", "a1", "v1"};
     std::vector<std::vector<std::string>> expectedResultsList = { { "1", "x", "2", "i" },
                                                                   { "1", "x", "4", "j" },
