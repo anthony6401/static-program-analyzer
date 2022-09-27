@@ -13,6 +13,7 @@ private:
     std::stack<TokenType> suchThatSyntax;
     bool hasValidFollowsParentSyntax(std::vector<TokenObject> relationshipClauseTokens);
     bool hasValidUsersModifiesSyntax(std::vector<TokenObject> relationshipClauseTokens);
+    bool isSynonymToken(TokenType tokenType);
 public:
     SuchThatClauseSyntaxChecker();
     ~SuchThatClauseSyntaxChecker();

@@ -124,15 +124,7 @@ bool SuchThatClauseSyntaxChecker::hasValidFollowsParentSyntax(std::vector<TokenO
 			}
 
 			if (possibleTokenType == TokenType::SYNONYM) {
-				std::vector<TokenType> synonymTokens = this->generalSyntax.at(TokenType::SYNONYM);
-				for (int k = 0; k < synonymTokens.size(); k++) {
-					TokenType synonymToken = synonymTokens.at(k);
-
-					if (tokenType == synonymToken) {
-						foundToken = true;
-						break;
-					}
-				}
+				foundToken = isSynonymToken(tokenType);
 			}
 		}
 
@@ -187,15 +179,7 @@ bool SuchThatClauseSyntaxChecker::hasValidUsersModifiesSyntax(std::vector<TokenO
 			}
 
 			if (possibleTokenType == TokenType::SYNONYM) {
-				std::vector<TokenType> synonymTokens = this->generalSyntax.at(TokenType::SYNONYM);
-				for (int k = 0; k < synonymTokens.size(); k++) {
-					TokenType synonymToken = synonymTokens.at(k);
-
-					if (tokenType == synonymToken) {
-						foundToken = true;
-						break;
-					}
-				}
+				foundToken = isSynonymToken(tokenType);
 			}
 		}
 
@@ -220,4 +204,17 @@ bool SuchThatClauseSyntaxChecker::hasValidUsersModifiesSyntax(std::vector<TokenO
 	}
 
 	return true;
+}
+
+bool SuchThatClauseSyntaxChecker::isSynonymToken(TokenType tokenType) {
+	std::vector<TokenType> synonymTokens = this->generalSyntax.at(TokenType::SYNONYM);
+	for (int k = 0; k < synonymTokens.size(); k++) {
+		TokenType synonymToken = synonymTokens.at(k);
+
+		if (tokenType == synonymToken) {
+			return true;
+		}
+	}
+
+	return false;
 }
