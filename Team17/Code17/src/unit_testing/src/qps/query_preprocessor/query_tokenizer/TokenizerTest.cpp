@@ -6,7 +6,7 @@
 #include <iostream>
 
 TEST_CASE("Test new clause") {
-    std::string testQuery = "(assign a; Select a pattern a(\"(x   +y    )*z+( 3+2\" , _\"x*y\"_)";
+    std::string testQuery = "(assign a; Select a pattern a(\"( x   +y    )*z+( 3 + 2\" , _\"x * y\"_)";
     Tokenizer tokenizer = Tokenizer();
     std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
     REQUIRE(1 == 1);

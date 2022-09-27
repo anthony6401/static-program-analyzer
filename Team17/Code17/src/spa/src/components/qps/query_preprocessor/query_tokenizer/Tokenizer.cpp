@@ -241,21 +241,21 @@ std::vector<std::string> Tokenizer::convertExpressionToCharVector(std::string s)
     for (char character : s) {
         // Temporary conversion of string to character
         temp.push_back(character);
-        // Character is a valid name
         if (isName(temp)) {
             expressionTokens.push_back(temp);
-        }
-
-        // Character is a valid integer
-        if (isInteger(temp)) {
+        } else if (isInteger(temp)) {
             expressionTokens.push_back(temp);
+        } else {
+            auto symbolsIterator = std::find(expressionSymbolsAndBrackets.begin(), expressionSymbolsAndBrackets.end(), character);
+            if (symbolsIterator != expressionSymbolsAndBrackets.cend()) {
+                expressionTokens.push_back(temp);
+            } else {
+                std::vector<std::string> invalidExpression;
+                // Return empty vector
+                return invalidExpression;
+            }
         }
-        auto symbolsIterator = std::find(expressionSymbolsAndBrackets.begin(), expressionSymbolsAndBrackets.end(), character);
-        // Character is a valid symbol or bracket
-        if (symbolsIterator != expressionSymbolsAndBrackets.cend()) {
-            expressionTokens.push_back(temp);
-        }
-        // Character is a valid bracket
+        temp.clear();
     }
     return expressionTokens;
 }
