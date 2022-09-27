@@ -235,69 +235,88 @@ bool Tokenizer::isIdentity(std::string s) {
     return false;
 }
 
+bool isExpressionName(std::string s) {
+    for (auto character : s) {
+        if (!isalpha(character)) {
+            return false;
+        }
+    }
+    return true;
+}
+
 std::vector<std::string> Tokenizer::convertExpressionToCharVector(std::string s) {
     std::vector<std::string> expressionTokens;
+    std::vector<std::string> invalidExpression;
     std::string temp;
     for (char character : s) {
-        // Temporary conversion of string to character
-        temp.push_back(character);
-        if (isName(temp)) {
-            expressionTokens.push_back(temp);
-        } else if (isInteger(temp)) {
-            expressionTokens.push_back(temp);
-        } else {
-            auto symbolsIterator = std::find(expressionSymbolsAndBrackets.begin(), expressionSymbolsAndBrackets.end(), character);
-            if (symbolsIterator != expressionSymbolsAndBrackets.cend()) {
-                expressionTokens.push_back(temp);
-            } else {
-                std::vector<std::string> invalidExpression;
-                // Return empty vector
-                return invalidExpression;
+        auto symbolsIterator = std::find(expressionSymbolsAndBrackets.begin(), expressionSymbolsAndBrackets.end(), character);
+        if (symbolsIterator != expressionSymbolsAndBrackets.cend()) {
+            if (!temp.empty()) {
+                if (isExpressionName(temp) || Tokenizer::isInteger(temp)) {
+                    expressionTokens.push_back(temp);
+                    temp.clear();
+                } else {
+                    std::cout << "INVALID EXPRESSION" << std::endl;
+                    return invalidExpression;
+                }
             }
+            expressionTokens.push_back(std::string(1, character));
+        } else {
+            // Potential Name or Integer Token
+            temp.push_back(character);
         }
-        temp.clear();
     }
+
+    if (!temp.empty()) {
+        if (!isExpressionName(temp) && !isInteger(temp)) {
+            std::cout << "INVALID EXPRESSION" << std::endl;
+            return invalidExpression;
+        } else {
+            expressionTokens.push_back(temp);
+        }
+    }
+
     return expressionTokens;
 }
 
  //"x+(x+2)" // "x+1" // "1"
-//bool Tokenizer::isExpression(std::string s) {
-//    std::stack<std::string> expressionStack;
-//    if (s.size() < 3) {
-//        return false;
-//    }
-//    if (s.front() != '"' || s.back() != '"') {
-//        return false;
-//    }
-//    // Removes quotations
-//    trimQuotesOrWildcard(s);
-//    // Break string into char and validate char
-//    std::vector<std::string> expressionCharVector = convertExpressionToCharVector(s);
-//    // Invalid expression
-//    if (expressionCharVector.empty()) {
-//        return false;
-//    }
-//    // Validate expression
-//    return true;
-//}
+bool Tokenizer::isExpression(std::string s) {
+    std::stack<std::string> expressionStack;
+    if (s.size() < 3) {
+        return false;
+    }
+    if (s.front() != '"' || s.back() != '"') {
+        return false;
+    }
+    // Removes quotations
+    trimQuotesOrWildcard(s);
+    // Break string into char and validate char
+    std::vector<std::string> expressionCharVector = convertExpressionToCharVector(s);
+    // Invalid expression
+    if (expressionCharVector.empty()) {
+        return false;
+    }
+    // Validate expression
+    return true;
+}
 
 // INCOMPLETE!!!
 // "x+(x+2)" // "x+1" // "1"
-bool Tokenizer::isExpression(std::string s) {
-    if (s.size() < 3) { // Perhaps add in expression symbol checking
-        return false;
-    } else {
-        if (s.front() == '"' && s.back() == '"') {
-            std::string withoutQuotes = trimQuotesOrWildcard(s);
-            for (char c : withoutQuotes) {
-                if (isalnum(c)) {
-                    return true;
-                }
-            }
-        }
-    }
-    return false;
-}
+//bool Tokenizer::isExpression(std::string s) {
+//    if (s.size() < 3) { // Perhaps add in expression symbol checking
+//        return false;
+//    } else {
+//        if (s.front() == '"' && s.back() == '"') {
+//            std::string withoutQuotes = trimQuotesOrWildcard(s);
+//            for (char c : withoutQuotes) {
+//                if (isalnum(c)) {
+//                    return true;
+//                }
+//            }
+//        }
+//    }
+//    return false;
+//}
 
 // _"x+1"_, _"x"_, _"1"_
 bool Tokenizer::isSubExpression(std::string s) {
