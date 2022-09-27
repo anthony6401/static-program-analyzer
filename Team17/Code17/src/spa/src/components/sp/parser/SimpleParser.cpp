@@ -242,6 +242,8 @@ std::vector<SimpleToken> SimpleParser::parseCondition(std::vector<std::string> t
             }
             if (SimpleValidator::isAndOrCenter(tokens, indice)) {
                 break;
+            } else {
+                indice++;
             }
 
         }
