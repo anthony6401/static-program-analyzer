@@ -236,12 +236,14 @@ std::vector<SimpleToken> SimpleParser::parseCondition(std::vector<std::string> t
     if (condition.find("&&") != std::string::npos || condition.find("||") != std::string::npos) {
         int indice = 0;
         for (std::string token : tokens) {
-            if (token == "&&" || token == "||") {
-                if (SimpleValidator::isAndOrCenter(tokens, indice)) {
-                    break;
-                }
+            if (token != "&&" && token != "||") {
+                indice++;
+                continue;
             }
-            indice++;
+            if (SimpleValidator::isAndOrCenter(tokens, indice)) {
+                break;
+            }
+
         }
         if (indice == tokens.size()) {
             throw std::invalid_argument("Received invalid condition. invalid && or ||");
