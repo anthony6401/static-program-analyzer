@@ -1,4 +1,4 @@
-#include "components/sp/tokenizer/SimpleTokenizer.h"
+#include "components/sp/parser/SimpleParser.h"
 #include "models/Entity/Entity.h"
 #include "models/Entity/AssignEntity.h"
 #include "models/Entity/IfEntity.h"
@@ -28,11 +28,9 @@ PKB* pkbSP = new PKB();
 auto spClient = new SPClient(pkbSP);
 
 TEST_CASE("test SP PKB integration") {
-	auto pkb = new PKB();
-	SPClient* client = new SPClient(pkb);
 	Extractor extractor = Extractor(spClient);
-	SimpleTokenizer simpleTokenizer = SimpleTokenizer(&extractor);
-	simpleTokenizer.tokenizeCode("    procedure computeCentroid {\
+	SimpleParser simpleParser = SimpleParser(&extractor);
+	simpleParser.parseCode("    procedure computeCentroid {\
 		      count = 0;\
 	      cenX = 0;\
 	      cenY = 0;\

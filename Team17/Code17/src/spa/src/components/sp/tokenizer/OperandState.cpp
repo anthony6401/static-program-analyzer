@@ -9,11 +9,11 @@ OperandState::OperandState(ExprStack* context) {
 
 void OperandState::put(std::vector<SimpleToken>& children, std::string value) {
     if (SimpleValidator::validateConstant(value)) {
-        SimpleToken token = SimpleToken(SpTokenType::TCONSTANT, value, 0, NULL);
+        SimpleToken token = SimpleToken(SpTokenType::TCONSTANT, value, 0);
         children.push_back(token);
         this->context->setState(new FactorState(this->context));
     } else if (SimpleValidator::validateVariable(value)) {
-        SimpleToken token = SimpleToken(SpTokenType::TVARIABLE, value, 0, NULL);
+        SimpleToken token = SimpleToken(SpTokenType::TVARIABLE, value, 0);
         children.push_back(token);
         this->context->setState(new FactorState(this->context));
     } else if (value == "(") {
