@@ -11,9 +11,11 @@ using namespace qps;
 class SuchThatClauseSyntaxChecker : public SyntaxChecker {
 private:
     std::stack<TokenType> suchThatSyntax;
-    bool hasValidFollowsParentSyntax(std::vector<TokenObject> relationshipClauseTokens);
-    bool hasValidUsersModifiesSyntax(std::vector<TokenObject> relationshipClauseTokens);
+    bool hasValidRelationshipSyntax(std::vector<TokenObject> relationshipClauseTokens);
+    bool hasValidUsesModifiesSyntax(std::vector<TokenObject> relationshipClauseTokens);
     bool isSynonymToken(TokenType tokenType);
+    void hasEntrefEntrefSyntax();
+    void hasStmtrefStmtrefSyntax();
 public:
     SuchThatClauseSyntaxChecker();
     ~SuchThatClauseSyntaxChecker();

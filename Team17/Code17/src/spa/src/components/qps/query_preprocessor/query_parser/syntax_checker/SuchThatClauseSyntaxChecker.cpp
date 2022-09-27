@@ -60,19 +60,23 @@ bool SuchThatClauseSyntaxChecker::isSyntacticallyCorrect(std::vector<TokenObject
 			return false;
 		}
 
-		if (tokenType == TokenType::FOLLOWS || tokenType == TokenType::FOLLOWS_T ||
-			tokenType == TokenType::PARENT || tokenType == TokenType::PARENT_T) {
-			bool hasValidSyntax = hasValidFollowsParentSyntax(relationshipClauseTokens);
+		bool hasValidSyntax = false;
 
-			if (!hasValidSyntax) {
-				return false;
-			}
+		if (tokenType == TokenType::USES || tokenType == TokenType::MODIFIES) {
+			hasValidSyntax = hasValidUsesModifiesSyntax(relationshipClauseTokens);
+		}
+		else if (tokenType == TokenType::CALLS || tokenType == TokenType::CALLS_T) {
+			hasEntrefEntrefSyntax();
+			hasValidSyntax = hasValidRelationshipSyntax(relationshipClauseTokens);
 		}
 		else {
-			bool hasValidSyntax = hasValidUsersModifiesSyntax(relationshipClauseTokens);
-			if (!hasValidSyntax) {
-				return false;
-			}
+			hasStmtrefStmtrefSyntax();
+			hasValidSyntax = hasValidRelationshipSyntax(relationshipClauseTokens);
+		}
+
+
+		if (!hasValidSyntax) {
+			return false;
 		}
 
 		break;
@@ -86,13 +90,7 @@ bool SuchThatClauseSyntaxChecker::isSyntacticallyCorrect(std::vector<TokenObject
 	return true;
 };
 
-bool SuchThatClauseSyntaxChecker::hasValidFollowsParentSyntax(std::vector<TokenObject> relationshipClauseTokens) {
-	this->suchThatSyntax.push(TokenType::CLOSED_BRACKET);
-	this->suchThatSyntax.push(TokenType::STMTREF);
-	this->suchThatSyntax.push(TokenType::COMMA);
-	this->suchThatSyntax.push(TokenType::STMTREF);
-	this->suchThatSyntax.push(TokenType::OPEN_BRACKET);
-
+bool SuchThatClauseSyntaxChecker::hasValidRelationshipSyntax(std::vector<TokenObject> relationshipClauseTokens) {
 	for (int i = 0; i < relationshipClauseTokens.size(); i++) {
 		TokenObject token = relationshipClauseTokens.at(i);
 		TokenType tokenType = token.getTokenType();
@@ -112,7 +110,7 @@ bool SuchThatClauseSyntaxChecker::hasValidFollowsParentSyntax(std::vector<TokenO
 			continue;
 		}
 
-		// STMTREF
+		// STMTREF or ENTREF
 		std::vector<TokenType> possibleTokenTypes = this->generalSyntax.at(syntax);
 		bool foundToken = false;
 		for (int j = 0; j < possibleTokenTypes.size(); j++) {
@@ -138,7 +136,7 @@ bool SuchThatClauseSyntaxChecker::hasValidFollowsParentSyntax(std::vector<TokenO
 }
 
 
-bool SuchThatClauseSyntaxChecker::hasValidUsersModifiesSyntax(std::vector<TokenObject> relationshipClauseTokens) {
+bool SuchThatClauseSyntaxChecker::hasValidUsesModifiesSyntax(std::vector<TokenObject> relationshipClauseTokens) {
 	this->suchThatSyntax.push(TokenType::CLOSED_BRACKET);
 	this->suchThatSyntax.push(TokenType::ENTREF);
 	this->suchThatSyntax.push(TokenType::COMMA);
@@ -217,4 +215,20 @@ bool SuchThatClauseSyntaxChecker::isSynonymToken(TokenType tokenType) {
 	}
 
 	return false;
+}
+
+void SuchThatClauseSyntaxChecker::hasEntrefEntrefSyntax() {
+	this->suchThatSyntax.push(TokenType::CLOSED_BRACKET);
+	this->suchThatSyntax.push(TokenType::ENTREF);
+	this->suchThatSyntax.push(TokenType::COMMA);
+	this->suchThatSyntax.push(TokenType::ENTREF);
+	this->suchThatSyntax.push(TokenType::OPEN_BRACKET);
+}
+
+void SuchThatClauseSyntaxChecker::hasStmtrefStmtrefSyntax() {
+	this->suchThatSyntax.push(TokenType::CLOSED_BRACKET);
+	this->suchThatSyntax.push(TokenType::STMTREF);
+	this->suchThatSyntax.push(TokenType::COMMA);
+	this->suchThatSyntax.push(TokenType::STMTREF);
+	this->suchThatSyntax.push(TokenType::OPEN_BRACKET);
 }
