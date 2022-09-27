@@ -5,6 +5,7 @@
 #include <sstream>
 #include <vector>
 #include <iterator>
+#include <stack>
 #include <iostream>
 #include <unordered_set>
 #include "../exceptions/TokenException.h"
@@ -13,6 +14,7 @@ using namespace qps;
 
 std::string whitespace = "\n\r\t\f\v";
 std::unordered_set<char> expressionSymbols = {'+', '-', '*', '/', '%'};
+std::unordered_set<char> expressionBrackets = {'(', ')'};
 
 Tokenizer::Tokenizer() {
     /**
@@ -234,23 +236,46 @@ bool Tokenizer::isIdentity(std::string s) {
     return false;
 }
 
-// INCOMPLETE!!!
-// "x+(x+2)" // "x+1" // "1"
-bool Tokenizer::isExpression(std::string s) {
-    if (s.size() < 3) { // Perhaps add in expression symbol checking
-        return false;
-    } else {
-        if (s.front() == '"' && s.back() == '"') {
-            std::string withoutQuotes = trimQuotesOrWildcard(s);
-            for (char c : withoutQuotes) {
-                if (isalnum(c)) {
-                    return true;
-                }
-            }
+std::vector<char> convertExpressionToCharVector(std::string s) {
+    std::vector<char> expressionTokens;
+    for (auto character : s) {
+        auto symbolsIterator = std::find(expressionSymbols.begin(), expressionSymbols.end(), character);
+        // Character is a valid symbol
+        if (symbolsIterator != expressionSymbols.cend()) {
+            expressionTokens.push_back(character);
         }
     }
-    return false;
+    return expressionTokens;
 }
+
+// "x+(x+2)" // "x+1" // "1"
+bool Tokenizer::isExpression(std::string s) {
+    std::stack<std::string> expressionStack;
+    if (s.size() < 3) {
+        return false;
+    }
+
+    // Break string into char and validate char
+    return true;
+}
+
+// INCOMPLETE!!!
+// "x+(x+2)" // "x+1" // "1"
+//bool Tokenizer::isExpression(std::string s) {
+//    if (s.size() < 3) { // Perhaps add in expression symbol checking
+//        return false;
+//    } else {
+//        if (s.front() == '"' && s.back() == '"') {
+//            std::string withoutQuotes = trimQuotesOrWildcard(s);
+//            for (char c : withoutQuotes) {
+//                if (isalnum(c)) {
+//                    return true;
+//                }
+//            }
+//        }
+//    }
+//    return false;
+//}
 
 // _"x+1"_, _"x"_, _"1"_
 bool Tokenizer::isSubExpression(std::string s) {
@@ -283,6 +308,7 @@ std::vector<TokenObject> Tokenizer::tokenize(std::string query) {
     tokenValues.erase(std::remove_if(tokenValues.begin(), tokenValues.end(), isEmptyOrBlank), tokenValues.end());
 
     for (std::string s : tokenValues) {
+        std::cout << s << std::endl;
         s = trimString(s);
         // Token value exists in list
         if (stringToTokenMap.find(s) != stringToTokenMap.end()) {
