@@ -260,12 +260,17 @@ std::vector<std::string> Tokenizer::convertExpressionToCharVector(std::string s)
     return expressionTokens;
 }
 
-// "x+(x+2)" // "x+1" // "1"
+ //"x+(x+2)" // "x+1" // "1"
 //bool Tokenizer::isExpression(std::string s) {
 //    std::stack<std::string> expressionStack;
 //    if (s.size() < 3) {
 //        return false;
 //    }
+//    if (s.front() != '"' || s.back() != '"') {
+//        return false;
+//    }
+//    // Removes quotations
+//    trimQuotesOrWildcard(s);
 //    // Break string into char and validate char
 //    std::vector<std::string> expressionCharVector = convertExpressionToCharVector(s);
 //    // Invalid expression
