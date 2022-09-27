@@ -13,8 +13,7 @@
 using namespace qps;
 
 std::string whitespace = "\n\r\t\f\v";
-std::unordered_set<char> expressionSymbols = {'+', '-', '*', '/', '%'};
-std::unordered_set<char> expressionBrackets = {'(', ')'};
+std::unordered_set<char> expressionSymbolsAndBrackets = {'(', ')', '+', '-', '*', '/', '%'};
 
 Tokenizer::Tokenizer() {
     /**
@@ -236,46 +235,59 @@ bool Tokenizer::isIdentity(std::string s) {
     return false;
 }
 
-std::vector<char> convertExpressionToCharVector(std::string s) {
-    std::vector<char> expressionTokens;
-    for (auto character : s) {
-        auto symbolsIterator = std::find(expressionSymbols.begin(), expressionSymbols.end(), character);
-        // Character is a valid symbol
-        if (symbolsIterator != expressionSymbols.cend()) {
-            expressionTokens.push_back(character);
+std::vector<std::string> Tokenizer::convertExpressionToCharVector(std::string s) {
+    std::vector<std::string> expressionTokens;
+    std::string temp;
+    for (char character : s) {
+        // Temporary conversion of string to character
+        temp.push_back(character);
+        // Character is a valid name
+        if (isName(temp)) {
+            expressionTokens.push_back(temp);
         }
+
+        // Character is a valid integer
+        if (isInteger(temp)) {
+            expressionTokens.push_back(temp);
+        }
+        auto symbolsIterator = std::find(expressionSymbolsAndBrackets.begin(), expressionSymbolsAndBrackets.end(), character);
+        // Character is a valid symbol or bracket
+        if (symbolsIterator != expressionSymbolsAndBrackets.cend()) {
+            expressionTokens.push_back(temp);
+        }
+        // Character is a valid bracket
     }
     return expressionTokens;
 }
 
 // "x+(x+2)" // "x+1" // "1"
-bool Tokenizer::isExpression(std::string s) {
-    std::stack<std::string> expressionStack;
-    if (s.size() < 3) {
-        return false;
-    }
-
-    // Break string into char and validate char
-    return true;
-}
+//bool Tokenizer::isExpression(std::string s) {
+//    std::stack<std::string> expressionStack;
+//    if (s.size() < 3) {
+//        return false;
+//    }
+//
+//    // Break string into char and validate char
+//    return true;
+//}
 
 // INCOMPLETE!!!
 // "x+(x+2)" // "x+1" // "1"
-//bool Tokenizer::isExpression(std::string s) {
-//    if (s.size() < 3) { // Perhaps add in expression symbol checking
-//        return false;
-//    } else {
-//        if (s.front() == '"' && s.back() == '"') {
-//            std::string withoutQuotes = trimQuotesOrWildcard(s);
-//            for (char c : withoutQuotes) {
-//                if (isalnum(c)) {
-//                    return true;
-//                }
-//            }
-//        }
-//    }
-//    return false;
-//}
+bool Tokenizer::isExpression(std::string s) {
+    if (s.size() < 3) { // Perhaps add in expression symbol checking
+        return false;
+    } else {
+        if (s.front() == '"' && s.back() == '"') {
+            std::string withoutQuotes = trimQuotesOrWildcard(s);
+            for (char c : withoutQuotes) {
+                if (isalnum(c)) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
 
 // _"x+1"_, _"x"_, _"1"_
 bool Tokenizer::isSubExpression(std::string s) {
