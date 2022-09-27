@@ -266,8 +266,13 @@ std::vector<std::string> Tokenizer::convertExpressionToCharVector(std::string s)
 //    if (s.size() < 3) {
 //        return false;
 //    }
-//
 //    // Break string into char and validate char
+//    std::vector<std::string> expressionCharVector = convertExpressionToCharVector(s);
+//    // Invalid expression
+//    if (expressionCharVector.empty()) {
+//        return false;
+//    }
+//    // Validate expression
 //    return true;
 //}
 
