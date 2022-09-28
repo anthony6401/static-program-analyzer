@@ -14,7 +14,7 @@ std::vector<std::string> SimpleTokenizer::tokenizeCode(std::string code) {
 
 std::vector<std::string> SimpleTokenizer::tokenizeLine(std::string code) {
     std::regex tokenDelimiters = std::regex("(==)|(!=)|(&&)|(\\|\\|)|(>=)|(<=)|[!%+\\-/*=(){};<>]");
-    std::regex whiteSpace = std::regex("\\S+");
+    std::regex notWhiteSpace = std::regex("\\S+");
     std::string line = std::regex_replace(code, tokenDelimiters, " $& ");
-    return SpUtils::split(line, whiteSpace);
+    return SpUtils::split(line, notWhiteSpace);
 }

@@ -2,9 +2,9 @@
 
 #include "StmtStack.h"
 
-class NestedStack : public StmtStack {
+class ProcedureStack : public StmtStack {
 public:
-    NestedStack(SimpleToken parent);
+    ProcedureStack(SimpleToken parent);
     void put(SimpleToken token);
     SimpleToken dump();
     bool isIf();

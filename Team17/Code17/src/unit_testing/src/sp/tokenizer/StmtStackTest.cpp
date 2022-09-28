@@ -3,7 +3,7 @@
 #include "components/sp/SimpleToken.h"
 #include "components/sp/utils/SpUtils.h"
 #include "components/sp/tokenizer/StmtStack.h"
-#include "components/sp/tokenizer/NestedStack.h"
+#include "components/sp/tokenizer/ProcedureStack.h"
 #include "components/sp/tokenizer/IfStack.h"
 #include "components/sp/tokenizer/ProgramStack.h"
 

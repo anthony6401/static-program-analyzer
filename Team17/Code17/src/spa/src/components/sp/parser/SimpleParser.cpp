@@ -8,7 +8,8 @@
 #include "../tokenizer/ExprStack.h"
 #include "../tokenizer/ProgramStack.h"
 #include "../tokenizer/IfStack.h"
-#include "../tokenizer/NestedStack.h"
+#include "../tokenizer/WhileStack.h"
+#include "../tokenizer/ProcedureStack.h"
 
 
 SimpleParser::SimpleParser(Extractor* extractor) {
@@ -28,11 +29,11 @@ void SimpleParser::parseCode(std::string code) {
         SimpleToken lineToken = SimpleParser::parseLine(line);
         if (lineToken.type == SpTokenType::TPROCEDURE) {
             stmtStack.push(currentStack);
-            currentStack = new NestedStack(lineToken);
+            currentStack = new ProcedureStack(lineToken);
         }
         else if (lineToken.type == SpTokenType::TWHILE) {
             stmtStack.push(currentStack);
-            currentStack = new NestedStack(lineToken);
+            currentStack = new WhileStack(lineToken);
         }
         else if (lineToken.type == SpTokenType::TIF) {
             stmtStack.push(currentStack);
