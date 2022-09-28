@@ -123,7 +123,7 @@ TEST_CASE("Parent* Relationship") {
 
 TEST_CASE("Pattern Clause with expressions and subexpressions") {
     std::string testQuery = "assign newa;\n"
-                            "Select newa pattern newa ( \"normSq\" , _\"cenX\"_)";
+                            "Select newa pattern newa ( \"normSq    \n  \" , _\"cenX\"_)";
     std::vector<TokenObject> expectedResult {assignTokenObject, newa_nameTokenObject, semicolonTokenObject,
                                              selectTokenObject, newa_nameTokenObject, patternTokenObject, newa_nameTokenObject,
                                              openBracketTokenObject, normsq_nameWithQuotesTokenObject, commaTokenObject,
@@ -136,7 +136,7 @@ TEST_CASE("Pattern Clause with expressions and subexpressions") {
 
 TEST_CASE("Queries with synonyms as design entities") {
     std::string testQuery = "assign variable;\n"
-                            "Select variable pattern variable ( \"normSq\" , _\"cenX\"_)";
+                            "Select variable pattern variable ( \" \v  normSq   \t \" , _\"cenX\"_)";
     std::vector<TokenObject> expectedResult {assignTokenObject, variableTokenObject, semicolonTokenObject,
                                              selectTokenObject, variableTokenObject, patternTokenObject, variableTokenObject,
                                              openBracketTokenObject, normsq_nameWithQuotesTokenObject, commaTokenObject,

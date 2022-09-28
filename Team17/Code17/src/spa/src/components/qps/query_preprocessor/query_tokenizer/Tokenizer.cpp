@@ -357,8 +357,11 @@ std::vector<TokenObject> Tokenizer::tokenize(std::string query) {
     // Remove empty strings from tokenized values
     tokenValues.erase(std::remove_if(tokenValues.begin(), tokenValues.end(), isEmptyOrBlank), tokenValues.end());
 
+    // Remove empty spaces within tokenized values
+    for (auto &s : tokenValues) {
+        s.erase(std::remove_if(s.begin(), s.end(), ::isspace), s.end());
+    }
     for (std::string s : tokenValues) {
-        std::cout << s << std::endl;
         s = trimString(s);
         // Token value exists in list
         if (stringToTokenMap.find(s) != stringToTokenMap.end()) {
