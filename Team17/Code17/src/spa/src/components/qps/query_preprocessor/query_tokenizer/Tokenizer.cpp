@@ -14,6 +14,7 @@ using namespace qps;
 
 std::string whitespace = "\n\r\t\f\v";
 std::unordered_set<char> expressionSymbolsAndBrackets = {'(', ')', '+', '-', '*', '/', '%'};
+std::unordered_set<char> expressionSymbols = {'+', '-', '*', '/', '%'};
 
 Tokenizer::Tokenizer() {
     /**
@@ -261,7 +262,7 @@ std::vector<std::string> Tokenizer::convertExpressionToCharVector(std::string s)
         auto symbolsIterator = std::find(expressionSymbolsAndBrackets.begin(), expressionSymbolsAndBrackets.end(), character);
         if (symbolsIterator != expressionSymbolsAndBrackets.cend()) {
             if (!temp.empty()) {
-                if (isExpressionName(temp) || Tokenizer::isInteger(temp)) {
+                if (isName(temp) || Tokenizer::isInteger(temp)) {
                     expressionTokens.push_back(temp);
                     temp.clear();
                 } else {
@@ -277,7 +278,7 @@ std::vector<std::string> Tokenizer::convertExpressionToCharVector(std::string s)
     }
 
     if (!temp.empty()) {
-        if (!isExpressionName(temp) && !isInteger(temp)) {
+        if (!isName(temp) && !isInteger(temp)) {
             std::cout << "INVALID EXPRESSION" << std::endl;
             return invalidExpression;
         } else {
@@ -288,44 +289,119 @@ std::vector<std::string> Tokenizer::convertExpressionToCharVector(std::string s)
     return expressionTokens;
 }
 
- //"x+(x+2)" // "x+1" // "1"
-//bool Tokenizer::isExpression(std::string s) {
-//    std::stack<std::string> expressionStack;
-//    if (s.size() < 3) {
-//        return false;
-//    }
-//    if (s.front() != '"' || s.back() != '"') {
-//        return false;
-//    }
-//    // Removes quotations
-//    trimQuotesOrWildcard(s);
-//    // Break string into char and validate char
-//    std::vector<std::string> expressionCharVector = convertExpressionToCharVector(s);
-//    // Invalid expression
-//    if (expressionCharVector.empty()) {
-//        return false;
-//    }
-//    // Validate expression
-//    return true;
-//}
-
-// INCOMPLETE!!!
-// "x+(x+2)" // "x+1" // "1"
-bool Tokenizer::isExpression(std::string s) {
-    if (s.size() < 3) { // Perhaps add in expression symbol checking
-        return false;
-    } else {
-        if (s.front() == '"' && s.back() == '"') {
-            std::string withoutQuotes = trimQuotesOrWildcard(s);
-            for (char c : withoutQuotes) {
-                if (isalnum(c)) {
-                    return true;
+bool Tokenizer::validateExpression(std::vector<std::string> expressionVector) {
+    std::unordered_set<char> mathematical_signs = {'*', '/', '+', '-', '%', '='};
+    std::stack<std::string> expressionStack;
+    std::string prev = " ";
+    bool isPrevName = false;
+    bool isPrevInteger = false;
+    for (auto string : expressionVector) {
+        if (string.size() > 1) {
+            if (isName(string) && isPrevName) {
+                return false;
+            } else if (isName(string)) {
+                isPrevName = true;
+                prev = " ";
+            } else {
+                if (isPrevInteger) {
+                    return false;
+                } else {
+                    isPrevInteger = true;
+                    prev = " ";
+                }
+            }
+        } else {
+            if (string == "(") {
+                expressionStack.push(string);
+                prev = "(";
+                isPrevInteger = false;
+                isPrevName = false;
+            } else if (string == ")") {
+                if (expressionStack.empty() || expressionStack.top() != "(" || mathematical_signs.count(prev[0])) {
+                    return false;
+                } else {
+                    expressionStack.pop();
+                    prev = ")";
+                }
+                isPrevInteger = false;
+                isPrevName = false;
+            } else {
+                char curr = string[0];
+                if (mathematical_signs.count(curr)) {
+                    if (mathematical_signs.count(prev[0]) || prev == "(") {
+                        return false;
+                    }
+                    prev = string;
+                    isPrevInteger = false;
+                    isPrevName = false;
+                } else if (isdigit(curr)) {
+                    if (isPrevInteger) {
+                        return false;
+                    }
+                    prev = string;
+                    isPrevInteger = true;
+                    isPrevName = false;
+                } else if (isalpha(curr)) {
+                    if (isPrevName) {
+                        return false;
+                    }
+                    prev = string;
+                    isPrevName = true;
+                    isPrevInteger = false;
                 }
             }
         }
     }
-    return false;
+
+    if (expressionStack.size() > 0) {
+        return false;
+    }
+    return true;
 }
+
+ //"x+(x+2)" // "x+1" // "1"
+bool Tokenizer::isExpression(std::string s) {
+     if (s.size() < 3) {
+         return false;
+     }
+     if (s.front() != '"' || s.back() != '"') {
+         return false;
+     }
+
+     if (s.front() == '"' && s.back() == '"') {
+         // Removes quotations
+         std::string trimmedQuotes = trimQuotesOrWildcard(s);
+         // Break string into char and validate char
+         std::vector<std::string> expressionVector = convertExpressionToCharVector(trimmedQuotes);
+         // Invalid expression
+         if (expressionVector.empty()) {
+             return false;
+         } else {
+             // Validate expression
+             bool isValidExpresion = validateExpression(expressionVector);
+             return isValidExpresion;
+         }
+     }
+     return false;
+}
+
+// INCOMPLETE!!!
+// "x+(x+2)" // "x+1" // "1"
+//bool Tokenizer::isExpression(std::string s) {
+//    if (s.size() < 3) { // Perhaps add in expression symbol checking
+//        return false;
+//    } else {
+//        if (s.front() == '"' && s.back() == '"') {
+//            std::string withoutQuotes = trimQuotesOrWildcard(s);
+//            for (char c : withoutQuotes) {
+//                if (isalnum(c)) {
+//                    return true;
+//                }
+//            }
+//        }
+//    }
+//    return false;
+//}
 
 // _"x+1"_, _"x"_, _"1"_
 bool Tokenizer::isSubExpression(std::string s) {

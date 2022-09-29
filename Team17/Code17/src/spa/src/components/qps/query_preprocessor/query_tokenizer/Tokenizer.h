@@ -18,6 +18,7 @@ private:
     bool isExpression(std::string s);
     bool isSubExpression(std::string s);
     std::vector<std::string> convertExpressionToCharVector(std::string s);
+    bool validateExpression(std::vector<std::string> expressionVector);
     // std::string trimString(const std::string& s);
     // std::vector<std::string> splitQuery(std::string query);
 
