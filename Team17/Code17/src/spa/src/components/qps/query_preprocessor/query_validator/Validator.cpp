@@ -79,9 +79,14 @@ bool Validator::suchThatClauseIsSemanticallyCorrect() {
 			isSemanticallyCorrect = isSemanticallyCorrect && isValidUsesAndModifies(relationship);
 		}
 
+		if (relationshipType == TokenType::CALLS || relationshipType == TokenType::CALLS_T) {
+			isSemanticallyCorrect = isSemanticallyCorrect && isValidCalls(relationship);
+		}
+
 		if (relationshipType == TokenType::FOLLOWS || relationshipType == TokenType::FOLLOWS_T ||
-			relationshipType == TokenType::PARENT || relationshipType == TokenType::PARENT_T) {
-			isSemanticallyCorrect = isSemanticallyCorrect && isValidFollowsAndParent(relationship);
+			relationshipType == TokenType::PARENT || relationshipType == TokenType::PARENT_T ||
+			relationshipType == TokenType::NEXT || relationshipType == TokenType::NEXT_T) {
+			isSemanticallyCorrect = isSemanticallyCorrect && isValidFollowsParentNext(relationship);
 
 		}
 
@@ -171,7 +176,7 @@ bool Validator::isValidUsesAndModifies(SuchThat relationship) {
 	return true;
 }
 
-bool Validator::isValidFollowsAndParent(SuchThat relationship) {
+bool Validator::isValidFollowsParentNext(SuchThat relationship) {
 	TokenObject leftParam = relationship.getLeft();
 	TokenObject rightParam = relationship.getRight();
 
@@ -209,6 +214,48 @@ bool Validator::isValidFollowsAndParent(SuchThat relationship) {
 }
 
 
+bool Validator::isValidCalls(SuchThat relationship) {
+	TokenObject leftParam = relationship.getLeft();
+	TokenObject rightParam = relationship.getRight();
+
+	// First parameter of Uses and Modifies cannot be WILDCARD due to ambiguity
+	if (leftParam.getTokenType() == TokenType::WILDCARD) {
+		return false;
+	}
+
+	// Check first parameter is valid
+	if (leftParam.getTokenType() == TokenType::NAME) {
+		std::string synonymName = leftParam.getValue();
+
+		// Synonym name is not declared or does not have the appropriate design entity
+		if (!isDeclaredSynonym(synonymName)) {
+			return false;
+		}
+
+		if (!isProcedure(synonymName)) {
+			return false;
+		}
+
+	}
+
+	// Check second parameter if valid
+	if (rightParam.getTokenType() == TokenType::NAME) {
+		std::string synonymName = rightParam.getValue();
+
+		// Synonym name is not declared or does not have the appropriate design entity
+		if (!isDeclaredSynonym(synonymName)) {
+			return false;
+		}
+
+		if (!isProcedure(synonymName)) {
+			return false;
+		}
+
+	}
+
+	return true;
+}
+
 bool Validator::isDeclaredSynonym(std::string synonym) {
 	std::unordered_map<std::string, DesignEntity> mappedSynonyms = this->parsedQuery.getSynonymToDesignEntityMap();
 	if (mappedSynonyms.find(synonym) == mappedSynonyms.end()) {
@@ -244,6 +291,16 @@ bool Validator::isAssign(std::string synonym) {
 	DesignEntity designEntityOfSynonym = this->parsedQuery.getSynonymToDesignEntityMap().at(synonym);
 
 	if (designEntityOfSynonym != DesignEntity::ASSIGN) {
+		return false;
+	}
+
+	return true;
+};
+
+bool Validator::isProcedure(std::string synonym) {
+	DesignEntity designEntityOfSynonym = this->parsedQuery.getSynonymToDesignEntityMap().at(synonym);
+
+	if (designEntityOfSynonym != DesignEntity::PROCEDURE) {
 		return false;
 	}
 

@@ -39,6 +39,20 @@ TEST_CASE("Single clause queries - such that") {
     REQUIRE(validatedQuery.isSemanticallyValid() == true);
 };
 
+TEST_CASE("Single clause queries - such that Next") {
+    Select select = Select("v");
+    std::vector<SuchThat> suchThat{ SuchThat(TokenType::NEXT, TokenObject(TokenType::NAME, "call"),TokenObject(TokenType::NAME, "while")) };
+    std::vector<qps::Pattern> pattern;
+    std::unordered_map<std::string, DesignEntity> mappedSynonyms{ {"v", DesignEntity::VARIABLE}, {"call", DesignEntity::CALL}, {"while", DesignEntity::WHILE} };
+    int numOfDeclaredSynonyms = 1;
+
+    QueryObject testParsedQuery = QueryObject(select, suchThat, pattern, mappedSynonyms, numOfDeclaredSynonyms);
+
+    Validator validator = Validator(testParsedQuery);
+    QueryObject validatedQuery = validator.validate();
+    REQUIRE(validatedQuery.isSemanticallyValid() == true);
+};
+
 TEST_CASE("Single clause queries - pattern") {
     Select select = Select("v");
     std::vector<SuchThat> suchThat;
@@ -103,6 +117,22 @@ TEST_CASE("Modifies where first param is read statement - read r; Select r such 
     std::vector<qps::Pattern> pattern{};
     std::unordered_map<std::string, DesignEntity> mappedSynonyms{ {"r", DesignEntity::READ} };
     int numOfDeclaredSynonyms = 1;
+
+    QueryObject testParsedQuery = QueryObject(select, suchThat, pattern, mappedSynonyms, numOfDeclaredSynonyms);
+
+
+    Validator validator = Validator(testParsedQuery);
+    QueryObject validatedQuery = validator.validate();
+
+    REQUIRE(validatedQuery.isSemanticallyValid() == true);
+};
+
+TEST_CASE("Calls where both parameters are procedures") {
+    Select select = Select("r");
+    std::vector<SuchThat> suchThat{ SuchThat(TokenType::CALLS, TokenObject(TokenType::NAME, "p"), TokenObject(TokenType::NAME, "q")) };
+    std::vector<qps::Pattern> pattern{};
+    std::unordered_map<std::string, DesignEntity> mappedSynonyms{ {"r", DesignEntity::READ}, {"p", DesignEntity::PROCEDURE}, {"q", DesignEntity::PROCEDURE} };
+    int numOfDeclaredSynonyms = 3;
 
     QueryObject testParsedQuery = QueryObject(select, suchThat, pattern, mappedSynonyms, numOfDeclaredSynonyms);
 
@@ -429,6 +459,70 @@ TEST_CASE("Modifies takes in cosntant as param") {
     std::vector<qps::Pattern> pattern{ Pattern("a", TokenObject(TokenType::NAME, "a"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
     std::unordered_map<std::string, DesignEntity> mappedSynonyms{ {"v", DesignEntity::VARIABLE}, {"a", DesignEntity::ASSIGN}, {"c", DesignEntity::CONSTANT} };
     int numOfDeclaredSynonyms = 2;
+
+    QueryObject testParsedQuery = QueryObject(select, suchThat, pattern, mappedSynonyms, numOfDeclaredSynonyms);
+
+
+    Validator validator = Validator(testParsedQuery);
+    QueryObject validatedQuery = validator.validate();
+
+    REQUIRE(validatedQuery.isSemanticallyValid() == false);
+};
+
+TEST_CASE("Calls* where first param is not proedure") {
+    Select select = Select("v");
+    std::vector<SuchThat> suchThat{ SuchThat(TokenType::CALLS_T,  TokenObject(TokenType::NAME, "v"), TokenObject(TokenType::WILDCARD, "_")) };
+    std::vector<Pattern> pattern{};
+    std::unordered_map<std::string, DesignEntity> mappedSynonyms{ {"v", DesignEntity::VARIABLE} };
+    int numOfDeclaredSynonyms = 1;
+
+    QueryObject testParsedQuery = QueryObject(select, suchThat, pattern, mappedSynonyms, numOfDeclaredSynonyms);
+
+
+    Validator validator = Validator(testParsedQuery);
+    QueryObject validatedQuery = validator.validate();
+
+    REQUIRE(validatedQuery.isSemanticallyValid() == false);
+};
+
+TEST_CASE("Calls where second param is not proedure") {
+    Select select = Select("a");
+    std::vector<SuchThat> suchThat{ SuchThat(TokenType::CALLS, TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME, "a")) };
+    std::vector<Pattern> pattern{};
+    std::unordered_map<std::string, DesignEntity> mappedSynonyms{ {"a", DesignEntity::ASSIGN} };
+    int numOfDeclaredSynonyms = 1;
+
+    QueryObject testParsedQuery = QueryObject(select, suchThat, pattern, mappedSynonyms, numOfDeclaredSynonyms);
+
+
+    Validator validator = Validator(testParsedQuery);
+    QueryObject validatedQuery = validator.validate();
+
+    REQUIRE(validatedQuery.isSemanticallyValid() == false);
+};
+
+TEST_CASE("Next where second param is not statement") {
+    Select select = Select("a");
+    std::vector<SuchThat> suchThat{ SuchThat(TokenType::NEXT, TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME, "a")) };
+    std::vector<Pattern> pattern{};
+    std::unordered_map<std::string, DesignEntity> mappedSynonyms{ {"a", DesignEntity::PROCEDURE} };
+    int numOfDeclaredSynonyms = 1;
+
+    QueryObject testParsedQuery = QueryObject(select, suchThat, pattern, mappedSynonyms, numOfDeclaredSynonyms);
+
+
+    Validator validator = Validator(testParsedQuery);
+    QueryObject validatedQuery = validator.validate();
+
+    REQUIRE(validatedQuery.isSemanticallyValid() == false);
+};
+
+TEST_CASE("Next* where first param is not statement") {
+    Select select = Select("a");
+    std::vector<SuchThat> suchThat{ SuchThat(TokenType::NEXT_T, TokenObject(TokenType::NAME, "a"), TokenObject(TokenType::WILDCARD, "_")) };
+    std::vector<Pattern> pattern{};
+    std::unordered_map<std::string, DesignEntity> mappedSynonyms{ {"a", DesignEntity::CONSTANT} };
+    int numOfDeclaredSynonyms = 1;
 
     QueryObject testParsedQuery = QueryObject(select, suchThat, pattern, mappedSynonyms, numOfDeclaredSynonyms);
 

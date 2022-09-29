@@ -14,6 +14,10 @@ namespace qps {
         SELECT,
         SUCH,
         THAT,
+        CALLS,
+        CALLS_T,
+        NEXT,
+        NEXT_T,
         // Lexical tokens
         NAME,
         INTEGER,
