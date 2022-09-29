@@ -290,70 +290,53 @@ std::vector<std::string> Tokenizer::convertExpressionToCharVector(std::string s)
 }
 
 bool Tokenizer::validateExpression(std::vector<std::string> expressionVector) {
-    std::unordered_set<char> mathematical_signs = {'*', '/', '+', '-', '%', '='};
     std::stack<std::string> expressionStack;
     std::string prev = " ";
     bool isPrevName = false;
     bool isPrevInteger = false;
     for (auto string : expressionVector) {
-        if (string.size() > 1) {
-            if (isName(string) && isPrevName) {
+        if (string == "(") {
+            expressionStack.push(string);
+            prev = "(";
+            isPrevInteger = false;
+            isPrevName = false;
+        } else if (string == ")") {
+            if (expressionStack.empty() || expressionStack.top() != "(" || expressionSymbols.count(prev)) {
                 return false;
-            } else if (isName(string)) {
-                isPrevName = true;
-                prev = " ";
             } else {
+                expressionStack.pop();
+                prev = ")";
+            }
+            isPrevInteger = false;
+            isPrevName = false;
+        } else {
+            // Name, Integer or Mathematical symbols
+            if (isName(string)) {
+                if (isPrevName) {
+                    return false;
+                } else {
+                    isPrevName = true;
+                    prev = string;
+                }
+            } else if (isInteger(string)) {
                 if (isPrevInteger) {
                     return false;
                 } else {
                     isPrevInteger = true;
-                    prev = " ";
+                    prev = string;
                 }
-            }
-        } else {
-            if (string == "(") {
-                expressionStack.push(string);
-                prev = "(";
-                isPrevInteger = false;
-                isPrevName = false;
-            } else if (string == ")") {
-                if (expressionStack.empty() || expressionStack.top() != "(" || mathematical_signs.count(prev[0])) {
+            } else if (expressionSymbols.count(string)) {
+                if (expressionSymbols.count(prev) || prev == "(") {
                     return false;
-                } else {
-                    expressionStack.pop();
-                    prev = ")";
                 }
+                prev = string;
                 isPrevInteger = false;
                 isPrevName = false;
-            } else {
-                char curr = string[0];
-                if (mathematical_signs.count(curr)) {
-                    if (mathematical_signs.count(prev[0]) || prev == "(") {
-                        return false;
-                    }
-                    prev = string;
-                    isPrevInteger = false;
-                    isPrevName = false;
-                } else if (isdigit(curr)) {
-                    if (isPrevInteger) {
-                        return false;
-                    }
-                    prev = string;
-                    isPrevInteger = true;
-                    isPrevName = false;
-                } else if (isalpha(curr)) {
-                    if (isPrevName) {
-                        return false;
-                    }
-                    prev = string;
-                    isPrevName = true;
-                    isPrevInteger = false;
-                }
             }
         }
     }
 
-    if (expressionStack.size() > 0) {
+    if (!expressionStack.empty()) {
         return false;
     }
     return true;
