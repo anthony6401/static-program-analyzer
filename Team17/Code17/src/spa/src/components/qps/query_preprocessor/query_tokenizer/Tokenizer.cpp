@@ -434,7 +434,6 @@ std::vector<TokenObject> Tokenizer::tokenize(std::string query) {
                 TokenObject object = TokenObject(TokenType::SUBEXPRESSION, trimmedWildcardAndQuotesFromSubExpression);
                 tokenList.push_back(object);
             } else {
-                // throw exception
                 throw TokenException();
             }
         }
