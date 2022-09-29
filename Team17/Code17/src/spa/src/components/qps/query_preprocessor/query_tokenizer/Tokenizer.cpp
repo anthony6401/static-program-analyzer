@@ -14,7 +14,7 @@ using namespace qps;
 
 std::string whitespace = "\n\r\t\f\v";
 std::unordered_set<char> expressionSymbolsAndBrackets = {'(', ')', '+', '-', '*', '/', '%'};
-std::unordered_set<char> expressionSymbols = {'+', '-', '*', '/', '%'};
+std::unordered_set<std::string> expressionSymbols = {"+", "-", "*", "/", "%"};
 
 Tokenizer::Tokenizer() {
     /**
