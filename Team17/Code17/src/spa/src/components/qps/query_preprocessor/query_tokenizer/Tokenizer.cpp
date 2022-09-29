@@ -291,7 +291,7 @@ std::vector<std::string> Tokenizer::convertExpressionToStringVector(std::string 
 
 bool Tokenizer::validateExpression(std::vector<std::string> expressionVector) {
     std::stack<std::string> expressionStack;
-    std::string prev = " ";
+    std::string prev = "";
     bool isPrevName = false;
     bool isPrevInteger = false;
     for (auto string : expressionVector) {
@@ -326,7 +326,7 @@ bool Tokenizer::validateExpression(std::vector<std::string> expressionVector) {
                     prev = string;
                 }
             } else if (expressionSymbols.count(string)) {
-                if (expressionSymbols.count(prev) || prev == "(") {
+                if (expressionSymbols.count(prev) || prev == "(" || prev.empty()) {
                     return false;
                 }
                 prev = string;
@@ -334,6 +334,10 @@ bool Tokenizer::validateExpression(std::vector<std::string> expressionVector) {
                 isPrevName = false;
             }
         }
+    }
+
+    if (expressionSymbols.count(prev)) {
+        return false;
     }
 
     if (!expressionStack.empty()) {

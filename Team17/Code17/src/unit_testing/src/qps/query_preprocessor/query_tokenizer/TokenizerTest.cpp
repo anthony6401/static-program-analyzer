@@ -287,3 +287,36 @@ TEST_CASE("Single line queries without space") {
 
     REQUIRE(testResult == expectedResult);
 }
+
+// Expression validator tests
+TEST_CASE("Valid expression") {
+    std::string testExpression = "\"(x1+yY)*za\"";
+    Tokenizer tokenizer = Tokenizer();
+    bool testResult = tokenizer.isExpression(testExpression);
+
+    REQUIRE(testResult == true);
+}
+
+TEST_CASE("Invalid expression - Extra close brackets") {
+    std::string testExpression = "\"(x+y))*z\"";
+    Tokenizer tokenizer = Tokenizer();
+    bool testResult = tokenizer.isExpression(testExpression);
+
+    REQUIRE(testResult == false);
+}
+
+TEST_CASE("Invalid expression - Math symbol at end") {
+    std::string testExpression = "\"(x+y)*z/\"";
+    Tokenizer tokenizer = Tokenizer();
+    bool testResult = tokenizer.isExpression(testExpression);
+
+    REQUIRE(testResult == false);
+}
+
+TEST_CASE("Invalid expression - Math symbol at start") {
+    std::string testExpression = "\"*(x+y)*z\"";
+    Tokenizer tokenizer = Tokenizer();
+    bool testResult = tokenizer.isExpression(testExpression);
+
+    REQUIRE(testResult == false);
+}
