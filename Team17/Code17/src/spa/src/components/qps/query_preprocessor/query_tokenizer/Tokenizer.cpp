@@ -254,7 +254,7 @@ bool isExpressionName(std::string s) {
     return true;
 }
 
-std::vector<std::string> Tokenizer::convertExpressionToCharVector(std::string s) {
+std::vector<std::string> Tokenizer::convertExpressionToStringVector(std::string s) {
     std::vector<std::string> expressionTokens;
     std::vector<std::string> invalidExpression;
     std::string temp;
@@ -355,7 +355,7 @@ bool Tokenizer::isExpression(std::string s) {
          // Removes quotations
          std::string trimmedQuotes = trimQuotesOrWildcard(s);
          // Break string into char and validate char
-         std::vector<std::string> expressionVector = convertExpressionToCharVector(trimmedQuotes);
+         std::vector<std::string> expressionVector = convertExpressionToStringVector(trimmedQuotes);
          // Invalid expression
          if (expressionVector.empty()) {
              return false;
@@ -367,24 +367,6 @@ bool Tokenizer::isExpression(std::string s) {
      }
      return false;
 }
-
-// INCOMPLETE!!!
-// "x+(x+2)" // "x+1" // "1"
-//bool Tokenizer::isExpression(std::string s) {
-//    if (s.size() < 3) { // Perhaps add in expression symbol checking
-//        return false;
-//    } else {
-//        if (s.front() == '"' && s.back() == '"') {
-//            std::string withoutQuotes = trimQuotesOrWildcard(s);
-//            for (char c : withoutQuotes) {
-//                if (isalnum(c)) {
-//                    return true;
-//                }
-//            }
-//        }
-//    }
-//    return false;
-//}
 
 // _"x+1"_, _"x"_, _"1"_
 bool Tokenizer::isSubExpression(std::string s) {
