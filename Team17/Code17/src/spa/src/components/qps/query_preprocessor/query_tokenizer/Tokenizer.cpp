@@ -386,6 +386,36 @@ auto isEmptyOrBlank = [](const std::string &s) {
     return s.find_first_not_of(" \n\t\f\v\r") == std::string::npos;
 };
 
+bool Tokenizer::isTuple(std::string s) {
+    if (s.front() == '<' && s.back() == '>') {
+        // Remove tuple brackets
+        std::string currString = s.substr(1, s.length() - 2);
+        // First occurrence of comma
+        int commaIndex = currString.find(',');
+        if (commaIndex == std::string::npos) {
+            return false;
+        }
+
+        std::string currValue;
+        int startIndex = 0;
+        while (commaIndex < currString.length()) {
+            // Returns substring from startIndex to value before commaIndex
+            currValue = currString.substr(startIndex, commaIndex);
+            if (!isName(currValue)) {
+                return false;
+            }
+
+            // Get index of next value
+            startIndex = commaIndex + 1;
+            currString = currString.substr(startIndex);
+            commaIndex = currString.find(',');
+        }
+        return true;
+    } else {
+        return false;
+    }
+}
+
 /**
  * Tokenizes each character or string according to Token Types and outputs vector<TokenObject>
  */
