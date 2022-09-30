@@ -171,29 +171,6 @@ std::string trimString(const std::string& s) {
     return s.substr(beginning, range);
 }
 
-// First attempt at string splitting, might require in the future
-
-std::vector<std::string> split(std::string query) {
-    std::vector<std::string> firstSplit = splitByDelimiter(query, ' ');
-    char split_delimiter = '|';
-    std::vector<char> char_output;
-    for (const std::string s : firstSplit) {
-        trimString(s);
-        for (char c : s) {
-            if (c == '"' || c == ',' || c == '(' || c == ')' || c == '\n' || c == '+' || c == '-') {
-                char_output.push_back(split_delimiter);
-                char_output.push_back(c);
-            } else {
-                char_output.push_back(c);
-            }
-        }
-        char_output.push_back(split_delimiter);
-    }
-
-    std::string string_output = std::string(char_output.begin(), char_output.end());
-    return formatCharToStringVector(string_output, split_delimiter);
-}
-
 /**
  * Checks that string s follows the NAME lexical syntax
  */
@@ -380,7 +357,8 @@ bool Tokenizer::isSubExpression(std::string s) {
         if (s.front() == '_' && s.back() == '_') {
             std::string withoutWildcard = trimQuotesOrWildcard(s);
             bool isIdentity = Tokenizer::isIdentity(withoutWildcard);
-           if (isIdentity || Tokenizer::isExpression(withoutWildcard) || Tokenizer::isInteger(trimQuotesOrWildcard(withoutWildcard))) {
+            bool isExpression = Tokenizer::isExpression(withoutWildcard);
+           if (isIdentity || isExpression) {
                return true;
            }
         }
