@@ -199,6 +199,83 @@ TEST_CASE("Capital letter design entity synonyms ") {
     REQUIRE(testResult == expectedResult);
 }
 
+// Calls and Calls* Clauses
+TEST_CASE("Calls Relationships") {
+    std::string testQuery = "procedure p, q;\n"
+                            "Select p such that Calls(p, q)";
+    std::vector<TokenObject> expectedResult {procTokenObject, p_nameTokenObject, commaTokenObject, q_nameTokenObject, semicolonTokenObject,
+                                             selectTokenObject, p_nameTokenObject, suchTokenObject, thatTokenObject,
+                                             callsTokenObject,openBracketTokenObject,p_nameTokenObject, commaTokenObject, q_nameTokenObject, closedBracketTokenObject};
+    Tokenizer tokenizer = Tokenizer();
+    std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
+
+    REQUIRE(testResult == expectedResult);
+}
+
+TEST_CASE("Calls* Relationships") {
+    std::string testQuery = "procedure p, q;\n"
+                            "Select p such that Calls*(p, q)";
+    std::vector<TokenObject> expectedResult {procTokenObject, p_nameTokenObject, commaTokenObject, q_nameTokenObject, semicolonTokenObject,
+                                             selectTokenObject, p_nameTokenObject, suchTokenObject, thatTokenObject,
+                                             callsTTokenObject,openBracketTokenObject,p_nameTokenObject, commaTokenObject, q_nameTokenObject, closedBracketTokenObject};
+    Tokenizer tokenizer = Tokenizer();
+    std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
+
+    REQUIRE(testResult == expectedResult);
+}
+
+// Next and Next* relationship
+TEST_CASE("Next Relationships") {
+    std::string testQuery = "stmt s; stmt s1;\n"
+                            "Select s1 such that Next(s, s1)";
+    std::vector<TokenObject> expectedResult {stmtTokenObject, s_nameTokenObject, semicolonTokenObject, stmtTokenObject, s1_nameTokenObject, semicolonTokenObject,
+                                             selectTokenObject, s1_nameTokenObject, suchTokenObject, thatTokenObject,
+                                             nextTokenObject, openBracketTokenObject, s_nameTokenObject, commaTokenObject, s1_nameTokenObject, closedBracketTokenObject};
+    Tokenizer tokenizer = Tokenizer();
+    std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
+
+    REQUIRE(testResult == expectedResult);
+}
+
+TEST_CASE("Next* Relationships") {
+    std::string testQuery = "stmt s1; stmt s;\n"
+                            "Select s1 such that Next*(s1, s)";
+    std::vector<TokenObject> expectedResult {stmtTokenObject, s1_nameTokenObject, semicolonTokenObject, stmtTokenObject, s_nameTokenObject, semicolonTokenObject,
+                                             selectTokenObject, s1_nameTokenObject, suchTokenObject, thatTokenObject,
+                                             nextTTokenObject, openBracketTokenObject, s1_nameTokenObject, commaTokenObject, s_nameTokenObject, closedBracketTokenObject};
+    Tokenizer tokenizer = Tokenizer();
+    std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
+
+    REQUIRE(testResult == expectedResult);
+}
+
+// Affects amd Affects* Relationships
+TEST_CASE("Affects Relationships") {
+    std::string testQuery = "stmt s; stmt s1;\n"
+                            "Select s1 such that Affects(s, s1)";
+    std::vector<TokenObject> expectedResult {stmtTokenObject, s_nameTokenObject, semicolonTokenObject, stmtTokenObject, s1_nameTokenObject, semicolonTokenObject,
+                                             selectTokenObject, s1_nameTokenObject, suchTokenObject, thatTokenObject,
+                                             affectsTokenObject, openBracketTokenObject, s_nameTokenObject, commaTokenObject, s1_nameTokenObject, closedBracketTokenObject};
+    Tokenizer tokenizer = Tokenizer();
+    std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
+
+    REQUIRE(testResult == expectedResult);
+}
+
+TEST_CASE("Affects* Relationships") {
+    std::string testQuery = "stmt s1; stmt s;\n"
+                            "Select s1 such that Affects*(s1, s)";
+    std::vector<TokenObject> expectedResult {stmtTokenObject, s1_nameTokenObject, semicolonTokenObject, stmtTokenObject, s_nameTokenObject, semicolonTokenObject,
+                                             selectTokenObject, s1_nameTokenObject, suchTokenObject, thatTokenObject,
+                                             affectsTTokenObject, openBracketTokenObject, s1_nameTokenObject, commaTokenObject, s_nameTokenObject, closedBracketTokenObject};
+    Tokenizer tokenizer = Tokenizer();
+    std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
+
+    REQUIRE(testResult == expectedResult);
+}
+
+// White spaces
+
 
 
 // Invalid tokens
