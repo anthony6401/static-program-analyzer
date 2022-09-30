@@ -288,6 +288,17 @@ TEST_CASE("AND clause with relationships") {
     REQUIRE(testResult == expectedResult);
 }
 
+// Return BOOLEAN
+TEST_CASE("Returns BOOLEAN") {
+    std::string testQuery = "Select BOOLEAN such that Affects*(s1, s)";
+    std::vector<TokenObject> expectedResult {selectTokenObject, booleanTokenObject, suchTokenObject, thatTokenObject,
+                                             affectsTTokenObject, openBracketTokenObject, s1_nameTokenObject, commaTokenObject, s_nameTokenObject, closedBracketTokenObject};
+    Tokenizer tokenizer = Tokenizer();
+    std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
+
+    REQUIRE(testResult == expectedResult);
+}
+
 // White spaces
 TEST_CASE("White spaces within relationships") {
     std::string testQuery = "stmt\v s1   ; stmt s;\n"

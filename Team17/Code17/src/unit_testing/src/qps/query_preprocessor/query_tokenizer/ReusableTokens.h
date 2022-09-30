@@ -25,6 +25,7 @@ TokenObject openBracketTokenObject = TokenObject(TokenType::OPEN_BRACKET, "(");
 TokenObject closedBracketTokenObject = TokenObject(TokenType::CLOSED_BRACKET, ")");
 
 TokenObject andTokenObject = TokenObject(TokenType::AND, "and");
+TokenObject booleanTokenObject = TokenObject(TokenType::BOOLEAN, "BOOLEAN");
 
 TokenObject stmtTokenObject = TokenObject(TokenType::STMT, "stmt");
 TokenObject procTokenObject = TokenObject(TokenType::PROCEDURE, "procedure");
