@@ -94,38 +94,53 @@ std::vector<std::string> splitQuery(std::string query) {
     std::vector<char> char_output;
     char delimiter = '|';
     bool isWildcard = false;
-    bool isIdentity = false;
+    bool isQuotes = false;
+    bool isTuple = false;
     for (char c : query) {
         switch (c) {
             case '_':
                 isWildcard = charTypeToggler(isWildcard);
                 break;
             case '"':
-                isIdentity = charTypeToggler(isIdentity);
+                isQuotes = charTypeToggler(isQuotes);
+                break;
+            case '<':
+                isTuple = charTypeToggler(isTuple);
+                char_output.push_back(delimiter);
+                break;
+            case '>':
+                isTuple = charTypeToggler(isTuple);
                 break;
             case ' ':
             case '\n':
             case '\t':
-                if (!isWildcard && !isIdentity) {
+            case '\v':
+            case '\f':
+            case '\r':
+                if (!isWildcard && !isQuotes && !isTuple) {
                     char_output.push_back(delimiter);
                 }
                 break;
             case ';':
-                char_output.push_back(delimiter);
+                if (!isTuple) {
+                    char_output.push_back(delimiter);
+                }
                 break;
             case ',':
-                char_output.push_back(delimiter);
+                if (!isTuple) {
+                    char_output.push_back(delimiter);
+                }
                 if (isWildcard) {
                     isWildcard = charTypeToggler(isWildcard);
                 }
                 break;
             case '(':
-                if (!isIdentity) {
+                if (!isQuotes) {
                     char_output.push_back(delimiter);
                 }
                 break;
             case ')':
-                if (!isIdentity) {
+                if (!isQuotes) {
                     char_output.push_back(delimiter);
                 }
 
@@ -144,11 +159,13 @@ std::vector<std::string> splitQuery(std::string query) {
         switch (c) {
             case ';':
             case ',':
-                char_output.push_back(delimiter);
+                if (!isTuple) {
+                    char_output.push_back(delimiter);
+                }
                 break;
             case '(':
             case ')':
-                if (!isIdentity) {
+                if (!isQuotes) {
                     char_output.push_back(delimiter);
                 }
                 break;
@@ -160,7 +177,6 @@ std::vector<std::string> splitQuery(std::string query) {
     std::vector<std::string> splittedQuery = formatCharToStringVector(string_output, delimiter);
     return splittedQuery;
 }
-
 /**
  * Trim the string to remove leading and trailing spaces
  */
