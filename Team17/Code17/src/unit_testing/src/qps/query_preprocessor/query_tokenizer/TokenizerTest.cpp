@@ -136,7 +136,7 @@ TEST_CASE("Pattern Clause with expressions and subexpressions") {
 
 TEST_CASE("Queries with synonyms as design entities") {
     std::string testQuery = "assign variable;\n"
-                            "Select variable pattern variable ( \" \v  normSq   \t \" , _\"cenX\"_)";
+                            "Select variable pattern variable ( \" \v  normSq   \t \" , _\" \n cenX\"_)";
     std::vector<TokenObject> expectedResult {assignTokenObject, variableTokenObject, semicolonTokenObject,
                                              selectTokenObject, variableTokenObject, patternTokenObject, variableTokenObject,
                                              openBracketTokenObject, normsq_nameWithQuotesTokenObject, commaTokenObject,
@@ -289,8 +289,30 @@ TEST_CASE("AND clause with relationships") {
 }
 
 // White spaces
+TEST_CASE("White spaces within relationships") {
+    std::string testQuery = "stmt\v s1   ; stmt s;\n"
+                            "Select s1  \f   such that Next*   (\ts1, s\f)";
+    std::vector<TokenObject> expectedResult {stmtTokenObject, s1_nameTokenObject, semicolonTokenObject, stmtTokenObject, s_nameTokenObject, semicolonTokenObject,
+                                             selectTokenObject, s1_nameTokenObject, suchTokenObject, thatTokenObject,
+                                             nextTTokenObject, openBracketTokenObject, s1_nameTokenObject, commaTokenObject, s_nameTokenObject, closedBracketTokenObject};
+    Tokenizer tokenizer = Tokenizer();
+    std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
 
+    REQUIRE(testResult == expectedResult);
+}
 
+TEST_CASE("White spaces within quotes") {
+    std::string testQuery = "assign a1;  \t"
+                            "Select a1  pattern a1 ( \" \n\r\v  x    \" , _\"\v 11\t \"_)";
+    std::vector<TokenObject> expectedResult {assignTokenObject, a1_nameTokenObject, semicolonTokenObject,
+                                             selectTokenObject, a1_nameTokenObject, patternTokenObject, a1_nameTokenObject,
+                                             openBracketTokenObject, x_nameWithQuotesTokenObject, commaTokenObject,
+                                             eleven_constantSubexpressionTokenObject, closedBracketTokenObject};
+    Tokenizer tokenizer = Tokenizer();
+    std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
+
+    REQUIRE(testResult == expectedResult);
+}
 
 // Invalid tokens
 TEST_CASE("Invalid name token") {

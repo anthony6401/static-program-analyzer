@@ -389,7 +389,7 @@ bool Tokenizer::isSubExpression(std::string s) {
 }
 
 auto isEmptyOrBlank = [](const std::string &s) {
-    return s.find_first_not_of(" \n\t") == std::string::npos;
+    return s.find_first_not_of(" \n\t\f\v\r") == std::string::npos;
 };
 
 /**
