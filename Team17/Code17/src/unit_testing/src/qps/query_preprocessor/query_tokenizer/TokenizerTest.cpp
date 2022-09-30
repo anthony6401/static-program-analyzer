@@ -249,7 +249,7 @@ TEST_CASE("Next* Relationships") {
     REQUIRE(testResult == expectedResult);
 }
 
-// Affects amd Affects* Relationships
+// Affects and Affects* Relationships
 TEST_CASE("Affects Relationships") {
     std::string testQuery = "stmt s; stmt s1;\n"
                             "Select s1 such that Affects(s, s1)";
@@ -268,6 +268,20 @@ TEST_CASE("Affects* Relationships") {
     std::vector<TokenObject> expectedResult {stmtTokenObject, s1_nameTokenObject, semicolonTokenObject, stmtTokenObject, s_nameTokenObject, semicolonTokenObject,
                                              selectTokenObject, s1_nameTokenObject, suchTokenObject, thatTokenObject,
                                              affectsTTokenObject, openBracketTokenObject, s1_nameTokenObject, commaTokenObject, s_nameTokenObject, closedBracketTokenObject};
+    Tokenizer tokenizer = Tokenizer();
+    std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
+
+    REQUIRE(testResult == expectedResult);
+}
+
+// AND clause
+TEST_CASE("AND clause with relationships") {
+    std::string testQuery = "assign a; while w;\n"
+                            "Select a such that Modifies(a, \"x\") and Parent*(w, a) and Next*(6, a)";
+    std::vector<TokenObject> expectedResult {assignTokenObject, a_nameTokenObject, semicolonTokenObject, whileTokenObject, w_nameTokenObject, semicolonTokenObject,
+                                             selectTokenObject, a_nameTokenObject, suchTokenObject, thatTokenObject, modifiesTokenObject, openBracketTokenObject, a_nameTokenObject, commaTokenObject, x_nameWithQuotesTokenObject, closedBracketTokenObject,
+                                             andTokenObject, parentTTokenObject, openBracketTokenObject, w_nameTokenObject, commaTokenObject, a_nameTokenObject, closedBracketTokenObject,
+                                             andTokenObject, nextTTokenObject, openBracketTokenObject, six_intTokenObject, commaTokenObject, a_nameTokenObject, closedBracketTokenObject};
     Tokenizer tokenizer = Tokenizer();
     std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
 

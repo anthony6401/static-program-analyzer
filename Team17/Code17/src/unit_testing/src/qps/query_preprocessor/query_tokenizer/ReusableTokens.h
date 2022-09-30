@@ -24,6 +24,8 @@ TokenObject thatTokenObject = TokenObject(TokenType::THAT, "that");
 TokenObject openBracketTokenObject = TokenObject(TokenType::OPEN_BRACKET, "(");
 TokenObject closedBracketTokenObject = TokenObject(TokenType::CLOSED_BRACKET, ")");
 
+TokenObject andTokenObject = TokenObject(TokenType::AND, "and");
+
 TokenObject stmtTokenObject = TokenObject(TokenType::STMT, "stmt");
 TokenObject procTokenObject = TokenObject(TokenType::PROCEDURE, "procedure");
 TokenObject readTokenObject = TokenObject(TokenType::READ, "read");
