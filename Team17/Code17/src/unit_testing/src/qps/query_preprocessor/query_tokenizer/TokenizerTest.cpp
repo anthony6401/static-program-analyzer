@@ -551,6 +551,50 @@ TEST_CASE("Invalid tuples token") {
     }
 }
 
+TEST_CASE("Invalid expressions and subexpressions token") {
+    SECTION("Test 1") {
+        std::string testQuery = "Select a1 pattern a1 ( \"x\" , \"x+a/\")";
+        Tokenizer tokenizer = Tokenizer();
+        REQUIRE_THROWS_WITH(tokenizer.tokenize(testQuery), "Token Exception Caught");
+    }
+
+    SECTION("Test 2") {
+        std::string testQuery = "Select a1 pattern a1 ( \"x\" , \"(x+a))\")";
+        Tokenizer tokenizer = Tokenizer();
+        REQUIRE_THROWS_WITH(tokenizer.tokenize(testQuery), "Token Exception Caught");
+    }
+
+    SECTION("Test 3") {
+        std::string testQuery = "Select a1 pattern a1 ( \"x\" , \"(x+a)/(\")";
+        Tokenizer tokenizer = Tokenizer();
+        REQUIRE_THROWS_WITH(tokenizer.tokenize(testQuery), "Token Exception Caught");
+    }
+
+    SECTION("Test 4") {
+        std::string testQuery = "Select a1 pattern a1 ( \"x\" , \"+1+2\")";
+        Tokenizer tokenizer = Tokenizer();
+        REQUIRE_THROWS_WITH(tokenizer.tokenize(testQuery), "Token Exception Caught");
+    }
+
+    SECTION("Test 5") {
+        std::string testQuery = "Select a1 pattern a1 ( \"x\" , \"x-+2\")";
+        Tokenizer tokenizer = Tokenizer();
+        REQUIRE_THROWS_WITH(tokenizer.tokenize(testQuery), "Token Exception Caught");
+    }
+
+    SECTION("Test 6") {
+        std::string testQuery = "Select a1 pattern a1 ( \"x\" , \"x(x+2)+2\")";
+        Tokenizer tokenizer = Tokenizer();
+        REQUIRE_THROWS_WITH(tokenizer.tokenize(testQuery), "Token Exception Caught");
+    }
+
+    SECTION("Test 7") {
+        std::string testQuery = "Select a1 pattern a1 ( \"x\" , _\"x*()+2\"_)";
+        Tokenizer tokenizer = Tokenizer();
+        REQUIRE_THROWS_WITH(tokenizer.tokenize(testQuery), "Token Exception Caught");
+    }
+}
+
 
 
 // Edge cases

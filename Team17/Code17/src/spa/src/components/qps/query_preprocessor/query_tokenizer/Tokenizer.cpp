@@ -289,12 +289,15 @@ bool Tokenizer::validateExpression(std::vector<std::string> expressionVector) {
     bool isPrevInteger = false;
     for (auto string : expressionVector) {
         if (string == "(") {
+            if (isPrevInteger || isPrevName) {
+                return false;
+            }
             expressionStack.push(string);
             prev = "(";
             isPrevInteger = false;
             isPrevName = false;
         } else if (string == ")") {
-            if (expressionStack.empty() || expressionStack.top() != "(" || expressionSymbols.count(prev)) {
+            if (expressionStack.empty() || expressionStack.top() != "(" || expressionSymbols.count(prev) || prev == "(") {
                 return false;
             } else {
                 expressionStack.pop();
