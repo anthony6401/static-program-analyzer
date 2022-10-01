@@ -17,9 +17,24 @@ PatternClauseSyntaxChecker::PatternClauseSyntaxChecker() {
 PatternClauseSyntaxChecker::~PatternClauseSyntaxChecker() {};
 
 bool PatternClauseSyntaxChecker::isSyntacticallyCorrect(std::vector<TokenObject> tokenizedClause) {
+	bool isPrevTokenClosedBracket = false;
+	
 	for (int i = 0; i < tokenizedClause.size(); i++) {
 		TokenObject token = tokenizedClause.at(i);
 		TokenType tokenType = token.getTokenType();
+
+		if (isPrevTokenClosedBracket) {
+			if (tokenType == TokenType::AND || tokenType == TokenType::PATTERN) {
+				this->patternSyntax.push(TokenType::CLOSED_BRACKET);
+				this->patternSyntax.push(TokenType::EXPRESSION_SPEC);
+				this->patternSyntax.push(TokenType::COMMA);
+				this->patternSyntax.push(TokenType::ENTREF);
+				this->patternSyntax.push(TokenType::OPEN_BRACKET);
+				this->patternSyntax.push(TokenType::SYNONYM);
+				isPrevTokenClosedBracket = false;
+				continue;
+			}
+		}
 
 		if (this->patternSyntax.empty()) {
 			return false;
@@ -31,6 +46,10 @@ bool PatternClauseSyntaxChecker::isSyntacticallyCorrect(std::vector<TokenObject>
 		if (this->generalSyntax.find(syntax) == this->generalSyntax.end()) {
 			if (tokenType != syntax) {
 				return false;
+			}
+
+			if (tokenType == TokenType::CLOSED_BRACKET) {
+				isPrevTokenClosedBracket = true;
 			}
 
 			this->patternSyntax.pop();
