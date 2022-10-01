@@ -820,7 +820,7 @@ TEST_CASE("Syntactically incorrect - Missing parameters") {
     REQUIRE(actualResult == false);
 };
 
-TEST_CASE("Syntactically incorrect - start with and") {
+TEST_CASE("Syntactically incorrect - such that start with and") {
     SuchThatClauseSyntaxChecker checker = SuchThatClauseSyntaxChecker();
     std::vector<TokenObject> validSuchThatTokens{
         TokenObject(TokenType::AND, "and"),
@@ -1151,6 +1151,178 @@ TEST_CASE("Valid pattern clause - assign synonym name is pattern") {
     REQUIRE(actualResult == true);
 };
 
+TEST_CASE("Valid pattern clause - more than one pattern") {
+    PatternClauseSyntaxChecker checker = PatternClauseSyntaxChecker();
+    std::vector<TokenObject> validPatternTokens{
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::NAME, "a"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::NAME, "a"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+
+    bool actualResult = checker.isSyntacticallyCorrect(validPatternTokens);
+    REQUIRE(actualResult == true);
+
+};
+
+TEST_CASE("Valid pattern clause - more than one pattern using and clause") {
+    PatternClauseSyntaxChecker checker = PatternClauseSyntaxChecker();
+    std::vector<TokenObject> validPatternTokens{
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::NAME, "a"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::AND, "and"),
+        TokenObject(TokenType::NAME, "a"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+
+    bool actualResult = checker.isSyntacticallyCorrect(validPatternTokens);
+    REQUIRE(actualResult == true);
+
+};
+
+TEST_CASE("Valid pattern clause - pattern - and - pattern") {
+    PatternClauseSyntaxChecker checker = PatternClauseSyntaxChecker();
+    std::vector<TokenObject> validPatternTokens{
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::NAME, "a"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::AND, "and"),
+        TokenObject(TokenType::NAME, "a"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::EXPRESSION, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+
+    bool actualResult = checker.isSyntacticallyCorrect(validPatternTokens);
+    REQUIRE(actualResult == true);
+
+};
+
+TEST_CASE("Valid pattern clause - pattern - pattern - and") {
+    PatternClauseSyntaxChecker checker = PatternClauseSyntaxChecker();
+    std::vector<TokenObject> validPatternTokens{
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::NAME, "a"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::EXPRESSION, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::AND, "and"),
+        TokenObject(TokenType::NAME, "a"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+
+    bool actualResult = checker.isSyntacticallyCorrect(validPatternTokens);
+    REQUIRE(actualResult == true);
+
+};
+
+TEST_CASE("Valid pattern clause - and is used as synonym") {
+    PatternClauseSyntaxChecker checker = PatternClauseSyntaxChecker();
+    std::vector<TokenObject> validPatternTokens{
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::NAME, "a"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::EXPRESSION, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::AND, "and"),
+        TokenObject(TokenType::AND, "and"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+
+    bool actualResult = checker.isSyntacticallyCorrect(validPatternTokens);
+    REQUIRE(actualResult == true);
+
+};
+
+TEST_CASE("Valid pattern clause - relref as synonym name with valid pattern and such that syntax") {
+    PatternClauseSyntaxChecker checker = PatternClauseSyntaxChecker();
+    std::vector<TokenObject> validPatternTokens{
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::NAME, "a"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::EXPRESSION, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::AND, "and"),
+        TokenObject(TokenType::USES, "Uses"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+
+    bool actualResult = checker.isSyntacticallyCorrect(validPatternTokens);
+    REQUIRE(actualResult == true);
+
+};
+
 TEST_CASE("Syntactically incorrect - Invalid parameters") {
     PatternClauseSyntaxChecker checker = PatternClauseSyntaxChecker();
     std::vector<TokenObject> validPatternTokens{
@@ -1195,3 +1367,237 @@ TEST_CASE("Syntactically incorrect - extra tokens") {
     bool actualResult = checker.isSyntacticallyCorrect(validPatternTokens);
     REQUIRE(actualResult == false);
  };
+
+TEST_CASE("Syntactically incorrect - pattern start with and") {
+    PatternClauseSyntaxChecker checker = PatternClauseSyntaxChecker();
+    std::vector<TokenObject> validPatternTokens{
+        TokenObject(TokenType::AND, "and"),
+        TokenObject(TokenType::USES, "Uses"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::NAME, "a"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::EXPRESSION, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+
+    bool actualResult = checker.isSyntacticallyCorrect(validPatternTokens);
+    REQUIRE(actualResult == false);
+
+};
+
+TEST_CASE("Syntactically incorrect - relref as synonym name with valid such that syntax only") {
+    PatternClauseSyntaxChecker checker = PatternClauseSyntaxChecker();
+    std::vector<TokenObject> validPatternTokens{
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::NAME, "a"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::EXPRESSION, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::AND, "and"),
+        TokenObject(TokenType::USES, "Uses"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME, "a"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+
+    bool actualResult = checker.isSyntacticallyCorrect(validPatternTokens);
+    REQUIRE(actualResult == false);
+
+};
+
+TEST_CASE("Syntactically incorrect - multiple and clauses in a row") {
+    PatternClauseSyntaxChecker checker = PatternClauseSyntaxChecker();
+    std::vector<TokenObject> validPatternTokens{
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::NAME, "a"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::AND, "and"),
+        TokenObject(TokenType::AND, "and"),
+        TokenObject(TokenType::USES, "Uses"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::EXPRESSION, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+
+    bool actualResult = checker.isSyntacticallyCorrect(validPatternTokens);
+    REQUIRE(actualResult == false);
+
+};
+
+TEST_CASE("Syntactically incorrect - multiple and clause is incomplete") {
+    PatternClauseSyntaxChecker checker = PatternClauseSyntaxChecker();
+    std::vector<TokenObject> validPatternTokens{
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::NAME, "a"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::AND, "and"),
+        TokenObject(TokenType::USES, "Uses"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::EXPRESSION, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+
+    bool actualResult = checker.isSyntacticallyCorrect(validPatternTokens);
+    REQUIRE(actualResult == false);
+
+};
+
+TEST_CASE("Syntactically incorrect - ends in and clause") {
+    PatternClauseSyntaxChecker checker = PatternClauseSyntaxChecker();
+    std::vector<TokenObject> validPatternTokens{
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::NAME, "a"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::AND, "and")
+    };
+
+    bool actualResult = checker.isSyntacticallyCorrect(validPatternTokens);
+    REQUIRE(actualResult == false);
+
+};
+
+TEST_CASE("Syntactically incorrect - multiple clauses with no and clause") {
+    PatternClauseSyntaxChecker checker = PatternClauseSyntaxChecker();
+    std::vector<TokenObject> validPatternTokens{
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::NAME, "a"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::USES, "Uses"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::EXPRESSION, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+
+    bool actualResult = checker.isSyntacticallyCorrect(validPatternTokens);
+    REQUIRE(actualResult == false);
+
+};
+
+TEST_CASE("Syntactically incorrect - multiple clauses with no pattern clause") {
+    PatternClauseSyntaxChecker checker = PatternClauseSyntaxChecker();
+    std::vector<TokenObject> validPatternTokens{
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::NAME, "a"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::AND, "and"),
+        TokenObject(TokenType::USES, "Uses"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::NAME, "a"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::EXPRESSION, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+
+    bool actualResult = checker.isSyntacticallyCorrect(validPatternTokens);
+    REQUIRE(actualResult == false);
+
+};
+
+TEST_CASE("Syntactically incorrect - pattern token after and") {
+    PatternClauseSyntaxChecker checker = PatternClauseSyntaxChecker();
+    std::vector<TokenObject> validPatternTokens{
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::NAME, "a"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::AND, "and"),
+        TokenObject(TokenType::USES, "Uses"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::AND, "and"),
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::NAME, "a"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::EXPRESSION, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+
+    bool actualResult = checker.isSyntacticallyCorrect(validPatternTokens);
+    REQUIRE(actualResult == false);
+
+};
