@@ -11,6 +11,18 @@ ResultTable CallsTClause::evaluateClause() {
     if (leftType == TokenType::NAME && rightType == TokenType::NAME) {
         return CallsTClause::evaluateSynonymSynonym();
     } else if (leftType == TokenType::NAME && rightType == TokenType::WILDCARD) {
+        return CallsTClause::evaluateSynonymWildcard();
+    } else if (leftType == TokenType::NAME && rightType == TokenType::NAME_WITH_QUOTATION) {
+        return CallsTClause::evaluateSynonymNameQuotes();
+    } else if (leftType == TokenType::WILDCARD && rightType == TokenType::NAME) {
+        return CallsTClause::evaluateWildcardSynonym();
+    } else if (leftType == TokenType::WILDCARD && rightType == TokenType::WILDCARD) {
+        return CallsTClause::evaluateWildcardWildcard();
+    } else if (leftType == TokenType::WILDCARD && rightType == TokenType::NAME_WITH_QUOTATION) {
+        return CallsTClause::evaluateWildcardNameQuotes();
+    } else if (leftType == TokenType::NAME_WITH_QUOTATION && rightType == TokenType::NAME) {
+        return CallsTClause::evaluateNameQuotesSynonym();
+    } else if (leftType == TokenType::NAME_WITH_QUOTATION && rightType == TokenType::WILDCARD) {
         return CallsTClause::evaluateNameQuotesWildcard();
     } else if (leftType == TokenType::NAME_WITH_QUOTATION && rightType == TokenType::NAME_WITH_QUOTATION) {
         return CallsTClause::evaluateNameQuotesNameQuotes();
@@ -50,6 +62,15 @@ std::vector<std::pair<std::string, std::string>> CallsTClause::processMapToVecto
             std::pair<std::string, std::string> newPair = {firstSynonym, secondSynonym};
             processedResult.emplace_back(newPair);
         }
+    }
+    return processedResult;
+}
+
+std::unordered_set<std::string> CallsTClause::processMapToSetFromFirst(std::unordered_map<std::string, std::unordered_set<std::string>> results) {
+    std::unordered_set<std::string> processedResult;
+    for (auto entry : results) {
+        std::string firstSynonym = entry.first;
+        processedResult.insert(firstSynonym);
     }
     return processedResult;
 }
