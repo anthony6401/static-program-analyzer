@@ -437,7 +437,10 @@ std::vector<TokenObject> Tokenizer::tokenize(std::string query) {
             TokenObject object = TokenObject(stringToTokenMap[s], s);
             tokenList.push_back(object);
         } else {
-            if (isName(s)) {
+            if (isTuple(s)) {
+                TokenObject object = TokenObject(TokenType::TUPLE, s);
+                tokenList.push_back(object);
+            } else if (isName(s)) {
                 TokenObject object = TokenObject(TokenType::NAME, s);
                 tokenList.push_back(object);
             } else if (isInteger(s)) {
