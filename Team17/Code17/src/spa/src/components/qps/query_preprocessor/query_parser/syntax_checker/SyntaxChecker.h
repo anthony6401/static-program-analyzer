@@ -17,7 +17,7 @@ protected:
         {TokenType::STMTREF, std::vector<TokenType>{TokenType::SYNONYM, TokenType::WILDCARD, TokenType::INTEGER}},
         {TokenType::ENTREF, std::vector<TokenType>{TokenType::SYNONYM, TokenType::WILDCARD, TokenType::NAME_WITH_QUOTATION}},
         {TokenType::EXPRESSION_SPEC, std::vector<TokenType>{TokenType::EXPRESSION, TokenType::SUBEXPRESSION, TokenType::WILDCARD, TokenType::NAME_WITH_QUOTATION}},
-        {TokenType::SYNONYM, std::vector<TokenType>{TokenType::NAME, TokenType::STMT, TokenType::READ, TokenType::PRINT, TokenType::CALL, TokenType::WHILE, TokenType::IF, TokenType::ASSIGN, TokenType::VARIABLE, TokenType::CONSTANT, TokenType::PROCEDURE, TokenType::SELECT, TokenType::SUCH, TokenType::THAT, TokenType::PATTERN, TokenType::FOLLOWS, TokenType::PARENT, TokenType::USES, TokenType::MODIFIES, TokenType::CALLS, TokenType::NEXT}}
+        {TokenType::SYNONYM, std::vector<TokenType>{TokenType::NAME, TokenType::STMT, TokenType::READ, TokenType::PRINT, TokenType::CALL, TokenType::WHILE, TokenType::IF, TokenType::ASSIGN, TokenType::VARIABLE, TokenType::CONSTANT, TokenType::PROCEDURE, TokenType::SELECT, TokenType::SUCH, TokenType::THAT, TokenType::PATTERN, TokenType::FOLLOWS, TokenType::PARENT, TokenType::USES, TokenType::MODIFIES, TokenType::CALLS, TokenType::NEXT, TokenType::AND, TokenType::WITH, TokenType::BOOLEAN}}
 
     };
 
