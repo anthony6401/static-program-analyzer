@@ -390,32 +390,31 @@ bool Tokenizer::isTuple(std::string s) {
     if (s.front() == '<' && s.back() == '>') {
         // Remove tuple brackets
         std::string currString = s.substr(1, s.length() - 2);
-        // First occurrence of comma
-        int commaIndex = currString.find(',');
-        if (commaIndex == std::string::npos) {
-            return false;
-        }
-
         std::string currValue;
         int startIndex = 0;
-        while (commaIndex < currString.length()) {
-            // Returns substring from startIndex to value before commaIndex
-            currValue = currString.substr(startIndex, commaIndex);
-            if (!isName(currValue)) {
+        bool hasComma = false;
+        while (currString.length() > 0) {
+            size_t commaIndex = currString.find(',');
+            if (commaIndex != std::string::npos && commaIndex > 0) {
+                // Find current value
+                hasComma = true;
+                currValue = currString.substr(0, commaIndex);
+                if (!isName(currValue)) {
+                    return false;
+                }
+
+                currString = currString.substr(commaIndex + 1, currString.length() - commaIndex - 1);
+            } else if (isName(currString) && hasComma) {
+                return true;
+            } else {
                 return false;
             }
-
-            // Get index of next value
-            startIndex = commaIndex + 1;
-            currString = currString.substr(startIndex);
-            commaIndex = currString.find(',');
         }
-        return true;
-    } else {
+
         return false;
     }
+    return false;
 }
-
 /**
  * Tokenizes each character or string according to Token Types and outputs vector<TokenObject>
  */
