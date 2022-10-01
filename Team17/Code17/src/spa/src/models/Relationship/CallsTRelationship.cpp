@@ -3,4 +3,4 @@
 
 #include "models/Entity/Entity.h"
 
-CallsTRelationship::CallsRelationship(Entity* leftEntity, Entity* rightEntity) : Relationship(leftEntity, rightEntity) {}
+CallsTRelationship::CallsTRelationship(Entity* leftEntity, Entity* rightEntity) : Relationship(leftEntity, rightEntity) {}
