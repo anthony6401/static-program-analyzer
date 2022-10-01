@@ -12,6 +12,7 @@
 #include "iostream"
 #include "components/qps/query_evaluator/factory/clauses/relationship/CallsClause.h"
 #include "components/qps/query_evaluator/factory/clauses/relationship/CallsTClause.h"
+#include "components/qps/query_evaluator/factory/clauses/relationship/NextClause.h"
 
 std::shared_ptr<Clause> ClauseCreator::createClause(Select synonym, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) {
     return std::make_shared<SelectClause>(synonym, synonymToDesignEntityMap, qpsClient);
@@ -59,6 +60,8 @@ std::shared_ptr<Clause> ClauseCreator::createClause(SuchThat relationship, Selec
         return std::make_shared<CallsClause>(left, right, synonym, synonymToDesignEntityMap, qpsClient);
     } else if (relationshipType == TokenType::CALLS_T) {
         return std::make_shared<CallsTClause>(left, right, synonym, synonymToDesignEntityMap, qpsClient);
+    } else if (relationshipType == TokenType::NEXT) {
+        return std::make_shared<NextClause>(left, right, synonym, synonymToDesignEntityMap, qpsClient);
     } else {
         return nullptr;
     };
