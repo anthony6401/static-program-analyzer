@@ -28,13 +28,13 @@ public:
     static RelationshipType getRelationshipType();
     ResultTable evaluateSynonymSynonym();
     ResultTable evaluateSynonymWildcard();
-    ResultTable evaluateSynonymInteger();
-    ResultTable evaluateIntegerSynonym();
-    ResultTable evaluateIntegerWildcard();
-    ResultTable evaluateIntegerInteger();
+    ResultTable evaluateSynonymNameQuotes();
     ResultTable evaluateWildcardSynonym();
     ResultTable evaluateWildcardWildcard();
-    ResultTable evaluateWildcardInteger();
+    ResultTable evaluateWildcardNameQuotes();
+    ResultTable evaluateNameQuotesSynonym();
+    ResultTable evaluateNameQuotesWildcard();
+    ResultTable evaluateNameQuotesNameQuotes();
 };
 
 #endif //SPA_CALLSCLAUSE_H
