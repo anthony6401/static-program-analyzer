@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <utility>
+#include <stack>
 
 struct pair_hash {
     template <class T1, class T2>
@@ -42,5 +43,86 @@ public:
         }
 
         return false;
+    }
+
+    bool isAlphanumeric(char c) {
+        return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9');
+    }
+
+    int prec(char c)
+    {
+        if (c == '^') {
+            return 3;
+        }
+        else if (c == '/' || c == '*' || c == '%') {
+            return 2;
+        }
+        else if (c == '+' || c == '-') {
+            return 1;
+        }
+        else
+            return -1;
+    }
+
+    std::string convertInfixToPostfix(std::string pattern) {
+        std::stack<char> st; // For stack operations, we are using
+        // C++ built in stack
+        std::string result;
+
+        for (int i = 0; i < pattern.length(); i++) {
+            char c = pattern[i];
+
+
+            // If the scanned character is
+            // an operand, add it to output string.
+            if (isAlphanumeric(c)) {
+                std::string temp;
+                while (isAlphanumeric(pattern[i])) {
+                    temp += pattern[i];
+                    i++;
+                }
+                temp += " ";
+                result += temp;
+                i--;
+            }
+
+            // If the scanned character is an
+            // ‘(‘, push it to the stack.
+            else if (c == '(') {
+                st.push('(');
+            }
+
+            // If the scanned character is an ‘)’,
+            // pop and to output string from the stack
+            // until an ‘(‘ is encountered.
+            else if (c == ')') {
+                while (st.top() != '(') {
+                    result += st.top();
+                    result += " ";
+                    st.pop();
+                }
+                st.pop();
+            }
+
+            // If an operator is scanned
+            else {
+                while (!st.empty()
+                    && prec(pattern[i]) <= prec(st.top())) {
+                    result += st.top();
+                    result += " ";
+                    st.pop();
+                }
+                st.push(c);
+            }
+        }
+
+        // Pop all the remaining elements from the stack
+        while (!st.empty()) {
+            result += st.top();
+            result += " ";
+            st.pop();
+        }
+
+        return result;
     }
 };
