@@ -383,11 +383,56 @@ TEST_CASE("Invalid symbols token") {
     REQUIRE_THROWS_WITH(tokenizer.tokenize(testQuery), "Token Exception Caught");
 }
 
+TEST_CASE("Invalid tuples token") {
+    SECTION("Test 1") {
+        std::string testQuery = "assign a1, a2; Select <,a1, a2> such that Affects (a1, a2)";
+        Tokenizer tokenizer = Tokenizer();
+        REQUIRE_THROWS_WITH(tokenizer.tokenize(testQuery), "Token Exception Caught");
+    }
+
+    SECTION("Test 2") {
+        std::string testQuery = "assign a1, a2; Select <a1, a2, a,> such that Affects (a1, a2)";
+        Tokenizer tokenizer = Tokenizer();
+        REQUIRE_THROWS_WITH(tokenizer.tokenize(testQuery), "Token Exception Caught");
+    }
+
+    SECTION("Test 3") {
+        std::string testQuery = "assign a1, a2; Select <a1, 1a2, a> such that Affects (a1, a2)";
+        Tokenizer tokenizer = Tokenizer();
+        REQUIRE_THROWS_WITH(tokenizer.tokenize(testQuery), "Token Exception Caught");
+    }
+
+    SECTION("Test 4") {
+        std::string testQuery = "assign a1, a2; Select <a> such that Affects (a1, a2)";
+        Tokenizer tokenizer = Tokenizer();
+        REQUIRE_THROWS_WITH(tokenizer.tokenize(testQuery), "Token Exception Caught");
+    }
+
+    SECTION("Test 5") {
+        std::string testQuery = "assign a1, a2; Select <a,,a2,a1> such that Affects (a1, a2)";
+        Tokenizer tokenizer = Tokenizer();
+        REQUIRE_THROWS_WITH(tokenizer.tokenize(testQuery), "Token Exception Caught");
+    }
+
+    SECTION("Test 6") {
+        std::string testQuery = "assign a1, a2; Select <<a,,a2,a1>> such that Affects (a1, a2)";
+        Tokenizer tokenizer = Tokenizer();
+        REQUIRE_THROWS_WITH(tokenizer.tokenize(testQuery), "Token Exception Caught");
+    }
+
+    SECTION("Test 7") {
+        std::string testQuery = "assign a1, a2; Select <,a,a2,a1,> such that Affects (a1, a2)";
+        Tokenizer tokenizer = Tokenizer();
+        REQUIRE_THROWS_WITH(tokenizer.tokenize(testQuery), "Token Exception Caught");
+    }
+}
+
+
 
 // Edge cases
 TEST_CASE("Presence of white spaces") {
     std::string testQuery = "stmt       s;    \n"
-                            "Select s    such   that Follows*    (6,   s)";
+                            "Select s    such   that Follows*    (6, \n\r\v  s)";
     std::vector<TokenObject> expectedResult {stmtTokenObject, s_nameTokenObject, semicolonTokenObject,
                                              selectTokenObject, s_nameTokenObject, suchTokenObject, thatTokenObject,
                                              followsTTokenObject, openBracketTokenObject, six_intTokenObject, commaTokenObject,
@@ -400,11 +445,22 @@ TEST_CASE("Presence of white spaces") {
 
 TEST_CASE("Presence of white spaces in Name with Quotes and Subexpressions") {
     std::string testQuery = "assign newa;\n"
-                            "Select newa pattern newa ( \"     normSq\" , _\"   cenX  \"_)";
+                            "Select newa pattern newa ( \"   \t  normSq\" , _\"   cenX  \"_)";
     std::vector<TokenObject> expectedResult {assignTokenObject, newa_nameTokenObject, semicolonTokenObject,
                                              selectTokenObject, newa_nameTokenObject, patternTokenObject, newa_nameTokenObject,
                                              openBracketTokenObject, normsq_nameWithQuotesTokenObject, commaTokenObject,
                                              cenX_subexpressionTokenObject, closedBracketTokenObject};
+    Tokenizer tokenizer = Tokenizer();
+    std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
+
+    REQUIRE(testResult == expectedResult);
+}
+
+TEST_CASE("Presence of white spaces in tuple") {
+    std::string testQuery = "assign a1, a2, a; Select <a, \na1\t, a2\r> such that Affects (a1, a2)";
+    std::vector<TokenObject> expectedResult {assignTokenObject, a1_nameTokenObject, commaTokenObject, a2_nameTokenObject, commaTokenObject, a_nameTokenObject, semicolonTokenObject,
+                                             selectTokenObject, threeSyn_tupleTokenObject, suchTokenObject, thatTokenObject,
+                                             affectsTokenObject, openBracketTokenObject, a1_nameTokenObject, commaTokenObject, a2_nameTokenObject, closedBracketTokenObject};
     Tokenizer tokenizer = Tokenizer();
     std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
 
