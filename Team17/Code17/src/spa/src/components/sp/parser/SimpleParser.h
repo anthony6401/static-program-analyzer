@@ -6,30 +6,24 @@
 
 class SimpleParser {
     public:
-        static int statementNumber;
-        static SimpleToken parseLine(std::vector<std::string>& tokens, std::string code);
-        static void parseProcedure(SimpleToken& printStmt, std::vector<std::string>& tokens,
-            Extractor* extractor);
-        static void parsePrint(SimpleToken& printStmt, std::vector<std::string>& tokens,
-            Extractor* extractor);
-        static void parseRead(SimpleToken& readStmt, std::vector<std::string>& tokens,
-            Extractor* extractor);
-        static void parseCall(SimpleToken& readStmt, std::vector<std::string>& tokens,
-            Extractor* extractor);
-        static void parseWhile(SimpleToken& readStmt, std::vector<std::string>& tokens,
-            Extractor* extractor);
-        static void parseIf(SimpleToken& readStmt, std::vector<std::string>& tokens,
-            Extractor* extractor);
-        static void parseAssign(SimpleToken& readStmt, std::vector<std::string>& tokens,
-            Extractor* extractor);
-        static std::vector<SimpleToken> parseCondition(std::vector<std::string> tokens);
-        static std::vector<SimpleToken> parseRelExpr(std::vector<std::string>& tokens);
-        static SimpleToken parseExpr(std::vector<std::string>& tokens);
-        static SimpleToken parseVariable(std::string& token);
-        static SimpleToken parseConstant(std::string& token);
-        static void parseHolder(SimpleToken& printStmt, std::vector<std::string>& tokens,
-            Extractor* extractor);
+        int statementNumber;
+        SimpleParser(Extractor* client);
+        void parseCode(std::string code);
+        SimpleToken parseLine(std::string code);
+        void parseProcedure(SimpleToken& printStmt, std::vector<std::string>& tokens);
+        void parsePrint(SimpleToken& printStmt, std::vector<std::string>& tokens);
+        void parseRead(SimpleToken& readStmt, std::vector<std::string>& tokens);
+        void parseCall(SimpleToken& readStmt, std::vector<std::string>& tokens);
+        void parseWhile(SimpleToken& readStmt, std::vector<std::string>& tokens);
+        void parseIf(SimpleToken& readStmt, std::vector<std::string>& tokens);
+        void parseAssign(SimpleToken& readStmt, std::vector<std::string>& tokens);
+        std::vector<SimpleToken> parseCondition(std::vector<std::string> tokens);
+        std::vector<SimpleToken> parseRelExpr(std::vector<std::string>& tokens);
+        SimpleToken parseExpr(std::vector<std::string>& tokens);
+        SimpleToken parseVariable(std::string& token);
+        SimpleToken parseConstant(std::string& token);
 
-        static SPClient client; // to be changed
-        static Extractor* extractor;
+    private:
+        Extractor* extractor;
+
 };

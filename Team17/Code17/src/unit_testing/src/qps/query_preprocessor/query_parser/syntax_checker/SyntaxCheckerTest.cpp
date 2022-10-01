@@ -333,6 +333,70 @@ TEST_CASE("Modifies relationship - ENTREF_ENTREF") {
     REQUIRE(actualResult == true);
 };
 
+TEST_CASE("Calls relationship - ENTREF_ENTREF") {
+    SuchThatClauseSyntaxChecker checker = SuchThatClauseSyntaxChecker();
+    std::vector<TokenObject> validSuchThatTokens{
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::THAT, "that"),
+        TokenObject(TokenType::CALLS, "Calls"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validSuchThatTokens);
+    REQUIRE(actualResult == true);
+};
+
+TEST_CASE("Calls* relationship - with synonym name Calls") {
+    SuchThatClauseSyntaxChecker checker = SuchThatClauseSyntaxChecker();
+    std::vector<TokenObject> validSuchThatTokens{
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::THAT, "that"),
+        TokenObject(TokenType::CALLS_T, "Calls*"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::CALLS, "Calls"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validSuchThatTokens);
+    REQUIRE(actualResult == true);
+};
+
+TEST_CASE("Next relationship") {
+    SuchThatClauseSyntaxChecker checker = SuchThatClauseSyntaxChecker();
+    std::vector<TokenObject> validSuchThatTokens{
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::THAT, "that"),
+        TokenObject(TokenType::NEXT, "Next"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::NAME, "s"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::INTEGER, "6"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validSuchThatTokens);
+    REQUIRE(actualResult == true);
+};
+
+TEST_CASE("Next* relationship - WILDCARD") {
+    SuchThatClauseSyntaxChecker checker = SuchThatClauseSyntaxChecker();
+    std::vector<TokenObject> validSuchThatTokens{
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::THAT, "that"),
+        TokenObject(TokenType::NEXT_T, "Next*"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::INTEGER, "6"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validSuchThatTokens);
+    REQUIRE(actualResult == true);
+};
+
 TEST_CASE("Synonyms with same name as such or that types") {
     SuchThatClauseSyntaxChecker checker = SuchThatClauseSyntaxChecker();
     std::vector<TokenObject> validSuchThatTokens{
@@ -391,6 +455,70 @@ TEST_CASE("Syntactically incorrect - Uses with STMTREF as 2nd parameter") {
         TokenObject(TokenType::WILDCARD, "_"),
         TokenObject(TokenType::COMMA, ","),
         TokenObject(TokenType::INTEGER, "1"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validSuchThatTokens);
+    REQUIRE(actualResult == false);
+};
+
+TEST_CASE("Syntactically incorrect - Calls with STMTREF parameter as first parameter") {
+    SuchThatClauseSyntaxChecker checker = SuchThatClauseSyntaxChecker();
+    std::vector<TokenObject> validSuchThatTokens{
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::THAT, "that"),
+        TokenObject(TokenType::CALLS, "Calls"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::INTEGER, "1"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validSuchThatTokens);
+    REQUIRE(actualResult == false);
+};
+
+TEST_CASE("Syntactically incorrect - Calls* with STMTREF parameter as second parameter") {
+    SuchThatClauseSyntaxChecker checker = SuchThatClauseSyntaxChecker();
+    std::vector<TokenObject> validSuchThatTokens{
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::THAT, "that"),
+        TokenObject(TokenType::CALLS_T, "Calls*"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::INTEGER, "1"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validSuchThatTokens);
+    REQUIRE(actualResult == false);
+};
+
+TEST_CASE("Syntactically incorrect - Next with ENTREF as one of the parameters") {
+    SuchThatClauseSyntaxChecker checker = SuchThatClauseSyntaxChecker();
+    std::vector<TokenObject> validSuchThatTokens{
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::THAT, "that"),
+        TokenObject(TokenType::NEXT, "Next"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validSuchThatTokens);
+    REQUIRE(actualResult == false);
+};
+
+TEST_CASE("Syntactically incorrect - Next* with ENTREF-ENTREF parameters") {
+    SuchThatClauseSyntaxChecker checker = SuchThatClauseSyntaxChecker();
+    std::vector<TokenObject> validSuchThatTokens{
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::THAT, "that"),
+        TokenObject(TokenType::NEXT, "Next"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "y"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
         TokenObject(TokenType::CLOSED_BRACKET, ")")
     };
     bool actualResult = checker.isSyntacticallyCorrect(validSuchThatTokens);
