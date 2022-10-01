@@ -29,6 +29,7 @@ static TokenObject procedureTokenObjectTwo = TokenObject(TokenType::NAME_WITH_QU
 static TokenObject variableTokenObjectTwo = TokenObject(TokenType::NAME_WITH_QUOTATION, variable_value_two);
 static TokenObject procedureTokenObjectThree = TokenObject(TokenType::NAME_WITH_QUOTATION, procedure_value_three);
 static TokenObject variableTokenObjectThree = TokenObject(TokenType::NAME_WITH_QUOTATION, variable_value_three);
+static TokenObject procedureTokenObjectFour = TokenObject(TokenType::NAME_WITH_QUOTATION, procedure_value_four);
 
 static TokenObject assignPatternTokenObjectFirstOne = TokenObject(TokenType::NAME_WITH_QUOTATION, assignFirstValueOne);
 static TokenObject assignPatternTokenObjectFirstTwo = TokenObject(TokenType::NAME_WITH_QUOTATION, assignFirstValueTwo);
