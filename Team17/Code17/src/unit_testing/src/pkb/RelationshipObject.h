@@ -11,6 +11,7 @@
 #include "models/Relationship/NextRelationship.h"
 #include "models/Relationship/NextTRelationship.h"
 #include "models/Relationship/CallsRelationship.h"
+#include "models/Relationship/CallsTRelationship.h"
 
 static Relationship* usesRelationshipAssignOne = new UsesRelationship(assignEntity, variableEntity);
 static Relationship* usesRelationshipAssignTwo = new UsesRelationship(assignEntityTwo, variableEntityTwo);
@@ -672,3 +673,14 @@ static Relationship* callsRelationshipTwoDup = new CallsRelationship(procedureEn
 
 static Relationship* callsRelationshipThree = new CallsRelationship(procedureEntityTwo, procedureEntityThree);
 static Relationship* callsRelationshipThreeDup = new CallsRelationship(procedureEntityTwo, procedureEntityThree);
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+static Relationship* callsTRelationshipOne = new CallsTRelationship(procedureEntity, procedureEntityTwo);
+static Relationship* callsTRelationshipOneDup = new CallsTRelationship(procedureEntity, procedureEntityTwo);
+
+static Relationship* callsTRelationshipTwo = new CallsTRelationship(procedureEntity, procedureEntityThree);
+static Relationship* callsTRelationshipTwoDup = new CallsTRelationship(procedureEntity, procedureEntityThree);
+
+static Relationship* callsTRelationshipThree = new CallsTRelationship(procedureEntityTwo, procedureEntityThree);
+static Relationship* callsTRelationshipThreeDup = new CallsTRelationship(procedureEntityTwo, procedureEntityThree);
