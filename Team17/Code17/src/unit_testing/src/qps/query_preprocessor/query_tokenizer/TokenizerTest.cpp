@@ -325,6 +325,18 @@ TEST_CASE("White spaces within quotes") {
     REQUIRE(testResult == expectedResult);
 }
 
+// Return Tuples
+TEST_CASE("Tuples with 2 synonym") {
+    std::string testQuery = "assign a1, a2; Select <a1, a2> such that Affects (a1, a2)";
+    std::vector<TokenObject> expectedResult {assignTokenObject, a1_nameTokenObject, commaTokenObject, a2_nameTokenObject, semicolonTokenObject,
+                                             selectTokenObject, twoSyn_tupleTokenObject, suchTokenObject, thatTokenObject,
+                                             affectsTokenObject, openBracketTokenObject, a1_nameTokenObject, commaTokenObject, a2_nameTokenObject, closedBracketTokenObject};
+    Tokenizer tokenizer = Tokenizer();
+    std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
+
+    REQUIRE(testResult == expectedResult);
+}
+
 // Invalid tokens
 TEST_CASE("Invalid name token") {
     std::string testQuery = "assign 0x1;\n";

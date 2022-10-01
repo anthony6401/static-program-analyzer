@@ -47,6 +47,8 @@ TokenObject cenX_subexpressionTokenObject = TokenObject(TokenType::SUBEXPRESSION
 TokenObject one_constantExpressionTokenObject = TokenObject(TokenType::EXPRESSION, "1");
 TokenObject eleven_constantSubexpressionTokenObject = TokenObject(TokenType::SUBEXPRESSION, "11");
 
+TokenObject twoSyn_tupleTokenObject = TokenObject(TokenType::TUPLE, "<a1,a2>");
+
 TokenObject v_nameTokenObject = TokenObject(TokenType::NAME, "v");
 TokenObject v1_nameTokenObject = TokenObject(TokenType::NAME, "v1");
 TokenObject s_nameTokenObject = TokenObject(TokenType::NAME, "s");
@@ -55,6 +57,7 @@ TokenObject p_nameTokenObject = TokenObject(TokenType::NAME, "p");
 TokenObject q_nameTokenObject = TokenObject(TokenType::NAME, "q");
 TokenObject a_nameTokenObject = TokenObject(TokenType::NAME, "a");
 TokenObject a1_nameTokenObject = TokenObject(TokenType::NAME, "a1");
+TokenObject a2_nameTokenObject = TokenObject(TokenType::NAME, "a2");
 TokenObject w_nameTokenObject = TokenObject(TokenType::NAME, "w");
 TokenObject ifs_nameTokenObject = TokenObject(TokenType::NAME, "ifs");
 TokenObject c_nameTokenObject = TokenObject(TokenType::NAME, "c");
