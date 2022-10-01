@@ -6,6 +6,8 @@
 #include "components/qps/query_preprocessor/query_tokenizer/TokenObject.h"
 #include "components/qps/query_preprocessor/query_tokenizer/TokenType.h"
 
+#include <tuple>
+
 #include <catch.hpp>
 
 // Tests for DeclarationClauseSyntaxChecker
@@ -429,6 +431,214 @@ TEST_CASE("Synonyms with same name as relationship types") {
     REQUIRE(actualResult == true);
 };
 
+TEST_CASE("Multiple such that clauses - no and clause") {
+    SuchThatClauseSyntaxChecker checker = SuchThatClauseSyntaxChecker();
+    std::vector<TokenObject> validSuchThatTokens{
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::THAT, "that"),
+        TokenObject(TokenType::NEXT, "Next"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::INTEGER, "6"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME, "v"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::THAT, "that"),
+        TokenObject(TokenType::USES, "Uses"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::INTEGER, "6"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME, "v"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+
+    bool actualResult = checker.isSyntacticallyCorrect(validSuchThatTokens);
+    REQUIRE(actualResult == true);
+};
+
+TEST_CASE("Multiple such that clauses - and clause") {
+    SuchThatClauseSyntaxChecker checker = SuchThatClauseSyntaxChecker();
+    std::vector<TokenObject> validSuchThatTokens{
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::THAT, "that"),
+        TokenObject(TokenType::PARENT, "Parent"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::INTEGER, "6"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME, "v"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::AND, "and"),
+        TokenObject(TokenType::PARENT, "Parent"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::INTEGER, "6"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME, "v"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+
+    bool actualResult = checker.isSyntacticallyCorrect(validSuchThatTokens);
+    REQUIRE(actualResult == true);
+};
+
+TEST_CASE("Multiple such that clauses - multiple and clause") {
+    SuchThatClauseSyntaxChecker checker = SuchThatClauseSyntaxChecker();
+    std::vector<TokenObject> validSuchThatTokens{
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::THAT, "that"),
+        TokenObject(TokenType::PARENT, "Parent"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::INTEGER, "6"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME, "v"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::AND, "and"),
+        TokenObject(TokenType::PARENT, "Parent"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::INTEGER, "6"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME, "v"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::AND, "and"),
+        TokenObject(TokenType::PARENT, "Parent"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::INTEGER, "6"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME, "v"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+
+    bool actualResult = checker.isSyntacticallyCorrect(validSuchThatTokens);
+    REQUIRE(actualResult == true);
+};
+
+TEST_CASE("Multiple such that clauses - such that - and - such that") {
+    SuchThatClauseSyntaxChecker checker = SuchThatClauseSyntaxChecker();
+    std::vector<TokenObject> validSuchThatTokens{
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::THAT, "that"),
+        TokenObject(TokenType::FOLLOWS, "Follows"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::INTEGER, "6"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME, "v"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::AND, "and"),
+        TokenObject(TokenType::PARENT, "Parent*"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::INTEGER, "6"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME, "v"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::THAT, "that"),
+        TokenObject(TokenType::NEXT, "Next"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::INTEGER, "6"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME, "v"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+
+    bool actualResult = checker.isSyntacticallyCorrect(validSuchThatTokens);
+    REQUIRE(actualResult == true);
+};
+
+TEST_CASE("Multiple such that clauses - such that - such that - and") {
+    SuchThatClauseSyntaxChecker checker = SuchThatClauseSyntaxChecker();
+    std::vector<TokenObject> validSuchThatTokens{
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::THAT, "that"),
+        TokenObject(TokenType::CALLS, "Calls"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME, "v"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::THAT, "that"),
+        TokenObject(TokenType::NEXT, "Next*"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::INTEGER, "6"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME, "v"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::AND, "and"),
+        TokenObject(TokenType::CALLS_T, "Calls*"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME, "v"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+
+    bool actualResult = checker.isSyntacticallyCorrect(validSuchThatTokens);
+    REQUIRE(actualResult == true);
+};
+
+TEST_CASE("Multiple such that clauses - pattern clause with relref synonym name taken with relref syntax") {
+    SuchThatClauseSyntaxChecker checker = SuchThatClauseSyntaxChecker();
+    std::vector<TokenObject> validSuchThatTokens{
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::THAT, "that"),
+        TokenObject(TokenType::CALLS, "Calls"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME, "v"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::THAT, "that"),
+        TokenObject(TokenType::NEXT, "Next*"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::INTEGER, "6"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME, "v"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::AND, "and"),
+        TokenObject(TokenType::CALLS_T, "Calls"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "v"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+
+    bool actualResult = checker.isSyntacticallyCorrect(validSuchThatTokens);
+    REQUIRE(actualResult == true);
+};
+
+TEST_CASE("Multiple such that clauses - and as synonym name") {
+    SuchThatClauseSyntaxChecker checker = SuchThatClauseSyntaxChecker();
+    std::vector<TokenObject> validSuchThatTokens{
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::THAT, "that"),
+        TokenObject(TokenType::CALLS, "Calls"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::AND, "and"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::THAT, "that"),
+        TokenObject(TokenType::NEXT, "Next*"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::INTEGER, "6"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::AND, "and"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::AND, "and"),
+        TokenObject(TokenType::CALLS_T, "Calls"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "v"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+
+    bool actualResult = checker.isSyntacticallyCorrect(validSuchThatTokens);
+    REQUIRE(actualResult == true);
+};
+
 TEST_CASE("Syntactically incorrect - Follows with wrong parameters") {
     SuchThatClauseSyntaxChecker checker = SuchThatClauseSyntaxChecker();
     std::vector<TokenObject> validSuchThatTokens{
@@ -606,6 +816,211 @@ TEST_CASE("Syntactically incorrect - Missing parameters") {
         TokenObject(TokenType::COMMA, ","),
         TokenObject(TokenType::CLOSED_BRACKET, ")")
     };
+    bool actualResult = checker.isSyntacticallyCorrect(validSuchThatTokens);
+    REQUIRE(actualResult == false);
+};
+
+TEST_CASE("Syntactically incorrect - start with and") {
+    SuchThatClauseSyntaxChecker checker = SuchThatClauseSyntaxChecker();
+    std::vector<TokenObject> validSuchThatTokens{
+        TokenObject(TokenType::AND, "and"),
+        TokenObject(TokenType::CALLS_T, "Calls*"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME, "v"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::THAT, "that"),
+        TokenObject(TokenType::CALLS, "Calls"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME, "v"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::THAT, "that"),
+        TokenObject(TokenType::NEXT, "Next*"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::INTEGER, "6"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME, "v"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+
+    };
+
+    bool actualResult = checker.isSyntacticallyCorrect(validSuchThatTokens);
+    REQUIRE(actualResult == false);
+};
+
+TEST_CASE("Syntactically incorrect - and immediately after such that") {
+    SuchThatClauseSyntaxChecker checker = SuchThatClauseSyntaxChecker();
+    std::vector<TokenObject> validSuchThatTokens{
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::THAT, "that"),
+        TokenObject(TokenType::AND, "and"),
+        TokenObject(TokenType::CALLS_T, "Calls*"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME, "v"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+
+    };
+
+    bool actualResult = checker.isSyntacticallyCorrect(validSuchThatTokens);
+    REQUIRE(actualResult == false);
+};
+
+TEST_CASE("Syntactically incorrect - and clause and such that missing") {
+    SuchThatClauseSyntaxChecker checker = SuchThatClauseSyntaxChecker();
+    std::vector<TokenObject> validSuchThatTokens{
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::THAT, "that"),
+        TokenObject(TokenType::CALLS, "Calls"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME, "v"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::NEXT, "Next*"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::INTEGER, "6"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME, "v"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+
+    };
+
+    bool actualResult = checker.isSyntacticallyCorrect(validSuchThatTokens);
+    REQUIRE(actualResult == false);
+};
+
+TEST_CASE("Syntactically incorrect - token after and is such that") {
+    SuchThatClauseSyntaxChecker checker = SuchThatClauseSyntaxChecker();
+    std::vector<TokenObject> validSuchThatTokens{
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::THAT, "that"),
+        TokenObject(TokenType::CALLS, "Calls"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME, "v"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::AND, "and"),
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::THAT, "that"),
+        TokenObject(TokenType::NEXT, "Next*"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::INTEGER, "6"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME, "v"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+
+    };
+
+    bool actualResult = checker.isSyntacticallyCorrect(validSuchThatTokens);
+    REQUIRE(actualResult == false);
+};
+
+TEST_CASE("Syntactically incorrect - such that - and - pattern") {
+    SuchThatClauseSyntaxChecker checker = SuchThatClauseSyntaxChecker();
+    std::vector<TokenObject> validSuchThatTokens{
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::THAT, "that"),
+        TokenObject(TokenType::CALLS, "Calls"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME, "v"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::AND, "and"),
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::NAME, "a"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::SUBEXPRESSION, "_\"y\"_"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+
+    };
+
+    bool actualResult = checker.isSyntacticallyCorrect(validSuchThatTokens);
+    REQUIRE(actualResult == false);
+};
+
+TEST_CASE("Syntactically incorrect - such that - and - pattern clause") {
+    SuchThatClauseSyntaxChecker checker = SuchThatClauseSyntaxChecker();
+    std::vector<TokenObject> validSuchThatTokens{
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::THAT, "that"),
+        TokenObject(TokenType::CALLS, "Calls"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME, "v"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::AND, "and"),
+        TokenObject(TokenType::NAME, "a"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::SUBEXPRESSION, "_\"y\"_"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+
+    };
+
+    bool actualResult = checker.isSyntacticallyCorrect(validSuchThatTokens);
+    REQUIRE(actualResult == false);
+};
+
+TEST_CASE("Syntactically incorrect - such that - and - pattern clause with relref as synonym name") {
+    SuchThatClauseSyntaxChecker checker = SuchThatClauseSyntaxChecker();
+    std::vector<TokenObject> validSuchThatTokens{
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::THAT, "that"),
+        TokenObject(TokenType::CALLS, "Calls"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME, "v"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::AND, "and"),
+        TokenObject(TokenType::USES, "Uses"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::SUBEXPRESSION, "_\"y\"_"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+
+    };
+
+    bool actualResult = checker.isSyntacticallyCorrect(validSuchThatTokens);
+    REQUIRE(actualResult == false);
+};
+
+TEST_CASE("Syntactically incorrect - multiple and in a row") {
+    SuchThatClauseSyntaxChecker checker = SuchThatClauseSyntaxChecker();
+    std::vector<TokenObject> validSuchThatTokens{
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::THAT, "that"),
+        TokenObject(TokenType::CALLS, "Calls"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME, "v"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::AND, "and"),
+        TokenObject(TokenType::AND, "and"),
+        TokenObject(TokenType::NEXT, "Next*"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::INTEGER, "6"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME, "v"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+
+    };
+
     bool actualResult = checker.isSyntacticallyCorrect(validSuchThatTokens);
     REQUIRE(actualResult == false);
 };
