@@ -593,6 +593,12 @@ TEST_CASE("Invalid expressions and subexpressions token") {
         Tokenizer tokenizer = Tokenizer();
         REQUIRE_THROWS_WITH(tokenizer.tokenize(testQuery), "Token Exception Caught");
     }
+
+    SECTION("Test 8") {
+        std::string testQuery = "Select a1 pattern a1 ( \"x\" , \"(1a+a)\")";
+        Tokenizer tokenizer = Tokenizer();
+        REQUIRE_THROWS_WITH(tokenizer.tokenize(testQuery), "Token Exception Caught");
+    }
 }
 
 
