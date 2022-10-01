@@ -217,6 +217,7 @@ std::vector<SuchThat> Parser::parseTokensIntoSuchThatObjects(std::vector<TokenOb
 	bool isFirstSuchToken = true;
 	bool isFirstThatToken = true;
 	bool isFirstParam = true;
+	bool isNewRelationship = true;
 	TokenType currRelationship{};
 	TokenObject leftParam = TokenObject();
 	TokenObject rightParam = TokenObject();
@@ -250,8 +251,9 @@ std::vector<SuchThat> Parser::parseTokensIntoSuchThatObjects(std::vector<TokenOb
 			continue;
 		}
 
-		if (this->isRelationshipToken(currTokenType)) {
+		if (this->isRelationshipToken(currTokenType) && isNewRelationship) {
 			currRelationship = currTokenType;
+			isNewRelationship = false;
 			continue;
 		}
 
@@ -342,7 +344,9 @@ std::vector<Pattern> Parser::parseTokensIntoPatternObjects(std::vector<TokenObje
 bool Parser::isRelationshipToken(TokenType token) {
 	std::vector<TokenType> relationshipTokens{
 		TokenType::FOLLOWS, TokenType::FOLLOWS_T, TokenType::PARENT,
-		TokenType::PARENT_T, TokenType::USES, TokenType::MODIFIES };
+		TokenType::PARENT_T, TokenType::USES, TokenType::MODIFIES,
+		TokenType::CALLS, TokenType::CALLS_T, TokenType::NEXT, TokenType::NEXT_T 
+	};
 
 	if (std::find(relationshipTokens.begin(), relationshipTokens.end(), token) == relationshipTokens.end()) {
 		return false;
