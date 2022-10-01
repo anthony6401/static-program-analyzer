@@ -19,8 +19,8 @@ bool CallsRelationshipStorage::storeRelationship(Relationship* rel) {
 
 		bool result = false;
 
-		bool resultOne = RelationshipUtils::insertEntity(this->procForwardStorage, leftValue, rightValue);
-		bool resultTwo = RelationshipUtils::insertEntity(this->procBackwardStorage, rightValue, leftValue);
+		bool resultOne = RelationshipUtils::insertEntity(&this->procForwardStorage, leftValue, rightValue);
+		bool resultTwo = RelationshipUtils::insertEntity(&this->procBackwardStorage, rightValue, leftValue);
 
 		result = result || resultOne || resultTwo;
 
@@ -64,7 +64,7 @@ std::unordered_set<std::string> CallsRelationshipStorage::getRelationshipBySecon
 // To answer Calls(p1, p2)
 std::unordered_map<std::string, std::unordered_set<std::string>> CallsRelationshipStorage::getAllRelationship(RelationshipType relType, DesignEntity returnType1, DesignEntity returnType2) {
 	if (relType == RelationshipType::CALLS) {
-		return this->procFowardStorage;
+		return this->procForwardStorage;
 	}
 	return std::unordered_map<std::string, std::unordered_set<std::string>>();
 }
