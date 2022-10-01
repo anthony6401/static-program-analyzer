@@ -17,6 +17,7 @@ private:
     bool isIdentity(std::string s);
     //bool isExpression(std::string s);
     bool isSubExpression(std::string s);
+    bool isExpression(std::string s);
     bool isTuple(std::string s);
     std::vector<std::string> convertExpressionToStringVector(std::string s);
     bool validateExpression(std::vector<std::string> expressionVector);
@@ -24,7 +25,6 @@ private:
 public:
     Tokenizer();
     std::vector<TokenObject> tokenize(std::string query);
-    bool isExpression(std::string s);
 };
 
 #endif //INC_22S1_CP_SPA_TEAM_17_TOKENIZER_H

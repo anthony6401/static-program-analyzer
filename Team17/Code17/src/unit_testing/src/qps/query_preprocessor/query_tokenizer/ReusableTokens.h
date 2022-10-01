@@ -43,9 +43,20 @@ TokenObject commaTokenObject = TokenObject(TokenType::COMMA, ",");
 
 TokenObject normsq_nameWithQuotesTokenObject = TokenObject(TokenType::NAME_WITH_QUOTATION, "normSq");
 TokenObject x_nameWithQuotesTokenObject = TokenObject(TokenType::NAME_WITH_QUOTATION, "x");
+
 TokenObject cenX_subexpressionTokenObject = TokenObject(TokenType::SUBEXPRESSION, "cenX");
-TokenObject one_constantExpressionTokenObject = TokenObject(TokenType::EXPRESSION, "1");
 TokenObject eleven_constantSubexpressionTokenObject = TokenObject(TokenType::SUBEXPRESSION, "11");
+TokenObject subexpressionTokenObject1 = TokenObject(TokenType::SUBEXPRESSION, "(x+y)");
+TokenObject subexpressionTokenObject2 = TokenObject(TokenType::SUBEXPRESSION, "((x+y))*(www/3)");
+TokenObject subexpressionTokenObject3 = TokenObject(TokenType::SUBEXPRESSION, "((x1+y))*(1/3)");
+TokenObject subexpressionTokenObject4 = TokenObject(TokenType::SUBEXPRESSION, "((x/(s-y)))*(www/(3*(2/x)))");
+
+TokenObject one_constantExpressionTokenObject = TokenObject(TokenType::EXPRESSION, "1");
+TokenObject expressionTokenObject1 = TokenObject(TokenType::EXPRESSION, "(x+y)");
+TokenObject expressionTokenObject2 = TokenObject(TokenType::EXPRESSION, "((x+y))*(www/3)");
+TokenObject expressionTokenObject3 = TokenObject(TokenType::EXPRESSION, "((x1+y))*(1/3)");
+TokenObject expressionTokenObject4 = TokenObject(TokenType::EXPRESSION, "((x/(s-y)))*(www/(3*(2/x)))");
+
 
 TokenObject twoSyn_tupleTokenObject = TokenObject(TokenType::TUPLE, "<a1,a2>");
 TokenObject threeSyn_tupleTokenObject = TokenObject(TokenType::TUPLE, "<a,a1,a2>");

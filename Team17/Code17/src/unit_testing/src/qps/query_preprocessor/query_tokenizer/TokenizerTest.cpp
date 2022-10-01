@@ -348,6 +348,130 @@ TEST_CASE("Tuples with 3 synonym") {
     REQUIRE(testResult == expectedResult);
 }
 
+TEST_CASE("Valid Expressions tests") {
+    SECTION("Test 1") {
+        std::string testQuery = "assign a1;\n"
+                                "Select a1 pattern a1 ( \"x\" , \"1\")";
+        std::vector<TokenObject> expectedResult {assignTokenObject, a1_nameTokenObject, semicolonTokenObject,
+                                                 selectTokenObject, a1_nameTokenObject, patternTokenObject, a1_nameTokenObject,
+                                                 openBracketTokenObject, x_nameWithQuotesTokenObject, commaTokenObject,
+                                                 one_constantExpressionTokenObject, closedBracketTokenObject};
+        Tokenizer tokenizer = Tokenizer();
+        std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
+        REQUIRE(testResult == expectedResult);
+    }
+
+    SECTION("Test 2") {
+        std::string testQuery = "assign a1;\n"
+                                "Select a1 pattern a1 ( \"x\" , \"(x+y)\")";
+        std::vector<TokenObject> expectedResult {assignTokenObject, a1_nameTokenObject, semicolonTokenObject,
+                                                 selectTokenObject, a1_nameTokenObject, patternTokenObject, a1_nameTokenObject,
+                                                 openBracketTokenObject, x_nameWithQuotesTokenObject, commaTokenObject,
+                                                 expressionTokenObject1, closedBracketTokenObject};
+        Tokenizer tokenizer = Tokenizer();
+        std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
+        REQUIRE(testResult == expectedResult);
+    }
+
+    SECTION("Test 3") {
+        std::string testQuery = "assign a1;\n"
+                                "Select a1 pattern a1 ( \"x\" , \"((x+y))*(www / 3)\")";
+        std::vector<TokenObject> expectedResult {assignTokenObject, a1_nameTokenObject, semicolonTokenObject,
+                                                 selectTokenObject, a1_nameTokenObject, patternTokenObject, a1_nameTokenObject,
+                                                 openBracketTokenObject, x_nameWithQuotesTokenObject, commaTokenObject,
+                                                 expressionTokenObject2, closedBracketTokenObject};
+        Tokenizer tokenizer = Tokenizer();
+        std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
+        REQUIRE(testResult == expectedResult);
+    }
+
+    SECTION("Test 4") {
+        std::string testQuery = "assign a1;\n"
+                                "Select a1 pattern a1 ( \"x\" , \"((x1+y))*(1 / 3)\")";
+        std::vector<TokenObject> expectedResult {assignTokenObject, a1_nameTokenObject, semicolonTokenObject,
+                                                 selectTokenObject, a1_nameTokenObject, patternTokenObject, a1_nameTokenObject,
+                                                 openBracketTokenObject, x_nameWithQuotesTokenObject, commaTokenObject,
+                                                 expressionTokenObject3, closedBracketTokenObject};
+        Tokenizer tokenizer = Tokenizer();
+        std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
+        REQUIRE(testResult == expectedResult);
+    }
+
+    SECTION("Test 5") {
+        std::string testQuery = "assign a1;\n"
+                                "Select a1 pattern a1 ( \"x\" , \"((x/(s-y)))*(www / (3*(2/x)))\")";
+        std::vector<TokenObject> expectedResult {assignTokenObject, a1_nameTokenObject, semicolonTokenObject,
+                                                 selectTokenObject, a1_nameTokenObject, patternTokenObject, a1_nameTokenObject,
+                                                 openBracketTokenObject, x_nameWithQuotesTokenObject, commaTokenObject,
+                                                 expressionTokenObject4, closedBracketTokenObject};
+        Tokenizer tokenizer = Tokenizer();
+        std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
+        REQUIRE(testResult == expectedResult);
+    }
+}
+
+TEST_CASE("Valid Subexpressions tests") {
+    SECTION("Test 1") {
+        std::string testQuery = "assign a1;\n"
+                                "Select a1 pattern a1 ( \"x\" , _\"11\"_)";
+        std::vector<TokenObject> expectedResult {assignTokenObject, a1_nameTokenObject, semicolonTokenObject,
+                                                 selectTokenObject, a1_nameTokenObject, patternTokenObject, a1_nameTokenObject,
+                                                 openBracketTokenObject, x_nameWithQuotesTokenObject, commaTokenObject,
+                                                 eleven_constantSubexpressionTokenObject, closedBracketTokenObject};
+        Tokenizer tokenizer = Tokenizer();
+        std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
+        REQUIRE(testResult == expectedResult);
+    }
+
+    SECTION("Test 2") {
+        std::string testQuery = "assign a1;\n"
+                                "Select a1 pattern a1 ( \"x\" , _\"(x+y)\"_)";
+        std::vector<TokenObject> expectedResult {assignTokenObject, a1_nameTokenObject, semicolonTokenObject,
+                                                 selectTokenObject, a1_nameTokenObject, patternTokenObject, a1_nameTokenObject,
+                                                 openBracketTokenObject, x_nameWithQuotesTokenObject, commaTokenObject,
+                                                 subexpressionTokenObject1, closedBracketTokenObject};
+        Tokenizer tokenizer = Tokenizer();
+        std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
+        REQUIRE(testResult == expectedResult);
+    }
+
+    SECTION("Test 3") {
+        std::string testQuery = "assign a1;\n"
+                                "Select a1 pattern a1 ( \"x\" , _\"((x+y))*(www / 3)\"_)";
+        std::vector<TokenObject> expectedResult {assignTokenObject, a1_nameTokenObject, semicolonTokenObject,
+                                                 selectTokenObject, a1_nameTokenObject, patternTokenObject, a1_nameTokenObject,
+                                                 openBracketTokenObject, x_nameWithQuotesTokenObject, commaTokenObject,
+                                                 subexpressionTokenObject2, closedBracketTokenObject};
+        Tokenizer tokenizer = Tokenizer();
+        std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
+        REQUIRE(testResult == expectedResult);
+    }
+
+    SECTION("Test 4") {
+        std::string testQuery = "assign a1;\n"
+                                "Select a1 pattern a1 ( \"x\" , _\"((x1+y))*(1 / 3)\"_)";
+        std::vector<TokenObject> expectedResult {assignTokenObject, a1_nameTokenObject, semicolonTokenObject,
+                                                 selectTokenObject, a1_nameTokenObject, patternTokenObject, a1_nameTokenObject,
+                                                 openBracketTokenObject, x_nameWithQuotesTokenObject, commaTokenObject,
+                                                 subexpressionTokenObject3, closedBracketTokenObject};
+        Tokenizer tokenizer = Tokenizer();
+        std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
+        REQUIRE(testResult == expectedResult);
+    }
+
+    SECTION("Test 5") {
+        std::string testQuery = "assign a1;\n"
+                                "Select a1 pattern a1 ( \"x\" , _\"((x/(s-y)))*(www / (3*(2/x)))\"_)";
+        std::vector<TokenObject> expectedResult {assignTokenObject, a1_nameTokenObject, semicolonTokenObject,
+                                                 selectTokenObject, a1_nameTokenObject, patternTokenObject, a1_nameTokenObject,
+                                                 openBracketTokenObject, x_nameWithQuotesTokenObject, commaTokenObject,
+                                                 subexpressionTokenObject4, closedBracketTokenObject};
+        Tokenizer tokenizer = Tokenizer();
+        std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
+        REQUIRE(testResult == expectedResult);
+    }
+}
+
 // Invalid tokens
 TEST_CASE("Invalid name token") {
     std::string testQuery = "assign 0x1;\n";
@@ -492,34 +616,34 @@ TEST_CASE("Single line queries without space") {
 }
 
 // Expression validator tests
-TEST_CASE("Valid expression") {
-    std::string testExpression = "\"(x1+yY)*za\"";
-    Tokenizer tokenizer = Tokenizer();
-    bool testResult = tokenizer.isExpression(testExpression);
-
-    REQUIRE(testResult == true);
-}
-
-TEST_CASE("Invalid expression - Extra close brackets") {
-    std::string testExpression = "\"(x+y))*z\"";
-    Tokenizer tokenizer = Tokenizer();
-    bool testResult = tokenizer.isExpression(testExpression);
-
-    REQUIRE(testResult == false);
-}
-
-TEST_CASE("Invalid expression - Math symbol at end") {
-    std::string testExpression = "\"(x+y)*z/\"";
-    Tokenizer tokenizer = Tokenizer();
-    bool testResult = tokenizer.isExpression(testExpression);
-
-    REQUIRE(testResult == false);
-}
-
-TEST_CASE("Invalid expression - Math symbol at start") {
-    std::string testExpression = "\"*(x+y)*z\"";
-    Tokenizer tokenizer = Tokenizer();
-    bool testResult = tokenizer.isExpression(testExpression);
-
-    REQUIRE(testResult == false);
-}
+//TEST_CASE("Valid expression") {
+//    std::string testExpression = "\"(x1+yY)*za\"";
+//    Tokenizer tokenizer = Tokenizer();
+//    bool testResult = tokenizer.isExpression(testExpression);
+//
+//    REQUIRE(testResult == true);
+//}
+//
+//TEST_CASE("Invalid expression - Extra close brackets") {
+//    std::string testExpression = "\"(x+y))*z\"";
+//    Tokenizer tokenizer = Tokenizer();
+//    bool testResult = tokenizer.isExpression(testExpression);
+//
+//    REQUIRE(testResult == false);
+//}
+//
+//TEST_CASE("Invalid expression - Math symbol at end") {
+//    std::string testExpression = "\"(x+y)*z/\"";
+//    Tokenizer tokenizer = Tokenizer();
+//    bool testResult = tokenizer.isExpression(testExpression);
+//
+//    REQUIRE(testResult == false);
+//}
+//
+//TEST_CASE("Invalid expression - Math symbol at start") {
+//    std::string testExpression = "\"*(x+y)*z\"";
+//    Tokenizer tokenizer = Tokenizer();
+//    bool testResult = tokenizer.isExpression(testExpression);
+//
+//    REQUIRE(testResult == false);
+//}
