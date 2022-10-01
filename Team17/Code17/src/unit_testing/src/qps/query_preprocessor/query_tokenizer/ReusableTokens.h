@@ -48,6 +48,7 @@ TokenObject one_constantExpressionTokenObject = TokenObject(TokenType::EXPRESSIO
 TokenObject eleven_constantSubexpressionTokenObject = TokenObject(TokenType::SUBEXPRESSION, "11");
 
 TokenObject twoSyn_tupleTokenObject = TokenObject(TokenType::TUPLE, "<a1,a2>");
+TokenObject threeSyn_tupleTokenObject = TokenObject(TokenType::TUPLE, "<a,a1,a2>");
 
 TokenObject v_nameTokenObject = TokenObject(TokenType::NAME, "v");
 TokenObject v1_nameTokenObject = TokenObject(TokenType::NAME, "v1");
