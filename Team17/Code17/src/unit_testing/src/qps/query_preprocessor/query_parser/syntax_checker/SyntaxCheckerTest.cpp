@@ -1025,6 +1025,64 @@ TEST_CASE("Syntactically incorrect - multiple and in a row") {
     REQUIRE(actualResult == false);
 };
 
+TEST_CASE("Syntactically incorrect - multiple instances but does not end in closed bracket") {
+    SuchThatClauseSyntaxChecker checker = SuchThatClauseSyntaxChecker();
+    std::vector<TokenObject> validSuchThatTokens{
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::THAT, "that"),
+        TokenObject(TokenType::CALLS, "Calls"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME, "v"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::THAT, "that"),
+        TokenObject(TokenType::NEXT, "Next*"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::INTEGER, "6"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME, "v"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::AND, "and"),
+        TokenObject(TokenType::CALLS_T, "Calls*"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME, "v")
+
+    };
+
+    bool actualResult = checker.isSyntacticallyCorrect(validSuchThatTokens);
+    REQUIRE(actualResult == false);
+};
+
+TEST_CASE("Syntactically incorrect - and clause with no relref") {
+    SuchThatClauseSyntaxChecker checker = SuchThatClauseSyntaxChecker();
+    std::vector<TokenObject> validSuchThatTokens{
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::THAT, "that"),
+        TokenObject(TokenType::CALLS, "Calls"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME, "v"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::THAT, "that"),
+        TokenObject(TokenType::NEXT, "Next*"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::INTEGER, "6"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME, "v"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::AND, "and")
+    };
+
+    bool actualResult = checker.isSyntacticallyCorrect(validSuchThatTokens);
+    REQUIRE(actualResult == false);
+};
+
 // Tests for PatternClauseSyntaxChecker
 TEST_CASE("Instantiate PatternClauseSyntaxChecker") {
     PatternClauseSyntaxChecker checker = PatternClauseSyntaxChecker();
