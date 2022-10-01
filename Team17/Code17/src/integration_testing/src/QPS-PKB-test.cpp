@@ -253,7 +253,6 @@ int initPKB() {
 
 int dummyForRun = initPKB();
 
-// PQL queries
 TEST_CASE("Select all queries") {
 
     SECTION("Select if statements") {
@@ -625,7 +624,7 @@ TEST_CASE("Debug synonym, wildcard") {
     REQUIRE(testResults == expectedResults);
 }
 
-TEST_CASE("More multiclause test") {
+TEST_CASE("1 Relationship, 1 Pattern Tests") {
     SECTION("Test 1") {
         std::string testQuery = R"(assign a; stmt s; Select a such that Parent(s, a) pattern a(_, _))";
         std::list<std::string> testResults;
@@ -634,7 +633,7 @@ TEST_CASE("More multiclause test") {
         REQUIRE(testResults == expectedResults);
     }
 
-    SECTION("Test") {
+    SECTION("Test for same synonym") {
         std::string testQuery = R"(stmt s; Select s such that Follows(s, s))";
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {};
@@ -688,7 +687,7 @@ TEST_CASE("More multiclause test") {
         REQUIRE(testResults == expectedResults);
     }
 
-    SECTION("Test 6") {
+    SECTION("Test 7") {
         std::string testQuery = R"(assign a; Select a such that Modifies(5, "flag") pattern a(_,_"1"_))";
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {};
