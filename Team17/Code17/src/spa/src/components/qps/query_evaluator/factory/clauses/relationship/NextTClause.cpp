@@ -1,8 +1,8 @@
 #include "NextTClause.h"
 
-NextTClause::NextTClause(TokenObject left, TokenObject right, Select synonym,
+NextTClause::NextTClause(TokenObject left, TokenObject right,
                        std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap,
-                       QPSClient qpsClient) : left(left), right(right), synonym(synonym),
+                       QPSClient qpsClient) : left(left), right(right),
                                               synonymToDesignEntityMap(synonymToDesignEntityMap), qpsClient(qpsClient) {}
 
 ResultTable NextTClause::evaluateClause() {

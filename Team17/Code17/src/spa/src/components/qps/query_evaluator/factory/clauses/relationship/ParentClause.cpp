@@ -1,8 +1,8 @@
 #include "ParentClause.h"
 
-ParentClause::ParentClause(TokenObject left, TokenObject right, Select synonym,
+ParentClause::ParentClause(TokenObject left, TokenObject right,
                              std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap,
-                             QPSClient qpsClient) : left(left), right(right), synonym(synonym),
+                             QPSClient qpsClient) : left(left), right(right),
                                                     synonymToDesignEntityMap(synonymToDesignEntityMap), qpsClient(qpsClient) {}
 
 ResultTable ParentClause::evaluateClause() {

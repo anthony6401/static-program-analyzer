@@ -11,13 +11,12 @@
 class NextClause : public Clause {
 private:
     std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap;
-    Select synonym;
     QPSClient qpsClient;
     TokenObject left;
     TokenObject right;
 
 public:
-    NextClause(TokenObject left, TokenObject right, Select synonym,
+    NextClause(TokenObject left, TokenObject right,
                   std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
     ResultTable evaluateClause() override;
     size_t getNumberOfSynonyms() override;

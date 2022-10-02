@@ -8,13 +8,12 @@
 class AssignPatternClause : public Clause {
 private:
     std::string assignSynonym;
-    Select synonym;
     QPSClient qpsClient;
     TokenObject left;
     TokenObject right;
 
 public:
-    AssignPatternClause(std::string assignSynonym, TokenObject left, TokenObject right, QPSClient qpsClient, Select synonym);
+    AssignPatternClause(std::string assignSynonym, TokenObject left, TokenObject right, QPSClient qpsClient);
     ResultTable evaluateClause() override;
     size_t getNumberOfSynonyms() override;
     std::set<std::string> getAllSynonyms() override;

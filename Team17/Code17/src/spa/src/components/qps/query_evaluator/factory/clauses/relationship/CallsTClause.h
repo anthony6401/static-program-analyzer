@@ -11,13 +11,12 @@
 class CallsTClause : public Clause {
 private:
     std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap;
-    Select synonym;
     QPSClient qpsClient;
     TokenObject left;
     TokenObject right;
 
 public:
-    CallsTClause(TokenObject left, TokenObject right, Select synonym,
+    CallsTClause(TokenObject left, TokenObject right,
                 std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
     ResultTable evaluateClause() override;
     size_t getNumberOfSynonyms() override;
