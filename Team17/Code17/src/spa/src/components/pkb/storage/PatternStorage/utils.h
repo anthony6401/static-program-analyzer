@@ -45,11 +45,11 @@ public:
         return false;
     }
 
-    bool isAlphanumeric(char c) {
+    static bool isAlphanumeric(char c) {
         return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9');
     }
 
-    int prec(char c)
+    static int prec(char c)
     {
         if (c == '^') {
             return 3;
@@ -64,10 +64,13 @@ public:
             return -1;
     }
 
-    std::string convertInfixToPostfix(std::string pattern) {
-        std::stack<char> st; // For stack operations, we are using
-        // C++ built in stack
+    static std::string convertInfixToPostfix(std::string pattern) {
+        // Using stack
+        std::stack<char> st;
+        
         std::string result;
+
+        bool hasAddedSpace = false;
 
         for (int i = 0; i < pattern.length(); i++) {
             char c = pattern[i];
@@ -76,14 +79,8 @@ public:
             // If the scanned character is
             // an operand, add it to output string.
             if (isAlphanumeric(c)) {
-                std::string temp;
-                while (isAlphanumeric(pattern[i])) {
-                    temp += pattern[i];
-                    i++;
-                }
-                temp += " ";
-                result += temp;
-                i--;
+                result += c;
+                hasAddedSpace = false;
             }
 
             // If the scanned character is an
@@ -98,7 +95,7 @@ public:
             else if (c == ')') {
                 while (st.top() != '(') {
                     result += st.top();
-                    result += " ";
+                    //result += " ";
                     st.pop();
                 }
                 st.pop();
@@ -106,10 +103,14 @@ public:
 
             // If an operator is scanned
             else {
+                if (!hasAddedSpace) {
+                    result += " ";
+                    hasAddedSpace = true;
+                }
                 while (!st.empty()
                     && prec(pattern[i]) <= prec(st.top())) {
                     result += st.top();
-                    result += " ";
+                    //result += " ";
                     st.pop();
                 }
                 st.push(c);
@@ -119,7 +120,7 @@ public:
         // Pop all the remaining elements from the stack
         while (!st.empty()) {
             result += st.top();
-            result += " ";
+            //result += " ";
             st.pop();
         }
 
