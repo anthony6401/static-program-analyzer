@@ -1,6 +1,6 @@
 #include "string"
 
-std::string sampleSource =
+std::string sampleSource1 =
         "procedure computeCentroid {"
         "    count = 0;" // 1
         "    cenX = 0;" // 2
