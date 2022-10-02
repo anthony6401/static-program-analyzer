@@ -1,21 +1,17 @@
 #include "ProcedureStack.h"
 #include <stdexcept>
 
-ProcedureStack::ProcedureStack(SimpleToken parent) : parent(parent) {
+ProcedureStack::ProcedureStack(SimpleToken parent, Extractor* context) : parent(parent) {
+    this->context = context;
 }
 
-void ProcedureStack::put(SimpleToken token) {
-    if (token.type == SpTokenType::TPROCEDURE) {
-        throw std::invalid_argument("Received invalid SIMPLE code line " + std::to_string(token.statementNumber));
-    }
-    if (token.type == SpTokenType::TCLOSE) {
-        if (follows.size() == 0) {
-            throw std::invalid_argument("Received empty stmtlist" + std::to_string(parent.statementNumber));
-        }
-        //extractProcedure
-    } else {
-        follows.push_back(token);
-    }
+void ProcedureStack::close(int statementNumber) {
+    //extractFollows(follows)
+    //extractParent(stack.value, follows, statementNumber)
+    //mergeStack(lastStack, this)
+    //modifies
+    //uses
+    context->procedures.insert(parent.value, this);
 }
 
 bool ProcedureStack::isIf() {

@@ -4,11 +4,12 @@
 
 class WhileStack : public StmtStack {
 public:
-    WhileStack(SimpleToken parent);
-    void put(SimpleToken token);
+    WhileStack(SimpleToken parent, Extractor* context);
+    void close(int statementNumber);
     bool isIf();
 
 private:
     SimpleToken parent;
+    Extractor* context;
 
 };

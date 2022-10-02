@@ -17,6 +17,10 @@ void Extractor::extractAll(SimpleToken procedureToken) {
 	extractConstants(procedureToken);
 }
 
+void Extractor::close(int statementNumber) {
+	currentStack.close(statementNumber);
+}
+
 // =============================== //
 // HELPER FUNCTIONS FOR EXTRACTION //
 // =============================== //

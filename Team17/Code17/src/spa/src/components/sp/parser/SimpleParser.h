@@ -3,6 +3,7 @@
 #include <string>
 #include "../SimpleToken.h"
 #include "../extractor/Extractor.h"
+#include "../validator/SimpleValidator.h"
 
 class SimpleParser {
     public:
@@ -24,6 +25,7 @@ class SimpleParser {
         std::string parseConstant(std::string& token);
 
     private:
+        SimpleValidator validator;
         Extractor* extractor;
 
 };

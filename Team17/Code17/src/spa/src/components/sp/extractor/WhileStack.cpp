@@ -1,22 +1,18 @@
 #include "WhileStack.h"
 #include <stdexcept>
 
-WhileStack::WhileStack(SimpleToken parent) : parent(parent) {
+WhileStack::WhileStack(SimpleToken parent, Extractor* context) : parent(parent) {
+    this->context = context;
 }
 
-void WhileStack::put(SimpleToken token) {
-    if (token.type == SpTokenType::TPROCEDURE) {
-        throw std::invalid_argument("Received invalid SIMPLE code line " + std::to_string(token.statementNumber));
-    }
-    if (token.type == SpTokenType::TCLOSE) {
-        if (follows.size() == 0) {
-            throw std::invalid_argument("Received empty stmtlist" + std::to_string(parent.statementNumber));
-        }
-        //extractWhile
-    }
-    else {
-        follows.push_back(token);
-    }
+void WhileStack::close(int statementNumber) {
+//extractFollows(follows)
+//extractParent(stack.value, follows, statementNumber)
+//mergeStack(lastStack, this)
+//modifies
+//uses
+    context->currentStack = context->parentStack.top();
+    context->parentStack.pop();
 }
 
 bool WhileStack::isIf() {

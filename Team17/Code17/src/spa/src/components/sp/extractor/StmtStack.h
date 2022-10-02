@@ -4,14 +4,16 @@
 #include <map>
 #include <set>
 #include "../SimpleToken.h"
+#include "../validator/SimpleValidator.h"
+#include "./Extractor.h"
 
 class StmtStack {
 
 public:
     StmtStack();
-    virtual void put(SimpleToken value) = 0;
+    virtual void close(int statementNumber) = 0;
     virtual bool isIf() = 0;
-    void mergeStack(StmtStack &parentStack, StmtStack &childStack);
+    virtual void mergeStack(StmtStack &parentStack, StmtStack &childStack);
     std::vector<SimpleToken> modifies;//variable names for modifies
     std::vector<SimpleToken> uses;//variable names for uses
     std::vector<SimpleToken> follows;// statementNumber

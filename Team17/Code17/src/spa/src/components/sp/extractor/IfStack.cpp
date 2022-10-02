@@ -1,28 +1,22 @@
 #include "IfStack.h"
 #include <stdexcept>
 
-IfStack::IfStack(SimpleToken parent) : parent(parent) {
+IfStack::IfStack(SimpleToken parent, Extractor* context) : parent(parent) {
     this->expectElse = true;
+    this->context = context;
 }
 
-void IfStack::put(SimpleToken token) {
-    if (token.type == SpTokenType::TPROCEDURE) {
-        throw std::invalid_argument("Received invalid SIMPLE code line " + std::to_string(token.statementNumber));
-    }
-    if (token.type == SpTokenType::TCLOSE) {
-        if (follows.size() == 0) {
-            throw std::invalid_argument("Received empty stmtlist" + std::to_string(parent.statementNumber));
-        }
-        //extractIf
-    } else if (token.type == SpTokenType::TELSE) {
-        if (!(expectElse)) {
-            throw std::invalid_argument("Received unexpected else line " + std::to_string(token.statementNumber));
-        }
-        expectElse = false;
+void IfStack::close(int statementNumber) {
+    if (expectElse) {
         ifFollows = follows;
         follows.clear();
     } else {
-        follows.push_back(token);
+        //extractFollows(follows)
+        //extractFollows(ifFollows)
+        //extractParent(stack.value, follows, statemetNumber)
+        //smergeStack(lastStack, this)
+        context->currentStack = context->parentStack.top();
+        context->parentStack.pop();
     }
 }
 

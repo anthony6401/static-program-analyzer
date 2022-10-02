@@ -21,7 +21,6 @@ bool SimpleValidator::isIfState() {
 void SimpleValidator::setState(ValidatorState newState) {
     parentStates.push(state);
     state = newState;
-
 }
 
 bool SimpleValidator::validLine(SpTokenType type) {
