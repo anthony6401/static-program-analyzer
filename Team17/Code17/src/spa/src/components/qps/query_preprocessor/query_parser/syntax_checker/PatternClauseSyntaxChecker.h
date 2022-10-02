@@ -13,6 +13,8 @@ using namespace qps;
 class PatternClauseSyntaxChecker : public SyntaxChecker {
 private:
     std::stack<TokenType> patternSyntax;
+    bool isEntrefToken(TokenType tokenType);
+
 public:
     PatternClauseSyntaxChecker();
     ~PatternClauseSyntaxChecker();
