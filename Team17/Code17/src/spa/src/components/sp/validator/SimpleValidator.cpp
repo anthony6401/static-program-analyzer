@@ -2,7 +2,31 @@
 #include <regex>
 #include <stack>
 #include "SimpleValidator.h"
+#include "./states/ValidatorState.h"
+#include "./states/ProgramState.h"
 #include "../utils/SpUtils.h"
+
+SimpleValidator::SimpleValidator() {
+    state = ProgramState();
+}
+
+bool SimpleValidator::validCode() {
+    return state.validCode();
+}
+
+bool SimpleValidator::isIfState() {
+    return state.isIfState();
+}
+
+void SimpleValidator::setState(ValidatorState newState) {
+    parentStates.push(state);
+    state = newState;
+
+}
+
+bool SimpleValidator::validLine(SpTokenType type) {
+    return state.validLine(type);
+}
 
 bool SimpleValidator::validateVariable(std::string& token) {
     std::regex constant = std::regex("[a-zA-Z][a-zA-Z0-9]*");

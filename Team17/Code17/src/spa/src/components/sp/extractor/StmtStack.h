@@ -10,11 +10,10 @@ class StmtStack {
 public:
     StmtStack();
     virtual void put(SimpleToken value) = 0;
-    virtual SimpleToken dump() = 0;
     virtual bool isIf() = 0;
     void mergeStack(StmtStack &parentStack, StmtStack &childStack);
-    std::set<std::string> modifies;
-    std::set<std::string> uses;
-    std::multimap<std::string, SimpleToken> callParents;
-    std::multimap<std::string, std::string> callProcedures;
+    std::vector<SimpleToken> modifies;//variable names for modifies
+    std::vector<SimpleToken> uses;//variable names for uses
+    std::vector<SimpleToken> follows;// statementNumber
+    std::multimap<std::string, std::string> callProcedures;// call procedure <proc1,proc2>
 };

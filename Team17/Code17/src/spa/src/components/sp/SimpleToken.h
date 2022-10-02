@@ -12,7 +12,6 @@ enum class SpTokenType {
     TWHILE,
     TIF,
     TASSIGN,
-    TCONDEXPR,
     TVARIABLE,
     TCONSTANT,
     TCLOSE,

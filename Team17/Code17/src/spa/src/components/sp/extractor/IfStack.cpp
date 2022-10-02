@@ -10,27 +10,20 @@ void IfStack::put(SimpleToken token) {
         throw std::invalid_argument("Received invalid SIMPLE code line " + std::to_string(token.statementNumber));
     }
     if (token.type == SpTokenType::TCLOSE) {
-        std::vector<SimpleToken> children = parent.getChildren();
-        SimpleToken stmtToken = SimpleToken(SpTokenType::TSTMTLIST, "", 0);
-        stmtToken.setChildren(stmtList);
-        children.push_back(stmtToken);
-        parent.setChildren(children);
-        if (stmtList.size() == 0) {
+        if (follows.size() == 0) {
             throw std::invalid_argument("Received empty stmtlist" + std::to_string(parent.statementNumber));
         }
+        //extractIf
     } else if (token.type == SpTokenType::TELSE) {
         if (!(expectElse)) {
             throw std::invalid_argument("Received unexpected else line " + std::to_string(token.statementNumber));
         }
         expectElse = false;
-        stmtList.clear();
+        ifFollows = follows;
+        follows.clear();
     } else {
-        stmtList.push_back(token);
+        follows.push_back(token);
     }
-}
-
-SimpleToken IfStack::dump() {
-    return parent;
 }
 
 bool IfStack::isIf() {

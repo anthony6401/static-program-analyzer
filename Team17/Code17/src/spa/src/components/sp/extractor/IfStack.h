@@ -6,12 +6,11 @@ class IfStack : public StmtStack {
 public:
     IfStack(SimpleToken parent);
     void put(SimpleToken token);
-    SimpleToken dump();
     bool isIf();
+    std::vector<SimpleToken> ifFollows;// statementNumber
 
 private:
     SimpleToken parent;
-    std::vector<SimpleToken> stmtList;
     bool expectElse;
 
 };
