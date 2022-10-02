@@ -2,6 +2,11 @@
 #include <string>
 #include <utility>
 #include <stack>
+#include <algorithm>
+#include <sstream>
+#include <iterator>
+#include <vector>
+#include <iostream>
 
 struct pair_hash {
     template <class T1, class T2>
@@ -12,7 +17,7 @@ struct pair_hash {
 
 class PatternUtils {
 public:
-    static bool isSubExpression(const std::string& sub_expression, const std::string& full_expression) {
+    /*static bool isSubExpression(const std::string& sub_expression, const std::string& full_expression) {
         size_t idx = full_expression.find_first_of(" *+/-%()");
         size_t prev = 0;
 
@@ -43,8 +48,8 @@ public:
         }
 
         return false;
-    }
-
+    }*/
+    // Helper function
     static bool isAlphanumeric(char c) {
         return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9');
     }
@@ -64,13 +69,81 @@ public:
             return -1;
     }
 
+    static bool isSubArray(std::vector<std::string> A, std::vector<std::string> B) {
+        //Get the length of the two array
+        int n = A.size();
+        int m = B.size();
+
+        //Initialize Pointer
+        int i = 0;
+        int j = 0;
+
+        while (i < n && j < m) {
+
+            // If element matches
+            // increment both pointers
+            if (A[i] == B[j]) {
+
+                i++;
+                j++;
+
+                // If array B is completely
+                // traversed
+                if (j == m)
+                    return true;
+            }
+            // If not,
+            // increment i and reset j
+            else {
+                i = i - j + 1;
+                j = 0;
+            }
+        }
+
+        return false;
+    }
+    // End of helper function
+
+
+    // full_expression in postfix format
+    static bool isSubExpression(const std::string sub_expression, const std::string full_expression) {
+        std::string subExprPostfix = convertInfixToPostfix(sub_expression);
+        
+        //Convert sub expression to vector<string>
+        std::stringstream subExpStream(subExprPostfix);
+        std::istream_iterator<std::string> subExpBegin(subExpStream);
+        std::istream_iterator<std::string> subExpEnd;
+        std::vector<std::string> subExpressionArr(subExpBegin, subExpEnd);
+
+        //Convert full_expression to vector<string>
+        std::stringstream fullExpStream(full_expression);
+        std::istream_iterator<std::string> fullExpBegin(fullExpStream);
+        std::istream_iterator<std::string> fullExpEnd;
+        std::vector<std::string> fullExpressionArr(fullExpBegin, fullExpEnd);
+
+        //Debugging
+
+      /*  for (auto s : subExpressionArr) {
+            std::cout << s << std::endl;
+        }
+
+        std::cout << "---------" << std::endl;
+
+        for (auto s : fullExpressionArr) {
+            std::cout << s << std::endl;
+        }
+        std::cout << "End of debug" << std::endl;*/
+
+        return isSubArray(fullExpressionArr, subExpressionArr);
+    }
+
     static std::string convertInfixToPostfix(std::string pattern) {
         // Using stack
         std::stack<char> st;
         
         std::string result;
 
-        bool hasAddedSpace = false;
+        //bool hasAddedSpace = false;
 
         for (int i = 0; i < pattern.length(); i++) {
             char c = pattern[i];
@@ -79,8 +152,14 @@ public:
             // If the scanned character is
             // an operand, add it to output string.
             if (isAlphanumeric(c)) {
-                result += c;
-                hasAddedSpace = false;
+                std::string temp;
+                while (isAlphanumeric(pattern[i])) {
+                    temp +=pattern[i];
+                    i++;
+                }
+                temp += " ";
+                result += temp;
+                i--;
             }
 
             // If the scanned character is an
@@ -95,7 +174,7 @@ public:
             else if (c == ')') {
                 while (st.top() != '(') {
                     result += st.top();
-                    //result += " ";
+                    result += " ";
                     st.pop();
                 }
                 st.pop();
@@ -103,14 +182,14 @@ public:
 
             // If an operator is scanned
             else {
-                if (!hasAddedSpace) {
+              /*  if (!hasAddedSpace) {
                     result += " ";
                     hasAddedSpace = true;
-                }
+                }*/
                 while (!st.empty()
                     && prec(pattern[i]) <= prec(st.top())) {
                     result += st.top();
-                    //result += " ";
+                    result += " ";
                     st.pop();
                 }
                 st.push(c);
@@ -120,7 +199,7 @@ public:
         // Pop all the remaining elements from the stack
         while (!st.empty()) {
             result += st.top();
-            //result += " ";
+            result += " ";
             st.pop();
         }
 
