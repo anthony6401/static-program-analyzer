@@ -38,20 +38,18 @@ public:
 	SPClient* client;
 	Extractor(SPClient* client);
 
-	void extractAll(SimpleToken procedureToken);
-	void extractFollows(SimpleToken procOrWhileIfToken);
-	void extractParent(SimpleToken procOrWhileIfToken);
-	void extractUses(SimpleToken procOrWhileIfToken);
-	void extractModify(SimpleToken procOrWhileIfToken);
-	void extractPattern(SimpleToken procOrWhileIfToken);
-
-	void storeFollowsRelationships(std::vector<FollowsRelationship*>);
-	void storeFollowsTRelationships(std::vector<FollowsTRelationship*>);
-	void storeParentRelationships(std::vector<ParentRelationship*>);
-	void storeParentTRelationships(std::vector<ParentTRelationship*>);
-	void storeUsesRelationships(std::vector<UsesRelationship*>);
-	void storeModifyRelationships(std::vector<ModifyRelationship*>);
-	void storeAssignPatterns(std::vector<AssignPattern*>);
+	void extractRead(SimpleToken readToken);
+	void extractPrint(SimpleToken printToken);
+	void extractAssign(SimpleToken assignToken);
+	void extractWhile(SimpleToken whileToken);
+	void extractIf(SimpleToken ifToken);
+	void extractExpr(SimpleToken exprToken);
+	void extractCall(SimpleToken callToken);
+	void extractProcedure(SimpleToken procedureToken);
+	void extractClose(SimpleToken closeToken);
+	void extractFollows();
+	void extractParent();
+	void endOfParser();
 
 	void extractConstants(SimpleToken procedureToken);
 	std::vector<ConstantEntity*> extractConstantsVector(SimpleToken procedureToken);

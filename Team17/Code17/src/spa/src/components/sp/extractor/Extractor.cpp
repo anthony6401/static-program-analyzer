@@ -7,6 +7,59 @@ Extractor::Extractor(SPClient* client) {
 	this->client = client;
 }
 
+// ======================== //
+// FUNCTIONS FOR EXTRACTION //
+// =========================//
+
+void Extractor::extractRead(SimpleToken readToken) {
+
+}
+
+void Extractor::extractPrint(SimpleToken printToken) {
+
+}
+
+void Extractor::extractAssign(SimpleToken assignToken) {
+
+}
+
+void Extractor::extractWhile(SimpleToken whileToken) {
+
+}
+
+void Extractor::extractIf(SimpleToken ifToken) {
+
+}
+
+void Extractor::extractExpr(SimpleToken exprToken) {
+
+}
+
+void Extractor::extractCall(SimpleToken callToken) {
+
+}
+
+void Extractor::extractProcedure(SimpleToken procedureToken) {
+
+}
+
+void Extractor::extractClose(SimpleToken closeToken) {
+
+}
+
+void Extractor::extractFollows() {
+
+}
+
+void Extractor::extractParent() {
+
+}
+
+void Extractor::endOfParser() {
+
+}
+
+/*
 // Parser only needs to call Extractor::extractAll
 void Extractor::extractAll(SimpleToken procedureToken) {
 	extractFollows(procedureToken);
@@ -119,3 +172,4 @@ void Extractor::storeAssignPatterns(std::vector<AssignPattern*> vector) {
 		this->client->storePattern(vector.at(i));
 	}
 }
+*/
