@@ -30,6 +30,8 @@
 #include "PatternExtractor.h"
 
 #include "StmtStack.h"
+#include "WhileStack.h"
+#include "IfStack.h"
 #include "ProcedureStack.h"
 
 #include "../../../models/Pattern/AssignPattern.h"
@@ -56,9 +58,15 @@ public:
 	void extractCall(SimpleToken callToken);
 	void extractProcedure(SimpleToken procedureToken);
 	void extractClose(SimpleToken closeToken);
-	void extractFollows();
-	void extractParent();
+	void extractFollows(StmtStack stmtStack);
+	void extractParent(StmtStack stmtStack);
 	void endOfParser();
+	UsesRelationship* createUsesRelationship(SimpleToken token);
+	ModifyRelationship* createModifyRelationship(SimpleToken token);
+	UsesRelationship* createUsesRelationshipExpr(SimpleToken stmtToken, SimpleToken exprToken);
+	CallsRelationship* createCallsRelationship(SimpleToken token);
+	Pattern* createAssignPattern(SimpleToken token);
+	Entity* generateEntity(SimpleToken token);
 
 	void extractConstants(SimpleToken procedureToken);
 	std::vector<ConstantEntity*> extractConstantsVector(SimpleToken procedureToken);
