@@ -6,7 +6,9 @@
 
 // PQL queries
 TEST_CASE("Calls queries") {
+    SECTION("") {
 
+    }
 }
 
 TEST_CASE("Calls* queries") {
