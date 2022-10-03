@@ -49,8 +49,8 @@ TEST_CASE("Calls queries") {
 
 TEST_CASE("Calls* queries") {
     SECTION("Calls* Test 1") {
-        std::string testQuery = "procedure p, p1; \n "
-                                "Select p such that Calls*(\"First\", \"Second\")";
+        std::string testQuery = "procedure p; \n "
+                                "Select p such that Calls*(_, _)";
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"First", "Second", "Third"};
         QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
@@ -68,11 +68,10 @@ TEST_CASE("Calls* queries") {
 
     SECTION("Calls* Test 3") {
         std::string testQuery = "procedure p, p1; \n "
-                                "Select p such that Calls*(\"Second\", \"First\")";
+                                "Select p1 such that Calls*(p, p1)";
         std::list<std::string> testResults;
-        std::list<std::string> expectedResults = {};
+        std::list<std::string> expectedResults = {"Second", "Third"};
         QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
-        REQUIRE(testResults.empty() == true);
         REQUIRE(testResults == expectedResults);
     }
 }
