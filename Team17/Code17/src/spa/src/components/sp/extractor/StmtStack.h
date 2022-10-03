@@ -6,6 +6,15 @@
 #include "../SimpleToken.h"
 #include "../validator/SimpleValidator.h"
 
+#include "../../../models/Relationship/Relationship.h"
+#include "../../../models/Relationship/FollowsRelationship.h"
+#include "../../../models/Relationship/FollowsTRelationship.h"
+#include "../../../models/Relationship/ParentRelationship.h"
+#include "../../../models/Relationship/ParentTRelationship.h"
+#include "../../../models/Relationship/UsesRelationship.h"
+#include "../../../models/Relationship/ModifyRelationship.h"
+#include "../../../models/Relationship/CallsRelationship.h"
+
 class StmtStack {
 
 public:

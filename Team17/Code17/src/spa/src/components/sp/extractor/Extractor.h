@@ -22,7 +22,7 @@
 #include "../../../models/Relationship/ParentTRelationship.h"
 #include "../../../models/Relationship/UsesRelationship.h"
 #include "../../../models/Relationship/ModifyRelationship.h"
-
+#include "../../../models/Relationship/CallsRelationship.h"
 #include "FollowsExtractor.h"
 #include "ParentExtractor.h"
 #include "UsesExtractor.h"

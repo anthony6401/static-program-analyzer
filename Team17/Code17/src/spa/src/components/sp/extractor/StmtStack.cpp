@@ -1,10 +1,10 @@
 #include "./StmtStack.h"
 
 StmtStack::StmtStack() {
-    std::vector<ModifyRelationship> modifies;
-    std::vector<UsesRelationship> uses;
+    std::vector<ModifyRelationship*> modifies;
+    std::vector<UsesRelationship*> uses;
     std::vector<SimpleToken> follows;
-    std::vector<CallsRelationship> calls;
+    std::vector<CallsRelationship*> calls;
     std::multimap<std::string, std::string> callProcedures;
 
     this->modifies = modifies;
@@ -21,7 +21,7 @@ void StmtStack::mergeStack(StmtStack &parentStack, StmtStack &childStack) {
 }
 
 void StmtStack::addFollows(SimpleToken token) {
-    this->follows.push_back(SimpleToken);
+    this->follows.push_back(token);
 }
 
 void StmtStack::addUses(UsesRelationship* relationship) {
@@ -29,7 +29,7 @@ void StmtStack::addUses(UsesRelationship* relationship) {
 }
 
 void StmtStack::addModify(ModifyRelationship* relationship) {
-    this->modify.push_back(relationship);
+    this->modifies.push_back(relationship);
 }
 
 void StmtStack::addCall(CallsRelationship* relationship) {
