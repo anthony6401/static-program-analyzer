@@ -116,3 +116,42 @@ TEST_CASE("Next* queries") {
         REQUIRE(testResults == expectedResults);
     }
 }
+
+TEST_CASE("Multi-clause queries") {
+    SECTION("Multi-clause Test 1") {
+        std::string testQuery = "assign a; while w; \n "
+                                "Select a pattern a (\"x\", _) such that Parent* (w, a) and Next* (1, a)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"4"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Multi-clause Test 2") {
+        std::string testQuery = "assign a; while w;\n "
+                                "Select a such that Modifies (a, \"x\") and Parent* (w, a) and Next* (1, a)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"4"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Multi-clause Test 3") {
+        std::string testQuery = "stmt s;\n "
+                                "Select s such that Next* (5, s) and Next* (s, 12)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"3","4","5","6","7","8","9","10","11"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Multi-clause Test 4") {
+        std::string testQuery = "procedure p;\n "
+                                "Select p such that Calls (p, \"Third\") and Modifies (p, \"i\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"Second"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+}
