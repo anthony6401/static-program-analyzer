@@ -29,6 +29,9 @@
 #include "ModifyExtractor.h"
 #include "PatternExtractor.h"
 
+#include "StmtStack.h"
+#include "ProcedureStack.h"
+
 #include "../../../models/Pattern/AssignPattern.h"
 
 #include "../../pkb/clients/SPClient.h"
@@ -36,7 +39,13 @@
 class Extractor {
 public:
 	SPClient* client;
+	std::stack<StmtStack> parentStack;
+	std::map<std::string, ProcedureStack*> procedures;
+	StmtStack currentStack;
+
 	Extractor(SPClient* client);
+
+	void close(int statementNumber);
 
 	void extractRead(SimpleToken readToken);
 	void extractPrint(SimpleToken printToken);

@@ -18,22 +18,22 @@ private:
 public:
     FollowsClause(TokenObject left, TokenObject right, Select synonym,
     std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
-    RawResult evaluateClause() override;
+    ResultTable evaluateClause() override;
     size_t getNumberOfSynonyms() override;
     std::set<std::string> getAllSynonyms() override;
     std::vector<std::pair<std::string, std::string>> processMapToVectorPair(std::unordered_map<std::string, std::unordered_set<std::string>> results);
     std::unordered_set<std::string> processMapToSetFromFirst(std::unordered_map<std::string, std::unordered_set<std::string>> results);
     std::unordered_set<std::string> processMapToSetFromSecond(std::unordered_map<std::string, std::unordered_set<std::string>> results);
     static RelationshipType getRelationshipType();
-    RawResult evaluateSynonymSynonym();
-    RawResult evaluateSynonymWildcard();
-    RawResult evaluateSynonymInteger();
-    RawResult evaluateIntegerSynonym();
-    RawResult evaluateIntegerWildcard();
-    RawResult evaluateIntegerInteger();
-    RawResult evaluateWildcardSynonym();
-    RawResult evaluateWildcardWildcard();
-    RawResult evaluateWildcardInteger();
+    ResultTable evaluateSynonymSynonym();
+    ResultTable evaluateSynonymWildcard();
+    ResultTable evaluateSynonymInteger();
+    ResultTable evaluateIntegerSynonym();
+    ResultTable evaluateIntegerWildcard();
+    ResultTable evaluateIntegerInteger();
+    ResultTable evaluateWildcardSynonym();
+    ResultTable evaluateWildcardWildcard();
+    ResultTable evaluateWildcardInteger();
 };
 
 #endif //SPA_FOLLOWSCLAUSE_H

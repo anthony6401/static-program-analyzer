@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include "../SimpleToken.h"
+#include "../../SimpleToken.h"
 
 class ExprState {
     public:

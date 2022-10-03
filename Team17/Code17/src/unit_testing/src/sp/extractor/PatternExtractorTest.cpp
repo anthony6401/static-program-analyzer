@@ -3,9 +3,6 @@
 #include <catch.hpp>
 #include <iostream>
 
-void parseHolderPattern(SimpleToken& printStmt, std::vector<std::string>& tokens,
-	Extractor* extractor) {
-}
 
 Extractor generateExtractorPattern() {
 	PKB* pkb = new PKB();
@@ -15,7 +12,7 @@ Extractor generateExtractorPattern() {
 }
 
 SimpleToken generateSimpleTokenPattern(SpTokenType type, std::string value, int statementNumber) {
-	SimpleToken simpleToken = SimpleToken(type, value, statementNumber, &parseHolderPattern);
+	SimpleToken simpleToken = SimpleToken(type, value, statementNumber);
 	return simpleToken;
 }
 

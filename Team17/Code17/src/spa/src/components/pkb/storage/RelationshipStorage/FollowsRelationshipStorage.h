@@ -23,6 +23,7 @@ public:
 	std::unordered_map<std::string, std::unordered_set<std::string>> getAllRelationship(RelationshipType relType, DesignEntity returnType1, DesignEntity returntype2);
 
 private:
+	std::unordered_map<std::string, std::unordered_set<std::string>>* getStorage(DesignEntity left, DesignEntity right, bool isForward);
 
 	std::unordered_map<std::string, std::unordered_set<std::string>> readToReadForwardMap;
 	std::unordered_map<std::string, std::unordered_set<std::string>> readToPrintForwardMap;

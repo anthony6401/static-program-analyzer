@@ -2,35 +2,35 @@
 
 #include <catch.hpp>
 #include <iostream>
-
+/*
 void parseHolder(SimpleToken& printStmt, std::vector<std::string>& tokens,
 	Extractor* extractor) {
 }
 
 SimpleToken generateProcedure(int code) {
 	if (code == 4) {
-		SimpleToken var_count = SimpleToken(SpTokenType::TVARIABLE, "count", 0, &parseHolder);
-		SimpleToken var_cenX = SimpleToken(SpTokenType::TVARIABLE, "cenX", 0, &parseHolder);
-		SimpleToken var_cenY = SimpleToken(SpTokenType::TVARIABLE, "cenY", 0, &parseHolder);
-		SimpleToken var_x = SimpleToken(SpTokenType::TVARIABLE, "x", 0, &parseHolder);
-		SimpleToken var_y = SimpleToken(SpTokenType::TVARIABLE, "y", 0, &parseHolder);
-		SimpleToken var_flag = SimpleToken(SpTokenType::TVARIABLE, "flag", 0, &parseHolder);
-		SimpleToken var_normSq = SimpleToken(SpTokenType::TVARIABLE, "normSq", 0, &parseHolder);
-		SimpleToken con_0 = SimpleToken(SpTokenType::TCONSTANT, "0", 0, &parseHolder);
-		SimpleToken con_1 = SimpleToken(SpTokenType::TCONSTANT, "1", 0, &parseHolder);
-		SimpleToken opr_plus = SimpleToken(SpTokenType::TOPR, "+", 0, &parseHolder);
-		SimpleToken opr_divi = SimpleToken(SpTokenType::TOPR, "/", 0, &parseHolder);
-		SimpleToken opr_time = SimpleToken(SpTokenType::TOPR, "*", 0, &parseHolder);
+		SimpleToken var_count = SimpleToken(SpTokenType::TVARIABLE, "count", 0);
+		SimpleToken var_cenX = SimpleToken(SpTokenType::TVARIABLE, "cenX", 0);
+		SimpleToken var_cenY = SimpleToken(SpTokenType::TVARIABLE, "cenY", 0);
+		SimpleToken var_x = SimpleToken(SpTokenType::TVARIABLE, "x", 0);
+		SimpleToken var_y = SimpleToken(SpTokenType::TVARIABLE, "y", 0);
+		SimpleToken var_flag = SimpleToken(SpTokenType::TVARIABLE, "flag", 0);
+		SimpleToken var_normSq = SimpleToken(SpTokenType::TVARIABLE, "normSq", 0);
+		SimpleToken con_0 = SimpleToken(SpTokenType::TCONSTANT, "0", 0);
+		SimpleToken con_1 = SimpleToken(SpTokenType::TCONSTANT, "1", 0);
+		SimpleToken opr_plus = SimpleToken(SpTokenType::TOPR, "+", 0);
+		SimpleToken opr_divi = SimpleToken(SpTokenType::TOPR, "/", 0);
+		SimpleToken opr_time = SimpleToken(SpTokenType::TOPR, "*", 0);
 
-		SimpleToken while_exp_1 = SimpleToken(SpTokenType::TEXPR, "count + 1", 0, &parseHolder);
-		SimpleToken while_exp_2 = SimpleToken(SpTokenType::TEXPR, "cenX + x", 0, &parseHolder);
-		SimpleToken while_exp_3 = SimpleToken(SpTokenType::TEXPR, "cenY + y", 0, &parseHolder);
-		SimpleToken while_ass_1 = SimpleToken(SpTokenType::TASSIGN, "count = count + 1", 5, &parseHolder);
-		SimpleToken while_ass_2 = SimpleToken(SpTokenType::TASSIGN, "cenX = cenX + x", 6, &parseHolder);
-		SimpleToken while_ass_3 = SimpleToken(SpTokenType::TASSIGN, "cenY = cenY + y", 7, &parseHolder);
-		SimpleToken while_stmtLst = SimpleToken(SpTokenType::TSTMTLIST, "", 0, &parseHolder);
-		SimpleToken while_cond = SimpleToken(SpTokenType::TCONDEXPR, "((x != 0) && (y != 0))", 0, &parseHolder);
-		SimpleToken whileT = SimpleToken(SpTokenType::TWHILE, "while ((x != 0) && (y != 0))", 4, &parseHolder);
+		SimpleToken while_exp_1 = SimpleToken(SpTokenType::TEXPR, "count + 1", 0);
+		SimpleToken while_exp_2 = SimpleToken(SpTokenType::TEXPR, "cenX + x", 0);
+		SimpleToken while_exp_3 = SimpleToken(SpTokenType::TEXPR, "cenY + y", 0);
+		SimpleToken while_ass_1 = SimpleToken(SpTokenType::TASSIGN, "count = count + 1", 5);
+		SimpleToken while_ass_2 = SimpleToken(SpTokenType::TASSIGN, "cenX = cenX + x", 6);
+		SimpleToken while_ass_3 = SimpleToken(SpTokenType::TASSIGN, "cenY = cenY + y", 7);
+		SimpleToken while_stmtLst = SimpleToken(SpTokenType::TSTMTLIST, "", 0);
+		SimpleToken while_cond = SimpleToken(SpTokenType::TCONDEXPR, "((x != 0) && (y != 0))", 0);
+		SimpleToken whileT = SimpleToken(SpTokenType::TWHILE, "while ((x != 0) && (y != 0))", 4);
 		std::vector<SimpleToken> w_exp_1;
 		std::vector<SimpleToken> w_exp_2;
 		std::vector<SimpleToken> w_exp_3;
@@ -74,16 +74,16 @@ SimpleToken generateProcedure(int code) {
 		whC.push_back(while_stmtLst);
 		whileT.setChildren(whC);
 		
-		SimpleToken if_exp_1 = SimpleToken(SpTokenType::TEXPR, "1", 0, &parseHolder);
-		SimpleToken if_exp_2 = SimpleToken(SpTokenType::TEXPR, "cenX / count", 0, &parseHolder);
-		SimpleToken if_exp_3 = SimpleToken(SpTokenType::TEXPR, "cenY / count", 0, &parseHolder);
-		SimpleToken if_ass_1 = SimpleToken(SpTokenType::TASSIGN, "flag = 1", 9, &parseHolder);
-		SimpleToken if_ass_2 = SimpleToken(SpTokenType::TASSIGN, "cenX = cenX / count", 10, &parseHolder);
-		SimpleToken if_ass_3 = SimpleToken(SpTokenType::TASSIGN, "cenY = cenY / count", 11, &parseHolder);
-		SimpleToken if_stmtLst_1 = SimpleToken(SpTokenType::TSTMTLIST, "", 0, &parseHolder);
-		SimpleToken if_stmtLst_2 = SimpleToken(SpTokenType::TSTMTLIST, "", 0, &parseHolder);
-		SimpleToken if_cond = SimpleToken(SpTokenType::TCONDEXPR, "(count == 0)", 0, &parseHolder);
-		SimpleToken ifT = SimpleToken(SpTokenType::TIF, "if (count == 0)", 8, &parseHolder);
+		SimpleToken if_exp_1 = SimpleToken(SpTokenType::TEXPR, "1", 0);
+		SimpleToken if_exp_2 = SimpleToken(SpTokenType::TEXPR, "cenX / count", 0);
+		SimpleToken if_exp_3 = SimpleToken(SpTokenType::TEXPR, "cenY / count", 0);
+		SimpleToken if_ass_1 = SimpleToken(SpTokenType::TASSIGN, "flag = 1", 9);
+		SimpleToken if_ass_2 = SimpleToken(SpTokenType::TASSIGN, "cenX = cenX / count", 10);
+		SimpleToken if_ass_3 = SimpleToken(SpTokenType::TASSIGN, "cenY = cenY / count", 11);
+		SimpleToken if_stmtLst_1 = SimpleToken(SpTokenType::TSTMTLIST, "", 0);
+		SimpleToken if_stmtLst_2 = SimpleToken(SpTokenType::TSTMTLIST, "", 0);
+		SimpleToken if_cond = SimpleToken(SpTokenType::TCONDEXPR, "(count == 0)", 0);
+		SimpleToken ifT = SimpleToken(SpTokenType::TIF, "if (count == 0)", 8);
 		std::vector<SimpleToken> i_exp_1;
 		std::vector<SimpleToken> i_exp_2;
 		std::vector<SimpleToken> i_exp_3;
@@ -126,14 +126,14 @@ SimpleToken generateProcedure(int code) {
 		ifC.push_back(if_stmtLst_2);
 		ifT.setChildren(ifC);
 
-		SimpleToken stmt_exp_1 = SimpleToken(SpTokenType::TEXPR, "0", 0, &parseHolder);
-		SimpleToken stmt_exp_2 = SimpleToken(SpTokenType::TEXPR, "0", 0, &parseHolder);
-		SimpleToken stmt_exp_3 = SimpleToken(SpTokenType::TEXPR, "0", 0, &parseHolder);
-		SimpleToken stmt_exp_4 = SimpleToken(SpTokenType::TEXPR, "cenX * cenX + cenY * cenY", 0, &parseHolder);
-		SimpleToken stmt_ass_1 = SimpleToken(SpTokenType::TASSIGN, "count = 0", 1, &parseHolder);
-		SimpleToken stmt_ass_2 = SimpleToken(SpTokenType::TASSIGN, "cenX = 0", 2, &parseHolder);
-		SimpleToken stmt_ass_3 = SimpleToken(SpTokenType::TASSIGN, "cenY = 0", 3, &parseHolder);
-		SimpleToken stmt_ass_4 = SimpleToken(SpTokenType::TASSIGN, "normSq = cenX * cenX + cenY * cenY", 12, &parseHolder);
+		SimpleToken stmt_exp_1 = SimpleToken(SpTokenType::TEXPR, "0", 0);
+		SimpleToken stmt_exp_2 = SimpleToken(SpTokenType::TEXPR, "0", 0);
+		SimpleToken stmt_exp_3 = SimpleToken(SpTokenType::TEXPR, "0", 0);
+		SimpleToken stmt_exp_4 = SimpleToken(SpTokenType::TEXPR, "cenX * cenX + cenY * cenY", 0);
+		SimpleToken stmt_ass_1 = SimpleToken(SpTokenType::TASSIGN, "count = 0", 1);
+		SimpleToken stmt_ass_2 = SimpleToken(SpTokenType::TASSIGN, "cenX = 0", 2);
+		SimpleToken stmt_ass_3 = SimpleToken(SpTokenType::TASSIGN, "cenY = 0", 3);
+		SimpleToken stmt_ass_4 = SimpleToken(SpTokenType::TASSIGN, "normSq = cenX * cenX + cenY * cenY", 12);
 		std::vector<SimpleToken> s_exp_1;
 		std::vector<SimpleToken> s_exp_2;
 		std::vector<SimpleToken> s_exp_3;
@@ -169,7 +169,7 @@ SimpleToken generateProcedure(int code) {
 		s_ass_4.push_back(stmt_exp_4);
 		stmt_ass_4.setChildren(s_ass_4);
 
-		SimpleToken computeCentroid = SimpleToken(SpTokenType::TPROCEDURE, "computeCentroid", 0, &parseHolder);
+		SimpleToken computeCentroid = SimpleToken(SpTokenType::TPROCEDURE, "computeCentroid", 0);
 		std::vector<SimpleToken> procStmtLst;
 		procStmtLst.push_back(stmt_ass_1);
 		procStmtLst.push_back(stmt_ass_2);
@@ -183,37 +183,37 @@ SimpleToken generateProcedure(int code) {
 	}
 
 	if (code == 0) {
-		SimpleToken var_a = SimpleToken(SpTokenType::TVARIABLE, "a", 0, &parseHolder);
-		SimpleToken var_b = SimpleToken(SpTokenType::TVARIABLE, "b", 0, &parseHolder);
-		SimpleToken var_c = SimpleToken(SpTokenType::TVARIABLE, "c", 0, &parseHolder);
-		SimpleToken var_d = SimpleToken(SpTokenType::TVARIABLE, "d", 0, &parseHolder);
-		SimpleToken var_e = SimpleToken(SpTokenType::TVARIABLE, "e", 0, &parseHolder);
-		SimpleToken var_f = SimpleToken(SpTokenType::TVARIABLE, "f", 0, &parseHolder);
-		SimpleToken var_g = SimpleToken(SpTokenType::TVARIABLE, "g", 0, &parseHolder);
-		SimpleToken var_h = SimpleToken(SpTokenType::TVARIABLE, "h", 0, &parseHolder);
-		SimpleToken var_i = SimpleToken(SpTokenType::TVARIABLE, "i", 0, &parseHolder);
-		SimpleToken var_j = SimpleToken(SpTokenType::TVARIABLE, "j", 0, &parseHolder);
-		SimpleToken var_k = SimpleToken(SpTokenType::TVARIABLE, "k", 0, &parseHolder);
-		SimpleToken var_l = SimpleToken(SpTokenType::TVARIABLE, "l", 0, &parseHolder);
-		SimpleToken var_m = SimpleToken(SpTokenType::TVARIABLE, "m", 0, &parseHolder);
-		SimpleToken var_n = SimpleToken(SpTokenType::TVARIABLE, "n", 0, &parseHolder);
-		SimpleToken con_1 = SimpleToken(SpTokenType::TCONSTANT, "1", 0, &parseHolder);
+		SimpleToken var_a = SimpleToken(SpTokenType::TVARIABLE, "a", 0);
+		SimpleToken var_b = SimpleToken(SpTokenType::TVARIABLE, "b", 0);
+		SimpleToken var_c = SimpleToken(SpTokenType::TVARIABLE, "c", 0);
+		SimpleToken var_d = SimpleToken(SpTokenType::TVARIABLE, "d", 0);
+		SimpleToken var_e = SimpleToken(SpTokenType::TVARIABLE, "e", 0);
+		SimpleToken var_f = SimpleToken(SpTokenType::TVARIABLE, "f", 0);
+		SimpleToken var_g = SimpleToken(SpTokenType::TVARIABLE, "g", 0);
+		SimpleToken var_h = SimpleToken(SpTokenType::TVARIABLE, "h", 0);
+		SimpleToken var_i = SimpleToken(SpTokenType::TVARIABLE, "i", 0);
+		SimpleToken var_j = SimpleToken(SpTokenType::TVARIABLE, "j", 0);
+		SimpleToken var_k = SimpleToken(SpTokenType::TVARIABLE, "k", 0);
+		SimpleToken var_l = SimpleToken(SpTokenType::TVARIABLE, "l", 0);
+		SimpleToken var_m = SimpleToken(SpTokenType::TVARIABLE, "m", 0);
+		SimpleToken var_n = SimpleToken(SpTokenType::TVARIABLE, "n", 0);
+		SimpleToken con_1 = SimpleToken(SpTokenType::TCONSTANT, "1", 0);
 
-		SimpleToken var_con1 = SimpleToken(SpTokenType::TVARIABLE, "con1", 0, &parseHolder);
-		SimpleToken var_con2 = SimpleToken(SpTokenType::TVARIABLE, "con2", 0, &parseHolder);
-		SimpleToken var_con3 = SimpleToken(SpTokenType::TVARIABLE, "con3", 0, &parseHolder);
-		SimpleToken var_con4 = SimpleToken(SpTokenType::TVARIABLE, "con4", 0, &parseHolder);
-		SimpleToken var_con5 = SimpleToken(SpTokenType::TVARIABLE, "con5", 0, &parseHolder);
-		SimpleToken opr_plus = SimpleToken(SpTokenType::TOPR, "+", 0, &parseHolder);
+		SimpleToken var_con1 = SimpleToken(SpTokenType::TVARIABLE, "con1", 0);
+		SimpleToken var_con2 = SimpleToken(SpTokenType::TVARIABLE, "con2", 0);
+		SimpleToken var_con3 = SimpleToken(SpTokenType::TVARIABLE, "con3", 0);
+		SimpleToken var_con4 = SimpleToken(SpTokenType::TVARIABLE, "con4", 0);
+		SimpleToken var_con5 = SimpleToken(SpTokenType::TVARIABLE, "con5", 0);
+		SimpleToken opr_plus = SimpleToken(SpTokenType::TOPR, "+", 0);
 
-		SimpleToken exp_1 = SimpleToken(SpTokenType::TEXPR, "c + d", 0, &parseHolder);
-		SimpleToken exp_2 = SimpleToken(SpTokenType::TEXPR, "c + d", 0, &parseHolder);
-		SimpleToken exp_3 = SimpleToken(SpTokenType::TEXPR, "g + h", 0, &parseHolder);
-		SimpleToken exp_4 = SimpleToken(SpTokenType::TEXPR, "g + h", 0, &parseHolder);
-		SimpleToken exp_5 = SimpleToken(SpTokenType::TEXPR, "k + l", 0, &parseHolder);
-		SimpleToken exp_6 = SimpleToken(SpTokenType::TEXPR, "k + l", 0, &parseHolder);
-		SimpleToken exp_7 = SimpleToken(SpTokenType::TEXPR, "m + n", 0, &parseHolder);
-		SimpleToken exp_8 = SimpleToken(SpTokenType::TEXPR, "m + n", 0, &parseHolder);
+		SimpleToken exp_1 = SimpleToken(SpTokenType::TEXPR, "c + d", 0);
+		SimpleToken exp_2 = SimpleToken(SpTokenType::TEXPR, "c + d", 0);
+		SimpleToken exp_3 = SimpleToken(SpTokenType::TEXPR, "g + h", 0);
+		SimpleToken exp_4 = SimpleToken(SpTokenType::TEXPR, "g + h", 0);
+		SimpleToken exp_5 = SimpleToken(SpTokenType::TEXPR, "k + l", 0);
+		SimpleToken exp_6 = SimpleToken(SpTokenType::TEXPR, "k + l", 0);
+		SimpleToken exp_7 = SimpleToken(SpTokenType::TEXPR, "m + n", 0);
+		SimpleToken exp_8 = SimpleToken(SpTokenType::TEXPR, "m + n", 0);
 		std::vector<SimpleToken> exp_1C;
 		exp_1C.push_back(var_c);
 		exp_1C.push_back(opr_plus);
@@ -255,14 +255,14 @@ SimpleToken generateProcedure(int code) {
 		exp_8C.push_back(var_n);
 		exp_8.setChildren(exp_8C);
 
-		SimpleToken ass_1 = SimpleToken(SpTokenType::TASSIGN, "c = c + d", 5, &parseHolder);
-		SimpleToken ass_2 = SimpleToken(SpTokenType::TASSIGN, "d = c + d", 6, &parseHolder);
-		SimpleToken ass_3 = SimpleToken(SpTokenType::TASSIGN, "g = h + h", 10, &parseHolder);
-		SimpleToken ass_4 = SimpleToken(SpTokenType::TASSIGN, "h = h + h", 11, &parseHolder);
-		SimpleToken ass_5 = SimpleToken(SpTokenType::TASSIGN, "k = k + l", 16, &parseHolder);
-		SimpleToken ass_6 = SimpleToken(SpTokenType::TASSIGN, "l = k + l", 17, &parseHolder);
-		SimpleToken ass_7 = SimpleToken(SpTokenType::TASSIGN, "m = m + n", 18, &parseHolder);
-		SimpleToken ass_8 = SimpleToken(SpTokenType::TASSIGN, "n = m + n", 19, &parseHolder);
+		SimpleToken ass_1 = SimpleToken(SpTokenType::TASSIGN, "c = c + d", 5);
+		SimpleToken ass_2 = SimpleToken(SpTokenType::TASSIGN, "d = c + d", 6);
+		SimpleToken ass_3 = SimpleToken(SpTokenType::TASSIGN, "g = h + h", 10);
+		SimpleToken ass_4 = SimpleToken(SpTokenType::TASSIGN, "h = h + h", 11);
+		SimpleToken ass_5 = SimpleToken(SpTokenType::TASSIGN, "k = k + l", 16);
+		SimpleToken ass_6 = SimpleToken(SpTokenType::TASSIGN, "l = k + l", 17);
+		SimpleToken ass_7 = SimpleToken(SpTokenType::TASSIGN, "m = m + n", 18);
+		SimpleToken ass_8 = SimpleToken(SpTokenType::TASSIGN, "n = m + n", 19);
 		std::vector<SimpleToken> ass_1C;
 		ass_1C.push_back(var_c);
 		ass_1C.push_back(exp_1);
@@ -296,10 +296,10 @@ SimpleToken generateProcedure(int code) {
 		ass_8C.push_back(exp_8);
 		ass_8.setChildren(ass_8C);
 
-		SimpleToken sl_1 = SimpleToken(SpTokenType::TSTMTLIST, "", 0, &parseHolder);
-		SimpleToken sl_2 = SimpleToken(SpTokenType::TSTMTLIST, "", 0, &parseHolder);
-		SimpleToken sl_3 = SimpleToken(SpTokenType::TSTMTLIST, "", 0, &parseHolder);
-		SimpleToken sl_4 = SimpleToken(SpTokenType::TSTMTLIST, "", 0, &parseHolder);
+		SimpleToken sl_1 = SimpleToken(SpTokenType::TSTMTLIST, "", 0);
+		SimpleToken sl_2 = SimpleToken(SpTokenType::TSTMTLIST, "", 0);
+		SimpleToken sl_3 = SimpleToken(SpTokenType::TSTMTLIST, "", 0);
+		SimpleToken sl_4 = SimpleToken(SpTokenType::TSTMTLIST, "", 0);
 		std::vector<SimpleToken> sl_1C;
 		sl_1C.push_back(ass_1);
 		sl_1C.push_back(ass_2);
@@ -317,9 +317,9 @@ SimpleToken generateProcedure(int code) {
 		sl_4C.push_back(ass_8);
 		sl_4.setChildren(sl_4C);
 
-		SimpleToken cE_1 = SimpleToken(SpTokenType::TCONDEXPR, "con2 == 1", 0, &parseHolder);
-		SimpleToken cE_2 = SimpleToken(SpTokenType::TCONDEXPR, "con3 == 1", 0, &parseHolder);
-		SimpleToken cE_3 = SimpleToken(SpTokenType::TCONDEXPR, "con5 == 1", 0, &parseHolder);
+		SimpleToken cE_1 = SimpleToken(SpTokenType::TCONDEXPR, "con2 == 1", 0);
+		SimpleToken cE_2 = SimpleToken(SpTokenType::TCONDEXPR, "con3 == 1", 0);
+		SimpleToken cE_3 = SimpleToken(SpTokenType::TCONDEXPR, "con5 == 1", 0);
 		std::vector<SimpleToken> cE_1C;
 		cE_1C.push_back(var_con2);
 		cE_1C.push_back(con_1);
@@ -333,9 +333,9 @@ SimpleToken generateProcedure(int code) {
 		cE_3C.push_back(con_1);
 		cE_3.setChildren(cE_3C);
 
-		SimpleToken if_while_1 = SimpleToken(SpTokenType::TWHILE, "while (con2 == 1)", 4, &parseHolder);
-		SimpleToken if_while_2 = SimpleToken(SpTokenType::TWHILE, "while (con3 == 1)", 9, &parseHolder);
-		SimpleToken while_if = SimpleToken(SpTokenType::TIF, "if (con5 == 1)", 15, &parseHolder);
+		SimpleToken if_while_1 = SimpleToken(SpTokenType::TWHILE, "while (con2 == 1)", 4);
+		SimpleToken if_while_2 = SimpleToken(SpTokenType::TWHILE, "while (con3 == 1)", 9);
+		SimpleToken while_if = SimpleToken(SpTokenType::TIF, "if (con5 == 1)", 15);
 		std::vector<SimpleToken> if_while_1C;
 		if_while_1C.push_back(cE_1);
 		if_while_1C.push_back(sl_1);
@@ -350,12 +350,12 @@ SimpleToken generateProcedure(int code) {
 		while_ifC.push_back(sl_4);
 		while_if.setChildren(while_ifC);
 
-		SimpleToken read_a = SimpleToken(SpTokenType::TREAD, "read a", 2, &parseHolder);
-		SimpleToken read_e = SimpleToken(SpTokenType::TREAD, "read e", 7, &parseHolder);
-		SimpleToken read_i = SimpleToken(SpTokenType::TREAD, "read i", 13, &parseHolder);
-		SimpleToken prin_b = SimpleToken(SpTokenType::TPRINT, "print b", 3, &parseHolder);
-		SimpleToken prin_f = SimpleToken(SpTokenType::TPRINT, "print f", 8, &parseHolder);
-		SimpleToken prin_j = SimpleToken(SpTokenType::TPRINT, "print j", 14, &parseHolder);
+		SimpleToken read_a = SimpleToken(SpTokenType::TREAD, "read a", 2);
+		SimpleToken read_e = SimpleToken(SpTokenType::TREAD, "read e", 7);
+		SimpleToken read_i = SimpleToken(SpTokenType::TREAD, "read i", 13);
+		SimpleToken prin_b = SimpleToken(SpTokenType::TPRINT, "print b", 3);
+		SimpleToken prin_f = SimpleToken(SpTokenType::TPRINT, "print f", 8);
+		SimpleToken prin_j = SimpleToken(SpTokenType::TPRINT, "print j", 14);
 		std::vector<SimpleToken> read_aC;
 		read_aC.push_back(var_a);
 		read_a.setChildren(read_aC);
@@ -375,9 +375,9 @@ SimpleToken generateProcedure(int code) {
 		prin_jC.push_back(var_j);
 		prin_j.setChildren(prin_jC);
 
-		SimpleToken if_sl_1 = SimpleToken(SpTokenType::TSTMTLIST, "", 0, &parseHolder);
-		SimpleToken if_sl_2 = SimpleToken(SpTokenType::TSTMTLIST, "", 0, &parseHolder);
-		SimpleToken while_sl = SimpleToken(SpTokenType::TSTMTLIST, "", 0, &parseHolder);
+		SimpleToken if_sl_1 = SimpleToken(SpTokenType::TSTMTLIST, "", 0);
+		SimpleToken if_sl_2 = SimpleToken(SpTokenType::TSTMTLIST, "", 0);
+		SimpleToken while_sl = SimpleToken(SpTokenType::TSTMTLIST, "", 0);
 		std::vector<SimpleToken> if_sl_1C;
 		if_sl_1C.push_back(read_a);
 		if_sl_1C.push_back(prin_b);
@@ -394,8 +394,8 @@ SimpleToken generateProcedure(int code) {
 		while_slC.push_back(while_if);
 		while_sl.setChildren(while_slC);
 
-		SimpleToken if_cE = SimpleToken(SpTokenType::TCONDEXPR, "con1 == 1", 0, &parseHolder);
-		SimpleToken while_cE = SimpleToken(SpTokenType::TCONDEXPR, "con4 == 1", 0, &parseHolder);
+		SimpleToken if_cE = SimpleToken(SpTokenType::TCONDEXPR, "con1 == 1", 0);
+		SimpleToken while_cE = SimpleToken(SpTokenType::TCONDEXPR, "con4 == 1", 0);
 		std::vector<SimpleToken> if_cEC;
 		if_cEC.push_back(var_con1);
 		if_cEC.push_back(con_1);
@@ -405,8 +405,8 @@ SimpleToken generateProcedure(int code) {
 		while_cEC.push_back(con_1);
 		while_cE.setChildren(while_cEC);
 
-		SimpleToken ifT = SimpleToken(SpTokenType::TIF, "if (con1 == 1)", 1, &parseHolder);
-		SimpleToken whileT = SimpleToken(SpTokenType::TWHILE, "while (con4 == 1)", 12, &parseHolder);
+		SimpleToken ifT = SimpleToken(SpTokenType::TIF, "if (con1 == 1)", 1);
+		SimpleToken whileT = SimpleToken(SpTokenType::TWHILE, "while (con4 == 1)", 12);
 		std::vector<SimpleToken> ifTC;
 		ifTC.push_back(if_cE);
 		ifTC.push_back(if_sl_1);
@@ -417,7 +417,7 @@ SimpleToken generateProcedure(int code) {
 		whileTC.push_back(while_sl);
 		whileT.setChildren(whileTC);
 
-		SimpleToken nestedWhileIf = SimpleToken(SpTokenType::TPROCEDURE, "nestedWhileIf", 0, &parseHolder);
+		SimpleToken nestedWhileIf = SimpleToken(SpTokenType::TPROCEDURE, "nestedWhileIf", 0);
 		std::vector<SimpleToken> nestedWhileIfC;
 		nestedWhileIfC.push_back(ifT);
 		nestedWhileIfC.push_back(whileT);
@@ -494,7 +494,7 @@ std::string printResultConstant(std::vector<ConstantEntity*> vector) {
 /* ==================== */
 /*      TEST CASES      */
 /* ==================== */
- 
+ /*
 TEST_CASE("Unit test - FollowsExtractor::extractFollows for computeCentroid") {
 	SimpleToken testProcedure = generateProcedure(4);
 	std::vector<FollowsRelationship*> testResult = FollowsExtractor::extractFollows(testProcedure);
@@ -627,7 +627,7 @@ TEST_CASE("Unit test - ModifyExtractor::extractModify for while token") {}
 TEST_CASE("Unit test - ModifyExtractor::extractModify for if token") {}
 TEST_CASE("Unit test - PatternExtractor::extractPattern for while token") {}
 TEST_CASE("Unit test - PatternExtractor::extractPattern for if token") {}
-
+*/
 /*
 void parseHolder(SimpleToken& printStmt, std::vector<std::string>& tokens,
 	Extractor* extractor) {
@@ -641,7 +641,7 @@ Extractor generateExtractor() {
 }
 
 SimpleToken generateSimpleToken(SpTokenType type, std::string value, int statementNumber) {
-	SimpleToken simpleToken = SimpleToken(type, value, statementNumber, &parseHolder);
+	SimpleToken simpleToken = SimpleToken(type, value, statementNumber);
 	return simpleToken;
 }
 

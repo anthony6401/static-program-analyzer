@@ -1,16 +1,62 @@
 #include <stack>
 #include <stdexcept>
 #include "SimpleParser.h"
-#include "../validator/SimpleValidator.h"
 #include "../SimpleToken.h"
 #include "../utils/SpUtils.h"
-#include "../tokenizer/ExprStack.h"
+#include "../tokenizer/SimpleTokenizer.h"
+#include "../parser/ExprStack/ExprStack.h"
+#include "../validator/states/NestedState.h"
+#include "../validator/states/IfState.h"
+#include "../validator/states/ElseState.h"
+#include "../validator/states/ProgramState.h"
 
 
-/// <summary>
-/// SIMPLE statement number that is currently being processed
-/// </summary>
-int SimpleParser::statementNumber = 1;
+SimpleParser::SimpleParser(Extractor* extractor) {
+    this->extractor = extractor;
+    validator = SimpleValidator();
+    statementNumber = 1;
+}
+
+void SimpleParser::parseCode(std::string code) {
+    std::vector<std::string> codeLines = SimpleTokenizer::tokenizeCode(code);
+    if (codeLines.empty()) {
+        throw std::invalid_argument("Received invalid SIMPLE code");
+    }
+
+    for (std::string line : codeLines) {
+        SimpleParser::parseLine(line);
+        /*
+        if (lineToken.type == SpTokenType::TPROCEDURE) {
+            stmtStack.push(currentStack);
+            currentStack = new ProcedureStack(lineToken);
+        }
+        else if (lineToken.type == SpTokenType::TWHILE) {
+            stmtStack.push(currentStack);
+            currentStack = new WhileStack(lineToken);
+        }
+        else if (lineToken.type == SpTokenType::TIF) {
+            stmtStack.push(currentStack);
+            currentStack = new IfStack(lineToken);
+        }
+        else if (lineToken.type == SpTokenType::TCLOSE) {
+            if (stmtStack.size() == 0) {
+                throw std::invalid_argument("Received invalid SIMPLE code. Extra }");
+            }
+            currentStack->put(lineToken);
+            if (!(currentStack->isIf())) {
+                StmtStack* parentStack = stmtStack.top();
+                delete currentStack;
+                currentStack = parentStack;
+                stmtStack.pop();
+            }
+        }
+        else {
+            currentStack->put(lineToken);
+        }*/
+    }
+    validator.validCode();
+    //extractor.endofcode
+}
 
 /// <summary>
 /// Identifies type of code line and returns a SimpleToken of it
@@ -18,70 +64,72 @@ int SimpleParser::statementNumber = 1;
 /// <param name="tokens">code of line that has been split into tokens</param>
 /// <param name="code">original line of code before splitting</param>
 /// <returns>SimpleToken identifying line type and value containing code</returns>
-SimpleToken SimpleParser::parseLine(std::vector<std::string>& tokens, std::string code) {
+void SimpleParser::parseLine(std::string code) {
+    std::vector<std::string> tokens = SimpleTokenizer::tokenizeLine(code);
     std::string first = tokens.front();
     if (first == "}") {
         tokens.erase(tokens.begin());
-        SimpleToken token = SimpleToken(SpTokenType::TCLOSE, code,
-        SimpleParser::statementNumber, &SimpleParser::parseHolder);
-        return token;
+        SimpleToken token = SimpleToken(SpTokenType::TCLOSE, code, statementNumber);
+        //extractor.close()
     } else if (tokens.at(1) == "=") {
-        SimpleToken token = SimpleToken(SpTokenType::TASSIGN, code,
-            SimpleParser::statementNumber, &SimpleParser::parseAssign);
         tokens.erase(tokens.begin() + 1);
-        SimpleParser::statementNumber++;
-        return token;
+        validator.validLine(SpTokenType::TASSIGN);
+        parseAssign(tokens);
     } else if (first == "procedure") {
         tokens.erase(tokens.begin());
-        SimpleToken token = SimpleToken(SpTokenType::TPROCEDURE, tokens.at(0),//need to change
-            0, &SimpleParser::parseProcedure);
-        return token;
+        validator.validLine(SpTokenType::TPROCEDURE);
+        parseProcedure(tokens);
+    } else if (first == "call") {
+        tokens.erase(tokens.begin());
+        validator.validLine(SpTokenType::TCALL);
+        parseCall(tokens);
     } else if (first == "read") {
         tokens.erase(tokens.begin());
-        SimpleToken token = SimpleToken(SpTokenType::TREAD, code,
-            SimpleParser::statementNumber, &SimpleParser::parseRead);
-        SimpleParser::statementNumber++;
-        return token;
+        validator.validLine(SpTokenType::TREAD);
+        parseRead(tokens);
     } else if (first == "print") {
         tokens.erase(tokens.begin());
-        SimpleToken token = SimpleToken(SpTokenType::TPRINT, code,
-            SimpleParser::statementNumber, &SimpleParser::parsePrint);
-        SimpleParser::statementNumber++;
-        return token;
+        validator.validLine(SpTokenType::TPRINT);
+        parsePrint(tokens);
     } else if (first == "while") {
         tokens.erase(tokens.begin());
-        SimpleToken token = SimpleToken(SpTokenType::TWHILE, code,
-            SimpleParser::statementNumber, &SimpleParser::parseWhile);
-        SimpleParser::statementNumber++;
-        return token;
+        validator.validLine(SpTokenType::TWHILE);
+        parseWhile(tokens);
     } else if (first == "if") {
         tokens.erase(tokens.begin());
-        SimpleToken token = SimpleToken(SpTokenType::TIF, code,
-            SimpleParser::statementNumber, &SimpleParser::parseIf);
-        SimpleParser::statementNumber++;
-        return token;
+        validator.validLine(SpTokenType::TIF);
+        parseIf(tokens);
     } else if (first == "else") {
         if (tokens.at(1) != "{") {
             throw std::invalid_argument("Received invalid SIMPLE code line " + std::to_string(SimpleParser::statementNumber));
         }
         tokens.erase(tokens.begin());
-        SimpleToken token = SimpleToken(SpTokenType::TELSE, code,
-            0, &SimpleParser::parseHolder);
-        return token;
+        validator.validLine(SpTokenType::TELSE);
+        //extractor.Close();
     } else {
         throw std::invalid_argument("Received invalid SIMPLE code line " + std::to_string(SimpleParser::statementNumber));
     }
 }
 
-void SimpleParser::parseProcedure(SimpleToken& procStmt, std::vector<std::string>& tokens,
-    Extractor* extractor) {
+void SimpleParser::parseProcedure(std::vector<std::string>& tokens) {
     if (tokens.size() == 2 && tokens.at(1) == "{") {
-        std::vector<SimpleToken> children;
-        children.push_back(parseVariable(tokens.at(0)));
-        procStmt.setChildren(children);
+        SimpleToken procedureToken = SimpleToken(SpTokenType::TPROCEDURE, parseVariable(tokens.at(0)), 0);//change to parse procedure
+        validator.setState(NestedState());
+        //extractProcedure(procedureToken);
     }
     else {
-        throw std::invalid_argument("Received invalid Procedure:Line " + std::to_string(procStmt.statementNumber));
+        throw std::invalid_argument("Received invalid Procedure:Line " + std::to_string(statementNumber));
+    }
+}
+
+void SimpleParser::parseCall(std::vector<std::string>& tokens) {
+    if (tokens.size() == 2 && tokens.at(1) == ";") {
+        SimpleToken callToken = SimpleToken(SpTokenType::TCALL, parseVariable(tokens.at(0)), statementNumber);
+        statementNumber++;
+        //extractCall(callToken)
+    }
+    else {
+        throw std::invalid_argument("Received invalid Call:Line " + std::to_string(statementNumber));
     }
 }
 
@@ -90,15 +138,13 @@ void SimpleParser::parseProcedure(SimpleToken& procStmt, std::vector<std::string
 /// </summary>
 /// <param name="printStmt">SimpleToken of TPRINT type</param>
 /// <param name="tokens">parameters for print statement</param>
-void SimpleParser::parsePrint(SimpleToken& printStmt, std::vector<std::string>& tokens,
-        Extractor* extractor) {
+void SimpleParser::parsePrint(std::vector<std::string>& tokens) {
     if (tokens.size() == 2 && tokens.at(1) == ";") {
-        std::vector<SimpleToken> children;
-        children.push_back(parseVariable(tokens.at(0)));
-        printStmt.setChildren(children);
-        // extractor->extractPrintStmt(printStmt); //pass to extractor
+        SimpleToken printToken = SimpleToken(SpTokenType::TPRINT, parseVariable(tokens.at(0)), statementNumber);
+        statementNumber++;
+        //extractPrint(printToken)
     } else {
-        throw std::invalid_argument("Received invalid Print:Line " + std::to_string(printStmt.statementNumber));
+        throw std::invalid_argument("Received invalid Print:Line " + std::to_string(statementNumber));
     }
 }
 
@@ -107,71 +153,57 @@ void SimpleParser::parsePrint(SimpleToken& printStmt, std::vector<std::string>& 
 /// </summary>
 /// <param name="printStmt">SimpleToken of TREAD type</param>
 /// <param name="tokens">parameters for read statement</param>
-void SimpleParser::parseRead(SimpleToken& readStmt, std::vector<std::string>& tokens,
-        Extractor* extractor) {
+void SimpleParser::parseRead(std::vector<std::string>& tokens) {
     if (tokens.size() == 2 && tokens.at(1) == ";") {
-        std::vector<SimpleToken> children;
-        children.push_back(parseVariable(tokens.at(0)));
-        readStmt.setChildren(children);
-        // extractor->extractReadStmt(readStmt); //pass to extractor
+        SimpleToken readToken = SimpleToken(SpTokenType::TREAD, parseVariable(tokens.at(0)), statementNumber);
+        statementNumber++;
+        //extractRead(readToken)
     } else {
-        throw std::invalid_argument("Received invalid Read:Line " + std::to_string(readStmt.statementNumber));
+        throw std::invalid_argument("Received invalid Read:Line " + std::to_string(statementNumber));
     }
 }
 
-void SimpleParser::parseCall(SimpleToken& callStmt, std::vector<std::string>& tokens,
-    Extractor* extractor) {
-    if (tokens.size() == 2 && tokens.at(1) == ";") {
-        std::vector<SimpleToken> children;
-        children.push_back(parseVariable(tokens.at(0)));
-        callStmt.setChildren(children);
-    }
-    else {
-        throw std::invalid_argument("Received invalid Call:Line " + std::to_string(callStmt.statementNumber));
-    }
-}
-
-void SimpleParser::parseWhile(SimpleToken& whileStmt, std::vector<std::string>& tokens,
-    Extractor* extractor) {
+void SimpleParser::parseWhile(std::vector<std::string>& tokens) {
     if (tokens.size() < 6 || tokens.back() != "{" || tokens.front() == "!") {
-        throw std::invalid_argument("Received invalid While:Line " + std::to_string(whileStmt.statementNumber));
+        throw std::invalid_argument("Received invalid While:Line " + std::to_string(statementNumber));
     }
     tokens.pop_back();
-    SimpleToken stmtList = SimpleToken(SpTokenType::TCONDEXPR, "", 0, NULL);
-    stmtList.setChildren(parseCondition(tokens));
-    std::vector<SimpleToken> children;
-    children.push_back(stmtList);
-    whileStmt.setChildren(children);
+    SimpleToken whileToken = SimpleToken(SpTokenType::TWHILE, "", statementNumber);
+    statementNumber++;
+    whileToken.setChildren(parseCondition(tokens));
+    validator.setState(NestedState());
+    //extractWhile(whileToken)
 }
 
-void SimpleParser::parseIf(SimpleToken& ifStmt, std::vector<std::string>& tokens,
-    Extractor* extractor) {
+void SimpleParser::parseIf(std::vector<std::string>& tokens) {
     if (tokens.size() < 7 || tokens.back() != "{" || tokens.front() == "!") {
-        throw std::invalid_argument("Received invalid If:Line " + std::to_string(ifStmt.statementNumber));
+        throw std::invalid_argument("Received invalid If:Line " + std::to_string(statementNumber));
     }
     tokens.pop_back();
     if (tokens.back() != "then") {
-        throw std::invalid_argument("Received invalid If:Line " + std::to_string(ifStmt.statementNumber));
+        throw std::invalid_argument("Received invalid If:Line " + std::to_string(statementNumber));
     }
     tokens.pop_back();
-    SimpleToken stmtList = SimpleToken(SpTokenType::TCONDEXPR, "", 0, NULL);
-    stmtList.setChildren(parseCondition(tokens));
-    std::vector<SimpleToken> children;
-    children.push_back(stmtList);
-    ifStmt.setChildren(children);
+    SimpleToken ifToken = SimpleToken(SpTokenType::TIF, "", statementNumber);
+    statementNumber++;
+    ifToken.setChildren(parseCondition(tokens));
+    validator.setState(IfState());
+    //extract(ifToken)
 }
 
-void SimpleParser::parseAssign(SimpleToken& assign, std::vector<std::string>& tokens,
-    Extractor* extractor) {
+void SimpleParser::parseAssign(std::vector<std::string>& tokens) {
     if (SimpleValidator::validateVariable(tokens.front()) && tokens.back() == ";") {
         tokens.pop_back();
         std::vector<SimpleToken> children;
-        children.push_back(SimpleToken(SpTokenType::TVARIABLE, tokens.front(), 0, NULL));
+        children.push_back(SimpleToken(SpTokenType::TVARIABLE, tokens.front(), 0));
         tokens.erase(tokens.begin());
         children.push_back(SimpleParser::parseExpr(tokens));
-        assign.setChildren(children);
+        SimpleToken assignToken = SimpleToken(SpTokenType::TASSIGN, "", statementNumber);
+        statementNumber++;
+        assignToken.setChildren(children);//add modifies, uses
+        //extractAssign(assignToken);
     } else {
-        throw std::invalid_argument("Received invalid assign:Line " + std::to_string(assign.statementNumber));
+        throw std::invalid_argument("Received invalid assign:Line " + std::to_string(statementNumber));
     }
 }
 
@@ -193,12 +225,16 @@ std::vector<SimpleToken> SimpleParser::parseCondition(std::vector<std::string> t
     if (condition.find("&&") != std::string::npos || condition.find("||") != std::string::npos) {
         int indice = 0;
         for (std::string token : tokens) {
-            if (token == "&&" || token == "||") {
-                if (SimpleValidator::isAndOrCenter(tokens, indice)) {
-                    break;
-                }
+            if (token != "&&" && token != "||") {
+                indice++;
+                continue;
             }
-            indice++;
+            if (SimpleValidator::isAndOrCenter(tokens, indice)) {
+                break;
+            } else {
+                indice++;
+            }
+
         }
         if (indice == tokens.size()) {
             throw std::invalid_argument("Received invalid condition. invalid && or ||");
@@ -248,7 +284,7 @@ SimpleToken SimpleParser::parseExpr(std::vector<std::string>& tokens) {
         stack.put(i);
     }
     if (stack.valid()) {
-        SimpleToken expr = SimpleToken(SpTokenType::TEXPR, "", 0, NULL);
+        SimpleToken expr = SimpleToken(SpTokenType::TEXPR, "", 0);
         expr.setChildren(stack.get());
         return expr;
     } else {
@@ -261,22 +297,18 @@ SimpleToken SimpleParser::parseExpr(std::vector<std::string>& tokens) {
 /// </summary>
 /// <param name="token">string to validate if valid variable</param>
 /// <returns>SimpleToken of TVARIABLE with variable name as value</returns>
-SimpleToken SimpleParser::parseVariable(std::string& token) {
+std::string SimpleParser::parseVariable(std::string& token) {
     if (SimpleValidator::validateVariable(token)) {
-        return SimpleToken(SpTokenType::TVARIABLE, token, 0, NULL);
+        return token;
     } else {
         throw std::invalid_argument("Received invalid variable " + token);
     }
 }
 
-SimpleToken SimpleParser::parseConstant(std::string& token) {
+std::string SimpleParser::parseConstant(std::string& token) {
     if (SimpleValidator::validateConstant(token)) {
-        return SimpleToken(SpTokenType::TCONSTANT, token, 0, NULL);
+        return token;
     } else {
         throw std::invalid_argument("Received invalid constant " + token);
     }
-}
-
-void SimpleParser::parseHolder(SimpleToken& printStmt, std::vector<std::string>& tokens,
-    Extractor* extractor) {
 }

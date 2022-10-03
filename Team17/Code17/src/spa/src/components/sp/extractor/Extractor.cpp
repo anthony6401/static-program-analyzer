@@ -5,6 +5,9 @@
 // Constructor
 Extractor::Extractor(SPClient* client) {
 	this->client = client;
+	std::stack<StmtStack> parentStack;
+	std::map<std::string, ProcedureStack*> procedures;
+	StmtStack stmtStack;
 }
 
 // ======================== //
@@ -102,6 +105,10 @@ void Extractor::extractAll(SimpleToken procedureToken) {
 	extractModify(procedureToken);
 	extractPattern(procedureToken);
 	extractConstants(procedureToken);
+}
+
+void Extractor::close(int statementNumber) {
+	currentStack->close(statementNumber);
 }
 
 // =============================== //

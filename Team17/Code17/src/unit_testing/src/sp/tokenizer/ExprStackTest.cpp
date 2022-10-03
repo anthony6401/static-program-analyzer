@@ -2,10 +2,10 @@
 #include <iostream>
 #include "components/sp/SimpleToken.h"
 #include "components/sp/utils/SpUtils.h"
-#include "components/sp/tokenizer/ExprStack.h"
-#include "components/sp/tokenizer/FactorState.h"
-#include "components/sp/tokenizer/OperandState.h"
-#include "components/sp/tokenizer/ExprCloseState.h"
+#include "components/sp/parser/ExprStack/ExprStack.h"
+#include "components/sp/parser/ExprStack/FactorState.h"
+#include "components/sp/parser/ExprStack/OperandState.h"
+#include "components/sp/parser/ExprStack/ExprCloseState.h"
 
 #include <catch.hpp>
 
@@ -33,7 +33,7 @@ TEST_CASE("Correct FactorState") {
         stack.put("-");
         stack.setState(new FactorState(&stack));
         std::vector<SimpleToken> result;
-        result.push_back(SimpleToken(SpTokenType::TOPR, "-", 0, NULL));
+        result.push_back(SimpleToken(SpTokenType::TOPR, "-", 0));
         REQUIRE(equalChild(stack.get(), result));
     }
     catch (std::exception e) {
@@ -67,8 +67,8 @@ TEST_CASE("Correct OperandState") {
         stack.setState(new OperandState(&stack));
         stack.put("a");
         std::vector<SimpleToken> result;
-        result.push_back(SimpleToken(SpTokenType::TCONSTANT, "1", 0, NULL));
-        result.push_back(SimpleToken(SpTokenType::TVARIABLE, "a", 0, NULL));
+        result.push_back(SimpleToken(SpTokenType::TCONSTANT, "1", 0));
+        result.push_back(SimpleToken(SpTokenType::TVARIABLE, "a", 0));
         REQUIRE(equalChild(stack.get(), result));
     }
     catch (std::exception e) {
@@ -100,7 +100,7 @@ TEST_CASE("Correct ExprCloseState") {
     try {
         stack.put("+");
         std::vector<SimpleToken> result;
-        result.push_back(SimpleToken(SpTokenType::TOPR, "+", 0, NULL));
+        result.push_back(SimpleToken(SpTokenType::TOPR, "+", 0));
         REQUIRE(equalChild(stack.get(), result));
     }
     catch (std::exception e) {

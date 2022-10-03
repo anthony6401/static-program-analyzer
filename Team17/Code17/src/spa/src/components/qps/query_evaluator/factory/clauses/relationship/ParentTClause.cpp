@@ -5,7 +5,7 @@ ParentTClause::ParentTClause(TokenObject left, TokenObject right, Select synonym
                                QPSClient qpsClient) : left(left), right(right), synonym(synonym),
                                                       synonymToDesignEntityMap(synonymToDesignEntityMap), qpsClient(qpsClient) {}
 
-RawResult ParentTClause::evaluateClause() {
+ResultTable ParentTClause::evaluateClause() {
     TokenType leftType = left.getTokenType();
     TokenType rightType = right.getTokenType();
     if (leftType == TokenType::NAME && rightType == TokenType::NAME) {
@@ -88,7 +88,7 @@ std::unordered_set<std::string> ParentTClause::processMapToSetFromSecond(std::un
     return processedResult;
 }
 
-RawResult ParentTClause::evaluateSynonymSynonym() {
+ResultTable ParentTClause::evaluateSynonymSynonym() {
     DesignEntity leftType = synonymToDesignEntityMap[left.getValue()];
     DesignEntity rightType = synonymToDesignEntityMap[right.getValue()];
     std::string leftValue = left.getValue();
@@ -101,7 +101,7 @@ RawResult ParentTClause::evaluateSynonymSynonym() {
     return {leftValue, rightValue, processedMap};
 }
 
-RawResult ParentTClause::evaluateSynonymWildcard() {
+ResultTable ParentTClause::evaluateSynonymWildcard() {
     DesignEntity leftType = synonymToDesignEntityMap[left.getValue()];
     DesignEntity rightType = DesignEntity::STMT;
     std::string leftValue = left.getValue();
@@ -110,21 +110,21 @@ RawResult ParentTClause::evaluateSynonymWildcard() {
     return {leftValue, processedMap};
 }
 
-RawResult ParentTClause::evaluateSynonymInteger() {
+ResultTable ParentTClause::evaluateSynonymInteger() {
     DesignEntity leftType = synonymToDesignEntityMap[left.getValue()];
     std::string leftValue = left.getValue();
     std::unordered_set<std::string> results = qpsClient.getRelationshipBySecond(getRelationshipType(), leftType, right);
     return {leftValue, results};
 }
 
-RawResult ParentTClause::evaluateIntegerSynonym() {
+ResultTable ParentTClause::evaluateIntegerSynonym() {
     std::string rightValue = right.getValue();
     DesignEntity rightType = synonymToDesignEntityMap[right.getValue()];
     std::unordered_set<std::string> results = qpsClient.getRelationshipByFirst(getRelationshipType(), left, rightType);
     return {rightValue, results};
 }
 
-RawResult ParentTClause::evaluateIntegerWildcard() {
+ResultTable ParentTClause::evaluateIntegerWildcard() {
     // Returns boolean
     DesignEntity rightType = DesignEntity::STMT;
     std::unordered_set<std::string> results = qpsClient.getRelationshipByFirst(getRelationshipType(), left, rightType);
@@ -133,14 +133,14 @@ RawResult ParentTClause::evaluateIntegerWildcard() {
     return {booleanResult};
 }
 
-RawResult ParentTClause::evaluateIntegerInteger() {
+ResultTable ParentTClause::evaluateIntegerInteger() {
     // Returns boolean
     bool result = qpsClient.getRelationship(getRelationshipType(), left, right);
     // result = true -> setIsFalseResult(true) -> isFalseResult = false
     return {result};
 }
 
-RawResult ParentTClause::evaluateWildcardSynonym() {
+ResultTable ParentTClause::evaluateWildcardSynonym() {
     DesignEntity leftType = DesignEntity::STMT;
     DesignEntity rightType = synonymToDesignEntityMap[right.getValue()];
     std::string rightValue = right.getValue();
@@ -149,14 +149,14 @@ RawResult ParentTClause::evaluateWildcardSynonym() {
     return {rightValue, processedMap};
 }
 
-RawResult ParentTClause::evaluateWildcardWildcard() {
+ResultTable ParentTClause::evaluateWildcardWildcard() {
     DesignEntity stmtType = DesignEntity::STMT;
     std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(getRelationshipType(), stmtType, stmtType);
     bool booleanResult = !results.empty();
     return {booleanResult};
 }
 
-RawResult ParentTClause::evaluateWildcardInteger() {
+ResultTable ParentTClause::evaluateWildcardInteger() {
     DesignEntity leftType = DesignEntity::STMT;
     std::unordered_set<std::string> results = qpsClient.getRelationshipBySecond(getRelationshipType(), leftType, right);
     bool booleanResult = !results.empty();
