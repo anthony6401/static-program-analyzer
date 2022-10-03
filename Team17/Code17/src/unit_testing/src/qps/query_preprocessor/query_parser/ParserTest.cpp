@@ -530,6 +530,100 @@ TEST_CASE("Multi clause query - more than one such that") {
     REQUIRE(expectedResult == actualResult);
 };
 
+TEST_CASE("Multi clause query - integration failing test") {
+    std::vector<TokenObject> testTokenObject{
+        TokenObject(TokenType::WHILE, std::string("while")),
+        TokenObject(TokenType::NAME, std::string("w")),
+        TokenObject(TokenType::SEMI_COLON, std::string(";")),
+        TokenObject(TokenType::ASSIGN, std::string("assign")),
+        TokenObject(TokenType::NAME, std::string("a")),
+        TokenObject(TokenType::SEMI_COLON, std::string(";")),
+        TokenObject(TokenType::SELECT, std::string("Select")),
+        TokenObject(TokenType::NAME, std::string("a")),
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::THAT, "that"),
+        TokenObject(TokenType::MODIFIES, "Modifies"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::NAME, "a"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::AND, "and"),
+        TokenObject(TokenType::PARENT_T, "Parent*"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::NAME, "w"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME, "a"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::AND, "and"),
+        TokenObject(TokenType::NEXT_T, "Next*"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::INTEGER, "1"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME, "a"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+
+    //std::vector<TokenObject> expectedDeclaration{ TokenObject(TokenType::WHILE, std::string("while")),
+    //    TokenObject(TokenType::NAME, std::string("w")),
+    //    TokenObject(TokenType::SEMI_COLON, std::string(";")),
+    //    TokenObject(TokenType::ASSIGN, std::string("assign")),
+    //    TokenObject(TokenType::NAME, std::string("a")),
+    //    TokenObject(TokenType::SEMI_COLON, std::string(";")) };
+    //std::vector<TokenObject> expectedSelect{ TokenObject(TokenType::SELECT, std::string("Select")),
+    //    TokenObject(TokenType::NAME, std::string("a")) };
+    //std::vector<TokenObject> expectedSuchThat{ TokenObject(TokenType::SUCH, "such"),
+    //    TokenObject(TokenType::THAT, "that"),
+    //    TokenObject(TokenType::MODIFIES, "Modifies"),
+    //    TokenObject(TokenType::OPEN_BRACKET, "("),
+    //    TokenObject(TokenType::NAME, "a"),
+    //    TokenObject(TokenType::COMMA, ","),
+    //    TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
+    //    TokenObject(TokenType::CLOSED_BRACKET, ")"),
+    //    TokenObject(TokenType::AND, "and"),
+    //    TokenObject(TokenType::PARENT_T, "Parent*"),
+    //    TokenObject(TokenType::OPEN_BRACKET, "("),
+    //    TokenObject(TokenType::NAME, "w"),
+    //    TokenObject(TokenType::COMMA, ","),
+    //    TokenObject(TokenType::NAME, "a"),
+    //    TokenObject(TokenType::CLOSED_BRACKET, ")"),
+    //    TokenObject(TokenType::AND, "and"),
+    //    TokenObject(TokenType::NEXT_T, "Next*"),
+    //    TokenObject(TokenType::OPEN_BRACKET, "("),
+    //    TokenObject(TokenType::INTEGER, "1"),
+    //    TokenObject(TokenType::COMMA, ","),
+    //    TokenObject(TokenType::NAME, "a"),
+    //    TokenObject(TokenType::CLOSED_BRACKET, ")") };
+    //std::vector<TokenObject> expectedPattern{};
+
+    //std::vector<std::vector<TokenObject>> expectedResult{ expectedDeclaration, expectedSelect, expectedSuchThat, expectedPattern };
+    //Parser parser = Parser(testTokenObject);
+    //std::vector<std::vector<TokenObject>> actualResult = parser.groupQueryIntoClause();
+
+    //REQUIRE(expectedResult == actualResult);
+
+    Select expectedSelect = Select("a");
+    std::vector<SuchThat> expectedSuchThat{ SuchThat(TokenType::MODIFIES, TokenObject(TokenType::NAME, "a"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")),
+        SuchThat(TokenType::PARENT_T, TokenObject(TokenType::NAME, "w"), TokenObject(TokenType::NAME, "a")), 
+        SuchThat(TokenType::NEXT_T, TokenObject(TokenType::INTEGER, "1"), TokenObject(TokenType::NAME, "a")) };
+    std::vector<Pattern> expectedPattern{};
+    std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"w", DesignEntity::WHILE}, {"a", DesignEntity::ASSIGN} };
+    int expectedNumOfDeclaredSynonyms = 2;
+
+    QueryObject expectedResult = QueryObject(expectedSelect, expectedSuchThat, expectedPattern, expectedMappedSynonyms, expectedNumOfDeclaredSynonyms);
+
+    Parser parser = Parser(testTokenObject);
+    QueryObject actualResult = parser.parse();
+
+    //std::cout << actualResult.isSyntacticallyCorrect();
+
+    REQUIRE(expectedResult == actualResult);
+    /*REQUIRE(expectedResult.getSelect() == actualResult.getSelect());
+    REQUIRE(expectedResult.getRelationships() == actualResult.getRelationships());
+    REQUIRE(expectedResult.getPattern() == actualResult.getPattern());
+    REQUIRE(expectedResult.getSynonymToDesignEntityMap() == actualResult.getSynonymToDesignEntityMap());*/
+};
+
 TEST_CASE("Multi clause query - more than one such that with and clause") {
     std::vector<TokenObject> testTokenObject{
         TokenObject(TokenType::VARIABLE, std::string("variable")),
@@ -620,6 +714,65 @@ TEST_CASE("Multi clause query - 2 such that with 1 pattern in the middle") {
     QueryObject actualResult = parser.parse();
 
     REQUIRE(expectedResult == actualResult);
+};
+
+TEST_CASE("Multi clause query - and as select synonym") {
+    std::vector<TokenObject> testTokenObject{
+        TokenObject(TokenType::ASSIGN, std::string("assign")),
+        TokenObject(TokenType::NAME, std::string("a")),
+        TokenObject(TokenType::COMMA, std::string(",")),
+        TokenObject(TokenType::AND, std::string("and")),
+        TokenObject(TokenType::COMMA, std::string(",")),
+        TokenObject(TokenType::PATTERN, std::string("pattern")),
+        TokenObject(TokenType::SEMI_COLON, std::string(";")),
+        TokenObject(TokenType::SELECT, std::string("Select")),
+        TokenObject(TokenType::AND, std::string("and")),
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::THAT, "that"),
+        TokenObject(TokenType::USES, "Uses"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::INTEGER, "6"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::AND, "and"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::NAME, "a"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::EXPRESSION, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::AND, "and"),
+        TokenObject(TokenType::AND, "and"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+
+    Select expectedSelect = Select("and");
+    std::vector<SuchThat> expectedSuchThat{ SuchThat(TokenType::USES, TokenObject(TokenType::INTEGER, "6"), TokenObject(TokenType::NAME, "and"))};
+    std::vector<Pattern> expectedPattern{Pattern("a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")), 
+        Pattern("pattern", TokenObject(TokenType::NAME, "pattern"), TokenObject(TokenType::EXPRESSION, "x")),
+        Pattern("and", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
+    std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"a", DesignEntity::ASSIGN}, {"and", DesignEntity::ASSIGN}, {"pattern", DesignEntity::ASSIGN}, };
+    int expectedNumOfDeclaredSynonyms = 3;
+
+    QueryObject expectedResult = QueryObject(expectedSelect, expectedSuchThat, expectedPattern, expectedMappedSynonyms, expectedNumOfDeclaredSynonyms);
+
+    Parser parser = Parser(testTokenObject);
+    QueryObject actualResult = parser.parse();
+
+    REQUIRE(expectedResult == actualResult);
+    
 };
 
 TEST_CASE("Multi clause query - pattern and such that clause with same pattern and such that clause") {

@@ -192,6 +192,16 @@ TEST_CASE("Syntactically correct Select with synonym") {
     REQUIRE(actualResult == true);
 };
 
+TEST_CASE("Syntactically correct Select with and synonym") {
+    SelectClauseSyntaxChecker checker = SelectClauseSyntaxChecker();
+    std::vector<TokenObject> validSelectTokens{
+        TokenObject(TokenType::SELECT, "Select"),
+        TokenObject(TokenType::AND, "and")
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validSelectTokens);
+    REQUIRE(actualResult == true);
+};
+
 TEST_CASE("Syntactically correct Select with synonym with same name as a design entity") {
     SelectClauseSyntaxChecker checker = SelectClauseSyntaxChecker();
     std::vector<TokenObject> validSelectTokens{
