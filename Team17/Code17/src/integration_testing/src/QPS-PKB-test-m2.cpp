@@ -87,22 +87,21 @@ TEST_CASE("Next queries") {
     }
 
     SECTION("Next Test 2") {
-        std::string testQuery = "procedure p; \n "
-                                "Select p such that Next(8, 9)";
+        std::string testQuery = "read re; \n "
+                                "Select re such that Next(re , 3)";
         std::list<std::string> testResults;
-        std::list<std::string> expectedResults = {};
+        std::list<std::string> expectedResults = {"1", "2"};
         QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
-        REQUIRE(testResults.empty() == true);
         REQUIRE(testResults == expectedResults);
     }
 }
 
 TEST_CASE("Next* queries") {
     SECTION("Next* Test 1") {
-        std::string testQuery = "procedure p; \n "
-                                "Select p such that Next*(1, 2)";
+        std::string testQuery = "assign a; \n "
+                                "Select a such that Next*(15, a)";
         std::list<std::string> testResults;
-        std::list<std::string> expectedResults = {"First", "Second", "Third"};
+        std::list<std::string> expectedResults = {"16", "17"};
         QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
         REQUIRE(testResults == expectedResults);
     }
