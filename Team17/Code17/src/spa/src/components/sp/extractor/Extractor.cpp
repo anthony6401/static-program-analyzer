@@ -66,11 +66,15 @@ void Extractor::extractExpr(SimpleToken stmtToken, SimpleToken exprToken) {
 }
 
 void Extractor::extractCall(SimpleToken callToken) {
-
+	currentStack.addFollows(callToken);
+	CallRelationship callRelationship = createCallRelationship(callToken);
+	currentStack.addCall(callRelationship);
+	currentStack.addProcedure();
 }
 
 void Extractor::extractProcedure(SimpleToken procedureToken) {
-
+	parentStack.insert(currentStack);
+	currentStack = new ProcedureStack(procedureToken, this);
 }
 
 void Extractor::extractClose(SimpleToken closeToken) {
