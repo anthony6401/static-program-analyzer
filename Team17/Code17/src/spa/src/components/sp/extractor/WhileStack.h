@@ -1,6 +1,7 @@
 #pragma once
 
 #include "StmtStack.h"
+#include "Extractor.h"
 
 class WhileStack : public StmtStack {
 public:

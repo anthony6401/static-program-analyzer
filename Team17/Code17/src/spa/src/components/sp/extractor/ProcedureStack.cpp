@@ -1,5 +1,6 @@
 #include "ProcedureStack.h"
 #include <stdexcept>
+#include "Extractor.h"
 
 ProcedureStack::ProcedureStack(SimpleToken parent, Extractor* context) : parent(parent) {
     this->context = context;
@@ -11,7 +12,7 @@ void ProcedureStack::close(int statementNumber) {
     //mergeStack(lastStack, this)
     //modifies
     //uses
-    context->procedures.insert(parent.value, this);
+    context->procedures.insert(std::pair<std::string, ProcedureStack*>(parent.value, this));
 }
 
 bool ProcedureStack::isIf() {

@@ -18,7 +18,7 @@ void Extractor::extractAll(SimpleToken procedureToken) {
 }
 
 void Extractor::close(int statementNumber) {
-	currentStack.close(statementNumber);
+	currentStack->close(statementNumber);
 }
 
 // =============================== //

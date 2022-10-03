@@ -5,6 +5,10 @@
 #include "../utils/SpUtils.h"
 #include "../tokenizer/SimpleTokenizer.h"
 #include "../parser/ExprStack/ExprStack.h"
+#include "../validator/states/NestedState.h"
+#include "../validator/states/IfState.h"
+#include "../validator/states/ElseState.h"
+#include "../validator/states/ProgramState.h"
 
 
 SimpleParser::SimpleParser(Extractor* extractor) {
@@ -110,6 +114,7 @@ void SimpleParser::parseLine(std::string code) {
 void SimpleParser::parseProcedure(std::vector<std::string>& tokens) {
     if (tokens.size() == 2 && tokens.at(1) == "{") {
         SimpleToken procedureToken = SimpleToken(SpTokenType::TPROCEDURE, parseVariable(tokens.at(0)), 0);//change to parse procedure
+        validator.setState(NestedState());
         //extractProcedure(procedureToken);
     }
     else {
@@ -166,6 +171,7 @@ void SimpleParser::parseWhile(std::vector<std::string>& tokens) {
     SimpleToken whileToken = SimpleToken(SpTokenType::TWHILE, "", statementNumber);
     statementNumber++;
     whileToken.setChildren(parseCondition(tokens));
+    validator.setState(NestedState());
     //extractWhile(whileToken)
 }
 
@@ -181,6 +187,7 @@ void SimpleParser::parseIf(std::vector<std::string>& tokens) {
     SimpleToken ifToken = SimpleToken(SpTokenType::TIF, "", statementNumber);
     statementNumber++;
     ifToken.setChildren(parseCondition(tokens));
+    validator.setState(IfState());
     //extract(ifToken)
 }
 

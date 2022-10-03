@@ -41,10 +41,10 @@ public:
 	SPClient* client;
 	Extractor(SPClient* client);
 
-	void Extractor::close(int statementNumber);
-	std::stack<StmtStack> parentStack;
+	void close(int statementNumber);
+	std::stack<StmtStack*> parentStack;
 	std::map<std::string, ProcedureStack*> procedures;
-	StmtStack currentStack;
+	StmtStack* currentStack;
 
 	void extractAll(SimpleToken procedureToken);
 	void extractFollows(SimpleToken procOrWhileIfToken);

@@ -2,6 +2,8 @@
 
 #include "StmtStack.h"
 
+class Extractor;
+
 class ProcedureStack : public StmtStack {
 public:
     ProcedureStack(SimpleToken parent, Extractor* context);
