@@ -12,27 +12,57 @@ Extractor::Extractor(SPClient* client) {
 // =========================//
 
 void Extractor::extractRead(SimpleToken readToken) {
-
+	currentStack.addFollows(readToken);
+	ModifyRelationship modifyRelationship = createModifyRelationship(readToken);
+	currentStack.addUses(modifyRelationship);
 }
 
 void Extractor::extractPrint(SimpleToken printToken) {
-
+	currentStack.addFollows(printToken);
+	UsesRelationship usesRelationship = createUsesRelationship(printToken);
+	currentStack.addUses(usesRelationship);
 }
 
 void Extractor::extractAssign(SimpleToken assignToken) {
+	currentStack.addFollows(assignToken);
+	SimpleToken varToken = assignToken.getChildren().at(0);
+	ModifyRelationship modifyRelationship = createModifyRelationship(varToken);
+	currentStack.addModify(modifyRelationship);
 
+	SimpleToken exprToken = assignToken.getChildren().at(1);
+	extractExpr(assignToken, exprToken);
+
+	Pattern assignPattern = createAssignPattern(assignToken);
+	currentStack.addAssignPattern(assignPattern);
 }
 
 void Extractor::extractWhile(SimpleToken whileToken) {
+	currentStack.addFollows(whileToken);	
+	extractExpr(whileToken, whileToken);
 
+	// create new while stack and set it as the current stack, old stack gets added to parentStack
+	parentStack.insert(currentStack);
+	currentStack = new WhileStack(whileToken, this);
 }
 
 void Extractor::extractIf(SimpleToken ifToken) {
+	currentStack.addFollows(ifToken);
+	extractExpr(ifToken, ifToken);
 
+	// create new if stack and set it as the current stack, old stack gets added to parentStack
+	parentStack.insert(currentStack);
+	currentStack = new IfStack(ifToken, this);
 }
 
-void Extractor::extractExpr(SimpleToken exprToken) {
-
+void Extractor::extractExpr(SimpleToken stmtToken, SimpleToken exprToken) {
+	std::vector<SimpleToken> exprChildren = exprToken.getChildren();
+	for (int i = 0; i < exprChildren.size(); i++) {
+		SimpleToken currentToken = exprChildren.at(i);
+		if (currentToken.type == SpTokenType::TVARIABLE) {
+			UsesRelationship usesRelationship = createUsesRelationshipExpr(stmtToken, currentToken);
+			currentStack.addUses(usesRelationship);
+		}
+	}
 }
 
 void Extractor::extractCall(SimpleToken callToken) {

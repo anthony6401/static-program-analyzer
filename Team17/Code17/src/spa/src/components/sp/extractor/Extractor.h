@@ -43,7 +43,7 @@ public:
 	void extractAssign(SimpleToken assignToken);
 	void extractWhile(SimpleToken whileToken);
 	void extractIf(SimpleToken ifToken);
-	void extractExpr(SimpleToken exprToken);
+	void extractExpr(SimpleToken stmtToken, SimpleToken exprToken);
 	void extractCall(SimpleToken callToken);
 	void extractProcedure(SimpleToken procedureToken);
 	void extractClose(SimpleToken closeToken);
