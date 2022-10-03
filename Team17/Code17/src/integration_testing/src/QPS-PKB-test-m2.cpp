@@ -49,7 +49,33 @@ TEST_CASE("Calls queries") {
 }
 
 TEST_CASE("Calls* queries") {
+    SECTION("Calls* Test 1") {
+        std::string testQuery = "procedure p, p1; \n "
+                                "Select p such that Calls*(\"First\", \"Second\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"First", "Second", "Third"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
 
+    SECTION("Calls* Test 2") {
+        std::string testQuery = "procedure p, p1; \n "
+                                "Select p1 such that Calls*(\"First\", \"Third\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"First", "Second", "Third"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Calls* Test 3") {
+        std::string testQuery = "procedure p, p1; \n "
+                                "Select p such that Calls*(\"Second\", \"First\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults.empty() == true);
+        REQUIRE(testResults == expectedResults);
+    }
 }
 
 TEST_CASE("Next queries") {
