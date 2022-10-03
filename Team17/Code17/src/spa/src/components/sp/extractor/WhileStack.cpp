@@ -11,10 +11,7 @@ void WhileStack::close(int statementNumber) {
     extractUses(context->currentStack->uses);
     extractModify(context->currentStack->modifies);
 
-    //extractParent(stack.value, follows, statementNumber)
-    //mergeStack(parent, cirrent)
-    //modifies
-    //uses
+    mergeStack(context->parentStack.top(), context->currentStack);
 
     context->currentStack = context->parentStack.top();
     context->parentStack.pop();
@@ -30,8 +27,8 @@ void WhileStack::extractFollows(std::vector<SimpleToken> follows) {
         SimpleToken second = follows.at(i + 1);
         Entity* firstEntity = generateEntity(first);
         Entity* secondEntity = generateEntity(second);
-        FollowsRelationship* follows = new FollowsRelationship(firstEntity, firstEntity);
-        context->client->storeRelationship(follows);
+        FollowsRelationship* followsRel = new FollowsRelationship(firstEntity, firstEntity);
+        context->client->storeRelationship(followsRel);
     }
     for (int i = 0; i < follows.size(); i++) {
         for (int j = i + 1; j < follows.size(); j++) {
@@ -39,39 +36,41 @@ void WhileStack::extractFollows(std::vector<SimpleToken> follows) {
             SimpleToken second = follows.at(j);
             Entity* firstEntity = generateEntity(first);
             Entity* secondEntity = generateEntity(second);
-            FollowsTRelationship* followsT = new FollowsTRelationship(firstEntity, firstEntity);
-            context->client->storeRelationship(followsT);
+            FollowsTRelationship* followsTRel = new FollowsTRelationship(firstEntity, firstEntity);
+            context->client->storeRelationship(followsTRel);
         }
     }
 }
 
 void WhileStack::extractParent(std::vector<SimpleToken> follows, int statementNumber) {
-    int index = 0;
-    for (int i = follows.at(0).statementNumber; i < statementNumber; i++) {
-        if (std::find(follows.begin(), follows.end(), i) != follows.end()) {
-            SimpleToken second = follows.at(index);
-            Entity* firstEntity = generateEntity(this->parent);
-            Entity* secondEntity = generateEntity(second);
-            ParentRelationship* parent = new ParentRelationship(firstEntity, firstEntity);
-            context->client->storeRelationship(parent);
-        }
-        else {
-            SimpleToken second = follows.at(index);
-            Entity* firstEntity = generateEntity(this->parent);
-            Entity* secondEntity = generateEntity(second);
-            ParentTRelationship* parentT = new ParentTRelationship(firstEntity, firstEntity);
-            context->client->storeRelationship(parentT);
-        }
-        index++;
+    for (int i = 0; i < follows.size(); i++) {
+        SimpleToken second = follows.at(i);
+        Entity* firstEntity = generateEntity(this->parent);
+        Entity* secondEntity = generateEntity(second);
+        ParentRelationship* parentRel = new ParentRelationship(firstEntity, firstEntity);
+        context->client->storeRelationship(parentRel);
+    }
+    // parentT?
+}
+
+void WhileStack::extractUses(std::vector<SimpleToken> uses) {
+    for (int i = 0; i < uses.size(); i++) {
+        SimpleToken second = uses.at(i);
+        Entity* firstEntity = generateEntity(this->parent);
+        Entity* secondEntity = generateEntity(second);
+        UsesRelationship* usesRel = new UsesRelationship(firstEntity, firstEntity);
+        context->client->storeRelationship(usesRel);
     }
 }
 
-void WhileStack::extractUses(std::vector<SimpleToken> follows) {
-
-}
-
-void WhileStack::extractModify(std::vector<SimpleToken> follows) {
-
+void WhileStack::extractModify(std::vector<SimpleToken> modifies) {
+    for (int i = 0; i < modifies.size(); i++) {
+        SimpleToken second = modifies.at(i);
+        Entity* firstEntity = generateEntity(this->parent);
+        Entity* secondEntity = generateEntity(second);
+        ModifyRelationship* modifyRel = new ModifyRelationship(firstEntity, firstEntity);
+        context->client->storeRelationship(modifyRel);
+    }
 }
 
 Entity* WhileStack::generateEntity(SimpleToken token) {
@@ -104,4 +103,3 @@ Entity* WhileStack::generateEntity(SimpleToken token) {
     }
     return new Entity(std::to_string(token.statementNumber)); // Should not happen
 }
-

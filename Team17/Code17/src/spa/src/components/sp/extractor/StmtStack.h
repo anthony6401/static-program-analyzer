@@ -13,7 +13,7 @@ public:
     SimpleToken parent;
     virtual void close(int statementNumber) = 0;
     virtual bool isIf() = 0;
-    virtual void mergeStack(StmtStack &parentStack, StmtStack &childStack);
+    virtual void mergeStack(StmtStack* parentStack, StmtStack* childStack);
     std::vector<SimpleToken> modifies;
     std::vector<SimpleToken> uses;
     std::vector<SimpleToken> follows;
