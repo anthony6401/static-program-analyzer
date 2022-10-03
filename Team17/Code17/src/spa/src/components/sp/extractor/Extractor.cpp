@@ -107,10 +107,15 @@ void Extractor::extractProcedure(SimpleToken procedureToken) {
 }
 
 void Extractor::endOfParser() {
-	// for all called proc in proc, get procstack from the map, add the rel to parent proc
-	// recurse
-	
+	for (auto itr = callProcedures.begin(); itr != callProcedures.end(); ++itr) {
+		std::string parent = itr->first;
+		std::string called = itr->second;
 
+		StmtStack* parentStack = procedures.find(parent)->second;
+		StmtStack* calledStack = procedures.find(called)->second;
+
+		void addNestedRelationships(parentStack, calledStack);
+	}
 }
 
 void Extractor::close(int statementNumber) {
