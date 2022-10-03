@@ -593,11 +593,6 @@ static int initPKB() {
     pkb_m2->storePattern(assignPattern10);
     pkb_m2->storePattern(assignPattern11);
 
-    auto test = pkb_m2->getAllEntity(DesignEntity::CONSTANT);
-    std::cout << test.size() << std::endl;
-    std::unordered_set<std::string> a = { "1", "2", "0", "5" };
-    std::cout << (a == test) << std::endl;
-
     return 0;
 }
 
@@ -606,13 +601,11 @@ static int dummyForRun = initPKB();
 // PQL queries
 TEST_CASE("Calls queries") {
     SECTION("Calls Test 1") {
-        std::cout << "IN HERE" << std::endl;
         std::string testQuery = "procedure p, p1; \n "
                                 "Select p such that Calls(\"First\", \"Second\")";
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"First", "Second", "Third"};
         QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
-        std::cout << "IN HERE" << std::endl;
         REQUIRE(testResults == expectedResults);
     }
 
