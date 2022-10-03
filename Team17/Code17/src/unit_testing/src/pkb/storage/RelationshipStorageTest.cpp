@@ -10,6 +10,7 @@
 #include "components/pkb/storage/RelationshipStorage/NextTRelationshipStorage.h"
 #include "components/pkb/storage/RelationshipStorage/NextRelationshipStorage.h"
 #include "components/pkb/storage/RelationshipStorage/CallsRelationshipStorage.h"
+#include "components/pkb/storage/RelationshipStorage/CallsTRelationshipStorage.h"
 
 #include "../RelationshipObject.h"
 #include "../ReuseableTokenObject.h"
@@ -2266,6 +2267,68 @@ TEST_CASE("Calls Relationship Storage Test") {
 		DesignEntity::PROCEDURE, DesignEntity::PROCEDURE);
 
 	std::unordered_map<std::string, std::unordered_set<std::string>> getAllRelationshipEmptyResult = callsRelationshipStorage->getAllRelationship(RelationshipType::FOLLOWS,
+		DesignEntity::PROCEDURE, DesignEntity::PROCEDURE);
+
+
+	REQUIRE(getAllRelationshipResult == getAllRelationshipTestAll);
+	REQUIRE(getAllRelationshipEmptyResult == emptyMap);
+}
+
+TEST_CASE("Calls* Relationship Storage Test") {
+	RelationshipStorage* callsTRelationshipStorage = new CallsTRelationshipStorage();
+
+	// TESTING FOR STORING
+
+	REQUIRE(callsTRelationshipStorage->storeRelationship(callsTRelationshipOne));
+	REQUIRE(!callsTRelationshipStorage->storeRelationship(callsTRelationshipOneDup));
+	REQUIRE(callsTRelationshipStorage->storeRelationship(callsTRelationshipTwo));
+	REQUIRE(!callsTRelationshipStorage->storeRelationship(callsTRelationshipTwoDup));
+	REQUIRE(callsTRelationshipStorage->storeRelationship(callsTRelationshipThree));
+	REQUIRE(!callsTRelationshipStorage->storeRelationship(callsTRelationshipThreeDup));
+
+	REQUIRE(!callsTRelationshipStorage->storeRelationship(followsRelationshipAssignAssignOne));
+
+	// Testing for Calls("proc1", "proc2") query
+	REQUIRE(callsTRelationshipStorage->getRelationship(RelationshipType::CALLS_T, procedureTokenObject, procedureTokenObjectTwo));
+	REQUIRE(callsTRelationshipStorage->getRelationship(RelationshipType::CALLS_T, procedureTokenObject, procedureTokenObjectThree));
+	REQUIRE(callsTRelationshipStorage->getRelationship(RelationshipType::CALLS_T, procedureTokenObjectTwo, procedureTokenObjectThree));
+	REQUIRE(!callsTRelationshipStorage->getRelationship(RelationshipType::CALLS_T, procedureTokenObject, procedureTokenObjectFour));
+
+	REQUIRE(!callsTRelationshipStorage->getRelationship(RelationshipType::FOLLOWS, procedureTokenObject, procedureTokenObjectTwo));
+
+	//Testing for Calls("proc1", p)
+	std::unordered_set<std::string> emptySet{};
+
+	std::unordered_set<std::string> getRelationshipByFirstTest1{ procedure_value_two, procedure_value_three };
+	std::unordered_set<std::string> getRelationshipByFirstTest2{ procedure_value_three };
+
+	REQUIRE(callsTRelationshipStorage->getRelationshipByFirst(RelationshipType::CALLS_T, procedureTokenObject, DesignEntity::PROCEDURE) == getRelationshipByFirstTest1);
+	REQUIRE(callsTRelationshipStorage->getRelationshipByFirst(RelationshipType::CALLS_T, procedureTokenObjectTwo, DesignEntity::PROCEDURE) == getRelationshipByFirstTest2);
+	REQUIRE(callsTRelationshipStorage->getRelationshipByFirst(RelationshipType::CALLS_T, procedureTokenObjectThree, DesignEntity::PROCEDURE) == emptySet);
+
+	REQUIRE(callsTRelationshipStorage->getRelationshipByFirst(RelationshipType::FOLLOWS, procedureTokenObject, DesignEntity::PROCEDURE) == emptySet);
+
+	//Testing for Calls(p, "proc2")
+	std::unordered_set<std::string> getRelationshipBySecondTest1{ procedure_value_one, procedure_value_two };
+	std::unordered_set<std::string> getRelationshipBySecondTest2{ procedure_value_one };
+
+	REQUIRE(callsTRelationshipStorage->getRelationshipBySecond(RelationshipType::CALLS_T, DesignEntity::PROCEDURE, procedureTokenObject) == emptySet);
+	REQUIRE(callsTRelationshipStorage->getRelationshipBySecond(RelationshipType::CALLS_T, DesignEntity::PROCEDURE, procedureTokenObjectTwo) == getRelationshipBySecondTest2);
+	REQUIRE(callsTRelationshipStorage->getRelationshipBySecond(RelationshipType::CALLS_T, DesignEntity::PROCEDURE, procedureTokenObjectThree) == getRelationshipBySecondTest1);
+
+	REQUIRE(callsTRelationshipStorage->getRelationshipBySecond(RelationshipType::FOLLOWS, DesignEntity::PROCEDURE, procedureTokenObjectThree) == emptySet);
+
+	//Testing for Calls(p1, p2)
+	std::unordered_map<std::string, std::unordered_set<std::string>> emptyMap{};
+	std::unordered_map<std::string, std::unordered_set<std::string>> getAllRelationshipTestAll{
+										{ procedure_value_one, std::unordered_set<std::string>({procedure_value_two, procedure_value_three})},
+										{ procedure_value_two, std::unordered_set<std::string>({procedure_value_three})}, };
+
+
+	std::unordered_map<std::string, std::unordered_set<std::string>> getAllRelationshipResult = callsTRelationshipStorage->getAllRelationship(RelationshipType::CALLS_T,
+		DesignEntity::PROCEDURE, DesignEntity::PROCEDURE);
+
+	std::unordered_map<std::string, std::unordered_set<std::string>> getAllRelationshipEmptyResult = callsTRelationshipStorage->getAllRelationship(RelationshipType::FOLLOWS,
 		DesignEntity::PROCEDURE, DesignEntity::PROCEDURE);
 
 

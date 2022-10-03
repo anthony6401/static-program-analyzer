@@ -11,12 +11,21 @@ TokenObject parentTokenObject = TokenObject(TokenType::PARENT, "Parent");
 TokenObject parentTTokenObject = TokenObject(TokenType::PARENT_T, "Parent*");
 TokenObject followsTokenObject = TokenObject(TokenType::FOLLOWS, "Follows");
 TokenObject followsTTokenObject = TokenObject(TokenType::FOLLOWS_T, "Follows*");
+TokenObject callsTokenObject = TokenObject(TokenType::CALLS, "Calls");
+TokenObject callsTTokenObject = TokenObject(TokenType::CALLS_T, "Calls*");
+TokenObject nextTokenObject = TokenObject(TokenType::NEXT, "Next");
+TokenObject nextTTokenObject = TokenObject(TokenType::NEXT_T, "Next*");
+TokenObject affectsTokenObject = TokenObject(TokenType::AFFECTS, "Affects");
+TokenObject affectsTTokenObject = TokenObject(TokenType::AFFECTS_T, "Affects*");
 TokenObject patternTokenObject = TokenObject(TokenType::PATTERN, "pattern");
 TokenObject selectTokenObject = TokenObject(TokenType::SELECT, "Select");
 TokenObject suchTokenObject = TokenObject(TokenType::SUCH, "such");
 TokenObject thatTokenObject = TokenObject(TokenType::THAT, "that");
 TokenObject openBracketTokenObject = TokenObject(TokenType::OPEN_BRACKET, "(");
 TokenObject closedBracketTokenObject = TokenObject(TokenType::CLOSED_BRACKET, ")");
+
+TokenObject andTokenObject = TokenObject(TokenType::AND, "and");
+TokenObject booleanTokenObject = TokenObject(TokenType::BOOLEAN, "BOOLEAN");
 
 TokenObject stmtTokenObject = TokenObject(TokenType::STMT, "stmt");
 TokenObject procTokenObject = TokenObject(TokenType::PROCEDURE, "procedure");
@@ -34,9 +43,23 @@ TokenObject commaTokenObject = TokenObject(TokenType::COMMA, ",");
 
 TokenObject normsq_nameWithQuotesTokenObject = TokenObject(TokenType::NAME_WITH_QUOTATION, "normSq");
 TokenObject x_nameWithQuotesTokenObject = TokenObject(TokenType::NAME_WITH_QUOTATION, "x");
+
 TokenObject cenX_subexpressionTokenObject = TokenObject(TokenType::SUBEXPRESSION, "cenX");
-TokenObject one_constantExpressionTokenObject = TokenObject(TokenType::EXPRESSION, "1");
 TokenObject eleven_constantSubexpressionTokenObject = TokenObject(TokenType::SUBEXPRESSION, "11");
+TokenObject subexpressionTokenObject1 = TokenObject(TokenType::SUBEXPRESSION, "(x+y)");
+TokenObject subexpressionTokenObject2 = TokenObject(TokenType::SUBEXPRESSION, "((x+y))*(www/3)");
+TokenObject subexpressionTokenObject3 = TokenObject(TokenType::SUBEXPRESSION, "((x1+y))*(1/3)");
+TokenObject subexpressionTokenObject4 = TokenObject(TokenType::SUBEXPRESSION, "((x/(s-y)))*(www/(3*(2/x)))");
+
+TokenObject one_constantExpressionTokenObject = TokenObject(TokenType::EXPRESSION, "1");
+TokenObject expressionTokenObject1 = TokenObject(TokenType::EXPRESSION, "(x+y)");
+TokenObject expressionTokenObject2 = TokenObject(TokenType::EXPRESSION, "((x+y))*(www/3)");
+TokenObject expressionTokenObject3 = TokenObject(TokenType::EXPRESSION, "((x1+y))*(1/3)");
+TokenObject expressionTokenObject4 = TokenObject(TokenType::EXPRESSION, "((x/(s-y)))*(www/(3*(2/x)))");
+
+
+TokenObject twoSyn_tupleTokenObject = TokenObject(TokenType::TUPLE, "<a1,a2>");
+TokenObject threeSyn_tupleTokenObject = TokenObject(TokenType::TUPLE, "<a,a1,a2>");
 
 TokenObject v_nameTokenObject = TokenObject(TokenType::NAME, "v");
 TokenObject v1_nameTokenObject = TokenObject(TokenType::NAME, "v1");
@@ -46,6 +69,7 @@ TokenObject p_nameTokenObject = TokenObject(TokenType::NAME, "p");
 TokenObject q_nameTokenObject = TokenObject(TokenType::NAME, "q");
 TokenObject a_nameTokenObject = TokenObject(TokenType::NAME, "a");
 TokenObject a1_nameTokenObject = TokenObject(TokenType::NAME, "a1");
+TokenObject a2_nameTokenObject = TokenObject(TokenType::NAME, "a2");
 TokenObject w_nameTokenObject = TokenObject(TokenType::NAME, "w");
 TokenObject ifs_nameTokenObject = TokenObject(TokenType::NAME, "ifs");
 TokenObject c_nameTokenObject = TokenObject(TokenType::NAME, "c");
