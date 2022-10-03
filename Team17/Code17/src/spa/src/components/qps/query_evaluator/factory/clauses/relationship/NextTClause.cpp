@@ -1,4 +1,5 @@
 #include "NextTClause.h"
+#include "iostream"
 
 NextTClause::NextTClause(TokenObject left, TokenObject right,
                        std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap,
@@ -121,6 +122,10 @@ ResultTable NextTClause::evaluateIntegerSynonym() {
     std::string rightValue = right.getValue();
     DesignEntity rightType = synonymToDesignEntityMap[right.getValue()];
     std::unordered_set<std::string> results = qpsClient.getRelationshipByFirst(getRelationshipType(), left, rightType);
+    std::cout << "IN INTEGER SYNONYM" << std::endl;
+    for (auto s : results) {
+        std::cout << s << std::endl;
+    }
     return {rightValue, results};
 }
 
