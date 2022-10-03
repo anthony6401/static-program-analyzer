@@ -19,5 +19,4 @@ private:
     SimpleToken parent;
     bool expectElse;
     Extractor* context;
-
 };
