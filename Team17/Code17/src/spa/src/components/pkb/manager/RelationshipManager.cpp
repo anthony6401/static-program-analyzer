@@ -11,6 +11,10 @@
 #include "components/pkb/storage/RelationshipStorage/FollowsTRelationshipStorage.h"
 #include "components/pkb/storage/RelationshipStorage/ParentRelationshipStorage.h"
 #include "components/pkb/storage/RelationshipStorage/ParentTRelationshipStorage.h"
+#include "components/pkb/storage/RelationshipStorage/CallsRelationshipStorage.h"
+#include "components/pkb/storage/RelationshipStorage/CallsTRelationshipStorage.h"
+#include "components/pkb/storage/RelationshipStorage/NextRelationshipStorage.h"
+#include "components/pkb/storage/RelationshipStorage/NextTRelationshipStorage.h"
 
 #include "models/Entity/DesignEntity.h"
 
@@ -25,6 +29,10 @@ RelationshipManager::RelationshipManager() {
 	FollowsTRelationshipStorage* followsTRelStorage = new FollowsTRelationshipStorage();
 	ParentRelationshipStorage* parentRelStorage = new ParentRelationshipStorage();
 	ParentTRelationshipStorage* parentTRelStorage = new ParentTRelationshipStorage();
+	CallsRelationshipStorage* callsRelStorage = new CallsRelationshipStorage();
+	CallsTRelationshipStorage* callsTRelStorage = new CallsTRelationshipStorage();
+	NextRelationshipStorage* nextRelStorage = new NextRelationshipStorage();
+	NextTRelationshipStorage* nextTRelStorage = new NextTRelationshipStorage();
 
 	relStorages.push_back(modifyRelStorage);
 	relStorages.push_back(usesRelStorage);
@@ -32,6 +40,10 @@ RelationshipManager::RelationshipManager() {
 	relStorages.push_back(followsTRelStorage);
 	relStorages.push_back(parentRelStorage);
 	relStorages.push_back(parentTRelStorage);
+	relStorages.push_back(callsRelStorage);
+	relStorages.push_back(callsTRelStorage);
+	relStorages.push_back(nextRelStorage);
+	relStorages.push_back(nextTRelStorage);
 }
 
 std::vector<RelationshipStorage*> RelationshipManager::getRelationshipStorage() {
