@@ -146,6 +146,10 @@ Pattern* Extractor::createAssignPattern(SimpleToken token) {
 
 }
 
+void Extractor::close(int statementNumber) {
+	currentStack.close(statementNumber);
+}
+
 Entity* UsesExtractor::generateEntity(SimpleToken token) {
 	if (token.type == SpTokenType::TREAD) {
 		return new ReadEntity(std::to_string(token.statementNumber));
