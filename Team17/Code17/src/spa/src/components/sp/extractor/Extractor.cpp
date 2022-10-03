@@ -138,7 +138,7 @@ Entity* Extractor::generateEntity(SimpleToken token) {
 		return new ProcedureEntity(token.value);
 	}
 	if (token.type == SpTokenType::TCALL) {
-		return new CallEntity(token.value);
+		return new CallEntity(std::to_string(token.statementNumber));
 	}
 	return new Entity(std::to_string(token.statementNumber)); // Should not happen
 }
