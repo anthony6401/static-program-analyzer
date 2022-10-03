@@ -1,9 +1,9 @@
 #include "FollowsClause.h"
 #include "iostream"
 
-FollowsClause::FollowsClause(TokenObject left, TokenObject right, Select synonym,
+FollowsClause::FollowsClause(TokenObject left, TokenObject right,
                              std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap,
-                             QPSClient qpsClient) : left(left), right(right), synonym(synonym),
+                             QPSClient qpsClient) : left(left), right(right),
                                                     synonymToDesignEntityMap(synonymToDesignEntityMap), qpsClient(qpsClient) {}
 
 ResultTable FollowsClause::evaluateClause() {

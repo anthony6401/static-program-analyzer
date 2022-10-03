@@ -1,9 +1,9 @@
 #include "UsesPClause.h"
 #include "iostream"
 
-UsesPClause::UsesPClause(TokenObject left, TokenObject right, Select synonym,
+UsesPClause::UsesPClause(TokenObject left, TokenObject right,
                          std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) :
-        left(left), right(right), synonym(synonym),
+        left(left), right(right),
         synonymToDesignEntityMap(synonymToDesignEntityMap), qpsClient(qpsClient) {};
 
 ResultTable UsesPClause::evaluateClause() {

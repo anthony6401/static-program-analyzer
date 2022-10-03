@@ -11,13 +11,12 @@
 class UsesPClause : public Clause {
 private:
     std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap;
-    Select synonym;
     QPSClient qpsClient;
     TokenObject left;
     TokenObject right;
 
 public:
-    UsesPClause(TokenObject left, TokenObject right, Select synonym,
+    UsesPClause(TokenObject left, TokenObject right,
                     std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
     ResultTable evaluateClause() override;
     size_t getNumberOfSynonyms() override;
