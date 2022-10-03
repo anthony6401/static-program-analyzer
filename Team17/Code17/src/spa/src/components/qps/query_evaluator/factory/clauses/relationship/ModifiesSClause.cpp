@@ -1,9 +1,9 @@
 #include "ModifiesSClause.h"
 #include "iostream"
 
-ModifiesSClause::ModifiesSClause(TokenObject left, TokenObject right, Select synonym,
+ModifiesSClause::ModifiesSClause(TokenObject left, TokenObject right,
                                  std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap,
-                                 QPSClient qpsClient) : left(left), right(right), synonym(synonym),
+                                 QPSClient qpsClient) : left(left), right(right),
                                  synonymToDesignEntityMap(synonymToDesignEntityMap), qpsClient(qpsClient) {};
 
 ResultTable ModifiesSClause::evaluateClause() {

@@ -251,8 +251,7 @@ int initPKB() {
 
 int dummyForRun = initPKB();
 
-// PQL queries
-TEST_CASE("Select all queries") {
+TEST_CASE("Select synonyms queries") {
 
     SECTION("Select if statements") {
         std::string testQuery = "if ifs; Select ifs";
@@ -596,34 +595,32 @@ TEST_CASE("Syntax and Semantics Checks") {
     }
 }
 
-TEST_CASE("Refactor multiclause test") {
-    std::string testQuery = R"(assign a; Select a such that Modifies(a, _) pattern a("count","0"))";
-    std::list<std::string> testResults;
-    std::list<std::string> expectedResults = {"1"};
-    QPS::processQueryResult(testQuery, testResults, qpsClient);
-    REQUIRE(testResults == expectedResults);
-}
+TEST_CASE("Milestone 1 Integration Test 1") {
 
-//while w;
-//Select w such that Follows(_, w)
+    SECTION("Refactor multiclause test") {
+        std::string testQuery = R"(assign a; Select a such that Modifies(a, _) pattern a("count","0"))";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"1"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
 
-TEST_CASE("Debug wildcard, synonym") {
-    std::string testQuery = R"(while w; Select w such that Follows(_, w))";
-    std::list<std::string> testResults;
-    std::list<std::string> expectedResults = {"4"};
-    QPS::processQueryResult(testQuery, testResults, qpsClient);
-    REQUIRE(testResults == expectedResults);
-}
+    SECTION("Debug wildcard, synonym") {
+        std::string testQuery = R"(while w; Select w such that Follows(_, w))";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"4"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
 
-TEST_CASE("Debug synonym, wildcard") {
-    std::string testQuery = R"(assign a; Select a such that Follows(a, _))";
-    std::list<std::string> testResults;
-    std::list<std::string> expectedResults = {"10", "3", "2", "1", "6", "5"};
-    QPS::processQueryResult(testQuery, testResults, qpsClient);
-    REQUIRE(testResults == expectedResults);
-}
+    SECTION("Debug synonym, wildcard") {
+        std::string testQuery = R"(assign a; Select a such that Follows(a, _))";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"10", "3", "2", "1", "6", "5"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient);
+        REQUIRE(testResults == expectedResults);
+    }
 
-TEST_CASE("More multiclause test") {
     SECTION("Test 1") {
         std::string testQuery = R"(assign a; stmt s; Select a such that Parent(s, a) pattern a(_, _))";
         std::list<std::string> testResults;
@@ -632,7 +629,7 @@ TEST_CASE("More multiclause test") {
         REQUIRE(testResults == expectedResults);
     }
 
-    SECTION("Test") {
+    SECTION("Test for same synonym") {
         std::string testQuery = R"(stmt s; Select s such that Follows(s, s))";
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {};
@@ -686,7 +683,7 @@ TEST_CASE("More multiclause test") {
         REQUIRE(testResults == expectedResults);
     }
 
-    SECTION("Test 6") {
+    SECTION("Test 7") {
         std::string testQuery = R"(assign a; Select a such that Modifies(5, "flag") pattern a(_,_"1"_))";
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {};
@@ -696,7 +693,7 @@ TEST_CASE("More multiclause test") {
     }
 }
 
-TEST_CASE("Relationships and patterns") {
+TEST_CASE("Milestone 1 Integration test 2") {
     SECTION("No synonym Clause - return true") {
         std::string testQuery = "variable v; Select v such that Modifies(1, _)";
         std::list<std::string> testResults;
