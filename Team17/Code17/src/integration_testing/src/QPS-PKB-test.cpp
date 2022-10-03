@@ -253,10 +253,6 @@ int initPKB() {
 
 int dummyForRun = initPKB();
 
-TEST_CASE("Multi-clause queries tests") {
-    REQUIRE(1 == 1);
-}
-
 TEST_CASE("Select synonyms queries") {
 
     SECTION("Select if statements") {
