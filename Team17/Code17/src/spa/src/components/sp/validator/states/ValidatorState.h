@@ -2,9 +2,12 @@
 
 #include "../../SimpleToken.h"
 
+class SimpleValidator;
+
 class ValidatorState {
 public:
-    virtual bool validLine(SpTokenType type) { return false; }
+    virtual void validLine(SpTokenType type, int statementNumber) {}
     virtual bool validCode() { return false; }
-    virtual bool isIfState() { return false; }
+    virtual void close() = 0;
+
 };
