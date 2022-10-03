@@ -636,17 +636,82 @@ TEST_CASE("Calls queries") {
         REQUIRE(testResults.empty() == true);
         REQUIRE(testResults == expectedResults);
     }
+
+    SECTION("Calls Test 5") {
+        std::string testQuery = "procedure p, p1; \n "
+            "Select p such that Calls(\"First\", \"Third\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults.empty() == true);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Calls Test 6") {
+        std::string testQuery = "procedure p, p1; \n "
+            "Select p such that Calls(\"First\", \"First\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults.empty() == true);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Calls Test 7") {
+        std::string testQuery = "procedure p; call call; \n "
+            "Select call such that Calls(\"First\", \"Second\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"3", "8"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Calls Test 8") {
+        std::string testQuery = "procedure p, p1; \n "
+            "Select p such that Calls(1, _)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"SyntaxError"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Calls Test 9") {
+        std::string testQuery = "procedure p, p1; \n "
+            "Select p such that Calls(3, _)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "SyntaxError" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Calls Test 10") {
+        std::string testQuery = "procedure p, p1; \n "
+            "Select p such that Calls(_, 3)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "SyntaxError" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Calls Test 11") {
+        std::string testQuery = "procedure p; stmt p1; \n "
+            "Select p such that Calls(p, p1)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "SemanticError" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
 }
 
 TEST_CASE("Calls* queries") {
-//    SECTION("Calls* Test 1") {
-//        std::string testQuery = "procedure p; \n "
-//                                "Select p such that Calls*(_, _)";
-//        std::list<std::string> testResults;
-//        std::list<std::string> expectedResults = {"First", "Second", "Third"};
-//        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
-//        REQUIRE(testResults == expectedResults);
-//    }
+    SECTION("Calls* Test 1") {
+        std::string testQuery = "procedure p; \n "
+                                "Select p such that Calls*(_, _)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"First", "Second", "Third"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
 
     SECTION("Calls* Test 2") {
         std::string testQuery = "procedure p, p1; \n "
@@ -662,6 +727,60 @@ TEST_CASE("Calls* queries") {
                                 "Select p1 such that Calls*(p, p1)";
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"Second", "Third"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Calls* Test 4") {
+        std::string testQuery = "procedure p, p1; \n "
+            "Select p1 such that Calls*(p, p1)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "First", "Second" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Calls* Test 5") {
+        std::string testQuery = "procedure p, p1; \n "
+            "Select p1 such that Calls*(\"First\", \"Second\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "Third", "Second", "First" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Calls* Test 6") {
+        std::string testQuery = "procedure p, p1; \n "
+            "Select p1 such that Calls*(5, _)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "SyntaxError" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Calls* Test 7") {
+        std::string testQuery = "procedure p, p1; \n "
+            "Select p1 such that Calls*(_, 6)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "SyntaxError" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Calls* Test 8") {
+        std::string testQuery = "stmt p, p1; \n "
+            "Select p1 such that Calls*(p, _)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "SemanticError" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Calls* Test 9") {
+        std::string testQuery = "procedure p, p1; call call; \n "
+            "Select p1 such that Calls*(call, _)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"SemanticError"};
         QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
         REQUIRE(testResults == expectedResults);
     }
@@ -718,14 +837,14 @@ TEST_CASE("Multi-clause queries") {
         REQUIRE(testResults == expectedResults);
     }
 
-//    SECTION("Multi-clause Test 2") {
-//        std::string testQuery = "assign a; while w;\n "
-//                                "Select a such that Modifies (a, \"x\") and Parent* (w, a) and Next* (4, a)";
-//        std::list<std::string> testResults;
-//        std::list<std::string> expectedResults = {"7"};
-//        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
-//        REQUIRE(testResults == expectedResults);
-//    }
+    SECTION("Multi-clause Test 2") {
+        std::string testQuery = "assign a; while w;\n "
+                                "Select a such that Modifies (a, \"x\") and Parent* (w, a) and Next* (4, a)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"7"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
 
     SECTION("Multi-clause Test 3") {
         std::string testQuery = "stmt s;\n "
@@ -750,6 +869,60 @@ TEST_CASE("Multi-clause queries") {
                                 "Select a pattern a (\"x\", _) such that Parent* (w, a) and Modifies (11, \"x\")";
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"7"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Multi-clause Test 6") {
+        std::string testQuery = "assign and; while w; \n "
+            "Select and pattern and (\"x\", _) such that Parent* (w, and) and Modifies (11, \"x\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "7" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Multi-clause Test 7") {
+        std::string testQuery = "assign a; while w; \n "
+            "Select a pattern a (\"x\", _) and Parent* (w, a) and Modifies (11, \"x\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "SyntaxError" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Multi-clause Test 8") {
+        std::string testQuery = "assign and; while w; \n "
+            "Select and pattern a (\"x\", _) such that Parent* (w, adn) and Modifies (11, \"x\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "SemanticError" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Multi-clause Test 9") {
+        std::string testQuery = "assign and, pattern; while Calls; \n "
+            "Select and pattern  pattern(\"x\", _) such that Parent* (Calls, and) and Modifies (11, \"x\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "7", "9" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Multi-clause Test 10") {
+        std::string testQuery = "assign a; while w; \n "
+            "Select a pattern a (\"x\", _) and such that Parent* (w, a) and Modifies (11, \"x\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "SyntaxError" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Multi-clause Test 5") {
+        std::string testQuery = "assign a; while w; \n "
+            "Select a pattern a (\"x\", _) such that Parent* (w, a) Modifies (11, \"x\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "SyntaxError" };
         QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
         REQUIRE(testResults == expectedResults);
     }
