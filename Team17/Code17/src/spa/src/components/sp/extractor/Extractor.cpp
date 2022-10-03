@@ -14,18 +14,33 @@ Extractor::Extractor(SPClient* client) {
 
 void Extractor::extractRead(SimpleToken readToken) {
 	this->currentStack->addFollows(readToken);
-	ModifyRelationship* modifyRelationship = createModifyRelationship(readToken);
+	this->currentStack->modifies.push_back(readToken);
+
+	Entity* left = generateEntity(readToken);
+	Entity* right = generateEntity(readToken.getChildren().at(0));
+	ModifyRelationship* relationship = new ModifyRelationship(left, right);
+	this->client->storeRelationship(relationship);
 }
 
 void Extractor::extractPrint(SimpleToken printToken) {
 	this->currentStack->addFollows(printToken);
-	UsesRelationship* usesRelationship = createUsesRelationship(printToken);
+	this->currentStack->uses.push_back(printToken);
+
+	Entity* left = generateEntity(printToken);
+	Entity* right = generateEntity(printToken.getChildren().at(0));
+	UsesRelationship* relationship = new UsesRelationship(left, right);
+	this->client->storeRelationship(relationship);
 }
 
 void Extractor::extractAssign(SimpleToken assignToken) {
 	this->currentStack->addFollows(assignToken);
 	SimpleToken varToken = assignToken.getChildren().at(0);
-	ModifyRelationship* modifyRelationship = createModifyRelationship(varToken);
+	this->currentStack->modifies.push_back(varToken);
+
+	Entity* left = generateEntity(assignToken);
+	Entity* right = generateEntity(assignToken.getChildren().at(0));
+	ModifyRelationship* relationship = new ModifyRelationship(left, right);
+	this->client->storeRelationship(relationship);
 
 	SimpleToken exprToken = assignToken.getChildren().at(1);
 	extractExpr(assignToken, exprToken);
@@ -57,71 +72,37 @@ void Extractor::extractExpr(SimpleToken stmtToken, SimpleToken exprToken) {
 	for (int i = 0; i < exprChildren.size(); i++) {
 		SimpleToken currentToken = exprChildren.at(i);
 		if (currentToken.type == SpTokenType::TVARIABLE) {
-			UsesRelationship* usesRelationship = createUsesRelationshipExpr(stmtToken, currentToken);
+			this->currentStack->uses.push_back(currentToken);
+
+			Entity* left = generateEntity(stmtToken);
+			Entity* right = generateEntity(currentToken);
+			UsesRelationship* relationship = new UsesRelationship(left, right);
+			this->client->storeRelationship(relationship);
 		}
 	}
 }
 
 void Extractor::extractCall(SimpleToken callToken) {
 	this->currentStack->addFollows(callToken);
-	CallsRelationship* callsRelationship = createCallsRelationship(callToken);
-	this->currentStack->callProcedures.insert(std::pair<std::string, std::string>(this->currentStack->parent.value, callToken.value));
+
+	Entity* left = generateEntity(SimpleToken(SpTokenType::TPROCEDURE, this->currentProcedure, 0));
+	Entity* right = generateEntity(callToken.getChildren().at(0));
+	CallsRelationship* relationship = new CallsRelationship(left, right);
+	this->client->storeRelationship(relationship);
+
+	this->callProcedures.insert(std::pair<std::string, std::string>(this->currentStack->parent.value, callToken.value));
 }
 
 void Extractor::extractProcedure(SimpleToken procedureToken) {
-	this->parentStack.push(currentStack);
 	this->currentStack = new ProcedureStack(procedureToken, this);
-}
-
-void Extractor::extractFollows(StmtStack* currentStack) {
-	std::vector<SimpleToken> follows = this->currentStack->follows;
-	for (int i = 0; i < follows.size() - 1; i++) {
-		Entity* left = generateEntity(follows.at(i));
-		Entity* right = generateEntity(follows.at(i + 1));
-		FollowsRelationship* followsRelationship = new FollowsRelationship(left, right);
-		// add to client here?
-	}
-	for (int i = 0; i < follows.size(); i++) {
-		for (int j = i + 1; j < follows.size(); j++) {
-			Entity* left = generateEntity(follows.at(i));
-			Entity* right = generateEntity(follows.at(j));
-			FollowsTRelationship* followsTRelationship = new FollowsTRelationship(left, right);
-			// add to client here?
-		}
-	}
-}
-
-void Extractor::extractParent(StmtStack* currentStack) {
-
+	this->currentProcedure = procedureToken.value;
 }
 
 void Extractor::endOfParser() {
-
+	// for all called proc in proc, get procstack from the map, add the rel to parent proc
+	// recurse
 }
 
-UsesRelationship* Extractor::createUsesRelationship(SimpleToken token) {
-	Entity* left = generateEntity(token);
-	Entity* right = generateEntity(token.getChildren().at(0));
-	return new UsesRelationship(left, right);
-}
-
-ModifyRelationship* Extractor::createModifyRelationship(SimpleToken token) {
-	Entity* left = generateEntity(token);
-	Entity* right = generateEntity(token.getChildren().at(0));
-	return new ModifyRelationship(left, right);
-}
-
-UsesRelationship* Extractor::createUsesRelationshipExpr(SimpleToken stmtToken, SimpleToken exprToken) {
-	Entity* left = generateEntity(stmtToken);
-	Entity* right = generateEntity(exprToken);
-	return new UsesRelationship(left, right);
-}
-
-CallsRelationship* Extractor::createCallsRelationship(SimpleToken token) {
-	Entity* left = generateEntity(token);
-	Entity* right = generateEntity(token);
-	return new CallsRelationship(left, right);
-}
 /*
 Pattern* Extractor::createAssignPattern(SimpleToken token) {
 
@@ -156,6 +137,8 @@ Entity* Extractor::generateEntity(SimpleToken token) {
 	if (token.type == SpTokenType::TPROCEDURE) {
 		return new ProcedureEntity(token.value);
 	}
-	// add in call type
+	if (token.type == SpTokenType::TCALL) {
+		return new CallEntity(token.value);
+	}
 	return new Entity(std::to_string(token.statementNumber)); // Should not happen
 }

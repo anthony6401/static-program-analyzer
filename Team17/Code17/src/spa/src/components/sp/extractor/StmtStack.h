@@ -17,7 +17,6 @@ public:
     std::vector<SimpleToken> modifies;
     std::vector<SimpleToken> uses;
     std::vector<SimpleToken> follows;
-    std::multimap<std::string, std::string> callProcedures;
     void addFollows(SimpleToken token);
 
 };
