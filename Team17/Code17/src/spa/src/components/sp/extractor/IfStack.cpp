@@ -28,7 +28,7 @@ bool IfStack::isIf() {
     return expectElse;
 }
 
-void WhileStack::extractFollows(std::vector<SimpleToken> follows) {
+void IfStack::extractFollows(std::vector<SimpleToken> follows) {
     for (int i = 0; i < follows.size() - 1; i++) {
         SimpleToken first = follows.at(i);
         SimpleToken second = follows.at(i + 1);
@@ -49,7 +49,7 @@ void WhileStack::extractFollows(std::vector<SimpleToken> follows) {
     }
 }
 
-void WhileStack::extractParent(std::vector<SimpleToken> follows, int statementNumber) {
+void IfStack::extractParent(std::vector<SimpleToken> follows, int statementNumber) {
     for (int i = 0; i < follows.size(); i++) {
         SimpleToken second = follows.at(i);
         Entity* firstEntity = generateEntity(this->parent);
@@ -60,7 +60,7 @@ void WhileStack::extractParent(std::vector<SimpleToken> follows, int statementNu
     // parentT?
 }
 
-void WhileStack::extractUses(std::vector<SimpleToken> uses) {
+void IfStack::extractUses(std::vector<SimpleToken> uses) {
     for (int i = 0; i < uses.size(); i++) {
         SimpleToken second = uses.at(i);
         Entity* firstEntity = generateEntity(this->parent);
@@ -70,7 +70,7 @@ void WhileStack::extractUses(std::vector<SimpleToken> uses) {
     }
 }
 
-void WhileStack::extractModify(std::vector<SimpleToken> modifies) {
+void IfStack::extractModify(std::vector<SimpleToken> modifies) {
     for (int i = 0; i < modifies.size(); i++) {
         SimpleToken second = modifies.at(i);
         Entity* firstEntity = generateEntity(this->parent);
@@ -80,7 +80,7 @@ void WhileStack::extractModify(std::vector<SimpleToken> modifies) {
     }
 }
 
-Entity* WhileStack::generateEntity(SimpleToken token) {
+Entity* IfStack::generateEntity(SimpleToken token) {
     if (token.type == SpTokenType::TREAD) {
         return new ReadEntity(std::to_string(token.statementNumber));
     }

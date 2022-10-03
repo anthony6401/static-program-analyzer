@@ -98,12 +98,13 @@ void Extractor::extractProcedure(SimpleToken procedureToken) {
 	this->currentProcedure = procedureToken.value;
 }
 
+/*
 void Extractor::endOfParser() {
 	// for all called proc in proc, get procstack from the map, add the rel to parent proc
 	// recurse
 }
 
-/*
+
 Pattern* Extractor::createAssignPattern(SimpleToken token) {
 
 }*/

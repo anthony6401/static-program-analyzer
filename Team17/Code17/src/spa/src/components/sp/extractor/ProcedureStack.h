@@ -3,6 +3,7 @@
 #include "StmtStack.h"
 
 class Extractor;
+class Entity;
 
 class ProcedureStack : public StmtStack {
 public:
