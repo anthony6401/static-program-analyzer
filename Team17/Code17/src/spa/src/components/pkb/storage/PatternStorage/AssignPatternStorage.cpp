@@ -11,8 +11,9 @@ bool AssignPatternStorage::storePattern(kb::Pattern* pattern) {
 	AssignPattern* assignPattern = dynamic_cast<AssignPattern*>(pattern);
 	if (assignPattern) {
 		std::string lineNum = assignPattern->getLineNum();
-		std::string firstValue = assignPattern->getFirstValue();
-		std::string secondValue = assignPattern->getSecondValue();
+		std::string firstValue =assignPattern->getFirstValue();
+		std::string secondValue = PatternUtils::convertInfixToPostfix(assignPattern->getSecondValue());
+
 
 		std::pair<std::string, std::string> pairValue(lineNum, secondValue);
 
@@ -33,7 +34,7 @@ std::unordered_set<std::string> AssignPatternStorage::getPattern(DesignEntity de
 	if (designEntity == DesignEntity::ASSIGN) {
 		if (this->assignPatternStorage.find(firstArgument.getValue()) != this->assignPatternStorage.end()) {
 			std::unordered_set<std::pair<std::string, std::string>, pair_hash>* set = &this->assignPatternStorage.find(firstArgument.getValue())->second;
-			std::string secondArgumentValue = secondArgument.getValue();
+			std::string secondArgumentValue = PatternUtils::convertInfixToPostfix(secondArgument.getValue());
 
 
 			if ((secondArgument.getTokenType() == qps::TokenType::EXPRESSION) || (secondArgument.getTokenType() == qps::TokenType::NAME_WITH_QUOTATION)) {
@@ -66,7 +67,7 @@ std::unordered_set<std::string> AssignPatternStorage::getPattern(DesignEntity de
 std::vector<std::pair<std::string, std::string>> AssignPatternStorage::getPatternPair(DesignEntity designEntity, TokenObject secondArgument) {
 	std::vector<std::pair<std::string, std::string>> result;
 	if (designEntity == DesignEntity::ASSIGN) {
-		std::string secondArgumentValue = secondArgument.getValue();
+		std::string secondArgumentValue = PatternUtils::convertInfixToPostfix(secondArgument.getValue());
 		for (auto it = this->assignPatternStorage.begin(); it != this->assignPatternStorage.end(); it++) {
 			std::string variable = it->first;
 
