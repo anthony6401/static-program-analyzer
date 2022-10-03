@@ -1,5 +1,6 @@
 #include <stack>
 #include <stdexcept>
+#include <iostream>
 #include "SimpleParser.h"
 #include "../SimpleToken.h"
 #include "../utils/SpUtils.h"
@@ -70,42 +71,45 @@ void SimpleParser::parseLine(std::string code) {
     if (first == "}") {
         tokens.erase(tokens.begin());
         SimpleToken token = SimpleToken(SpTokenType::TCLOSE, code, statementNumber);
+        validator.validLine(SpTokenType::TCLOSE, statementNumber);
+        validator.close();
         //extractor.close()
     } else if (tokens.at(1) == "=") {
         tokens.erase(tokens.begin() + 1);
-        validator.validLine(SpTokenType::TASSIGN);
+        validator.validLine(SpTokenType::TASSIGN, statementNumber);
         parseAssign(tokens);
     } else if (first == "procedure") {
+        std::cout << "procedure" << std::endl;
         tokens.erase(tokens.begin());
-        validator.validLine(SpTokenType::TPROCEDURE);
+        validator.validLine(SpTokenType::TPROCEDURE, statementNumber);
         parseProcedure(tokens);
     } else if (first == "call") {
         tokens.erase(tokens.begin());
-        validator.validLine(SpTokenType::TCALL);
+        validator.validLine(SpTokenType::TCALL, statementNumber);
         parseCall(tokens);
     } else if (first == "read") {
         tokens.erase(tokens.begin());
-        validator.validLine(SpTokenType::TREAD);
+        validator.validLine(SpTokenType::TREAD, statementNumber);
         parseRead(tokens);
     } else if (first == "print") {
         tokens.erase(tokens.begin());
-        validator.validLine(SpTokenType::TPRINT);
+        validator.validLine(SpTokenType::TPRINT, statementNumber);
         parsePrint(tokens);
     } else if (first == "while") {
         tokens.erase(tokens.begin());
-        validator.validLine(SpTokenType::TWHILE);
+        validator.validLine(SpTokenType::TWHILE, statementNumber);
         parseWhile(tokens);
     } else if (first == "if") {
         tokens.erase(tokens.begin());
-        validator.validLine(SpTokenType::TIF);
+        validator.validLine(SpTokenType::TIF, statementNumber);
         parseIf(tokens);
     } else if (first == "else") {
         if (tokens.at(1) != "{") {
             throw std::invalid_argument("Received invalid SIMPLE code line " + std::to_string(SimpleParser::statementNumber));
         }
         tokens.erase(tokens.begin());
-        validator.validLine(SpTokenType::TELSE);
-        //extractor.Close();
+        validator.validLine(SpTokenType::TELSE, statementNumber);
+        validator.close();
     } else {
         throw std::invalid_argument("Received invalid SIMPLE code line " + std::to_string(SimpleParser::statementNumber));
     }
@@ -114,7 +118,7 @@ void SimpleParser::parseLine(std::string code) {
 void SimpleParser::parseProcedure(std::vector<std::string>& tokens) {
     if (tokens.size() == 2 && tokens.at(1) == "{") {
         SimpleToken procedureToken = SimpleToken(SpTokenType::TPROCEDURE, parseVariable(tokens.at(0)), 0);//change to parse procedure
-        validator.setState(NestedState());
+        validator.setState(new NestedState(&validator));
         //extractProcedure(procedureToken);
     }
     else {
@@ -171,7 +175,7 @@ void SimpleParser::parseWhile(std::vector<std::string>& tokens) {
     SimpleToken whileToken = SimpleToken(SpTokenType::TWHILE, "", statementNumber);
     statementNumber++;
     whileToken.setChildren(parseCondition(tokens));
-    validator.setState(NestedState());
+    validator.setState(new NestedState(&validator));
     //extractWhile(whileToken)
 }
 
@@ -187,7 +191,7 @@ void SimpleParser::parseIf(std::vector<std::string>& tokens) {
     SimpleToken ifToken = SimpleToken(SpTokenType::TIF, "", statementNumber);
     statementNumber++;
     ifToken.setChildren(parseCondition(tokens));
-    validator.setState(IfState());
+    validator.setState(new IfState(&validator));
     //extract(ifToken)
 }
 

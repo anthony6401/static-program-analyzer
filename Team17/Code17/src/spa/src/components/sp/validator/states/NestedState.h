@@ -1,12 +1,16 @@
 #pragma once
 
+#include "../SimpleValidator.h"
 #include "./ValidatorState.h"
 
 class NestedState : public ValidatorState {
 public:
-    NestedState();
-    bool validLine(SpTokenType type);
+    NestedState(SimpleValidator* context);
+    void validLine(SpTokenType type, int statementNumber);
     bool validCode();
-    bool isIfState();
+    void close();
+
+private:
+    SimpleValidator* context;
 
 };

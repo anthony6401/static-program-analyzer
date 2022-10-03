@@ -7,24 +7,24 @@
 #include "../utils/SpUtils.h"
 
 SimpleValidator::SimpleValidator() {
-    state = ProgramState();
+    state = new ProgramState(this);
 }
 
 bool SimpleValidator::validCode() {
-    return state.validCode();
+    return state->validCode();
 }
 
-bool SimpleValidator::isIfState() {
-    return state.isIfState();
+void SimpleValidator::close() {
+    state->close();
 }
 
-void SimpleValidator::setState(ValidatorState newState) {
+void SimpleValidator::setState(ValidatorState* newState) {
     parentStates.push(state);
     state = newState;
 }
 
-bool SimpleValidator::validLine(SpTokenType type) {
-    return state.validLine(type);
+void SimpleValidator::validLine(SpTokenType type, int statementNumber) {
+    state->validLine(type, statementNumber);
 }
 
 bool SimpleValidator::validateVariable(std::string& token) {

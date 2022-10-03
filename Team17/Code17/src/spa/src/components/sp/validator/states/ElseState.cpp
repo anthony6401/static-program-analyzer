@@ -1,15 +1,22 @@
 #include "./ElseState.h"
+#include <stdexcept>
 
-ElseState::ElseState() {}
+ElseState::ElseState(SimpleValidator* context) {
+    this->context = context;
+}
 
-bool ElseState::validLine(SpTokenType type) {
-    return type == SpTokenType::TELSE;
+void ElseState::validLine(SpTokenType type, int statementNumber) {
+    if (type != SpTokenType::TELSE) {
+        throw std::invalid_argument("Received invalid SIMPLE code line. Expected Else::" + std::to_string(statementNumber));
+    }
 }
 
 bool ElseState::validCode() {
     return false;
 }
 
-bool ElseState::isIfState() {
-    return false;
+void ElseState::close() {
+    context->state = context->parentStates.top();
+    context->parentStates.pop();
+    delete this;
 }

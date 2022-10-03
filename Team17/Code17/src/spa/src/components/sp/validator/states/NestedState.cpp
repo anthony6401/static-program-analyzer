@@ -1,15 +1,24 @@
 #include "./NestedState.h"
+#include <stdexcept>
 
-NestedState::NestedState() {}
+NestedState::NestedState(SimpleValidator* context) {
+    this->context = context;
+}
 
-bool NestedState::validLine(SpTokenType type) {
-    return type != SpTokenType::TPROCEDURE && type != SpTokenType::TELSE;
+void NestedState::validLine(SpTokenType type, int statementNumber) {
+    if (type == SpTokenType::TPROCEDURE) {
+        throw std::invalid_argument("Received invalid SIMPLE code line. Unexpected procedure::" + std::to_string(statementNumber));
+    } else if (type == SpTokenType::TELSE) {
+        throw std::invalid_argument("Received invalid SIMPLE code line. Unexpected else::" + std::to_string(statementNumber));
+    } 
 }
 
 bool NestedState::validCode() {
     return false;
 }
 
-bool NestedState::isIfState() {
-    return false;
+void NestedState::close() {
+    context->state = context->parentStates.top();
+    context->parentStates.pop();
+    delete this;
 }

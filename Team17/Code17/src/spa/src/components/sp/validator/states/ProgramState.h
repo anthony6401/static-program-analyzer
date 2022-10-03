@@ -1,12 +1,16 @@
 #pragma once
 
 #include "./ValidatorState.h"
+#include "../SimpleValidator.h"
 
 class ProgramState : public ValidatorState {
 public:
-    ProgramState();
-    bool validLine(SpTokenType type);
+    ProgramState(SimpleValidator* context);
+    void validLine(SpTokenType type, int statementNumber);
     bool validCode();
-    bool isIfState();
+    void close();
+
+private:
+    SimpleValidator* context;
 
 };
