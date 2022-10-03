@@ -92,7 +92,6 @@ bool SuchThatClauseSyntaxChecker::isSyntacticallyCorrect(std::vector<TokenObject
 
 bool SuchThatClauseSyntaxChecker::isRelationshipSyntacticallyCorrect(std::vector<TokenObject> relationshipClauseTokens, TokenType relrefToken) {
 	if (relationshipClauseTokens.empty()) {
-		std::cout << "no relationship";
 		return false;
 	}
 
@@ -262,14 +261,14 @@ void SuchThatClauseSyntaxChecker::hasStmtrefStmtrefSyntax() {
 }
 
 std::tuple<int, std::vector<TokenObject>> SuchThatClauseSyntaxChecker::getRelationshipClauseTokens(std::vector<TokenObject> tokenizedClause, int relrefIndex) {
-	auto closedBracketToken = std::find(tokenizedClause.begin() + relrefIndex + 1, tokenizedClause.end(), TokenObject(TokenType::CLOSED_BRACKET, ")"));
+	auto closedBracketTokenIterator = std::find(tokenizedClause.begin() + relrefIndex + 1, tokenizedClause.end(), TokenObject(TokenType::CLOSED_BRACKET, ")"));
 
-	if (closedBracketToken == tokenizedClause.end()) {
+	if (closedBracketTokenIterator == tokenizedClause.end()) {
 		return {};
 	}
 
-	int closedBracketTokenIndex = closedBracketToken - tokenizedClause.begin();
-	std::vector<TokenObject> relationshipClauseTokens(tokenizedClause.begin() + relrefIndex + 1, closedBracketToken + 1);
+	int closedBracketTokenIndex = closedBracketTokenIterator - tokenizedClause.begin();
+	std::vector<TokenObject> relationshipClauseTokens(tokenizedClause.begin() + relrefIndex + 1, closedBracketTokenIterator + 1);
 
 	return { closedBracketTokenIndex, relationshipClauseTokens };
 
