@@ -19,27 +19,26 @@ TEST_CASE("Calls queries") {
     }
 
     SECTION("Calls Test 2") {
-        std::string testQuery = "procedure p, p1; \n "
-                                "Select p1 such that Calls(\"Second\", \"Third\")";
+        std::string testQuery = "procedure p; \n "
+                                "Select p such that Calls(p, _)";
         std::list<std::string> testResults;
-        std::list<std::string> expectedResults = {"First", "Second", "Third"};
+        std::list<std::string> expectedResults = {"First", "Second"};
         QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
         REQUIRE(testResults == expectedResults);
     }
 
     SECTION("Calls Test 3") {
-        std::string testQuery = "procedure p, p1; \n "
-                                "Select p such that Calls(\"First\", \"Third\")";
+        std::string testQuery = "procedure p; \n "
+                                "Select p such that Calls(p, \"Third\")";
         std::list<std::string> testResults;
-        std::list<std::string> expectedResults = {};
+        std::list<std::string> expectedResults = {"Second"};
         QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
-        REQUIRE(testResults.empty() == true);
         REQUIRE(testResults == expectedResults);
     }
 
     SECTION("Calls Test 4") {
         std::string testQuery = "procedure p, p1; \n "
-                                "Select p such that Calls(\"Second\", \"First\")";
+                                "Select p such that Calls(\"Third\", _)";
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {};
         QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
