@@ -10,9 +10,10 @@ auto qpsClient_m2 = QPSClient(pkb_m2);
 // PQL queries
 TEST_CASE("Calls queries") {
     SECTION("Calls") {
-        std::string testQuery = "if ifs; Select ifs";
+        std::string testQuery = "procedure p, p1; \n "
+                                "Select p such that Calls(\"First\", \"Second\")";
         std::list<std::string> testResults;
-        std::list<std::string> expectedResults = {"8"};
+        std::list<std::string> expectedResults = {"First", "Second", "Third"};
         QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
         REQUIRE(testResults == expectedResults);
     }
