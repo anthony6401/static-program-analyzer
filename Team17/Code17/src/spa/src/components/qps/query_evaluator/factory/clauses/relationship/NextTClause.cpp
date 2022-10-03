@@ -1,4 +1,5 @@
 #include "NextTClause.h"
+#include "iostream"
 
 NextTClause::NextTClause(TokenObject left, TokenObject right,
                        std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap,
