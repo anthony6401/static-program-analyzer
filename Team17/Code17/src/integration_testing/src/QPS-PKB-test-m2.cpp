@@ -598,8 +598,6 @@ static int initPKB() {
 
 static int dummyForRun = initPKB();
 
-
-
 // PQL queries
 TEST_CASE("Calls queries") {
     SECTION("Calls Test 1") {
