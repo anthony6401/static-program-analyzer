@@ -41,9 +41,9 @@
 class Extractor {
 public:
 	SPClient* client;
-	std::stack<StmtStack> parentStack;
+	std::stack<StmtStack*> parentStack;
 	std::map<std::string, ProcedureStack*> procedures;
-	StmtStack currentStack;
+	StmtStack* currentStack;
 
 	Extractor(SPClient* client);
 
@@ -57,15 +57,14 @@ public:
 	void extractExpr(SimpleToken stmtToken, SimpleToken exprToken);
 	void extractCall(SimpleToken callToken);
 	void extractProcedure(SimpleToken procedureToken);
-	void extractClose(SimpleToken closeToken);
-	void extractFollows(StmtStack stmtStack);
-	void extractParent(StmtStack stmtStack);
+	void extractFollows(StmtStack* stmtStack);
+	void extractParent(StmtStack* stmtStack);
 	void endOfParser();
 	UsesRelationship* createUsesRelationship(SimpleToken token);
 	ModifyRelationship* createModifyRelationship(SimpleToken token);
 	UsesRelationship* createUsesRelationshipExpr(SimpleToken stmtToken, SimpleToken exprToken);
 	CallsRelationship* createCallsRelationship(SimpleToken token);
-	Pattern* createAssignPattern(SimpleToken token);
+	//Pattern* createAssignPattern(SimpleToken token);
 	Entity* generateEntity(SimpleToken token);
 
 	void extractConstants(SimpleToken procedureToken);

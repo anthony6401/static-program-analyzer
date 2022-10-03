@@ -1,7 +1,35 @@
 #include "components/sp/parser/SimpleParser.h"
-#include <iostream>
+#include "components/sp/extractor/Extractor.h"
 #include <catch.hpp>
-/*
+
+class ExtractorStub : public Extractor {
+    ExtractorStub();
+    std::vector<SimpleToken> result;
+    void extractWhile(SimpleToken whileToken) {
+        result.push_back(whileToken);
+    }
+    void extractIf(SimpleToken ifToken) {
+        result.push_back(ifToken);
+    }
+    void extractAsssign(SimpleToken assignToken) {
+        result.push_back(assignToken);
+    }
+    void extractPrint(SimpleToken printToken) {
+        result.push_back(printToken);
+    }
+    void extractRead(SimpleToken readToken) {
+        result.push_back(readToken);
+    }
+    void extractCall(SimpleToken callToken) {
+        result.push_back(callToken);
+    }
+    void extractProcedure(SimpleToken procedureToken) {
+        result.push_back(procedureToken);
+    }
+};
+
+
+
 //Temporary solution. Will clean up in the future
 bool equalToken(SimpleToken& test, SimpleToken& result) {
     return test.type == result.type && test.statementNumber == result.statementNumber && test.value == result.value;
@@ -31,6 +59,43 @@ auto stubClient = new SPClient(stubSP);
 Extractor extractor = Extractor(stubClient);
 SimpleParser parser = SimpleParser(&extractor);
 
+TEST_CASE("parse expr") {
+    std::vector<std::string> test_tokens;
+    test_tokens.push_back("(");
+    test_tokens.push_back("1");
+    test_tokens.push_back("+");
+    test_tokens.push_back("(");
+    test_tokens.push_back("1");
+    test_tokens.push_back(")");
+    test_tokens.push_back(")");
+    SimpleToken test_result = parser.parseExpr(test_tokens);
+
+    SimpleToken result = SimpleToken(SpTokenType::TEXPR, "", 0);
+
+    std::vector<SimpleToken> resultTokens;
+    resultTokens.push_back(SimpleToken(SpTokenType::TCONSTANT, "1", 0));
+    resultTokens.push_back(SimpleToken(SpTokenType::TOPR, "+", 0));
+    resultTokens.push_back(SimpleToken(SpTokenType::TCONSTANT, "1", 0));
+    result.setChildren(resultTokens);
+    REQUIRE(equalChildren(test_result.getChildren(), result.getChildren()));
+}
+
+TEST_CASE("parse condexpr") {
+    std::vector<std::string> test_tokens { "(","(", "(","!","(", "1", "<", "ab1", ")",")", "&&", "(", "abc", "==","123",")"
+        , ")", "||", "(", "1", "<=", "abc", ")", ")" };
+    std::vector<SimpleToken> test_result = parser.parseCondition(test_tokens);
+
+    std::vector<SimpleToken> resultTokens;
+    resultTokens.push_back(SimpleToken(SpTokenType::TCONSTANT, "1", 0));
+    resultTokens.push_back(SimpleToken(SpTokenType::TVARIABLE, "ab1", 0));
+    resultTokens.push_back(SimpleToken(SpTokenType::TVARIABLE, "abc", 0));
+    resultTokens.push_back(SimpleToken(SpTokenType::TCONSTANT, "123", 0));
+    resultTokens.push_back(SimpleToken(SpTokenType::TCONSTANT, "1", 0));
+    resultTokens.push_back(SimpleToken(SpTokenType::TVARIABLE, "abc", 0));
+    REQUIRE(equalChildren(test_result, resultTokens));
+}
+/*
+
 TEST_CASE("parseLine print") {
     parser.statementNumber = 1;
     std::string code = "print test;";
@@ -55,24 +120,7 @@ TEST_CASE("parseLine read") {
     REQUIRE(equalToken(test_result, expected_result));
 }
 
-TEST_CASE("parse expr") {
-    std::vector<std::string> test_tokens;
-    test_tokens.push_back("(");
-    test_tokens.push_back("1");
-    test_tokens.push_back("+");
-    test_tokens.push_back("1");
-    test_tokens.push_back(")");
-    SimpleToken test_result = parser.parseExpr(test_tokens);
 
-    SimpleToken result = SimpleToken(SpTokenType::TEXPR, "", 0);
-
-    std::vector<SimpleToken> resultTokens;
-    resultTokens.push_back(SimpleToken(SpTokenType::TCONSTANT, "1", 0));
-    resultTokens.push_back(SimpleToken(SpTokenType::TOPR, "+", 0));
-    resultTokens.push_back(SimpleToken(SpTokenType::TCONSTANT, "1", 0));
-    result.setChildren(resultTokens);
-    REQUIRE(equalChildren(test_result.getChildren(), result.getChildren()));
-}
 
 TEST_CASE("parse assign") {
     std::vector<std::string> test_tokens{ "a", "(", "1", "+","1", ")",";" };

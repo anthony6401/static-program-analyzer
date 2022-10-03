@@ -4,13 +4,8 @@
 
 // Constructor
 Extractor::Extractor(SPClient* client) {
-	std::stack<StmtStack> parentStack;
-	std::map<std::string, ProcedureStack*> procedures;
-	StmtStack currentStack = StmtStack();
 	this->client = client;
-	this->parentStack = parentStack;
-	this->procedures = procedures;
-	this->currentStack = currentStack;
+	currentStack = new ProcedureStack(SimpleToken(), this);
 }
 
 // ======================== //
@@ -18,48 +13,43 @@ Extractor::Extractor(SPClient* client) {
 // =========================//
 
 void Extractor::extractRead(SimpleToken readToken) {
-	this->currentStack.addFollows(readToken);
+	this->currentStack->addFollows(readToken);
 	ModifyRelationship* modifyRelationship = createModifyRelationship(readToken);
-	this->currentStack.addModify(modifyRelationship);
 }
 
 void Extractor::extractPrint(SimpleToken printToken) {
-	this->currentStack.addFollows(printToken);
+	this->currentStack->addFollows(printToken);
 	UsesRelationship* usesRelationship = createUsesRelationship(printToken);
-	this->currentStack.addUses(usesRelationship);
 }
 
 void Extractor::extractAssign(SimpleToken assignToken) {
-	this->currentStack.addFollows(assignToken);
+	this->currentStack->addFollows(assignToken);
 	SimpleToken varToken = assignToken.getChildren().at(0);
 	ModifyRelationship* modifyRelationship = createModifyRelationship(varToken);
-	this->currentStack.addModify(modifyRelationship);
 
 	SimpleToken exprToken = assignToken.getChildren().at(1);
 	extractExpr(assignToken, exprToken);
 
-	Pattern assignPattern = createAssignPattern(assignToken);
-	this->currentStack.addAssignPattern(assignPattern);
+	//Pattern assignPattern = createAssignPattern(assignToken);
+	//this->currentStack->addAssignPattern(assignPattern);
 }
 
 void Extractor::extractWhile(SimpleToken whileToken) {
-	this->currentStack.addFollows(whileToken);
+	this->currentStack->addFollows(whileToken);
 	extractExpr(whileToken, whileToken);
 
 	// create new while stack and set it as the current stack, old stack gets added to parentStack
 	this->parentStack.push(currentStack);
-	WhileStack whileStack = WhileStack(whileToken, this);
-	this->currentStack = whileStack;
+	this->currentStack = new WhileStack(whileToken, this);
 }
 
 void Extractor::extractIf(SimpleToken ifToken) {
-	this->currentStack.addFollows(ifToken);
+	this->currentStack->addFollows(ifToken);
 	extractExpr(ifToken, ifToken);
 
 	// create new if stack and set it as the current stack, old stack gets added to parentStack
 	this->parentStack.push(currentStack);
-	IfStack ifStack = IfStack(ifToken, this);
-	this->currentStack = ifStack;
+	this->currentStack = new IfStack(ifToken, this);
 }
 
 void Extractor::extractExpr(SimpleToken stmtToken, SimpleToken exprToken) {
@@ -68,32 +58,23 @@ void Extractor::extractExpr(SimpleToken stmtToken, SimpleToken exprToken) {
 		SimpleToken currentToken = exprChildren.at(i);
 		if (currentToken.type == SpTokenType::TVARIABLE) {
 			UsesRelationship* usesRelationship = createUsesRelationshipExpr(stmtToken, currentToken);
-			this->currentStack.addUses(usesRelationship);
 		}
 	}
 }
 
 void Extractor::extractCall(SimpleToken callToken) {
-	this->currentStack.addFollows(callToken);
+	this->currentStack->addFollows(callToken);
 	CallsRelationship* callsRelationship = createCallsRelationship(callToken);
-	this->currentStack.addCall(callsRelationship);
-	this->procedures.addProcedure();
+	this->currentStack->callProcedures.insert(std::pair<std::string, std::string>(this->currentStack->parent.value, callToken.value));
 }
 
 void Extractor::extractProcedure(SimpleToken procedureToken) {
 	this->parentStack.push(currentStack);
-	ProcedureStack procStack = ProcedureStack(procedureToken, this);
-	this->currentStack = procStack;
+	this->currentStack = new ProcedureStack(procedureToken, this);
 }
 
-void Extractor::extractClose(SimpleToken closeToken) {
-	extractFollows(this->currentStack);
-	extractParent(this->currentStack);
-	this->currentStack.mergeStack();
-}
-
-void Extractor::extractFollows(StmtStack currentStack) {
-	std::vector<SimpleToken> follows = this->currentStack.follows;
+void Extractor::extractFollows(StmtStack* currentStack) {
+	std::vector<SimpleToken> follows = this->currentStack->follows;
 	for (int i = 0; i < follows.size() - 1; i++) {
 		Entity* left = generateEntity(follows.at(i));
 		Entity* right = generateEntity(follows.at(i + 1));
@@ -102,15 +83,15 @@ void Extractor::extractFollows(StmtStack currentStack) {
 	}
 	for (int i = 0; i < follows.size(); i++) {
 		for (int j = i + 1; j < follows.size(); j++) {
-			SimpleToken left = follows.at(i);
-			SimpleToken right = follows.at(j);
+			Entity* left = generateEntity(follows.at(i));
+			Entity* right = generateEntity(follows.at(j));
 			FollowsTRelationship* followsTRelationship = new FollowsTRelationship(left, right);
 			// add to client here?
 		}
 	}
 }
 
-void Extractor::extractParent(StmtStack currentStack) {
+void Extractor::extractParent(StmtStack* currentStack) {
 
 }
 
@@ -141,13 +122,13 @@ CallsRelationship* Extractor::createCallsRelationship(SimpleToken token) {
 	Entity* right = generateEntity(token);
 	return new CallsRelationship(left, right);
 }
-
+/*
 Pattern* Extractor::createAssignPattern(SimpleToken token) {
 
-}
+}*/
 
 void Extractor::close(int statementNumber) {
-	currentStack.close(statementNumber);
+	currentStack->close(statementNumber);
 }
 
 Entity* Extractor::generateEntity(SimpleToken token) {
