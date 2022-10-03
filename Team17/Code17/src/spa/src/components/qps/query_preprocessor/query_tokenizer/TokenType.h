@@ -14,10 +14,18 @@ namespace qps {
         SELECT,
         SUCH,
         THAT,
+        AND,
         CALLS,
         CALLS_T,
         NEXT,
         NEXT_T,
+        AFFECTS,
+        AFFECTS_T,
+        WITH,
+        // Return types and specifications
+        BOOLEAN,
+        TUPLE,
+        ATTRIBUTE,
         // Lexical tokens
         NAME,
         INTEGER,

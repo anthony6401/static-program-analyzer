@@ -8,6 +8,7 @@
 #include "models/Relationship/NextRelationship.h"
 #include "models/Relationship/NextTRelationship.h"
 #include "models/Relationship/CallsRelationship.h"
+#include "models/Relationship/CallsTRelationship.h"
 
 #include "models/Entity/Entity.h"
 #include "models/Entity/AssignEntity.h"
@@ -437,4 +438,28 @@ TEST_CASE("Calls Relationship Test") {
     REQUIRE(*(callsRel1->getRightEntity()) == *procEntity2);
     REQUIRE(*(callsRel2->getRightEntity()) == *procEntity3);
     REQUIRE(*(callsRel3->getRightEntity()) == *procEntity4);
+}
+
+TEST_CASE("CallsT Relationship Test") {
+    std::string procValue1 = "proc1";
+    std::string procValue2 = "proc2";
+    std::string procValue3 = "proc3";
+    std::string procValue4 = "proc4";
+
+    Entity* procEntity1 = new ProcedureEntity(procValue1);
+    Entity* procEntity2 = new ProcedureEntity(procValue2);
+    Entity* procEntity3 = new ProcedureEntity(procValue3);
+    Entity* procEntity4 = new ProcedureEntity(procValue4);
+
+    Relationship* callsTRel1 = new CallsTRelationship(procEntity1, procEntity2);
+    Relationship* callsTRel2 = new CallsTRelationship(procEntity2, procEntity3);
+    Relationship* callsTRel3 = new CallsTRelationship(procEntity3, procEntity4);
+
+    REQUIRE(*(callsTRel1->getLeftEntity()) == *procEntity1);
+    REQUIRE(*(callsTRel2->getLeftEntity()) == *procEntity2);
+    REQUIRE(*(callsTRel3->getLeftEntity()) == *procEntity3);
+
+    REQUIRE(*(callsTRel1->getRightEntity()) == *procEntity2);
+    REQUIRE(*(callsTRel2->getRightEntity()) == *procEntity3);
+    REQUIRE(*(callsTRel3->getRightEntity()) == *procEntity4);
 }
