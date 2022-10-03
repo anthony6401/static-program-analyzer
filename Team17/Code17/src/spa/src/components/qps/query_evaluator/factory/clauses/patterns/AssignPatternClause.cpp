@@ -2,8 +2,8 @@
 #include "iostream"
 
 AssignPatternClause::AssignPatternClause(std::string assignSynonym, TokenObject left, TokenObject right,
-                                         QPSClient qpsClient, Select synonym)
-                                         : assignSynonym(assignSynonym), left(left), right(right), qpsClient(qpsClient), synonym(synonym) {}
+                                         QPSClient qpsClient)
+                                         : assignSynonym(assignSynonym), left(left), right(right), qpsClient(qpsClient) {}
 
 ResultTable AssignPatternClause::evaluateClause() {
     TokenType leftType = left.getTokenType();

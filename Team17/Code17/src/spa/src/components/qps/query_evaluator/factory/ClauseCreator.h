@@ -15,8 +15,8 @@
 class ClauseCreator {
 public:
     ClauseCreator();
-    static std::shared_ptr<Clause> createClause(SuchThat relationship, Select synonym, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
-    static std::shared_ptr<Clause> createClause(qps::Pattern pattern, Select synonym, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
+    static std::shared_ptr<Clause> createClause(SuchThat relationship, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
+    static std::shared_ptr<Clause> createClause(qps::Pattern pattern, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
     static std::shared_ptr<Clause> createClause(Select synonym, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
     static bool isStmtRelationship(TokenObject left, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap);
     static bool isProcRelationship(TokenObject left, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap);

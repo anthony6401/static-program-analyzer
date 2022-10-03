@@ -47,6 +47,8 @@ static std::string variable_value_three = "variable_value_three";
 static std::string while_value_three = "18";
 static std::string statement_value_three= "20";
 
+static std::string procedure_value_four = "procedure_value_four";
+
 static Entity* entity = new Entity(entity_value);
 static Entity* assignEntity = new AssignEntity(assign_value_one);
 static Entity* callEntity = new CallEntity(call_value_one);

@@ -58,6 +58,8 @@ std::vector<std::vector<TokenObject>> Parser::groupQueryIntoClause() {
 	bool isSelectClause = false;
 	bool isSuchThatClause = false;
 	bool isPatternClause = false;
+	bool isPrevClauseSuchThatClause = false;
+	bool isPrevClausePatternClause = false;
 
 	for (TokenObject token : this->getTokenizedQuery()) {
 		TokenType tokenType = token.getTokenType();
@@ -89,6 +91,8 @@ std::vector<std::vector<TokenObject>> Parser::groupQueryIntoClause() {
 			relationshipTokenObjects.push_back(token);
 			isSelectClause = false;
 			isSuchThatClause = true;
+			isPrevClauseSuchThatClause = true;
+			isPrevClausePatternClause = false;
 			continue;
 		}
 
@@ -108,6 +112,8 @@ std::vector<std::vector<TokenObject>> Parser::groupQueryIntoClause() {
 			patternTokenObjects.push_back(token);
 			isPatternClause = true;
 			isSelectClause = false;
+			isPrevClauseSuchThatClause = false;
+			isPrevClausePatternClause = true;
 			continue;
 		}
 
@@ -116,6 +122,30 @@ std::vector<std::vector<TokenObject>> Parser::groupQueryIntoClause() {
 			patternTokenObjects.push_back(token);
 			isPatternClause = false;
 			continue;
+		}
+
+		if (tokenType == TokenType::AND && !isSuchThatClause && !isPatternClause) {
+			if (isSelectClause && selectTokenObjects.size() < 2) {
+				selectTokenObjects.push_back(token);
+				continue;
+			}
+
+			if (isPrevClauseSuchThatClause) {
+				relationshipTokenObjects.push_back(token);
+				isSelectClause = false;
+				isSuchThatClause = true;
+				isPrevClauseSuchThatClause = false;
+				continue;
+			}
+
+			if (isPrevClausePatternClause) {
+				patternTokenObjects.push_back(token);
+				isPatternClause = true;
+				isSelectClause = false;
+				isPrevClausePatternClause = false;
+				continue;
+			}
+
 		}
 
 		// Start of select clause
@@ -217,6 +247,7 @@ std::vector<SuchThat> Parser::parseTokensIntoSuchThatObjects(std::vector<TokenOb
 	bool isFirstSuchToken = true;
 	bool isFirstThatToken = true;
 	bool isFirstParam = true;
+	bool isNewRelationship = true;
 	TokenType currRelationship{};
 	TokenObject leftParam = TokenObject();
 	TokenObject rightParam = TokenObject();
@@ -224,7 +255,7 @@ std::vector<SuchThat> Parser::parseTokensIntoSuchThatObjects(std::vector<TokenOb
 	for (TokenObject token : relationshipTokens) {
 		TokenType currTokenType = token.getTokenType();
 
-		if ((currTokenType == TokenType::OPEN_BRACKET) || (currTokenType == TokenType::CLOSED_BRACKET)) {
+		if ((currTokenType == TokenType::OPEN_BRACKET) || (currTokenType == TokenType::AND)) {
 			continue;
 		}
 
@@ -232,6 +263,7 @@ std::vector<SuchThat> Parser::parseTokensIntoSuchThatObjects(std::vector<TokenOb
 			// For multi such that clauses in advanced SPA
 			isFirstSuchToken = true;
 			isFirstThatToken = true;
+			isNewRelationship = true;
 			continue;
 		}
 
@@ -250,8 +282,10 @@ std::vector<SuchThat> Parser::parseTokensIntoSuchThatObjects(std::vector<TokenOb
 			continue;
 		}
 
-		if (this->isRelationshipToken(currTokenType)) {
+		if (this->isRelationshipToken(currTokenType) && isNewRelationship) {
 			currRelationship = currTokenType;
+			isNewRelationship = false;
+			isFirstParam = true;
 			continue;
 		}
 
@@ -290,7 +324,7 @@ std::vector<Pattern> Parser::parseTokensIntoPatternObjects(std::vector<TokenObje
 	for (TokenObject token : patternTokens) {
 		TokenType currTokenType = token.getTokenType();
 
-		if (currTokenType == TokenType::OPEN_BRACKET) {
+		if ((currTokenType == TokenType::OPEN_BRACKET) || (currTokenType == TokenType::AND)) {
 			continue;
 		}
 
@@ -342,7 +376,9 @@ std::vector<Pattern> Parser::parseTokensIntoPatternObjects(std::vector<TokenObje
 bool Parser::isRelationshipToken(TokenType token) {
 	std::vector<TokenType> relationshipTokens{
 		TokenType::FOLLOWS, TokenType::FOLLOWS_T, TokenType::PARENT,
-		TokenType::PARENT_T, TokenType::USES, TokenType::MODIFIES };
+		TokenType::PARENT_T, TokenType::USES, TokenType::MODIFIES,
+		TokenType::CALLS, TokenType::CALLS_T, TokenType::NEXT, TokenType::NEXT_T 
+	};
 
 	if (std::find(relationshipTokens.begin(), relationshipTokens.end(), token) == relationshipTokens.end()) {
 		return false;

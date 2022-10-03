@@ -111,12 +111,12 @@ ClauseDivider Evaluator::extractClausesToEvaluate(QueryObject queryObject, std::
         clauseDivider.addClauseToDivider(selectClauseToEvaluate);
     } else {
         for (const auto& r : relationships) {
-            std::shared_ptr<Clause> relationshipClauseToEvaluate = ClauseCreator::createClause(r, synonym, synonymToDesignEntityMap, qpsClient);
+            std::shared_ptr<Clause> relationshipClauseToEvaluate = ClauseCreator::createClause(r, synonymToDesignEntityMap, qpsClient);
             clauseDivider.addClauseToDivider(relationshipClauseToEvaluate);
         }
 
         for (const auto& p : patterns) {
-            std::shared_ptr<Clause> patternClauseToEvaluate = ClauseCreator::createClause(p, synonym, synonymToDesignEntityMap, qpsClient);
+            std::shared_ptr<Clause> patternClauseToEvaluate = ClauseCreator::createClause(p, synonymToDesignEntityMap, qpsClient);
             clauseDivider.addClauseToDivider(patternClauseToEvaluate);
         }
     }

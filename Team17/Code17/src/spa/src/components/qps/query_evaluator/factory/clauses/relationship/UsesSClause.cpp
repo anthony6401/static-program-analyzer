@@ -1,9 +1,9 @@
 #include "UsesSClause.h"
 #include "iostream"
 
-UsesSClause::UsesSClause(TokenObject left, TokenObject right, Select synonym,
+UsesSClause::UsesSClause(TokenObject left, TokenObject right,
                          std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient)
-                         : left(left), right(right), synonym(synonym), synonymToDesignEntityMap(synonymToDesignEntityMap)
+                         : left(left), right(right), synonymToDesignEntityMap(synonymToDesignEntityMap)
                          , qpsClient(qpsClient) {};
 
 

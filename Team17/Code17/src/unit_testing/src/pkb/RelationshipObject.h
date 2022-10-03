@@ -10,6 +10,8 @@
 #include "models/Relationship/FollowsTRelationship.h"
 #include "models/Relationship/NextRelationship.h"
 #include "models/Relationship/NextTRelationship.h"
+#include "models/Relationship/CallsRelationship.h"
+#include "models/Relationship/CallsTRelationship.h"
 
 static Relationship* usesRelationshipAssignOne = new UsesRelationship(assignEntity, variableEntity);
 static Relationship* usesRelationshipAssignTwo = new UsesRelationship(assignEntityTwo, variableEntityTwo);
@@ -661,3 +663,24 @@ static Relationship* nextTRelationshipIfWhileDupOne = new NextTRelationship(ifEn
 static Relationship* nextTRelationshipIfIfOne = new NextTRelationship(ifEntity, ifEntityTwo);
 static Relationship* nextTRelationshipIfIfDupOne = new NextTRelationship(ifEntityDuplicate, ifEntityTwoDuplicate);
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+static Relationship* callsRelationshipOne = new CallsRelationship(procedureEntity, procedureEntityTwo);
+static Relationship* callsRelationshipOneDup = new CallsRelationship(procedureEntity, procedureEntityTwo);
+
+static Relationship* callsRelationshipTwo = new CallsRelationship(procedureEntity, procedureEntityThree);
+static Relationship* callsRelationshipTwoDup = new CallsRelationship(procedureEntity, procedureEntityThree);
+
+static Relationship* callsRelationshipThree = new CallsRelationship(procedureEntityTwo, procedureEntityThree);
+static Relationship* callsRelationshipThreeDup = new CallsRelationship(procedureEntityTwo, procedureEntityThree);
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+static Relationship* callsTRelationshipOne = new CallsTRelationship(procedureEntity, procedureEntityTwo);
+static Relationship* callsTRelationshipOneDup = new CallsTRelationship(procedureEntity, procedureEntityTwo);
+
+static Relationship* callsTRelationshipTwo = new CallsTRelationship(procedureEntity, procedureEntityThree);
+static Relationship* callsTRelationshipTwoDup = new CallsTRelationship(procedureEntity, procedureEntityThree);
+
+static Relationship* callsTRelationshipThree = new CallsTRelationship(procedureEntityTwo, procedureEntityThree);
+static Relationship* callsTRelationshipThreeDup = new CallsTRelationship(procedureEntityTwo, procedureEntityThree);
