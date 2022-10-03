@@ -61,7 +61,7 @@ public:
 	void extractCall(SimpleToken callToken);
 	void extractProcedure(SimpleToken procedureToken);
 	void endOfParser();
-	//Pattern* createAssignPattern(SimpleToken token);
+	std::string getExpressionAsString(SimpleToken exprToken);
 	Entity* generateEntity(SimpleToken token);
 
 	void extractConstants(SimpleToken procedureToken);

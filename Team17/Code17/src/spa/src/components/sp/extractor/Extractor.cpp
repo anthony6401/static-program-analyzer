@@ -2,15 +2,10 @@
 
 #include <iostream>
 
-// Constructor
 Extractor::Extractor(SPClient* client) {
 	this->client = client;
 	currentStack = new ProcedureStack(SimpleToken(), this);
 }
-
-// ======================== //
-// FUNCTIONS FOR EXTRACTION //
-// =========================//
 
 void Extractor::extractRead(SimpleToken readToken) {
 	this->currentStack->addFollows(readToken);
@@ -45,8 +40,21 @@ void Extractor::extractAssign(SimpleToken assignToken) {
 	SimpleToken exprToken = assignToken.getChildren().at(1);
 	extractExpr(assignToken, exprToken);
 
-	//Pattern assignPattern = createAssignPattern(assignToken);
-	//this->currentStack->addAssignPattern(assignPattern);
+	std::string lineNum = std::to_string(assignToken.statementNumber);
+	std::string firstVal = assignToken.getChildren().at(0).value;
+	std::string seconVal = getExpressionAsString(assignToken.getChildren().at(1));
+	AssignPattern * assignPattern = new AssignPattern(lineNum, firstVal, seconVal);
+	this->client->storePattern(assignPattern);
+}
+
+std::string Extractor::getExpressionAsString(SimpleToken expression) {
+	std::string expressionString;
+	std::vector<SimpleToken> expressionChildren = expression.getChildren();
+	for (int i = 0; i < expressionChildren.size(); i++) {
+		std::string nextString = expressionChildren.at(i).value;
+		expressionString = expressionString + nextString;
+	}
+	return expressionString;
 }
 
 void Extractor::extractWhile(SimpleToken whileToken) {
@@ -98,16 +106,12 @@ void Extractor::extractProcedure(SimpleToken procedureToken) {
 	this->currentProcedure = procedureToken.value;
 }
 
-/*
 void Extractor::endOfParser() {
 	// for all called proc in proc, get procstack from the map, add the rel to parent proc
 	// recurse
+	
+
 }
-
-
-Pattern* Extractor::createAssignPattern(SimpleToken token) {
-
-}*/
 
 void Extractor::close(int statementNumber) {
 	currentStack->close(statementNumber);
