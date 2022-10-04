@@ -2,10 +2,10 @@
 #include <iostream>
 #include "components/sp/SimpleToken.h"
 #include "components/sp/utils/SpUtils.h"
-#include "components/sp/tokenizer/ExprStack.h"
-#include "components/sp/tokenizer/FactorState.h"
-#include "components/sp/tokenizer/OperandState.h"
-#include "components/sp/tokenizer/ExprCloseState.h"
+#include "components/sp/parser/ExprStack/ExprStack.h"
+#include "components/sp/parser/ExprStack/FactorState.h"
+#include "components/sp/parser/ExprStack/OperandState.h"
+#include "components/sp/parser/ExprStack/ExprCloseState.h"
 
 #include <catch.hpp>
 

@@ -2,7 +2,7 @@
 
 #include <catch.hpp>
 #include <iostream>
-
+/*
 void parseHolder(SimpleToken& printStmt, std::vector<std::string>& tokens,
 	Extractor* extractor) {
 }
@@ -494,7 +494,7 @@ std::string printResultConstant(std::vector<ConstantEntity*> vector) {
 /* ==================== */
 /*      TEST CASES      */
 /* ==================== */
- 
+ /*
 TEST_CASE("Unit test - FollowsExtractor::extractFollows for computeCentroid") {
 	SimpleToken testProcedure = generateProcedure(4);
 	std::vector<FollowsRelationship*> testResult = FollowsExtractor::extractFollows(testProcedure);
@@ -627,7 +627,7 @@ TEST_CASE("Unit test - ModifyExtractor::extractModify for while token") {}
 TEST_CASE("Unit test - ModifyExtractor::extractModify for if token") {}
 TEST_CASE("Unit test - PatternExtractor::extractPattern for while token") {}
 TEST_CASE("Unit test - PatternExtractor::extractPattern for if token") {}
-
+*/
 /*
 void parseHolder(SimpleToken& printStmt, std::vector<std::string>& tokens,
 	Extractor* extractor) {

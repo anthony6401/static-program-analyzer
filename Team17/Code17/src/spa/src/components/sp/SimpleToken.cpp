@@ -1,5 +1,11 @@
 #include "SimpleToken.h"
 
+SimpleToken::SimpleToken() {
+    this->type = SpTokenType::TPROGRAM;
+    this->value = "";
+    this->statementNumber = 0;
+}
+
 /// <summary>
 /// Represent individual SIMPLE tokens
 /// </summary>

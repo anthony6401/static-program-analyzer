@@ -3,7 +3,7 @@
 #include <stack>
 #include <vector>
 #include <stdexcept>
-#include "../SimpleToken.h"
+#include "../../SimpleToken.h"
 #include "ExprState.h"
 
 class FactorState;

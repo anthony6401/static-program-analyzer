@@ -2,338 +2,238 @@
 
 #include <iostream>
 
-// Constructor
 Extractor::Extractor(SPClient* client) {
 	this->client = client;
+	currentStack = new ProcedureStack(SimpleToken(), this);
 }
 
-// Parser only needs to call Extractor::extractAll
-void Extractor::extractAll(SimpleToken procedureToken) {
-	extractFollows(procedureToken);
-	extractParent(procedureToken);
-	extractUses(procedureToken);
-	extractModify(procedureToken);
-	extractPattern(procedureToken);
-	extractConstants(procedureToken);
+void Extractor::extractRead(SimpleToken readToken) {
+	//std::cout << "extractRead\n";
+	this->currentStack->addFollows(readToken);
+	this->currentStack->modifies.push_back(readToken);
+
+	Entity* left = generateEntity(readToken);
+	Entity* right = generateEntity(SimpleToken(SpTokenType::TVARIABLE, readToken.value, 0));
+	ModifyRelationship* relationship = new ModifyRelationship(left, right);
+	this->client->storeRelationship(relationship);
+	//std::cout << typeid(relationship).name() << " | " + (relationship->getLeftEntity()->getValue()) + " | " + (relationship->getRightEntity()->getValue()) + "\n";
+	//std::cout << "extractRead OK\n";
 }
 
-// =============================== //
-// HELPER FUNCTIONS FOR EXTRACTION //
-// =============================== //
+void Extractor::extractPrint(SimpleToken printToken) {
+	//std::cout << "extractPrint\n";
+	this->currentStack->addFollows(printToken);
+	this->currentStack->uses.push_back(printToken);
 
-void Extractor::extractFollows(SimpleToken procOrWhileIfToken) {
-	std::vector<FollowsRelationship*> followsVector = FollowsExtractor::extractFollows(procOrWhileIfToken);
-	std::vector<FollowsTRelationship*> followsTVector = FollowsExtractor::extractFollowsT(procOrWhileIfToken);
-	storeFollowsRelationships(followsVector);
-	storeFollowsTRelationships(followsTVector);
+	Entity* left = generateEntity(printToken);
+	Entity* right = generateEntity(SimpleToken(SpTokenType::TVARIABLE, printToken.value, 0));
+	UsesRelationship* relationship = new UsesRelationship(left, right);
+	this->client->storeRelationship(relationship);
+	//std::cout << typeid(relationship).name() << " | " + (relationship->getLeftEntity()->getValue()) + " | " + (relationship->getRightEntity()->getValue()) + "\n";
+	//std::cout << "extractPrint OK\n";
 }
 
-void Extractor::extractParent(SimpleToken procOrWhileIfToken) {
-	std::vector<ParentRelationship*> parentVector = ParentExtractor::extractParent(procOrWhileIfToken);
-	std::vector<ParentTRelationship*> parentTVector = ParentExtractor::extractParentT(procOrWhileIfToken);
-	storeParentRelationships(parentVector);
-	storeParentTRelationships(parentTVector);
+void Extractor::extractAssign(SimpleToken assignToken) {
+	//std::cout << "extractAssign\n";
+	this->currentStack->addFollows(assignToken);
+	SimpleToken varToken = assignToken.getChildren().at(0);
+	this->currentStack->modifies.push_back(varToken);
+
+	Entity* left = generateEntity(assignToken);
+	Entity* right = generateEntity(varToken);
+	ModifyRelationship* relationship = new ModifyRelationship(left, right);
+	//std::cout << typeid(relationship).name() << " | " + (relationship->getLeftEntity()->getValue()) + " | " + (relationship->getRightEntity()->getValue()) + "\n";
+	this->client->storeRelationship(relationship);
+
+	SimpleToken exprToken = assignToken.getChildren().at(1);
+	extractExpr(assignToken, exprToken);
+
+	std::string lineNum = std::to_string(assignToken.statementNumber);
+	std::string firstVal = varToken.value;
+	std::string seconVal = getExpressionAsString(exprToken);
+	AssignPattern * assignPattern = new AssignPattern(lineNum, firstVal, seconVal);
+	this->client->storePattern(assignPattern);
+	//std::cout << "extractAssign OK\n";
 }
 
-void Extractor::extractUses(SimpleToken procOrWhileIfToken) {
-	std::vector<UsesRelationship*> usesVector = UsesExtractor::extractUses(procOrWhileIfToken);
-	storeUsesRelationships(usesVector);
-}
-
-void Extractor::extractModify(SimpleToken procOrWhileIfToken) {
-	std::vector<ModifyRelationship*> modifyVector = ModifyExtractor::extractModify(procOrWhileIfToken);
-	storeModifyRelationships(modifyVector);
-}
-
-void Extractor::extractPattern(SimpleToken procOrWhileIfToken) {
-	std::vector<AssignPattern*> assignPatternVector = PatternExtractor::extractPattern(procOrWhileIfToken);
-	storeAssignPatterns(assignPatternVector);
-}
-
-void Extractor::extractConstants(SimpleToken procedureToken) {
-	std::vector<ConstantEntity*> constantVector = extractConstantsVector(procedureToken);
-	for (int i = 0; i < constantVector.size(); i++) {
-		this->client->storeConstant(constantVector.at(i));
-	}
-}
-
-std::vector<ConstantEntity*> Extractor::extractConstantsVector(SimpleToken procedureToken) {
-	std::vector<ConstantEntity*> constantVector;
-
-	for (int i = 0; i < procedureToken.getChildren().size(); i++) {
-		SimpleToken current = procedureToken.getChildren().at(i);
-		if (current.type == SpTokenType::TCONSTANT) {
-			ConstantEntity* constantEntity = new ConstantEntity(current.value);
-			constantVector.push_back(constantEntity);
-		}
-
-		std::vector<ConstantEntity*> moreConstantVector = extractConstantsVector(current);
-		constantVector.insert(constantVector.end(), moreConstantVector.begin(), moreConstantVector.end());
-	}
-
-	return constantVector;
-}
-
-// ============================ //
-// HELPER FUNCTIONS FOR STORING //
-// ============================ //
-
-void Extractor::storeFollowsRelationships(std::vector<FollowsRelationship*> vector) {
-	for (int i = 0; i < vector.size(); i++) {
-		this->client->storeRelationship(vector.at(i));
-	}
-}
-
-void Extractor::storeFollowsTRelationships(std::vector<FollowsTRelationship*> vector) {
-	for (int i = 0; i < vector.size(); i++) {
-		this->client->storeRelationship(vector.at(i));
-	}
-}
-
-void Extractor::storeParentRelationships(std::vector<ParentRelationship*> vector) {
-	for (int i = 0; i < vector.size(); i++) {
-		this->client->storeRelationship(vector.at(i));
-	}
-}
-
-void Extractor::storeParentTRelationships(std::vector<ParentTRelationship*> vector) {
-	for (int i = 0; i < vector.size(); i++) {
-		this->client->storeRelationship(vector.at(i));
-	}
-}
-
-void Extractor::storeUsesRelationships(std::vector<UsesRelationship*> vector) {
-	for (int i = 0; i < vector.size(); i++) {
-		this->client->storeRelationship(vector.at(i));
-	}
-}
-
-void Extractor::storeModifyRelationships(std::vector<ModifyRelationship*> vector) {
-	for (int i = 0; i < vector.size(); i++) {
-		this->client->storeRelationship(vector.at(i));
-	}
-}
-
-void Extractor::storeAssignPatterns(std::vector<AssignPattern*> vector) {
-	for (int i = 0; i < vector.size(); i++) {
-		this->client->storePattern(vector.at(i));
-	}
-}
-
-/*
-void Extractor::extractProcedure(SimpleToken procedureToken) {
-	if (procedureToken.type != SpTokenType::TPROCEDURE) {
-		throw std::invalid_argument("Invalid token type for extractProcedure");
-	}
-	std::vector<SimpleToken> childrenOfProcedureToken = procedureToken.getChildren();
-	extractParentRelationships(procedureToken, childrenOfProcedureToken);
-	extractFollowsRelationships(childrenOfProcedureToken);
-
-	extractUsesRelationshipsForProcedure(procedureToken);
-	extractModifyRelationshipsForProcedure(procedureToken);
-
-	extractSeriesOfStmts(childrenOfProcedureToken);
-}
-
-void Extractor::extractParentRelationships(SimpleToken parentToken, std::vector<SimpleToken> children) {
-	ParentExtractor::extractParent(*this, parentToken, children);
-	ParentExtractor::extractParentT(*this, parentToken, children);
-}
-
-void Extractor::extractFollowsRelationships(std::vector<SimpleToken> seriesOfStmts) {
-	FollowsExtractor::extractFollows(*this, seriesOfStmts);
-	FollowsExtractor::extractFollowsT(*this, seriesOfStmts);
-}
-
-void Extractor::extractUsesRelationshipsForProcedure(SimpleToken procedureToken) {
-
-}
-
-void Extractor::extractModifyRelationshipsForProcedure(SimpleToken procedureToken) {
-
-}
-
-void Extractor::extractSeriesOfStmts(std::vector<SimpleToken> seriesOfStmts) {
-	int i = 0;
-	while (i < seriesOfStmts.size()) {
-		SimpleToken stmtToken = seriesOfStmts.at(i);
-		if (stmtToken.type == SpTokenType::TREAD) {
-			extractReadStmt(stmtToken);
-		}
-		if (stmtToken.type == SpTokenType::TPRINT) {
-			extractPrintStmt(stmtToken);
-		}
-		if (stmtToken.type == SpTokenType::TASSIGN) {
-			extractAssignStmt(stmtToken);
-		}
-		if (stmtToken.type == SpTokenType::TWHILE) {
-			extractWhileStmt(stmtToken);
-		}
-		if (stmtToken.type == SpTokenType::TIF) {
-			extractIfStmt(stmtToken);
-		}
-		if (stmtToken.type == SpTokenType::TCALL) {
-			// code here
-		}
-		i++;
-	}
-}
-
-void Extractor::extractReadStmt(SimpleToken simpleToken) {
-	if (simpleToken.type != SpTokenType::TREAD) {
-		throw std::invalid_argument("Invalid token type for extractRead");
-	}
-	ModifyRelationship* modifyRelationship = getModifyRelationshipForRead(simpleToken);
-	this->client->storeRelationship(modifyRelationship);
-}
-
-ModifyRelationship* Extractor::getModifyRelationshipForRead(SimpleToken simpleToken) {
-	ReadEntity* leftEntity = new ReadEntity(std::to_string(simpleToken.statementNumber));
-	VariableEntity* rightEntity = new VariableEntity(simpleToken.getChildren().at(0).value);
-	return new ModifyRelationship(leftEntity, rightEntity);
-}
-
-void Extractor::extractPrintStmt(SimpleToken simpleToken) {
-	if (simpleToken.type != SpTokenType::TPRINT) {
-		throw std::invalid_argument("Invalid token type for extractPrint");
-	}
-	UsesRelationship* usesRelationship = getUsesRelationshipForPrint(simpleToken);
-	this->client->storeRelationship(usesRelationship);
-}
-
-UsesRelationship* Extractor::getUsesRelationshipForPrint(SimpleToken simpleToken) {
-	PrintEntity* leftEntity = new PrintEntity(std::to_string(simpleToken.statementNumber));
-	VariableEntity* rightEntity = new VariableEntity(simpleToken.getChildren().at(0).value);
-	return new UsesRelationship(leftEntity, rightEntity);
-}
-
-void Extractor::extractAssignStmt(SimpleToken simpleToken) {
-	if (simpleToken.type != SpTokenType::TASSIGN) {
-		throw std::invalid_argument("Invalid token type for extractAssign");
-	}
-	ModifyRelationship* modifyRelationship = getModifyRelationshipForAssign(simpleToken);
-	this->client->storeRelationship(modifyRelationship);
-
-	std::vector<UsesRelationship*> usesRelationships = getUsesRelationshipsForAssign(simpleToken);
-	for (int i = 0; i < usesRelationships.size(); i++) {
-		this->client->storeRelationship(usesRelationships.at(i));
-	}
-
-	PatternExtractor::extractPattern(*this, simpleToken);
-}
-
-ModifyRelationship* Extractor::getModifyRelationshipForAssign(SimpleToken simpleToken) {
-	AssignEntity* assignEntity = new AssignEntity(std::to_string(simpleToken.statementNumber));
-	std::vector<SimpleToken> children = simpleToken.getChildren();
-
-	SimpleToken variable = children.at(0);
-	VariableEntity* variableEntity = new VariableEntity(variable.value);
-
-	return new ModifyRelationship(assignEntity, variableEntity);
-}
-
-std::vector<UsesRelationship*> Extractor::getUsesRelationshipsForAssign(SimpleToken simpleToken) {
-	AssignEntity* assignEntity = new AssignEntity(std::to_string(simpleToken.statementNumber));
-	std::vector<SimpleToken> children = simpleToken.getChildren();
-
-	SimpleToken expression = children.at(1);
+std::string Extractor::getExpressionAsString(SimpleToken expression) {
+	std::string expressionString;
 	std::vector<SimpleToken> expressionChildren = expression.getChildren();
-
-	std::vector<UsesRelationship*> usesRelationships;
-
 	for (int i = 0; i < expressionChildren.size(); i++) {
-		SimpleToken token = expressionChildren.at(i);
-		if (token.type == SpTokenType::TVARIABLE) {
-			VariableEntity* variableEntityInExpression = new VariableEntity(token.value);
-			UsesRelationship* usesRelationship = new UsesRelationship(assignEntity, variableEntityInExpression);
-			usesRelationships.push_back(usesRelationship);
+		std::string nextString = expressionChildren.at(i).value;
+		expressionString = expressionString + nextString;
+	}
+	return expressionString;
+}
+
+void Extractor::extractWhile(SimpleToken whileToken) {
+	//std::cout << "extractWhile\n";
+	this->currentStack->addFollows(whileToken);
+	extractExpr(whileToken, whileToken);
+
+	// create new while stack and set it as the current stack, old stack gets added to parentStack
+	this->parentStack.push(currentStack);
+	this->currentStack = new WhileStack(whileToken, this);
+	//std::cout << "extractWhile OK\n";
+}
+
+void Extractor::extractIf(SimpleToken ifToken) {
+	//std::cout << "extractIf\n";
+	this->currentStack->addFollows(ifToken);
+	extractExpr(ifToken, ifToken);
+
+	// create new if stack and set it as the current stack, old stack gets added to parentStack
+	this->parentStack.push(currentStack);
+	this->currentStack = new IfStack(ifToken, this);
+	//std::cout << "extractIf OK\n";
+}
+
+void Extractor::extractExpr(SimpleToken stmtToken, SimpleToken exprToken) {
+	//std::cout << "extractExpr\n";
+	std::vector<SimpleToken> exprChildren = exprToken.getChildren();
+	for (int i = 0; i < exprChildren.size(); i++) {
+		SimpleToken currentToken = exprChildren.at(i);
+		if (currentToken.type == SpTokenType::TVARIABLE) {
+			this->currentStack->uses.push_back(currentToken);
+
+			Entity* left = generateEntity(stmtToken);
+			Entity* right = generateEntity(currentToken);
+			UsesRelationship* relationship = new UsesRelationship(left, right);
+			//std::cout << typeid(relationship).name() << " | " + (relationship->getLeftEntity()->getValue()) + " | " + (relationship->getRightEntity()->getValue()) + "\n";
+			this->client->storeRelationship(relationship);
+		}
+		if (currentToken.type == SpTokenType::TCONSTANT) {
+			this->client->storeConstant(new ConstantEntity(currentToken.value));
 		}
 	}
-
-	return usesRelationships;
+	//std::cout << "extractExpr OK\n";
 }
 
-void Extractor::extractWhileStmt(SimpleToken whileToken) {
-	if (whileToken.type != SpTokenType::TWHILE) {
-		throw std::invalid_argument("Invalid token type for extractWhile");
-	}
-	std::vector<SimpleToken> childrenOfWhileToken = whileToken.getChildren();
-	extractParentRelationships(whileToken, childrenOfWhileToken);
-	extractFollowsRelationships(childrenOfWhileToken);
+void Extractor::extractCall(SimpleToken callToken) {
+	//std::cout << "extractCall\n";
+	this->currentStack->addFollows(callToken);
 
-	SimpleToken condExpr = childrenOfWhileToken.at(0); // Condition expression
-	extractCondExpr(whileToken, condExpr);
+	Entity* left = generateEntity(SimpleToken(SpTokenType::TPROCEDURE, this->currentProcedure, 0));
+	Entity* right = new CallEntity(callToken.value);
+	CallsRelationship* relationship = new CallsRelationship(left, right);
+	//std::cout << typeid(relationship).name() << " | " + (relationship->getLeftEntity()->getValue()) + " | " + (relationship->getRightEntity()->getValue()) + "\n";
+	this->client->storeRelationship(relationship);
 
-	SimpleToken stmtLst = childrenOfWhileToken.at(1); // Statement list in while loop
-	extractStmtLst(stmtLst);
+	this->callProcedures.insert(std::pair<std::string, std::string>(this->currentProcedure, callToken.value));
+	//std::cout << "extractCall OK\n";
 }
 
-void Extractor::extractIfStmt(SimpleToken ifToken) {
-	if (ifToken.type != SpTokenType::TIF) {
-		throw std::invalid_argument("Invalid token type for extractIf");
-	}
-	std::vector<SimpleToken> childrenOfIfToken = ifToken.getChildren();
-	extractParentRelationships(ifToken, childrenOfIfToken);
-	extractFollowsRelationships(childrenOfIfToken);
-
-	SimpleToken condExpr = childrenOfIfToken.at(0); // Condition expression
-	extractCondExpr(ifToken, condExpr);
-
-	SimpleToken stmtLst1 = childrenOfIfToken.at(1); // If statement
-	extractStmtLst(stmtLst1);
-	SimpleToken stmtLst2 = childrenOfIfToken.at(2); // Else statement
-	extractStmtLst(stmtLst2);
+void Extractor::extractProcedure(SimpleToken procedureToken) {
+	//std::cout << "extractProcedure\n";
+	this->currentStack = new ProcedureStack(procedureToken, this);
+	this->currentProcedure = procedureToken.value;
+	//std::cout << "extractProcedure OK\n";
 }
 
-void Extractor::extractStmtLst(SimpleToken stmtLstToken) {
-	if (stmtLstToken.type != SpTokenType::TSTMTLIST) {
-		throw std::invalid_argument("Invalid token type for extractStmtLst");
-	}
-	std::vector<SimpleToken> seriesOfStmts = stmtLstToken.getChildren();
-	extractSeriesOfStmts(seriesOfStmts);
+void Extractor::close(int statementNumber) {
+	//std::cout << "close\n";
+	currentStack->close(statementNumber);
+	//std::cout << "close OK\n";
 }
 
-void Extractor::extractCondExpr(SimpleToken condToken, SimpleToken condExpr) {
-	if (condExpr.type != SpTokenType::TCONDEXPR) {
-		throw std::invalid_argument("Invalid token type for extractCondExpr");
-	}
-	std::vector<UsesRelationship*> usesRelationships = getUsesRelationshipsForCondExpr(condToken, condExpr);
-	for (int i = 0; i < usesRelationships.size(); i++) {
-		this->client->storeRelationship(usesRelationships.at(i));
-	}
-}
+void Extractor::endOfParser() {
+	//std::cout << "endOfParser\n";
+	for (auto itr = callProcedures.begin(); itr != callProcedures.end(); ++itr) {
+		//std::cout << "for loop begin\n";
 
-std::vector<UsesRelationship*> Extractor::getUsesRelationshipsForCondExpr(SimpleToken condToken, SimpleToken condExpr) {
-	if (condToken.type != SpTokenType::TWHILE && condToken.type != SpTokenType::TIF) {
-		throw std::invalid_argument("Invalid token type for Condiional Token");
-	}
-	Entity* condEntity;
-	if (condToken.type == SpTokenType::TWHILE) {
-		condEntity = new WhileEntity(std::to_string(condToken.statementNumber));
-	}
-	if (condToken.type == SpTokenType::TIF) {
-		condEntity = new IfEntity(std::to_string(condToken.statementNumber));
-	}
+		std::string parent = itr->first;
+		std::string called = itr->second;
 
-	std::vector<UsesRelationship*> usesRelationships;
+		//std::cout << parent + "\n";
+		//std::cout << called + "\n";
 
-	std::vector<SimpleToken> childrenOfCondExpr = condExpr.getChildren();
-	for (int i = 0; i < childrenOfCondExpr.size(); i++) {
-		SimpleToken current = childrenOfCondExpr.at(i);
-		if (current.type == SpTokenType::TVARIABLE) {
-			VariableEntity* variableEntity = new VariableEntity(current.value);
-			UsesRelationship* usesRelationship = new UsesRelationship(condEntity, variableEntity);
-			usesRelationships.push_back(usesRelationship);
+		//std::cout << "for loop middle\n";
+
+		if (procedures.find(parent) != procedures.end() && procedures.find(called) != procedures.end()) {
+			//std::cout << "found stuff\n";
+
+			StmtStack* parentStack = procedures.find(parent)->second;
+			StmtStack* calledStack = procedures.find(called)->second;
+			addNestedRelationships(parentStack, calledStack, parent);
 		}
+
+		//std::cout << "for loop end OK\n";
 	}
-	
-	return usesRelationships;
+	//std::cout << "endOfParser OK\n";
 }
 
-void Extractor::extractCall() {
-	CallEntity* callEntity = new CallEntity("");
-	VariableEntity* variableEntity = new VariableEntity("");
+void Extractor::addNestedRelationships(StmtStack* parentStack, StmtStack* calledStack, std::string name) {
+	//std::cout << "addNestedRels\n";
+	std::vector<SimpleToken> follows = calledStack->follows;
+	std::vector<SimpleToken> parentT = calledStack->parentT;
+	std::vector<SimpleToken> uses = calledStack->uses;
+	std::vector<SimpleToken> modifies = calledStack->modifies;
 
-	// To be implemented
+	for (int i = 0; i < follows.size(); i++) {
+		SimpleToken second = follows.at(i);
+		Entity* firstEntity = generateEntity(SimpleToken(SpTokenType::TPROCEDURE, name, 0));
+		Entity* secondEntity = generateEntity(second);
+		ParentTRelationship* parentTRel = new ParentTRelationship(firstEntity, secondEntity);
+		//std::cout << typeid(parentTRel).name() << " | " + (parentTRel->getLeftEntity()->getValue()) + " | " + (parentTRel->getRightEntity()->getValue()) + "\n";
+		this->client->storeRelationship(parentTRel);
+	}
+
+	for (int i = 0; i < parentT.size(); i++) {
+		SimpleToken second = parentT.at(i);
+		Entity* firstEntity = generateEntity(SimpleToken(SpTokenType::TPROCEDURE, name, 0));
+		Entity* secondEntity = generateEntity(second);
+		ParentTRelationship* parentTRel = new ParentTRelationship(firstEntity, secondEntity);
+		//std::cout << typeid(parentTRel).name() << " | " + (parentTRel->getLeftEntity()->getValue()) + " | " + (parentTRel->getRightEntity()->getValue()) + "\n";
+		this->client->storeRelationship(parentTRel);
+	}
+
+	for (int i = 0; i < uses.size(); i++) {
+		SimpleToken second = uses.at(i);
+		Entity* firstEntity = generateEntity(SimpleToken(SpTokenType::TPROCEDURE, name, 0));
+		Entity* secondEntity = generateEntity(second);
+		UsesRelationship* usesRel = new UsesRelationship(firstEntity, secondEntity);
+		//std::cout << typeid(usesRel).name() << " | " + (usesRel->getLeftEntity()->getValue()) + " | " + (usesRel->getRightEntity()->getValue()) + "\n";
+		this->client->storeRelationship(usesRel);
+	}
+
+	for (int i = 0; i < modifies.size(); i++) {
+		SimpleToken second = modifies.at(i);
+		Entity* firstEntity = generateEntity(SimpleToken(SpTokenType::TPROCEDURE, name, 0));
+		Entity* secondEntity = generateEntity(second);
+		ModifyRelationship* modifyRel = new ModifyRelationship(firstEntity, secondEntity);
+		//std::cout << typeid(modifyRel).name() << " | " + (modifyRel->getLeftEntity()->getValue()) + " | " + (modifyRel->getRightEntity()->getValue()) + "\n";
+		this->client->storeRelationship(modifyRel);
+	}
+	//std::cout << "addNestedRels OK\n";
 }
-*/
+
+Entity* Extractor::generateEntity(SimpleToken token) {
+	if (token.type == SpTokenType::TREAD) {
+		return new ReadEntity(std::to_string(token.statementNumber));
+	}
+	if (token.type == SpTokenType::TPRINT) {
+		return new PrintEntity(std::to_string(token.statementNumber));
+	}
+	if (token.type == SpTokenType::TASSIGN) {
+		return new AssignEntity(std::to_string(token.statementNumber));
+	}
+	if (token.type == SpTokenType::TWHILE) {
+		return new WhileEntity(std::to_string(token.statementNumber));
+	}
+	if (token.type == SpTokenType::TIF) {
+		return new IfEntity(std::to_string(token.statementNumber));
+	}
+	if (token.type == SpTokenType::TVARIABLE) {
+		return new VariableEntity(token.value);
+	}
+	if (token.type == SpTokenType::TCONSTANT) {
+		return new ConstantEntity(token.value);
+	}
+	if (token.type == SpTokenType::TPROCEDURE) {
+		return new ProcedureEntity(token.value);
+	}
+	if (token.type == SpTokenType::TCALL) {
+		return new CallEntity(std::to_string(token.statementNumber));
+	}
+	return new Entity(std::to_string(token.statementNumber)); // Should not happen
+}
