@@ -38,6 +38,8 @@
 
 #include "../../pkb/clients/SPClient.h"
 
+class Entity;
+
 class Extractor {
 public:
 	SPClient* client;
@@ -61,6 +63,7 @@ public:
 	void extractCall(SimpleToken callToken);
 	void extractProcedure(SimpleToken procedureToken);
 	void endOfParser();
+	void addNestedRelationships(StmtStack* parent, StmtStack* called);
 	std::string getExpressionAsString(SimpleToken exprToken);
 	Entity* generateEntity(SimpleToken token);
 

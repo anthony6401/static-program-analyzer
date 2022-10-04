@@ -1,6 +1,8 @@
 #include "WhileStack.h"
 #include <stdexcept>
 
+#include <iostream>
+
 WhileStack::WhileStack(SimpleToken parent, Extractor* context) : parent(parent) {
     this->context = context;
 }
@@ -27,7 +29,8 @@ void WhileStack::extractFollows(std::vector<SimpleToken> follows) {
         SimpleToken second = follows.at(i + 1);
         Entity* firstEntity = generateEntity(first);
         Entity* secondEntity = generateEntity(second);
-        FollowsRelationship* followsRel = new FollowsRelationship(firstEntity, firstEntity);
+        FollowsRelationship* followsRel = new FollowsRelationship(firstEntity, secondEntity);
+        std::cout << typeid(followsRel).name() << " | " + (followsRel->getLeftEntity()->getValue()) + " | " + (followsRel->getRightEntity()->getValue()) + "\n";
         context->client->storeRelationship(followsRel);
     }
     for (int i = 0; i < follows.size(); i++) {
@@ -36,7 +39,8 @@ void WhileStack::extractFollows(std::vector<SimpleToken> follows) {
             SimpleToken second = follows.at(j);
             Entity* firstEntity = generateEntity(first);
             Entity* secondEntity = generateEntity(second);
-            FollowsTRelationship* followsTRel = new FollowsTRelationship(firstEntity, firstEntity);
+            FollowsTRelationship* followsTRel = new FollowsTRelationship(firstEntity, secondEntity);
+            std::cout << typeid(followsTRel).name() << " | " + (followsTRel->getLeftEntity()->getValue()) + " | " + (followsTRel->getRightEntity()->getValue()) + "\n";
             context->client->storeRelationship(followsTRel);
         }
     }
@@ -47,7 +51,8 @@ void WhileStack::extractParent(std::vector<SimpleToken> follows, int statementNu
         SimpleToken second = follows.at(i);
         Entity* firstEntity = generateEntity(this->parent);
         Entity* secondEntity = generateEntity(second);
-        ParentRelationship* parentRel = new ParentRelationship(firstEntity, firstEntity);
+        ParentRelationship* parentRel = new ParentRelationship(firstEntity, secondEntity);
+        std::cout << typeid(parentRel).name() << " | " + (parentRel->getLeftEntity()->getValue()) + " | " + (parentRel->getRightEntity()->getValue()) + "\n";
         context->client->storeRelationship(parentRel);
     }
     // parentT?
@@ -57,8 +62,9 @@ void WhileStack::extractUses(std::vector<SimpleToken> uses) {
     for (int i = 0; i < uses.size(); i++) {
         SimpleToken second = uses.at(i);
         Entity* firstEntity = generateEntity(this->parent);
-        Entity* secondEntity = generateEntity(second);
-        UsesRelationship* usesRel = new UsesRelationship(firstEntity, firstEntity);
+        Entity* secondEntity = generateEntity(SimpleToken(SpTokenType::TVARIABLE, second.value, 0));
+        UsesRelationship* usesRel = new UsesRelationship(firstEntity, secondEntity);
+        std::cout << typeid(usesRel).name() << " | " + (usesRel->getLeftEntity()->getValue()) + " | " + (usesRel->getRightEntity()->getValue()) + "\n";
         context->client->storeRelationship(usesRel);
     }
 }
@@ -67,8 +73,9 @@ void WhileStack::extractModify(std::vector<SimpleToken> modifies) {
     for (int i = 0; i < modifies.size(); i++) {
         SimpleToken second = modifies.at(i);
         Entity* firstEntity = generateEntity(this->parent);
-        Entity* secondEntity = generateEntity(second);
-        ModifyRelationship* modifyRel = new ModifyRelationship(firstEntity, firstEntity);
+        Entity* secondEntity = generateEntity(SimpleToken(SpTokenType::TVARIABLE, second.value, 0));
+        ModifyRelationship* modifyRel = new ModifyRelationship(firstEntity, secondEntity);
+        std::cout << typeid(modifyRel).name() << " | " + (modifyRel->getLeftEntity()->getValue()) + " | " + (modifyRel->getRightEntity()->getValue()) + "\n";
         context->client->storeRelationship(modifyRel);
     }
 }

@@ -3,6 +3,8 @@
 #include "models/Relationship/Relationship.h"
 #include "models/Pattern/Pattern.h"
 
+#include <iostream>
+
 SPClient::SPClient(PKB* knowledge){
 	pkb = knowledge;
 }
@@ -16,6 +18,7 @@ bool SPClient::storeRelationship(Relationship* rel) {
 }
 
 bool SPClient::storePattern(kb::Pattern* pattern) {
+	std::cout << "Pattern: " + (pattern->getLineNum()) + " | " + (pattern->getFirstValue()) + " = " + (pattern->getSecondValue()) + "\n";
 	return pkb->storePattern(pattern);
 }
 

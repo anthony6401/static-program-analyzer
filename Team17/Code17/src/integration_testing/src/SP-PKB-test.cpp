@@ -30,26 +30,35 @@ auto spClient = new SPClient(pkbSP);
 TEST_CASE("test SP PKB integration") {
 	Extractor extractor = Extractor(spClient);
 	SimpleParser simpleParser = SimpleParser(&extractor);
-	simpleParser.parseCode("    procedure computeCentroid {\
-		      count = 0;\
-	      cenX = 0;\
-	      cenY = 0;\
-	      while ((x != 0) && (y != 0)) {\
-		          count = count + 1;\
-		          cenX = cenX + x;\
-		          cenY = cenY + y;\
-	}\
-	      if (count == 0) then{\
-	          flag = 1;\
-	}\
-	else {\
-		          cenX = cenX / count;\
-		          cenY = cenY / count;\
-	}\
-	      normSq = cenX * cenX + cenY * cenY;\
-}");
+    std::cout << "Starting test\n";
+	simpleParser.parseCode("procedure First {\
+                                read x;\
+                                read z;\
+                                call Second; }\
+                            \
+                            procedure Second {\
+                                x = 0;\
+                                i = 5;\
+                                while (i != 0) {\
+                                    x = x + 2 * y;\
+                                    call Third;\
+                                    i = i - 1; }\
+                                if (x == 1) then {\
+                                    x = x + 1; }\
+                                else {\
+                                    z = 1; }\
+                                z = z + x + i;\
+                                y = z + 2;\
+                                x = x * y + z; }\
+                            \
+                            procedure Third {\
+                                z = 5;\
+                                v = z;\
+                                print v; }");
+        std::cout << "Ending test\n";
 }
 
+/*
 // pkbSP APIs queries
 TEST_CASE("Select all queries for SP") {
     SECTION("Select if statements") {
@@ -303,3 +312,4 @@ TEST_CASE("Relationships and patterns for SP") {
         REQUIRE(testResults == expectedResults);
     }
 }
+*/
