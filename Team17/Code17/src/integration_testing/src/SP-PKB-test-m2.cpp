@@ -29,6 +29,32 @@ auto spClient_m2 = new SPClient(pkbSP_m2);
 
 TEST_CASE("test SP PKB integration m2") {
     // Populate PKB with SP
+    Extractor extractor_m2 = Extractor(spClient_m2);
+    SimpleParser simpleParser_m2 = SimpleParser(&extractor_m2);
+    simpleParser_m2.parseCode("procedure First {\
+                                read x;\
+                                read z;\
+                                call Second; }\
+                            \
+                            procedure Second {\
+                                x = 0;\
+                                i = 5;\
+                                while (i != 0) {\
+                                    x = x + 2 * y;\
+                                    call Third;\
+                                    i = i - 1; }\
+                                if (x == 1) then {\
+                                    x = x + 1; }\
+                                else {\
+                                    z = 1; }\
+                                z = z + x + i;\
+                                y = z + 2;\
+                                x = x * y + z; }\
+                            \
+                            procedure Third {\
+                                z = 5;\
+                                v = z;\
+                                print v; }");
 }
 
 // pkbSP APIs queries
