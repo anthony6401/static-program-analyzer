@@ -7,7 +7,7 @@ class WhileStack : public StmtStack {
 public:
     WhileStack(SimpleToken parent, Extractor* context);
     void close(int statementNumber);
-    bool isIf();
+    void mergeStack();
     void extractFollows(std::vector<SimpleToken> follows);
     void extractParent(std::vector<SimpleToken> follows);
     void extractParentT(std::vector<SimpleToken> parentT);

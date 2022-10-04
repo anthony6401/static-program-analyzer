@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-IfStack::IfStack(SimpleToken parent, Extractor* context) : parent(parent) {
+IfStack::IfStack(SimpleToken parent, Extractor* context) : parent(parent), StmtStack(parent, context) {
     this->expectElse = true;
     this->context = context;
 }
@@ -22,22 +22,19 @@ void IfStack::close(int statementNumber) {
         extractUses(context->currentStack->uses);
         extractModify(context->currentStack->modifies);
 
-        mergeStack_if(context->parentStack.top(), context->currentStack, ifFollows);
+        mergeStack();
 
         context->currentStack = context->parentStack.top();
         context->parentStack.pop();
     }
 }
 
-void IfStack::mergeStack_if(StmtStack* parentStack, StmtStack* childStack, std::vector<SimpleToken> ifFollows) {
-    parentStack->parentT.insert(parentStack->parentT.end(), ifFollows.begin(), ifFollows.end());
-    parentStack->parentT.insert(parentStack->parentT.end(), childStack->follows.begin(), childStack->follows.end());
-    parentStack->uses.insert(parentStack->uses.end(), childStack->uses.begin(), childStack->uses.end());
-    parentStack->modifies.insert(parentStack->modifies.end(), childStack->modifies.begin(), childStack->modifies.end());
-}
-
-bool IfStack::isIf() {
-    return expectElse;
+void IfStack::mergeStack() {
+    StmtStack* parent = context->parentStack.top();
+    parent->parentT.insert(parent->parentT.end(), this->ifFollows.begin(), this->ifFollows.end());
+    parent->parentT.insert(parent->parentT.end(), this->follows.begin(), this->follows.end());
+    parent->uses.insert(parent->uses.end(), this->uses.begin(), this->uses.end());
+    parent->modifies.insert(parent->modifies.end(), this->modifies.begin(), this->modifies.end());
 }
 
 void IfStack::extractFollows(std::vector<SimpleToken> follows) {

@@ -2,14 +2,13 @@
 
 #include <iostream>
 
-Extractor::Extractor(SPClient* client) {
+Extractor::Extractor(SPClient* client) : currentStack(nullptr) {
 	this->client = client;
-	currentStack = new ProcedureStack(SimpleToken(), this);
 }
 
 void Extractor::extractRead(SimpleToken readToken) {
 	//std::cout << "extractRead\n";
-	this->currentStack->addFollows(readToken);
+	this->currentStack->follows.push_back(readToken);
 	this->currentStack->modifies.push_back(readToken);
 
 	Entity* left = generateEntity(readToken);
@@ -22,7 +21,7 @@ void Extractor::extractRead(SimpleToken readToken) {
 
 void Extractor::extractPrint(SimpleToken printToken) {
 	//std::cout << "extractPrint\n";
-	this->currentStack->addFollows(printToken);
+	this->currentStack->follows.push_back(printToken);
 	this->currentStack->uses.push_back(printToken);
 
 	Entity* left = generateEntity(printToken);
@@ -35,7 +34,7 @@ void Extractor::extractPrint(SimpleToken printToken) {
 
 void Extractor::extractAssign(SimpleToken assignToken) {
 	//std::cout << "extractAssign\n";
-	this->currentStack->addFollows(assignToken);
+	this->currentStack->follows.push_back(assignToken);
 	SimpleToken varToken = assignToken.getChildren().at(0);
 	this->currentStack->modifies.push_back(varToken);
 
@@ -68,7 +67,7 @@ std::string Extractor::getExpressionAsString(SimpleToken expression) {
 
 void Extractor::extractWhile(SimpleToken whileToken) {
 	//std::cout << "extractWhile\n";
-	this->currentStack->addFollows(whileToken);
+	this->currentStack->follows.push_back(whileToken);
 	extractExpr(whileToken, whileToken);
 
 	// create new while stack and set it as the current stack, old stack gets added to parentStack
@@ -79,7 +78,7 @@ void Extractor::extractWhile(SimpleToken whileToken) {
 
 void Extractor::extractIf(SimpleToken ifToken) {
 	//std::cout << "extractIf\n";
-	this->currentStack->addFollows(ifToken);
+	this->currentStack->follows.push_back(ifToken);
 	extractExpr(ifToken, ifToken);
 
 	// create new if stack and set it as the current stack, old stack gets added to parentStack
@@ -111,7 +110,7 @@ void Extractor::extractExpr(SimpleToken stmtToken, SimpleToken exprToken) {
 
 void Extractor::extractCall(SimpleToken callToken) {
 	//std::cout << "extractCall\n";
-	this->currentStack->addFollows(callToken);
+	this->currentStack->follows.push_back(callToken);
 
 	Entity* left = generateEntity(SimpleToken(SpTokenType::TPROCEDURE, this->currentProcedure, 0));
 	Entity* right = new CallEntity(callToken.value);

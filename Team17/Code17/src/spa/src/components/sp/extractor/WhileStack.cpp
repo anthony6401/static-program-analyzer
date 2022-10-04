@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-WhileStack::WhileStack(SimpleToken parent, Extractor* context) : parent(parent) {
+WhileStack::WhileStack(SimpleToken parent, Extractor* context) : parent(parent), StmtStack(parent, context) {
     this->context = context;
 }
 
@@ -14,14 +14,17 @@ void WhileStack::close(int statementNumber) {
     extractUses(context->currentStack->uses);
     extractModify(context->currentStack->modifies);
 
-    mergeStack(context->parentStack.top(), context->currentStack);
+    mergeStack();
 
     context->currentStack = context->parentStack.top();
     context->parentStack.pop();
 }
 
-bool WhileStack::isIf() {
-    return false;
+void WhileStack::mergeStack() {
+    StmtStack* parent = context->parentStack.top();
+    parent->parentT.insert(parent->parentT.end(), this->follows.begin(), this->follows.end());
+    parent->uses.insert(parent->uses.end(), this->uses.begin(), this->uses.end());
+    parent->modifies.insert(parent->modifies.end(), this->modifies.begin(), this->modifies.end());
 }
 
 void WhileStack::extractFollows(std::vector<SimpleToken> follows) {

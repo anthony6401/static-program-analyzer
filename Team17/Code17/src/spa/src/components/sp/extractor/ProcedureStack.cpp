@@ -4,7 +4,7 @@
 
 #include <iostream>
 
-ProcedureStack::ProcedureStack(SimpleToken parent, Extractor* context) : parent(parent) {
+ProcedureStack::ProcedureStack(SimpleToken parent, Extractor* context) : parent(parent), StmtStack(parent, context) {
     this->context = context;
 }
 
@@ -18,9 +18,7 @@ void ProcedureStack::close(int statementNumber) {
     context->procedures.insert(std::pair<std::string, ProcedureStack*>(parent.value, this));
 }
 
-bool ProcedureStack::isIf() {
-    return false;
-}
+void ProcedureStack::mergeStack() {}
 
 void ProcedureStack::extractFollows(std::vector<SimpleToken> follows) {
     for (int i = 0; i < follows.size() - 1; i++) {

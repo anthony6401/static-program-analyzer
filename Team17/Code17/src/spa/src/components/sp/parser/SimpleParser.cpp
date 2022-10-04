@@ -89,7 +89,9 @@ void SimpleParser::parseLine(std::string code) {
 
 void SimpleParser::parseProcedure(std::vector<std::string>& tokens) {
     if (tokens.size() == 2 && tokens.at(1) == "{") {
-        validator.validateProcedure(tokens.at(0));
+        if (!(validator.validateProcedure(tokens.at(0)))) {
+            throw std::invalid_argument("Received invalid or duplicate Procedure:Line " + std::to_string(statementNumber));
+        }
         SimpleToken procedureToken = SimpleToken(SpTokenType::TPROCEDURE, parseVariable(tokens.at(0)), 0);//change to parse procedure
         validator.setState(new NestedState(&validator));
         extractor->extractProcedure(procedureToken);
