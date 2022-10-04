@@ -9,15 +9,14 @@ SelectSynonymClause::SelectSynonymClause(TokenObject selectSynonym, std::unorder
 ResultTable SelectSynonymClause::evaluateClause() {
     std::string selectSynonymValue = selectSynonym.getValue();
     ResultTable resultTable;
+    resultTable.setIsSynonymResult();
     // Select synonym found -> Just select synonym column from table
     if (synonymsInTable.find(selectSynonymValue) != synonymsInTable.end()) {
-        resultTable.setIsSynonymResult();
         return resultTable;
     } else { // Evaluate and select all synonym
-        resultTable.setIsSynonymResult();
         DesignEntity returnType = synonymToDesignEntityMap[selectSynonymValue];
         std::unordered_set<std::string> results = qpsClient.getAllEntity(returnType);
-        resultTable = ResultTable(selectSynonymValue, results);
+        resultTable = std::move(ResultTable(selectSynonymValue, results));
         return resultTable;
     }
 

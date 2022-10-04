@@ -17,7 +17,7 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
         std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap = queryObject.getSynonymToDesignEntityMap();
         Select select = queryObject.getSelect();
         std::shared_ptr<Clause> selectClause = ClauseCreator::createClause(select.getSynonym(), synonymToDesignEntityMap, qpsClient);
-
+        //std::shared_ptr<Clause> selectClause = ClauseCreator::createClause(select, &synonymsInTable, synonymToDesignEntityMap, qpsClient);
         ClauseDivider clausesToEvaluate = extractClausesToEvaluate(queryObject, synonymToDesignEntityMap, qpsClient);
         clausesToEvaluate.divideCommonSynonymGroupsBySelect(selectClause);
         GroupedClause noSynonymsClauses = clausesToEvaluate.getNoSynonymsPresent();
@@ -34,8 +34,7 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
         }
 
         //std::unordered_set<std::string> synonymsInTable{evaluatedResults.synonymsList.begin(), evaluatedResults.synonymsList.end()};
-        //std::shared_ptr<Clause> selectClause = ClauseCreator::createClause(select, synonymsInTable, synonymToDesignEntityMap, qpsClient);
-
+        //selectClause = ClauseCreator::createClause(select, synonymsInTable, synonymToDesignEntityMap, qpsClient);
         ResultTable finalResultTable = Evaluator::combineResultsWithSelect(selectClause, evaluatedResults);
         Evaluator::populateResults(finalResultTable, select.getSynonym(), results);
     }
@@ -54,6 +53,7 @@ void Evaluator::populateResults(ResultTable finalResult, std::string selectSynon
 }
 
 ResultTable Evaluator::combineResultsWithSelect(std::shared_ptr<Clause> selectClause, ResultTable evaluatedResults) {
+    // Synonym, Tuple or Boolean
     ResultTable selectResults = selectClause -> evaluateClause();
     evaluatedResults.combineResult(selectResults);
     return evaluatedResults;
