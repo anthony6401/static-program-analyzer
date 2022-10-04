@@ -13,6 +13,7 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
         results.emplace_back("SemanticError");
     } else {
         ResultTable evaluatedResults;
+        std::unordered_set<std::string> synonymsInTable{};
         std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap = queryObject.getSynonymToDesignEntityMap();
         Select select = queryObject.getSelect();
         std::shared_ptr<Clause> selectClause = ClauseCreator::createClause(select.getSynonym(), synonymToDesignEntityMap, qpsClient);
@@ -32,7 +33,9 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
             evaluatedResults = Evaluator::evaluateHasSelectSynonymClauses(hasSelectSynonymPresent, select.getSynonym());
         }
 
-        // For unrelated to select synonyms, if both tables are true/not empty, return all results
+        //std::unordered_set<std::string> synonymsInTable{evaluatedResults.synonymsList.begin(), evaluatedResults.synonymsList.end()};
+        //std::shared_ptr<Clause> selectClause = ClauseCreator::createClause(select, synonymsInTable, synonymToDesignEntityMap, qpsClient);
+
         ResultTable finalResultTable = Evaluator::combineResultsWithSelect(selectClause, evaluatedResults);
         Evaluator::populateResults(finalResultTable, select.getSynonym(), results);
     }

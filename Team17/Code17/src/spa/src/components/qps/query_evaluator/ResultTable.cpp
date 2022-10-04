@@ -64,6 +64,22 @@ void ResultTable::setIsSynonymResult() {
     isSynonymResult = true;
 }
 
+bool ResultTable::getIsTupleResult() {
+    return isTupleResult;
+}
+
+void ResultTable::setIsTupleResult() {
+    isTupleResult = true;
+}
+
+bool ResultTable::getIsBooleanResult() {
+    return isBooleanResult;
+}
+
+void ResultTable::setIsBooleanResult() {
+    isBooleanResult = true;
+}
+
 
 std::unordered_set<std::string> ResultTable::getResultsToBePopulated(std::string selectSynonym) {
     std::unordered_set<std::string> result({});

@@ -12,6 +12,7 @@ private:
     bool isFalseResult = false;
     bool isSynonymResult = false;
     bool isTupleResult = false;
+    bool isBooleanResult = false;
 
 public:
     std::vector<std::string> synonymsList;
@@ -33,6 +34,10 @@ public:
     friend std::ostream &operator<<(std::ostream &os, const ResultTable &table);
     bool getIsSynonymResult();
     void setIsSynonymResult();
+    bool getIsTupleResult();
+    void setIsTupleResult();
+    bool getIsBooleanResult();
+    void setIsBooleanResult();
     bool getIsFalseResult();
     void setIsFalseResult(bool pkbBooleanResult);
     void setIsFalseResultToTrue();
