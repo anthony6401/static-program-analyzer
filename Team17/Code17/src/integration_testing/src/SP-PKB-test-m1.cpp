@@ -281,7 +281,7 @@ TEST_CASE("Relationships and patterns for SP") {
         REQUIRE(testResults == expectedResults);
     }
 
-    SECTION("Parent with 2 synonyms") {
+    SECTION("Parent* with 2 synonyms") {
         // Parent*(w, s)
         std::unordered_map<std::string, std::unordered_set<std::string>> testResults = pkbSP->getAllRelationship(RelationshipType::PARENT_T, DesignEntity::WHILE, DesignEntity::STMT);
         std::unordered_map<std::string, std::unordered_set<std::string>> expectedResults = { {"4", std::unordered_set<std::string>({"5", "6", "7"})} };
