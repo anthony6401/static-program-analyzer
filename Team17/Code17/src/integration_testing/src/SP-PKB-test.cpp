@@ -109,7 +109,9 @@ TEST_CASE("Select all queries for SP") {
         REQUIRE(testResults == expectedResults);
     }
 }
+*/
 
+/*
 TEST_CASE("Relationships and patterns for SP") {
     SECTION("Modifies with no synonym") {
         // Modifies(2, cenX)
