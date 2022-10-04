@@ -14,12 +14,11 @@ PKB* SPClient::getPKB() {
 }
 
 bool SPClient::storeRelationship(Relationship* rel) {
-	std::cout << "Relationship: " + (rel->getLeftEntity()->getValue()) + " | " + (rel->getRightEntity()->getValue()) + "\n";
 	return pkb->storeRelationship(rel);
 }
 
 bool SPClient::storePattern(kb::Pattern* pattern) {
-	std::cout << "Pattern: " + (pattern->getLineNum()) + " | " + (pattern->getFirstValue()) + " | " + (pattern->getSecondValue()) + "\n";
+	std::cout << "Pattern: " + (pattern->getLineNum()) + " | " + (pattern->getFirstValue()) + " = " + (pattern->getSecondValue()) + "\n";
 	return pkb->storePattern(pattern);
 }
 

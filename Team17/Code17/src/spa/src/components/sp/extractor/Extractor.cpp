@@ -16,6 +16,7 @@ void Extractor::extractRead(SimpleToken readToken) {
 	Entity* right = generateEntity(SimpleToken(SpTokenType::TVARIABLE, readToken.value, 0));
 	ModifyRelationship* relationship = new ModifyRelationship(left, right);
 	this->client->storeRelationship(relationship);
+	std::cout << typeid(relationship).name() << " | " + (relationship->getLeftEntity()->getValue()) + " | " + (relationship->getRightEntity()->getValue()) + "\n";
 	std::cout << "extractRead OK\n";
 }
 
@@ -28,6 +29,7 @@ void Extractor::extractPrint(SimpleToken printToken) {
 	Entity* right = generateEntity(SimpleToken(SpTokenType::TVARIABLE, printToken.value, 0));
 	UsesRelationship* relationship = new UsesRelationship(left, right);
 	this->client->storeRelationship(relationship);
+	std::cout << typeid(relationship).name() << " | " + (relationship->getLeftEntity()->getValue()) + " | " + (relationship->getRightEntity()->getValue()) + "\n";
 	std::cout << "extractPrint OK\n";
 }
 
@@ -40,6 +42,7 @@ void Extractor::extractAssign(SimpleToken assignToken) {
 	Entity* left = generateEntity(assignToken);
 	Entity* right = generateEntity(varToken);
 	ModifyRelationship* relationship = new ModifyRelationship(left, right);
+	std::cout << typeid(relationship).name() << " | " + (relationship->getLeftEntity()->getValue()) + " | " + (relationship->getRightEntity()->getValue()) + "\n";
 	this->client->storeRelationship(relationship);
 
 	SimpleToken exprToken = assignToken.getChildren().at(1);
@@ -96,6 +99,7 @@ void Extractor::extractExpr(SimpleToken stmtToken, SimpleToken exprToken) {
 			Entity* left = generateEntity(stmtToken);
 			Entity* right = generateEntity(currentToken);
 			UsesRelationship* relationship = new UsesRelationship(left, right);
+			std::cout << typeid(relationship).name() << " | " + (relationship->getLeftEntity()->getValue()) + " | " + (relationship->getRightEntity()->getValue()) + "\n";
 			this->client->storeRelationship(relationship);
 		}
 	}
@@ -109,6 +113,7 @@ void Extractor::extractCall(SimpleToken callToken) {
 	Entity* left = generateEntity(SimpleToken(SpTokenType::TPROCEDURE, this->currentProcedure, 0));
 	Entity* right = generateEntity(SimpleToken(SpTokenType::TCALL, callToken.value, 0));
 	CallsRelationship* relationship = new CallsRelationship(left, right);
+	std::cout << typeid(relationship).name() << " | " + (relationship->getLeftEntity()->getValue()) + " | " + (relationship->getRightEntity()->getValue()) + "\n";
 	this->client->storeRelationship(relationship);
 
 	this->callProcedures.insert(std::pair<std::string, std::string>(this->currentStack->parent.value, callToken.value));
@@ -163,6 +168,7 @@ void Extractor::addNestedRelationships(StmtStack* parentStack, StmtStack* called
 		Entity* firstEntity = generateEntity(parentStack->parent);
 		Entity* secondEntity = generateEntity(second);
 		ParentTRelationship* parentTRel = new ParentTRelationship(firstEntity, firstEntity);
+		std::cout << typeid(parentTRel).name() << " | " + (parentTRel->getLeftEntity()->getValue()) + " | " + (parentTRel->getRightEntity()->getValue()) + "\n";
 		this->client->storeRelationship(parentTRel);
 	}
 
@@ -171,6 +177,7 @@ void Extractor::addNestedRelationships(StmtStack* parentStack, StmtStack* called
 		Entity* firstEntity = generateEntity(parentStack->parent);
 		Entity* secondEntity = generateEntity(second);
 		UsesRelationship* usesRel = new UsesRelationship(firstEntity, secondEntity);
+		std::cout << typeid(usesRel).name() << " | " + (usesRel->getLeftEntity()->getValue()) + " | " + (usesRel->getRightEntity()->getValue()) + "\n";
 		this->client->storeRelationship(usesRel);
 	}
 
@@ -179,6 +186,7 @@ void Extractor::addNestedRelationships(StmtStack* parentStack, StmtStack* called
 		Entity* firstEntity = generateEntity(parentStack->parent);
 		Entity* secondEntity = generateEntity(second);
 		ModifyRelationship* modifyRel = new ModifyRelationship(firstEntity, secondEntity);
+		std::cout << typeid(modifyRel).name() << " | " + (modifyRel->getLeftEntity()->getValue()) + " | " + (modifyRel->getRightEntity()->getValue()) + "\n";
 		this->client->storeRelationship(modifyRel);
 	}
 	std::cout << "addNestedRels OK\n";
