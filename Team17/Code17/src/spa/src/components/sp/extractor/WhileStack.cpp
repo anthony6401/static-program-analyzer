@@ -51,7 +51,9 @@ void WhileStack::extractParent(std::vector<SimpleToken> follows) {
         Entity* firstEntity = generateEntity(this->parent);
         Entity* secondEntity = generateEntity(second);
         ParentRelationship* parentRel = new ParentRelationship(firstEntity, secondEntity);
+        ParentTRelationship* parentTRel = new ParentTRelationship(firstEntity, secondEntity);
         context->client->storeRelationship(parentRel);
+        context->client->storeRelationship(parentTRel);
     }
 }
 
