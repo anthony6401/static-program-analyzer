@@ -324,7 +324,7 @@ std::vector<Pattern> Parser::parseTokensIntoPatternObjects(std::vector<TokenObje
 	for (TokenObject token : patternTokens) {
 		TokenType currTokenType = token.getTokenType();
 
-		if ((currTokenType == TokenType::OPEN_BRACKET)) {
+		if (currTokenType == TokenType::OPEN_BRACKET) {
 			continue;
 		}
 
