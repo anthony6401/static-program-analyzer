@@ -19,6 +19,19 @@ std::shared_ptr<Clause> ClauseCreator::createClause(Select synonym, std::unorder
     return std::make_shared<SelectClause>(synonym, synonymToDesignEntityMap, qpsClient);
 }
 
+std::shared_ptr<Clause> ClauseCreator::createClause(Select select, const std::unordered_set<std::string> &tableSynonyms, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) {
+    TokenType selectReturnType = select.getReturnType();
+    if (selectReturnType == TokenType::SYNONYM) {
+        return std::make_shared<SelectClause>(select, synonymToDesignEntityMap, qpsClient);
+    } else if (selectReturnType == TokenType::BOOLEAN) {
+        return std::make_shared<SelectClause>(select, synonymToDesignEntityMap, qpsClient);
+    } else if (selectReturnType == TokenType::TUPLE) {
+        return std::make_shared<SelectClause>(select, synonymToDesignEntityMap, qpsClient);
+    } else {
+        return nullptr;
+    }
+}
+
 std::shared_ptr<Clause> ClauseCreator::createClause(qps::Pattern pattern, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) {
     TokenObject left = pattern.getLeft();
     TokenObject right = pattern.getRight();
