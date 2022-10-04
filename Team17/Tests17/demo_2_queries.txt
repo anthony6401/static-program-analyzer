@@ -1,0 +1,130 @@
+1 - Calls Test 1
+procedure p, p1;
+Select p such that Calls("First", "Second")
+Third, Second, First
+5000
+2 - Calls Test 2
+procedure p;
+Select p such that Calls(p, _)
+Second, First
+5000
+3 - Calls Test 3
+procedure p;
+Select p such that Calls(p, "Third")
+Second
+5000
+4 - Calls Test 4
+procedure p, p1;
+Select p such that Calls("Third", _)
+none
+5000
+5 - Calls Test 5
+procedure p, p1;
+Select p such that Calls("First", "Third")
+none
+5000
+6 - Calls Test 6
+procedure p, p1;
+Select p such that Calls("First", "First")
+none
+5000
+7 - Calls Test 7
+procedure p; call call;
+Select call such that Calls("First", "Second")
+8, 3
+5000
+8 - Calls Test 8
+procedure p, p1;
+Select p such that Calls(1, _)
+SyntaxError
+5000
+9 - Calls Test 9
+procedure p, p1;
+Select p such that Calls(3, _)
+SyntaxError
+5000
+10 - Calls Test 10
+procedure p, p1;
+Select p such that Calls(_, 3)
+SyntaxError
+5000
+11 - Calls Test 11
+procedure p; stmt p1;
+Select p such that Calls(p, p1)
+SemanticError
+5000
+12 - Pattern Expressions test 1
+read re; assign a;
+Select re pattern a("x", "x + 2*y")
+1, 2
+5000
+13 - Pattern Expressions test 2
+variable v; assign a;
+Select v pattern a(v, "i - 1")
+i
+5000
+14 - Pattern Expressions test 3
+variable v; assign a;
+Select v pattern a(v, "x * y + z")
+x
+5000
+15 - Pattern Expressions test 4
+variable v; assign a;
+Select v pattern a(v, "y * z")
+none
+5000
+16 - Pattern Expressions test 5
+variable v; assign a;
+Select v pattern a(v, "0")
+x
+5000
+17 - Pattern Subexpressions test 1
+variable v; assign a;
+Select v pattern a(v, _"x * y"_)
+x
+5000
+18 - Pattern Subexpressions test 2
+variable v; assign a;
+Select v pattern a(v, _"z + x"_)
+z
+5000
+19 - Pattern Subexpressions test 3
+variable v; assign a;
+Select a pattern a(v, _"5"_)
+5, 16
+5000
+20 - ModifiesP test 1
+variable v; procedure p;
+Select p such that Modifies(p, v)
+First, Second, Third
+5000
+21 - UsesP test 1
+procedure p;
+Select p such that Uses(p, "i")
+First, Second
+5000
+22 - Select all p
+procedure p;
+Select p
+First, Second, Third
+5000
+23 - Pattern subexpressions - return false 1
+variable v; assign a;
+Select v pattern a(v, _"y + z"_)
+none
+5000
+24 - Pattern subexpressions - return false 2
+variable v; assign a;
+Select v pattern a(v, _"x + 2"_)
+none
+5000
+25 - Pattern subexpressions - return false 3
+variable v; assign a;
+Select v pattern a(v, _"x + i"_)
+none
+5000
+26 - Pattern subexpressions - return false 4
+variable v; assign a;
+Select v pattern a(v, _"x - 1"_)
+none
+5000
