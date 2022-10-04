@@ -58,58 +58,56 @@ TEST_CASE("test SP PKB integration") {
         //std::cout << "Ending test\n";
 }
 
-/*
 // pkbSP APIs queries
 TEST_CASE("Select all queries for SP") {
-    SECTION("Select if statements") {
-        std::unordered_set<std::string> testResults = pkbSP->getAllEntity(DesignEntity::IF);
-        std::unordered_set<std::string> expectedResults = { "8" };
-        REQUIRE(testResults == expectedResults);
-    }
-
     SECTION("Select assign statements") {
         std::unordered_set<std::string> testResults = pkbSP->getAllEntity(DesignEntity::ASSIGN);
-        std::unordered_set<std::string> expectedResults = { "1", "2", "3", "5", "6", "7", "9", "10", "11", "12" };
+        std::unordered_set<std::string> expectedResults = { "4", "5", "7", "9", "11", "12", "13", "14", "15", "16", "17" };
         REQUIRE(testResults == expectedResults);
     }
 
     SECTION("Select read statements") {
         std::unordered_set<std::string> testResults = pkbSP->getAllEntity(DesignEntity::READ);
-        std::unordered_set<std::string> expectedResults = {};
+        std::unordered_set<std::string> expectedResults = { "1", "2" };
         REQUIRE(testResults == expectedResults);
     }
 
     SECTION("Select print statements") {
         std::unordered_set<std::string> testResults = pkbSP->getAllEntity(DesignEntity::PRINT);
-        std::unordered_set<std::string> expectedResults = {};
+        std::unordered_set<std::string> expectedResults = { "18" };
         REQUIRE(testResults == expectedResults);
     }
 
     SECTION("Select procedures") {
         std::unordered_set<std::string> testResults = pkbSP->getAllEntity(DesignEntity::PROCEDURE);
-        std::unordered_set<std::string> expectedResults = { "computeCentroid" };
+        std::unordered_set<std::string> expectedResults = { "First", "Second", "Third" };
         REQUIRE(testResults == expectedResults);
     }
 
     SECTION("Select while statements") {
         std::unordered_set<std::string> testResults = pkbSP->getAllEntity(DesignEntity::WHILE);
-        std::unordered_set<std::string> expectedResults = { "4" };
+        std::unordered_set<std::string> expectedResults = { "6" };
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Select if statements") {
+        std::unordered_set<std::string> testResults = pkbSP->getAllEntity(DesignEntity::IF);
+        std::unordered_set<std::string> expectedResults = { "10" };
         REQUIRE(testResults == expectedResults);
     }
 
     SECTION("Select variables") {
         std::unordered_set<std::string> testResults = pkbSP->getAllEntity(DesignEntity::VARIABLE);
-        std::unordered_set<std::string> expectedResults = { "count", "cenX", "cenY", "x", "y", "flag", "normSq" };
+        std::unordered_set<std::string> expectedResults = { "x", "y", "i", "z", "v" };
         REQUIRE(testResults == expectedResults);
     }
 
     SECTION("Select constants") {
         std::unordered_set<std::string> testResults = pkbSP->getAllEntity(DesignEntity::CONSTANT);
-        std::unordered_set<std::string> expectedResults = { "0", "1" };
+        std::unordered_set<std::string> expectedResults = { "0", "5" , "2", "1"};
         REQUIRE(testResults == expectedResults);
     }
 }
-*/
 
 /*
 TEST_CASE("Relationships and patterns for SP") {

@@ -102,6 +102,9 @@ void Extractor::extractExpr(SimpleToken stmtToken, SimpleToken exprToken) {
 			//std::cout << typeid(relationship).name() << " | " + (relationship->getLeftEntity()->getValue()) + " | " + (relationship->getRightEntity()->getValue()) + "\n";
 			this->client->storeRelationship(relationship);
 		}
+		if (currentToken.type == SpTokenType::TCONSTANT) {
+			this->client->storeConstant(new ConstantEntity(currentToken.value));
+		}
 	}
 	//std::cout << "extractExpr OK\n";
 }
