@@ -10,7 +10,6 @@ class ResultTable {
 
 private:
     bool isFalseResult = false;
-    bool isEmptySynResult = true;
     bool isSynonymResult = false;
     bool isTupleResult = false;
 
@@ -38,8 +37,6 @@ public:
     void setIsFalseResult(bool pkbBooleanResult);
     void setIsFalseResultToTrue();
     bool isEmptyResult();
-    bool getIsEmptySynResult();
-    void setIsEmptySynResultToFalse();
     int getSynonymCount();
 
 };

@@ -5,9 +5,9 @@
 #include <map>
 #include <initializer_list>
 
-ResultTable::ResultTable() : resultsList({}), isFalseResult(false), isEmptySynResult(true), synonymsList({}) {}
+ResultTable::ResultTable() : resultsList({}), isFalseResult(false), synonymsList({}) {}
 
-ResultTable::ResultTable(bool pkbBooleanResult) : resultsList({}), isEmptySynResult(true), synonymsList({}) {
+ResultTable::ResultTable(bool pkbBooleanResult) : resultsList({}), synonymsList({}) {
     setIsFalseResult(pkbBooleanResult);
 };
 
@@ -21,7 +21,6 @@ ResultTable::ResultTable(const std::string& synonym, const std::unordered_set<st
         std::vector<std::string> resultSublist = {singleResult};
         resultsList.emplace_back(resultSublist);
     }
-    setIsEmptySynResultToFalse();
 }
 
 ResultTable::ResultTable(std::string leftSynonym, std::string rightSynonym, std::vector<std::pair<std::string, std::string>> results) {
@@ -35,7 +34,6 @@ ResultTable::ResultTable(std::string leftSynonym, std::string rightSynonym, std:
         std::vector<std::string> resultSublist = {pairResult.first, pairResult.second};
         resultsList.emplace_back(resultSublist);
     }
-    setIsEmptySynResultToFalse();
 }
 
 bool ResultTable::getIsFalseResult() {
@@ -56,14 +54,6 @@ void ResultTable::setIsFalseResultToTrue() {
 
 int ResultTable::getSynonymCount() {
     return synonymsList.size();
-}
-
-bool ResultTable::getIsEmptySynResult() {
-    return isEmptySynResult;
-}
-
-void ResultTable::setIsEmptySynResultToFalse() {
-    isEmptySynResult = false;
 }
 
 bool ResultTable::getIsSynonymResult() {
