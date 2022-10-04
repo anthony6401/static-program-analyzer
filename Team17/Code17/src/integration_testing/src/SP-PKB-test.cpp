@@ -55,7 +55,7 @@ TEST_CASE("test SP PKB integration") {
                                 z = 5;\
                                 v = z;\
                                 print v; }");
-    std::cout << "Ending test\n";
+        std::cout << "Starting test\n";
 }
 
 /*

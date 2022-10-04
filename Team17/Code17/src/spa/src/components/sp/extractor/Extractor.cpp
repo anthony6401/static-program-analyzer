@@ -136,6 +136,9 @@ void Extractor::endOfParser() {
 		std::string parent = itr->first;
 		std::string called = itr->second;
 
+		std::cout << parent + "\n";
+		std::cout << called + "\n";
+
 		std::cout << "for loop middle\n";
 
 		if (procedures.find(parent) != procedures.end() && procedures.find(called) != procedures.end()) {
@@ -207,7 +210,7 @@ Entity* Extractor::generateEntity(SimpleToken token) {
 		return new ProcedureEntity(token.value);
 	}
 	if (token.type == SpTokenType::TCALL) {
-		return new CallEntity(std::to_string(token.statementNumber));
+		return new CallEntity(token.value);
 	}
 	return new Entity(std::to_string(token.statementNumber)); // Should not happen
 }

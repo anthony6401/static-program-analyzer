@@ -117,7 +117,7 @@ void SimpleParser::parseLine(std::string code) {
 
 void SimpleParser::parseProcedure(std::vector<std::string>& tokens) {
     if (tokens.size() == 2 && tokens.at(1) == "{") {
-        SimpleToken procedureToken = SimpleToken(SpTokenType::TPROCEDURE, parseVariable(tokens.at(0)), 0);//change to parse procedure
+        SimpleToken procedureToken = SimpleToken(SpTokenType::TPROCEDURE, parseVariable(tokens.at(0)), 0); //change to parse procedure
         validator.setState(new NestedState(&validator));
         extractor->extractProcedure(procedureToken);
     }

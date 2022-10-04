@@ -1,6 +1,8 @@
 #include "IfStack.h"
 #include <stdexcept>
 
+#include <iostream>
+
 IfStack::IfStack(SimpleToken parent, Extractor* context) : parent(parent) {
     this->expectElse = true;
     this->context = context;
@@ -10,10 +12,12 @@ void IfStack::close(int statementNumber) {
     if (expectElse) {
         ifFollows = follows;
         follows.clear();
+        this->expectElse = false;
     } else {
         extractFollows(follows);
         extractFollows(ifFollows);
-        extractParent(context->currentStack->follows, statementNumber);
+        extractParent(follows, statementNumber);
+        extractParent(ifFollows, statementNumber);
         extractUses(context->currentStack->uses);
         extractModify(context->currentStack->modifies);
 
