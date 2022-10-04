@@ -10,8 +10,9 @@ class ResultTable {
 
 private:
     bool isFalseResult = false;
-    bool isBooleanResult = true;
+    bool isEmptySynResult = true;
     bool isSynonymResult = false;
+    bool isTupleResult = false;
 
 public:
     std::vector<std::string> synonymsList;
@@ -37,8 +38,8 @@ public:
     void setIsFalseResult(bool pkbBooleanResult);
     void setIsFalseResultToTrue();
     bool isEmptyResult();
-    bool getIsBooleanResult();
-    void setIsBooleanResultToFalse();
+    bool getIsEmptySynResult();
+    void setIsEmptySynResultToFalse();
     int getSynonymCount();
 
 };

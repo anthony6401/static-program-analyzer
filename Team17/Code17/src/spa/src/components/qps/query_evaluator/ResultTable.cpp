@@ -5,9 +5,9 @@
 #include <map>
 #include <initializer_list>
 
-ResultTable::ResultTable() : resultsList({}), isFalseResult(false), isBooleanResult(true), synonymsList({}) {}
+ResultTable::ResultTable() : resultsList({}), isFalseResult(false), isEmptySynResult(true), synonymsList({}) {}
 
-ResultTable::ResultTable(bool pkbBooleanResult) : resultsList({}), isBooleanResult(true), synonymsList({}) {
+ResultTable::ResultTable(bool pkbBooleanResult) : resultsList({}), isEmptySynResult(true), synonymsList({}) {
     setIsFalseResult(pkbBooleanResult);
 };
 
@@ -21,7 +21,7 @@ ResultTable::ResultTable(const std::string& synonym, const std::unordered_set<st
         std::vector<std::string> resultSublist = {singleResult};
         resultsList.emplace_back(resultSublist);
     }
-    setIsBooleanResultToFalse();
+    setIsEmptySynResultToFalse();
 }
 
 ResultTable::ResultTable(std::string leftSynonym, std::string rightSynonym, std::vector<std::pair<std::string, std::string>> results) {
@@ -35,7 +35,7 @@ ResultTable::ResultTable(std::string leftSynonym, std::string rightSynonym, std:
         std::vector<std::string> resultSublist = {pairResult.first, pairResult.second};
         resultsList.emplace_back(resultSublist);
     }
-    setIsBooleanResultToFalse();
+    setIsEmptySynResultToFalse();
 }
 
 bool ResultTable::getIsFalseResult() {
@@ -58,12 +58,12 @@ int ResultTable::getSynonymCount() {
     return synonymsList.size();
 }
 
-bool ResultTable::getIsBooleanResult() {
-    return isBooleanResult;
+bool ResultTable::getIsEmptySynResult() {
+    return isEmptySynResult;
 }
 
-void ResultTable::setIsBooleanResultToFalse() {
-    isBooleanResult = false;
+void ResultTable::setIsEmptySynResultToFalse() {
+    isEmptySynResult = false;
 }
 
 bool ResultTable::getIsSynonymResult() {
