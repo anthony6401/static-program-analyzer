@@ -94,7 +94,7 @@ void Extractor::extractCall(SimpleToken callToken) {
 	this->currentStack->addFollows(callToken);
 
 	Entity* left = generateEntity(SimpleToken(SpTokenType::TPROCEDURE, this->currentProcedure, 0));
-	Entity* right = new CallEntity(callToken.value);
+	Entity* right = new ProcedureEntity(callToken.value);
 	CallsRelationship* relationship = new CallsRelationship(left, right);
 	this->client->storeRelationship(relationship);
 
@@ -117,6 +117,7 @@ void Extractor::endOfParser() {
 		if (procedures.find(parent) != procedures.end() && procedures.find(called) != procedures.end()) {
 			StmtStack* parentStack = procedures.find(parent)->second;
 			StmtStack* calledStack = procedures.find(called)->second;
+			this->client->storeRelationship(new CallsTRelationship(new ProcedureEntity(parent), new ProcedureEntity(called)));
 			addNestedRelationships(parentStack, calledStack, parent);
 		}
 		for (auto itrRec = callProcedures.begin(); itrRec != callProcedures.end(); ++itrRec) {
@@ -124,6 +125,7 @@ void Extractor::endOfParser() {
 			if (calledRecurse != called) {
 				StmtStack* parentStack = procedures.find(parent)->second;
 				StmtStack* calledStackRecurse = procedures.find(calledRecurse)->second;
+				this->client->storeRelationship(new CallsTRelationship(new ProcedureEntity(parent), new ProcedureEntity(calledRecurse)));
 				addNestedRelationships(parentStack, calledStackRecurse, parent);
 			}
 		}

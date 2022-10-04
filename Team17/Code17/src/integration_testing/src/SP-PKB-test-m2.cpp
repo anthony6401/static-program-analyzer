@@ -46,7 +46,7 @@ TEST_CASE("test SP PKB integration m2") {
 TEST_CASE("Select all queries for SP m2") {
     SECTION("Select call statements") {
         std::unordered_set<std::string> testResults = pkbSP_m2->getAllEntity(DesignEntity::CALL);
-        std::unordered_set<std::string> expectedResults = { "Third", "Second", "First" };
+        std::unordered_set<std::string> expectedResults = { "3", "8" };
         REQUIRE(testResults == expectedResults);
     }
 }
