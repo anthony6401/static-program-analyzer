@@ -16,17 +16,17 @@ Second
 4 - Calls Test 4
 procedure p, p1;
 Select p such that Calls("Third", _)
-None
+none
 5000
 5 - Calls Test 5
 procedure p, p1;
 Select p such that Calls("First", "Third")
-None
+none
 5000
 6 - Calls Test 6
 procedure p, p1;
 Select p such that Calls("First", "First")
-None
+none
 5000
 7 - Calls Test 7
 procedure p; call call;
@@ -54,54 +54,54 @@ Select p such that Calls(p, p1)
 SemanticError
 5000
 12 - Pattern Expressions test 1
-read re;
-Select re pattern("x", "x + 2*y")
+read re; assign a;
+Select re pattern a("x", "x + 2*y")
 1, 2
 5000
 13 - Pattern Expressions test 2
-variable v;
-Select v pattern(v, "i - 1")
+variable v; assign a;
+Select v pattern a(v, "i - 1")
 i
 5000
 14 - Pattern Expressions test 3
-variable v;
-Select v pattern(v, "x * y + z")
+variable v; assign a;
+Select v pattern a(v, "x * y + z")
 x
 5000
 15 - Pattern Expressions test 4
-variable v;
-Select v pattern(v, "y * z")
-None
+variable v; assign a;
+Select v pattern a(v, "y * z")
+none
 5000
 16 - Pattern Expressions test 5
-variable v;
-Select v pattern(v, "0")
+variable v; assign a;
+Select v pattern a(v, "0")
 x
 5000
 17 - Pattern Subexpressions test 1
-variable v;
-Select v pattern(v, _"x * y"_)
+variable v; assign a;
+Select v pattern a(v, _"x * y"_)
 x
 5000
 18 - Pattern Subexpressions test 2
-variable v;
-Select v pattern(v, _"z + x"_)
+variable v; assign a;
+Select v pattern a(v, _"z + x"_)
 z
 5000
 19 - Pattern Subexpressions test 3
-assign a;
-Select a pattern(v, _"5"_)
+variable v; assign a;
+Select a pattern a(v, _"5"_)
 5, 16
 5000
 20 - ModifiesP test 1
 variable v; procedure p;
 Select p such that Modifies(p, v)
-First, Second
+First, Second, Third
 5000
 21 - UsesP test 1
 procedure p;
 Select p such that Uses(p, "i")
-Second
+First, Second
 5000
 22 - Select all p
 procedure p;
