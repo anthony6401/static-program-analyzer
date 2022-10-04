@@ -26,34 +26,6 @@ void SimpleParser::parseCode(std::string code) {
 
     for (std::string line : codeLines) {
         SimpleParser::parseLine(line);
-        /*
-        if (lineToken.type == SpTokenType::TPROCEDURE) {
-            stmtStack.push(currentStack);
-            currentStack = new ProcedureStack(lineToken);
-        }
-        else if (lineToken.type == SpTokenType::TWHILE) {
-            stmtStack.push(currentStack);
-            currentStack = new WhileStack(lineToken);
-        }
-        else if (lineToken.type == SpTokenType::TIF) {
-            stmtStack.push(currentStack);
-            currentStack = new IfStack(lineToken);
-        }
-        else if (lineToken.type == SpTokenType::TCLOSE) {
-            if (stmtStack.size() == 0) {
-                throw std::invalid_argument("Received invalid SIMPLE code. Extra }");
-            }
-            currentStack->put(lineToken);
-            if (!(currentStack->isIf())) {
-                StmtStack* parentStack = stmtStack.top();
-                delete currentStack;
-                currentStack = parentStack;
-                stmtStack.pop();
-            }
-        }
-        else {
-            currentStack->put(lineToken);
-        }*/
     }
     validator.validCode();
     //extractor.endofcode
@@ -117,6 +89,7 @@ void SimpleParser::parseLine(std::string code) {
 
 void SimpleParser::parseProcedure(std::vector<std::string>& tokens) {
     if (tokens.size() == 2 && tokens.at(1) == "{") {
+        validator.validateProcedure(tokens.at(0));
         SimpleToken procedureToken = SimpleToken(SpTokenType::TPROCEDURE, parseVariable(tokens.at(0)), 0);//change to parse procedure
         validator.setState(new NestedState(&validator));
         //extractProcedure(procedureToken);
@@ -296,11 +269,6 @@ SimpleToken SimpleParser::parseExpr(std::vector<std::string>& tokens) {
     }
 }
 
-/// <summary>
-/// Process variable for design extractor
-/// </summary>
-/// <param name="token">string to validate if valid variable</param>
-/// <returns>SimpleToken of TVARIABLE with variable name as value</returns>
 std::string SimpleParser::parseVariable(std::string& token) {
     if (SimpleValidator::validateVariable(token)) {
         return token;

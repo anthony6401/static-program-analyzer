@@ -94,6 +94,19 @@ TEST_CASE("parse condexpr") {
     resultTokens.push_back(SimpleToken(SpTokenType::TVARIABLE, "abc", 0));
     REQUIRE(equalChildren(test_result, resultTokens));
 }
+
+TEST_CASE("parse relexpr") {
+    std::vector<std::string> test_tokens{ "(","a1234","+","1",")","!=","abc"};
+    std::vector<SimpleToken> test_result = parser.parseRelExpr(test_tokens);
+
+    std::vector<SimpleToken> resultTokens;
+    resultTokens.push_back(SimpleToken(SpTokenType::TVARIABLE, "a1234", 0));
+    resultTokens.push_back(SimpleToken(SpTokenType::TOPR, "+", 0));
+    resultTokens.push_back(SimpleToken(SpTokenType::TCONSTANT, "1", 0));
+    resultTokens.push_back(SimpleToken(SpTokenType::TVARIABLE, "abc", 0));
+    REQUIRE(equalChildren(test_result, resultTokens));
+}
+
 /*
 
 TEST_CASE("parseLine print") {
