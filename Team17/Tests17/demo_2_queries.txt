@@ -108,3 +108,23 @@ procedure p;
 Select p
 First, Second, Third
 5000
+23 - Pattern subexpressions - return false 1
+variable v; assign a;
+Select v pattern a(v, _"y + z"_)
+none
+5000
+24 - Pattern subexpressions - return false 2
+variable v; assign a;
+Select v pattern a(v, _"x + 2"_)
+none
+5000
+25 - Pattern subexpressions - return false 3
+variable v; assign a;
+Select v pattern a(v, _"x + i"_)
+none
+5000
+26 - Pattern subexpressions - return false 4
+variable v; assign a;
+Select v pattern a(v, _"x - 1"_)
+none
+5000
