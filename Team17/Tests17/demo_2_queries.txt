@@ -1,0 +1,55 @@
+1 - Calls Test 1
+procedure p, p1;
+Select p such that Calls("First", "Second")
+Third, Second, First
+5000
+2 - Calls Test 2
+procedure p;
+Select p such that Calls(p, _)
+Second, First
+5000
+3 - Calls Test 3
+procedure p;
+Select p such that Calls(p, "Third")
+Second
+5000
+4 - Calls Test 4
+procedure p, p1;
+Select p such that Calls("Third", _)
+None
+5000
+5 - Calls Test 5
+procedure p, p1;
+Select p such that Calls("First", "Third")
+None
+5000
+6 - Calls Test 6
+procedure p, p1;
+Select p such that Calls("First", "First")
+None
+5000
+7 - Calls Test 7
+procedure p; call call;
+Select call such that Calls("First", "Second")
+8, 3
+5000
+8 - Calls Test 8
+procedure p, p1;
+Select p such that Calls(1, _)
+SyntaxError
+5000
+9 - Calls Test 9
+procedure p, p1;
+Select p such that Calls(3, _)
+SyntaxError
+5000
+10 - Calls Test 10
+procedure p, p1;
+Select p such that Calls(_, 3)
+SyntaxError
+5000
+11 - Calls Test 11
+procedure p; stmt p1;
+Select p such that Calls(p, p1)
+SemanticError
+5000
