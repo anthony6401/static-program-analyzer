@@ -117,15 +117,17 @@ void Extractor::endOfParser() {
 		if (procedures.find(parent) != procedures.end() && procedures.find(called) != procedures.end()) {
 			StmtStack* parentStack = procedures.find(parent)->second;
 			StmtStack* calledStack = procedures.find(called)->second;
-			this->client->storeRelationship(new CallsTRelationship(new ProcedureEntity(parent), new ProcedureEntity(called)));
+			CallsTRelationship* callsTRel = new CallsTRelationship(new ProcedureEntity(parent), new ProcedureEntity(called));
+			this->client->storeRelationship(callsTRel);
 			addNestedRelationships(parentStack, calledStack, parent);
 		}
 		for (auto itrRec = callProcedures.begin(); itrRec != callProcedures.end(); ++itrRec) {
 			std::string calledRecurse = itrRec->second;
-			if (calledRecurse != called) {
+			if (calledRecurse != called && parent != calledRecurse) {
 				StmtStack* parentStack = procedures.find(parent)->second;
 				StmtStack* calledStackRecurse = procedures.find(calledRecurse)->second;
-				this->client->storeRelationship(new CallsTRelationship(new ProcedureEntity(parent), new ProcedureEntity(calledRecurse)));
+				CallsTRelationship* callsTRel = new CallsTRelationship(new ProcedureEntity(parent), new ProcedureEntity(calledRecurse));
+				this->client->storeRelationship(callsTRel);
 				addNestedRelationships(parentStack, calledStackRecurse, parent);
 			}
 		}
