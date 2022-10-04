@@ -15,11 +15,11 @@
 #include "components/qps/query_evaluator/factory/clauses/relationship/NextClause.h"
 #include "components/qps/query_evaluator/factory/clauses/relationship/NextTClause.h"
 
-std::shared_ptr<Clause> ClauseCreator::createClause(Select synonym, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) {
-    return std::make_shared<SelectClause>(synonym, synonymToDesignEntityMap, qpsClient);
+std::shared_ptr<Clause> ClauseCreator::createClause(Select select, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) {
+    return std::make_shared<SelectClause>(select, synonymToDesignEntityMap, qpsClient);
 }
 
-std::shared_ptr<Clause> ClauseCreator::createClause(Select select, const std::unordered_set<std::string> &tableSynonyms, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) {
+std::shared_ptr<Clause> ClauseCreator::createClause(Select select, const std::unordered_set<std::string> &synonymsInTable, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) {
     TokenType selectReturnType = select.getReturnType();
     if (selectReturnType == TokenType::SYNONYM) {
         return std::make_shared<SelectClause>(select, synonymToDesignEntityMap, qpsClient);
