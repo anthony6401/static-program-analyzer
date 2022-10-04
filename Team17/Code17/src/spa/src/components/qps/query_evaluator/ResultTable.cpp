@@ -2,6 +2,7 @@
 #include "vector"
 #include "string"
 #include "iostream"
+#include "components/qps/query_preprocessor/query_tokenizer/TokenObject.h"
 #include <map>
 #include <initializer_list>
 
@@ -81,7 +82,7 @@ void ResultTable::setIsBooleanResult() {
 }
 
 
-std::unordered_set<std::string> ResultTable::getResultsToBePopulated(std::string selectSynonym) {
+std::unordered_set<std::string> ResultTable::getSynonymResultsToBePopulated(std::string selectSynonym) {
     std::unordered_set<std::string> result({});
     auto iterator = std::find(synonymsList.begin(), synonymsList.end(), selectSynonym);
     if (iterator != synonymsList.cend()) {
@@ -91,6 +92,35 @@ std::unordered_set<std::string> ResultTable::getResultsToBePopulated(std::string
         }
     }
     return result;
+}
+
+std::unordered_set<std::string> ResultTable::getTupleResultsToBePopulated(std::vector<TokenObject> tuple) {
+    std::unordered_set<std::string> result({});
+    for (auto resultSublist : resultsList) {
+        std::vector<std::string> newResultSublist;
+        for (auto tupleObject : tuple) {
+            if (tupleObject.getTokenType() == TokenType::SYNONYM) {
+                auto iterator = std::find(synonymsList.begin(), synonymsList.end(), tupleObject.getValue());
+                if (iterator != synonymsList.cend()) {
+                    int indexOfSynonym = std::distance(synonymsList.begin(), iterator);
+                    newResultSublist.push_back(resultSublist[indexOfSynonym]);
+                }
+            } else {
+                // ATTRIBUTES
+            }
+        }
+        result.insert(ResultTable::formTupleResultString(newResultSublist));
+    }
+
+    return result;
+}
+
+std::string ResultTable::formTupleResultString(std::vector<std::string> newResultsList) {
+    std::string tupleResultString;
+    for (size_t i = 0; i < newResultsList.size(); ++i) {
+        tupleResultString += newResultsList[i] + (i != newResultsList.size() - 1 ? " " : "");
+    }
+    return tupleResultString;
 }
 
 void ResultTable::filterBySelectSynonym(std::string selectSynonym) {

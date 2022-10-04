@@ -1,6 +1,7 @@
 #ifndef SPA_RESULTTABLE_H
 #define SPA_RESULTTABLE_H
 
+#include "components/qps/query_preprocessor/query_tokenizer/TokenObject.h"
 #include "unordered_set"
 #include "string"
 #include "vector"
@@ -26,11 +27,13 @@ public:
     void combineResult(ResultTable nextResult);
     std::map<std::string, size_t> computeSynonymToIndexMap();
     std::pair<std::vector<std::pair<size_t, size_t>>, std::vector<size_t>> getIndexes(std::vector<std::string> nextSynonymsList);
-    std::unordered_set<std::string> getResultsToBePopulated(std::string selectSynonym);
+    std::unordered_set<std::string> getSynonymResultsToBePopulated(std::string selectSynonym);
+    std::unordered_set<std::string> getTupleResultsToBePopulated(std::vector<TokenObject> tuple);
     std::vector<std::pair<size_t, size_t>> findCommonSynonymsIndexPairs(std::vector<std::string> nextSynonymsList, std::map<std::string, size_t> synonymToIndexMap);
     void joinResultsListWithCommonSynonym(ResultTable nextResult, std::vector<std::pair<size_t, size_t>> commonSynonymsIndexPairs, std::vector<size_t> notCommonNextSynonymIndex);
     void joinResultsListWithNoCommonSynonym(ResultTable nextResult);
     std::vector<size_t> findNotCommonSynonymsIndex(std::vector<std::string> nextSynonymsList, std::map<std::string, size_t> synonymToIndexMap);
+    std::string formTupleResultString(std::vector<std::string> newResultsList);
     friend std::ostream &operator<<(std::ostream &os, const ResultTable &table);
     bool getIsSynonymResult();
     void setIsSynonymResult();
@@ -43,7 +46,6 @@ public:
     void setIsFalseResultToTrue();
     bool isEmptyResult();
     int getSynonymCount();
-
 };
 
 #endif //SPA_RESULTTABLE_H

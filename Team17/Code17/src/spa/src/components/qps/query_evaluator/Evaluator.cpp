@@ -56,10 +56,18 @@ void Evaluator::populateResultsList(ResultTable finalResult, Select select, std:
             // Return empty result
             return;
         } else {
-            // get synonym result
+            std::string selectSynonym = select.getReturnValues().front().getValue();
+            std::unordered_set<std::string> resultsToPopulate = finalResult.getSynonymResultsToBePopulated(selectSynonym);
+            for (std::string result : resultsToPopulate) {
+                results.emplace_back(result);
+            }
         }
     } else if (isTupleResult) {
-        // get tuple result
+        std::vector<TokenObject> tuple = select.getReturnValues();
+        std::unordered_set<std::string> resultsToPopulate = finalResult.getTupleResultsToBePopulated(tuple);
+        for (std::string result : resultsToPopulate) {
+            results.emplace_back(result);
+        }
     } else {
         // Attribute result
     }
@@ -72,7 +80,7 @@ void Evaluator::populateResults(ResultTable finalResult, std::string selectSynon
         return;
     }
 
-    std::unordered_set<std::string> resultsToPopulate = finalResult.getResultsToBePopulated(selectSynonym);
+    std::unordered_set<std::string> resultsToPopulate = finalResult.getSynonymResultsToBePopulated(selectSynonym);
     for (std::string result : resultsToPopulate) {
         results.emplace_back(result);
     }
