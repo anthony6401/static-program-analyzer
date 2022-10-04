@@ -79,7 +79,7 @@ void SimpleParser::parseLine(std::string code) {
         validator.validLine(SpTokenType::TASSIGN, statementNumber);
         parseAssign(tokens);
     } else if (first == "procedure") {
-        std::cout << "procedure" << std::endl;
+        //std::cout << "procedure" << std::endl;
         tokens.erase(tokens.begin());
         validator.validLine(SpTokenType::TPROCEDURE, statementNumber);
         parseProcedure(tokens);

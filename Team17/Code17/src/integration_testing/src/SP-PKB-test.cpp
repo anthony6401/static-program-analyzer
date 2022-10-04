@@ -30,7 +30,7 @@ auto spClient = new SPClient(pkbSP);
 TEST_CASE("test SP PKB integration") {
 	Extractor extractor = Extractor(spClient);
 	SimpleParser simpleParser = SimpleParser(&extractor);
-    std::cout << "Starting test\n";
+    //std::cout << "Starting test\n";
 	simpleParser.parseCode("procedure First {\
                                 read x;\
                                 read z;\
@@ -55,7 +55,7 @@ TEST_CASE("test SP PKB integration") {
                                 z = 5;\
                                 v = z;\
                                 print v; }");
-        std::cout << "Ending test\n";
+        //std::cout << "Ending test\n";
 }
 
 /*

@@ -10,10 +10,12 @@ public:
     bool isIf();
     std::vector<SimpleToken> ifFollows; // statementNumber
     void extractFollows(std::vector<SimpleToken> follows);
-    void extractParent(std::vector<SimpleToken> follows, int statementNumber);
+    void extractParent(std::vector<SimpleToken> follows);
+    void extractParentT(std::vector<SimpleToken> parentT);
     void extractUses(std::vector<SimpleToken> uses);
     void extractModify(std::vector<SimpleToken> modifies);
     Entity* generateEntity(SimpleToken token);
+    void mergeStack_if(StmtStack* parent, StmtStack* child, std::vector<SimpleToken> ifFollows);
 
 private:
     SimpleToken parent;

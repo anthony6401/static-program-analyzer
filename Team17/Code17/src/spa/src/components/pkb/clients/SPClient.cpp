@@ -18,7 +18,6 @@ bool SPClient::storeRelationship(Relationship* rel) {
 }
 
 bool SPClient::storePattern(kb::Pattern* pattern) {
-	std::cout << "Pattern: " + (pattern->getLineNum()) + " | " + (pattern->getFirstValue()) + " = " + (pattern->getSecondValue()) + "\n";
 	return pkb->storePattern(pattern);
 }
 

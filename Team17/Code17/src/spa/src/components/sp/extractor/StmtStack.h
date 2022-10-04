@@ -17,6 +17,6 @@ public:
     std::vector<SimpleToken> modifies;
     std::vector<SimpleToken> uses;
     std::vector<SimpleToken> follows;
+    std::vector<SimpleToken> parentT;
     void addFollows(SimpleToken token);
-
 };

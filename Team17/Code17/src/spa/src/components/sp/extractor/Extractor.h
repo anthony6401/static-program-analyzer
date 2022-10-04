@@ -63,7 +63,7 @@ public:
 	void extractCall(SimpleToken callToken);
 	void extractProcedure(SimpleToken procedureToken);
 	void endOfParser();
-	void addNestedRelationships(StmtStack* parent, StmtStack* called);
+	void addNestedRelationships(StmtStack* parent, StmtStack* called, std::string name);
 	std::string getExpressionAsString(SimpleToken exprToken);
 	Entity* generateEntity(SimpleToken token);
 

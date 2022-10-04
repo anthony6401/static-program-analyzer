@@ -10,7 +10,8 @@ ProcedureStack::ProcedureStack(SimpleToken parent, Extractor* context) : parent(
 
 void ProcedureStack::close(int statementNumber) {
     extractFollows(context->currentStack->follows);
-    extractParent(context->currentStack->follows, statementNumber);
+    extractParent(context->currentStack->follows);
+    extractParentT(context->currentStack->parentT);
     extractUses(context->currentStack->uses);
     extractModify(context->currentStack->modifies);
 
@@ -28,7 +29,7 @@ void ProcedureStack::extractFollows(std::vector<SimpleToken> follows) {
         Entity* firstEntity = generateEntity(first);
         Entity* secondEntity = generateEntity(second);
         FollowsRelationship* followsRel = new FollowsRelationship(firstEntity, secondEntity);
-        std::cout << typeid(followsRel).name() << " | " + (followsRel->getLeftEntity()->getValue()) + " | " + (followsRel->getRightEntity()->getValue()) + "\n";
+        //std::cout << typeid(followsRel).name() << " | " + (followsRel->getLeftEntity()->getValue()) + " | " + (followsRel->getRightEntity()->getValue()) + "\n";
         context->client->storeRelationship(followsRel);
     }
     for (int i = 0; i < follows.size(); i++) {
@@ -38,22 +39,32 @@ void ProcedureStack::extractFollows(std::vector<SimpleToken> follows) {
             Entity* firstEntity = generateEntity(first);
             Entity* secondEntity = generateEntity(second);
             FollowsTRelationship* followsTRel = new FollowsTRelationship(firstEntity, secondEntity);
-            std::cout << typeid(followsTRel).name() << " | " + (followsTRel->getLeftEntity()->getValue()) + " | " + (followsTRel->getRightEntity()->getValue()) + "\n";
+            //std::cout << typeid(followsTRel).name() << " | " + (followsTRel->getLeftEntity()->getValue()) + " | " + (followsTRel->getRightEntity()->getValue()) + "\n";
             context->client->storeRelationship(followsTRel);
         }
     }
 }
 
-void ProcedureStack::extractParent(std::vector<SimpleToken> follows, int statementNumber) {
+void ProcedureStack::extractParent(std::vector<SimpleToken> follows) {
     for (int i = 0; i < follows.size(); i++) {
         SimpleToken second = follows.at(i);
         Entity* firstEntity = generateEntity(this->parent);
         Entity* secondEntity = generateEntity(second);
         ParentRelationship* parentRel = new ParentRelationship(firstEntity, secondEntity);
-        std::cout << typeid(parentRel).name() << " | " + (parentRel->getLeftEntity()->getValue()) + " | " + (parentRel->getRightEntity()->getValue()) + "\n";
+        //std::cout << typeid(parentRel).name() << " | " + (parentRel->getLeftEntity()->getValue()) + " | " + (parentRel->getRightEntity()->getValue()) + "\n";
         context->client->storeRelationship(parentRel);
     }
-    // parentT?
+}
+
+void ProcedureStack::extractParentT(std::vector<SimpleToken> parentT) {
+    for (int i = 0; i < parentT.size(); i++) {
+        SimpleToken second = parentT.at(i);
+        Entity* firstEntity = generateEntity(this->parent);
+        Entity* secondEntity = generateEntity(second);
+        ParentTRelationship* parentTRel = new ParentTRelationship(firstEntity, secondEntity);
+        //std::cout << typeid(parentTRel).name() << " | " + (parentTRel->getLeftEntity()->getValue()) + " | " + (parentTRel->getRightEntity()->getValue()) + "\n";
+        context->client->storeRelationship(parentTRel);
+    }
 }
 
 void ProcedureStack::extractUses(std::vector<SimpleToken> uses) {
@@ -62,7 +73,7 @@ void ProcedureStack::extractUses(std::vector<SimpleToken> uses) {
         Entity* firstEntity = generateEntity(this->parent);
         Entity* secondEntity = generateEntity(SimpleToken(SpTokenType::TVARIABLE, second.value, 0));
         UsesRelationship* usesRel = new UsesRelationship(firstEntity, secondEntity);
-        std::cout << typeid(usesRel).name() << " | " + (usesRel->getLeftEntity()->getValue()) + " | " + (usesRel->getRightEntity()->getValue()) + "\n";
+        //std::cout << typeid(usesRel).name() << " | " + (usesRel->getLeftEntity()->getValue()) + " | " + (usesRel->getRightEntity()->getValue()) + "\n";
         context->client->storeRelationship(usesRel);
     }
 }
@@ -73,7 +84,7 @@ void ProcedureStack::extractModify(std::vector<SimpleToken> modifies) {
         Entity* firstEntity = generateEntity(this->parent);
         Entity* secondEntity = generateEntity(SimpleToken(SpTokenType::TVARIABLE, second.value, 0));
         ModifyRelationship* modifyRel = new ModifyRelationship(firstEntity, secondEntity);
-        std::cout << typeid(modifyRel).name() << " | " + (modifyRel->getLeftEntity()->getValue()) + " | " + (modifyRel->getRightEntity()->getValue()) + "\n";
+        //std::cout << typeid(modifyRel).name() << " | " + (modifyRel->getLeftEntity()->getValue()) + " | " + (modifyRel->getRightEntity()->getValue()) + "\n";
         context->client->storeRelationship(modifyRel);
     }
 }

@@ -9,7 +9,8 @@ public:
     void close(int statementNumber);
     bool isIf();
     void extractFollows(std::vector<SimpleToken> follows);
-    void extractParent(std::vector<SimpleToken> follows, int statementNumber);
+    void extractParent(std::vector<SimpleToken> follows);
+    void extractParentT(std::vector<SimpleToken> parentT);
     void extractUses(std::vector<SimpleToken> uses);
     void extractModify(std::vector<SimpleToken> modifies);
     Entity* generateEntity(SimpleToken token);
