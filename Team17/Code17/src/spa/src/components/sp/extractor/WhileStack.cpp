@@ -27,7 +27,7 @@ void WhileStack::extractFollows(std::vector<SimpleToken> follows) {
         SimpleToken second = follows.at(i + 1);
         Entity* firstEntity = generateEntity(first);
         Entity* secondEntity = generateEntity(second);
-        FollowsRelationship* followsRel = new FollowsRelationship(firstEntity, firstEntity);
+        FollowsRelationship* followsRel = new FollowsRelationship(firstEntity, secondEntity);
         context->client->storeRelationship(followsRel);
     }
     for (int i = 0; i < follows.size(); i++) {
@@ -36,7 +36,7 @@ void WhileStack::extractFollows(std::vector<SimpleToken> follows) {
             SimpleToken second = follows.at(j);
             Entity* firstEntity = generateEntity(first);
             Entity* secondEntity = generateEntity(second);
-            FollowsTRelationship* followsTRel = new FollowsTRelationship(firstEntity, firstEntity);
+            FollowsTRelationship* followsTRel = new FollowsTRelationship(firstEntity, secondEntity);
             context->client->storeRelationship(followsTRel);
         }
     }
@@ -47,7 +47,7 @@ void WhileStack::extractParent(std::vector<SimpleToken> follows, int statementNu
         SimpleToken second = follows.at(i);
         Entity* firstEntity = generateEntity(this->parent);
         Entity* secondEntity = generateEntity(second);
-        ParentRelationship* parentRel = new ParentRelationship(firstEntity, firstEntity);
+        ParentRelationship* parentRel = new ParentRelationship(firstEntity, secondEntity);
         context->client->storeRelationship(parentRel);
     }
     // parentT?
@@ -58,7 +58,7 @@ void WhileStack::extractUses(std::vector<SimpleToken> uses) {
         SimpleToken second = uses.at(i);
         Entity* firstEntity = generateEntity(this->parent);
         Entity* secondEntity = generateEntity(second);
-        UsesRelationship* usesRel = new UsesRelationship(firstEntity, firstEntity);
+        UsesRelationship* usesRel = new UsesRelationship(firstEntity, secondEntity);
         context->client->storeRelationship(usesRel);
     }
 }
@@ -68,7 +68,7 @@ void WhileStack::extractModify(std::vector<SimpleToken> modifies) {
         SimpleToken second = modifies.at(i);
         Entity* firstEntity = generateEntity(this->parent);
         Entity* secondEntity = generateEntity(second);
-        ModifyRelationship* modifyRel = new ModifyRelationship(firstEntity, firstEntity);
+        ModifyRelationship* modifyRel = new ModifyRelationship(firstEntity, secondEntity);
         context->client->storeRelationship(modifyRel);
     }
 }

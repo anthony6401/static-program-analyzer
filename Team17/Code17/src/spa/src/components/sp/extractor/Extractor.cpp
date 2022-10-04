@@ -106,6 +106,10 @@ void Extractor::extractProcedure(SimpleToken procedureToken) {
 	this->currentProcedure = procedureToken.value;
 }
 
+void Extractor::close(int statementNumber) {
+	currentStack->close(statementNumber);
+}
+
 void Extractor::endOfParser() {
 	for (auto itr = callProcedures.begin(); itr != callProcedures.end(); ++itr) {
 		std::string parent = itr->first;
@@ -114,12 +118,38 @@ void Extractor::endOfParser() {
 		StmtStack* parentStack = procedures.find(parent)->second;
 		StmtStack* calledStack = procedures.find(called)->second;
 
-		void addNestedRelationships(parentStack, calledStack);
+		addNestedRelationships(parentStack, calledStack);
 	}
 }
 
-void Extractor::close(int statementNumber) {
-	currentStack->close(statementNumber);
+void Extractor::addNestedRelationships(StmtStack* parentStack, StmtStack* calledStack) {
+	std::vector<SimpleToken> follows = calledStack->follows;
+	std::vector<SimpleToken> uses = calledStack->uses;
+	std::vector<SimpleToken> modifies = calledStack->modifies;
+
+	for (int i = 0; i < follows.size(); i++) {
+		SimpleToken second = follows.at(i);
+		Entity* firstEntity = generateEntity(parentStack->parent);
+		Entity* secondEntity = generateEntity(second);
+		ParentRelationship* parentRel = new ParentRelationship(firstEntity, firstEntity);
+		this->client->storeRelationship(parentRel);
+	}
+
+	for (int i = 0; i < uses.size(); i++) {
+		SimpleToken second = uses.at(i);
+		Entity* firstEntity = generateEntity(parentStack->parent);
+		Entity* secondEntity = generateEntity(second);
+		UsesRelationship* usesRel = new UsesRelationship(firstEntity, secondEntity);
+		this->client->storeRelationship(usesRel);
+	}
+
+	for (int i = 0; i < modifies.size(); i++) {
+		SimpleToken second = modifies.at(i);
+		Entity* firstEntity = generateEntity(parentStack->parent);
+		Entity* secondEntity = generateEntity(second);
+		ModifyRelationship* modifyRel = new ModifyRelationship(firstEntity, secondEntity);
+		this->client->storeRelationship(modifyRel);
+	}
 }
 
 Entity* Extractor::generateEntity(SimpleToken token) {
