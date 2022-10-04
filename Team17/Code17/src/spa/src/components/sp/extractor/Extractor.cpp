@@ -112,14 +112,20 @@ void Extractor::close(int statementNumber) {
 
 void Extractor::endOfParser() {
 	for (auto itr = callProcedures.begin(); itr != callProcedures.end(); ++itr) {
-
 		std::string parent = itr->first;
 		std::string called = itr->second;
-
 		if (procedures.find(parent) != procedures.end() && procedures.find(called) != procedures.end()) {
 			StmtStack* parentStack = procedures.find(parent)->second;
 			StmtStack* calledStack = procedures.find(called)->second;
 			addNestedRelationships(parentStack, calledStack, parent);
+		}
+		for (auto itrRec = callProcedures.begin(); itrRec != callProcedures.end(); ++itrRec) {
+			std::string calledRecurse = itrRec->second;
+			if (calledRecurse != called) {
+				StmtStack* parentStack = procedures.find(parent)->second;
+				StmtStack* calledStackRecurse = procedures.find(calledRecurse)->second;
+				addNestedRelationships(parentStack, calledStackRecurse, parent);
+			}
 		}
 	}
 }
