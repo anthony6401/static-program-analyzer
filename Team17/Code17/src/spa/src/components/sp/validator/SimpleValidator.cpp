@@ -32,6 +32,16 @@ bool SimpleValidator::validateVariable(std::string& token) {
     return std::regex_match(token, std::regex(constant));
 }
 
+bool SimpleValidator::validateProcedure(std::string& token) {
+    std::regex constant = std::regex("[a-zA-Z][a-zA-Z0-9]*");
+    if (std::regex_match(token, std::regex(constant))) {
+        std::pair<std::set<std::string>::iterator, bool> result = procedureNames.insert(token);
+        return result.second;
+    } else {
+        return false;
+    }
+}
+
 bool SimpleValidator::validateConstant(std::string& token) {
     std::regex numeric = std::regex("(0|[1-9][0-9]*)");
     return std::regex_match(token, numeric);
