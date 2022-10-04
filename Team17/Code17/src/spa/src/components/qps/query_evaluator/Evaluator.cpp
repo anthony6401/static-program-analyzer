@@ -40,6 +40,32 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
     }
 }
 
+void Evaluator::populateResultsList(ResultTable finalResult, Select select, std::list<std::string> &results) {
+    bool isBooleanResult = finalResult.getIsBooleanResult();
+    bool isSynonymResult = finalResult.getIsSynonymResult();
+    bool isTupleResult = finalResult.getIsTupleResult();
+    // bool isAttributeResult = finalResult.getIsAttributeResult();
+    if (isBooleanResult) {
+        if (finalResult.getIsFalseResult()) {
+            results.emplace_back("FALSE");
+        } else {
+            results.emplace_back("TRUE");
+        }
+    } else if (isSynonymResult) {
+        if (finalResult.getIsFalseResult()) {
+            // Return empty result
+            return;
+        } else {
+            // get synonym result
+        }
+    } else if (isTupleResult) {
+        // get tuple result
+    } else {
+        // Attribute result
+    }
+
+}
+
 void Evaluator::populateResults(ResultTable finalResult, std::string selectSynonym, std::list<std::string> &results) {
     if (finalResult.getIsFalseResult()) {
         // Return empty result
