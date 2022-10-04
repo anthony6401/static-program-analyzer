@@ -47,7 +47,6 @@ void IfStack::extractFollows(std::vector<SimpleToken> follows) {
         Entity* firstEntity = generateEntity(first);
         Entity* secondEntity = generateEntity(second);
         FollowsRelationship* followsRel = new FollowsRelationship(firstEntity, secondEntity);
-        //std::cout << typeid(followsRel).name() << " | " + (followsRel->getLeftEntity()->getValue()) + " | " + (followsRel->getRightEntity()->getValue()) + "\n";
         context->client->storeRelationship(followsRel);
     }
     for (int i = 0; i < follows.size(); i++) {
@@ -57,7 +56,6 @@ void IfStack::extractFollows(std::vector<SimpleToken> follows) {
             Entity* firstEntity = generateEntity(first);
             Entity* secondEntity = generateEntity(second);
             FollowsTRelationship* followsTRel = new FollowsTRelationship(firstEntity, secondEntity);
-            //std::cout << typeid(followsTRel).name() << " | " + (followsTRel->getLeftEntity()->getValue()) + " | " + (followsTRel->getRightEntity()->getValue()) + "\n";
             context->client->storeRelationship(followsTRel);
         }
     }
@@ -69,7 +67,6 @@ void IfStack::extractParent(std::vector<SimpleToken> follows) {
         Entity* firstEntity = generateEntity(this->parent);
         Entity* secondEntity = generateEntity(second);
         ParentRelationship* parentRel = new ParentRelationship(firstEntity, secondEntity);
-        //std::cout << typeid(parentRel).name() << " | " + (parentRel->getLeftEntity()->getValue()) + " | " + (parentRel->getRightEntity()->getValue()) + "\n";
         context->client->storeRelationship(parentRel);
     }
 }
@@ -80,7 +77,6 @@ void IfStack::extractParentT(std::vector<SimpleToken> parentT) {
         Entity* firstEntity = generateEntity(this->parent);
         Entity* secondEntity = generateEntity(second);
         ParentTRelationship* parentTRel = new ParentTRelationship(firstEntity, secondEntity);
-        //std::cout << typeid(parentTRel).name() << " | " + (parentTRel->getLeftEntity()->getValue()) + " | " + (parentTRel->getRightEntity()->getValue()) + "\n";
         context->client->storeRelationship(parentTRel);
     }
 }
@@ -91,7 +87,6 @@ void IfStack::extractUses(std::vector<SimpleToken> uses) {
         Entity* firstEntity = generateEntity(this->parent);
         Entity* secondEntity = generateEntity(SimpleToken(SpTokenType::TVARIABLE, second.value, 0));
         UsesRelationship* usesRel = new UsesRelationship(firstEntity, secondEntity);
-        //std::cout << typeid(usesRel).name() << " | " + (usesRel->getLeftEntity()->getValue()) + " | " + (usesRel->getRightEntity()->getValue()) + "\n";
         context->client->storeRelationship(usesRel);
     }
 }
@@ -102,7 +97,6 @@ void IfStack::extractModify(std::vector<SimpleToken> modifies) {
         Entity* firstEntity = generateEntity(this->parent);
         Entity* secondEntity = generateEntity(SimpleToken(SpTokenType::TVARIABLE, second.value, 0));
         ModifyRelationship* modifyRel = new ModifyRelationship(firstEntity, secondEntity);
-        //std::cout << typeid(modifyRel).name() << " | " + (modifyRel->getLeftEntity()->getValue()) + " | " + (modifyRel->getRightEntity()->getValue()) + "\n";
         context->client->storeRelationship(modifyRel);
     }
 }
