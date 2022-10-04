@@ -42,7 +42,6 @@ TEST_CASE("test SP PKB integration m2") {
 }
 
 // pkbSP APIs queries
-// Uncomment all test cases when SP has populate PKB
 TEST_CASE("Select all queries for SP m2") {
     SECTION("Select call statements") {
         std::unordered_set<std::string> testResults = pkbSP_m2->getAllEntity(DesignEntity::CALL);
@@ -107,6 +106,36 @@ TEST_CASE("Calls* queries SP") {
         std::unordered_map<std::string, std::unordered_set<std::string>> testResults = pkbSP_m2->getAllRelationship(RelationshipType::CALLS_T, DesignEntity::PROCEDURE, DesignEntity::PROCEDURE);
         std::unordered_map<std::string, std::unordered_set<std::string>> expectedResults = { {"First", std::unordered_set<std::string>({"Second", "Third" })},
                                                                                                 {"Second", std::unordered_set<std::string>({"Third"})} };
+        REQUIRE(testResults == expectedResults);
+    }
+}
+
+TEST_CASE("Pattern queries SP") {
+    SECTION("Pattern with first argument as name in quotes and second argument as expression with operators") {
+        // a("x", "x+1")
+        std::unordered_set<std::string> testResults = pkbSP_m2->getPattern(DesignEntity::ASSIGN, TokenObject(TokenType::NAME_WITH_QUOTATION, "x"), TokenObject(TokenType::EXPRESSION, "x+1"));
+        std::unordered_set<std::string> expectedResults = {"11"};
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Pattern with first argument as name in quotes and second argument as subexpression with operators") {
+        // a("x", _"x*y"_)
+        std::unordered_set<std::string> testResults = pkbSP_m2->getPattern(DesignEntity::ASSIGN, TokenObject(TokenType::NAME_WITH_QUOTATION, "x"), TokenObject(TokenType::SUBEXPRESSION, "x*y"));
+        std::unordered_set<std::string> expectedResults = { "15" };
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Pattern with first argument as synonym and second argument as expression with operators") {
+        // a(v, "x+1")
+        std::vector<std::pair<std::string, std::string>> testResults = pkbSP_m2->getPatternPair(DesignEntity::ASSIGN, TokenObject(TokenType::EXPRESSION, "x+1"));
+        std::vector<std::pair<std::string, std::string>> expectedResults = { {"11", "x"}};
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Pattern with first argument as synonym and second argument as subexpression with operators") {
+        // a(v, _"x*y"_)
+        std::vector<std::pair<std::string, std::string>> testResults = pkbSP_m2->getPatternPair(DesignEntity::ASSIGN, TokenObject(TokenType::SUBEXPRESSION, "x*y"));
+        std::vector<std::pair<std::string, std::string>> expectedResults = { {"15", "x"}};
         REQUIRE(testResults == expectedResults);
     }
 }
