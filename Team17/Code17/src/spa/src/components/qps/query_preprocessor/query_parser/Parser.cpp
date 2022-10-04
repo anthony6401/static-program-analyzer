@@ -91,8 +91,6 @@ std::vector<std::vector<TokenObject>> Parser::groupQueryIntoClause() {
 			relationshipTokenObjects.push_back(token);
 			isSelectClause = false;
 			isSuchThatClause = true;
-			isPrevClauseSuchThatClause = true;
-			isPrevClausePatternClause = false;
 			continue;
 		}
 
@@ -100,6 +98,8 @@ std::vector<std::vector<TokenObject>> Parser::groupQueryIntoClause() {
 		if (tokenType == TokenType::CLOSED_BRACKET && !isSelectClause && isSuchThatClause && !isPatternClause) {
 			relationshipTokenObjects.push_back(token);
 			isSuchThatClause = false;
+			isPrevClauseSuchThatClause = true;
+			isPrevClausePatternClause = false;
 			continue;
 		}
 
@@ -112,8 +112,6 @@ std::vector<std::vector<TokenObject>> Parser::groupQueryIntoClause() {
 			patternTokenObjects.push_back(token);
 			isPatternClause = true;
 			isSelectClause = false;
-			isPrevClauseSuchThatClause = false;
-			isPrevClausePatternClause = true;
 			continue;
 		}
 
@@ -121,6 +119,8 @@ std::vector<std::vector<TokenObject>> Parser::groupQueryIntoClause() {
 		if (tokenType == TokenType::CLOSED_BRACKET && !isSelectClause && !isSuchThatClause && isPatternClause) {
 			patternTokenObjects.push_back(token);
 			isPatternClause = false;
+			isPrevClauseSuchThatClause = false;
+			isPrevClausePatternClause = true;
 			continue;
 		}
 
@@ -255,7 +255,7 @@ std::vector<SuchThat> Parser::parseTokensIntoSuchThatObjects(std::vector<TokenOb
 	for (TokenObject token : relationshipTokens) {
 		TokenType currTokenType = token.getTokenType();
 
-		if ((currTokenType == TokenType::OPEN_BRACKET) || (currTokenType == TokenType::AND)) {
+		if ((currTokenType == TokenType::OPEN_BRACKET) || (currTokenType == TokenType::AND && isNewRelationship)) {
 			continue;
 		}
 
@@ -315,7 +315,7 @@ std::vector<SuchThat> Parser::parseTokensIntoSuchThatObjects(std::vector<TokenOb
 
 std::vector<Pattern> Parser::parseTokensIntoPatternObjects(std::vector<TokenObject> patternTokens) {
 	std::vector<Pattern> patterns;
-	bool isFirstPatternToken = true;
+	bool isNewPattern = true;
 	bool isFirstParam = true;
 	std::string assignSynonym = "";
 	TokenObject leftParam = TokenObject();
@@ -324,20 +324,20 @@ std::vector<Pattern> Parser::parseTokensIntoPatternObjects(std::vector<TokenObje
 	for (TokenObject token : patternTokens) {
 		TokenType currTokenType = token.getTokenType();
 
-		if ((currTokenType == TokenType::OPEN_BRACKET) || (currTokenType == TokenType::AND)) {
+		if ((currTokenType == TokenType::OPEN_BRACKET)) {
 			continue;
 		}
 
 		if (currTokenType == TokenType::CLOSED_BRACKET) {
 			// For multi such that clauses in advanced SPA
-			isFirstPatternToken = true;
+			isNewPattern = true;
 			isFirstParam = true;
 			assignSynonym = "";
 			continue;
 		}
 
-		if ((currTokenType == TokenType::PATTERN) && isFirstPatternToken) {
-			isFirstPatternToken = false;
+		if ((currTokenType == TokenType::PATTERN || currTokenType == TokenType::AND) && isNewPattern) {
+			isNewPattern = false;
 			continue;
 		}
 

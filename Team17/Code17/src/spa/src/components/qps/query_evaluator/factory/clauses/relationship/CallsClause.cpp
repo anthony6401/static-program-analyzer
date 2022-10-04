@@ -1,4 +1,5 @@
 #include "CallsClause.h"
+#include "iostream"
 
 CallsClause::CallsClause(TokenObject left, TokenObject right,
                                  std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap,
