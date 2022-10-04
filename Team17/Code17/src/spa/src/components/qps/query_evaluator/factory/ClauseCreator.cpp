@@ -25,7 +25,7 @@ std::shared_ptr<Clause> ClauseCreator::createClause(Select select, const std::un
     if (selectReturnType == TokenType::SYNONYM) {
         return std::make_shared<SelectClause>(select, synonymToDesignEntityMap, qpsClient);
     } else if (selectReturnType == TokenType::BOOLEAN) {
-        return std::make_shared<SelectBooleanClause>(select, synonymToDesignEntityMap, qpsClient);
+        return std::make_shared<SelectBooleanClause>();
     } else if (selectReturnType == TokenType::TUPLE) {
         return std::make_shared<SelectClause>(select, synonymToDesignEntityMap, qpsClient);
     } else {

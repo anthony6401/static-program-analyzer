@@ -1,6 +1,6 @@
 file(GLOB_RECURSE srcs "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 file(GLOB_RECURSE headers "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h" "${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp")
-add_library(spa ${srcs} ${headers} src/components/qps/query_evaluator/factory/clauses/select/SelectBooleanClause.cpp src/components/qps/query_evaluator/factory/clauses/select/SelectBooleanClause.h)
+add_library(spa ${srcs} ${headers} src/components/qps/query_evaluator/factory/clauses/select/SelectBooleanClause.cpp src/components/qps/query_evaluator/factory/clauses/select/SelectBooleanClause.h src/components/qps/query_evaluator/factory/clauses/select/SelectTupleClause.cpp src/components/qps/query_evaluator/factory/clauses/select/SelectTupleClause.h)
 # this makes the headers accessible for other projects which uses spa lib
 target_include_directories(spa PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 

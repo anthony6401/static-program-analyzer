@@ -9,13 +9,9 @@
 #include "models/Entity/DesignEntity.h"
 
 class SelectBooleanClause : public Clause {
-private:
-    std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap;
-    Select select;
-    QPSClient qpsClient;
 
 public:
-    SelectBooleanClause(Select select, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
+    SelectBooleanClause();
     ResultTable evaluateClause() override;
     size_t getNumberOfSynonyms() override;
     std::set<std::string> getAllSynonyms() override;
