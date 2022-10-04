@@ -218,11 +218,6 @@ bool Validator::isValidCalls(SuchThat relationship) {
 	TokenObject leftParam = relationship.getLeft();
 	TokenObject rightParam = relationship.getRight();
 
-	// First parameter of Uses and Modifies cannot be WILDCARD due to ambiguity
-	if (leftParam.getTokenType() == TokenType::WILDCARD) {
-		return false;
-	}
-
 	// Check first parameter is valid
 	if (leftParam.getTokenType() == TokenType::NAME) {
 		std::string synonymName = leftParam.getValue();

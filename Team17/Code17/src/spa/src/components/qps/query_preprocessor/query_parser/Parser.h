@@ -35,7 +35,6 @@ private:
         {TokenType::CONSTANT, DesignEntity::CONSTANT},
         {TokenType::PROCEDURE, DesignEntity::PROCEDURE}
     };
-    std::vector<std::vector<TokenObject>> groupQueryIntoClause();
     bool isSyntacticallyCorrect(std::vector<TokenObject> tokenizedClause, SyntaxChecker* checker);
     Select parseTokensIntoSelectObject(std::vector<TokenObject> selectTokens);
     std::vector<SuchThat> parseTokensIntoSuchThatObjects(std::vector<TokenObject> relationshipTokens);
@@ -48,6 +47,8 @@ public:
     Parser(std::vector<TokenObject> tokenizedQuery);
     QueryObject parse();
     std::vector<TokenObject> getTokenizedQuery();
+    std::vector<std::vector<TokenObject>> groupQueryIntoClause();
+
 
 };
 
