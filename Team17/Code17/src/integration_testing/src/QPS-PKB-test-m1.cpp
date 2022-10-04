@@ -20,8 +20,6 @@
 #include "components/qps/QPS.h"
 #include <iostream>
 
-// Integration test for QPS and PKB
-
 // Populating data in PKB
 PKB* pkb = new PKB();
 auto qpsClient = QPSClient(pkb);
