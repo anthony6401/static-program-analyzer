@@ -53,3 +53,43 @@ procedure p; stmt p1;
 Select p such that Calls(p, p1)
 SemanticError
 5000
+12 - Pattern Expressions test 1
+read re;
+Select re pattern("x", "x + 2*y")
+1, 2
+5000
+13 - Pattern Expressions test 2
+variable v;
+Select v pattern(v, "i - 1")
+i
+5000
+14 - Pattern Expressions test 3
+variable v;
+Select v pattern(v, "x * y + z")
+x
+5000
+15 - Pattern Expressions test 4
+variable v;
+Select v pattern(v, "y * z")
+None
+5000
+16 - Pattern Expressions test 5
+variable v;
+Select v pattern(v, "0")
+x
+5000
+17 - Pattern Subexpressions test 1
+variable v;
+Select v pattern(v, _"x * y"_)
+x
+5000
+18 - Pattern Subexpressions test 2
+variable v;
+Select v pattern(v, _"z + x"_)
+z
+5000
+19 - Pattern Subexpressions test 3
+assign a;
+Select a pattern(v, _"5"_)
+5, 16
+5000
