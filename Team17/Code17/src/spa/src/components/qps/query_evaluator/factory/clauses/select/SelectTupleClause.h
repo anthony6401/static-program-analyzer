@@ -18,6 +18,8 @@ private:
 public:
     SelectTupleClause(std::vector<TokenObject> tuple, std::unordered_set<std::string> &synonymsInTable, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
     ResultTable evaluateClause() override;
+    ResultTable evaluateSynonymInTuple(std::string synonym);
+    ResultTable evaluateAttributeInTuple();
     size_t getNumberOfSynonyms() override;
     std::set<std::string> getAllSynonyms() override;
 };
