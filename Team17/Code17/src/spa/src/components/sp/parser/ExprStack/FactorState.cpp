@@ -1,7 +1,7 @@
 #include "FactorState.h"
 #include "OperandState.h"
 #include "ExprCloseState.h"
-#include "../validator/SimpleValidator.h"
+#include "../../validator/SimpleValidator.h"
 
 FactorState::FactorState(ExprStack* context) {
     this->context = context;

@@ -22,64 +22,51 @@
 #include "../../../models/Relationship/ParentTRelationship.h"
 #include "../../../models/Relationship/UsesRelationship.h"
 #include "../../../models/Relationship/ModifyRelationship.h"
-
+#include "../../../models/Relationship/CallsRelationship.h"
 #include "FollowsExtractor.h"
 #include "ParentExtractor.h"
 #include "UsesExtractor.h"
 #include "ModifyExtractor.h"
 #include "PatternExtractor.h"
 
+#include "StmtStack.h"
+#include "WhileStack.h"
+#include "IfStack.h"
+#include "ProcedureStack.h"
+
 #include "../../../models/Pattern/AssignPattern.h"
 
 #include "../../pkb/clients/SPClient.h"
 
+class Entity;
+
 class Extractor {
 public:
 	SPClient* client;
+	std::stack<StmtStack*> parentStack;
+	std::map<std::string, ProcedureStack*> procedures;
+	StmtStack* currentStack;
+	std::multimap<std::string, std::string> callProcedures;
+
+	std::string currentProcedure;
+
 	Extractor(SPClient* client);
 
-	void extractAll(SimpleToken procedureToken);
-	void extractFollows(SimpleToken procOrWhileIfToken);
-	void extractParent(SimpleToken procOrWhileIfToken);
-	void extractUses(SimpleToken procOrWhileIfToken);
-	void extractModify(SimpleToken procOrWhileIfToken);
-	void extractPattern(SimpleToken procOrWhileIfToken);
+	void close(int statementNumber);
 
-	void storeFollowsRelationships(std::vector<FollowsRelationship*>);
-	void storeFollowsTRelationships(std::vector<FollowsTRelationship*>);
-	void storeParentRelationships(std::vector<ParentRelationship*>);
-	void storeParentTRelationships(std::vector<ParentTRelationship*>);
-	void storeUsesRelationships(std::vector<UsesRelationship*>);
-	void storeModifyRelationships(std::vector<ModifyRelationship*>);
-	void storeAssignPatterns(std::vector<AssignPattern*>);
+	void extractRead(SimpleToken readToken);
+	void extractPrint(SimpleToken printToken);
+	void extractAssign(SimpleToken assignToken);
+	void extractWhile(SimpleToken whileToken);
+	void extractIf(SimpleToken ifToken);
+	void extractExpr(SimpleToken stmtToken, SimpleToken exprToken);
+	void extractCall(SimpleToken callToken);
+	void extractProcedure(SimpleToken procedureToken);
+	void endOfParser();
+	void addNestedRelationships(StmtStack* parent, StmtStack* called, std::string name);
+	std::string getExpressionAsString(SimpleToken exprToken);
+	Entity* generateEntity(SimpleToken token);
 
 	void extractConstants(SimpleToken procedureToken);
 	std::vector<ConstantEntity*> extractConstantsVector(SimpleToken procedureToken);
-
-	/*
-	void extractProcedure(SimpleToken simpleToken);
-
-	void extractParentRelationships(SimpleToken simpleToken, std::vector<SimpleToken> children);
-	void extractFollowsRelationships(std::vector<SimpleToken> children);
-	void extractUsesRelationshipsForProcedure(SimpleToken simpleToken);
-	void extractModifyRelationshipsForProcedure(SimpleToken simpleToken);
-	void extractSeriesOfStmts(std::vector<SimpleToken> seriesOfStmts);
-
-	ModifyRelationship* getModifyRelationshipForRead(SimpleToken simpleToken);
-	UsesRelationship* getUsesRelationshipForPrint(SimpleToken simpleToken);
-	ModifyRelationship* getModifyRelationshipForAssign(SimpleToken simpleToken);
-	std::vector<UsesRelationship*> getUsesRelationshipsForAssign(SimpleToken simpleToken);
-	void extractReadStmt(SimpleToken simpleToken);
-	void extractPrintStmt(SimpleToken simpleToken);
-	void extractAssignStmt(SimpleToken simpleToken);
-
-	void extractWhileStmt(SimpleToken simpleToken);
-	void extractIfStmt(SimpleToken simpleToken);
-
-	std::vector<UsesRelationship*> getUsesRelationshipsForCondExpr(SimpleToken condToken, SimpleToken condExpr);
-	void extractCondExpr(SimpleToken simpleToken, SimpleToken condExpr);
-	void extractStmtLst(SimpleToken simpleToken);
-
-	void extractCall();
-	*/
 };

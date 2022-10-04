@@ -4,18 +4,6 @@ std::vector<ParentRelationship*> ParentExtractor::extractParent(SimpleToken proc
 	std::vector<ParentRelationship*> parentVector;
 
 	std::vector<SimpleToken> stmtSeries = procOrWhileIfToken.getChildren();
-
-	/*
-	if (procOrWhileIfToken.type == SpTokenType::TPROCEDURE) {
-		for (int i = 0; i < stmtSeries.size(); i++) {
-			SimpleToken childToken = stmtSeries.at(i);
-			Entity* parentEntity = generateEntity(procOrWhileIfToken);
-			Entity* childEntity = generateEntity(childToken);
-			ParentRelationship* parent = new ParentRelationship(parentEntity, childEntity);
-			parentVector.push_back(parent);
-		}
-	}
-	*/
 	
 	if (procOrWhileIfToken.type == SpTokenType::TWHILE) {
 		SimpleToken stmtLstToken = stmtSeries.at(1);
@@ -65,25 +53,6 @@ std::vector<ParentTRelationship*> ParentExtractor::extractParentT(SimpleToken pr
 	std::vector<ParentTRelationship*> parentTVector;
 	
 	std::vector<SimpleToken> stmtSeries = procOrWhileIfToken.getChildren();
-
-	/*
-	if (procOrWhileIfToken.type == SpTokenType::TPROCEDURE) {
-		for (int i = 0; i < stmtSeries.size(); i++) {
-			SimpleToken childToken = stmtSeries.at(i);
-			Entity* parentEntity = generateEntity(procOrWhileIfToken);
-			Entity* childEntity = generateEntity(childToken);
-			ParentTRelationship* parent = new ParentTRelationship(parentEntity, childEntity);
-			parentTVector.push_back(parent);
-		}
-		for (int i = 0; i < stmtSeries.size(); i++) {
-			SimpleToken childToken = stmtSeries.at(i);
-			if (childToken.type == SpTokenType::TWHILE || childToken.type == SpTokenType::TIF) {
-				std::vector<ParentTRelationship*> nestedParentTVector = getNestedParentT(procOrWhileIfToken, childToken);
-				parentTVector.insert(parentTVector.end(), nestedParentTVector.begin(), nestedParentTVector.end());
-			}
-		}
-	}
-	*/
 
 	if (procOrWhileIfToken.type == SpTokenType::TWHILE) {
 		SimpleToken stmtLstToken = stmtSeries.at(1);
@@ -226,44 +195,6 @@ Entity* ParentExtractor::generateEntity(SimpleToken token) {
 	if (token.type == SpTokenType::TIF) {
 		return new IfEntity(std::to_string(token.statementNumber));
 	}
-	//if (token.type == SpTokenType::TCALL) {
-	//	return new CallEntity(std::to_string(token.statementNumber));
-	//}
+	// add in call type
 	return new Entity(std::to_string(token.statementNumber)); // Should not happen
 }
-
-/*
-void ParentExtractor::extractParent(Extractor extractor, SimpleToken parentToken, std::vector<SimpleToken> seriesOfStmts) {
-	while (seriesOfStmts.size() > 0) {
-		SimpleToken childToken = seriesOfStmts.at(0);
-		Entity* parent = generateEntity(parentToken);
-		Entity* child = generateEntity(childToken);
-
-		ParentRelationship* parentRelationship = new ParentRelationship(parent, child);
-		extractor.client->storeRelationship(parentRelationship);
-
-		seriesOfStmts.erase(seriesOfStmts.begin());
-	}
-}
-
-void ParentExtractor::extractParentT(Extractor extractor, SimpleToken parent, std::vector<SimpleToken> seriesOfStmts) {
-	// code here
-}
-
-Entity* ParentExtractor::generateEntity(SimpleToken token) {
-	if (token.type == SpTokenType::TREAD) {
-		return new ReadEntity(std::to_string(token.statementNumber));
-	} else if (token.type == SpTokenType::TPRINT) {
-		return new PrintEntity(std::to_string(token.statementNumber));
-	} else if (token.type == SpTokenType::TASSIGN) {
-		return new AssignEntity(std::to_string(token.statementNumber));
-	} else if (token.type == SpTokenType::TWHILE) {
-		return new WhileEntity(std::to_string(token.statementNumber));
-	} else if (token.type == SpTokenType::TIF) {
-		return new IfEntity(std::to_string(token.statementNumber));
-	} else if (token.type == SpTokenType::TCALL) {
-		return new CallEntity(std::to_string(token.statementNumber));
-	}
-	return new Entity(std::to_string(token.statementNumber));
-}
-*/

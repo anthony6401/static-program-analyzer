@@ -3,6 +3,8 @@
 #include "models/Relationship/Relationship.h"
 #include "models/Pattern/Pattern.h"
 
+#include <iostream>
+
 SPClient::SPClient(PKB* knowledge){
 	pkb = knowledge;
 }
