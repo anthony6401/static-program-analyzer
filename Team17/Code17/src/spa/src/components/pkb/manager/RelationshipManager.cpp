@@ -32,7 +32,8 @@ RelationshipManager::RelationshipManager() {
 	CallsRelationshipStorage* callsRelStorage = new CallsRelationshipStorage();
 	CallsTRelationshipStorage* callsTRelStorage = new CallsTRelationshipStorage();
 	NextRelationshipStorage* nextRelStorage = new NextRelationshipStorage();
-	NextTRelationshipStorage* nextTRelStorage = new NextTRelationshipStorage();
+
+	this->nextStorage = nextRelStorage;
 
 	relStorages.push_back(modifyRelStorage);
 	relStorages.push_back(usesRelStorage);
@@ -43,7 +44,6 @@ RelationshipManager::RelationshipManager() {
 	relStorages.push_back(callsRelStorage);
 	relStorages.push_back(callsTRelStorage);
 	relStorages.push_back(nextRelStorage);
-	relStorages.push_back(nextTRelStorage);
 }
 
 std::vector<RelationshipStorage*> RelationshipManager::getRelationshipStorage() {
@@ -112,4 +112,21 @@ bool RelationshipManager::storeRelationship(Relationship* rel) {
 	}
 
 	return ret;
+}
+
+bool RelationshipManager::getNextTRelationship(TokenObject firstArgument, TokenObject secondArgument) {
+	return nextStorage->getNextTRelationship(firstArgument, secondArgument);
+}
+
+std::unordered_set<std::string> RelationshipManager::getNextTRelationshipByFirst(TokenObject firstArgument, DesignEntity returnType, std::unordered_set<std::string>& filter) {
+	return nextStorage->getNextTRelationshipByFirst(firstArgument, returnType, filter);
+}
+
+std::unordered_set<std::string> RelationshipManager::getNextTRelationshipBySecond(DesignEntity returnType, TokenObject secondArgument, std::unordered_set<std::string>& filter) {
+	return nextStorage->getNextTRelationshipBySecond(returnType, secondArgument, filter);
+}
+
+std::unordered_map<std::string, std::unordered_set<std::string>> RelationshipManager::getAllNextTRelationship(DesignEntity returnType1, DesignEntity returnType2, 
+																										std::unordered_set<std::string>& filter) {
+	return nextStorage->getAllNextTRelationship(returnType1, returnType2, filter);
 }
