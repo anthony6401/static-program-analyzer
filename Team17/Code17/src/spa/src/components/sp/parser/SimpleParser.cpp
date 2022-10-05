@@ -28,7 +28,8 @@ void SimpleParser::parseCode(std::string code) {
         SimpleParser::parseLine(line);
     }
     validator.validCode();
-    extractor->endOfParser();
+    validator.isValidCalls(callProcedures, procedures);
+    extractor->endOfParser(callProcedures);
 }
 
 /// <summary>
@@ -89,10 +90,13 @@ void SimpleParser::parseLine(std::string code) {
 
 void SimpleParser::parseProcedure(std::vector<std::string>& tokens) {
     if (tokens.size() == 2 && tokens.at(1) == "{") {
-        if (!(validator.validateProcedure(tokens.at(0)))) {
+        std::string procedure = parseVariable(tokens.at(0));
+        if (!(validator.validateProcedure(procedure))) {
             throw std::invalid_argument("Received invalid or duplicate Procedure:Line " + std::to_string(statementNumber));
         }
-        SimpleToken procedureToken = SimpleToken(SpTokenType::TPROCEDURE, parseVariable(tokens.at(0)), 0);//change to parse procedure
+        SimpleToken procedureToken = SimpleToken(SpTokenType::TPROCEDURE, procedure, 0);
+        this->currentProcedure = procedure;
+        this->procedures.insert(procedure);
         validator.setState(new NestedState(&validator));
         extractor->extractProcedure(procedureToken);
     }
@@ -103,9 +107,11 @@ void SimpleParser::parseProcedure(std::vector<std::string>& tokens) {
 
 void SimpleParser::parseCall(std::vector<std::string>& tokens) {
     if (tokens.size() == 2 && tokens.at(1) == ";") {
-        SimpleToken callToken = SimpleToken(SpTokenType::TCALL, parseVariable(tokens.at(0)), statementNumber);
+        std::string procedure = parseVariable(tokens.at(0));
+        SimpleToken callToken = SimpleToken(SpTokenType::TCALL, procedure, statementNumber);
         statementNumber++;
-        extractor->extractCall(callToken);
+        extractor->extractCall(callToken, procedure);
+        this->callProcedures.insert(std::pair<std::string, std::string>(procedure, this->currentProcedure));
     }
     else {
         throw std::invalid_argument("Received invalid Call:Line " + std::to_string(statementNumber));

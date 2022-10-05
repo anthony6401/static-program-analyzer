@@ -93,30 +93,30 @@ void Extractor::extractExpr(SimpleToken stmtToken, SimpleToken exprToken) {
 	}
 }
 
-void Extractor::extractCall(SimpleToken callToken) {
+void Extractor::extractCall(SimpleToken callToken, std::string currentProcedure) {
 	//std::cout << "extractCall\n";
 	this->currentStack->follows.push_back(callToken);
 
-	Entity* left = generateEntity(SimpleToken(SpTokenType::TPROCEDURE, this->currentProcedure, 0));
+	Entity* left = generateEntity(SimpleToken(SpTokenType::TPROCEDURE, currentProcedure, 0));
 	Entity* right = new ProcedureEntity(callToken.value);
 	CallsRelationship* relationship = new CallsRelationship(left, right);
 	this->client->storeRelationship(relationship);
 
-	this->callProcedures.insert(std::pair<std::string, std::string>(this->currentProcedure, callToken.value));
+
 }
 
 void Extractor::extractProcedure(SimpleToken procedureToken) {
 	this->currentStack = new ProcedureStack(procedureToken, this);
-	this->currentProcedure = procedureToken.value;
 }
 
 void Extractor::close(int statementNumber) {
 	currentStack->close(statementNumber);
 }
 
-void Extractor::endOfParser() {
+void Extractor::endOfParser(std::multimap<std::string, std::string> callProcedures) {
 	for (auto itr = callProcedures.begin(); itr != callProcedures.end(); ++itr) {
 		std::string parent = itr->first;
+		std::cout << parent << std::endl;
 		std::string called = itr->second;
 		if (procedures.find(parent) != procedures.end() && procedures.find(called) != procedures.end()) {
 			StmtStack* parentStack = procedures.find(parent)->second;
