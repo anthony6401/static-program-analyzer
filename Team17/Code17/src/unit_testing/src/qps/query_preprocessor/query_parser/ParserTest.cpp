@@ -79,7 +79,7 @@ TEST_CASE("Boolean return type") {
         TokenObject(TokenType::BOOLEAN, std::string("BOOLEAN"))
     };
 
-    Select expectedSelect = Select(TokenType::BOOLEAN);
+    Select expectedSelect = Select(TokenType::BOOLEAN, { TokenObject(TokenType::NAME, std::string("BOOLEAN")) });
     std::vector<SuchThat> expectedSuchThat{};
     std::vector<Pattern> expectedPattern{};
     std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"variable", DesignEntity::VARIABLE} };

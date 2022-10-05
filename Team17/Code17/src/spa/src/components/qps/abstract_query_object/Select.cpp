@@ -23,3 +23,6 @@ std::string Select::getSynonym() {
     return synonym;
 }
 
+void Select::setReturnTypeToSynonym() {
+    this->returnType = TokenType::SYNONYM;
+}

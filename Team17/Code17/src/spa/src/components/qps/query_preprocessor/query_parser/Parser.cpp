@@ -238,7 +238,10 @@ Select Parser::parseTokensIntoSelectObject(std::vector<TokenObject> selectTokens
 
 		// Will check if BOOLEAN is declared as a design entity in Validator
 		if (currTokenType == TokenType::BOOLEAN) {
-			return Select(TokenType::BOOLEAN);
+			// Set TokenType to NAME in the event BOOLEAN is declared as a design entity
+			// If return type is BOOLEAN, return values are ignored
+			token.setTokenType(TokenType::NAME);
+			return Select(TokenType::BOOLEAN, {token});
 		}
 
 		if (currTokenType == TokenType::TUPLE) {
@@ -247,8 +250,7 @@ Select Parser::parseTokensIntoSelectObject(std::vector<TokenObject> selectTokens
 		}
 
 		if (currTokenType == TokenType::ATTRIBUTE) {
-			std::vector<TokenObject> attributeElement{ token };
-			return Select(TokenType::ATTRIBUTE, attributeElement);
+			return Select(TokenType::ATTRIBUTE, {token});
 		}
 
 		// Change TokenType of synonyms tokenized to design entity tokens etc to NAME
@@ -256,10 +258,7 @@ Select Parser::parseTokensIntoSelectObject(std::vector<TokenObject> selectTokens
 			token.setTokenType(TokenType::NAME);
 		}
 
-		std::vector<TokenObject> synonymElement{ token };
-
-
-		return Select(TokenType::SYNONYM, synonymElement);
+		return Select(TokenType::SYNONYM, {token});
 
 	}
 

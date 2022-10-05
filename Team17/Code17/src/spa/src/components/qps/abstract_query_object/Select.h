@@ -22,6 +22,7 @@ public:
     std::string getSynonym();
     TokenType getReturnType();
     std::vector<TokenObject> getReturnValues();
+    void setReturnTypeToSynonym();
     bool operator==(const Select& other) const {
         return synonym == other.synonym
         && returnValues == other.returnValues &&
