@@ -56,7 +56,8 @@ namespace qps {
         RELREF,
         STMTREF,
         ENTREF,
-        EXPRESSION_SPEC
+        EXPRESSION_SPEC,
+        RESULT_CL
     };
 }
 
