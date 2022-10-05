@@ -58,12 +58,31 @@ bool Validator::isSemanticallyValid() {
 
 bool Validator::selectClauseIsSemanticallyCorrect() {
 	Select selectClause = this->parsedQuery.getSelect();
-	std::string returnValue = selectClause.getSynonym();
+	TokenType returnType = selectClause.getReturnType();
+	std::vector<TokenObject> returnValues = selectClause.getReturnValues();
+
 	std::unordered_map<std::string, DesignEntity> mappedSynonyms = this->parsedQuery.getSynonymToDesignEntityMap();
-	
-	if (mappedSynonyms.find(returnValue) == mappedSynonyms.end()) {
-		return false;
+
+	// TODO
+	if (returnType == TokenType::BOOLEAN) {
+		
 	}
+
+	for (TokenObject token : returnValues) {
+		TokenType currTokenType = token.getTokenType();
+		std::string tokenValue = token.getValue();
+
+		// To be validated in futuer iterations
+		if (currTokenType == TokenType::ATTRIBUTE) {
+
+		}
+
+		// Synonym in tuple not declared
+		if (mappedSynonyms.find(tokenValue) == mappedSynonyms.end()) {
+			return false;
+		}
+	}
+	
 
 	return true;
 };
