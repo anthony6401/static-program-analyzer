@@ -116,7 +116,6 @@ void Extractor::close(int statementNumber) {
 void Extractor::endOfParser(std::multimap<std::string, std::string> callProcedures) {
 	for (auto itr = callProcedures.begin(); itr != callProcedures.end(); ++itr) {
 		std::string parent = itr->first;
-		std::cout << parent << std::endl;
 		std::string called = itr->second;
 		if (procedures.find(parent) != procedures.end() && procedures.find(called) != procedures.end()) {
 			StmtStack* parentStack = procedures.find(parent)->second;
