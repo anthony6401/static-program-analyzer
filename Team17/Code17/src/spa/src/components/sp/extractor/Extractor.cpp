@@ -15,8 +15,6 @@ void Extractor::extractRead(SimpleToken readToken) {
 	Entity* right = generateEntity(SimpleToken(SpTokenType::TVARIABLE, readToken.value, 0));
 	ModifyRelationship* relationship = new ModifyRelationship(left, right);
 	this->client->storeRelationship(relationship);
-	//std::cout << typeid(relationship).name() << " | " + (relationship->getLeftEntity()->getValue()) + " | " + (relationship->getRightEntity()->getValue()) + "\n";
-	//std::cout << "extractRead OK\n";
 }
 
 void Extractor::extractPrint(SimpleToken printToken) {
@@ -28,8 +26,6 @@ void Extractor::extractPrint(SimpleToken printToken) {
 	Entity* right = generateEntity(SimpleToken(SpTokenType::TVARIABLE, printToken.value, 0));
 	UsesRelationship* relationship = new UsesRelationship(left, right);
 	this->client->storeRelationship(relationship);
-	//std::cout << typeid(relationship).name() << " | " + (relationship->getLeftEntity()->getValue()) + " | " + (relationship->getRightEntity()->getValue()) + "\n";
-	//std::cout << "extractPrint OK\n";
 }
 
 void Extractor::extractAssign(SimpleToken assignToken) {
@@ -41,7 +37,6 @@ void Extractor::extractAssign(SimpleToken assignToken) {
 	Entity* left = generateEntity(assignToken);
 	Entity* right = generateEntity(varToken);
 	ModifyRelationship* relationship = new ModifyRelationship(left, right);
-	//std::cout << typeid(relationship).name() << " | " + (relationship->getLeftEntity()->getValue()) + " | " + (relationship->getRightEntity()->getValue()) + "\n";
 	this->client->storeRelationship(relationship);
 
 	SimpleToken exprToken = assignToken.getChildren().at(1);
@@ -52,7 +47,6 @@ void Extractor::extractAssign(SimpleToken assignToken) {
 	std::string seconVal = getExpressionAsString(exprToken);
 	AssignPattern * assignPattern = new AssignPattern(lineNum, firstVal, seconVal);
 	this->client->storePattern(assignPattern);
-	//std::cout << "extractAssign OK\n";
 }
 
 std::string Extractor::getExpressionAsString(SimpleToken expression) {
@@ -69,26 +63,19 @@ void Extractor::extractWhile(SimpleToken whileToken) {
 	//std::cout << "extractWhile\n";
 	this->currentStack->follows.push_back(whileToken);
 	extractExpr(whileToken, whileToken);
-
-	// create new while stack and set it as the current stack, old stack gets added to parentStack
 	this->parentStack.push(currentStack);
 	this->currentStack = new WhileStack(whileToken, this);
-	//std::cout << "extractWhile OK\n";
 }
 
 void Extractor::extractIf(SimpleToken ifToken) {
 	//std::cout << "extractIf\n";
 	this->currentStack->follows.push_back(ifToken);
 	extractExpr(ifToken, ifToken);
-
-	// create new if stack and set it as the current stack, old stack gets added to parentStack
 	this->parentStack.push(currentStack);
 	this->currentStack = new IfStack(ifToken, this);
-	//std::cout << "extractIf OK\n";
 }
 
 void Extractor::extractExpr(SimpleToken stmtToken, SimpleToken exprToken) {
-	//std::cout << "extractExpr\n";
 	std::vector<SimpleToken> exprChildren = exprToken.getChildren();
 	for (int i = 0; i < exprChildren.size(); i++) {
 		SimpleToken currentToken = exprChildren.at(i);
@@ -98,14 +85,12 @@ void Extractor::extractExpr(SimpleToken stmtToken, SimpleToken exprToken) {
 			Entity* left = generateEntity(stmtToken);
 			Entity* right = generateEntity(currentToken);
 			UsesRelationship* relationship = new UsesRelationship(left, right);
-			//std::cout << typeid(relationship).name() << " | " + (relationship->getLeftEntity()->getValue()) + " | " + (relationship->getRightEntity()->getValue()) + "\n";
 			this->client->storeRelationship(relationship);
 		}
 		if (currentToken.type == SpTokenType::TCONSTANT) {
 			this->client->storeConstant(new ConstantEntity(currentToken.value));
 		}
 	}
-	//std::cout << "extractExpr OK\n";
 }
 
 void Extractor::extractCall(SimpleToken callToken) {
@@ -113,51 +98,44 @@ void Extractor::extractCall(SimpleToken callToken) {
 	this->currentStack->follows.push_back(callToken);
 
 	Entity* left = generateEntity(SimpleToken(SpTokenType::TPROCEDURE, this->currentProcedure, 0));
-	Entity* right = new CallEntity(callToken.value);
+	Entity* right = new ProcedureEntity(callToken.value);
 	CallsRelationship* relationship = new CallsRelationship(left, right);
-	//std::cout << typeid(relationship).name() << " | " + (relationship->getLeftEntity()->getValue()) + " | " + (relationship->getRightEntity()->getValue()) + "\n";
 	this->client->storeRelationship(relationship);
 
 	this->callProcedures.insert(std::pair<std::string, std::string>(this->currentProcedure, callToken.value));
-	//std::cout << "extractCall OK\n";
 }
 
 void Extractor::extractProcedure(SimpleToken procedureToken) {
-	//std::cout << "extractProcedure\n";
 	this->currentStack = new ProcedureStack(procedureToken, this);
 	this->currentProcedure = procedureToken.value;
-	//std::cout << "extractProcedure OK\n";
 }
 
 void Extractor::close(int statementNumber) {
-	//std::cout << "close\n";
 	currentStack->close(statementNumber);
-	//std::cout << "close OK\n";
 }
 
 void Extractor::endOfParser() {
-	//std::cout << "endOfParser\n";
 	for (auto itr = callProcedures.begin(); itr != callProcedures.end(); ++itr) {
-		//std::cout << "for loop begin\n";
-
 		std::string parent = itr->first;
 		std::string called = itr->second;
-
-		//std::cout << parent + "\n";
-		//std::cout << called + "\n";
-
-		//std::cout << "for loop middle\n";
-
 		if (procedures.find(parent) != procedures.end() && procedures.find(called) != procedures.end()) {
-			//std::cout << "found stuff\n";
 			StmtStack* parentStack = procedures.find(parent)->second;
 			StmtStack* calledStack = procedures.find(called)->second;
+			CallsTRelationship* callsTRel = new CallsTRelationship(new ProcedureEntity(parent), new ProcedureEntity(called));
+			this->client->storeRelationship(callsTRel);
 			addNestedRelationships(parentStack, calledStack, parent);
 		}
-
-		//std::cout << "for loop end OK\n";
+		for (auto itrRec = callProcedures.begin(); itrRec != callProcedures.end(); ++itrRec) {
+			std::string calledRecurse = itrRec->second;
+			if (calledRecurse != called && parent != calledRecurse) {
+				StmtStack* parentStack = procedures.find(parent)->second;
+				StmtStack* calledStackRecurse = procedures.find(calledRecurse)->second;
+				CallsTRelationship* callsTRel = new CallsTRelationship(new ProcedureEntity(parent), new ProcedureEntity(calledRecurse));
+				this->client->storeRelationship(callsTRel);
+				addNestedRelationships(parentStack, calledStackRecurse, parent);
+			}
+		}
 	}
-	//std::cout << "endOfParser OK\n";
 }
 
 void Extractor::addNestedRelationships(StmtStack* parentStack, StmtStack* calledStack, std::string name) {
@@ -172,7 +150,6 @@ void Extractor::addNestedRelationships(StmtStack* parentStack, StmtStack* called
 		Entity* firstEntity = generateEntity(SimpleToken(SpTokenType::TPROCEDURE, name, 0));
 		Entity* secondEntity = generateEntity(second);
 		ParentTRelationship* parentTRel = new ParentTRelationship(firstEntity, secondEntity);
-		//std::cout << typeid(parentTRel).name() << " | " + (parentTRel->getLeftEntity()->getValue()) + " | " + (parentTRel->getRightEntity()->getValue()) + "\n";
 		this->client->storeRelationship(parentTRel);
 	}
 
@@ -181,7 +158,6 @@ void Extractor::addNestedRelationships(StmtStack* parentStack, StmtStack* called
 		Entity* firstEntity = generateEntity(SimpleToken(SpTokenType::TPROCEDURE, name, 0));
 		Entity* secondEntity = generateEntity(second);
 		ParentTRelationship* parentTRel = new ParentTRelationship(firstEntity, secondEntity);
-		//std::cout << typeid(parentTRel).name() << " | " + (parentTRel->getLeftEntity()->getValue()) + " | " + (parentTRel->getRightEntity()->getValue()) + "\n";
 		this->client->storeRelationship(parentTRel);
 	}
 
@@ -190,7 +166,6 @@ void Extractor::addNestedRelationships(StmtStack* parentStack, StmtStack* called
 		Entity* firstEntity = generateEntity(SimpleToken(SpTokenType::TPROCEDURE, name, 0));
 		Entity* secondEntity = generateEntity(second);
 		UsesRelationship* usesRel = new UsesRelationship(firstEntity, secondEntity);
-		//std::cout << typeid(usesRel).name() << " | " + (usesRel->getLeftEntity()->getValue()) + " | " + (usesRel->getRightEntity()->getValue()) + "\n";
 		this->client->storeRelationship(usesRel);
 	}
 
@@ -199,10 +174,8 @@ void Extractor::addNestedRelationships(StmtStack* parentStack, StmtStack* called
 		Entity* firstEntity = generateEntity(SimpleToken(SpTokenType::TPROCEDURE, name, 0));
 		Entity* secondEntity = generateEntity(second);
 		ModifyRelationship* modifyRel = new ModifyRelationship(firstEntity, secondEntity);
-		//std::cout << typeid(modifyRel).name() << " | " + (modifyRel->getLeftEntity()->getValue()) + " | " + (modifyRel->getRightEntity()->getValue()) + "\n";
 		this->client->storeRelationship(modifyRel);
 	}
-	//std::cout << "addNestedRels OK\n";
 }
 
 Entity* Extractor::generateEntity(SimpleToken token) {

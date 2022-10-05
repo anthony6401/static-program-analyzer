@@ -28,88 +28,79 @@ PKB* pkbSP = new PKB();
 auto spClient = new SPClient(pkbSP);
 
 TEST_CASE("test SP PKB integration") {
-	Extractor extractor = Extractor(spClient);
-	SimpleParser simpleParser = SimpleParser(&extractor);
-    //std::cout << "Starting test\n";
-	simpleParser.parseCode("procedure First {\
-                                read x;\
-                                read z;\
-                                call Second; }\
-                            \
-                            procedure Second {\
-                                x = 0;\
-                                i = 5;\
-                                while (i != 0) {\
-                                    x = x + 2 * y;\
-                                    call Third;\
-                                    i = i - 1; }\
-                                if (x == 1) then {\
-                                    x = x + 1; }\
-                                else {\
-                                    z = 1; }\
-                                z = z + x + i;\
-                                y = z + 2;\
-                                x = x * y + z; }\
-                            \
-                            procedure Third {\
-                                z = 5;\
-                                v = z;\
-                                print v; }");
-        //std::cout << "Ending test\n";
+    Extractor extractor = Extractor(spClient);
+    SimpleParser simpleParser = SimpleParser(&extractor);
+    simpleParser.parseCode("    procedure computeCentroid {\
+		      count = 0;\
+	      cenX = 0;\
+	      cenY = 0;\
+	      while ((x != 0) && (y != 0)) {\
+		          count = count + 1;\
+		          cenX = cenX + x;\
+		          cenY = cenY + y;\
+	}\
+	      if (count == 0) then{\
+	          flag = 1;\
+	}\
+	else {\
+		          cenX = cenX / count;\
+		          cenY = cenY / count;\
+	}\
+	      normSq = cenX * cenX + cenY * cenY;\
+    }");
 }
 
 // pkbSP APIs queries
 TEST_CASE("Select all queries for SP") {
+    SECTION("Select if statements") {
+        std::unordered_set<std::string> testResults = pkbSP->getAllEntity(DesignEntity::IF);
+        std::unordered_set<std::string> expectedResults = { "8" };
+        REQUIRE(testResults == expectedResults);
+    }
+
     SECTION("Select assign statements") {
         std::unordered_set<std::string> testResults = pkbSP->getAllEntity(DesignEntity::ASSIGN);
-        std::unordered_set<std::string> expectedResults = { "4", "5", "7", "9", "11", "12", "13", "14", "15", "16", "17" };
+        std::unordered_set<std::string> expectedResults = { "1", "2", "3", "5", "6", "7", "9", "10", "11", "12" };
         REQUIRE(testResults == expectedResults);
     }
 
     SECTION("Select read statements") {
         std::unordered_set<std::string> testResults = pkbSP->getAllEntity(DesignEntity::READ);
-        std::unordered_set<std::string> expectedResults = { "1", "2" };
+        std::unordered_set<std::string> expectedResults = {};
         REQUIRE(testResults == expectedResults);
     }
 
     SECTION("Select print statements") {
         std::unordered_set<std::string> testResults = pkbSP->getAllEntity(DesignEntity::PRINT);
-        std::unordered_set<std::string> expectedResults = { "18" };
+        std::unordered_set<std::string> expectedResults = {};
         REQUIRE(testResults == expectedResults);
     }
 
     SECTION("Select procedures") {
         std::unordered_set<std::string> testResults = pkbSP->getAllEntity(DesignEntity::PROCEDURE);
-        std::unordered_set<std::string> expectedResults = { "First", "Second", "Third" };
+        std::unordered_set<std::string> expectedResults = { "computeCentroid" };
         REQUIRE(testResults == expectedResults);
     }
 
     SECTION("Select while statements") {
         std::unordered_set<std::string> testResults = pkbSP->getAllEntity(DesignEntity::WHILE);
-        std::unordered_set<std::string> expectedResults = { "6" };
-        REQUIRE(testResults == expectedResults);
-    }
-
-    SECTION("Select if statements") {
-        std::unordered_set<std::string> testResults = pkbSP->getAllEntity(DesignEntity::IF);
-        std::unordered_set<std::string> expectedResults = { "10" };
+        std::unordered_set<std::string> expectedResults = { "4" };
         REQUIRE(testResults == expectedResults);
     }
 
     SECTION("Select variables") {
         std::unordered_set<std::string> testResults = pkbSP->getAllEntity(DesignEntity::VARIABLE);
-        std::unordered_set<std::string> expectedResults = { "x", "y", "i", "z", "v" };
+        std::unordered_set<std::string> expectedResults = { "count", "cenX", "cenY", "x", "y", "flag", "normSq" };
         REQUIRE(testResults == expectedResults);
     }
 
     SECTION("Select constants") {
         std::unordered_set<std::string> testResults = pkbSP->getAllEntity(DesignEntity::CONSTANT);
-        std::unordered_set<std::string> expectedResults = { "0", "5" , "2", "1"};
+        std::unordered_set<std::string> expectedResults = { "0", "1" };
         REQUIRE(testResults == expectedResults);
     }
 }
 
-/*
 TEST_CASE("Relationships and patterns for SP") {
     SECTION("Modifies with no synonym") {
         // Modifies(2, cenX)
@@ -290,7 +281,7 @@ TEST_CASE("Relationships and patterns for SP") {
         REQUIRE(testResults == expectedResults);
     }
 
-    SECTION("Parent with 2 synonyms") {
+    SECTION("Parent* with 2 synonyms") {
         // Parent*(w, s)
         std::unordered_map<std::string, std::unordered_set<std::string>> testResults = pkbSP->getAllRelationship(RelationshipType::PARENT_T, DesignEntity::WHILE, DesignEntity::STMT);
         std::unordered_map<std::string, std::unordered_set<std::string>> expectedResults = { {"4", std::unordered_set<std::string>({"5", "6", "7"})} };
@@ -312,4 +303,3 @@ TEST_CASE("Relationships and patterns for SP") {
         REQUIRE(testResults == expectedResults);
     }
 }
-*/
