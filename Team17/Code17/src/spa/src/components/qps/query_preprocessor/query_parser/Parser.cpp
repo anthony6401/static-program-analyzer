@@ -6,6 +6,7 @@
 #include <unordered_map>
 #include <stdexcept>
 #include <memory>
+#include <sstream>
 
 using namespace qps;
 
@@ -228,14 +229,37 @@ Select Parser::parseTokensIntoSelectObject(std::vector<TokenObject> selectTokens
 	bool isFirstSelectToken = true;
 
 	for (TokenObject token : selectTokens) {
-		if ((token.getTokenType() == TokenType::SELECT) && isFirstSelectToken) {
+		TokenType currTokenType = token.getTokenType();
+
+		if ((currTokenType == TokenType::SELECT) && isFirstSelectToken) {
 			isFirstSelectToken = false;
 			continue;
 		}
 
-		std::string returnValue = token.getValue();
+		// Will check if BOOLEAN is declared as a design entity in Validator
+		if (currTokenType == TokenType::BOOLEAN) {
+			return Select(TokenType::BOOLEAN);
+		}
 
-		return Select(returnValue);
+		if (currTokenType == TokenType::TUPLE) {
+			std::vector<TokenObject> tupleElements = parseTupleIntoIndividualTokens(token.getValue());
+			return Select(TokenType::TUPLE, tupleElements);
+		}
+
+		if (currTokenType == TokenType::ATTRIBUTE) {
+			std::vector<TokenObject> attributeElement{ token };
+			return Select(TokenType::ATTRIBUTE, attributeElement);
+		}
+
+		// Change TokenType of synonyms tokenized to design entity tokens etc to NAME
+		if ((currTokenType != TokenType::ATTRIBUTE) && (currTokenType != TokenType::NAME)) {
+			token.setTokenType(TokenType::NAME);
+		}
+
+		std::vector<TokenObject> synonymElement{ token };
+
+
+		return Select(TokenType::SYNONYM, synonymElement);
 
 	}
 
@@ -399,3 +423,27 @@ bool Parser::isDesignEntityToken(TokenType token) {
 
 	return true;
 };
+
+std::vector<TokenObject> Parser::parseTupleIntoIndividualTokens(std::string tupleValue) {
+	std::vector<TokenObject> elements{};
+	std::stringstream ss(tupleValue);
+
+	while (ss.good()) {
+		std::string elementValue;
+		std::getline(ss, elementValue, ',');
+
+		TokenObject element;
+		bool isAttribute = std::find(elementValue.begin(), elementValue.end(), '.') != elementValue.end();
+
+		if (isAttribute) {
+			element = TokenObject(TokenType::ATTRIBUTE, elementValue);
+		}
+
+		// element is a synonym
+		element = TokenObject(TokenType::NAME, elementValue);
+		elements.push_back(element);
+	}
+
+	return elements;
+}
+

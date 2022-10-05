@@ -42,6 +42,7 @@ private:
     std::tuple<int, std::unordered_map<std::string, DesignEntity>> mapSynonymToDesignEntity(std::vector<TokenObject> declarations);
     bool isRelationshipToken(TokenType token);
     bool isDesignEntityToken(TokenType token);
+    std::vector<TokenObject> parseTupleIntoIndividualTokens(std::string tupleValue);
 
 public:
     Parser(std::vector<TokenObject> tokenizedQuery);
