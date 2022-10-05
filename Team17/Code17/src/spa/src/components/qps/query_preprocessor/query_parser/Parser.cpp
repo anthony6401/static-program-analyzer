@@ -426,7 +426,8 @@ bool Parser::isDesignEntityToken(TokenType token) {
 
 std::vector<TokenObject> Parser::parseTupleIntoIndividualTokens(std::string tupleValue) {
 	std::vector<TokenObject> elements{};
-	std::stringstream ss(tupleValue);
+	std::string stringOfElements = tupleValue.substr(1, tupleValue.length() - 2);
+	std::stringstream ss(stringOfElements);
 
 	while (ss.good()) {
 		std::string elementValue;
@@ -438,9 +439,11 @@ std::vector<TokenObject> Parser::parseTupleIntoIndividualTokens(std::string tupl
 		if (isAttribute) {
 			element = TokenObject(TokenType::ATTRIBUTE, elementValue);
 		}
+		else {
+			// element is a synonym
+			element = TokenObject(TokenType::NAME, elementValue);
+		}
 
-		// element is a synonym
-		element = TokenObject(TokenType::NAME, elementValue);
 		elements.push_back(element);
 	}
 
