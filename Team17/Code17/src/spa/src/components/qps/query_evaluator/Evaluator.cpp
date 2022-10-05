@@ -16,8 +16,8 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
         std::unordered_set<std::string> synonymsInTable{};
         std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap = queryObject.getSynonymToDesignEntityMap();
         Select select = queryObject.getSelect();
-        std::shared_ptr<Clause> selectClause = ClauseCreator::createClause(select.getSynonym(), synonymToDesignEntityMap, qpsClient);
-        //std::shared_ptr<Clause> selectClause = ClauseCreator::createClause(select, &synonymsInTable, synonymToDesignEntityMap, qpsClient);
+        std::shared_ptr<Clause> selectClause = ClauseCreator::createClause(select, synonymsInTable, synonymToDesignEntityMap, qpsClient);
+        //std::shared_ptr<Clause> selectClause = ClauseCreator::createClause(select.getSynonym(), synonymToDesignEntityMap, qpsClient);
         ClauseDivider clausesToEvaluate = extractClausesToEvaluate(queryObject, synonymToDesignEntityMap, qpsClient);
         clausesToEvaluate.divideCommonSynonymGroupsBySelect(selectClause);
         GroupedClause noSynonymsClauses = clausesToEvaluate.getNoSynonymsPresent();
@@ -30,41 +30,57 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
         if (isFalseNoSynonymClauseEvaluation || isFalseNoSelectSynonymEvaluation) {
             evaluatedResults.setIsFalseResultToTrue();
         } else {
-            evaluatedResults = Evaluator::evaluateHasSelectSynonymClauses(hasSelectSynonymPresent, select.getSynonym());
+            evaluatedResults = Evaluator::evaluateHasSelectSynonymClauses(hasSelectSynonymPresent, selectClause);
         }
-
-        //std::unordered_set<std::string> synonymsInTable{evaluatedResults.synonymsList.begin(), evaluatedResults.synonymsList.end()};
-        //selectClause = ClauseCreator::createClause(select, synonymsInTable, synonymToDesignEntityMap, qpsClient);
-        ResultTable finalResultTable = Evaluator::combineResultsWithSelect(selectClause, evaluatedResults);
-        Evaluator::populateResults(finalResultTable, select.getSynonym(), results);
+        std::cout << "EVALUATED RESULTS:" << std::endl;
+        std::cout  << evaluatedResults << std::endl;
+        synonymsInTable = {evaluatedResults.synonymsList.begin(), evaluatedResults.synonymsList.end()};
+        std::cout << "SYNONYMS IN TABLE:" << std::endl;
+        for (auto s : synonymsInTable) {
+            std::cout << s << std::endl;
+        }
+        selectClause = ClauseCreator::createClause(select, synonymsInTable, synonymToDesignEntityMap, qpsClient);
+        ResultTable selectTable = selectClause -> evaluateClause();
+        std::cout << "SELECT TABLE:" << std::endl;
+        std::cout  << selectTable << std::endl;
+        evaluatedResults.combineResult(selectTable);
+        std::cout << "evaluated results is synonym result: " << evaluatedResults.getIsSynonymResult() << std::endl;
+        std::cout << "EVALUATED RESULTS AFTER COMBINING SELECT:" << std::endl;
+        std::cout  << evaluatedResults << std::endl;
+        // ResultTable finalResultTable = Evaluator::combineResultsWithSelect(selectClause, evaluatedResults);
+        Evaluator::populateResultsList(evaluatedResults, select, results);
     }
 }
 
-void Evaluator::populateResultsList(ResultTable finalResult, Select select, std::list<std::string> &results) {
-    bool isBooleanResult = finalResult.getIsBooleanResult();
-    bool isSynonymResult = finalResult.getIsSynonymResult();
-    bool isTupleResult = finalResult.getIsTupleResult();
+void Evaluator::populateResultsList(ResultTable &evaluatedResults, Select select, std::list<std::string> &results) {
+    std::cout << "evaluated results is synonym result in populate: " << evaluatedResults.getIsSynonymResult() << std::endl;
+    bool isBooleanResult = evaluatedResults.getIsBooleanResult();
+    bool isSynonymResult = evaluatedResults.getIsSynonymResult();
+    bool isTupleResult = evaluatedResults.getIsTupleResult();
     // bool isAttributeResult = finalResult.getIsAttributeResult();
     if (isBooleanResult) {
-        if (finalResult.getIsFalseResult()) {
+        if (evaluatedResults.getIsFalseResult()) {
             results.emplace_back("FALSE");
         } else {
             results.emplace_back("TRUE");
         }
     } else if (isSynonymResult) {
-        if (finalResult.getIsFalseResult()) {
+        if (evaluatedResults.getIsFalseResult()) {
             // Return empty result
             return;
         } else {
+            std::cout << "In is synonym populate results" << std::endl;
+            std::cout << evaluatedResults << std::endl;
             std::string selectSynonym = select.getReturnValues().front().getValue();
-            std::unordered_set<std::string> resultsToPopulate = finalResult.getSynonymResultsToBePopulated(selectSynonym);
+            std::cout << "select synonym is: " << selectSynonym << std::endl;
+            std::unordered_set<std::string> resultsToPopulate = evaluatedResults.getSynonymResultsToBePopulated(selectSynonym);
             for (std::string result : resultsToPopulate) {
                 results.emplace_back(result);
             }
         }
     } else if (isTupleResult) {
         std::vector<TokenObject> tuple = select.getReturnValues();
-        std::unordered_set<std::string> resultsToPopulate = finalResult.getTupleResultsToBePopulated(tuple);
+        std::unordered_set<std::string> resultsToPopulate = evaluatedResults.getTupleResultsToBePopulated(tuple);
         for (std::string result : resultsToPopulate) {
             results.emplace_back(result);
         }
@@ -86,12 +102,15 @@ void Evaluator::populateResults(ResultTable finalResult, std::string selectSynon
     }
 }
 
-ResultTable Evaluator::combineResultsWithSelect(std::shared_ptr<Clause> selectClause, ResultTable evaluatedResults) {
-    // Synonym, Tuple or Boolean
-    ResultTable selectResults = selectClause -> evaluateClause();
-    evaluatedResults.combineResult(selectResults);
-    return evaluatedResults;
-}
+//ResultTable Evaluator::combineResultsWithSelect(std::shared_ptr<Clause> &selectClause, ResultTable &evaluatedResults) {
+//    // Synonym, Tuple or Boolean
+//    std::cout << "IN COMBINE RESULTS WITH SELECT METHOD" << std::endl;
+//    ResultTable selectResults = selectClause -> evaluateClause();
+//    evaluatedResults.combineResult(selectResults);
+//    std::cout << "test " << evaluatedResults.getIsSynonymResult() << std::endl;
+//    std::cout << "evaluatedResults are: " << evaluatedResults.resultsList.empty() << std::endl;
+//    return evaluatedResults;
+//}
 
 // Returns boolean, check for False or Empty Clauses
 bool Evaluator::evaluateNoSynonymClauses(GroupedClause noSynonymsClauses) {
@@ -123,7 +142,7 @@ bool Evaluator::evaluateNoSelectSynonymClauses(std::vector<GroupedClause> noSele
 // Each grouped clause has connected synonyms, and each group clause is related to Select synonym
 // Evaluate each grouped clause in a loop, find common synonyms and combine results
 // Combine all grouped clauses and filter values by select synonym
-ResultTable Evaluator::evaluateHasSelectSynonymClauses(std::vector<GroupedClause> hasSelectSynonymPresent, std::string selectSynonym) {
+ResultTable Evaluator::evaluateHasSelectSynonymClauses(std::vector<GroupedClause> hasSelectSynonymPresent, std::shared_ptr<Clause> &selectClause) {
     ResultTable combinedResultTable;
     for (GroupedClause gc : hasSelectSynonymPresent) {
         ResultTable intermediate = gc.evaluateGroupedClause();
@@ -131,7 +150,7 @@ ResultTable Evaluator::evaluateHasSelectSynonymClauses(std::vector<GroupedClause
             combinedResultTable = std::move(intermediate);
             break;
         }
-        intermediate.filterBySelectSynonym(selectSynonym);
+        intermediate.filterBySelectSynonym(selectClause -> getAllSynonyms());
         combinedResultTable.combineResult(intermediate);
     }
     return combinedResultTable;

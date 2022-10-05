@@ -1,5 +1,6 @@
 #include "GroupedClause.h"
 #include "memory"
+#include "iostream"
 
 GroupedClause::GroupedClause() : synonyms({}), clauses({}) {}
 

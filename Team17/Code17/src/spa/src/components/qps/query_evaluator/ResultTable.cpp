@@ -123,16 +123,15 @@ std::string ResultTable::formTupleResultString(std::vector<std::string> newResul
     return tupleResultString;
 }
 
-void ResultTable::filterBySelectSynonym(std::string selectSynonym) {
+void ResultTable::filterBySelectSynonym(std::set<std::string> &&synonyms) {
     std::vector<std::string> newSynonymsList;
     std::vector<std::vector<std::string>> newResultsList;
 
     std::vector<size_t> indexes; // Index of select synonym
     for (size_t i = 0; i < synonymsList.size(); i++) {
-        std::string currentSynonym = synonymsList.at(i);
-        if (currentSynonym == selectSynonym) {
+        if (synonyms.find(synonymsList.at(i))!=synonyms.end()) {
             indexes.emplace_back(i);
-            newSynonymsList.emplace_back(currentSynonym);
+            newSynonymsList.emplace_back(synonymsList.at(i));
         }
     }
     synonymsList = std::move(newSynonymsList);
@@ -147,12 +146,26 @@ void ResultTable::filterBySelectSynonym(std::string selectSynonym) {
     resultsList = std::move(newResultsList);
 }
 
+
+void ResultTable::updateResultType(ResultTable &nextResult) {
+    if (nextResult.getIsBooleanResult() && !isBooleanResult) {
+        isBooleanResult ^= true;
+    }
+
+    if (nextResult.getIsSynonymResult() && !isSynonymResult) {
+        isSynonymResult ^= true;
+    }
+}
+
+
+
 // Find common synonyms and merge resultsLists
-void ResultTable::combineResult(ResultTable nextResult) {
+void ResultTable::combineResult(ResultTable &nextResult) {
+    ResultTable::updateResultType(nextResult);
     if (isFalseResult) {
         return;
     } else {
-        if (nextResult.isFalseResult || nextResult.isEmptyResult()) {
+        if (nextResult.isFalseResult) {
             setIsFalseResultToTrue();
         }
         // find common synonyms, maximum 2 since there are only 2 parameters / pattern takes in 1 synonym at max
@@ -262,6 +275,23 @@ std::vector<std::pair<size_t, size_t>> ResultTable::findCommonSynonymsIndexPairs
         }
     }
     return indexPairs;
+}
+
+std::ostream &operator<<(std::ostream &os, const ResultTable &table) {
+    for (const auto &attribute : table.synonymsList) {
+        os << attribute << "\t";
+    }
+    os << std::endl;
+    os << "_______________________________________________________" << std::endl;
+
+    for (const auto &record : table.resultsList) {
+        for (const auto &value : record) {
+            os << value << "\t";
+        }
+        os << std::endl;
+    }
+
+    return os;
 }
 
 

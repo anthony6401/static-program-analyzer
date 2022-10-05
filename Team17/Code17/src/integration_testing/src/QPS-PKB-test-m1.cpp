@@ -251,6 +251,14 @@ int initPKB() {
 
 int dummyForRun = initPKB();
 
+TEST_CASE("Test") {
+    std::string testQuery = "if ifs; Select ifs";
+    std::list<std::string> testResults;
+    std::list<std::string> expectedResults = {"8"};
+    QPS::processQueryResult(testQuery, testResults, qpsClient);
+    REQUIRE(testResults == expectedResults);
+}
+
 TEST_CASE("Select synonyms queries") {
 
     SECTION("Select if statements") {
@@ -594,6 +602,7 @@ TEST_CASE("Syntax and Semantics Checks") {
         REQUIRE(testResults == expectedResults);
     }
 }
+
 
 TEST_CASE("Milestone 1 Integration Test 1") {
 

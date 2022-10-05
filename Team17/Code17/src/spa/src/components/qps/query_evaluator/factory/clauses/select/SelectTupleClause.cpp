@@ -13,7 +13,7 @@ ResultTable SelectTupleClause::evaluateClause() {
         ResultTable intermediate;
         TokenType tupleObjectType = tupleObject.getTokenType();
         std::string tupleObjectValue = tupleObject.getValue();
-        if (tupleObjectType == TokenType::SYNONYM) {
+        if (tupleObjectType == TokenType::NAME) {
             if (synonymsInTable.find(tupleObjectValue) != synonymsInTable.end()) {
                 continue;
             } else {
@@ -42,7 +42,7 @@ size_t SelectTupleClause::getNumberOfSynonyms() {
     for (auto tupleObject : tuple) {
         TokenType tupleObjectType = tupleObject.getTokenType();
         std::string tupleObjectValue = tupleObject.getValue();
-        if (tupleObjectType == TokenType::SYNONYM) {
+        if (tupleObjectType == TokenType::NAME) {
             numberOfSynonyms++;
         }
 
@@ -58,7 +58,7 @@ std::set<std::string> SelectTupleClause::getAllSynonyms() {
     for (auto tupleObject : tuple) {
         TokenType tupleObjectType = tupleObject.getTokenType();
         std::string tupleObjectValue = tupleObject.getValue();
-        if (tupleObjectType == TokenType::SYNONYM) {
+        if (tupleObjectType == TokenType::NAME) {
             synonyms.emplace(tupleObjectValue);
         }
 
