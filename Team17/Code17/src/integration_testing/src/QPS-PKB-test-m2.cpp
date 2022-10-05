@@ -762,9 +762,3 @@ TEST_CASE("Multi-clause queries") {
         REQUIRE(testResults == expectedResults);
     }
 }
-
-TEST_CASE("TEST") {
-    std::unordered_set<std::string> testResults = pkb_m2->getRelationshipByFirst(RelationshipType::NEXT_T, TokenObject(TokenType::INTEGER, "4"), DesignEntity::ASSIGN);
-    std::unordered_set<std::string> expectedResults = { "5", "7", "9", "11", "12", "13", "14", "15" };
-    REQUIRE(testResults == expectedResults);
-}

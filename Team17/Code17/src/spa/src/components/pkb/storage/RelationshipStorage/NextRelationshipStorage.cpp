@@ -363,8 +363,8 @@ std::unordered_set<std::string> NextRelationshipStorage::getNextTRelationshipByF
 
 // DFS search to answer Next* queries with first argument integer value and second argument synonym
 void NextRelationshipStorage::DFSNextTForwardByFirst(std::string& curr, std::unordered_set<std::string>& visited,
-	std::unordered_set<std::string>& result, std::unordered_set<std::string>& filter, DesignEntity resultType,
-	std::unordered_map<std::string, std::unordered_set<std::string>>* storage) {
+													std::unordered_set<std::string>& result, std::unordered_set<std::string>& filter, DesignEntity resultType,
+													std::unordered_map<std::string, std::unordered_set<std::string>>* storage) {
 	visited.insert(curr);
 
 	std::unordered_map<std::string, std::unordered_set<std::string>>::const_iterator neighboursIterator = storage->find(curr);
@@ -372,14 +372,10 @@ void NextRelationshipStorage::DFSNextTForwardByFirst(std::string& curr, std::uno
 	if (neighboursIterator != this->stmtToStmtForwardMap.end()) {
 		for (std::string neighbour : neighboursIterator->second) {
 			std::unordered_set<std::string>::const_iterator exist = visited.find(neighbour);
-
+			if (filter.find(neighbour) != filter.end()) {
+				result.insert(neighbour);
+			}
 			if (exist == visited.end()) {
-				for (auto const& e : filter) {
-					std::cout << e << std::endl;
-				}
-				if (filter.find(neighbour) != filter.end()) {
-					result.insert(neighbour);
-				}
 				DFSNextTForwardByFirst(neighbour, visited, result, filter, resultType, storage);
 			}
 		}
