@@ -150,7 +150,6 @@ void Extractor::endOfParser() {
 
 		if (procedures.find(parent) != procedures.end() && procedures.find(called) != procedures.end()) {
 			//std::cout << "found stuff\n";
-
 			StmtStack* parentStack = procedures.find(parent)->second;
 			StmtStack* calledStack = procedures.find(called)->second;
 			addNestedRelationships(parentStack, calledStack, parent);

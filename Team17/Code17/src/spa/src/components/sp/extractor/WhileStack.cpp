@@ -28,7 +28,7 @@ void WhileStack::mergeStack() {
 }
 
 void WhileStack::extractFollows(std::vector<SimpleToken> follows) {
-    for (int i = 0; i < follows.size() - 1; i++) {
+    for (size_t i = 0; i < follows.size() - 1; i++) {
         SimpleToken first = follows.at(i);
         SimpleToken second = follows.at(i + 1);
         Entity* firstEntity = generateEntity(first);
