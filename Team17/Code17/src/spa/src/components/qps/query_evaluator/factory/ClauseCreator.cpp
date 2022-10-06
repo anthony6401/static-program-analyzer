@@ -18,10 +18,6 @@
 #include "components/qps/query_evaluator/factory/clauses/select/SelectSynonymClause.h"
 #include "components/qps/query_evaluator/factory/clauses/select/SelectTupleClause.h"
 
-std::shared_ptr<Clause> ClauseCreator::createClause(Select select, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) {
-    return std::make_shared<SelectClause>(select, synonymToDesignEntityMap, qpsClient);
-}
-
 std::shared_ptr<Clause> ClauseCreator::createClause(Select select, std::unordered_set<std::string> &synonymsInTable, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) {
     TokenType selectReturnType = select.getReturnType();
     std::vector<TokenObject> selectReturnValues = select.getReturnValues();
