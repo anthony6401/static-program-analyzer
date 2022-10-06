@@ -99,12 +99,10 @@ std::unordered_set<std::string> ResultTable::getTupleResultsToBePopulated(std::v
     for (auto resultSublist : resultsList) {
         std::vector<std::string> newResultSublist;
         for (auto tupleObject : tuple) {
-            if (tupleObject.getTokenType() == TokenType::SYNONYM) {
+            if (tupleObject.getTokenType() == TokenType::NAME) {
                 auto iterator = std::find(synonymsList.begin(), synonymsList.end(), tupleObject.getValue());
-                if (iterator != synonymsList.cend()) {
-                    int indexOfSynonym = std::distance(synonymsList.begin(), iterator);
-                    newResultSublist.push_back(resultSublist[indexOfSynonym]);
-                }
+                int indexOfSynonym = std::distance(synonymsList.begin(), iterator);
+                newResultSublist.push_back(resultSublist[indexOfSynonym]);
             } else {
                 // ATTRIBUTES
             }

@@ -42,6 +42,8 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
         std::cout << selectTable << std::endl;
         evaluatedResults.combineResult(selectTable);
         std::cout << "is evaluated results tuple result: " << evaluatedResults.getIsTupleResult() << std::endl;
+        std::cout << "FINAL EVALUATED RESULTS: " << std::endl;
+        std::cout << evaluatedResults << std::endl;
         Evaluator::populateResultsList(evaluatedResults, select, results);
     }
 }
