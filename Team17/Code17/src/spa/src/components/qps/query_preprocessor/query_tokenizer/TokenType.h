@@ -39,6 +39,7 @@ namespace qps {
         CLOSED_BRACKET,
         QUOTATION_MARK,
         SEMI_COLON,
+        EQUALS,
         // Design entities
         STMT,
         READ,

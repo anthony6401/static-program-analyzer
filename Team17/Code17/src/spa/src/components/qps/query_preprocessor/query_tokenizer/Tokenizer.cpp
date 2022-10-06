@@ -46,6 +46,7 @@ Tokenizer::Tokenizer() {
             {")", TokenType::CLOSED_BRACKET},
             {"\"", TokenType::QUOTATION_MARK},
             {";", TokenType::SEMI_COLON},
+            {"=", TokenType::EQUALS},
             {"stmt", TokenType::STMT},
             {"read", TokenType::READ},
             {"print", TokenType::PRINT},
@@ -96,6 +97,7 @@ std::vector<std::string> splitQuery(std::string query) {
     bool isWildcard = false;
     bool isQuotes = false;
     bool isTuple = false;
+    bool isAttribute = false;
     for (char c : query) {
         switch (c) {
             case '_':
@@ -117,10 +119,11 @@ std::vector<std::string> splitQuery(std::string query) {
             case '\v':
             case '\f':
             case '\r':
-                if (!isWildcard && !isQuotes && !isTuple) {
+                if (!isWildcard && !isQuotes && !isTuple && !isAttribute) {
                     char_output.push_back(delimiter);
                 }
                 break;
+            case '=':
             case ';':
                 if (!isTuple) {
                     char_output.push_back(delimiter);
@@ -148,17 +151,22 @@ std::vector<std::string> splitQuery(std::string query) {
                     isWildcard = charTypeToggler(isWildcard);
                 }
                 break;
+            case '.':
+                isAttribute = charTypeToggler(isAttribute);
             default: break;
         }
 
-        // Removes white spaces between identities and sub-expressions eg. "x + y" becomes "x+y"
         if (c != ' ') {
             char_output.push_back(c);
+            if (isAttribute && c != '.') {
+                isAttribute = charTypeToggler(isAttribute);
+            }
         }
 
         switch (c) {
             case ';':
             case ',':
+            case '=':
                 if (!isTuple) {
                     char_output.push_back(delimiter);
                 }
@@ -177,6 +185,7 @@ std::vector<std::string> splitQuery(std::string query) {
     std::vector<std::string> splittedQuery = formatCharToStringVector(string_output, delimiter);
     return splittedQuery;
 }
+
 /**
  * Trim the string to remove leading and trailing spaces
  */
@@ -238,15 +247,6 @@ bool Tokenizer::isIdentity(std::string s) {
     return false;
 }
 
-bool isExpressionName(std::string s) {
-    for (auto character : s) {
-        if (!isalpha(character)) {
-            return false;
-        }
-    }
-    return true;
-}
-
 std::vector<std::string> Tokenizer::convertExpressionToStringVector(std::string s) {
     std::vector<std::string> expressionTokens;
     std::vector<std::string> invalidExpression;
@@ -259,20 +259,17 @@ std::vector<std::string> Tokenizer::convertExpressionToStringVector(std::string 
                     expressionTokens.push_back(temp);
                     temp.clear();
                 } else {
-                    std::cout << "INVALID EXPRESSION" << std::endl;
                     return invalidExpression;
                 }
             }
             expressionTokens.push_back(std::string(1, character));
         } else {
-            // Potential Name or Integer Token
             temp.push_back(character);
         }
     }
 
     if (!temp.empty()) {
         if (!isName(temp) && !isInteger(temp)) {
-            std::cout << "INVALID EXPRESSION" << std::endl;
             return invalidExpression;
         } else {
             expressionTokens.push_back(temp);
@@ -391,23 +388,21 @@ auto isEmptyOrBlank = [](const std::string &s) {
 
 bool Tokenizer::isTuple(std::string s) {
     if (s.front() == '<' && s.back() == '>') {
-        // Remove tuple brackets
         std::string currString = s.substr(1, s.length() - 2);
         std::string currValue;
-        int startIndex = 0;
-        bool hasComma = false;
         while (currString.length() > 0) {
             size_t commaIndex = currString.find(',');
             if (commaIndex != std::string::npos && commaIndex > 0) {
-                // Find current value
-                hasComma = true;
                 currValue = currString.substr(0, commaIndex);
-                if (!isName(currValue)) {
+
+                if (!isName(currValue) && !isValidAttribute(currValue)) {
                     return false;
                 }
 
                 currString = currString.substr(commaIndex + 1, currString.length() - commaIndex - 1);
-            } else if (isName(currString) && hasComma) {
+            } else if (isName(currString)) {
+                return true;
+            } else if (isValidAttribute(currString)) {
                 return true;
             } else {
                 return false;
@@ -418,6 +413,34 @@ bool Tokenizer::isTuple(std::string s) {
     }
     return false;
 }
+
+bool Tokenizer::isValidAttribute(std::string s) {
+    std::unordered_set<std::string> attributeNameList = {"procName", "varName", "value", "stmt#"};
+    size_t fullstopIndex = s.find('.');
+    std::string synonymName = s.substr(0, fullstopIndex);
+    std::string attributeName = s.substr(fullstopIndex + 1, s.length() - fullstopIndex - 1);
+    if (!isName(synonymName)) {
+        return false;
+    }
+    if (!attributeNameList.count(attributeName)) {
+        return false;
+    }
+    return true;
+}
+
+std::vector<std::string> Tokenizer::getValidAttribute(std::string s) {
+    std::vector<std::string> attribute = {};
+    std::unordered_set<std::string> attributeNameList = {"procName", "varName", "value", "stmt#"};
+    size_t fullstopIndex = s.find('.');
+    std::string synonymName = s.substr(0, fullstopIndex);
+    std::string attributeName = s.substr(fullstopIndex + 1, s.length() - fullstopIndex - 1);
+    if (isName(synonymName) && attributeNameList.count(attributeName)) {
+        return {synonymName, attributeName};
+    } else {
+        return attribute;
+    }
+}
+
 /**
  * Tokenizes each character or string according to Token Types and outputs vector<TokenObject>
  */
@@ -434,13 +457,15 @@ std::vector<TokenObject> Tokenizer::tokenize(std::string query) {
     }
     for (std::string s : tokenValues) {
         s = trimString(s);
-        // Token value exists in list
         if (stringToTokenMap.find(s) != stringToTokenMap.end()) {
             TokenObject object = TokenObject(stringToTokenMap[s], s);
             tokenList.push_back(object);
         } else {
             if (isTuple(s)) {
                 TokenObject object = TokenObject(TokenType::TUPLE, s);
+                tokenList.push_back(object);
+            } else if (isValidAttribute(s)) {
+                TokenObject object = TokenObject(TokenType::ATTRIBUTE, s);
                 tokenList.push_back(object);
             } else if (isName(s)) {
                 TokenObject object = TokenObject(TokenType::NAME, s);
