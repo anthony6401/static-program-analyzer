@@ -899,4 +899,3 @@ TEST_CASE("TUPLE queries") {
     }
 }
 
-}
