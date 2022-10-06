@@ -247,7 +247,7 @@ std::unordered_map<std::string, std::unordered_set<std::string>>* NextRelationsh
 }
 
 // DFS search to answer Next* queries with 2 integer values
-bool NextRelationshipStorage::DFSNextTForward(std::string curr, std::string& target, std::unordered_set<std::string>& visited) {
+bool NextRelationshipStorage::DFSNextTForward(std::string curr, std::string target, std::unordered_set<std::string>& visited) {
 	visited.insert(curr);
 
 	std::unordered_map<std::string, std::unordered_set<std::string>>::const_iterator neighboursIterator = this->stmtToStmtForwardMap.find(curr);
