@@ -32,28 +32,17 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
         } else {
             evaluatedResults = Evaluator::evaluateHasSelectSynonymClauses(hasSelectSynonymPresent, selectClause);
         }
-        std::cout << "EVALUATED RESULTS:" << std::endl;
-        std::cout  << evaluatedResults << std::endl;
+
         synonymsInTable = {evaluatedResults.synonymsList.begin(), evaluatedResults.synonymsList.end()};
-        std::cout << "SYNONYMS IN TABLE:" << std::endl;
-        for (auto s : synonymsInTable) {
-            std::cout << s << std::endl;
-        }
+
         selectClause = ClauseCreator::createClause(select, synonymsInTable, synonymToDesignEntityMap, qpsClient);
         ResultTable selectTable = selectClause -> evaluateClause();
-        std::cout << "SELECT TABLE:" << std::endl;
-        std::cout  << selectTable << std::endl;
         evaluatedResults.combineResult(selectTable);
-        std::cout << "evaluated results is synonym result: " << evaluatedResults.getIsSynonymResult() << std::endl;
-        std::cout << "EVALUATED RESULTS AFTER COMBINING SELECT:" << std::endl;
-        std::cout  << evaluatedResults << std::endl;
-        // ResultTable finalResultTable = Evaluator::combineResultsWithSelect(selectClause, evaluatedResults);
         Evaluator::populateResultsList(evaluatedResults, select, results);
     }
 }
 
 void Evaluator::populateResultsList(ResultTable &evaluatedResults, Select select, std::list<std::string> &results) {
-    std::cout << "evaluated results is synonym result in populate: " << evaluatedResults.getIsSynonymResult() << std::endl;
     bool isBooleanResult = evaluatedResults.getIsBooleanResult();
     bool isSynonymResult = evaluatedResults.getIsSynonymResult();
     bool isTupleResult = evaluatedResults.getIsTupleResult();
@@ -69,10 +58,7 @@ void Evaluator::populateResultsList(ResultTable &evaluatedResults, Select select
             // Return empty result
             return;
         } else {
-            std::cout << "In is synonym populate results" << std::endl;
-            std::cout << evaluatedResults << std::endl;
             std::string selectSynonym = select.getReturnValues().front().getValue();
-            std::cout << "select synonym is: " << selectSynonym << std::endl;
             std::unordered_set<std::string> resultsToPopulate = evaluatedResults.getSynonymResultsToBePopulated(selectSynonym);
             for (std::string result : resultsToPopulate) {
                 results.emplace_back(result);

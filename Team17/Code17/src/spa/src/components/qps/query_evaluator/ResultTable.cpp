@@ -149,11 +149,11 @@ void ResultTable::filterBySelectSynonym(std::set<std::string> &&synonyms) {
 
 void ResultTable::updateResultType(ResultTable &nextResult) {
     if (nextResult.getIsBooleanResult() && !isBooleanResult) {
-        isBooleanResult ^= true;
+        isBooleanResult = true;
     }
 
     if (nextResult.getIsSynonymResult() && !isSynonymResult) {
-        isSynonymResult ^= true;
+        isSynonymResult = true;
     }
 }
 
