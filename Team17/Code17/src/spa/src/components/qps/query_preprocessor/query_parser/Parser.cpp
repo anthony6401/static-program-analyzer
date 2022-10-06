@@ -20,6 +20,7 @@ QueryObject Parser::parse() {
 	std::vector<TokenObject> selectTokenObjects = groupedQueryTokens[1];
 	std::vector<TokenObject> relationshipTokenObjects = groupedQueryTokens[2];
 	std::vector<TokenObject> patternTokenObjects = groupedQueryTokens[3];
+	std::vector<TokenObject> withTokenObjects = groupedQueryTokens[4];
 
 	bool hasNoSyntaxError = true;
 
@@ -35,6 +36,10 @@ QueryObject Parser::parse() {
 
 	if (patternTokenObjects.size() > 0) {
 		hasNoSyntaxError = hasNoSyntaxError && isSyntacticallyCorrect(patternTokenObjects, new PatternClauseSyntaxChecker());
+	}
+
+	if (withTokenObjects.size() > 0) {
+		hasNoSyntaxError = hasNoSyntaxError && isSyntacticallyCorrect(withTokenObjects, new WithClauseSyntaxChecker());
 	}
 
 	if (!hasNoSyntaxError) {
@@ -54,18 +59,22 @@ std::vector<std::vector<TokenObject>> Parser::groupQueryIntoClause() {
 	std::vector<TokenObject> selectTokenObjects;
 	std::vector<TokenObject> relationshipTokenObjects;
 	std::vector<TokenObject> patternTokenObjects;
+	std::vector<TokenObject> withTokenObjects;
 
 	bool isEndOfDeclaration = true;
 	bool isSelectClause = false;
 	bool isSuchThatClause = false;
 	bool isPatternClause = false;
+	bool isWithClause = false;
 	bool isPrevClauseSuchThatClause = false;
 	bool isPrevClausePatternClause = false;
+	bool isPrevClauseWithClause = false;
+	bool isPrevEqualsToken = false;
 
 	for (TokenObject token : this->getTokenizedQuery()) {
 		TokenType tokenType = token.getTokenType();
 
-		if (isDesignEntityToken(tokenType) && isEndOfDeclaration && !isSelectClause && !isSuchThatClause && !isPatternClause) {
+		if (isDesignEntityToken(tokenType) && isEndOfDeclaration && !isSelectClause && !isSuchThatClause && !isPatternClause && !isWithClause) {
 			declarationTokenObjects.push_back(token);
 			isEndOfDeclaration = false;
 			continue;
@@ -84,7 +93,7 @@ std::vector<std::vector<TokenObject>> Parser::groupQueryIntoClause() {
 		}
 
 		// Start of such that clause
-		if (tokenType == TokenType::SUCH && !isSuchThatClause && !isPatternClause) {
+		if (tokenType == TokenType::SUCH && !isSuchThatClause && !isPatternClause && !isWithClause) {
 			if (isSelectClause && selectTokenObjects.size() < 2) {
 				selectTokenObjects.push_back(token);
 				continue;
@@ -96,16 +105,17 @@ std::vector<std::vector<TokenObject>> Parser::groupQueryIntoClause() {
 		}
 
 		// End of such that clause
-		if (tokenType == TokenType::CLOSED_BRACKET && !isSelectClause && isSuchThatClause && !isPatternClause) {
+		if (tokenType == TokenType::CLOSED_BRACKET && !isSelectClause && isSuchThatClause && !isPatternClause && !isWithClause) {
 			relationshipTokenObjects.push_back(token);
 			isSuchThatClause = false;
 			isPrevClauseSuchThatClause = true;
 			isPrevClausePatternClause = false;
+			isPrevClauseWithClause = false;
 			continue;
 		}
 
 		// Start of pattern clause
-		if (tokenType == TokenType::PATTERN && !isSuchThatClause && !isPatternClause) {
+		if (tokenType == TokenType::PATTERN && !isSuchThatClause && !isPatternClause && !isWithClause) {
 			if (isSelectClause && selectTokenObjects.size() < 2) {
 				selectTokenObjects.push_back(token);
 				continue;
@@ -117,15 +127,45 @@ std::vector<std::vector<TokenObject>> Parser::groupQueryIntoClause() {
 		}
 
 		// End of pattern clause
-		if (tokenType == TokenType::CLOSED_BRACKET && !isSelectClause && !isSuchThatClause && isPatternClause) {
+		if (tokenType == TokenType::CLOSED_BRACKET && !isSelectClause && !isSuchThatClause && isPatternClause && !isWithClause) {
 			patternTokenObjects.push_back(token);
 			isPatternClause = false;
 			isPrevClauseSuchThatClause = false;
 			isPrevClausePatternClause = true;
+			isPrevClauseWithClause = false;
 			continue;
 		}
 
-		if (tokenType == TokenType::AND && !isSuchThatClause && !isPatternClause) {
+		// Start of with clause
+		if (tokenType == TokenType::WITH && !isSuchThatClause && !isPatternClause && !isWithClause) {
+			if (isSelectClause && selectTokenObjects.size() < 2) {
+				selectTokenObjects.push_back(token);
+				continue;
+			}
+			withTokenObjects.push_back(token);
+			isSelectClause = false;
+			isWithClause = true;
+			continue;
+		}
+
+		if (tokenType == TokenType::EQUALS && !isSuchThatClause && !isPatternClause && isWithClause) {
+			withTokenObjects.push_back(token);
+			isPrevEqualsToken = true;
+			continue;
+		}
+
+		// End of with clause
+		if (isPrevEqualsToken && !isSuchThatClause && !isPatternClause && isWithClause) {
+			withTokenObjects.push_back(token);
+			isPrevEqualsToken = false;
+			isWithClause = false;
+			isPrevClauseSuchThatClause = false;
+			isPrevClausePatternClause = false;
+			isPrevClauseWithClause = true;
+			continue;
+		}
+
+		if (tokenType == TokenType::AND && !isSuchThatClause && !isPatternClause && !isWithClause) {
 			if (isSelectClause && selectTokenObjects.size() < 2) {
 				selectTokenObjects.push_back(token);
 				continue;
@@ -135,6 +175,7 @@ std::vector<std::vector<TokenObject>> Parser::groupQueryIntoClause() {
 				relationshipTokenObjects.push_back(token);
 				isSelectClause = false;
 				isSuchThatClause = true;
+				isWithClause = false;
 				isPrevClauseSuchThatClause = false;
 				continue;
 			}
@@ -143,14 +184,24 @@ std::vector<std::vector<TokenObject>> Parser::groupQueryIntoClause() {
 				patternTokenObjects.push_back(token);
 				isPatternClause = true;
 				isSelectClause = false;
+				isWithClause = false;
 				isPrevClausePatternClause = false;
+				continue;
+			}
+
+			if (isPrevClauseWithClause) {
+				withTokenObjects.push_back(token);
+				isWithClause = true;
+				isPatternClause = false;
+				isSelectClause = false;
+				isPrevClauseWithClause = false;
 				continue;
 			}
 
 		}
 
 		// Start of select clause
-		if (isEndOfDeclaration && !isSelectClause && !isSuchThatClause && !isPatternClause) {
+		if (isEndOfDeclaration && !isSelectClause && !isSuchThatClause && !isPatternClause && !isWithClause) {
 			selectTokenObjects.push_back(token);
 			isSelectClause = true;
 			continue;
@@ -171,6 +222,11 @@ std::vector<std::vector<TokenObject>> Parser::groupQueryIntoClause() {
 			continue;
 		}
 
+		if (isWithClause) {
+			patternTokenObjects.push_back(token);
+			continue;
+		}
+
 		// Throw generalized exception for now, will change in the future
 		throw std::runtime_error("Error parsing query");
 	}
@@ -179,7 +235,8 @@ std::vector<std::vector<TokenObject>> Parser::groupQueryIntoClause() {
 		declarationTokenObjects,
 		selectTokenObjects,
 		relationshipTokenObjects,
-		patternTokenObjects
+		patternTokenObjects,
+		withTokenObjects
 	};
 
 	return groupedQuery;

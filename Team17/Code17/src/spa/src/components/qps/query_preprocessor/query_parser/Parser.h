@@ -5,6 +5,7 @@
 #include "syntax_checker/SelectClauseSyntaxChecker.h"
 #include "syntax_checker/SuchThatClauseSyntaxChecker.h"
 #include "syntax_checker/PatternClauseSyntaxChecker.h"
+#include "syntax_checker/WithClauseSyntaxChecker.h"
 #include "components/qps/query_preprocessor/query_tokenizer/TokenObject.h"
 #include "components/qps/query_preprocessor/query_tokenizer/TokenType.h"
 #include "components/qps/abstract_query_object/QueryObject.h"
