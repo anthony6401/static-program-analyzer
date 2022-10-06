@@ -97,6 +97,7 @@ std::vector<std::string> splitQuery(std::string query) {
     bool isWildcard = false;
     bool isQuotes = false;
     bool isTuple = false;
+    bool isAttribute = false;
     for (char c : query) {
         switch (c) {
             case '_':
@@ -118,10 +119,11 @@ std::vector<std::string> splitQuery(std::string query) {
             case '\v':
             case '\f':
             case '\r':
-                if (!isWildcard && !isQuotes && !isTuple) {
+                if (!isWildcard && !isQuotes && !isTuple && !isAttribute) {
                     char_output.push_back(delimiter);
                 }
                 break;
+            case '=':
             case ';':
                 if (!isTuple) {
                     char_output.push_back(delimiter);
@@ -149,17 +151,22 @@ std::vector<std::string> splitQuery(std::string query) {
                     isWildcard = charTypeToggler(isWildcard);
                 }
                 break;
+            case '.':
+                isAttribute = charTypeToggler(isAttribute);
             default: break;
         }
 
-        // Removes white spaces between identities and sub-expressions eg. "x + y" becomes "x+y"
         if (c != ' ') {
             char_output.push_back(c);
+            if (isAttribute && c != '.') {
+                isAttribute = charTypeToggler(isAttribute);
+            }
         }
 
         switch (c) {
             case ';':
             case ',':
+            case '=':
                 if (!isTuple) {
                     char_output.push_back(delimiter);
                 }
@@ -178,6 +185,7 @@ std::vector<std::string> splitQuery(std::string query) {
     std::vector<std::string> splittedQuery = formatCharToStringVector(string_output, delimiter);
     return splittedQuery;
 }
+
 /**
  * Trim the string to remove leading and trailing spaces
  */
