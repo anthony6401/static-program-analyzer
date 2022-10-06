@@ -440,6 +440,8 @@ TEST_CASE("Calls queries") {
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"Third", "Second", "First"};
         QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
         REQUIRE(testResults == expectedResults);
     }
 
@@ -449,6 +451,8 @@ TEST_CASE("Calls queries") {
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"Second", "First"};
         QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
         REQUIRE(testResults == expectedResults);
     }
 
@@ -497,6 +501,8 @@ TEST_CASE("Calls queries") {
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"8", "3"};
         QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
         REQUIRE(testResults == expectedResults);
     }
 
@@ -544,6 +550,8 @@ TEST_CASE("Calls* queries") {
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"Third", "Second", "First"};
         QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
         REQUIRE(testResults == expectedResults);
     }
 
@@ -553,6 +561,8 @@ TEST_CASE("Calls* queries") {
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"Third", "Second", "First"};
         QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
         REQUIRE(testResults == expectedResults);
     }
 
@@ -562,6 +572,8 @@ TEST_CASE("Calls* queries") {
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"Second", "Third"};
         QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
         REQUIRE(testResults == expectedResults);
     }
 
@@ -571,6 +583,8 @@ TEST_CASE("Calls* queries") {
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = { "Second", "Third" };
         QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
         REQUIRE(testResults == expectedResults);
     }
 
@@ -580,6 +594,8 @@ TEST_CASE("Calls* queries") {
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = { "Third", "Second", "First" };
         QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
         REQUIRE(testResults == expectedResults);
     }
 
@@ -627,6 +643,8 @@ TEST_CASE("Next queries") {
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"Third", "Second", "First"};
         QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
         REQUIRE(testResults == expectedResults);
     }
 
@@ -647,6 +665,8 @@ TEST_CASE("Next* queries") {
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"14", "13", "15", "12", "11", "9", "7"};
         QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
         REQUIRE(testResults == expectedResults);
     }
 
@@ -686,6 +706,8 @@ TEST_CASE("Multi-clause queries") {
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"14", "12", "11", "6", "9", "13", "10", "8", "7"};
         QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
         REQUIRE(testResults == expectedResults);
     }
 
@@ -740,6 +762,8 @@ TEST_CASE("Multi-clause queries") {
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = { "7", "9" };
         QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
         REQUIRE(testResults == expectedResults);
     }
 
