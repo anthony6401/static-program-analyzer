@@ -5,10 +5,6 @@
 #include "memory"
 #include "components/qps/query_evaluator/factory/interface/Clause.h"
 
-// Represents Groups with common areas in:
-// 1. No Synonym
-// 2. Common synonyms (with and without select synonym)
-
 class GroupedClause {
 private:
     std::set<std::string> synonyms;

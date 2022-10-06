@@ -41,19 +41,15 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
 }
 
 void Evaluator::populateResultsList(ResultTable &evaluatedResults, Select select, std::list<std::string> &results) {
-    bool isBooleanResult = evaluatedResults.getIsBooleanResult();
-    bool isSynonymResult = evaluatedResults.getIsSynonymResult();
-    bool isTupleResult = evaluatedResults.getIsTupleResult();
-    // bool isAttributeResult = finalResult.getIsAttributeResult();
-    if (isBooleanResult) {
+    TokenType returnType = select.getReturnType();
+    if (returnType == TokenType::BOOLEAN) {
         if (evaluatedResults.getIsFalseResult()) {
             results.emplace_back("FALSE");
         } else {
             results.emplace_back("TRUE");
         }
-    } else if (isSynonymResult) {
+    } else if (returnType == TokenType::SYNONYM) {
         if (evaluatedResults.getIsFalseResult()) {
-            // Return empty result
             return;
         } else {
             std::string selectSynonym = select.getReturnValues().front().getValue();
@@ -62,7 +58,7 @@ void Evaluator::populateResultsList(ResultTable &evaluatedResults, Select select
                 results.emplace_back(result);
             }
         }
-    } else if (isTupleResult) {
+    } else if (returnType == TokenType::TUPLE) {
         std::vector<TokenObject> tuple = select.getReturnValues();
         std::unordered_set<std::string> resultsToPopulate = evaluatedResults.getTupleResultsToBePopulated(tuple);
         for (std::string result : resultsToPopulate) {
@@ -81,7 +77,7 @@ bool Evaluator::evaluateNoSynonymClauses(GroupedClause noSynonymsClauses) {
     } else {
         std::vector<std::shared_ptr<Clause>> clauses = noSynonymsClauses.getClauses();
         for (auto c : clauses) {
-            ResultTable result = c -> evaluateClause(); // {false} -> getIsFalseResult -> true
+            ResultTable result = c -> evaluateClause();
             if (result.getIsFalseResult()) {
                 return true;
             }

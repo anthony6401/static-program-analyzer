@@ -26,7 +26,6 @@ ResultTable SelectTupleClause::evaluateClause() {
         resultTable.combineResult(intermediate);
     }
 
-    resultTable.setIsTupleResult();
     return resultTable;
 }
 

@@ -4,7 +4,6 @@ SelectBooleanClause::SelectBooleanClause() {}
 
 ResultTable SelectBooleanClause::evaluateClause() {
     ResultTable resultTable;
-    resultTable.setIsBooleanResult();
     return resultTable;
 }
 

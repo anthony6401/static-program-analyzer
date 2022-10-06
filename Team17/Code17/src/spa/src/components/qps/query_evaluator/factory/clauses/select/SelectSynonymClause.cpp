@@ -12,13 +12,11 @@ ResultTable SelectSynonymClause::evaluateClause() {
     ResultTable resultTable;
     // Select synonym found -> Just select synonym column from table
     if (synonymsInTable.find(selectSynonymValue) != synonymsInTable.end()) {
-        resultTable.setIsSynonymResult();
         return resultTable;
     } else { // Evaluate and select all synonym
         DesignEntity returnType = synonymToDesignEntityMap[selectSynonymValue];
         std::unordered_set<std::string> results = qpsClient.getAllEntity(returnType);
         resultTable = std::move(ResultTable(selectSynonymValue, results));
-        resultTable.setIsSynonymResult();
         return resultTable;
     }
 

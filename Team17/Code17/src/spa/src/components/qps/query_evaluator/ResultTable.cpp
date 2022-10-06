@@ -53,35 +53,6 @@ void ResultTable::setIsFalseResultToTrue() {
     isFalseResult = true;
 }
 
-int ResultTable::getSynonymCount() {
-    return synonymsList.size();
-}
-
-bool ResultTable::getIsSynonymResult() {
-    return isSynonymResult;
-}
-
-void ResultTable::setIsSynonymResult() {
-    isSynonymResult = true;
-}
-
-bool ResultTable::getIsTupleResult() {
-    return isTupleResult;
-}
-
-void ResultTable::setIsTupleResult() {
-    isTupleResult = true;
-}
-
-bool ResultTable::getIsBooleanResult() {
-    return isBooleanResult;
-}
-
-void ResultTable::setIsBooleanResult() {
-    isBooleanResult = true;
-}
-
-
 std::unordered_set<std::string> ResultTable::getSynonymResultsToBePopulated(std::string selectSynonym) {
     std::unordered_set<std::string> result({});
     auto iterator = std::find(synonymsList.begin(), synonymsList.end(), selectSynonym);
@@ -145,25 +116,9 @@ void ResultTable::filterBySelectSynonym(std::set<std::string> &&synonyms) {
 }
 
 
-void ResultTable::updateResultType(ResultTable &nextResult) {
-    if (nextResult.getIsBooleanResult() && !isBooleanResult) {
-        isBooleanResult = true;
-    }
-
-    if (nextResult.getIsSynonymResult() && !isSynonymResult) {
-        isSynonymResult = true;
-    }
-
-    if (nextResult.getIsTupleResult() && !isTupleResult) {
-        isTupleResult = true;
-    }
-}
-
-
 
 // Find common synonyms and merge resultsLists
 void ResultTable::combineResult(ResultTable &nextResult) {
-    ResultTable::updateResultType(nextResult);
     if (isFalseResult) {
         return;
     } else {
