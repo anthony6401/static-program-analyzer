@@ -157,6 +157,7 @@ TEST_CASE("Query returns boolean") {
     QueryObject validatedQuery = validator.validate();
 
     REQUIRE(validatedQuery.isSemanticallyValid() == true);
+    REQUIRE(validatedQuery.getSelect().getReturnType() == TokenType::BOOLEAN);
 };
 
 TEST_CASE("Query returns boolean but BOOLEAN is declared as synonym") {
