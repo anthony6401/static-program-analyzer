@@ -167,19 +167,11 @@ TEST_CASE("PKB Relationship Manager test") {
 	REQUIRE(pkb.storeRelationship(followsTRelationshipWhileIfOne));
 	REQUIRE(pkb.storeRelationship(followsTRelationshipIfReadOne));
 
-	REQUIRE(pkb.storeRelationship(nextRelationshipReadPrintOne));
-	REQUIRE(pkb.storeRelationship(nextRelationshipPrintAssignOne));
 	REQUIRE(pkb.storeRelationship(nextRelationshipAssignCallOne));
-	REQUIRE(pkb.storeRelationship(nextRelationshipCallWhileOne));
-	REQUIRE(pkb.storeRelationship(nextRelationshipWhileIfOne));
-	REQUIRE(pkb.storeRelationship(nextRelationshipIfReadOne));
-
-	//REQUIRE(pkb.storeRelationship(nextTRelationshipReadPrintOne));
-	//REQUIRE(pkb.storeRelationship(nextTRelationshipPrintAssignOne));
-	//REQUIRE(pkb.storeRelationship(nextTRelationshipAssignCallOne));
-	//REQUIRE(pkb.storeRelationship(nextTRelationshipCallWhileOne));
-	//REQUIRE(pkb.storeRelationship(nextTRelationshipWhileIfOne));
-	//REQUIRE(pkb.storeRelationship(nextTRelationshipIfReadOne));
+	REQUIRE(pkb.storeRelationship(nextRelationshipCallIfOne));
+	REQUIRE(pkb.storeRelationship(nextRelationshipIfPrintOne));
+	REQUIRE(pkb.storeRelationship(nextRelationshipPrintReadOne));
+	REQUIRE(pkb.storeRelationship(nextRelationshipReadWhileOne));
 
 	REQUIRE(pkb.storeRelationship(callsRelationshipOne));
 	REQUIRE(pkb.storeRelationship(callsRelationshipTwo));
@@ -196,7 +188,7 @@ TEST_CASE("PKB Relationship Manager test") {
 	REQUIRE(pkb.getRelationship(RelationshipType::FOLLOWS, stmtTokenObject5, stmtTokenObject4));
 	REQUIRE(pkb.getRelationship(RelationshipType::FOLLOWS_T, stmtTokenObject5, stmtTokenObject4));
 	REQUIRE(pkb.getRelationship(RelationshipType::NEXT, stmtTokenObject1, stmtTokenObject2));
-	//REQUIRE(pkb.getRelationship(RelationshipType::NEXT_T, stmtTokenObject1, stmtTokenObject2));
+	REQUIRE(pkb.getRelationship(RelationshipType::NEXT_T, stmtTokenObject1, stmtTokenObject2));
 	REQUIRE(pkb.getRelationship(RelationshipType::CALLS, procedureTokenObject, procedureTokenObjectTwo));
 	REQUIRE(pkb.getRelationship(RelationshipType::CALLS_T, procedureTokenObject, procedureTokenObjectTwo));
 
@@ -207,8 +199,8 @@ TEST_CASE("PKB Relationship Manager test") {
 	std::unordered_set<std::string> parentTExpectedResult({ read_value_one });
 	std::unordered_set<std::string> followsExpectedResult({ print_value_one });
 	std::unordered_set<std::string> followsTExpectedResult({ print_value_one });
-	std::unordered_set<std::string> nextExpectedResult({ print_value_one });
-	//std::unordered_set<std::string> nextTExpectedResult({ print_value_one });
+	std::unordered_set<std::string> nextExpectedResult({ while_value_one });
+	std::unordered_set<std::string> nextTExpectedResult({ while_value_one });
 	std::unordered_set<std::string> callsExpectedResult{ procedure_value_two, procedure_value_three };
 	std::unordered_set<std::string> callsTExpectedResult{ procedure_value_two, procedure_value_three };
 
@@ -219,8 +211,8 @@ TEST_CASE("PKB Relationship Manager test") {
 	REQUIRE(pkb.getRelationshipByFirst(RelationshipType::PARENT_T, stmtTokenObject6, DesignEntity::READ) == parentTExpectedResult);
 	REQUIRE(pkb.getRelationshipByFirst(RelationshipType::FOLLOWS, stmtTokenObject5, DesignEntity::PRINT) == followsExpectedResult);
 	REQUIRE(pkb.getRelationshipByFirst(RelationshipType::FOLLOWS_T, stmtTokenObject5, DesignEntity::PRINT) == followsTExpectedResult);
-	REQUIRE(pkb.getRelationshipByFirst(RelationshipType::NEXT, stmtTokenObject5, DesignEntity::PRINT) == nextExpectedResult);
-	//REQUIRE(pkb.getRelationshipByFirst(RelationshipType::NEXT_T, stmtTokenObject5, DesignEntity::PRINT) == nextTExpectedResult);
+	REQUIRE(pkb.getRelationshipByFirst(RelationshipType::NEXT, stmtTokenObject5, DesignEntity::WHILE) == nextExpectedResult);
+	REQUIRE(pkb.getRelationshipByFirst(RelationshipType::NEXT_T, stmtTokenObject5, DesignEntity::WHILE) == nextTExpectedResult);
 	REQUIRE(pkb.getRelationshipByFirst(RelationshipType::CALLS, procedureTokenObject, DesignEntity::PROCEDURE) == callsExpectedResult);
 	REQUIRE(pkb.getRelationshipByFirst(RelationshipType::CALLS_T, procedureTokenObject, DesignEntity::PROCEDURE) == callsTExpectedResult);
 
@@ -232,8 +224,8 @@ TEST_CASE("PKB Relationship Manager test") {
 	std::unordered_set<std::string> parentTExpectedResultTwo({ while_value_one });
 	std::unordered_set<std::string> followsExpectedResultTwo({ read_value_one });
 	std::unordered_set<std::string> followsTExpectedResultTwo({ read_value_one });
-	std::unordered_set<std::string> nextExpectedResultTwo({ read_value_one });
-	//std::unordered_set<std::string> nextTExpectedResultTwo({ read_value_one });
+	std::unordered_set<std::string> nextExpectedResultTwo({ if_value_one });
+	std::unordered_set<std::string> nextTExpectedResultTwo({ call_value_one });
 	std::unordered_set<std::string> callsExpectedResultTwo{ procedure_value_one, procedure_value_two };
 	std::unordered_set<std::string> callsTExpectedResultTwo{ procedure_value_one, procedure_value_two };
 
@@ -243,8 +235,8 @@ TEST_CASE("PKB Relationship Manager test") {
 	REQUIRE(pkb.getRelationshipBySecond(RelationshipType::PARENT_T, DesignEntity::WHILE, stmtTokenObject5) == parentTExpectedResultTwo);
 	REQUIRE(pkb.getRelationshipBySecond(RelationshipType::FOLLOWS, DesignEntity::READ, stmtTokenObject4) == followsExpectedResultTwo);
 	REQUIRE(pkb.getRelationshipBySecond(RelationshipType::FOLLOWS_T, DesignEntity::READ, stmtTokenObject4) == followsTExpectedResultTwo);
-	REQUIRE(pkb.getRelationshipBySecond(RelationshipType::NEXT, DesignEntity::READ, stmtTokenObject4) == nextExpectedResultTwo);
-	//REQUIRE(pkb.getRelationshipBySecond(RelationshipType::NEXT_T, DesignEntity::READ, stmtTokenObject4) == nextTExpectedResultTwo);
+	REQUIRE(pkb.getRelationshipBySecond(RelationshipType::NEXT, DesignEntity::IF, stmtTokenObject4) == nextExpectedResultTwo);
+	REQUIRE(pkb.getRelationshipBySecond(RelationshipType::NEXT_T, DesignEntity::CALL, stmtTokenObject4) == nextTExpectedResultTwo);
 	REQUIRE(pkb.getRelationshipBySecond(RelationshipType::CALLS, DesignEntity::PROCEDURE, procedureTokenObjectThree) == callsExpectedResultTwo);
 	REQUIRE(pkb.getRelationshipBySecond(RelationshipType::CALLS_T, DesignEntity::PROCEDURE, procedureTokenObjectThree) == callsTExpectedResultTwo);
 
@@ -255,8 +247,8 @@ TEST_CASE("PKB Relationship Manager test") {
 	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultParentTAll{ { while_value_one, std::unordered_set<std::string>({read_value_one}) } };
 	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultFollowsAll{ { read_value_one, std::unordered_set<std::string>({print_value_one}) } };
 	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultFollowsTAll{ { read_value_one, std::unordered_set<std::string>({print_value_one}) } };
-	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultNextAll{ { read_value_one, std::unordered_set<std::string>({print_value_one}) } };
-	//std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultNextTAll{ { read_value_one, std::unordered_set<std::string>({print_value_one}) } };
+	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultNextAll{ { print_value_one, std::unordered_set<std::string>({read_value_one}) } };
+	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultNextTAll{ { print_value_one, std::unordered_set<std::string>({read_value_one}) } };
 	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultCallsAll{
 										{ procedure_value_one, std::unordered_set<std::string>({procedure_value_two, procedure_value_three})},
 										{ procedure_value_two, std::unordered_set<std::string>({procedure_value_three})}, };
@@ -270,8 +262,8 @@ TEST_CASE("PKB Relationship Manager test") {
 	REQUIRE(pkb.getAllRelationship(RelationshipType::PARENT_T, DesignEntity::WHILE, DesignEntity::READ) == expectedResultParentTAll);
 	REQUIRE(pkb.getAllRelationship(RelationshipType::FOLLOWS, DesignEntity::READ, DesignEntity::PRINT) == expectedResultFollowsAll);
 	REQUIRE(pkb.getAllRelationship(RelationshipType::FOLLOWS_T, DesignEntity::READ, DesignEntity::PRINT) == expectedResultFollowsTAll);
-	REQUIRE(pkb.getAllRelationship(RelationshipType::NEXT, DesignEntity::READ, DesignEntity::PRINT) == expectedResultNextAll);
-	//REQUIRE(pkb.getAllRelationship(RelationshipType::NEXT_T, DesignEntity::READ, DesignEntity::PRINT) == expectedResultNextTAll);
+	REQUIRE(pkb.getAllRelationship(RelationshipType::NEXT, DesignEntity::PRINT, DesignEntity::READ) == expectedResultNextAll);
+	REQUIRE(pkb.getAllRelationship(RelationshipType::NEXT_T, DesignEntity::PRINT, DesignEntity::READ) == expectedResultNextTAll);
 	REQUIRE(pkb.getAllRelationship(RelationshipType::CALLS, DesignEntity::PROCEDURE, DesignEntity::PROCEDURE) == expectedResultCallsAll);
 	REQUIRE(pkb.getAllRelationship(RelationshipType::CALLS_T, DesignEntity::PROCEDURE, DesignEntity::PROCEDURE) == expectedResultCallsTAll);
 	
