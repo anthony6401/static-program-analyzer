@@ -99,10 +99,10 @@ TEST_CASE("Attribute return type") {
         TokenObject(TokenType::VARIABLE, std::string("variable")),
         TokenObject(TokenType::SEMI_COLON, std::string(";")),
         TokenObject(TokenType::SELECT, std::string("Select")),
-        TokenObject(TokenType::ATTRIBUTE, std::string("proc.procName"))
+        TokenObject(TokenType::ATTRIBUTE, std::string("variable.varName"))
     };
 
-    Select expectedSelect = Select(TokenType::ATTRIBUTE, { TokenObject(TokenType::ATTRIBUTE, std::string("proc.procName")) });
+    Select expectedSelect = Select(TokenType::ATTRIBUTE, { TokenObject(TokenType::ATTRIBUTE_SYNONYM, std::string("variable")), TokenObject(TokenType::ATTRIBUTE_NAME, std::string("varName")) });
     std::vector<SuchThat> expectedSuchThat{};
     std::vector<Pattern> expectedPattern{};
     std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"variable", DesignEntity::VARIABLE} };
@@ -181,7 +181,8 @@ TEST_CASE("Tuple return type - only attributes") {
         TokenObject(TokenType::TUPLE, std::string("<variable.varName,v.varName>"))
     };
 
-    Select expectedSelect = Select(TokenType::TUPLE, { TokenObject(TokenType::ATTRIBUTE, std::string("variable.varName")), TokenObject(TokenType::ATTRIBUTE, std::string("v.varName")) });
+    Select expectedSelect = Select(TokenType::TUPLE, { TokenObject(TokenType::ATTRIBUTE_SYNONYM, std::string("variable")), TokenObject(TokenType::ATTRIBUTE_NAME, std::string("varName")), 
+        TokenObject(TokenType::ATTRIBUTE_SYNONYM, std::string("v")), TokenObject(TokenType::ATTRIBUTE_NAME, std::string("varName")) });
     std::vector<SuchThat> expectedSuchThat{};
     std::vector<Pattern> expectedPattern{};
     std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"variable", DesignEntity::VARIABLE}, {"v", DesignEntity::VARIABLE} };
@@ -207,7 +208,7 @@ TEST_CASE("Tuple return type - only a single attribute") {
         TokenObject(TokenType::TUPLE, std::string("<variable.varName>"))
     };
 
-    Select expectedSelect = Select(TokenType::TUPLE, { TokenObject(TokenType::ATTRIBUTE, std::string("variable.varName")) });
+    Select expectedSelect = Select(TokenType::TUPLE, { TokenObject(TokenType::ATTRIBUTE_SYNONYM, std::string("variable")), TokenObject(TokenType::ATTRIBUTE_NAME, std::string("varName")) });
     std::vector<SuchThat> expectedSuchThat{};
     std::vector<Pattern> expectedPattern{};
     std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"variable", DesignEntity::VARIABLE}, {"v", DesignEntity::VARIABLE} };
@@ -234,8 +235,9 @@ TEST_CASE("Tuple return type - attributes and synonyms") {
     };
 
     Select expectedSelect = Select(TokenType::TUPLE, { 
-        TokenObject(TokenType::ATTRIBUTE, std::string("variable.varName")), TokenObject(TokenType::NAME, std::string("v")), 
-        TokenObject(TokenType::NAME, std::string("variable")), TokenObject(TokenType::ATTRIBUTE, std::string("v.varName")) });
+        TokenObject(TokenType::ATTRIBUTE_SYNONYM, std::string("variable")), TokenObject(TokenType::ATTRIBUTE_NAME, std::string("varName")), 
+        TokenObject(TokenType::NAME, std::string("v")), TokenObject(TokenType::NAME, std::string("variable")), 
+        TokenObject(TokenType::ATTRIBUTE_SYNONYM, std::string("v")), TokenObject(TokenType::ATTRIBUTE_NAME, std::string("varName")) });
     std::vector<SuchThat> expectedSuchThat{};
     std::vector<Pattern> expectedPattern{};
     std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"variable", DesignEntity::VARIABLE}, {"v", DesignEntity::VARIABLE} };
@@ -1194,10 +1196,10 @@ TEST_CASE("Multi clause query - more than 2 and clause for pattern with new retu
         TokenObject(TokenType::CLOSED_BRACKET, ")")
     };
 
-    Select expectedSelect = Select(TokenType::TUPLE, { TokenObject(TokenType::ATTRIBUTE, std::string("v.varName")), 
+    Select expectedSelect = Select(TokenType::TUPLE, { TokenObject(TokenType::ATTRIBUTE_SYNONYM, std::string("v")), TokenObject(TokenType::ATTRIBUTE_NAME, std::string("varName")),
         TokenObject(TokenType::NAME, std::string("v")), TokenObject(TokenType::NAME, std::string("a")), 
         TokenObject(TokenType::NAME, std::string("a")), TokenObject(TokenType::NAME, std::string("v")), 
-        TokenObject(TokenType::ATTRIBUTE, std::string("a.value")) });
+        TokenObject(TokenType::ATTRIBUTE_SYNONYM, std::string("a")), TokenObject(TokenType::ATTRIBUTE_NAME, std::string("value")) });
     std::vector<SuchThat> expectedSuchThat{};
     std::vector<Pattern> expectedPattern{ Pattern("a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")),
         Pattern("a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")),
