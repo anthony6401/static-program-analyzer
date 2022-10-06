@@ -388,23 +388,23 @@ auto isEmptyOrBlank = [](const std::string &s) {
 
 bool Tokenizer::isTuple(std::string s) {
     if (s.front() == '<' && s.back() == '>') {
-        // Remove tuple brackets
         std::string currString = s.substr(1, s.length() - 2);
         std::string currValue;
-        int startIndex = 0;
         bool hasComma = false;
         while (currString.length() > 0) {
             size_t commaIndex = currString.find(',');
             if (commaIndex != std::string::npos && commaIndex > 0) {
-                // Find current value
                 hasComma = true;
                 currValue = currString.substr(0, commaIndex);
-                if (!isName(currValue)) {
+
+                if (!isName(currValue) && !isValidAttribute(currValue)) {
                     return false;
                 }
 
                 currString = currString.substr(commaIndex + 1, currString.length() - commaIndex - 1);
             } else if (isName(currString) && hasComma) {
+                return true;
+            } else if (isValidAttribute(currString) && hasComma) {
                 return true;
             } else {
                 return false;
