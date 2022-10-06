@@ -441,7 +441,9 @@ std::unordered_map<std::string, std::unordered_set<std::string>> NextRelationshi
 		std::unordered_set<std::string> result;
 		std::string start = it->first;
 		DFSNextTForwardWithSynonym(start, visited, result, filter, DFSstorage);
-		result_map[start] = result;
+		if (result.size() != 0) {
+			result_map[start] = result;
+		}
 	}
 
 	return result_map;
