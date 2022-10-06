@@ -18,6 +18,7 @@ private:
     //bool isExpression(std::string s);
     bool isSubExpression(std::string s);
     bool isExpression(std::string s);
+    bool isValidAttribute(std::string s);
     bool isTuple(std::string s);
     std::vector<std::string> convertExpressionToStringVector(std::string s);
     bool validateExpression(std::vector<std::string> expressionVector);

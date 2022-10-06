@@ -415,6 +415,21 @@ bool Tokenizer::isTuple(std::string s) {
     }
     return false;
 }
+
+bool Tokenizer::isValidAttribute(std::string s) {
+    std::unordered_set<std::string> attributeNameList = {"procName", "varName", "value", "stmt#"};
+    size_t fullstopIndex = s.find('.');
+    std::string synonymName = s.substr(0, fullstopIndex);
+    std::string attributeName = s.substr(fullstopIndex + 1, s.length() - fullstopIndex - 1);
+    if (!isName(synonymName)) {
+        return false;
+    }
+    if (!attributeNameList.count(attributeName)) {
+        return false;
+    }
+    return true;
+}
+
 /**
  * Tokenizes each character or string according to Token Types and outputs vector<TokenObject>
  */
@@ -438,6 +453,9 @@ std::vector<TokenObject> Tokenizer::tokenize(std::string query) {
         } else {
             if (isTuple(s)) {
                 TokenObject object = TokenObject(TokenType::TUPLE, s);
+                tokenList.push_back(object);
+            } else if (isValidAttribute(s)) {
+                TokenObject object = TokenObject(TokenType::ATTRIBUTE, s);
                 tokenList.push_back(object);
             } else if (isName(s)) {
                 TokenObject object = TokenObject(TokenType::NAME, s);
