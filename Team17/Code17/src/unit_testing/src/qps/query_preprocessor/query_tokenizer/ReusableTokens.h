@@ -57,6 +57,11 @@ TokenObject expressionTokenObject2 = TokenObject(TokenType::EXPRESSION, "((x+y))
 TokenObject expressionTokenObject3 = TokenObject(TokenType::EXPRESSION, "((x1+y))*(1/3)");
 TokenObject expressionTokenObject4 = TokenObject(TokenType::EXPRESSION, "((x/(s-y)))*(www/(3*(2/x)))");
 
+TokenObject attributeTokenObject1 = TokenObject(TokenType::ATTRIBUTE, "a.stmt#");
+TokenObject attributeTokenObject2 = TokenObject(TokenType::ATTRIBUTE, "procName.procName");
+TokenObject attributeTokenObject3 = TokenObject(TokenType::ATTRIBUTE, "c.value");
+TokenObject attributeTokenObject4 = TokenObject(TokenType::ATTRIBUTE, "procName.varName");
+
 TokenObject oneSyn_tupleTokenObject = TokenObject(TokenType::TUPLE, "<a1>");
 TokenObject twoSyn_tupleTokenObject = TokenObject(TokenType::TUPLE, "<a1,a2>");
 TokenObject threeSyn_tupleTokenObject = TokenObject(TokenType::TUPLE, "<a,a1,a2>");
