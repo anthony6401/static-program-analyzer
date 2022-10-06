@@ -14,7 +14,6 @@
 #include "components/pkb/storage/RelationshipStorage/CallsRelationshipStorage.h"
 #include "components/pkb/storage/RelationshipStorage/CallsTRelationshipStorage.h"
 #include "components/pkb/storage/RelationshipStorage/NextRelationshipStorage.h"
-#include "components/pkb/storage/RelationshipStorage/NextTRelationshipStorage.h"
 
 #include "models/Entity/DesignEntity.h"
 

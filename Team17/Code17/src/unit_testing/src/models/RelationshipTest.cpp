@@ -6,7 +6,6 @@
 #include "models/Relationship/FollowsRelationship.h"
 #include "models/Relationship/FollowsTRelationship.h"
 #include "models/Relationship/NextRelationship.h"
-#include "models/Relationship/NextTRelationship.h"
 #include "models/Relationship/CallsRelationship.h"
 #include "models/Relationship/CallsTRelationship.h"
 
@@ -357,12 +356,12 @@ TEST_CASE("Next Relationship Test") {
     Entity* assignEntity = new AssignEntity(ifValue);
     Entity* callEntity = new CallEntity(callValue);
 
-    Relationship* whileAssignRel = new NextTRelationship(whileEntity, assignEntity);
-    Relationship* readIfRel = new NextTRelationship(readEntity, ifEntity);
-    Relationship* assignPrintRel = new NextTRelationship(assignEntity, printEntity);
-    Relationship* printCallRel = new NextTRelationship(printEntity, callEntity);
-    Relationship* callWhileRel = new NextTRelationship(callEntity, whileEntity);
-    Relationship* ifReadRel = new NextTRelationship(whileEntity, readEntity);
+    Relationship* whileAssignRel = new NextRelationship(whileEntity, assignEntity);
+    Relationship* readIfRel = new NextRelationship(readEntity, ifEntity);
+    Relationship* assignPrintRel = new NextRelationship(assignEntity, printEntity);
+    Relationship* printCallRel = new NextRelationship(printEntity, callEntity);
+    Relationship* callWhileRel = new NextRelationship(callEntity, whileEntity);
+    Relationship* ifReadRel = new NextRelationship(whileEntity, readEntity);
 
     REQUIRE(*(whileAssignRel->getLeftEntity()) == *whileEntity);
     REQUIRE(*(readIfRel->getLeftEntity()) == *readEntity);

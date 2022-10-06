@@ -20,7 +20,6 @@
 #include "models/Relationship/ParentRelationship.h"
 #include "models/Relationship/ParentTRelationship.h"
 #include "models/Relationship/NextRelationship.h"
-#include "models/Relationship/NextTRelationship.h"
 #include "models/Relationship/CallsRelationship.h"
 #include "models/Relationship/CallsTRelationship.h"
 #include "models/Pattern/Pattern.h"

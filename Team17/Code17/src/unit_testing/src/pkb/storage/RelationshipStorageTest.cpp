@@ -7,7 +7,6 @@
 #include "components/pkb/storage/RelationshipStorage/ParentTRelationshipStorage.h"
 #include "components/pkb/storage/RelationshipStorage/FollowsRelationshipStorage.h"
 #include "components/pkb/storage/RelationshipStorage/FollowsTRelationshipStorage.h"
-#include "components/pkb/storage/RelationshipStorage/NextTRelationshipStorage.h"
 #include "components/pkb/storage/RelationshipStorage/NextRelationshipStorage.h"
 #include "components/pkb/storage/RelationshipStorage/CallsRelationshipStorage.h"
 #include "components/pkb/storage/RelationshipStorage/CallsTRelationshipStorage.h"
