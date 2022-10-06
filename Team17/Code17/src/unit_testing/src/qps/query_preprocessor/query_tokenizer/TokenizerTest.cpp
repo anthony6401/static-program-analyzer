@@ -390,6 +390,38 @@ TEST_CASE("Valid tuples with attributes") {
 
         REQUIRE(testResult == expectedResult);
     }
+
+    SECTION("Test 3") {
+        std::string testQuery = "assign a; procedure p; constant c; variable v; Select <a.stmt#, p.procName, c.value, v.varName> such that Affects (a1, a2)";
+        std::vector<TokenObject> expectedResult{assignTokenObject, a_nameTokenObject, semicolonTokenObject,
+                                                procTokenObject, p_nameTokenObject, semicolonTokenObject,
+                                                constantTokenObject, c_nameTokenObject, semicolonTokenObject,
+                                                variableTokenObject, v_nameTokenObject, semicolonTokenObject,
+                                                selectTokenObject, fourAttri_tupleTokenObject, suchTokenObject,
+                                                thatTokenObject,
+                                                affectsTokenObject, openBracketTokenObject, a1_nameTokenObject,
+                                                commaTokenObject, a2_nameTokenObject, closedBracketTokenObject};
+        Tokenizer tokenizer = Tokenizer();
+        std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
+
+        REQUIRE(testResult == expectedResult);
+    }
+
+    SECTION("Test 4") {
+        std::string testQuery = "assign a; procedure p; constant c; variable v; Select <p.procName> such that Affects (a1, a2)";
+        std::vector<TokenObject> expectedResult{assignTokenObject, a_nameTokenObject, semicolonTokenObject,
+                                                procTokenObject, p_nameTokenObject, semicolonTokenObject,
+                                                constantTokenObject, c_nameTokenObject, semicolonTokenObject,
+                                                variableTokenObject, v_nameTokenObject, semicolonTokenObject,
+                                                selectTokenObject, oneAttri_tupleTokenObject, suchTokenObject,
+                                                thatTokenObject,
+                                                affectsTokenObject, openBracketTokenObject, a1_nameTokenObject,
+                                                commaTokenObject, a2_nameTokenObject, closedBracketTokenObject};
+        Tokenizer tokenizer = Tokenizer();
+        std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
+
+        REQUIRE(testResult == expectedResult);
+    }
 }
 
 TEST_CASE("Valid Expressions tests") {
@@ -550,6 +582,58 @@ TEST_CASE("Invalid symbols token") {
     Tokenizer tokenizer = Tokenizer();
     REQUIRE_THROWS_WITH(tokenizer.tokenize(testQuery), "Token Exception Caught");
 }
+
+TEST_CASE("Invalid attributes token") {
+    SECTION("Test 1") {
+        std::string testQuery = "assign a;\n"
+                                "Select a..stmt# such that Uses (1, \"x\")";
+        Tokenizer tokenizer = Tokenizer();
+        REQUIRE_THROWS_WITH(tokenizer.tokenize(testQuery), "Token Exception Caught");
+    }
+
+    SECTION("Test 2") {
+        std::string testQuery = "assign a;\n"
+                                "Select a.stmt such that Uses (1, \"x\")";
+        Tokenizer tokenizer = Tokenizer();
+        REQUIRE_THROWS_WITH(tokenizer.tokenize(testQuery), "Token Exception Caught");
+    }
+
+    SECTION("Test 3") {
+        std::string testQuery = "assign a;\n"
+                                "Select 1.procName such that Uses (1, \"x\")";
+        Tokenizer tokenizer = Tokenizer();
+        REQUIRE_THROWS_WITH(tokenizer.tokenize(testQuery), "Token Exception Caught");
+    }
+
+    SECTION("Test 4") {
+        std::string testQuery = "assign a;\n"
+                                "Select a.procName.b.stmt# such that Uses (1, \"x\")";
+        Tokenizer tokenizer = Tokenizer();
+        REQUIRE_THROWS_WITH(tokenizer.tokenize(testQuery), "Token Exception Caught");
+    }
+
+    SECTION("Test 5") {
+        std::string testQuery = "assign a;\n"
+                                "Select .procName such that Uses (1, \"x\")";
+        Tokenizer tokenizer = Tokenizer();
+        REQUIRE_THROWS_WITH(tokenizer.tokenize(testQuery), "Token Exception Caught");
+    }
+
+    SECTION("Test 6") {
+        std::string testQuery = "assign a;\n"
+                                "Select 1procName.procName such that Uses (1, \"x\")";
+        Tokenizer tokenizer = Tokenizer();
+        REQUIRE_THROWS_WITH(tokenizer.tokenize(testQuery), "Token Exception Caught");
+    }
+
+    SECTION("Test 7") {
+        std::string testQuery = "assign a;\n"
+                                "Select value.c such that Uses (1, \"x\")";
+        Tokenizer tokenizer = Tokenizer();
+        REQUIRE_THROWS_WITH(tokenizer.tokenize(testQuery), "Token Exception Caught");
+    }
+}
+
 
 TEST_CASE("Invalid tuples token") {
     SECTION("Test 1") {

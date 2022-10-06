@@ -62,6 +62,8 @@ TokenObject twoSyn_tupleTokenObject = TokenObject(TokenType::TUPLE, "<a1,a2>");
 TokenObject threeSyn_tupleTokenObject = TokenObject(TokenType::TUPLE, "<a,a1,a2>");
 TokenObject attriSyn_tupleTokenObject1 = TokenObject(TokenType::TUPLE, "<a.stmt#,a1,a2>");
 TokenObject attriSyn_tupleTokenObject2 = TokenObject(TokenType::TUPLE, "<a,p.procName,a2>");
+TokenObject fourAttri_tupleTokenObject = TokenObject(TokenType::TUPLE, "<a.stmt#, p.procName, c.value, v.varName>");
+TokenObject oneAttri_tupleTokenObject = TokenObject(TokenType::TUPLE, "<p.procName>");
 
 TokenObject v_nameTokenObject = TokenObject(TokenType::NAME, "v");
 TokenObject v1_nameTokenObject = TokenObject(TokenType::NAME, "v1");
