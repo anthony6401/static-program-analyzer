@@ -390,11 +390,9 @@ bool Tokenizer::isTuple(std::string s) {
     if (s.front() == '<' && s.back() == '>') {
         std::string currString = s.substr(1, s.length() - 2);
         std::string currValue;
-        bool hasComma = false;
         while (currString.length() > 0) {
             size_t commaIndex = currString.find(',');
             if (commaIndex != std::string::npos && commaIndex > 0) {
-                hasComma = true;
                 currValue = currString.substr(0, commaIndex);
 
                 if (!isName(currValue) && !isValidAttribute(currValue)) {
@@ -402,9 +400,9 @@ bool Tokenizer::isTuple(std::string s) {
                 }
 
                 currString = currString.substr(commaIndex + 1, currString.length() - commaIndex - 1);
-            } else if (isName(currString) && hasComma) {
+            } else if (isName(currString)) {
                 return true;
-            } else if (isValidAttribute(currString) && hasComma) {
+            } else if (isValidAttribute(currString)) {
                 return true;
             } else {
                 return false;

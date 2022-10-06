@@ -326,6 +326,18 @@ TEST_CASE("White spaces within quotes") {
 }
 
 // Return Tuples
+
+TEST_CASE("Tuples with 1 synonym") {
+    std::string testQuery = "assign a1, a2; Select <a1> such that Affects (a1, a2)";
+    std::vector<TokenObject> expectedResult {assignTokenObject, a1_nameTokenObject, commaTokenObject, a2_nameTokenObject, semicolonTokenObject,
+                                             selectTokenObject, oneSyn_tupleTokenObject, suchTokenObject, thatTokenObject,
+                                             affectsTokenObject, openBracketTokenObject, a1_nameTokenObject, commaTokenObject, a2_nameTokenObject, closedBracketTokenObject};
+    Tokenizer tokenizer = Tokenizer();
+    std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
+
+    REQUIRE(testResult == expectedResult);
+}
+
 TEST_CASE("Tuples with 2 synonym") {
     std::string testQuery = "assign a1, a2; Select <a1, a2> such that Affects (a1, a2)";
     std::vector<TokenObject> expectedResult {assignTokenObject, a1_nameTokenObject, commaTokenObject, a2_nameTokenObject, semicolonTokenObject,
@@ -346,6 +358,38 @@ TEST_CASE("Tuples with 3 synonym") {
     std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
 
     REQUIRE(testResult == expectedResult);
+}
+
+TEST_CASE("Valid tuples with attributes") {
+    SECTION("Test 1") {
+        std::string testQuery = "assign a1, a2, a; Select <a.stmt#,a1,a2> such that Affects (a1, a2)";
+        std::vector<TokenObject> expectedResult{assignTokenObject, a1_nameTokenObject, commaTokenObject,
+                                                a2_nameTokenObject, commaTokenObject, a_nameTokenObject,
+                                                semicolonTokenObject,
+                                                selectTokenObject, attriSyn_tupleTokenObject1, suchTokenObject,
+                                                thatTokenObject,
+                                                affectsTokenObject, openBracketTokenObject, a1_nameTokenObject,
+                                                commaTokenObject, a2_nameTokenObject, closedBracketTokenObject};
+        Tokenizer tokenizer = Tokenizer();
+        std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
+
+        REQUIRE(testResult == expectedResult);
+    }
+
+    SECTION("Test 2") {
+        std::string testQuery = "assign a, a2; procedure p; Select <a,p.procName,a2> such that Affects (a1, a2)";
+        std::vector<TokenObject> expectedResult{assignTokenObject, a_nameTokenObject, commaTokenObject,
+                                                a2_nameTokenObject, semicolonTokenObject, procTokenObject, p_nameTokenObject,
+                                                semicolonTokenObject,
+                                                selectTokenObject, attriSyn_tupleTokenObject2, suchTokenObject,
+                                                thatTokenObject,
+                                                affectsTokenObject, openBracketTokenObject, a1_nameTokenObject,
+                                                commaTokenObject, a2_nameTokenObject, closedBracketTokenObject};
+        Tokenizer tokenizer = Tokenizer();
+        std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
+
+        REQUIRE(testResult == expectedResult);
+    }
 }
 
 TEST_CASE("Valid Expressions tests") {
@@ -515,37 +559,49 @@ TEST_CASE("Invalid tuples token") {
     }
 
     SECTION("Test 2") {
-        std::string testQuery = "assign a1, a2; Select <a1, a2, a,> such that Affects (a1, a2)";
+        std::string testQuery = "assign a, a1, a2; Select <a1, a2, a,> such that Affects (a1, a2)";
         Tokenizer tokenizer = Tokenizer();
         REQUIRE_THROWS_WITH(tokenizer.tokenize(testQuery), "Token Exception Caught");
     }
 
     SECTION("Test 3") {
-        std::string testQuery = "assign a1, a2; Select <a1, 1a2, a> such that Affects (a1, a2)";
+        std::string testQuery = "assign a, a1, a2; Select <a1, 1a2, a> such that Affects (a1, a2)";
         Tokenizer tokenizer = Tokenizer();
         REQUIRE_THROWS_WITH(tokenizer.tokenize(testQuery), "Token Exception Caught");
     }
 
     SECTION("Test 4") {
-        std::string testQuery = "assign a1, a2; Select <a> such that Affects (a1, a2)";
+        std::string testQuery = "assign a1, a2; Select <> such that Affects (a1, a2)";
         Tokenizer tokenizer = Tokenizer();
         REQUIRE_THROWS_WITH(tokenizer.tokenize(testQuery), "Token Exception Caught");
     }
 
     SECTION("Test 5") {
-        std::string testQuery = "assign a1, a2; Select <a,,a2,a1> such that Affects (a1, a2)";
+        std::string testQuery = "assign a, a1, a2; Select <a,,a2,a1> such that Affects (a1, a2)";
         Tokenizer tokenizer = Tokenizer();
         REQUIRE_THROWS_WITH(tokenizer.tokenize(testQuery), "Token Exception Caught");
     }
 
     SECTION("Test 6") {
-        std::string testQuery = "assign a1, a2; Select <<a,,a2,a1>> such that Affects (a1, a2)";
+        std::string testQuery = "assign a, a1, a2; Select <<a,,a2,a1>> such that Affects (a1, a2)";
         Tokenizer tokenizer = Tokenizer();
         REQUIRE_THROWS_WITH(tokenizer.tokenize(testQuery), "Token Exception Caught");
     }
 
     SECTION("Test 7") {
-        std::string testQuery = "assign a1, a2; Select <,a,a2,a1,> such that Affects (a1, a2)";
+        std::string testQuery = "assign a, a1, a2; Select <,a,a2,a1,> such that Affects (a1, a2)";
+        Tokenizer tokenizer = Tokenizer();
+        REQUIRE_THROWS_WITH(tokenizer.tokenize(testQuery), "Token Exception Caught");
+    }
+
+    SECTION("Test 8") {
+        std::string testQuery = "assign a, a1, a2; Select <a.proc, a2,a1> such that Affects (a1, a2)";
+        Tokenizer tokenizer = Tokenizer();
+        REQUIRE_THROWS_WITH(tokenizer.tokenize(testQuery), "Token Exception Caught");
+    }
+
+    SECTION("Test 9") {
+        std::string testQuery = "assign a, a1, a2; Select <a.procname, a2,a1> such that Affects (a1, a2)";
         Tokenizer tokenizer = Tokenizer();
         REQUIRE_THROWS_WITH(tokenizer.tokenize(testQuery), "Token Exception Caught");
     }
