@@ -430,6 +430,19 @@ bool Tokenizer::isValidAttribute(std::string s) {
     return true;
 }
 
+std::vector<std::string> Tokenizer::getValidAttribute(std::string s) {
+    std::vector<std::string> attribute = {};
+    std::unordered_set<std::string> attributeNameList = {"procName", "varName", "value", "stmt#"};
+    size_t fullstopIndex = s.find('.');
+    std::string synonymName = s.substr(0, fullstopIndex);
+    std::string attributeName = s.substr(fullstopIndex + 1, s.length() - fullstopIndex - 1);
+    if (isName(synonymName) && attributeNameList.count(attributeName)) {
+        return {synonymName, attributeName};
+    } else {
+        return attribute;
+    }
+}
+
 /**
  * Tokenizes each character or string according to Token Types and outputs vector<TokenObject>
  */
