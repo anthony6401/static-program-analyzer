@@ -13,19 +13,31 @@ WithClauseSyntaxChecker::WithClauseSyntaxChecker() {
 WithClauseSyntaxChecker::~WithClauseSyntaxChecker() {};
 
 bool WithClauseSyntaxChecker::isSyntacticallyCorrect(std::vector<TokenObject> tokenizedClause) {
+	bool isSecondRef = false;
+	
 	for (int i = 0; i < tokenizedClause.size(); i++) {
 		TokenObject token = tokenizedClause.at(i);
 		TokenType tokenType = token.getTokenType();
 
-		if (this->withSyntax.empty()) {
-			// Multiple instances of with clause
+		if (isSecondRef) {
 			if (tokenType == TokenType::AND) {
 				this->withSyntax.push(TokenType::REF);
 				this->withSyntax.push(TokenType::EQUALS);
 				this->withSyntax.push(TokenType::REF);
+				isSecondRef = false;
 				continue;
 			}
 
+			if (tokenType == TokenType::SUCH) {
+				this->withSyntax.push(TokenType::REF);
+				this->withSyntax.push(TokenType::EQUALS);
+				this->withSyntax.push(TokenType::REF);
+				this->withSyntax.push(TokenType::WITH);
+				isSecondRef = false;
+			}
+		}
+
+		if (this->withSyntax.empty()) {
 			return false;
 		}
 
@@ -36,6 +48,13 @@ bool WithClauseSyntaxChecker::isSyntacticallyCorrect(std::vector<TokenObject> to
 			if (tokenType != syntax) {
 				return false;
 			}
+
+			if (tokenType == TokenType::EQUALS) {
+				isSecondRef = true;
+			}
+
+			this->withSyntax.pop();
+			continue;
 		}
 
 		// REF token
@@ -55,7 +74,6 @@ bool WithClauseSyntaxChecker::isSyntacticallyCorrect(std::vector<TokenObject> to
 		}
 
 		this->withSyntax.pop();
-		continue;
 
 	}
 
