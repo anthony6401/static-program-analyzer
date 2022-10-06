@@ -118,15 +118,15 @@ bool RelationshipManager::getNextTRelationship(TokenObject firstArgument, TokenO
 	return nextStorage->getNextTRelationship(firstArgument, secondArgument);
 }
 
-std::unordered_set<std::string> RelationshipManager::getNextTRelationshipByFirst(TokenObject firstArgument, DesignEntity returnType, std::unordered_set<std::string>& filter) {
-	return nextStorage->getNextTRelationshipByFirst(firstArgument, returnType, filter);
+std::unordered_set<std::string> RelationshipManager::getNextTRelationshipByFirst(TokenObject firstArgument, std::unordered_set<std::string>& filter) {
+	return nextStorage->getNextTRelationshipByFirst(firstArgument, filter);
 }
 
-std::unordered_set<std::string> RelationshipManager::getNextTRelationshipBySecond(DesignEntity returnType, TokenObject secondArgument, std::unordered_set<std::string>& filter) {
-	return nextStorage->getNextTRelationshipBySecond(returnType, secondArgument, filter);
+std::unordered_set<std::string> RelationshipManager::getNextTRelationshipBySecond(TokenObject secondArgument, std::unordered_set<std::string>& filter) {
+	return nextStorage->getNextTRelationshipBySecond(secondArgument, filter);
 }
 
-std::unordered_map<std::string, std::unordered_set<std::string>> RelationshipManager::getAllNextTRelationship(DesignEntity returnType1, DesignEntity returnType2, 
+std::unordered_map<std::string, std::unordered_set<std::string>> RelationshipManager::getAllNextTRelationship(DesignEntity returnType1, 
 																										std::unordered_set<std::string>& filter) {
-	return nextStorage->getAllNextTRelationship(returnType1, returnType2, filter);
+	return nextStorage->getAllNextTRelationship(returnType1, filter);
 }

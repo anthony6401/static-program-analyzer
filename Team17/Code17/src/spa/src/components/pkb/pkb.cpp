@@ -50,7 +50,7 @@ bool PKB::getRelationship(RelationshipType relType, TokenObject firstArgument, T
 std::unordered_set<std::string> PKB::getRelationshipByFirst(RelationshipType relType, TokenObject firstArgument, DesignEntity returnType) {
 	if (relType == RelationshipType::NEXT_T) {
 		std::unordered_set<std::string> filter = entityManager->getAllEntity(returnType);
-		return relManager->getNextTRelationshipByFirst(firstArgument, returnType, filter);
+		return relManager->getNextTRelationshipByFirst(firstArgument, filter);
 	}
 
 	return relManager->getRelationshipByFirst(relType, firstArgument, returnType);
@@ -59,7 +59,7 @@ std::unordered_set<std::string> PKB::getRelationshipByFirst(RelationshipType rel
 std::unordered_set<std::string> PKB::getRelationshipBySecond(RelationshipType relType, DesignEntity returnType, TokenObject secondArgument) {
 	if (relType == RelationshipType::NEXT_T) {
 		std::unordered_set<std::string> filter = entityManager->getAllEntity(returnType);
-		return relManager->getNextTRelationshipBySecond(returnType, secondArgument, filter);
+		return relManager->getNextTRelationshipBySecond(secondArgument, filter);
 	}
 
 	return relManager->getRelationshipBySecond(relType, returnType, secondArgument);
@@ -68,7 +68,7 @@ std::unordered_set<std::string> PKB::getRelationshipBySecond(RelationshipType re
 std::unordered_map<std::string, std::unordered_set<std::string>> PKB::getAllRelationship(RelationshipType relType, DesignEntity returnType1, DesignEntity returnType2) {
 	if (relType == RelationshipType::NEXT_T) {
 		std::unordered_set<std::string> filter = entityManager->getAllEntity(returnType2);
-		return relManager->getAllNextTRelationship(returnType1, returnType2, filter);
+		return relManager->getAllNextTRelationship(returnType1, filter);
 	}
 	return relManager->getAllRelationship(relType, returnType1, returnType2);
 }
