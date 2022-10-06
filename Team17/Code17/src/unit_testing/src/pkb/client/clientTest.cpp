@@ -74,19 +74,11 @@ TEST_CASE("SP Client test") {
 	REQUIRE(spClient.storeRelationship(followsTRelationshipWhileIfOne));
 	REQUIRE(spClient.storeRelationship(followsTRelationshipIfReadOne));
 
-	REQUIRE(spClient.storeRelationship(nextRelationshipReadPrintOne));
-	REQUIRE(spClient.storeRelationship(nextRelationshipPrintAssignOne));
 	REQUIRE(spClient.storeRelationship(nextRelationshipAssignCallOne));
-	REQUIRE(spClient.storeRelationship(nextRelationshipCallWhileOne));
-	REQUIRE(spClient.storeRelationship(nextRelationshipWhileIfOne));
-	REQUIRE(spClient.storeRelationship(nextRelationshipIfReadOne));
-
-	REQUIRE(spClient.storeRelationship(nextTRelationshipReadPrintOne));
-	REQUIRE(spClient.storeRelationship(nextTRelationshipPrintAssignOne));
-	REQUIRE(spClient.storeRelationship(nextTRelationshipAssignCallOne));
-	REQUIRE(spClient.storeRelationship(nextTRelationshipCallWhileOne));
-	REQUIRE(spClient.storeRelationship(nextTRelationshipWhileIfOne));
-	REQUIRE(spClient.storeRelationship(nextTRelationshipIfReadOne));
+	REQUIRE(spClient.storeRelationship(nextRelationshipCallIfOne));
+	REQUIRE(spClient.storeRelationship(nextRelationshipIfPrintOne));
+	REQUIRE(spClient.storeRelationship(nextRelationshipPrintReadOne));
+	REQUIRE(spClient.storeRelationship(nextRelationshipReadWhileOne));
 
 	REQUIRE(spClient.storeRelationship(callsRelationshipOne));
 	REQUIRE(spClient.storeRelationship(callsRelationshipTwo));
@@ -205,8 +197,8 @@ TEST_CASE("QPS Client test") {
 	std::unordered_set<std::string> parentTExpectedResult({ read_value_one });
 	std::unordered_set<std::string> followsExpectedResult({ print_value_one });
 	std::unordered_set<std::string> followsTExpectedResult({ print_value_one });
-	std::unordered_set<std::string> nextExpectedResult({ print_value_one });
-	std::unordered_set<std::string> nextTExpectedResult({ print_value_one });
+	std::unordered_set<std::string> nextExpectedResult({ while_value_one });
+	std::unordered_set<std::string> nextTExpectedResult({ while_value_one });
 	std::unordered_set<std::string> callsExpectedResult{ procedure_value_two, procedure_value_three };
 	std::unordered_set<std::string> callsTExpectedResult{ procedure_value_two, procedure_value_three };
 
@@ -216,8 +208,8 @@ TEST_CASE("QPS Client test") {
 	REQUIRE(qpsClient.getRelationshipByFirst(RelationshipType::PARENT_T, stmtTokenObject6, DesignEntity::READ) == parentTExpectedResult);
 	REQUIRE(qpsClient.getRelationshipByFirst(RelationshipType::FOLLOWS, stmtTokenObject5, DesignEntity::PRINT) == followsExpectedResult);
 	REQUIRE(qpsClient.getRelationshipByFirst(RelationshipType::FOLLOWS_T, stmtTokenObject5, DesignEntity::PRINT) == followsTExpectedResult);
-	REQUIRE(qpsClient.getRelationshipByFirst(RelationshipType::NEXT, stmtTokenObject5, DesignEntity::PRINT) == nextExpectedResult);
-	REQUIRE(qpsClient.getRelationshipByFirst(RelationshipType::NEXT_T, stmtTokenObject5, DesignEntity::PRINT) == nextTExpectedResult);
+	REQUIRE(qpsClient.getRelationshipByFirst(RelationshipType::NEXT, stmtTokenObject5, DesignEntity::WHILE) == nextExpectedResult);
+	REQUIRE(qpsClient.getRelationshipByFirst(RelationshipType::NEXT_T, stmtTokenObject5, DesignEntity::WHILE) == nextTExpectedResult);
 	REQUIRE(qpsClient.getRelationshipByFirst(RelationshipType::CALLS, procedureTokenObject, DesignEntity::PROCEDURE) == callsExpectedResult);
 	REQUIRE(qpsClient.getRelationshipByFirst(RelationshipType::CALLS_T, procedureTokenObject, DesignEntity::PROCEDURE) == callsTExpectedResult);
 
@@ -228,8 +220,8 @@ TEST_CASE("QPS Client test") {
 	std::unordered_set<std::string> parentTExpectedResultTwo({ while_value_one });
 	std::unordered_set<std::string> followsExpectedResultTwo({ read_value_one });
 	std::unordered_set<std::string> followsTExpectedResultTwo({ read_value_one });
-	std::unordered_set<std::string> nextExpectedResultTwo({ read_value_one });
-	std::unordered_set<std::string> nextTExpectedResultTwo({ read_value_one });
+	std::unordered_set<std::string> nextExpectedResultTwo({ if_value_one });
+	std::unordered_set<std::string> nextTExpectedResultTwo({ call_value_one });
 	std::unordered_set<std::string> callsExpectedResultTwo{ procedure_value_one, procedure_value_two };
 	std::unordered_set<std::string> callsTExpectedResultTwo{ procedure_value_one, procedure_value_two };
 
@@ -239,8 +231,8 @@ TEST_CASE("QPS Client test") {
 	REQUIRE(qpsClient.getRelationshipBySecond(RelationshipType::PARENT_T, DesignEntity::WHILE, stmtTokenObject5) == parentTExpectedResultTwo);
 	REQUIRE(qpsClient.getRelationshipBySecond(RelationshipType::FOLLOWS, DesignEntity::READ, stmtTokenObject4) == followsExpectedResultTwo);
 	REQUIRE(qpsClient.getRelationshipBySecond(RelationshipType::FOLLOWS_T, DesignEntity::READ, stmtTokenObject4) == followsTExpectedResultTwo);
-	REQUIRE(qpsClient.getRelationshipBySecond(RelationshipType::NEXT, DesignEntity::READ, stmtTokenObject4) == nextExpectedResultTwo);
-	REQUIRE(qpsClient.getRelationshipBySecond(RelationshipType::NEXT_T, DesignEntity::READ, stmtTokenObject4) == nextTExpectedResultTwo);
+	REQUIRE(qpsClient.getRelationshipBySecond(RelationshipType::NEXT, DesignEntity::IF, stmtTokenObject4) == nextExpectedResultTwo);
+	REQUIRE(qpsClient.getRelationshipBySecond(RelationshipType::NEXT_T, DesignEntity::CALL, stmtTokenObject4) == nextTExpectedResultTwo);
 	REQUIRE(qpsClient.getRelationshipBySecond(RelationshipType::CALLS, DesignEntity::PROCEDURE, procedureTokenObjectThree) == callsExpectedResultTwo);
 	REQUIRE(qpsClient.getRelationshipBySecond(RelationshipType::CALLS_T, DesignEntity::PROCEDURE, procedureTokenObjectThree) == callsTExpectedResultTwo);
 
@@ -251,8 +243,8 @@ TEST_CASE("QPS Client test") {
 	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultParentTAll{ { while_value_one, std::unordered_set<std::string>({read_value_one}) } };
 	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultFollowsAll{ { read_value_one, std::unordered_set<std::string>({print_value_one}) } };
 	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultFollowsTAll{ { read_value_one, std::unordered_set<std::string>({print_value_one}) } };
-	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultNextAll{ { read_value_one, std::unordered_set<std::string>({print_value_one}) } };
-	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultNextTAll{ { read_value_one, std::unordered_set<std::string>({print_value_one}) } };
+	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultNextAll{ { print_value_one, std::unordered_set<std::string>({read_value_one}) } };
+	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultNextTAll{ { print_value_one, std::unordered_set<std::string>({read_value_one}) } };
 	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultCallsAll{
 										{ procedure_value_one, std::unordered_set<std::string>({procedure_value_two, procedure_value_three})},
 										{ procedure_value_two, std::unordered_set<std::string>({procedure_value_three})}, };
@@ -266,8 +258,8 @@ TEST_CASE("QPS Client test") {
 	REQUIRE(qpsClient.getAllRelationship(RelationshipType::PARENT_T, DesignEntity::WHILE, DesignEntity::READ) == expectedResultParentTAll);
 	REQUIRE(qpsClient.getAllRelationship(RelationshipType::FOLLOWS, DesignEntity::READ, DesignEntity::PRINT) == expectedResultFollowsAll);
 	REQUIRE(qpsClient.getAllRelationship(RelationshipType::FOLLOWS_T, DesignEntity::READ, DesignEntity::PRINT) == expectedResultFollowsTAll);
-	REQUIRE(qpsClient.getAllRelationship(RelationshipType::NEXT, DesignEntity::READ, DesignEntity::PRINT) == expectedResultNextAll);
-	REQUIRE(qpsClient.getAllRelationship(RelationshipType::NEXT_T, DesignEntity::READ, DesignEntity::PRINT) == expectedResultNextTAll);
+	REQUIRE(qpsClient.getAllRelationship(RelationshipType::NEXT, DesignEntity::PRINT, DesignEntity::READ) == expectedResultNextAll);
+	REQUIRE(qpsClient.getAllRelationship(RelationshipType::NEXT_T, DesignEntity::PRINT, DesignEntity::READ) == expectedResultNextTAll);
 	REQUIRE(qpsClient.getAllRelationship(RelationshipType::CALLS, DesignEntity::PROCEDURE, DesignEntity::PROCEDURE) == expectedResultCallsAll);
 	REQUIRE(qpsClient.getAllRelationship(RelationshipType::CALLS_T, DesignEntity::PROCEDURE, DesignEntity::PROCEDURE) == expectedResultCallsTAll);
 }

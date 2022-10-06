@@ -21,9 +21,17 @@ public:
 	std::unordered_set<std::string> getRelationshipByFirst(RelationshipType relType, TokenObject firstArgument, DesignEntity returnType);
 	std::unordered_set<std::string> getRelationshipBySecond(RelationshipType relType, DesignEntity returnType, TokenObject secondArgument);
 	std::unordered_map<std::string, std::unordered_set<std::string>> getAllRelationship(RelationshipType relType, DesignEntity returnType1, DesignEntity returntype2);
+	bool getNextTRelationship(TokenObject firstArgument, TokenObject secondArgument);
+	std::unordered_set<std::string> getNextTRelationshipByFirst(TokenObject firstArgument, std::unordered_set<std::string>& filter);
+	std::unordered_set<std::string> getNextTRelationshipBySecond(TokenObject secondArgument, std::unordered_set<std::string>& filter);
+	std::unordered_map<std::string, std::unordered_set<std::string>> getAllNextTRelationship(DesignEntity returnType1, std::unordered_set<std::string>& filter);
 
 private:
 	std::unordered_map<std::string, std::unordered_set<std::string>>* getStorage(DesignEntity left, DesignEntity right, bool isForward);
+	bool DFSNextTForward(std::string curr, std::string target, std::unordered_set<std::string>& visited);
+	void DFSNextTForwardWithSynonym(std::string curr, std::unordered_set<std::string>& visited,
+								std::unordered_set<std::string>& result, std::unordered_set<std::string>& filter,
+								std::unordered_map<std::string, std::unordered_set<std::string>>* storage);
 
 	std::unordered_map<std::string, std::unordered_set<std::string>> readToReadForwardMap;
 	std::unordered_map<std::string, std::unordered_set<std::string>> readToPrintForwardMap;
