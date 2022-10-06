@@ -928,3 +928,68 @@ TEST_CASE("Multi-clause queries") {
     }
 
 }
+
+TEST_CASE("BOOLEAN queries") {
+    SECTION("BOOLEAN Test 1 - 1 True") {
+        std::string testQuery = "assign a; while w; \n "
+                                "Select BOOLEAN such that Modifies(7, \"x\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "TRUE" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("BOOLEAN Test 2 - 1 True") {
+        std::string testQuery = "assign a; while w; \n "
+                                "Select BOOLEAN such that Modifies(2, \"y\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "TRUE" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("BOOLEAN Test 3 - 1 False") {
+        std::string testQuery = "assign a; while w; \n "
+                                "Select BOOLEAN such that Modifies(18, \"v\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "FALSE" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("BOOLEAN Test 4 - 2 False") {
+        std::string testQuery = "assign a; while w; \n "
+                                "Select BOOLEAN such that Modifies(18, \"v\") and Parent(w, 13)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "FALSE" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("BOOLEAN Test 5 - 2 True") {
+        std::string testQuery = "procedure p; \n "
+                                "Select BOOLEAN such that Uses(18, \"v\") and Calls(\"First\", p)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "TRUE" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("BOOLEAN Test 6 - 1 False, 1 True") {
+        std::string testQuery = "procedure p; \n "
+                                "Select BOOLEAN such that Modifies(2, \"z\") such that Calls(p, \"Third\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "FALSE" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("BOOLEAN Test 7 - 1 True, 1 False") {
+        std::string testQuery = "variable v; assign a;\n "
+                                "Select BOOLEAN pattern a(\"x\", _\"x\"_) such that Modifies(3, v)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "FALSE" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+}
