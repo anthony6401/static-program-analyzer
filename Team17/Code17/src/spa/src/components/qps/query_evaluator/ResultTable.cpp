@@ -2,12 +2,13 @@
 #include "vector"
 #include "string"
 #include "iostream"
+#include "components/qps/query_preprocessor/query_tokenizer/TokenObject.h"
 #include <map>
 #include <initializer_list>
 
-ResultTable::ResultTable() : resultsList({}), isFalseResult(false), isBooleanResult(true), synonymsList({}) {}
+ResultTable::ResultTable() : resultsList({}), isFalseResult(false), synonymsList({}) {}
 
-ResultTable::ResultTable(bool pkbBooleanResult) : resultsList({}), isBooleanResult(true), synonymsList({}) {
+ResultTable::ResultTable(bool pkbBooleanResult) : resultsList({}), synonymsList({}) {
     setIsFalseResult(pkbBooleanResult);
 };
 
@@ -21,7 +22,6 @@ ResultTable::ResultTable(const std::string& synonym, const std::unordered_set<st
         std::vector<std::string> resultSublist = {singleResult};
         resultsList.emplace_back(resultSublist);
     }
-    setIsBooleanResultToFalse();
 }
 
 ResultTable::ResultTable(std::string leftSynonym, std::string rightSynonym, std::vector<std::pair<std::string, std::string>> results) {
@@ -35,7 +35,6 @@ ResultTable::ResultTable(std::string leftSynonym, std::string rightSynonym, std:
         std::vector<std::string> resultSublist = {pairResult.first, pairResult.second};
         resultsList.emplace_back(resultSublist);
     }
-    setIsBooleanResultToFalse();
 }
 
 bool ResultTable::getIsFalseResult() {
@@ -54,28 +53,7 @@ void ResultTable::setIsFalseResultToTrue() {
     isFalseResult = true;
 }
 
-int ResultTable::getSynonymCount() {
-    return synonymsList.size();
-}
-
-bool ResultTable::getIsBooleanResult() {
-    return isBooleanResult;
-}
-
-void ResultTable::setIsBooleanResultToFalse() {
-    isBooleanResult = false;
-}
-
-bool ResultTable::getIsSynonymResult() {
-    return isSynonymResult;
-}
-
-void ResultTable::setIsSynonymResult() {
-    isSynonymResult = true;
-}
-
-
-std::unordered_set<std::string> ResultTable::getResultsToBePopulated(std::string selectSynonym) {
+std::unordered_set<std::string> ResultTable::getSynonymResultsToBePopulated(std::string selectSynonym) {
     std::unordered_set<std::string> result({});
     auto iterator = std::find(synonymsList.begin(), synonymsList.end(), selectSynonym);
     if (iterator != synonymsList.cend()) {
@@ -87,16 +65,42 @@ std::unordered_set<std::string> ResultTable::getResultsToBePopulated(std::string
     return result;
 }
 
-void ResultTable::filterBySelectSynonym(std::string selectSynonym) {
+std::unordered_set<std::string> ResultTable::getTupleResultsToBePopulated(std::vector<TokenObject> tuple) {
+    std::unordered_set<std::string> result({});
+    for (auto resultSublist : resultsList) {
+        std::vector<std::string> newResultSublist;
+        for (auto tupleObject : tuple) {
+            if (tupleObject.getTokenType() == TokenType::NAME) {
+                auto iterator = std::find(synonymsList.begin(), synonymsList.end(), tupleObject.getValue());
+                int indexOfSynonym = std::distance(synonymsList.begin(), iterator);
+                newResultSublist.push_back(resultSublist[indexOfSynonym]);
+            } else {
+                // ATTRIBUTES
+            }
+        }
+        result.insert(ResultTable::formTupleResultString(newResultSublist));
+    }
+
+    return result;
+}
+
+std::string ResultTable::formTupleResultString(std::vector<std::string> newResultsList) {
+    std::string tupleResultString;
+    for (size_t i = 0; i < newResultsList.size(); ++i) {
+        tupleResultString += newResultsList[i] + (i != newResultsList.size() - 1 ? " " : "");
+    }
+    return tupleResultString;
+}
+
+void ResultTable::filterBySelectSynonym(std::set<std::string> &&synonyms) {
     std::vector<std::string> newSynonymsList;
     std::vector<std::vector<std::string>> newResultsList;
 
     std::vector<size_t> indexes; // Index of select synonym
     for (size_t i = 0; i < synonymsList.size(); i++) {
-        std::string currentSynonym = synonymsList.at(i);
-        if (currentSynonym == selectSynonym) {
+        if (synonyms.find(synonymsList.at(i))!=synonyms.end()) {
             indexes.emplace_back(i);
-            newSynonymsList.emplace_back(currentSynonym);
+            newSynonymsList.emplace_back(synonymsList.at(i));
         }
     }
     synonymsList = std::move(newSynonymsList);
@@ -111,12 +115,14 @@ void ResultTable::filterBySelectSynonym(std::string selectSynonym) {
     resultsList = std::move(newResultsList);
 }
 
+
+
 // Find common synonyms and merge resultsLists
-void ResultTable::combineResult(ResultTable nextResult) {
+void ResultTable::combineResult(ResultTable &nextResult) {
     if (isFalseResult) {
         return;
     } else {
-        if (nextResult.isFalseResult || nextResult.isEmptyResult()) {
+        if (nextResult.isFalseResult) {
             setIsFalseResultToTrue();
         }
         // find common synonyms, maximum 2 since there are only 2 parameters / pattern takes in 1 synonym at max
@@ -226,6 +232,23 @@ std::vector<std::pair<size_t, size_t>> ResultTable::findCommonSynonymsIndexPairs
         }
     }
     return indexPairs;
+}
+
+std::ostream &operator<<(std::ostream &os, const ResultTable &table) {
+    for (const auto &attribute : table.synonymsList) {
+        os << attribute << "\t";
+    }
+    os << std::endl;
+    os << "_______________________________________________________" << std::endl;
+
+    for (const auto &record : table.resultsList) {
+        for (const auto &value : record) {
+            os << value << "\t";
+        }
+        os << std::endl;
+    }
+
+    return os;
 }
 
 

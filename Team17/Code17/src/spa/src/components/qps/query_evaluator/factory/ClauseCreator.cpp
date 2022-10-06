@@ -14,9 +14,24 @@
 #include "components/qps/query_evaluator/factory/clauses/relationship/CallsTClause.h"
 #include "components/qps/query_evaluator/factory/clauses/relationship/NextClause.h"
 #include "components/qps/query_evaluator/factory/clauses/relationship/NextTClause.h"
+#include "components/qps/query_evaluator/factory/clauses/select/SelectBooleanClause.h"
+#include "components/qps/query_evaluator/factory/clauses/select/SelectSynonymClause.h"
+#include "components/qps/query_evaluator/factory/clauses/select/SelectTupleClause.h"
 
-std::shared_ptr<Clause> ClauseCreator::createClause(Select synonym, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) {
-    return std::make_shared<SelectClause>(synonym, synonymToDesignEntityMap, qpsClient);
+std::shared_ptr<Clause> ClauseCreator::createClause(Select select, std::unordered_set<std::string> &synonymsInTable, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) {
+    TokenType selectReturnType = select.getReturnType();
+    std::vector<TokenObject> selectReturnValues = select.getReturnValues();
+    if (selectReturnType == TokenType::SYNONYM) {
+        return std::make_shared<SelectSynonymClause>(selectReturnValues.front(), synonymsInTable, synonymToDesignEntityMap, qpsClient);
+    } else if (selectReturnType == TokenType::BOOLEAN) {
+        return std::make_shared<SelectBooleanClause>();
+    } else if (selectReturnType == TokenType::TUPLE) {
+        return std::make_shared<SelectTupleClause>(selectReturnValues, synonymsInTable, synonymToDesignEntityMap, qpsClient);
+    } else if (selectReturnType == TokenType::ATTRIBUTE) {
+        return std::make_shared<SelectSynonymClause>(selectReturnValues.front(), synonymsInTable, synonymToDesignEntityMap, qpsClient);
+    } else {
+        return nullptr;
+    }
 }
 
 std::shared_ptr<Clause> ClauseCreator::createClause(qps::Pattern pattern, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) {

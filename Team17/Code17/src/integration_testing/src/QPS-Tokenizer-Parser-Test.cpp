@@ -12,7 +12,7 @@
 TEST_CASE("Query with single declaration and no such that or pattern clause") {
     std::string testQuery = "variable v; Select v";
 
-    Select expectedSelect = Select("v");
+    Select expectedSelect = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("v")) });
     std::vector<SuchThat> expectedSuchThat{};
     std::vector<Pattern> expectedPattern{};
     std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"v", DesignEntity::VARIABLE} };
@@ -26,7 +26,8 @@ TEST_CASE("Query with single declaration and no such that or pattern clause") {
 
 TEST_CASE("Query with multiple declarations") {
     std::string testQuery = "stmt s, s1; variable v, v1; procedure p, q; assign a, a1; while w; if ifs; constant c; read re; print pn; call cl; Select re";
-    Select expectedSelect = Select("re");
+    
+    Select expectedSelect = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("re")) });
     std::vector<SuchThat> expectedSuchThat{};
     std::vector<Pattern> expectedPattern{};
     std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{
@@ -47,7 +48,8 @@ TEST_CASE("Query with multiple declarations") {
 
 TEST_CASE("Query with synonyms in declaration clause with same name as design entity") {
     std::string testQuery = "variable variable; Select variable";
-    Select expectedSelect = Select("variable");
+    
+    Select expectedSelect = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("variable")) });
     std::vector<SuchThat> expectedSuchThat{};
     std::vector<Pattern> expectedPattern{};
     std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"variable", DesignEntity::VARIABLE} };
@@ -64,7 +66,8 @@ TEST_CASE("Modifies Relationship with integer") {
     std::string testQuery = "variable v;\n"
         "Select v such that Modifies (6, v)";
 
-    Select expectedSelect = Select("v");
+
+    Select expectedSelect = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("v")) });
     std::vector<SuchThat> expectedSuchThat{SuchThat(TokenType::MODIFIES, TokenObject(TokenType::INTEGER, "6"),
                                                     TokenObject(TokenType::NAME, "v"))};
     std::vector<Pattern> expectedPattern{};
@@ -82,7 +85,7 @@ TEST_CASE("Uses Relationship with integer") {
     std::string testQuery = "assign a;\n"
         "Select a such that Uses (2, \"x\")";
 
-    Select expectedSelect = Select("a");
+    Select expectedSelect = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("a")) });
     std::vector<SuchThat> expectedSuchThat{SuchThat(TokenType::USES, TokenObject(TokenType::INTEGER, "2"),
                                                     TokenObject(TokenType::NAME_WITH_QUOTATION, "x"))};
     std::vector<Pattern> expectedPattern{};
@@ -99,7 +102,7 @@ TEST_CASE("Uses Relationship with integer") {
 TEST_CASE("Pattern used as name") {
     std::string testQuery = "variable v; assign pattern; Select pattern pattern pattern(v, \"expr\")";
 
-    Select expectedSelect = Select("pattern");
+    Select expectedSelect = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("pattern")) });
     std::vector<SuchThat> expectedSuchThat{};
     std::vector<Pattern> expectedPattern{ Pattern("pattern", TokenObject(TokenType::NAME, "v"), TokenObject(TokenType::NAME_WITH_QUOTATION, "expr"))};
     std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"v", DesignEntity::VARIABLE},  {"pattern", DesignEntity::ASSIGN}};
@@ -114,7 +117,7 @@ TEST_CASE("Pattern used as name") {
 TEST_CASE("SemanticError - if ifs; Select if") {
     std::string testQuery = "if ifs; Select if";
 
-    Select expectedSelect = Select("if");
+    Select expectedSelect = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("if")) });
     std::vector<SuchThat> expectedSuchThat;
     std::vector<Pattern> expectedPattern;
     std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"ifs", DesignEntity::IF} };
@@ -131,7 +134,7 @@ TEST_CASE("Follows Relationship") {
     std::string testQuery = "stmt s1;\n"
         "Select s1 such that Follows (6, s1)";
 
-    Select expectedSelect = Select("s1");
+    Select expectedSelect = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("s1")) });
     std::vector<SuchThat> expectedSuchThat{SuchThat(TokenType::FOLLOWS, TokenObject(TokenType::INTEGER, "6"),
                                                     TokenObject(TokenType::NAME, "s1"))};
     std::vector<Pattern> expectedPattern{};
@@ -149,7 +152,7 @@ TEST_CASE("Follows* Relationship") {
     std::string testQuery = "stmt s;\n"
         "Select s such that Follows* (6, s)";
 
-    Select expectedSelect = Select("s");
+    Select expectedSelect = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("s")) });
     std::vector<SuchThat> expectedSuchThat{SuchThat(TokenType::FOLLOWS_T, TokenObject(TokenType::INTEGER, "6"), TokenObject(TokenType::NAME, "s"))};
     std::vector<Pattern> expectedPattern{};
     std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"s", DesignEntity::STMT} };
@@ -166,7 +169,7 @@ TEST_CASE("Parent Relationship") {
     std::string testQuery = "stmt s;\n"
         "Select s such that Parent (s, 6)";
 
-    Select expectedSelect = Select("s");
+    Select expectedSelect = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("s")) });
     std::vector<SuchThat> expectedSuchThat{ SuchThat(TokenType::PARENT, TokenObject(TokenType::NAME, "s"), TokenObject(TokenType::INTEGER, "6")) };
     std::vector<Pattern> expectedPattern{};
     std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"s", DesignEntity::STMT} };
@@ -183,7 +186,7 @@ TEST_CASE("Parent* Relationship") {
     std::string testQuery = "assign a; while w;\n"
         "Select a such that Parent* (w, a)";
 
-    Select expectedSelect = Select("a");
+    Select expectedSelect = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("a")) });
     std::vector<SuchThat> expectedSuchThat{ SuchThat(TokenType::PARENT_T, TokenObject(TokenType::NAME, "w"), TokenObject(TokenType::NAME, "a")) };
     std::vector<Pattern> expectedPattern{};
     std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"a", DesignEntity::ASSIGN}, {"w", DesignEntity::WHILE}, };
@@ -200,7 +203,7 @@ TEST_CASE("Pattern Clause with expressions and subexpressions") {
     std::string testQuery = "assign newa;\n"
         "Select newa pattern newa ( \"normSq\" , _\"cenX\"_)";
 
-    Select expectedSelect = Select("newa");
+    Select expectedSelect = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("newa")) });
     std::vector<SuchThat> expectedSuchThat{};
     std::vector<Pattern> expectedPattern{Pattern("newa", TokenObject(TokenType::NAME_WITH_QUOTATION, "normSq"), TokenObject(TokenType::SUBEXPRESSION, "cenX"))};
     std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"newa", DesignEntity::ASSIGN} };
@@ -216,7 +219,7 @@ TEST_CASE("Queries with synonyms as design entities") {
     std::string testQuery = "assign variable;\n"
         "Select variable pattern variable ( \"normSq\" , _\"cenX\"_)";
 
-    Select expectedSelect = Select("variable");
+    Select expectedSelect = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("variable")) });
     std::vector<SuchThat> expectedSuchThat{};
     std::vector<Pattern> expectedPattern{ Pattern("variable", TokenObject(TokenType::NAME_WITH_QUOTATION, "normSq"), TokenObject(TokenType::SUBEXPRESSION, "cenX")) };
     std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"variable", DesignEntity::ASSIGN} };
@@ -233,7 +236,7 @@ TEST_CASE("Pattern Clause with constant expressions") {
     std::string testQuery = "assign newa;\n"
         "Select newa pattern newa ( \"normSq\" , \"1\")";
 
-    Select expectedSelect = Select("newa");
+    Select expectedSelect = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("newa")) });
     std::vector<SuchThat> expectedSuchThat{};
     std::vector<Pattern> expectedPattern{ Pattern("newa", TokenObject(TokenType::NAME_WITH_QUOTATION, "normSq"), TokenObject(TokenType::EXPRESSION, "1")) };
     std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"newa", DesignEntity::ASSIGN} };
@@ -249,7 +252,7 @@ TEST_CASE("Pattern Clause with constant subexpressions") {
     std::string testQuery = "assign a1;\n"
         "Select a1 pattern a1 ( \"x\" , _\"11\"_)";
 
-    Select expectedSelect = Select("a1");
+    Select expectedSelect = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("a1")) });
     std::vector<SuchThat> expectedSuchThat{};
     std::vector<Pattern> expectedPattern{ Pattern("a1", TokenObject(TokenType::NAME_WITH_QUOTATION, "x"), TokenObject(TokenType::SUBEXPRESSION, "11")) };
     std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"a1", DesignEntity::ASSIGN} };
@@ -266,7 +269,7 @@ TEST_CASE("Capital letter synonyms") {
     std::string testQuery = "stmt Statement;\n"
         "Select Statement such that Parent (s, 6)";
 
-    Select expectedSelect = Select("Statement");
+    Select expectedSelect = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("Statement")) });
     std::vector<SuchThat> expectedSuchThat{SuchThat(TokenType::PARENT, TokenObject(TokenType::NAME, "s"), TokenObject(TokenType::INTEGER, "6"))};
     std::vector<Pattern> expectedPattern{};
     std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"Statement", DesignEntity::STMT} };
@@ -283,7 +286,7 @@ TEST_CASE("Capital letter design entity synonyms ") {
     std::string testQuery = "variable Variable;\n"
         "Select Variable such that Modifies (6, Variable)";
 
-    Select expectedSelect = Select("Variable");
+    Select expectedSelect = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("Variable")) });
     std::vector<SuchThat> expectedSuchThat{SuchThat(TokenType::MODIFIES, TokenObject(TokenType::INTEGER, "6"), TokenObject(TokenType::NAME, "Variable"))};
     std::vector<Pattern> expectedPattern{};
     std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"Variable", DesignEntity::VARIABLE} };
@@ -340,7 +343,8 @@ TEST_CASE("Invalid name token - start w digit") {
 TEST_CASE("Presence of white spaces") {
     std::string testQuery = "stmt       s;    \n"
         "Select s    such   that Follows*    (6,   s)";
-    Select expectedSelect = Select("s");
+
+    Select expectedSelect = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("s")) });
     std::vector<SuchThat> expectedSuchThat{SuchThat(TokenType::FOLLOWS_T, TokenObject(TokenType::INTEGER, "6"), TokenObject(TokenType::NAME, "s"))};
     std::vector<Pattern> expectedPattern{};
     std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"s", DesignEntity::STMT} };
@@ -355,7 +359,8 @@ TEST_CASE("Presence of white spaces") {
 TEST_CASE("Presence of white spaces in Name with Quotes and Subexpressions") {
     std::string testQuery = "assign newa;\n"
         "Select newa pattern newa ( \"     normSq\" , _\"   cenX  \"_)";
-    Select expectedSelect = Select("newa");
+
+    Select expectedSelect = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("newa")) });
     std::vector<SuchThat> expectedSuchThat{};
     std::vector<Pattern> expectedPattern{ Pattern("newa", TokenObject(TokenType::NAME_WITH_QUOTATION, "normSq"), TokenObject(TokenType::SUBEXPRESSION, "cenX")) };
     std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"newa", DesignEntity::ASSIGN} };
@@ -369,7 +374,8 @@ TEST_CASE("Presence of white spaces in Name with Quotes and Subexpressions") {
 
 TEST_CASE("Single line queries with space") {
     std::string testQuery = "assign newa; Select newa pattern newa ( \"     normSq\" , _\"   cenX  \"_)";
-    Select expectedSelect = Select("newa");
+
+    Select expectedSelect = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("newa")) });
     std::vector<SuchThat> expectedSuchThat{};
     std::vector<Pattern> expectedPattern{ Pattern("newa", TokenObject(TokenType::NAME_WITH_QUOTATION, "normSq"), TokenObject(TokenType::SUBEXPRESSION, "cenX")) };
     std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"newa", DesignEntity::ASSIGN} };
@@ -383,7 +389,8 @@ TEST_CASE("Single line queries with space") {
 
 TEST_CASE("Single line queries without space") {
     std::string testQuery = "assign newa;Select newa pattern newa ( \"     normSq\" , _\"   cenX  \"_)";
-    Select expectedSelect = Select("newa");
+
+    Select expectedSelect = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("newa")) });
     std::vector<SuchThat> expectedSuchThat{};
     std::vector<Pattern> expectedPattern{Pattern("newa", TokenObject(TokenType::NAME_WITH_QUOTATION, "normSq"), TokenObject(TokenType::SUBEXPRESSION, "cenX"))};
     std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"newa", DesignEntity::ASSIGN} };

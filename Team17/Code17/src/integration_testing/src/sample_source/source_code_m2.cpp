@@ -3,7 +3,7 @@
 std::string sampleSource2 =
         "procedure First {"
         "      read x;" //1
-        "      read z;\n" //2
+        "      read y;\n" //2
         "      call Second; }\n" //3
         "procedure Second {\n"
         "        x = 0;\n" //4

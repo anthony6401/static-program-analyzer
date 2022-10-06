@@ -32,6 +32,7 @@ public:
     std::unordered_map<std::string, DesignEntity> getSynonymToDesignEntityMap();
     int getNumOfDeclaredSynonyms();
     void setSemanticallyInvalid();
+    void setReturnTypeToSynonym();
     bool operator==(const QueryObject& other) const {
         return relationships == other.relationships
             && patterns == other.patterns

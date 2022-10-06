@@ -251,6 +251,7 @@ int initPKB() {
 
 int dummyForRun = initPKB();
 
+
 TEST_CASE("Select synonyms queries") {
 
     SECTION("Select if statements") {
@@ -600,6 +601,7 @@ TEST_CASE("Syntax and Semantics Checks") {
         REQUIRE(testResults == expectedResults);
     }
 }
+
 
 TEST_CASE("Milestone 1 Integration Test 1") {
 

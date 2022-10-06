@@ -4,7 +4,7 @@
 using namespace qps;
 
 SelectClauseSyntaxChecker::SelectClauseSyntaxChecker() {
-	this->selectSyntax.push(TokenType::SYNONYM);
+	this->selectSyntax.push(TokenType::RESULT_CL);
 	this->selectSyntax.push(TokenType::SELECT);
 };
 
@@ -31,7 +31,7 @@ bool SelectClauseSyntaxChecker::isSyntacticallyCorrect(std::vector<TokenObject> 
 			continue;
 		}
 
-		// SYNONYM token
+		// RESULT_CL token
 		std::vector<TokenType> possibleTokenTypes = this->generalSyntax.at(syntax);
 		bool foundToken = false;
 		for (int j = 0; j < possibleTokenTypes.size(); j++) {
@@ -40,6 +40,10 @@ bool SelectClauseSyntaxChecker::isSyntacticallyCorrect(std::vector<TokenObject> 
 			if (tokenType == possibleTokenType) {
 				foundToken = true;
 				break;
+			}
+
+			if (possibleTokenType == TokenType::SYNONYM) {
+				foundToken = isSynonymToken(tokenType);
 			}
 		}
 
@@ -59,3 +63,16 @@ bool SelectClauseSyntaxChecker::isSyntacticallyCorrect(std::vector<TokenObject> 
 	return true;
 
 };
+
+bool SelectClauseSyntaxChecker::isSynonymToken(TokenType tokenType) {
+	std::vector<TokenType> synonymTokens = this->generalSyntax.at(TokenType::SYNONYM);
+	for (int k = 0; k < synonymTokens.size(); k++) {
+		TokenType synonymToken = synonymTokens.at(k);
+
+		if (tokenType == synonymToken) {
+			return true;
+		}
+	}
+
+	return false;
+}

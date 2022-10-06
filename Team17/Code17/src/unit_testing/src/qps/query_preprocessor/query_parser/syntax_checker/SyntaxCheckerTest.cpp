@@ -232,6 +232,36 @@ TEST_CASE("Syntactically correct Select with synonym name as pattern") {
     REQUIRE(actualResult == true);
 };
 
+TEST_CASE("Syntactically correct Select with attribute as return type") {
+    SelectClauseSyntaxChecker checker = SelectClauseSyntaxChecker();
+    std::vector<TokenObject> validSelectTokens{
+        TokenObject(TokenType::SELECT, "Select"),
+        TokenObject(TokenType::ATTRIBUTE, "proc.procName"),
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validSelectTokens);
+    REQUIRE(actualResult == true);
+};
+
+TEST_CASE("Syntactically correct Select with boolean as return type") {
+    SelectClauseSyntaxChecker checker = SelectClauseSyntaxChecker();
+    std::vector<TokenObject> validSelectTokens{
+        TokenObject(TokenType::SELECT, "Select"),
+        TokenObject(TokenType::BOOLEAN, "BOOLEAN"),
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validSelectTokens);
+    REQUIRE(actualResult == true);
+};
+
+TEST_CASE("Syntactically correct Select with tuple as return type") {
+    SelectClauseSyntaxChecker checker = SelectClauseSyntaxChecker();
+    std::vector<TokenObject> validSelectTokens{
+        TokenObject(TokenType::SELECT, "Select"),
+        TokenObject(TokenType::TUPLE, "<a, a1, v, v1>"),
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validSelectTokens);
+    REQUIRE(actualResult == true);
+};
+
 TEST_CASE("Syntactically incorrect Select with synonym") {
     SelectClauseSyntaxChecker checker = SelectClauseSyntaxChecker();
     std::vector<TokenObject> invalidSelectTokens{
@@ -250,6 +280,28 @@ TEST_CASE("Syntactically incorrect Select with multiple synonyms") {
         TokenObject(TokenType::NAME, "v"),
         TokenObject(TokenType::COMMA, ","),
         TokenObject(TokenType::NAME, "y")
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(invalidSelectTokens);
+    REQUIRE(actualResult == false);
+};
+
+TEST_CASE("Syntactically incorrect Select with multiple return types") {
+    SelectClauseSyntaxChecker checker = SelectClauseSyntaxChecker();
+    std::vector<TokenObject> invalidSelectTokens{
+        TokenObject(TokenType::SELECT, "Select"),
+        TokenObject(TokenType::NAME, "v"),
+        TokenObject(TokenType::BOOLEAN, "BOOLEAN"),
+        TokenObject(TokenType::TUPLE, "<v>")
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(invalidSelectTokens);
+    REQUIRE(actualResult == false);
+};
+
+TEST_CASE("Syntactically incorrect Select with invalid return type") {
+    SelectClauseSyntaxChecker checker = SelectClauseSyntaxChecker();
+    std::vector<TokenObject> invalidSelectTokens{
+        TokenObject(TokenType::SELECT, "Select"),
+        TokenObject(TokenType::INTEGER, "1")
     };
     bool actualResult = checker.isSyntacticallyCorrect(invalidSelectTokens);
     REQUIRE(actualResult == false);

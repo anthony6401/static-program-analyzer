@@ -58,12 +58,35 @@ bool Validator::isSemanticallyValid() {
 
 bool Validator::selectClauseIsSemanticallyCorrect() {
 	Select selectClause = this->parsedQuery.getSelect();
-	std::string returnValue = selectClause.getSynonym();
+	TokenType returnType = selectClause.getReturnType();
+	std::vector<TokenObject> returnValues = selectClause.getReturnValues();
+
 	std::unordered_map<std::string, DesignEntity> mappedSynonyms = this->parsedQuery.getSynonymToDesignEntityMap();
-	
-	if (mappedSynonyms.find(returnValue) == mappedSynonyms.end()) {
-		return false;
+
+	for (TokenObject token : returnValues) {
+		TokenType currTokenType = token.getTokenType();
+		std::string tokenValue = token.getValue();
+
+		// To be validated in futuer iterations
+		if (currTokenType == TokenType::ATTRIBUTE) {
+			continue;
+		}
+
+		// Synonym is not declared
+		if (mappedSynonyms.find(tokenValue) == mappedSynonyms.end()) {
+			if (tokenValue == "BOOLEAN" && returnType == TokenType::BOOLEAN) {
+				continue;
+			}
+			return false;
+		}
+
+		// BOOLEAN used as a synonym in declaration, convert return type to SYNONYM
+		if (tokenValue == "BOOLEAN" && returnType == TokenType::BOOLEAN) {
+			this->parsedQuery.setReturnTypeToSynonym();
+		}
+
 	}
+	
 
 	return true;
 };

@@ -57,3 +57,7 @@ int QueryObject::getNumOfDeclaredSynonyms() {
 void QueryObject::setSemanticallyInvalid() {
 	this->hasNoSemanticError = false;
 }
+
+void QueryObject::setReturnTypeToSynonym() {
+	this->select.setReturnTypeToSynonym();
+}
