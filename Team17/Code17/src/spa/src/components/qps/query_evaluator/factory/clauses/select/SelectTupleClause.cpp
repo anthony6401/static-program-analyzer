@@ -1,19 +1,21 @@
 #include "SelectTupleClause.h"
 #include "components/pkb/pkb.h"
 #include "components/pkb/clients/QPSClient.h"
+#include "iostream"
 
 SelectTupleClause::SelectTupleClause(std::vector<TokenObject> tuple, std::unordered_set<std::string> &synonymsInTable, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient)
         : tuple(tuple), synonymsInTable(synonymsInTable), synonymToDesignEntityMap(synonymToDesignEntityMap), qpsClient(qpsClient) {}
 
 ResultTable SelectTupleClause::evaluateClause() {
+    std::cout << "IN EVALUATE CLAUSE FOR TUPLE" << std::endl;
     ResultTable resultTable;
-    resultTable.setIsTupleResult();
     // TokenObjects can be synonyms of attributes
     for (auto tupleObject : tuple) {
         ResultTable intermediate;
         TokenType tupleObjectType = tupleObject.getTokenType();
         std::string tupleObjectValue = tupleObject.getValue();
         if (tupleObjectType == TokenType::NAME) {
+            // If select synonym is found -> just select from table
             if (synonymsInTable.find(tupleObjectValue) != synonymsInTable.end()) {
                 continue;
             } else {
@@ -24,6 +26,9 @@ ResultTable SelectTupleClause::evaluateClause() {
         }
         resultTable.combineResult(intermediate);
     }
+
+    resultTable.setIsTupleResult();
+    std::cout << "is table tuple result: " << resultTable.getIsTupleResult() << std::endl;
     return resultTable;
 }
 

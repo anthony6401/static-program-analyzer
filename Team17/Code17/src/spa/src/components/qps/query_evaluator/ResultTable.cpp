@@ -155,6 +155,10 @@ void ResultTable::updateResultType(ResultTable &nextResult) {
     if (nextResult.getIsSynonymResult() && !isSynonymResult) {
         isSynonymResult = true;
     }
+
+    if (nextResult.getIsTupleResult() && !isTupleResult) {
+        isTupleResult = true;
+    }
 }
 
 

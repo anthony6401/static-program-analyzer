@@ -34,10 +34,14 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
         }
 
         synonymsInTable = {evaluatedResults.synonymsList.begin(), evaluatedResults.synonymsList.end()};
-
+        std::cout << "EVALUATED RESULTS: " << std::endl;
+        std::cout << evaluatedResults << std::endl;
         selectClause = ClauseCreator::createClause(select, synonymsInTable, synonymToDesignEntityMap, qpsClient);
         ResultTable selectTable = selectClause -> evaluateClause();
+        std::cout << "SELECT RESULTS: " << std::endl;
+        std::cout << selectTable << std::endl;
         evaluatedResults.combineResult(selectTable);
+        std::cout << "is evaluated results tuple result: " << evaluatedResults.getIsTupleResult() << std::endl;
         Evaluator::populateResultsList(evaluatedResults, select, results);
     }
 }
@@ -65,6 +69,7 @@ void Evaluator::populateResultsList(ResultTable &evaluatedResults, Select select
             }
         }
     } else if (isTupleResult) {
+        std::cout << "IN POPULATE RESULTS LIST TUPLE " << std::endl;
         std::vector<TokenObject> tuple = select.getReturnValues();
         std::unordered_set<std::string> resultsToPopulate = evaluatedResults.getTupleResultsToBePopulated(tuple);
         for (std::string result : resultsToPopulate) {

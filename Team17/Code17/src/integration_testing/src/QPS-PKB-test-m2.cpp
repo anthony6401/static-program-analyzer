@@ -993,3 +993,14 @@ TEST_CASE("BOOLEAN queries") {
         REQUIRE(testResults == expectedResults);
     }
 }
+
+TEST_CASE("TUPLE queries") {
+    SECTION("Tuple Test 1 - ") {
+        std::string testQuery = "procedure p, p1;\n "
+                                "Select <p, p1> such that Calls(p, p1)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "First Second", "Second Third" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+}
