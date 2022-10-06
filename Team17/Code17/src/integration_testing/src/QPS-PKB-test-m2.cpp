@@ -992,14 +992,50 @@ TEST_CASE("BOOLEAN queries") {
         QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
         REQUIRE(testResults == expectedResults);
     }
+
+    SECTION("BOOLEAN Test 8 - Calls itself") {
+        std::string testQuery = "procedure p,p1;\n "
+                                "Select BOOLEAN such that Calls(p, p)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "FALSE" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
 }
 
 TEST_CASE("TUPLE queries") {
-    SECTION("Tuple Test 1 - ") {
+    SECTION("Tuple Test 1 - 2 synonyms present") {
         std::string testQuery = "procedure p, p1;\n "
                                 "Select <p, p1> such that Calls(p, p1)";
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = { "First Second", "Second Third" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Tuple Test 2 - 3 synonyms present") {
+        std::string testQuery = "procedure p, p1; variable v; stmt s;\n "
+                                "Select <p, p1, v> such that Calls(p, p1) and Modifies(14, v)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "First Second y", "Second Third y" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Tuple Test 3 - 3 synonyms present with False result") {
+        std::string testQuery = "procedure p, p1; variable v; stmt s;\n "
+                                "Select <p, p1, v> such that Calls(p, p1) and Modifies(3, v)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Tuple Test 4 - 3 synonyms present") {
+        std::string testQuery = "procedure p, p1; variable v; stmt s;\n "
+                                "Select <p, p1, s> such that Calls(p, p1) and Modifies(s, \"i\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"First Second 6", "Second Third 9", "First Second 5", "Second Third 6", "First Second 9", "Second Third 5"};
         QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
         REQUIRE(testResults == expectedResults);
     }
