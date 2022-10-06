@@ -250,7 +250,8 @@ Select Parser::parseTokensIntoSelectObject(std::vector<TokenObject> selectTokens
 		}
 
 		if (currTokenType == TokenType::ATTRIBUTE) {
-			return Select(TokenType::ATTRIBUTE, {token});
+			auto [attrSynonym, attrName] = parseAttributeIntoIndividualTokens(token.getValue());
+			return Select(TokenType::ATTRIBUTE, {attrSynonym, attrName});
 		}
 
 		// Change TokenType of synonyms tokenized to design entity tokens etc to NAME
@@ -432,20 +433,26 @@ std::vector<TokenObject> Parser::parseTupleIntoIndividualTokens(std::string tupl
 		std::string elementValue;
 		std::getline(ss, elementValue, ',');
 
-		TokenObject element;
 		bool isAttribute = std::find(elementValue.begin(), elementValue.end(), '.') != elementValue.end();
 
 		if (isAttribute) {
-			element = TokenObject(TokenType::ATTRIBUTE, elementValue);
-		}
-		else {
-			// element is a synonym
-			element = TokenObject(TokenType::NAME, elementValue);
+			auto [attrSynonym, attrName] = parseAttributeIntoIndividualTokens(elementValue);
+			elements.push_back(attrSynonym);
+			elements.push_back(attrName);
+			continue;
 		}
 
-		elements.push_back(element);
+		// Synonym
+		elements.push_back({ TokenObject(TokenType::NAME, elementValue) });
 	}
 
 	return elements;
 }
 
+std::tuple<TokenObject, TokenObject> Parser::parseAttributeIntoIndividualTokens(std::string attribute) {
+    size_t fullstopIndex = attribute.find('.');
+    std::string synonymName = attribute.substr(0, fullstopIndex);
+    std::string attributeName = attribute.substr(fullstopIndex + 1, attribute.length() - fullstopIndex - 1);
+
+	return {TokenObject(TokenType::ATTRIBUTE_SYNONYM, synonymName), TokenObject(TokenType::ATTRIBUTE_NAME, attributeName)};
+}

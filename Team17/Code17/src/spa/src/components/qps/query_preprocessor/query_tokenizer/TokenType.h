@@ -59,7 +59,9 @@ namespace qps {
         ENTREF,
         EXPRESSION_SPEC,
         RESULT_CL,
-        REF
+        REF,
+        ATTRIBUTE_SYNONYM,
+        ATTRIBUTE_NAME
     };
 }
 

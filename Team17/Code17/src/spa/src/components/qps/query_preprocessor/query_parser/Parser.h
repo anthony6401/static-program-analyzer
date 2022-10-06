@@ -43,6 +43,7 @@ private:
     bool isRelationshipToken(TokenType token);
     bool isDesignEntityToken(TokenType token);
     std::vector<TokenObject> parseTupleIntoIndividualTokens(std::string tupleValue);
+    std::tuple<TokenObject, TokenObject> parseAttributeIntoIndividualTokens(std::string attribute);
 
 public:
     Parser(std::vector<TokenObject> tokenizedQuery);
