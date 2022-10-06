@@ -2,13 +2,13 @@
 
 #include <iostream>
 
-Extractor::Extractor(SPClient* client) {
+Extractor::Extractor(SPClient* client) : currentStack(nullptr) {
 	this->client = client;
-	currentStack = new ProcedureStack(SimpleToken(), this);
 }
 
 void Extractor::extractRead(SimpleToken readToken) {
-	this->currentStack->addFollows(readToken);
+	//std::cout << "extractRead\n";
+	this->currentStack->follows.push_back(readToken);
 	this->currentStack->modifies.push_back(readToken);
 
 	Entity* left = generateEntity(readToken);
@@ -19,7 +19,7 @@ void Extractor::extractRead(SimpleToken readToken) {
 
 void Extractor::extractPrint(SimpleToken printToken) {
 	//std::cout << "extractPrint\n";
-	this->currentStack->addFollows(printToken);
+	this->currentStack->follows.push_back(printToken);
 	this->currentStack->uses.push_back(printToken);
 
 	Entity* left = generateEntity(printToken);
@@ -29,7 +29,8 @@ void Extractor::extractPrint(SimpleToken printToken) {
 }
 
 void Extractor::extractAssign(SimpleToken assignToken) {
-	this->currentStack->addFollows(assignToken);
+	//std::cout << "extractAssign\n";
+	this->currentStack->follows.push_back(assignToken);
 	SimpleToken varToken = assignToken.getChildren().at(0);
 	this->currentStack->modifies.push_back(varToken);
 
@@ -59,14 +60,16 @@ std::string Extractor::getExpressionAsString(SimpleToken expression) {
 }
 
 void Extractor::extractWhile(SimpleToken whileToken) {
-	this->currentStack->addFollows(whileToken);
+	//std::cout << "extractWhile\n";
+	this->currentStack->follows.push_back(whileToken);
 	extractExpr(whileToken, whileToken);
 	this->parentStack.push(currentStack);
 	this->currentStack = new WhileStack(whileToken, this);
 }
 
 void Extractor::extractIf(SimpleToken ifToken) {
-	this->currentStack->addFollows(ifToken);
+	//std::cout << "extractIf\n";
+	this->currentStack->follows.push_back(ifToken);
 	extractExpr(ifToken, ifToken);
 	this->parentStack.push(currentStack);
 	this->currentStack = new IfStack(ifToken, this);
@@ -90,27 +93,27 @@ void Extractor::extractExpr(SimpleToken stmtToken, SimpleToken exprToken) {
 	}
 }
 
-void Extractor::extractCall(SimpleToken callToken) {
-	this->currentStack->addFollows(callToken);
+void Extractor::extractCall(SimpleToken callToken, std::string currentProcedure) {
+	//std::cout << "extractCall\n";
+	this->currentStack->follows.push_back(callToken);
 
-	Entity* left = generateEntity(SimpleToken(SpTokenType::TPROCEDURE, this->currentProcedure, 0));
+	Entity* left = generateEntity(SimpleToken(SpTokenType::TPROCEDURE, currentProcedure, 0));
 	Entity* right = new ProcedureEntity(callToken.value);
 	CallsRelationship* relationship = new CallsRelationship(left, right);
 	this->client->storeRelationship(relationship);
 
-	this->callProcedures.insert(std::pair<std::string, std::string>(this->currentProcedure, callToken.value));
+
 }
 
 void Extractor::extractProcedure(SimpleToken procedureToken) {
 	this->currentStack = new ProcedureStack(procedureToken, this);
-	this->currentProcedure = procedureToken.value;
 }
 
 void Extractor::close(int statementNumber) {
 	currentStack->close(statementNumber);
 }
 
-void Extractor::endOfParser() {
+void Extractor::endOfParser(std::multimap<std::string, std::string> callProcedures) {
 	for (auto itr = callProcedures.begin(); itr != callProcedures.end(); ++itr) {
 		std::string parent = itr->first;
 		std::string called = itr->second;

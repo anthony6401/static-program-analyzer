@@ -8,6 +8,9 @@
 class SimpleParser {
     public:
         int statementNumber;
+        std::string currentProcedure;
+        std::set<std::string> procedures;
+        std::multimap<std::string, std::string> callProcedures;
         SimpleParser(Extractor* client);
         void parseCode(std::string code);
         void parseLine(std::string code);

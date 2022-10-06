@@ -9,14 +9,15 @@
 class StmtStack {
 
 public:
-    StmtStack();
     SimpleToken parent;
     virtual void close(int statementNumber) = 0;
-    virtual bool isIf() = 0;
-    virtual void mergeStack(StmtStack* parentStack, StmtStack* childStack);
+    virtual void mergeStack() = 0;
     std::vector<SimpleToken> modifies;
     std::vector<SimpleToken> uses;
     std::vector<SimpleToken> follows;
     std::vector<SimpleToken> parentT;
-    void addFollows(SimpleToken token);
+
+protected:
+    StmtStack(SimpleToken parent, Extractor* context) : parent(parent) {};
+
 };
