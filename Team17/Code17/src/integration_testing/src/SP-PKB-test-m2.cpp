@@ -40,7 +40,7 @@ TEST_CASE("test SP PKB integration m2") {
                                 v = z;\
                                 print v; }");
 }
-
+/*
 // pkbSP APIs queries
 TEST_CASE("Select all queries for SP m2") {
     SECTION("Select call statements") {
@@ -138,4 +138,4 @@ TEST_CASE("Pattern queries SP") {
         std::vector<std::pair<std::string, std::string>> expectedResults = { {"15", "x"}};
         REQUIRE(testResults == expectedResults);
     }
-}
+}*/
