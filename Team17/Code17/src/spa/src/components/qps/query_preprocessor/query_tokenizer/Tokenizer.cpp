@@ -46,6 +46,7 @@ Tokenizer::Tokenizer() {
             {")", TokenType::CLOSED_BRACKET},
             {"\"", TokenType::QUOTATION_MARK},
             {";", TokenType::SEMI_COLON},
+            {"=", TokenType::EQUALS},
             {"stmt", TokenType::STMT},
             {"read", TokenType::READ},
             {"print", TokenType::PRINT},
