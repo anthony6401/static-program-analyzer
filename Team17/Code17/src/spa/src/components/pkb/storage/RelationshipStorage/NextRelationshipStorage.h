@@ -28,8 +28,8 @@ public:
 
 private:
 	std::unordered_map<std::string, std::unordered_set<std::string>>* getStorage(DesignEntity left, DesignEntity right, bool isForward);
-	bool DFSNextTForward(std::string& curr, std::string& target, std::unordered_set<std::string>& visited);
-	void DFSNextTForwardWithSynonym(std::string& curr, std::unordered_set<std::string>& visited,
+	bool DFSNextTForward(std::string curr, std::string& target, std::unordered_set<std::string>& visited);
+	void DFSNextTForwardWithSynonym(std::string curr, std::unordered_set<std::string>& visited,
 								std::unordered_set<std::string>& result, std::unordered_set<std::string>& filter,
 								std::unordered_map<std::string, std::unordered_set<std::string>>* storage);
 
