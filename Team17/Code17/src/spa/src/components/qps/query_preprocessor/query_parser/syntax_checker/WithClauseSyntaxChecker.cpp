@@ -28,7 +28,7 @@ bool WithClauseSyntaxChecker::isSyntacticallyCorrect(std::vector<TokenObject> to
 				continue;
 			}
 
-			if (tokenType == TokenType::SUCH) {
+			if (tokenType == TokenType::WITH) {
 				this->withSyntax.push(TokenType::REF);
 				this->withSyntax.push(TokenType::EQUALS);
 				this->withSyntax.push(TokenType::REF);
