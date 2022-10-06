@@ -271,7 +271,7 @@ void NextRelationshipStorage::DFSNextTForwardWithSynonym(std::string& curr, std:
 
 	std::unordered_map<std::string, std::unordered_set<std::string>>::const_iterator neighboursIterator = storage->find(curr);
 
-	if (neighboursIterator != this->stmtToStmtForwardMap.end()) {
+	if (neighboursIterator != storage->end()) {
 		for (std::string neighbour : neighboursIterator->second) {
 			std::unordered_set<std::string>::const_iterator exist = visited.find(neighbour);
 			if (filter.find(neighbour) != filter.end()) {
@@ -434,12 +434,13 @@ std::unordered_map<std::string, std::unordered_set<std::string>> NextRelationshi
 std::unordered_map<std::string, std::unordered_set<std::string>> NextRelationshipStorage::getAllNextTRelationship(DesignEntity returnType1, 
 																												std::unordered_set<std::string>& filter) {
 	std::unordered_map<std::string, std::unordered_set<std::string>> result_map;
-	for (std::unordered_map<std::string, std::unordered_set<std::string>>::iterator it = this->assignToStmtForwardMap.begin(); it != this->assignToStmtForwardMap.end(); ++it) {
+	std::unordered_map<std::string, std::unordered_set<std::string>>* storageForFilter = getStorage(returnType1, DesignEntity::STMT, true);
+	std::unordered_map<std::string, std::unordered_set<std::string>>* DFSstorage = getStorage(DesignEntity::STMT, DesignEntity::STMT, true);
+	for (std::unordered_map<std::string, std::unordered_set<std::string>>::iterator it = storageForFilter->begin(); it != storageForFilter->end(); ++it) {
 		std::unordered_set<std::string> visited;
 		std::unordered_set<std::string> result;
-		std::unordered_map<std::string, std::unordered_set<std::string>>* storage = getStorage(DesignEntity::STMT, DesignEntity::STMT, true);
 		std::string start = it->first;
-		DFSNextTForwardWithSynonym(start, visited, result, filter, storage);
+		DFSNextTForwardWithSynonym(start, visited, result, filter, DFSstorage);
 		result_map[start] = result;
 	}
 

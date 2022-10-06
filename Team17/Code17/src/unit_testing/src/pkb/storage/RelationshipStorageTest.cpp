@@ -1953,7 +1953,77 @@ TEST_CASE("Next Relationship Storage Test") {
 }
 
 TEST_CASE("NextT Relationship Storage Test") {
+	NextRelationshipStorage* nextRelationshipStorage = new NextRelationshipStorage();
 
+	// Populate PKB
+	REQUIRE(nextRelationshipStorage->storeRelationship(nextRelationshipAssignCallOne));
+	REQUIRE(nextRelationshipStorage->storeRelationship(nextRelationshipCallIfOne));
+	REQUIRE(nextRelationshipStorage->storeRelationship(nextRelationshipIfPrintOne));
+	REQUIRE(nextRelationshipStorage->storeRelationship(nextRelationshipPrintReadOne));
+	REQUIRE(nextRelationshipStorage->storeRelationship(nextRelationshipReadWhileOne));
+
+	// Test for Next*(1, 2)
+	REQUIRE(nextRelationshipStorage->getNextTRelationship(stmtTokenObject1, stmtTokenObject6));
+	REQUIRE(nextRelationshipStorage->getNextTRelationship(stmtTokenObject2, stmtTokenObject6));
+	REQUIRE(nextRelationshipStorage->getNextTRelationship(stmtTokenObject3, stmtTokenObject6));
+	REQUIRE(nextRelationshipStorage->getNextTRelationship(stmtTokenObject2, stmtTokenObject5));
+	REQUIRE(nextRelationshipStorage->getNextTRelationship(stmtTokenObject3, stmtTokenObject4));
+	REQUIRE(!nextRelationshipStorage->getNextTRelationship(stmtTokenObject2, stmtTokenObject7));
+	REQUIRE(!nextRelationshipStorage->getNextTRelationship(stmtTokenObject3, stmtTokenObject1));
+
+	std::unordered_set<std::string> stmt_filter = {assign_value_one, call_value_one, if_value_one, print_value_one, read_value_one, while_value_one };
+	std::unordered_set<std::string> a_filter = { assign_value_one };
+	std::unordered_set<std::string> c_filter = { call_value_one };
+	std::unordered_set<std::string> if_filter = { if_value_one };
+	std::unordered_set<std::string> pr_filter = { print_value_one };
+	std::unordered_set<std::string> r_filter = { read_value_one };
+	std::unordered_set<std::string> w_filter = { while_value_one };
+
+	std::unordered_set<std::string> empty = {};
+
+	// Test for Next*(1, s)
+	std::unordered_set<std::string> expectedResultByFirstStmt = { call_value_one, if_value_one, print_value_one, read_value_one, while_value_one };
+	std::unordered_set<std::string> expectedResultByFirstPrint = { print_value_one };
+	std::unordered_set<std::string> expectedResultByFirstRead = { read_value_one };
+	std::unordered_set<std::string> expectedResultByFirstWhile = { while_value_one };
+
+	REQUIRE(nextRelationshipStorage->getNextTRelationshipByFirst(stmtTokenObject1, stmt_filter) == expectedResultByFirstStmt);
+	REQUIRE(nextRelationshipStorage->getNextTRelationshipByFirst(stmtTokenObject2, pr_filter) == expectedResultByFirstPrint);
+	REQUIRE(nextRelationshipStorage->getNextTRelationshipByFirst(stmtTokenObject3, r_filter) == expectedResultByFirstRead);
+	REQUIRE(nextRelationshipStorage->getNextTRelationshipByFirst(stmtTokenObject4, w_filter) == expectedResultByFirstWhile);
+	REQUIRE(nextRelationshipStorage->getNextTRelationshipByFirst(stmtTokenObject1, a_filter) == empty);
+
+	// Test for Next*(s, 2)
+	std::unordered_set<std::string> expectedResultBySecondStmt = { assign_value_one, call_value_one, if_value_one, print_value_one, read_value_one };
+	std::unordered_set<std::string> expectedResultBySecondAssign = { assign_value_one };
+	std::unordered_set<std::string> expectedResultBySecondCall = { call_value_one };
+	std::unordered_set<std::string> expectedResultBySecondIf = { if_value_one };
+
+	REQUIRE(nextRelationshipStorage->getNextTRelationshipBySecond(stmtTokenObject6, stmt_filter) == expectedResultBySecondStmt);
+	REQUIRE(nextRelationshipStorage->getNextTRelationshipBySecond(stmtTokenObject5, if_filter) == expectedResultBySecondIf);
+	REQUIRE(nextRelationshipStorage->getNextTRelationshipBySecond(stmtTokenObject4, c_filter) == expectedResultBySecondCall);
+	REQUIRE(nextRelationshipStorage->getNextTRelationshipBySecond(stmtTokenObject3, a_filter) == expectedResultBySecondAssign);
+	REQUIRE(nextRelationshipStorage->getNextTRelationshipBySecond(stmtTokenObject6, w_filter) == empty);
+
+	std::unordered_map<std::string, std::unordered_set<std::string>> emptyMap = {};
+	// Test for Next*(s1, s2)
+	std::unordered_map<std::string, std::unordered_set<std::string>> expectedStmtStmtAll{
+									{ assign_value_one, std::unordered_set<std::string>({call_value_one, if_value_one, print_value_one, read_value_one, while_value_one})},
+									{ call_value_one, std::unordered_set<std::string>({if_value_one, print_value_one, read_value_one, while_value_one})},
+									{ if_value_one, std::unordered_set<std::string>({print_value_one, read_value_one, while_value_one})},
+									{ print_value_one, std::unordered_set<std::string>({read_value_one, while_value_one})},
+									{ read_value_one, std::unordered_set<std::string>({while_value_one})} };
+	std::unordered_map<std::string, std::unordered_set<std::string>> expectedStmtWhileAll{
+									{ assign_value_one, std::unordered_set<std::string>({while_value_one})},
+									{ call_value_one, std::unordered_set<std::string>({while_value_one})},
+									{ if_value_one, std::unordered_set<std::string>({while_value_one})},
+									{ print_value_one, std::unordered_set<std::string>({while_value_one})},
+									{ read_value_one, std::unordered_set<std::string>({while_value_one})} };
+
+
+	REQUIRE(nextRelationshipStorage->getAllNextTRelationship(DesignEntity::STMT, stmt_filter) == expectedStmtStmtAll);
+	REQUIRE(nextRelationshipStorage->getAllNextTRelationship(DesignEntity::STMT, w_filter) == expectedStmtWhileAll);
+	REQUIRE(nextRelationshipStorage->getAllNextTRelationship(DesignEntity::WHILE, stmt_filter) == emptyMap);
 }
 
 TEST_CASE("Calls Relationship Storage Test") {

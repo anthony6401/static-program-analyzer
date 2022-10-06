@@ -56,19 +56,19 @@ TEST_CASE("Relationship Manager Test") {
 	REQUIRE(relManager.storeRelationship(followsTRelationshipWhileIfOne));
 	REQUIRE(relManager.storeRelationship(followsTRelationshipIfReadOne));
 
-	//REQUIRE(relManager.storeRelationship(nextRelationshipReadPrintOne));
-	//REQUIRE(relManager.storeRelationship(nextRelationshipPrintAssignOne));
-	//REQUIRE(relManager.storeRelationship(nextRelationshipAssignCallOne));
-	//REQUIRE(relManager.storeRelationship(nextRelationshipCallWhileOne));
-	//REQUIRE(relManager.storeRelationship(nextRelationshipWhileIfOne));
-	//REQUIRE(relManager.storeRelationship(nextRelationshipIfReadOne));
+	REQUIRE(relManager.storeRelationship(nextRelationshipReadPrintOne));
+	REQUIRE(relManager.storeRelationship(nextRelationshipPrintAssignOne));
+	REQUIRE(relManager.storeRelationship(nextRelationshipAssignCallOne));
+	REQUIRE(relManager.storeRelationship(nextRelationshipCallWhileOne));
+	REQUIRE(relManager.storeRelationship(nextRelationshipWhileIfOne));
+	REQUIRE(relManager.storeRelationship(nextRelationshipIfReadOne));
 	
-	REQUIRE(relManager.storeRelationship(nextTRelationshipReadPrintOne));
-	REQUIRE(relManager.storeRelationship(nextTRelationshipPrintAssignOne));
-	REQUIRE(relManager.storeRelationship(nextTRelationshipAssignCallOne));
-	REQUIRE(relManager.storeRelationship(nextTRelationshipCallWhileOne));
-	REQUIRE(relManager.storeRelationship(nextTRelationshipWhileIfOne));
-	REQUIRE(relManager.storeRelationship(nextTRelationshipIfReadOne));
+	//REQUIRE(relManager.storeRelationship(nextTRelationshipReadPrintOne));
+	//REQUIRE(relManager.storeRelationship(nextTRelationshipPrintAssignOne));
+	//REQUIRE(relManager.storeRelationship(nextTRelationshipAssignCallOne));
+	//REQUIRE(relManager.storeRelationship(nextTRelationshipCallWhileOne));
+	//REQUIRE(relManager.storeRelationship(nextTRelationshipWhileIfOne));
+	//REQUIRE(relManager.storeRelationship(nextTRelationshipIfReadOne));
 
 	REQUIRE(relManager.storeRelationship(callsRelationshipOne));
 	REQUIRE(relManager.storeRelationship(callsRelationshipTwo));
