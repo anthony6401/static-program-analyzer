@@ -274,7 +274,6 @@ TEST_CASE("Affects* Relationships") {
     REQUIRE(testResult == expectedResult);
 }
 
-// AND clause
 TEST_CASE("AND clause with relationships") {
     std::string testQuery = "assign a; while w;\n"
                             "Select a such that Modifies(a, \"x\") and Parent*(w, a) and Next*(6, a)";
@@ -288,7 +287,47 @@ TEST_CASE("AND clause with relationships") {
     REQUIRE(testResult == expectedResult);
 }
 
-// Return BOOLEAN
+TEST_CASE("WITH clause") {
+    SECTION("Test 1") {
+        std::string testQuery = "stmt a; constant c;\n"
+                                "Select s with a.stmt# = c.value";
+        std::vector<TokenObject> expectedResult {stmtTokenObject, a_nameTokenObject, semicolonTokenObject, constantTokenObject, c_nameTokenObject, semicolonTokenObject,
+                                                 selectTokenObject, s_nameTokenObject, withTokenObject, attributeTokenObject1, equalsTokenObject, attributeTokenObject3};
+        Tokenizer tokenizer = Tokenizer();
+        std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
+
+        REQUIRE(testResult == expectedResult);
+    }
+
+    SECTION("Test 2") {
+        std::string testQuery = "stmt s, s1;\n"
+                                "Select s.stmt# such that Follows* (s, s1) with s1.stmt#=6";
+        std::vector<TokenObject> expectedResult {stmtTokenObject, s_nameTokenObject, commaTokenObject, s1_nameTokenObject, semicolonTokenObject,
+                                                 selectTokenObject, attributeTokenObject5, suchTokenObject, thatTokenObject,
+                                                 followsTTokenObject, openBracketTokenObject, s_nameTokenObject, commaTokenObject, s1_nameTokenObject, closedBracketTokenObject,
+                                                 withTokenObject, attributeTokenObject6, equalsTokenObject, six_intTokenObject};
+        Tokenizer tokenizer = Tokenizer();
+        std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
+
+        REQUIRE(testResult == expectedResult);
+    }
+
+    SECTION("Test 3") {
+        std::string testQuery = "stmt s, s1;\n"
+                                "Select s.stmt# such that Follows* (s, s1) with s1.stmt#\t=\n6";
+        std::vector<TokenObject> expectedResult {stmtTokenObject, s_nameTokenObject, commaTokenObject, s1_nameTokenObject, semicolonTokenObject,
+                                                 selectTokenObject, attributeTokenObject5, suchTokenObject, thatTokenObject,
+                                                 followsTTokenObject, openBracketTokenObject, s_nameTokenObject, commaTokenObject, s1_nameTokenObject, closedBracketTokenObject,
+                                                 withTokenObject, attributeTokenObject6, equalsTokenObject, six_intTokenObject};
+        Tokenizer tokenizer = Tokenizer();
+        std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
+
+        REQUIRE(testResult == expectedResult);
+    }
+}
+
+
+
 TEST_CASE("Returns BOOLEAN") {
     std::string testQuery = "Select BOOLEAN such that Affects*(s1, s)";
     std::vector<TokenObject> expectedResult {selectTokenObject, booleanTokenObject, suchTokenObject, thatTokenObject,
@@ -299,7 +338,6 @@ TEST_CASE("Returns BOOLEAN") {
     REQUIRE(testResult == expectedResult);
 }
 
-// White spaces
 TEST_CASE("White spaces within relationships") {
     std::string testQuery = "stmt\v s1   ; stmt s;\n"
                             "Select s1  \f   such that Next*   (\ts1, s\f)";
@@ -325,7 +363,6 @@ TEST_CASE("White spaces within quotes") {
     REQUIRE(testResult == expectedResult);
 }
 
-// Return Tuples
 
 TEST_CASE("Tuples with 1 synonym") {
     std::string testQuery = "assign a1, a2; Select <a1> such that Affects (a1, a2)";

@@ -26,6 +26,8 @@ TokenObject closedBracketTokenObject = TokenObject(TokenType::CLOSED_BRACKET, ")
 
 TokenObject andTokenObject = TokenObject(TokenType::AND, "and");
 TokenObject booleanTokenObject = TokenObject(TokenType::BOOLEAN, "BOOLEAN");
+TokenObject withTokenObject = TokenObject(TokenType::WITH, "with");
+TokenObject equalsTokenObject = TokenObject(TokenType::EQUALS, "=");
 
 TokenObject stmtTokenObject = TokenObject(TokenType::STMT, "stmt");
 TokenObject procTokenObject = TokenObject(TokenType::PROCEDURE, "procedure");
@@ -61,6 +63,8 @@ TokenObject attributeTokenObject1 = TokenObject(TokenType::ATTRIBUTE, "a.stmt#")
 TokenObject attributeTokenObject2 = TokenObject(TokenType::ATTRIBUTE, "procName.procName");
 TokenObject attributeTokenObject3 = TokenObject(TokenType::ATTRIBUTE, "c.value");
 TokenObject attributeTokenObject4 = TokenObject(TokenType::ATTRIBUTE, "procName.varName");
+TokenObject attributeTokenObject5 = TokenObject(TokenType::ATTRIBUTE, "s.stmt#");
+TokenObject attributeTokenObject6 = TokenObject(TokenType::ATTRIBUTE, "s1.stmt#");
 
 TokenObject oneSyn_tupleTokenObject = TokenObject(TokenType::TUPLE, "<a1>");
 TokenObject twoSyn_tupleTokenObject = TokenObject(TokenType::TUPLE, "<a1,a2>");
