@@ -342,43 +342,6 @@ TEST_CASE("FollowsT Relationship Test") {
     REQUIRE(*(ifReadRel->getRightEntity()) == *readEntity);
 }
 
-TEST_CASE("NextT Relationship Test") {
-    std::string whileValue = "1";
-    std::string ifValue = "2";
-    std::string assignValue = "3";
-    std::string readValue = "4";
-    std::string printValue = "5";
-    std::string callValue = "6";
-
-    Entity* whileEntity = new WhileEntity(whileValue);
-    Entity* ifEntity = new IfEntity(ifValue);
-    Entity* readEntity = new ReadEntity(readValue);
-    Entity* printEntity = new PrintEntity(printValue);
-    Entity* assignEntity = new AssignEntity(ifValue);
-    Entity* callEntity = new CallEntity(callValue);
-
-    Relationship* whileAssignRel = new NextTRelationship(whileEntity, assignEntity);
-    Relationship* readIfRel = new NextTRelationship(readEntity, ifEntity);
-    Relationship* assignPrintRel = new NextTRelationship(assignEntity, printEntity);
-    Relationship* printCallRel = new NextTRelationship(printEntity, callEntity);
-    Relationship* callWhileRel = new NextTRelationship(callEntity, whileEntity);
-    Relationship* ifReadRel = new NextTRelationship(whileEntity, readEntity);
-
-    REQUIRE(*(whileAssignRel->getLeftEntity()) == *whileEntity);
-    REQUIRE(*(readIfRel->getLeftEntity()) == *readEntity);
-    REQUIRE(*(assignPrintRel->getLeftEntity()) == *assignEntity);
-    REQUIRE(*(printCallRel->getLeftEntity()) == *printEntity);
-    REQUIRE(*(callWhileRel->getLeftEntity()) == *callEntity);
-    REQUIRE(*(ifReadRel->getLeftEntity()) == *whileEntity);
-
-    REQUIRE(*(whileAssignRel->getRightEntity()) == *assignEntity);
-    REQUIRE(*(readIfRel->getRightEntity()) == *ifEntity);
-    REQUIRE(*(assignPrintRel->getRightEntity()) == *printEntity);
-    REQUIRE(*(printCallRel->getRightEntity()) == *callEntity);
-    REQUIRE(*(callWhileRel->getRightEntity()) == *whileEntity);
-    REQUIRE(*(ifReadRel->getRightEntity()) == *readEntity);
-}
-
 TEST_CASE("Next Relationship Test") {
     std::string whileValue = "1";
     std::string ifValue = "2";
