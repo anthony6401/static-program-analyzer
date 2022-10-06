@@ -8,11 +8,11 @@ With::With(TokenType leftType, TokenType rightType, std::vector<TokenObject> lef
 }
 
 TokenType With::getLeftType() {
-    return relationship;
+    return leftType;
 }
 
 TokenType With::getRightType() {
-    return relationship;
+    return rightType;
 }
 
 std::vector<TokenObject> With::getLeft() {

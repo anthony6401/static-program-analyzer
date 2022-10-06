@@ -23,8 +23,7 @@ public:
     std::vector<TokenObject> getLeft();
     std::vector<TokenObject> getRight();
     bool operator==(const With& other) const {
-        return relationship == other.relationship
-            && leftType == other.leftType
+        return leftType == other.leftType
             && rightType == other.rightType
             && left == other.left
             && right == other.right;
