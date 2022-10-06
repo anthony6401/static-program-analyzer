@@ -376,9 +376,7 @@ std::unordered_set<std::string> NextRelationshipStorage::getNextTRelationshipByF
 	std::unordered_set<std::string> visited;
 	std::unordered_set<std::string> result;
 	std::unordered_map<std::string, std::unordered_set<std::string>>* storage = getStorage(DesignEntity::STMT, DesignEntity::STMT, true);
-	if (storage != nullptr) {
-		DFSNextTForwardWithSynonym(firstArgument.getValue(), visited, result, filter, storage);
-	}
+	DFSNextTForwardWithSynonym(firstArgument.getValue(), visited, result, filter, storage);
 	return result;
 }
 
@@ -410,9 +408,7 @@ std::unordered_set<std::string> NextRelationshipStorage::getNextTRelationshipByS
 	std::unordered_set<std::string> visited;
 	std::unordered_set<std::string> result;
 	std::unordered_map<std::string, std::unordered_set<std::string>>* storage = getStorage(DesignEntity::STMT, DesignEntity::STMT, false);
-	if (storage != nullptr) {
-		DFSNextTForwardWithSynonym(secondArgument.getValue(), visited, result, filter, storage);
-	}
+	DFSNextTForwardWithSynonym(secondArgument.getValue(), visited, result, filter, storage);
 	return result;
 }
 
@@ -437,5 +433,15 @@ std::unordered_map<std::string, std::unordered_set<std::string>> NextRelationshi
 
 std::unordered_map<std::string, std::unordered_set<std::string>> NextRelationshipStorage::getAllNextTRelationship(DesignEntity returnType1, 
 																												std::unordered_set<std::string>& filter) {
-	return std::unordered_map<std::string, std::unordered_set<std::string>>();
+	std::unordered_map<std::string, std::unordered_set<std::string>> result_map;
+	for (std::unordered_map<std::string, std::unordered_set<std::string>>::iterator it = this->assignToStmtForwardMap.begin(); it != this->assignToStmtForwardMap.end(); ++it) {
+		std::unordered_set<std::string> visited;
+		std::unordered_set<std::string> result;
+		std::unordered_map<std::string, std::unordered_set<std::string>>* storage = getStorage(DesignEntity::STMT, DesignEntity::STMT, true);
+		std::string start = it->first;
+		DFSNextTForwardWithSynonym(start, visited, result, filter, storage);
+		result_map[start] = result;
+	}
+
+	return result_map;
 }
