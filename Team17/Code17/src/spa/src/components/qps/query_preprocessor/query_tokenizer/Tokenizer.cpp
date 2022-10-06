@@ -238,15 +238,6 @@ bool Tokenizer::isIdentity(std::string s) {
     return false;
 }
 
-bool isExpressionName(std::string s) {
-    for (auto character : s) {
-        if (!isalpha(character)) {
-            return false;
-        }
-    }
-    return true;
-}
-
 std::vector<std::string> Tokenizer::convertExpressionToStringVector(std::string s) {
     std::vector<std::string> expressionTokens;
     std::vector<std::string> invalidExpression;
@@ -259,20 +250,17 @@ std::vector<std::string> Tokenizer::convertExpressionToStringVector(std::string 
                     expressionTokens.push_back(temp);
                     temp.clear();
                 } else {
-                    std::cout << "INVALID EXPRESSION" << std::endl;
                     return invalidExpression;
                 }
             }
             expressionTokens.push_back(std::string(1, character));
         } else {
-            // Potential Name or Integer Token
             temp.push_back(character);
         }
     }
 
     if (!temp.empty()) {
         if (!isName(temp) && !isInteger(temp)) {
-            std::cout << "INVALID EXPRESSION" << std::endl;
             return invalidExpression;
         } else {
             expressionTokens.push_back(temp);
