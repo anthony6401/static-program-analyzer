@@ -63,13 +63,6 @@ bool Validator::selectClauseIsSemanticallyCorrect() {
 
 	std::unordered_map<std::string, DesignEntity> mappedSynonyms = this->parsedQuery.getSynonymToDesignEntityMap();
 
-	if (returnType == TokenType::BOOLEAN) {
-		// BOOLEAN used as a synonym in declaration, convert return type to SYNONYM
-		if (mappedSynonyms.find("BOOLEAN") != mappedSynonyms.end()) {
-			return true;
-		}
-	}
-
 	for (TokenObject token : returnValues) {
 		TokenType currTokenType = token.getTokenType();
 		std::string tokenValue = token.getValue();
@@ -87,8 +80,9 @@ bool Validator::selectClauseIsSemanticallyCorrect() {
 			return false;
 		}
 
+		// BOOLEAN used as a synonym in declaration, convert return type to SYNONYM
 		if (tokenValue == "BOOLEAN" && returnType == TokenType::BOOLEAN) {
-			this->parsedQuery.getSelect().setReturnTypeToSynonym();
+			this->parsedQuery.setReturnTypeToSynonym();
 		}
 
 	}

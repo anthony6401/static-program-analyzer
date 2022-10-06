@@ -143,6 +143,55 @@ TEST_CASE("Calls where both parameters are procedures") {
     REQUIRE(validatedQuery.isSemanticallyValid() == true);
 };
 
+TEST_CASE("Query returns boolean") {
+    Select select = Select(TokenType::BOOLEAN, { TokenObject(TokenType::NAME, std::string("BOOLEAN")) });
+    std::vector<SuchThat> suchThat{ SuchThat(TokenType::CALLS, TokenObject(TokenType::NAME, "p"), TokenObject(TokenType::NAME, "q")) };
+    std::vector<qps::Pattern> pattern{};
+    std::unordered_map<std::string, DesignEntity> mappedSynonyms{ {"r", DesignEntity::READ}, {"p", DesignEntity::PROCEDURE}, {"q", DesignEntity::PROCEDURE} };
+    int numOfDeclaredSynonyms = 3;
+
+    QueryObject testParsedQuery = QueryObject(select, suchThat, pattern, mappedSynonyms, numOfDeclaredSynonyms);
+
+
+    Validator validator = Validator(testParsedQuery);
+    QueryObject validatedQuery = validator.validate();
+
+    REQUIRE(validatedQuery.isSemanticallyValid() == true);
+};
+
+TEST_CASE("Query returns boolean but BOOLEAN is declared as synonym") {
+    Select select = Select(TokenType::BOOLEAN, { TokenObject(TokenType::NAME, std::string("BOOLEAN")) });
+    std::vector<SuchThat> suchThat{ SuchThat(TokenType::CALLS, TokenObject(TokenType::NAME, "p"), TokenObject(TokenType::NAME, "q")) };
+    std::vector<qps::Pattern> pattern{};
+    std::unordered_map<std::string, DesignEntity> mappedSynonyms{ {"BOOLEAN", DesignEntity::READ}, {"p", DesignEntity::PROCEDURE}, {"q", DesignEntity::PROCEDURE} };
+    int numOfDeclaredSynonyms = 3;
+
+    QueryObject testParsedQuery = QueryObject(select, suchThat, pattern, mappedSynonyms, numOfDeclaredSynonyms);
+
+
+    Validator validator = Validator(testParsedQuery);
+    QueryObject validatedQuery = validator.validate();
+
+    REQUIRE(validatedQuery.isSemanticallyValid() == true);
+    REQUIRE(validatedQuery.getSelect().getReturnType() == TokenType::SYNONYM);
+};
+
+TEST_CASE("Query returns tuple") {
+    Select select = Select(TokenType::TUPLE, { TokenObject(TokenType::NAME, std::string("r")), TokenObject(TokenType::ATTRIBUTE, std::string("r.value")) });
+    std::vector<SuchThat> suchThat{ SuchThat(TokenType::CALLS, TokenObject(TokenType::NAME, "p"), TokenObject(TokenType::NAME, "q")) };
+    std::vector<qps::Pattern> pattern{};
+    std::unordered_map<std::string, DesignEntity> mappedSynonyms{ {"r", DesignEntity::READ}, {"p", DesignEntity::PROCEDURE}, {"q", DesignEntity::PROCEDURE} };
+    int numOfDeclaredSynonyms = 3;
+
+    QueryObject testParsedQuery = QueryObject(select, suchThat, pattern, mappedSynonyms, numOfDeclaredSynonyms);
+
+
+    Validator validator = Validator(testParsedQuery);
+    QueryObject validatedQuery = validator.validate();
+
+    REQUIRE(validatedQuery.isSemanticallyValid() == true);
+};
+
 TEST_CASE("SyntaxError - query should be deemed as semantically valid") {
     QueryObject testParsedQuery = QueryObject();
 
@@ -214,6 +263,36 @@ TEST_CASE("Return type not declared - variable v; Select v1") {
 
 TEST_CASE("Return type not declared - if ifs; Select if") {
     Select select = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("if")) });
+    std::vector<SuchThat> suchThat;
+    std::vector<qps::Pattern> pattern;
+    std::unordered_map<std::string, DesignEntity> mappedSynonyms{ {"ifs", DesignEntity::IF} };
+    int numOfDeclaredSynonyms = 1;
+
+    QueryObject testParsedQuery = QueryObject(select, suchThat, pattern, mappedSynonyms, numOfDeclaredSynonyms);
+
+
+    Validator validator = Validator(testParsedQuery);
+    QueryObject validatedQuery = validator.validate();
+    REQUIRE(validatedQuery.isSemanticallyValid() == false);
+};
+
+TEST_CASE("Return type not declared - if ifs; Select <if>") {
+    Select select = Select(TokenType::TUPLE, { TokenObject(TokenType::NAME, std::string("if")) });
+    std::vector<SuchThat> suchThat;
+    std::vector<qps::Pattern> pattern;
+    std::unordered_map<std::string, DesignEntity> mappedSynonyms{ {"ifs", DesignEntity::IF} };
+    int numOfDeclaredSynonyms = 1;
+
+    QueryObject testParsedQuery = QueryObject(select, suchThat, pattern, mappedSynonyms, numOfDeclaredSynonyms);
+
+
+    Validator validator = Validator(testParsedQuery);
+    QueryObject validatedQuery = validator.validate();
+    REQUIRE(validatedQuery.isSemanticallyValid() == false);
+};
+
+TEST_CASE("Return type not declared - if ifs; Select <ifs, if>") {
+    Select select = Select(TokenType::TUPLE, { TokenObject(TokenType::NAME, std::string("ifs")), TokenObject(TokenType::NAME, std::string("if")) });
     std::vector<SuchThat> suchThat;
     std::vector<qps::Pattern> pattern;
     std::unordered_map<std::string, DesignEntity> mappedSynonyms{ {"ifs", DesignEntity::IF} };
