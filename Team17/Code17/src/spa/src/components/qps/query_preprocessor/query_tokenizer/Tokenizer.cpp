@@ -457,7 +457,6 @@ std::vector<TokenObject> Tokenizer::tokenize(std::string query) {
     }
     for (std::string s : tokenValues) {
         s = trimString(s);
-        // Token value exists in list
         if (stringToTokenMap.find(s) != stringToTokenMap.end()) {
             TokenObject object = TokenObject(stringToTokenMap[s], s);
             tokenList.push_back(object);
