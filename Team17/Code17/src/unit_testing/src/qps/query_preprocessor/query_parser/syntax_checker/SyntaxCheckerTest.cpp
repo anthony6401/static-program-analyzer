@@ -285,6 +285,18 @@ TEST_CASE("Syntactically incorrect Select with multiple synonyms") {
     REQUIRE(actualResult == false);
 };
 
+TEST_CASE("Syntactically incorrect Select with multiple return types") {
+    SelectClauseSyntaxChecker checker = SelectClauseSyntaxChecker();
+    std::vector<TokenObject> invalidSelectTokens{
+        TokenObject(TokenType::SELECT, "Select"),
+        TokenObject(TokenType::NAME, "v"),
+        TokenObject(TokenType::BOOLEAN, "BOOLEAN"),
+        TokenObject(TokenType::TUPLE, "<v>")
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(invalidSelectTokens);
+    REQUIRE(actualResult == false);
+};
+
 TEST_CASE("Syntactically incorrect Select with invalid return type") {
     SelectClauseSyntaxChecker checker = SelectClauseSyntaxChecker();
     std::vector<TokenObject> invalidSelectTokens{
