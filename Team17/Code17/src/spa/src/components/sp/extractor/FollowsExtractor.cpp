@@ -150,29 +150,6 @@ Entity* FollowsExtractor::generateEntity(SimpleToken token) {
 	if (token.type == SpTokenType::TIF) {
 		return new IfEntity(std::to_string(token.statementNumber));
 	}
-	//if (token.type == SpTokenType::TCALL) {
-	//	return new CallEntity(std::to_string(token.statementNumber));
-	//}
+	// add in call type
 	return new Entity(std::to_string(token.statementNumber)); // Should not happen
 }
-
-/*
-void FollowsExtractor::extractFollows(Extractor extractor, std::vector<SimpleToken> seriesOfStmts) {
-	while (seriesOfStmts.size() > 1) {
-		SimpleToken formerToken = seriesOfStmts.at(0);
-		SimpleToken latterToken = seriesOfStmts.at(1);
-
-		Entity* former = generateEntity(formerToken);
-		Entity* latter = generateEntity(latterToken);
-
-		FollowsRelationship* followsRelationship = new FollowsRelationship(former, latter);
-		extractor.client->storeRelationship(followsRelationship);
-
-		seriesOfStmts.erase(seriesOfStmts.begin());
-	}
-}
-
-void FollowsExtractor::extractFollowsT(Extractor extractor, std::vector<SimpleToken> seriesOfStmts) {
-	// code here
-}
-*/

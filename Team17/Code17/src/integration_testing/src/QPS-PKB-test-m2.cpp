@@ -20,7 +20,6 @@
 #include "models/Relationship/ParentRelationship.h"
 #include "models/Relationship/ParentTRelationship.h"
 #include "models/Relationship/NextRelationship.h"
-#include "models/Relationship/NextTRelationship.h"
 #include "models/Relationship/CallsRelationship.h"
 #include "models/Relationship/CallsTRelationship.h"
 #include "models/Pattern/Pattern.h"
@@ -229,89 +228,6 @@ static Relationship* nextRelationship15 = new NextRelationship(stmt14, stmt15);
 static Relationship* nextRelationship16 = new NextRelationship(stmt16, stmt17);
 static Relationship* nextRelationship17 = new NextRelationship(stmt17, stmt18);
 
-// Next* Relationship
-static Relationship* nextTRelationship1 = new NextTRelationship(stmt1, stmt2);
-static Relationship* nextTRelationship2 = new NextTRelationship(stmt1, stmt3);
-static Relationship* nextTRelationship3 = new NextTRelationship(stmt2, stmt3);
-static Relationship* nextTRelationship4 = new NextTRelationship(stmt4, stmt5);
-static Relationship* nextTRelationship5 = new NextTRelationship(stmt4, stmt6);
-static Relationship* nextTRelationship6 = new NextTRelationship(stmt4, stmt7);
-static Relationship* nextTRelationship7 = new NextTRelationship(stmt4, stmt8);
-static Relationship* nextTRelationship8 = new NextTRelationship(stmt4, stmt9);
-static Relationship* nextTRelationship9 = new NextTRelationship(stmt4, stmt10);
-static Relationship* nextTRelationship10 = new NextTRelationship(stmt4, stmt11);
-static Relationship* nextTRelationship11 = new NextTRelationship(stmt4, stmt12);
-static Relationship* nextTRelationship12 = new NextTRelationship(stmt4, stmt13);
-static Relationship* nextTRelationship13 = new NextTRelationship(stmt4, stmt14);
-static Relationship* nextTRelationship14 = new NextTRelationship(stmt4, stmt15);
-static Relationship* nextTRelationship15 = new NextTRelationship(stmt5, stmt6);
-static Relationship* nextTRelationship16 = new NextTRelationship(stmt5, stmt7);
-static Relationship* nextTRelationship17 = new NextTRelationship(stmt5, stmt8);
-static Relationship* nextTRelationship18 = new NextTRelationship(stmt5, stmt9);
-static Relationship* nextTRelationship19 = new NextTRelationship(stmt5, stmt10);
-static Relationship* nextTRelationship20 = new NextTRelationship(stmt5, stmt11);
-static Relationship* nextTRelationship21 = new NextTRelationship(stmt5, stmt12);
-static Relationship* nextTRelationship22 = new NextTRelationship(stmt5, stmt13);
-static Relationship* nextTRelationship23 = new NextTRelationship(stmt5, stmt14);
-static Relationship* nextTRelationship24 = new NextTRelationship(stmt5, stmt15);
-static Relationship* nextTRelationship25 = new NextTRelationship(stmt6, stmt6);
-static Relationship* nextTRelationship26 = new NextTRelationship(stmt6, stmt7);
-static Relationship* nextTRelationship27 = new NextTRelationship(stmt6, stmt8);
-static Relationship* nextTRelationship28 = new NextTRelationship(stmt6, stmt9);
-static Relationship* nextTRelationship29 = new NextTRelationship(stmt6, stmt10);
-static Relationship* nextTRelationship30 = new NextTRelationship(stmt6, stmt11);
-static Relationship* nextTRelationship31 = new NextTRelationship(stmt6, stmt12);
-static Relationship* nextTRelationship32 = new NextTRelationship(stmt6, stmt13);
-static Relationship* nextTRelationship33 = new NextTRelationship(stmt6, stmt14);
-static Relationship* nextTRelationship34 = new NextTRelationship(stmt6, stmt15);
-static Relationship* nextTRelationship35 = new NextTRelationship(stmt7, stmt6);
-static Relationship* nextTRelationship36 = new NextTRelationship(stmt7, stmt7);
-static Relationship* nextTRelationship37 = new NextTRelationship(stmt7, stmt8);
-static Relationship* nextTRelationship38 = new NextTRelationship(stmt7, stmt9);
-static Relationship* nextTRelationship39 = new NextTRelationship(stmt7, stmt10);
-static Relationship* nextTRelationship40 = new NextTRelationship(stmt7, stmt11);
-static Relationship* nextTRelationship41 = new NextTRelationship(stmt7, stmt12);
-static Relationship* nextTRelationship42 = new NextTRelationship(stmt7, stmt13);
-static Relationship* nextTRelationship43 = new NextTRelationship(stmt7, stmt14);
-static Relationship* nextTRelationship44 = new NextTRelationship(stmt7, stmt15);
-static Relationship* nextTRelationship45 = new NextTRelationship(stmt8, stmt6);
-static Relationship* nextTRelationship46 = new NextTRelationship(stmt8, stmt7);
-static Relationship* nextTRelationship47 = new NextTRelationship(stmt8, stmt8);
-static Relationship* nextTRelationship48 = new NextTRelationship(stmt8, stmt9);
-static Relationship* nextTRelationship49 = new NextTRelationship(stmt8, stmt10);
-static Relationship* nextTRelationship50 = new NextTRelationship(stmt8, stmt11);
-static Relationship* nextTRelationship51 = new NextTRelationship(stmt8, stmt12);
-static Relationship* nextTRelationship52 = new NextTRelationship(stmt8, stmt13);
-static Relationship* nextTRelationship53 = new NextTRelationship(stmt8, stmt14);
-static Relationship* nextTRelationship54 = new NextTRelationship(stmt8, stmt15);
-static Relationship* nextTRelationship55 = new NextTRelationship(stmt9, stmt6);
-static Relationship* nextTRelationship56 = new NextTRelationship(stmt9, stmt7);
-static Relationship* nextTRelationship57 = new NextTRelationship(stmt9, stmt8);
-static Relationship* nextTRelationship58 = new NextTRelationship(stmt9, stmt9);
-static Relationship* nextTRelationship59 = new NextTRelationship(stmt9, stmt10);
-static Relationship* nextTRelationship60 = new NextTRelationship(stmt9, stmt11);
-static Relationship* nextTRelationship61 = new NextTRelationship(stmt9, stmt12);
-static Relationship* nextTRelationship62 = new NextTRelationship(stmt9, stmt13);
-static Relationship* nextTRelationship63 = new NextTRelationship(stmt9, stmt14);
-static Relationship* nextTRelationship64 = new NextTRelationship(stmt9, stmt15);
-static Relationship* nextTRelationship65 = new NextTRelationship(stmt10, stmt11);
-static Relationship* nextTRelationship66 = new NextTRelationship(stmt10, stmt12);
-static Relationship* nextTRelationship67 = new NextTRelationship(stmt10, stmt13);
-static Relationship* nextTRelationship68 = new NextTRelationship(stmt10, stmt14);
-static Relationship* nextTRelationship69 = new NextTRelationship(stmt10, stmt15);
-static Relationship* nextTRelationship70 = new NextTRelationship(stmt11, stmt13);
-static Relationship* nextTRelationship71 = new NextTRelationship(stmt11, stmt14);
-static Relationship* nextTRelationship72 = new NextTRelationship(stmt11, stmt15);
-static Relationship* nextTRelationship73 = new NextTRelationship(stmt12, stmt13);
-static Relationship* nextTRelationship74 = new NextTRelationship(stmt12, stmt14);
-static Relationship* nextTRelationship75 = new NextTRelationship(stmt12, stmt15);
-static Relationship* nextTRelationship76 = new NextTRelationship(stmt13, stmt14);
-static Relationship* nextTRelationship77 = new NextTRelationship(stmt13, stmt15);
-static Relationship* nextTRelationship78 = new NextTRelationship(stmt14, stmt15);
-static Relationship* nextTRelationship79 = new NextTRelationship(stmt16, stmt17);
-static Relationship* nextTRelationship80 = new NextTRelationship(stmt16, stmt18);
-static Relationship* nextTRelationship81 = new NextTRelationship(stmt17, stmt18);
-
 // Calls Relationship
 static Relationship* callsRelationship1 = new CallsRelationship(procFirst, procSecond);
 static Relationship* callsRelationship2 = new CallsRelationship(procSecond, procThird);
@@ -492,88 +408,6 @@ static int initPKB() {
     pkb_m2->storeRelationship(nextRelationship16);
     pkb_m2->storeRelationship(nextRelationship17);
 
-    pkb_m2->storeRelationship(nextTRelationship1);
-    pkb_m2->storeRelationship(nextTRelationship2);
-    pkb_m2->storeRelationship(nextTRelationship3);
-    pkb_m2->storeRelationship(nextTRelationship4);
-    pkb_m2->storeRelationship(nextTRelationship5);
-    pkb_m2->storeRelationship(nextTRelationship6);
-    pkb_m2->storeRelationship(nextTRelationship7);
-    pkb_m2->storeRelationship(nextTRelationship8);
-    pkb_m2->storeRelationship(nextTRelationship9);
-    pkb_m2->storeRelationship(nextTRelationship10);
-    pkb_m2->storeRelationship(nextTRelationship11);
-    pkb_m2->storeRelationship(nextTRelationship12);
-    pkb_m2->storeRelationship(nextTRelationship13);
-    pkb_m2->storeRelationship(nextTRelationship14);
-    pkb_m2->storeRelationship(nextTRelationship15);
-    pkb_m2->storeRelationship(nextTRelationship16);
-    pkb_m2->storeRelationship(nextTRelationship17);
-    pkb_m2->storeRelationship(nextTRelationship18);
-    pkb_m2->storeRelationship(nextTRelationship19);
-    pkb_m2->storeRelationship(nextTRelationship20);
-    pkb_m2->storeRelationship(nextTRelationship21);
-    pkb_m2->storeRelationship(nextTRelationship22);
-    pkb_m2->storeRelationship(nextTRelationship23);
-    pkb_m2->storeRelationship(nextTRelationship24);
-    pkb_m2->storeRelationship(nextTRelationship25);
-    pkb_m2->storeRelationship(nextTRelationship26);
-    pkb_m2->storeRelationship(nextTRelationship27);
-    pkb_m2->storeRelationship(nextTRelationship28);
-    pkb_m2->storeRelationship(nextTRelationship29);
-    pkb_m2->storeRelationship(nextTRelationship30);
-    pkb_m2->storeRelationship(nextTRelationship31);
-    pkb_m2->storeRelationship(nextTRelationship32);
-    pkb_m2->storeRelationship(nextTRelationship33);
-    pkb_m2->storeRelationship(nextTRelationship34);
-    pkb_m2->storeRelationship(nextTRelationship35);
-    pkb_m2->storeRelationship(nextTRelationship36);
-    pkb_m2->storeRelationship(nextTRelationship37);
-    pkb_m2->storeRelationship(nextTRelationship38);
-    pkb_m2->storeRelationship(nextTRelationship39);
-    pkb_m2->storeRelationship(nextTRelationship40);
-    pkb_m2->storeRelationship(nextTRelationship41);
-    pkb_m2->storeRelationship(nextTRelationship42);
-    pkb_m2->storeRelationship(nextTRelationship43);
-    pkb_m2->storeRelationship(nextTRelationship44);
-    pkb_m2->storeRelationship(nextTRelationship45);
-    pkb_m2->storeRelationship(nextTRelationship46);
-    pkb_m2->storeRelationship(nextTRelationship47);
-    pkb_m2->storeRelationship(nextTRelationship48);
-    pkb_m2->storeRelationship(nextTRelationship49);
-    pkb_m2->storeRelationship(nextTRelationship50);
-    pkb_m2->storeRelationship(nextTRelationship51);
-    pkb_m2->storeRelationship(nextTRelationship52);
-    pkb_m2->storeRelationship(nextTRelationship53);
-    pkb_m2->storeRelationship(nextTRelationship54);
-    pkb_m2->storeRelationship(nextTRelationship55);
-    pkb_m2->storeRelationship(nextTRelationship56);
-    pkb_m2->storeRelationship(nextTRelationship57);
-    pkb_m2->storeRelationship(nextTRelationship58);
-    pkb_m2->storeRelationship(nextTRelationship59);
-    pkb_m2->storeRelationship(nextTRelationship60);
-    pkb_m2->storeRelationship(nextTRelationship61);
-    pkb_m2->storeRelationship(nextTRelationship62);
-    pkb_m2->storeRelationship(nextTRelationship63);
-    pkb_m2->storeRelationship(nextTRelationship64);
-    pkb_m2->storeRelationship(nextTRelationship65);
-    pkb_m2->storeRelationship(nextTRelationship66);
-    pkb_m2->storeRelationship(nextTRelationship67);
-    pkb_m2->storeRelationship(nextTRelationship68);
-    pkb_m2->storeRelationship(nextTRelationship69);
-    pkb_m2->storeRelationship(nextTRelationship70);
-    pkb_m2->storeRelationship(nextTRelationship71);
-    pkb_m2->storeRelationship(nextTRelationship72);
-    pkb_m2->storeRelationship(nextTRelationship73);
-    pkb_m2->storeRelationship(nextTRelationship74);
-    pkb_m2->storeRelationship(nextTRelationship75);
-    pkb_m2->storeRelationship(nextTRelationship76);
-    pkb_m2->storeRelationship(nextTRelationship77);
-    pkb_m2->storeRelationship(nextTRelationship78);
-    pkb_m2->storeRelationship(nextTRelationship79);
-    pkb_m2->storeRelationship(nextTRelationship80);
-    pkb_m2->storeRelationship(nextTRelationship81);
-
     pkb_m2->storeRelationship(callsRelationship1);
     pkb_m2->storeRelationship(callsRelationship2);
 
@@ -606,6 +440,8 @@ TEST_CASE("Calls queries") {
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"Third", "Second", "First"};
         QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
         REQUIRE(testResults == expectedResults);
     }
 
@@ -615,6 +451,8 @@ TEST_CASE("Calls queries") {
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"Second", "First"};
         QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
         REQUIRE(testResults == expectedResults);
     }
 
@@ -663,6 +501,8 @@ TEST_CASE("Calls queries") {
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"8", "3"};
         QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
         REQUIRE(testResults == expectedResults);
     }
 
@@ -710,6 +550,8 @@ TEST_CASE("Calls* queries") {
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"Third", "Second", "First"};
         QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
         REQUIRE(testResults == expectedResults);
     }
 
@@ -719,6 +561,8 @@ TEST_CASE("Calls* queries") {
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"Third", "Second", "First"};
         QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
         REQUIRE(testResults == expectedResults);
     }
 
@@ -728,6 +572,8 @@ TEST_CASE("Calls* queries") {
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"Second", "Third"};
         QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
         REQUIRE(testResults == expectedResults);
     }
 
@@ -737,6 +583,8 @@ TEST_CASE("Calls* queries") {
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = { "Second", "Third" };
         QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
         REQUIRE(testResults == expectedResults);
     }
 
@@ -746,6 +594,8 @@ TEST_CASE("Calls* queries") {
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = { "Third", "Second", "First" };
         QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
         REQUIRE(testResults == expectedResults);
     }
 
@@ -793,6 +643,8 @@ TEST_CASE("Next queries") {
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"Third", "Second", "First"};
         QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
         REQUIRE(testResults == expectedResults);
     }
 
@@ -813,6 +665,8 @@ TEST_CASE("Next* queries") {
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"14", "13", "15", "12", "11", "9", "7"};
         QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
         REQUIRE(testResults == expectedResults);
     }
 
@@ -852,6 +706,8 @@ TEST_CASE("Multi-clause queries") {
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"14", "12", "11", "6", "9", "13", "10", "8", "7"};
         QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
         REQUIRE(testResults == expectedResults);
     }
 
@@ -906,6 +762,8 @@ TEST_CASE("Multi-clause queries") {
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = { "7", "9" };
         QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
         REQUIRE(testResults == expectedResults);
     }
 
@@ -1039,4 +897,6 @@ TEST_CASE("TUPLE queries") {
         QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
         REQUIRE(testResults == expectedResults);
     }
+}
+
 }

@@ -12,7 +12,6 @@ enum class SpTokenType {
     TWHILE,
     TIF,
     TASSIGN,
-    TCONDEXPR,
     TVARIABLE,
     TCONSTANT,
     TCLOSE,
@@ -26,6 +25,7 @@ class Extractor;
 
 class SimpleToken {
 public:
+    SimpleToken();
     SimpleToken(SpTokenType type, std::string value, int statementNumber);
     SpTokenType type;
     int statementNumber;

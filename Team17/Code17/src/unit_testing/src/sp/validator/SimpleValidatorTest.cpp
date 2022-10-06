@@ -42,3 +42,44 @@ TEST_CASE("valid center") {
     REQUIRE(SimpleValidator::isAndOrCenter(tstrings, 5));
     REQUIRE(!(SimpleValidator::isAndOrCenter(tstrings, 7)));
 }
+
+TEST_CASE("Not cyclic calls") {
+    std::multimap<std::string, std::string> callProcedures = {
+        {"proc1", "proc2"},
+        {"proc1", "proc3"},
+        {"proc2", "proc3"}
+    };
+    std::set<std::string> procedures = {"proc1", "proc2", "proc3"};
+    REQUIRE(SimpleValidator::isValidCalls(callProcedures, procedures));
+}
+
+TEST_CASE("Is cyclic calls") {
+    std::multimap<std::string, std::string> callProcedures = {
+        {"proc1", "proc2"},
+        {"proc1", "proc3"},
+        {"proc2", "proc3"},
+        {"proc3", "proc1"}
+    };
+    std::set<std::string> procedures = { "proc1", "proc2", "proc3" };
+    REQUIRE(!(SimpleValidator::isValidCalls(callProcedures, procedures)));
+}
+
+TEST_CASE("Multiple cyclic calls") {
+    std::multimap<std::string, std::string> callProcedures = {
+        {"proc1", "proc2"},
+        {"proc1", "proc3"},
+        {"proc2", "proc3"},
+        {"proc3", "proc1"},
+        {"proc2", "proc1"}
+    };
+    std::set<std::string> procedures = { "proc1", "proc2", "proc3" };
+    REQUIRE(!(SimpleValidator::isValidCalls(callProcedures, procedures)));
+}
+
+TEST_CASE("Rcursive calls") {
+    std::multimap<std::string, std::string> callProcedures = {
+        {"proc1", "proc1"}
+    };
+    std::set<std::string> procedures = { "proc1"};
+    REQUIRE(!(SimpleValidator::isValidCalls(callProcedures, procedures)));
+}

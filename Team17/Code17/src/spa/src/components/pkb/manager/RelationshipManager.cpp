@@ -14,7 +14,6 @@
 #include "components/pkb/storage/RelationshipStorage/CallsRelationshipStorage.h"
 #include "components/pkb/storage/RelationshipStorage/CallsTRelationshipStorage.h"
 #include "components/pkb/storage/RelationshipStorage/NextRelationshipStorage.h"
-#include "components/pkb/storage/RelationshipStorage/NextTRelationshipStorage.h"
 
 #include "models/Entity/DesignEntity.h"
 
@@ -32,7 +31,8 @@ RelationshipManager::RelationshipManager() {
 	CallsRelationshipStorage* callsRelStorage = new CallsRelationshipStorage();
 	CallsTRelationshipStorage* callsTRelStorage = new CallsTRelationshipStorage();
 	NextRelationshipStorage* nextRelStorage = new NextRelationshipStorage();
-	NextTRelationshipStorage* nextTRelStorage = new NextTRelationshipStorage();
+
+	this->nextStorage = nextRelStorage;
 
 	relStorages.push_back(modifyRelStorage);
 	relStorages.push_back(usesRelStorage);
@@ -43,7 +43,6 @@ RelationshipManager::RelationshipManager() {
 	relStorages.push_back(callsRelStorage);
 	relStorages.push_back(callsTRelStorage);
 	relStorages.push_back(nextRelStorage);
-	relStorages.push_back(nextTRelStorage);
 }
 
 std::vector<RelationshipStorage*> RelationshipManager::getRelationshipStorage() {
@@ -112,4 +111,21 @@ bool RelationshipManager::storeRelationship(Relationship* rel) {
 	}
 
 	return ret;
+}
+
+bool RelationshipManager::getNextTRelationship(TokenObject firstArgument, TokenObject secondArgument) {
+	return nextStorage->getNextTRelationship(firstArgument, secondArgument);
+}
+
+std::unordered_set<std::string> RelationshipManager::getNextTRelationshipByFirst(TokenObject firstArgument, std::unordered_set<std::string>& filter) {
+	return nextStorage->getNextTRelationshipByFirst(firstArgument, filter);
+}
+
+std::unordered_set<std::string> RelationshipManager::getNextTRelationshipBySecond(TokenObject secondArgument, std::unordered_set<std::string>& filter) {
+	return nextStorage->getNextTRelationshipBySecond(secondArgument, filter);
+}
+
+std::unordered_map<std::string, std::unordered_set<std::string>> RelationshipManager::getAllNextTRelationship(DesignEntity returnType1, 
+																										std::unordered_set<std::string>& filter) {
+	return nextStorage->getAllNextTRelationship(returnType1, filter);
 }
