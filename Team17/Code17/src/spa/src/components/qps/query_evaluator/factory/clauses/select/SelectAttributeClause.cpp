@@ -8,8 +8,17 @@ SelectAttributeClause::SelectAttributeClause(TokenObject selectSynonym, std::str
         : selectSynonym(selectSynonym), attributeName(attributeName), synonymsInTable(synonymsInTable), synonymToDesignEntityMap(synonymToDesignEntityMap), qpsClient(qpsClient) {}
 
 ResultTable SelectAttributeClause::evaluateClause() {
-
+    // Evaluate all synonyms
+    std::string selectSynonymValue = selectSynonym.getValue();
+    ResultTable resultTable;
+    DesignEntity returnType = synonymToDesignEntityMap[selectSynonymValue];
+    std::unordered_set<std::string> results = qpsClient.getAllEntity(returnType);
+    // Select synonym found -> evaluate by attribute name
+    if (synonymsInTable.find(selectSynonymValue) != synonymsInTable.end()) {
+    }
+    return resultTable;
 }
+
 
 size_t SelectAttributeClause::getNumberOfSynonyms() {
     return 1;
