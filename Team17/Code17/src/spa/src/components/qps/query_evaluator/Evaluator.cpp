@@ -34,9 +34,9 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
 
         synonymsInTable = {evaluatedResults.synonymsList.begin(), evaluatedResults.synonymsList.end()};
         selectClause = ClauseCreator::createClause(select, synonymsInTable, synonymToDesignEntityMap, qpsClient);
-        // check select clause attribute
         ResultTable selectTable = selectClause -> evaluateClause();
         evaluatedResults.combineResult(selectTable);
+        // std::cout << "evaluated results aft combining: " << evaluatedResults.getHasAlternativeAttributeName() << std::endl;
         Evaluator::populateResultsList(evaluatedResults, select, results, qpsClient);
     }
 }

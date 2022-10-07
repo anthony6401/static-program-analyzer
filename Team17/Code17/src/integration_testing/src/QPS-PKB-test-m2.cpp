@@ -899,3 +899,14 @@ TEST_CASE("TUPLE queries") {
     }
 }
 
+//TEST_CASE("Attribute queries - non alternate attribute names") {
+//    SECTION("Attribute Test 1") {
+//        std::string testQuery = "procedure p, p1;\n "
+//                                "Select p.procName such that Calls(p, p1)";
+//        std::list<std::string> testResults;
+//        std::list<std::string> expectedResults = { "First", "Second" };
+//        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+//        REQUIRE(testResults == expectedResults);
+//    }
+//}
+
