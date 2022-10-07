@@ -574,21 +574,21 @@ TEST_CASE("Valid Attributes Tests") {
         REQUIRE(testResult == expectedResult);
     }
 
-//    SECTION("Test 9") {
-//        std::string testQuery = "constant c;\n"
-//                                "Select procName.  \n\t\v\r varName pattern a1 (\"x\" , \"1\")";
-//        std::vector<TokenObject> expectedResult {constantTokenObject, c_nameTokenObject, semicolonTokenObject,
-//                                                 selectTokenObject, attributeTokenObject4, patternTokenObject, a1_nameTokenObject,
-//                                                 openBracketTokenObject, x_nameWithQuotesTokenObject, commaTokenObject,
-//                                                 one_constantExpressionTokenObject, closedBracketTokenObject};
-//        Tokenizer tokenizer = Tokenizer();
-//        std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
-//        REQUIRE(testResult == expectedResult);
-//    }
+    SECTION("Test 9") {
+        std::string testQuery = "constant c;\n"
+                                "Select procName .  \n varName pattern a1 (\"x\" , \"1\")";
+        std::vector<TokenObject> expectedResult {constantTokenObject, c_nameTokenObject, semicolonTokenObject,
+                                                 selectTokenObject, attributeTokenObject4, patternTokenObject, a1_nameTokenObject,
+                                                 openBracketTokenObject, x_nameWithQuotesTokenObject, commaTokenObject,
+                                                 one_constantExpressionTokenObject, closedBracketTokenObject};
+        Tokenizer tokenizer = Tokenizer();
+        std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
+        REQUIRE(testResult == expectedResult);
+    }
 
     SECTION("Test 10") {
         std::string testQuery = "constant c;\n"
-                                "Select procName \n\t\v\r . varName pattern a1 (\"x\" , \"1\")";
+                                "Select procName \n\t\v\r\f . varName pattern a1 (\"x\" , \"1\")";
         std::vector<TokenObject> expectedResult {constantTokenObject, c_nameTokenObject, semicolonTokenObject,
                                                  selectTokenObject, attributeTokenObject4, patternTokenObject, a1_nameTokenObject,
                                                  openBracketTokenObject, x_nameWithQuotesTokenObject, commaTokenObject,

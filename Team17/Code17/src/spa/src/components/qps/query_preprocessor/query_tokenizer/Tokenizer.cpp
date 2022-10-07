@@ -179,7 +179,7 @@ std::vector<std::string> splitQuery(std::string query) {
             default: break;
         }
 
-        if (c != ' ') {
+        if (c != ' ' && !isEmptySpace(c)) {
             char_output.push_back(c);
             if (isAttribute && c != '.') {
                 isAttribute = charTypeToggler(isAttribute);
