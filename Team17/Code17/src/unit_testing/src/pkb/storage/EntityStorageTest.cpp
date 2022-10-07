@@ -32,13 +32,13 @@ TEST_CASE("Assign Entity Storage Test") {
 	REQUIRE(!assignEntityStorage->storeEntity(whileEntity));
 
 	// Check size to make sure only the correct entity is stored
-	REQUIRE(assignEntityStorage->getSize() == 1);
+	REQUIRE(assignEntityStorage->getAllEntity(DesignEntity::ASSIGN).size() == 1);
 
 	// Storing second correct entity
 	REQUIRE(assignEntityStorage->storeEntity(assignEntityTwo));
 
 	// Check size to make sure both of the correct entities is stored
-	REQUIRE(assignEntityStorage->getSize() == 2);
+	REQUIRE(assignEntityStorage->getAllEntity(DesignEntity::ASSIGN).size() == 2);
 
 	// Get Set based on TokenType
 	std::unordered_set<std::string> assignSet = assignEntityStorage->getAllEntity(DesignEntity::ASSIGN);
@@ -91,13 +91,13 @@ TEST_CASE("Constant Entity Storage Test") {
 	REQUIRE(!constantEntityStorage->storeEntity(whileEntity));
 
 	// Check size to make sure only the correct entity is stored
-	REQUIRE(constantEntityStorage->getSize() == 1);
+	REQUIRE(constantEntityStorage->getAllEntity(DesignEntity::CONSTANT).size() == 1);
 
 	// Storing second correct entity
 	REQUIRE(constantEntityStorage->storeEntity(constantEntityTwo));
 
 	// Check size to make sure both of the correct entities is stored
-	REQUIRE(constantEntityStorage->getSize() == 2);
+	REQUIRE(constantEntityStorage->getAllEntity(DesignEntity::CONSTANT).size() == 2);
 
 	// Get Set based on TokenType
 	std::unordered_set<std::string> assignSet = constantEntityStorage->getAllEntity(DesignEntity::ASSIGN);
@@ -149,13 +149,13 @@ TEST_CASE("Call Entity Storage Test") {
 	REQUIRE(!callEntityStorage->storeEntity(whileEntity));
 
 	// Check size to make sure only the correct entity is stored
-	REQUIRE(callEntityStorage->getSize() == 1);
+	REQUIRE(callEntityStorage->getAllEntity(DesignEntity::CALL).size() == 1);
 
 	// Storing second correct entity
 	REQUIRE(callEntityStorage->storeEntity(callEntityTwo));
 
 	// Check size to make sure both of the correct entities is stored
-	REQUIRE(callEntityStorage->getSize() == 2);
+	REQUIRE(callEntityStorage->getAllEntity(DesignEntity::CALL).size() == 2);
 
 	// Get Set based on TokenType
 	std::unordered_set<std::string> assignSet = callEntityStorage->getAllEntity(DesignEntity::ASSIGN);
@@ -207,14 +207,14 @@ TEST_CASE("If Entity Storage Test") {
 	REQUIRE(!ifEntityStorage->storeEntity(whileEntity));
 
 	// Check size to make sure only the correct entity is stored
-	REQUIRE(ifEntityStorage->getSize() == 1);
+	REQUIRE(ifEntityStorage->getAllEntity(DesignEntity::IF).size() == 1);
 
 	// Storing second correct entity
 	REQUIRE(ifEntityStorage->storeEntity(ifEntityTwo));
 
 
 	// Check size to make sure both of the correct entities is stored
-	REQUIRE(ifEntityStorage->getSize() == 2);
+	REQUIRE(ifEntityStorage->getAllEntity(DesignEntity::IF).size() == 2);
 
 	// Get Set based on TokenType
 	std::unordered_set<std::string> assignSet = ifEntityStorage->getAllEntity(DesignEntity::ASSIGN);
@@ -266,13 +266,13 @@ TEST_CASE("print Entity Storage Test") {
 	REQUIRE(!printEntityStorage->storeEntity(whileEntity));
 
 	// Check size to make sure only the correct entity is stored
-	REQUIRE(printEntityStorage->getSize() == 1);
+	REQUIRE(printEntityStorage->getAllEntity(DesignEntity::PRINT).size() == 1);
 
 	// Storing second correct entity
 	REQUIRE(printEntityStorage->storeEntity(printEntityTwo));
 
 	// Check size to make sure both of the correct entities is stored
-	REQUIRE(printEntityStorage->getSize() == 2);
+	REQUIRE(printEntityStorage->getAllEntity(DesignEntity::PRINT).size() == 2);
 
 	// Get Set based on TokenType
 	std::unordered_set<std::string> assignSet = printEntityStorage->getAllEntity(DesignEntity::ASSIGN);
@@ -324,13 +324,13 @@ TEST_CASE("Procedure Entity Storage Test") {
 	REQUIRE(!procedureEntityStorage->storeEntity(whileEntity));
 
 	// Check size to make sure only the correct entity is stored
-	REQUIRE(procedureEntityStorage->getSize() == 1);
+	REQUIRE(procedureEntityStorage->getAllEntity(DesignEntity::PROCEDURE).size() == 1);
 
 	// Storing second correct entity
 	REQUIRE(procedureEntityStorage->storeEntity(procedureEntityTwo));
 
 	// Check size to make sure both of the correct entities is stored
-	REQUIRE(procedureEntityStorage->getSize() == 2);
+	REQUIRE(procedureEntityStorage->getAllEntity(DesignEntity::PROCEDURE).size() == 2);
 
 	// Get Set based on TokenType
 	std::unordered_set<std::string> assignSet = procedureEntityStorage->getAllEntity(DesignEntity::ASSIGN);
@@ -382,13 +382,13 @@ TEST_CASE("Read Entity Storage Test") {
 	REQUIRE(!readEntityStorage->storeEntity(whileEntity));
 
 	// Check size to make sure only the correct entity is stored
-	REQUIRE(readEntityStorage->getSize() == 1);
+	REQUIRE(readEntityStorage->getAllEntity(DesignEntity::READ).size() == 1);
 
 	// Storing second correct entity
 	REQUIRE(readEntityStorage->storeEntity(readEntityTwo));
 
 	// Check size to make sure both of the correct entities is stored
-	REQUIRE(readEntityStorage->getSize() == 2);
+	REQUIRE(readEntityStorage->getAllEntity(DesignEntity::READ).size() == 2);
 
 	// Get Set based on TokenType
 	std::unordered_set<std::string> assignSet = readEntityStorage->getAllEntity(DesignEntity::ASSIGN);
@@ -440,13 +440,13 @@ TEST_CASE("Variable Entity Storage Test") {
 	REQUIRE(!variableEntityStorage->storeEntity(whileEntity));
 
 	// Check size to make sure only the correct entity is stored
-	REQUIRE(variableEntityStorage->getSize() == 1);
+	REQUIRE(variableEntityStorage->getAllEntity(DesignEntity::VARIABLE).size() == 1);
 
 	// Storing second correct entity
 	REQUIRE(variableEntityStorage->storeEntity(variableEntityTwo));
 
 	// Check size to make sure both of the correct entities is stored
-	REQUIRE(variableEntityStorage->getSize() == 2);
+	REQUIRE(variableEntityStorage->getAllEntity(DesignEntity::VARIABLE).size() == 2);
 
 	// Get Set based on TokenType
 	std::unordered_set<std::string> assignSet = variableEntityStorage->getAllEntity(DesignEntity::ASSIGN);
@@ -498,13 +498,13 @@ TEST_CASE("While Entity Storage Test") {
 	REQUIRE(!whileEntityStorage->storeEntity(variableEntity));
 	
 	// Check size to make sure only the correct entity is stored
-	REQUIRE(whileEntityStorage->getSize() == 1);
+	REQUIRE(whileEntityStorage->getAllEntity(DesignEntity::WHILE).size() == 1);
 
 	// Storing second correct entity
 	REQUIRE(whileEntityStorage->storeEntity(whileEntityTwo));
 
 	// Check size to make sure both of the correct entities is stored
-	REQUIRE(whileEntityStorage->getSize() == 2);
+	REQUIRE(whileEntityStorage->getAllEntity(DesignEntity::WHILE).size() == 2);
 
 	// Get Set based on TokenType
 	std::unordered_set<std::string> assignSet = whileEntityStorage->getAllEntity(DesignEntity::ASSIGN);
@@ -556,7 +556,7 @@ TEST_CASE("Statement Entity Storage Test") {
 	REQUIRE(!statementEntityStorage->storeEntity(variableEntity));
 
 	// Check size to make sure only all the correct entities is stored
-	REQUIRE(statementEntityStorage->getSize() == 6);
+	REQUIRE(statementEntityStorage->getAllEntity(DesignEntity::STMT).size() == 6);
 
 	// Storing correct entities for the second insertion of the same type
 	REQUIRE(statementEntityStorage->storeEntity(assignEntityTwo));
@@ -567,7 +567,7 @@ TEST_CASE("Statement Entity Storage Test") {
 	REQUIRE(statementEntityStorage->storeEntity(whileEntityTwo));
 
 	// Check size to make sure all the correct entities is stored after the second insertion
-	REQUIRE(statementEntityStorage->getSize() == 12);
+	REQUIRE(statementEntityStorage->getAllEntity(DesignEntity::STMT).size() == 12);
 
 	// Storing some of the correct entities to check whether different entities with the same value will not overlap
 	REQUIRE(statementEntityStorage->storeEntity(assignEntityThree));

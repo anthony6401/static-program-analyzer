@@ -32,14 +32,14 @@ PKB* pkb_m2 = new PKB();
 auto qpsClient_m2 = QPSClient(pkb_m2);
 
 // Stmt Entity
-static Entity* stmt1 = new ReadEntity("1");
-static Entity* stmt2 = new ReadEntity("2");
-static Entity* stmt3 = new CallEntity("3");
+static Entity* stmt1 = new ReadEntity("1", "x");
+static Entity* stmt2 = new ReadEntity("2", "z");
+static Entity* stmt3 = new CallEntity("3", "Second");
 static Entity* stmt4 = new AssignEntity("4");
 static Entity* stmt5 = new AssignEntity("5");
 static Entity* stmt6 = new WhileEntity("6");
 static Entity* stmt7 = new AssignEntity("7");
-static Entity* stmt8 = new CallEntity("8");
+static Entity* stmt8 = new CallEntity("8", "Third");
 static Entity* stmt9 = new AssignEntity("9");
 static Entity* stmt10 = new IfEntity("10");
 static Entity* stmt11 = new AssignEntity("11");
@@ -49,7 +49,7 @@ static Entity* stmt14 = new AssignEntity("14");
 static Entity* stmt15 = new AssignEntity("15");
 static Entity* stmt16 = new AssignEntity("16");
 static Entity* stmt17 = new AssignEntity("17");
-static Entity* stmt18 = new PrintEntity("18");
+static Entity* stmt18 = new PrintEntity("18", "v");
 
 // Proc Entity
 static Entity* procFirst = new ProcedureEntity("First");
