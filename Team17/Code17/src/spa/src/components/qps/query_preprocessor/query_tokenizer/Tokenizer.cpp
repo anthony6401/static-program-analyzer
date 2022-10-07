@@ -91,6 +91,23 @@ bool charTypeToggler(bool isCharType) {
     return !isCharType;
 }
 
+bool isEmptySpace(char character) {
+    std::vector<char> emptyCharVector = {' ', '\n', '\t', '\v', '\f', '\r'};
+    bool isEmpty = std::count(emptyCharVector.begin(), emptyCharVector.end(), character);
+    return isEmpty;
+}
+
+void removeDelimiter(std::vector<char> &char_output, char delimiter) {
+    int currLength = char_output.size() - 1;
+    for (int i = currLength; i >= 0; i--) {
+        if (char_output[i] == delimiter || isEmptySpace(char_output[i])) {
+            char_output.erase(char_output.begin() + i);
+        } else {
+            break;
+        }
+    }
+}
+
 std::vector<std::string> splitQuery(std::string query) {
     std::vector<char> char_output;
     char delimiter = '|';
@@ -124,6 +141,10 @@ std::vector<std::string> splitQuery(std::string query) {
                 }
                 break;
             case '=':
+                if (!isTuple) {
+                    char_output.push_back(delimiter);
+                }
+                break;
             case ';':
                 if (!isTuple) {
                     char_output.push_back(delimiter);
@@ -153,6 +174,8 @@ std::vector<std::string> splitQuery(std::string query) {
                 break;
             case '.':
                 isAttribute = charTypeToggler(isAttribute);
+                removeDelimiter(char_output, delimiter);
+                break;
             default: break;
         }
 
