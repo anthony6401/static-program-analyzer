@@ -85,6 +85,10 @@ std::vector<std::pair<std::string, std::string>> PKB::getPatternPair(DesignEntit
 	return patternManager->getPatternPair(designEntity, secondArgument);
 }
 
+std::unordered_set<std::string> PKB::getStatementMapping(std::unordered_set<std::string>& stmtSet, DesignEntity entityType) {
+	return entityManager->getStatementMapping(stmtSet, entityType);
+}
+
 EntityManager* PKB::getEntityManager() {
 	return entityManager;
 }

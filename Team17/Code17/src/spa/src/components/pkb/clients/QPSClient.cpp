@@ -38,3 +38,6 @@ std::vector<std::pair<std::string, std::string>> QPSClient::getPatternPair(Desig
 	return pkb->getPatternPair(designEntity, secondArgument);
 }
 
+std::unordered_set<std::string> QPSClient::getStatementMapping(std::unordered_set<std::string>& stmtSet, DesignEntity entityType) {
+	return pkb->getStatementMapping(stmtSet, entityType);
+}
