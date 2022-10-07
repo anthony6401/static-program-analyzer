@@ -10,22 +10,25 @@ SelectAttributeClause::SelectAttributeClause(TokenObject selectSynonym, std::str
 ResultTable SelectAttributeClause::evaluateClause() {
     // Evaluate all synonyms
     std::string selectSynonymValue = selectSynonym.getValue();
+    DesignEntity returnType = synonymToDesignEntityMap[selectSynonymValue];
     ResultTable resultTable;
 
-    // evaluate by attribute name
     if (synonymsInTable.find(selectSynonymValue) != synonymsInTable.end()) {
-
+        if (checkIsAlternateAttributeName(returnType, attributeName)) {
+            resultTable.setHasAlternativeAttributeNameToTrue();
+            return resultTable;
+        }
+        return resultTable;
     } else {
-        DesignEntity returnType = synonymToDesignEntityMap[selectSynonymValue];
         // evaluate by synonym
         std::unordered_set<std::string> results = qpsClient.getAllEntity(returnType);
-        // evaluate by attribute
+        resultTable = std::move(ResultTable(selectSynonymValue, results));
+        return resultTable;
     }
-    return resultTable;
 }
 
 
-bool SelectAttributeClause::isAlternateAttributeName(DesignEntity returnType, std::string attributeName) {
+bool SelectAttributeClause::checkIsAlternateAttributeName(DesignEntity returnType, std::string attributeName) {
     // Default returned values are statement numbers
     if (returnType == DesignEntity::CALL || returnType == DesignEntity::READ || returnType == DesignEntity::PRINT) {
         if (attributeName == "procName" || attributeName == "varName") {

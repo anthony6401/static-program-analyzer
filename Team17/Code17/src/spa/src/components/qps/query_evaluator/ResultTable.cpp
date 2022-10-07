@@ -53,6 +53,14 @@ void ResultTable::setIsFalseResultToTrue() {
     isFalseResult = true;
 }
 
+void ResultTable::setHasAlternativeAttributeNameToTrue() {
+    hasAlternativeAttributeName = true;
+}
+
+bool ResultTable::getHasAlternativeAttributeName() {
+    return hasAlternativeAttributeName;
+}
+
 std::unordered_set<std::string> ResultTable::getSynonymResultsToBePopulated(std::string selectSynonym) {
     std::unordered_set<std::string> result({});
     auto iterator = std::find(synonymsList.begin(), synonymsList.end(), selectSynonym);
@@ -115,10 +123,18 @@ void ResultTable::filterBySelectSynonym(std::set<std::string> &&synonyms) {
     resultsList = std::move(newResultsList);
 }
 
+void ResultTable::updateHasCommonAttributeName(ResultTable &nextResult) {
+    if (nextResult.getHasAlternativeAttributeName()) {
+        setHasAlternativeAttributeNameToTrue();
+    }
+}
 
 
 // Find common synonyms and merge resultsLists
 void ResultTable::combineResult(ResultTable &nextResult) {
+
+    ResultTable::updateHasCommonAttributeName(nextResult);
+
     if (isFalseResult) {
         return;
     } else {

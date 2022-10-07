@@ -34,13 +34,17 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
 
         synonymsInTable = {evaluatedResults.synonymsList.begin(), evaluatedResults.synonymsList.end()};
         selectClause = ClauseCreator::createClause(select, synonymsInTable, synonymToDesignEntityMap, qpsClient);
+        // check select clause attribute
         ResultTable selectTable = selectClause -> evaluateClause();
         evaluatedResults.combineResult(selectTable);
         Evaluator::populateResultsList(evaluatedResults, select, results);
     }
 }
 
+
+
 void Evaluator::populateResultsList(ResultTable &evaluatedResults, Select select, std::list<std::string> &results) {
+    std::string selectSynonym = select.getReturnValues().front().getValue();
     TokenType returnType = select.getReturnType();
     if (returnType == TokenType::BOOLEAN) {
         if (evaluatedResults.getIsFalseResult()) {
@@ -52,7 +56,6 @@ void Evaluator::populateResultsList(ResultTable &evaluatedResults, Select select
         if (evaluatedResults.getIsFalseResult()) {
             return;
         } else {
-            std::string selectSynonym = select.getReturnValues().front().getValue();
             std::unordered_set<std::string> resultsToPopulate = evaluatedResults.getSynonymResultsToBePopulated(selectSynonym);
             for (std::string result : resultsToPopulate) {
                 results.emplace_back(result);
@@ -64,8 +67,16 @@ void Evaluator::populateResultsList(ResultTable &evaluatedResults, Select select
         for (std::string result : resultsToPopulate) {
             results.emplace_back(result);
         }
-    } else {
-        // Attribute result
+    } else if (returnType == TokenType::ATTRIBUTE) {
+        bool hasAlternativeAttributeName = evaluatedResults.getHasAlternativeAttributeName();
+        if (hasAlternativeAttributeName) {
+            // call pkb api
+        } else {
+            std::unordered_set<std::string> resultsToPopulate = evaluatedResults.getSynonymResultsToBePopulated(selectSynonym);
+            for (std::string result : resultsToPopulate) {
+                results.emplace_back(result);
+            }
+        }
     }
 
 }

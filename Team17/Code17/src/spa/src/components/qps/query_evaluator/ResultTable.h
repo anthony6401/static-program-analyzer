@@ -12,7 +12,7 @@ class ResultTable {
 
 private:
     bool isFalseResult = false;
-
+    bool hasAlternativeAttributeName = false;
 public:
     std::vector<std::string> synonymsList;
     std::vector<std::vector<std::string>> resultsList;
@@ -35,6 +35,9 @@ public:
     bool getIsFalseResult();
     void setIsFalseResult(bool pkbBooleanResult);
     void setIsFalseResultToTrue();
+    void setHasAlternativeAttributeNameToTrue();
+    void updateHasCommonAttributeName(ResultTable &nextResult);
+    bool getHasAlternativeAttributeName();
     bool isEmptyResult();
 };
 
