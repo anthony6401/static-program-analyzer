@@ -37,13 +37,13 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
         // check select clause attribute
         ResultTable selectTable = selectClause -> evaluateClause();
         evaluatedResults.combineResult(selectTable);
-        Evaluator::populateResultsList(evaluatedResults, select, results);
+        Evaluator::populateResultsList(evaluatedResults, select, results, qpsClient);
     }
 }
 
 
 
-void Evaluator::populateResultsList(ResultTable &evaluatedResults, Select select, std::list<std::string> &results) {
+void Evaluator::populateResultsList(ResultTable &evaluatedResults, Select select, std::list<std::string> &results, QPSClient qpsClient) {
     std::string selectSynonym = select.getReturnValues().front().getValue();
     TokenType returnType = select.getReturnType();
     if (returnType == TokenType::BOOLEAN) {
@@ -52,7 +52,9 @@ void Evaluator::populateResultsList(ResultTable &evaluatedResults, Select select
         } else {
             results.emplace_back("TRUE");
         }
-    } else if (returnType == TokenType::SYNONYM) {
+    }
+
+    if (returnType == TokenType::SYNONYM) {
         if (evaluatedResults.getIsFalseResult()) {
             return;
         } else {
@@ -61,24 +63,37 @@ void Evaluator::populateResultsList(ResultTable &evaluatedResults, Select select
                 results.emplace_back(result);
             }
         }
-    } else if (returnType == TokenType::TUPLE) {
+    }
+
+    if (returnType == TokenType::TUPLE) {
         std::vector<TokenObject> tuple = select.getReturnValues();
         std::unordered_set<std::string> resultsToPopulate = evaluatedResults.getTupleResultsToBePopulated(tuple);
         for (std::string result : resultsToPopulate) {
             results.emplace_back(result);
         }
-    } else if (returnType == TokenType::ATTRIBUTE) {
+    }
+
+    if (returnType == TokenType::ATTRIBUTE) {
+        std::unordered_set<std::string> resultsToPopulate = evaluatedResults.getSynonymResultsToBePopulated(selectSynonym);
         bool hasAlternativeAttributeName = evaluatedResults.getHasAlternativeAttributeName();
         if (hasAlternativeAttributeName) {
+            std::unordered_set<std::string> alternativeAttributeValueSet;
             // call pkb api
+            for (auto r : resultsToPopulate) {
+                std::string alternative;
+                alternativeAttributeValueSet.insert(alternative);
+            }
+
+            for (auto s : alternativeAttributeValueSet) {
+                results.emplace_back(s);
+            }
+
         } else {
-            std::unordered_set<std::string> resultsToPopulate = evaluatedResults.getSynonymResultsToBePopulated(selectSynonym);
             for (std::string result : resultsToPopulate) {
                 results.emplace_back(result);
             }
         }
     }
-
 }
 
 // Returns boolean, check for False or Empty Clauses
