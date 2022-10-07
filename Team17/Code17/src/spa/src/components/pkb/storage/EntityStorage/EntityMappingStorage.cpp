@@ -3,4 +3,4 @@
 #include <unordered_map>
 #include <string>
 
-EntityMappingStorage::EntityMappingStorage() : EntityStorage(), map(std::unordered_map<std::string, std::unordered_set<std::string>>()) {}
+EntityMappingStorage::EntityMappingStorage() : EntityStorage(), map(std::unordered_map<std::string, std::string>()) {}

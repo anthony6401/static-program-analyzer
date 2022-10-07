@@ -8,5 +8,5 @@ public:
 	EntityMappingStorage();
 	virtual std::unordered_set<std::string> getStatementMapping(std::unordered_set<std::string>& stmtSet, DesignEntity entityType) = 0;
 protected:
-	std::unordered_map<std::string, std::unordered_set<std::string>> map;
+	std::unordered_map<std::string, std::string> map;
 };

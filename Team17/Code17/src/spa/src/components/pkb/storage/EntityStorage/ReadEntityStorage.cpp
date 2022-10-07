@@ -7,7 +7,7 @@ ReadEntityStorage::ReadEntityStorage() : EntityMappingStorage() {}
 bool ReadEntityStorage::storeEntity(Entity* entity) {
 	ReadEntity* readEntity = dynamic_cast<ReadEntity*>(entity);
 	if (readEntity) {
-		return map.insert({ readEntity->getValue(), std::unordered_set<std::string>({readEntity->getValueName()}) }).second;
+		return map.insert({ readEntity->getValue(), readEntity->getValueName() }).second;
 	}
 
 	return false;
@@ -26,5 +26,16 @@ std::unordered_set<std::string> ReadEntityStorage::getAllEntity(DesignEntity ret
 }
 
 std::unordered_set<std::string> ReadEntityStorage::getStatementMapping(std::unordered_set<std::string>& stmtSet, DesignEntity entityType) {
+	if (entityType == DesignEntity::READ) {
+		std::unordered_set<std::string> result;
+		for (const auto& stmt : stmtSet) {
+			if (map.find(stmt) != map.end()) {
+				result.insert(map.find(stmt)->second);
+			}
+		}
+
+		return result;
+	}
+
 	return std::unordered_set<std::string>();
 }
