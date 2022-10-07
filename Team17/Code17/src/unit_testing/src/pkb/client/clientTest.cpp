@@ -106,6 +106,22 @@ TEST_CASE("QPS Client test") {
 	REQUIRE(qpsClient.getAllEntity(DesignEntity::VARIABLE) == var_set);
 	REQUIRE(qpsClient.getAllEntity(DesignEntity::CONSTANT) == const_set);
 
+	std::unordered_set<std::string> callSet{ call_value_one };
+	std::unordered_set<std::string> printSet{ print_value_one };
+	std::unordered_set<std::string> readSet{ read_value_one };
+
+	std::unordered_set<std::string> callMappingResult{ procedure_value_one };
+	std::unordered_set<std::string> printMappingResult{ variable_value_one };
+	std::unordered_set<std::string> readMappingResult{ variable_value_one };
+
+	std::unordered_set<std::string> callMappingTest = qpsClient.getStatementMapping(callSet, DesignEntity::CALL);
+	std::unordered_set<std::string> printMappingTest = qpsClient.getStatementMapping(printSet, DesignEntity::PRINT);
+	std::unordered_set<std::string> readMappingTest = qpsClient.getStatementMapping(readSet, DesignEntity::READ);
+
+	REQUIRE(callMappingTest == callMappingResult);
+	REQUIRE(printMappingTest == printMappingResult);
+	REQUIRE(readMappingTest == readMappingResult);
+
 	//Pattern
 	std::unordered_set<std::string> assignGetPatternNameNameOne = qpsClient.getPattern(DesignEntity::ASSIGN, assignPatternTokenObjectFirstOne, assignPatternTokenObjectSecondOne);
 	std::unordered_set<std::string> assignGetPatternNameNameTwo = qpsClient.getPattern(DesignEntity::ASSIGN, assignPatternTokenObjectFirstTwo, assignPatternTokenObjectSecondTwo);
