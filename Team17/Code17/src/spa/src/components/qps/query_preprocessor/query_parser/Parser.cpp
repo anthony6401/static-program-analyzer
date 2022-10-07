@@ -225,7 +225,7 @@ std::vector<std::vector<TokenObject>> Parser::groupQueryIntoClause() {
 		}
 
 		if (isWithClause) {
-			patternTokenObjects.push_back(token);
+			withTokenObjects.push_back(token);
 			continue;
 		}
 
@@ -482,15 +482,17 @@ std::vector<With> Parser::parseTokensIntoWithObjects(std::vector<TokenObject> wi
 				auto [attrSynonym, attrName] = parseAttributeIntoIndividualTokens(token.getValue());
 				left.push_back(attrSynonym);
 				left.push_back(attrName);
-				isLeft = false;
 
 				leftType = setTokenTypeOfAttribute(attrName.getValue());
-				continue;
+			}
+			else {
+				// Ref is either NAME_WITH_QUOTATION or INTEGER
+				left.push_back(token);
+				leftType = token.getTokenType() == TokenType::NAME_WITH_QUOTATION ? TokenType::NAME : TokenType::INTEGER;
+				isLeft = false;
 			}
 
-			// Ref is either NAME_WITH_QUOTATION or INTEGER
-			left.push_back(token);
-			leftType = token.getTokenType() == TokenType::NAME_WITH_QUOTATION ? TokenType::NAME : TokenType::INTEGER;
+			isLeft = false;
 			continue;
 		}
 
