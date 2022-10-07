@@ -1,6 +1,8 @@
 #pragma once
 #include "models/Entity/DesignEntity.h"
 #include "EntityStorage.h"
+#include <unordered_map>
+#include <unordered_set>
 
 class EntityMappingStorage : public EntityStorage {
 
