@@ -11,12 +11,28 @@ ResultTable SelectAttributeClause::evaluateClause() {
     // Evaluate all synonyms
     std::string selectSynonymValue = selectSynonym.getValue();
     ResultTable resultTable;
-    DesignEntity returnType = synonymToDesignEntityMap[selectSynonymValue];
-    std::unordered_set<std::string> results = qpsClient.getAllEntity(returnType);
-    // Select synonym found -> evaluate by attribute name
+
+    // evaluate by attribute name
     if (synonymsInTable.find(selectSynonymValue) != synonymsInTable.end()) {
+
+    } else {
+        DesignEntity returnType = synonymToDesignEntityMap[selectSynonymValue];
+        // evaluate by synonym
+        std::unordered_set<std::string> results = qpsClient.getAllEntity(returnType);
+        // evaluate by attribute
     }
     return resultTable;
+}
+
+
+bool SelectAttributeClause::isAlternateAttributeName(DesignEntity returnType, std::string attributeName) {
+    // Default returned values are statement numbers
+    if (returnType == DesignEntity::CALL || returnType == DesignEntity::READ || returnType == DesignEntity::PRINT) {
+        if (attributeName == "procName" || attributeName == "varName") {
+            return true;
+        }
+    }
+    return false;
 }
 
 
