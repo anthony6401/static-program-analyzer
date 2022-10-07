@@ -9,4 +9,6 @@ public:
 	VariableEntityStorage();
 	bool storeEntity(Entity* entity);
 	std::unordered_set<std::string> getAllEntity(DesignEntity returnType);
+protected:
+	std::unordered_set<std::string> set;
 };

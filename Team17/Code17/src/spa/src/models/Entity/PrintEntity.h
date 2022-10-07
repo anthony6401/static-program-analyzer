@@ -6,8 +6,11 @@
 
 class PrintEntity : public StatementEntity {
 public:
-	PrintEntity(std::string entityValue);
+	PrintEntity(std::string stmtNumber, std::string n);
 	bool operator==(const PrintEntity& other) const {
-		return value == other.value;
+		return (stmtNumber == other.stmtNumber) && (value == other.value);
 	}
+	std::string getStmtNumber();
+private:
+	std::string stmtNumber;
 };

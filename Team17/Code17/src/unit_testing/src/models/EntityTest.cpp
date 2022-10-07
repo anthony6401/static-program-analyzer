@@ -64,11 +64,12 @@ TEST_CASE("Statement Entity Test") {
 
 // Child of Statement Entity
 TEST_CASE("Call Entity Test") {
-	CallEntity c = CallEntity(VALUE);
+	CallEntity c = CallEntity(VALUE, "First");
 	Entity e = Entity(VALUE);
 	StatementEntity st = StatementEntity(VALUE);
 
-	REQUIRE(c.getValue() == "1");
+	REQUIRE(c.getStmtNumber() == "1");
+	REQUIRE(c.getValue() == "First");
 	REQUIRE(e == c);
 	REQUIRE(st == c);
 }
@@ -95,25 +96,26 @@ TEST_CASE("If Entity Test") {
 }
 
 TEST_CASE("Print Entity Test") {
-	PrintEntity pr = PrintEntity(VALUE);
+	PrintEntity pr = PrintEntity(VALUE, "v");
 	Entity e = Entity(VALUE);
 	StatementEntity st = StatementEntity(VALUE);
 
-	REQUIRE(pr.getValue() == "1");
+	REQUIRE(pr.getStmtNumber() == "1");
+	REQUIRE(pr.getValue() == "v");
 	REQUIRE(e == pr);
 	REQUIRE(st == pr);
 
 }
 
 TEST_CASE("Read Entity Test") {
-	ReadEntity rd = ReadEntity(VALUE);
+	ReadEntity rd = ReadEntity(VALUE, "v");
 	Entity e = Entity(VALUE);
 	StatementEntity st = StatementEntity(VALUE);
 
-	REQUIRE(rd.getValue() == "1");
+	REQUIRE(rd.getStmtNumber() == "1");
+	REQUIRE(rd.getValue() == "v");
 	REQUIRE(e == rd);
 	REQUIRE(st == rd);
-
 
 }
 
@@ -143,4 +145,3 @@ TEST_CASE("StatementList Entity Test") {
 	REQUIRE(stmtLst1 == stmtLst2);
 
 }
-

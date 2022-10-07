@@ -9,7 +9,4 @@ public:
 	EntityStorage();
 	virtual bool storeEntity(Entity* entity) = 0;
 	virtual std::unordered_set<std::string> getAllEntity(DesignEntity tokenType) = 0;
-	int getSize();
-protected:
-	std::unordered_set<std::string> set;
 };
