@@ -82,4 +82,16 @@ TEST_CASE("Entity Manager getAllEntity method test") {
 	REQUIRE(read_test == read_res);
 	REQUIRE(variable_test == variable_res);
 	REQUIRE(while_test == while_res);
+
+	std::unordered_set<std::string> callSet{ call_value_one };
+	std::unordered_set<std::string> printSet{ print_value_one };
+	std::unordered_set<std::string> readSet{ read_value_one };
+
+	std::unordered_set<std::string> callMappingResult{ procedure_value_one };
+	std::unordered_set<std::string> printMappingResult{ print_value_one };
+	std::unordered_set<std::string> readMappingResult{ read_value_one };
+
+	std::unordered_set<std::string> call_test = entityManager.getStatementMapping(callSet, DesignEntity::CALL);
+	std::unordered_set<std::string> print_test = entityManager.getStatementMapping(printSet, DesignEntity::PRINT);
+	std::unordered_set<std::string> read_test = entityManager.getStatementMapping(readSet, DesignEntity::READ);
 }
