@@ -53,7 +53,7 @@ QueryObject Parser::parse() {
 	std::vector<Pattern> patterns = parseTokensIntoPatternObjects(patternTokenObjects);
 	std::vector<With> withs = parseTokensIntoWithObjects(withTokenObjects);
 
-	return QueryObject(select, relationships, patterns, mappedSynonyms, numOfDeclaredSynonyms);
+	return QueryObject(select, relationships, patterns, withs, mappedSynonyms, numOfDeclaredSynonyms);
 };
 
 std::vector<std::vector<TokenObject>> Parser::groupQueryIntoClause() {
