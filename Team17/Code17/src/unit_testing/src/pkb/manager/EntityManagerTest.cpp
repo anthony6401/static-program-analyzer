@@ -88,10 +88,14 @@ TEST_CASE("Entity Manager getAllEntity method test") {
 	std::unordered_set<std::string> readSet{ read_value_one };
 
 	std::unordered_set<std::string> callMappingResult{ procedure_value_one };
-	std::unordered_set<std::string> printMappingResult{ print_value_one };
-	std::unordered_set<std::string> readMappingResult{ read_value_one };
+	std::unordered_set<std::string> printMappingResult{ variable_value_one };
+	std::unordered_set<std::string> readMappingResult{ variable_value_one };
 
-	std::unordered_set<std::string> call_test = entityManager.getStatementMapping(callSet, DesignEntity::CALL);
-	std::unordered_set<std::string> print_test = entityManager.getStatementMapping(printSet, DesignEntity::PRINT);
-	std::unordered_set<std::string> read_test = entityManager.getStatementMapping(readSet, DesignEntity::READ);
+	std::unordered_set<std::string> callMappingTest = entityManager.getStatementMapping(callSet, DesignEntity::CALL);
+	std::unordered_set<std::string> printMappingTest = entityManager.getStatementMapping(printSet, DesignEntity::PRINT);
+	std::unordered_set<std::string> readMappingTest = entityManager.getStatementMapping(readSet, DesignEntity::READ);
+
+	REQUIRE(callMappingTest == callMappingResult);
+	REQUIRE(printMappingTest == printMappingResult);
+	REQUIRE(readMappingTest == readMappingResult);
 }
