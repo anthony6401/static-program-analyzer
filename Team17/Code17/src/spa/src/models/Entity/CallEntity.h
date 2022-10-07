@@ -6,11 +6,11 @@
 
 class CallEntity : public StatementEntity {
 public:
-	CallEntity(std::string stmtNumber, std::string n);
+	CallEntity(std::string entityValue, std::string valueName);
 	bool operator==(const CallEntity& other) const {
-		return (stmtNumber == other.stmtNumber) && (value == other.value);
+		return (valueName == other.valueName) && (value == other.value);
 	}
-	std::string getStmtNumber();
+	std::string getValueName();
 private:
-	std::string stmtNumber;
+	std::string valueName;
 };

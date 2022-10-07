@@ -7,7 +7,7 @@ PrintEntityStorage::PrintEntityStorage() : EntityMappingStorage() {}
 bool PrintEntityStorage::storeEntity(Entity* entity) {
 	PrintEntity* printEntity = dynamic_cast<PrintEntity*>(entity);
 	if (printEntity) {
-		return map.insert({ printEntity->getStmtNumber(), std::unordered_set<std::string>({printEntity->getValue()}) }).second;
+		return map.insert({ printEntity->getValue(), std::unordered_set<std::string>({printEntity->getValueName()}) }).second;
 	}
 
 	return false;

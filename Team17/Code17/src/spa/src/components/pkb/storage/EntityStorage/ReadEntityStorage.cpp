@@ -7,7 +7,7 @@ ReadEntityStorage::ReadEntityStorage() : EntityMappingStorage() {}
 bool ReadEntityStorage::storeEntity(Entity* entity) {
 	ReadEntity* readEntity = dynamic_cast<ReadEntity*>(entity);
 	if (readEntity) {
-		return map.insert({ readEntity->getStmtNumber(), std::unordered_set<std::string>({readEntity->getValue()}) }).second;
+		return map.insert({ readEntity->getValue(), std::unordered_set<std::string>({readEntity->getValueName()}) }).second;
 	}
 
 	return false;

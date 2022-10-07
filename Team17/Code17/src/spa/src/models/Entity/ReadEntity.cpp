@@ -3,8 +3,8 @@
 
 #include <string>
 
-ReadEntity::ReadEntity(std::string stmtNumber, std::string entityValue) : StatementEntity(entityValue), stmtNumber(stmtNumber) {};
+ReadEntity::ReadEntity(std::string entityValue, std::string valueName) : StatementEntity(entityValue), valueName(valueName) {};
 
-std::string ReadEntity::getStmtNumber() {
-	return this->stmtNumber;
+std::string ReadEntity::getValueName() {
+	return this->valueName;
 }

@@ -3,8 +3,8 @@
 
 #include <string>
 
-PrintEntity::PrintEntity(std::string stmtNumber, std::string entityValue) : StatementEntity(entityValue), stmtNumber(stmtNumber) {};
+PrintEntity::PrintEntity(std::string entityValue, std::string valueName) : StatementEntity(entityValue), valueName(valueName) {};
 
-std::string PrintEntity::getStmtNumber() {
-	return this->stmtNumber;
+std::string PrintEntity::getValueName() {
+	return this->valueName;
 }

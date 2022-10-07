@@ -7,7 +7,7 @@ CallEntityStorage::CallEntityStorage() : EntityMappingStorage() {}
 bool CallEntityStorage::storeEntity(Entity* entity) {
 	CallEntity* callEntity = dynamic_cast<CallEntity*>(entity);
 	if (callEntity) {
-		return map.insert({ callEntity->getStmtNumber(), std::unordered_set<std::string>({callEntity->getValue()})}).second;
+		return map.insert({ callEntity->getValue(), std::unordered_set<std::string>({callEntity->getValueName()})}).second;
 	}
 
 	return false;

@@ -68,8 +68,8 @@ TEST_CASE("Call Entity Test") {
 	Entity e = Entity(VALUE);
 	StatementEntity st = StatementEntity(VALUE);
 
-	REQUIRE(c.getStmtNumber() == "1");
-	REQUIRE(c.getValue() == "First");
+	REQUIRE(c.getValue() == "1");
+	REQUIRE(c.getValueName() == "First");
 	REQUIRE(e == c);
 	REQUIRE(st == c);
 }
@@ -100,8 +100,8 @@ TEST_CASE("Print Entity Test") {
 	Entity e = Entity(VALUE);
 	StatementEntity st = StatementEntity(VALUE);
 
-	REQUIRE(pr.getStmtNumber() == "1");
-	REQUIRE(pr.getValue() == "v");
+	REQUIRE(pr.getValue() == "1");
+	REQUIRE(pr.getValueName() == "v");
 	REQUIRE(e == pr);
 	REQUIRE(st == pr);
 
@@ -112,8 +112,8 @@ TEST_CASE("Read Entity Test") {
 	Entity e = Entity(VALUE);
 	StatementEntity st = StatementEntity(VALUE);
 
-	REQUIRE(rd.getStmtNumber() == "1");
-	REQUIRE(rd.getValue() == "v");
+	REQUIRE(rd.getValue() == "1");
+	REQUIRE(rd.getValueName() == "v");
 	REQUIRE(e == rd);
 	REQUIRE(st == rd);
 
