@@ -12,6 +12,7 @@
 #include "components/qps/abstract_query_object/Select.h"
 #include "components/qps/abstract_query_object/SuchThat.h"
 #include "components/qps/abstract_query_object/Pattern.h"
+#include "components/qps/abstract_query_object/With.h"
 #include "models/Entity/DesignEntity.h"
 #include <vector>
 #include <tuple>
@@ -40,11 +41,13 @@ private:
     Select parseTokensIntoSelectObject(std::vector<TokenObject> selectTokens);
     std::vector<SuchThat> parseTokensIntoSuchThatObjects(std::vector<TokenObject> relationshipTokens);
     std::vector<Pattern> parseTokensIntoPatternObjects(std::vector<TokenObject> patternTokens);
+    std::vector<With> parseTokensIntoWithObjects(std::vector<TokenObject> withTokens);
     std::tuple<int, std::unordered_map<std::string, DesignEntity>> mapSynonymToDesignEntity(std::vector<TokenObject> declarations);
     bool isRelationshipToken(TokenType token);
     bool isDesignEntityToken(TokenType token);
     std::vector<TokenObject> parseTupleIntoIndividualTokens(std::string tupleValue);
     std::tuple<TokenObject, TokenObject> parseAttributeIntoIndividualTokens(std::string attribute);
+    TokenType setTokenTypeOfAttribute(std::string attrName);
 
 public:
     Parser(std::vector<TokenObject> tokenizedQuery);
