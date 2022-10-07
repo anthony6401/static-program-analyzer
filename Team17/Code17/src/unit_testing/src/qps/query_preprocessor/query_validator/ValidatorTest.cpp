@@ -178,7 +178,7 @@ TEST_CASE("Query returns boolean but BOOLEAN is declared as synonym") {
 };
 
 TEST_CASE("Query returns tuple") {
-    Select select = Select(TokenType::TUPLE, { TokenObject(TokenType::NAME, std::string("r")), TokenObject(TokenType::ATTRIBUTE, std::string("r.value")) });
+    Select select = Select(TokenType::TUPLE, { TokenObject(TokenType::NAME, std::string("r")), TokenObject(TokenType::ATTRIBUTE_SYNONYM, std::string("r")), TokenObject(TokenType::ATTRIBUTE_NAME, std::string("varName")) });
     std::vector<SuchThat> suchThat{ SuchThat(TokenType::CALLS, TokenObject(TokenType::NAME, "p"), TokenObject(TokenType::NAME, "q")) };
     std::vector<qps::Pattern> pattern{};
     std::unordered_map<std::string, DesignEntity> mappedSynonyms{ {"r", DesignEntity::READ}, {"p", DesignEntity::PROCEDURE}, {"q", DesignEntity::PROCEDURE} };
