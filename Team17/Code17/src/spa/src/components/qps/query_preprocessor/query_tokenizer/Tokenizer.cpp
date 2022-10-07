@@ -205,6 +205,7 @@ std::vector<std::string> splitQuery(std::string query) {
     }
 
     std::string string_output = std::string(char_output.begin(), char_output.end());
+    string_output.erase(std::remove_if(string_output.begin(), string_output.end(), ::isspace), string_output.end());
     std::vector<std::string> splittedQuery = formatCharToStringVector(string_output, delimiter);
     return splittedQuery;
 }
