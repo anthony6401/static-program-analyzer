@@ -93,6 +93,7 @@ TEST_CASE("Assign Pattern Storage Test") {
 TEST_CASE("If Pattern Storage Test") {
 	PatternStorage* ifPatternStorage = new IfPatternStorage();
 
+
 	REQUIRE(ifPatternStorage->storePattern(ifPatternOne));
 	REQUIRE(ifPatternStorage->storePattern(ifPatternTwo));
 	REQUIRE(ifPatternStorage->storePattern(ifPatternOneDup));
@@ -107,13 +108,13 @@ TEST_CASE("If Pattern Storage Test") {
 	std::vector<std::pair<std::string, std::string>> ifGetPatternPairNameNameOne = ifPatternStorage->getPatternPair(DesignEntity::IF, ifPatternTokenObjectFirstOne);
 	std::vector<std::pair<std::string, std::string>> ifGetPatternPairNameNameTwo = ifPatternStorage->getPatternPair(DesignEntity::IF, ifPatternTokenObjectFirstTwo);
 	
-	std::vector<std::pair<std::string, std::string>> expectedGetPatternPairNameNameOne{ {ifFirstValueOne, ifLineNumOne},
-																						{ifFirstValueTwo, ifLineNumTwo},
-																						{ifFirstValueTwo, ifLineNumOne} };
+	std::vector<std::pair<std::string, std::string>> expectedGetPatternPairNameNameOne{ { ifLineNumOne, ifFirstValueOne },
+																						{ ifLineNumTwo, ifFirstValueTwo},
+																						{ ifLineNumOne, ifFirstValueTwo} };
 
-	std::vector<std::pair<std::string, std::string>> expectedGetPatternPairNameNameTwo{ {ifFirstValueOne, ifLineNumOne},
-																						{ifFirstValueTwo, ifLineNumTwo},
-																						{ifFirstValueTwo, ifLineNumOne} };
+	std::vector<std::pair<std::string, std::string>> expectedGetPatternPairNameNameTwo{ { ifLineNumOne, ifFirstValueOne },
+																						{ ifLineNumTwo, ifFirstValueTwo},
+																						{ ifLineNumOne, ifFirstValueTwo} };
 
 	REQUIRE(ifGetPatternPairNameNameOne == expectedGetPatternPairNameNameOne);
 	REQUIRE(ifGetPatternPairNameNameTwo == expectedGetPatternPairNameNameTwo);
