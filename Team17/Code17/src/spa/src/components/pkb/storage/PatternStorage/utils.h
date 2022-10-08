@@ -54,6 +54,12 @@ public:
                 i++;
                 j++;
             }
+
+            // If array B is completely
+            // traversed
+            if (j == m)
+                return true;
+
             // If not,
             // increment i and reset j
             else {
@@ -61,11 +67,6 @@ public:
                 j = 0;
             }
         }
-
-        // If array B is completely
-        // traversed
-        if (j == m)
-            return true;
 
         return false;
     }
@@ -96,8 +97,6 @@ public:
         std::stack<char> st;
         
         std::string result;
-
-        //bool hasAddedSpace = false;
 
         for (int i = 0; i < pattern.length(); i++) {
             char c = pattern[i];
@@ -136,10 +135,6 @@ public:
 
             // If an operator is scanned
             else {
-              /*  if (!hasAddedSpace) {
-                    result += " ";
-                    hasAddedSpace = true;
-                }*/
                 while (!st.empty()
                     && prec(pattern[i]) <= prec(st.top())) {
                     result += st.top();
