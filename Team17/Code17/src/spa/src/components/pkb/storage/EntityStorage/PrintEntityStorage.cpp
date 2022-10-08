@@ -25,17 +25,12 @@ std::unordered_set<std::string> PrintEntityStorage::getAllEntity(DesignEntity re
 	return std::unordered_set<std::string>();
 }
 
-std::unordered_set<std::string> PrintEntityStorage::getStatementMapping(std::unordered_set<std::string>& stmtSet, DesignEntity entityType) {
+std::string PrintEntityStorage::getStatementMapping(std::string& stmtNumber, DesignEntity entityType) {
 	if (entityType == DesignEntity::PRINT) {
-		std::unordered_set<std::string> result;
-		for (const auto& stmt : stmtSet) {
-			if (map.find(stmt) != map.end()) {
-				result.insert(map.find(stmt)->second);
-			}
+		if (map.find(stmtNumber) != map.end()) {
+			return map.find(stmtNumber)->second;
 		}
-
-		return result;
 	}
 
-	return std::unordered_set<std::string>();
+	return std::string();
 }

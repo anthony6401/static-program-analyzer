@@ -60,17 +60,17 @@ bool EntityManager::storeEntity(Entity* entity) {
 	return ret;
 }
 
-std::unordered_set<std::string> EntityManager::getStatementMapping(std::unordered_set<std::string>& stmtSet, DesignEntity entityType) {
-	std::unordered_set<std::string> temp;
+std::string EntityManager::getStatementMapping(std::string& stmtNumber, DesignEntity entityType) {
+	std::string temp;
 
 	for (auto& es : stmtMappingStore) {
-		temp = es->getStatementMapping(stmtSet, entityType);
-		if (temp != std::unordered_set<std::string>()) {
+		temp = es->getStatementMapping(stmtNumber, entityType);
+		if (temp != std::string()) {
 			return temp;
 		}
 	}
 
-	return std::unordered_set<std::string>();
+	return std::string();
 }
 
 std::unordered_set<std::string> EntityManager::getAllEntity(DesignEntity returnType) {

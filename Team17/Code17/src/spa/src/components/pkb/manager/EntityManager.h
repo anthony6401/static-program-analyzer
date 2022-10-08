@@ -12,7 +12,7 @@ public:
 	EntityManager();
 	std::vector<EntityStorage*> getEntityStorage();
 	std::unordered_set<std::string> getAllEntity(DesignEntity returnType);
-	std::unordered_set<std::string> getStatementMapping(std::unordered_set<std::string>& stmtSet, DesignEntity entityType);
+	std::string getStatementMapping(std::string& stmtNumber, DesignEntity entityType);
 	bool storeEntity(Entity* entity);
 
 private:
