@@ -21,7 +21,7 @@ public:
     ResultTable evaluateClause() override;
     size_t getNumberOfSynonyms() override;
     std::set<std::string> getAllSynonyms() override;
-    bool checkIsAlternateAttributeName(DesignEntity returnType, std::string attributeName);
+    static bool checkIsAlternateAttributeName(DesignEntity returnType, std::string attributeName);
 };
 
 #endif //SPA_SELECTATTRIBUTECLAUSE_H

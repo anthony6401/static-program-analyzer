@@ -1,4 +1,5 @@
 #include "SelectTupleClause.h"
+#include "SelectAttributeClause.h"
 #include "components/pkb/pkb.h"
 #include "components/pkb/clients/QPSClient.h"
 #include "iostream"
@@ -9,10 +10,11 @@ SelectTupleClause::SelectTupleClause(std::vector<TokenObject> tuple, std::unorde
 ResultTable SelectTupleClause::evaluateClause() {
     ResultTable resultTable;
     // TokenObjects can be synonyms of attributes
-    for (auto tupleObject : tuple) {
+    for (int i = 0; i < tuple.size() - 1; i++) {
         ResultTable intermediate;
-        TokenType tupleObjectType = tupleObject.getTokenType();
-        std::string tupleObjectValue = tupleObject.getValue();
+        TokenType tupleObjectType = tuple[i].getTokenType();
+        std::string tupleObjectValue = tuple[i].getValue();
+        DesignEntity returnType = synonymToDesignEntityMap[tupleObjectValue];
         if (tupleObjectType == TokenType::NAME) {
             // If select synonym is found -> just select from table
             if (synonymsInTable.find(tupleObjectValue) != synonymsInTable.end()) {
@@ -21,13 +23,23 @@ ResultTable SelectTupleClause::evaluateClause() {
                 intermediate = SelectTupleClause::evaluateSynonymInTuple(tupleObjectValue);
             }
         } else if (tupleObjectType == TokenType::ATTRIBUTE_SYNONYM) {
+            std::string attributeName = tuple[i + 1].getValue(); // Type: ATTRIBUTE_NAME
+            if (synonymsInTable.find(tupleObjectValue) != synonymsInTable.end()) {
+                if (SelectAttributeClause::checkIsAlternateAttributeName(returnType, attributeName)) {
 
+                }
+                continue;
+            } else {
+                intermediate = SelectTupleClause::evaluateSynonymInTuple(tupleObjectValue);
+            }
         }
         resultTable.combineResult(intermediate);
     }
 
     return resultTable;
 }
+
+
 
 ResultTable SelectTupleClause::evaluateSynonymInTuple(std::string synonym) {
     DesignEntity returnType = synonymToDesignEntityMap[synonym];
