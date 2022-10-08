@@ -55,3 +55,12 @@ static std::string ifFirstValueTwo = "abc";
 static kb::Pattern* ifPatternOne = new IfPattern(ifLineNumOne, ifFirstValueOne);
 static kb::Pattern* ifPatternOneDup = new IfPattern(ifLineNumOne, ifFirstValueTwo);
 static kb::Pattern* ifPatternTwo = new IfPattern(ifLineNumTwo, ifFirstValueTwo);
+
+static std::string whileLineNumOne = "300";
+static std::string whileFirstValueOne = "y";
+static std::string whileLineNumTwo = "400";
+static std::string whileFirstValueTwo = "def";
+
+static kb::Pattern* whilePatternOne = new IfPattern(ifLineNumOne, ifFirstValueOne);
+static kb::Pattern* whilePatternOneDup = new IfPattern(ifLineNumOne, ifFirstValueTwo);
+static kb::Pattern* whilePatternTwo = new IfPattern(ifLineNumTwo, ifFirstValueTwo);
