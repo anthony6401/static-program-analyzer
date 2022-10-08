@@ -13,5 +13,6 @@ public:
 private:
     SimpleValidator* context;
     bool expectElse;
+    bool hasStmt;
 
 };

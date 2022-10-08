@@ -3,6 +3,7 @@
 
 ElseState::ElseState(SimpleValidator* context) {
     this->context = context;
+    this->hasStmt = true;
 }
 
 void ElseState::validLine(SpTokenType type, int statementNumber) {

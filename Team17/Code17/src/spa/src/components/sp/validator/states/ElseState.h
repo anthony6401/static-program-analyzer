@@ -12,5 +12,6 @@ public:
 
 private:
     SimpleValidator* context;
+    bool hasStmt;
 
 };

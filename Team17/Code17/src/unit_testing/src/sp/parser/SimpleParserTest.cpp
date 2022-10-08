@@ -1,37 +1,9 @@
 #include "components/sp/parser/SimpleParser.h"
-#include "components/sp/extractor/Extractor.h"
+#include <iostream>
 #include <catch.hpp>
 
-class ExtractorStub : public Extractor {
-    ExtractorStub();
-    std::vector<SimpleToken> result;
-    void extractWhile(SimpleToken whileToken) {
-        result.push_back(whileToken);
-    }
-    void extractIf(SimpleToken ifToken) {
-        result.push_back(ifToken);
-    }
-    void extractAsssign(SimpleToken assignToken) {
-        result.push_back(assignToken);
-    }
-    void extractPrint(SimpleToken printToken) {
-        result.push_back(printToken);
-    }
-    void extractRead(SimpleToken readToken) {
-        result.push_back(readToken);
-    }
-    void extractCall(SimpleToken callToken) {
-        result.push_back(callToken);
-    }
-    void extractProcedure(SimpleToken procedureToken) {
-        result.push_back(procedureToken);
-    }
-};
-
-
-
 //Temporary solution. Will clean up in the future
-bool equalToken(SimpleToken& test, SimpleToken& result) {
+bool equalToken(SimpleToken test, SimpleToken result) {
     return test.type == result.type && test.statementNumber == result.statementNumber && test.value == result.value;
 }
 
@@ -54,184 +26,355 @@ bool equalChildren(std::vector<SimpleToken> test, std::vector<SimpleToken> resul
     return true;
 }
 
-PKB* stubSP = new PKB();
-auto stubClient = new SPClient(stubSP);
-Extractor extractor = Extractor(stubClient);
-SimpleParser parser = SimpleParser(&extractor);
+PKB* stub = new PKB();
+auto client = new SPClient(stub);
+Extractor xtractor = Extractor(client);
+SimpleParser sparser = SimpleParser(&xtractor);
 
-TEST_CASE("parse expr") {
-    std::vector<std::string> test_tokens;
-    test_tokens.push_back("(");
-    test_tokens.push_back("1");
-    test_tokens.push_back("+");
-    test_tokens.push_back("(");
-    test_tokens.push_back("1");
-    test_tokens.push_back(")");
-    test_tokens.push_back(")");
-    SimpleToken test_result = parser.parseExpr(test_tokens);
+TEST_CASE("parse Read") {
+    SECTION("Invalid read missing ;") {
+        sparser.statementNumber = 1;
+        std::vector<std::string> test_tokens { "test"};
+        try {
+            sparser.parseRead(test_tokens);
+        } catch (std::invalid_argument e) {
+            REQUIRE(e.what() == std::string("Received invalid Read:Line 1"));
+        }
+    }
 
-    SimpleToken result = SimpleToken(SpTokenType::TEXPR, "", 0);
-
-    std::vector<SimpleToken> resultTokens;
-    resultTokens.push_back(SimpleToken(SpTokenType::TCONSTANT, "1", 0));
-    resultTokens.push_back(SimpleToken(SpTokenType::TOPR, "+", 0));
-    resultTokens.push_back(SimpleToken(SpTokenType::TCONSTANT, "1", 0));
-    result.setChildren(resultTokens);
-    REQUIRE(equalChildren(test_result.getChildren(), result.getChildren()));
-}
-
-TEST_CASE("parse condexpr") {
-    std::vector<std::string> test_tokens { "(","(", "(","!","(", "1", "<", "ab1", ")",")", "&&", "(", "abc", "==","123",")"
-        , ")", "||", "(", "1", "<=", "abc", ")", ")" };
-    std::vector<SimpleToken> test_result = parser.parseCondition(test_tokens);
-
-    std::vector<SimpleToken> resultTokens;
-    resultTokens.push_back(SimpleToken(SpTokenType::TCONSTANT, "1", 0));
-    resultTokens.push_back(SimpleToken(SpTokenType::TVARIABLE, "ab1", 0));
-    resultTokens.push_back(SimpleToken(SpTokenType::TVARIABLE, "abc", 0));
-    resultTokens.push_back(SimpleToken(SpTokenType::TCONSTANT, "123", 0));
-    resultTokens.push_back(SimpleToken(SpTokenType::TCONSTANT, "1", 0));
-    resultTokens.push_back(SimpleToken(SpTokenType::TVARIABLE, "abc", 0));
-    REQUIRE(equalChildren(test_result, resultTokens));
-}
-
-TEST_CASE("parse relexpr") {
-    std::vector<std::string> test_tokens{ "(","a1234","+","1",")","!=","abc"};
-    std::vector<SimpleToken> test_result = parser.parseRelExpr(test_tokens);
-
-    std::vector<SimpleToken> resultTokens;
-    resultTokens.push_back(SimpleToken(SpTokenType::TVARIABLE, "a1234", 0));
-    resultTokens.push_back(SimpleToken(SpTokenType::TOPR, "+", 0));
-    resultTokens.push_back(SimpleToken(SpTokenType::TCONSTANT, "1", 0));
-    resultTokens.push_back(SimpleToken(SpTokenType::TVARIABLE, "abc", 0));
-    REQUIRE(equalChildren(test_result, resultTokens));
-}
-
-/*
-
-TEST_CASE("parseLine print") {
-    parser.statementNumber = 1;
-    std::string code = "print test;";
-    std::vector<std::string> test_tokens;
-    test_tokens.push_back("print");
-    test_tokens.push_back("test");
-    test_tokens.push_back(";");
-    SimpleToken test_result = parser.parseLine(code);
-    SimpleToken expected_result = SimpleToken(SpTokenType::TPRINT, code,1);
-    REQUIRE(equalToken(test_result, expected_result));
-}
-
-TEST_CASE("parseLine read") {
-    parser.statementNumber = 1;
-    std::string code = "read test;";
-    std::vector<std::string> test_tokens;
-    test_tokens.push_back("read");
-    test_tokens.push_back("test");
-    test_tokens.push_back(";");
-    SimpleToken test_result = parser.parseLine(code);
-    SimpleToken expected_result = SimpleToken(SpTokenType::TREAD, code,1);
-    REQUIRE(equalToken(test_result, expected_result));
-}
-
-
-
-TEST_CASE("parse assign") {
-    std::vector<std::string> test_tokens{ "a", "(", "1", "+","1", ")",";" };
-    SimpleToken test = SimpleToken(SpTokenType::TASSIGN, "", 1);
-    parser.parseAssign(test, test_tokens);
-
-    std::vector<SimpleToken> children;
-    std::vector<SimpleToken> resultTokens;
-    SimpleToken result = SimpleToken(SpTokenType::TASSIGN, "", 1);
-    children.push_back(SimpleToken(SpTokenType::TVARIABLE, "a", 0));
-    SimpleToken expr = SimpleToken(SpTokenType::TEXPR, "", 0);
-    resultTokens.push_back(SimpleToken(SpTokenType::TCONSTANT, "1", 0));
-    resultTokens.push_back(SimpleToken(SpTokenType::TOPR, "+", 0));
-    resultTokens.push_back(SimpleToken(SpTokenType::TCONSTANT, "1", 0));
-    expr.setChildren(resultTokens);
-    children.push_back(expr);
-    result.setChildren(children);
-
-    REQUIRE(equalToken(test, result));
-    REQUIRE(equalChildren(test.getChildren(), result.getChildren()));
-}
-
-TEST_CASE("parse while") {
-    std::vector<std::string> test_tokens{ "(", "(", "(", "15", "<", "20", ")", "&&", "(", "abc", "==","10",")"
-        , ")", "||", "(", "5", "<=", "10", ")", ")" , "{"};
-    SimpleToken test = SimpleToken(SpTokenType::TWHILE, "", 1);
-    parser.parseWhile(test, test_tokens);
-
-    std::vector<SimpleToken> children;
-    std::vector<SimpleToken> resultTokens;
-    SimpleToken result = SimpleToken(SpTokenType::TWHILE, "", 1);
-    SimpleToken expr = SimpleToken(SpTokenType::TCONDEXPR, "", 0);
-    resultTokens.push_back(SimpleToken(SpTokenType::TCONSTANT, "15", 0));
-    resultTokens.push_back(SimpleToken(SpTokenType::TCONSTANT, "20", 0));
-    resultTokens.push_back(SimpleToken(SpTokenType::TVARIABLE, "abc", 0));
-    resultTokens.push_back(SimpleToken(SpTokenType::TCONSTANT, "10", 0));
-    resultTokens.push_back(SimpleToken(SpTokenType::TCONSTANT, "5", 0));
-    resultTokens.push_back(SimpleToken(SpTokenType::TCONSTANT, "10", 0));
-    expr.setChildren(resultTokens);
-    children.push_back(expr);
-    result.setChildren(children);
-
-    REQUIRE(equalToken(test, result));
-    REQUIRE(equalChildren(test.getChildren(), result.getChildren()));
-}
-
-TEST_CASE("parse if") {
-    std::vector<std::string> test_tokens{ "(", "(", "(", "15", "<", "20", ")", "&&", "(", "abc", "==","10",")"
-        , ")", "||", "(", "5", "<=", "10", ")", ")" , "then", "{" };
-    SimpleToken test = SimpleToken(SpTokenType::TIF, "", 1);
-    parser.parseIf(test, test_tokens);
-
-    std::vector<SimpleToken> children;
-    std::vector<SimpleToken> resultTokens;
-    SimpleToken result = SimpleToken(SpTokenType::TIF, "", 1);
-    SimpleToken expr = SimpleToken(SpTokenType::TCONDEXPR, "", 0);
-    resultTokens.push_back(SimpleToken(SpTokenType::TCONSTANT, "15", 0));
-    resultTokens.push_back(SimpleToken(SpTokenType::TCONSTANT, "20", 0));
-    resultTokens.push_back(SimpleToken(SpTokenType::TVARIABLE, "abc", 0));
-    resultTokens.push_back(SimpleToken(SpTokenType::TCONSTANT, "10", 0));
-    resultTokens.push_back(SimpleToken(SpTokenType::TCONSTANT, "5", 0));
-    resultTokens.push_back(SimpleToken(SpTokenType::TCONSTANT, "10", 0));
-    expr.setChildren(resultTokens);
-    children.push_back(expr);
-    result.setChildren(children);
-
-    REQUIRE(equalToken(test, result));
-    REQUIRE(equalChildren(test.getChildren(), result.getChildren()));
-}
-
-
-TEST_CASE("parse read") {
-    parser.statementNumber = 1;
-    std::string code = "read test;";
-    std::vector<std::string> tokens;
-    tokens.push_back("test");
-    tokens.push_back(";");
-    SimpleToken test_token = SimpleToken(SpTokenType::TREAD, code,1);
-    parser.parseRead(test_token, tokens);
-    SimpleToken expected_children = SimpleToken(SpTokenType::TVARIABLE, "test", 
-        0);
-    std::vector<SimpleToken> expected_result;
-    expected_result.push_back(expected_children);
-    REQUIRE(equalChildren(test_token.getChildren(), expected_result));
+    SECTION("Invalid read extra operands") {
+        sparser.statementNumber = 1;
+        std::vector<std::string> test_tokens{ "test", ";", ";"};
+        try {
+            sparser.parseRead(test_tokens);
+        }
+        catch (std::invalid_argument e) {
+            REQUIRE(e.what() == std::string("Received invalid Read:Line 1"));
+        }
+    }
 }
 
 TEST_CASE("parse print") {
-    parser.statementNumber = 1;
-    std::string code = "print test;";
-    std::vector<std::string> tokens;
-    tokens.push_back("test");
-    tokens.push_back(";");
-    SimpleToken test_token = SimpleToken(SpTokenType::TPRINT, code,1);
-    parser.parsePrint(test_token, tokens);
-    SimpleToken expected_children = SimpleToken(SpTokenType::TVARIABLE, "test",
-        0);
-    std::vector<SimpleToken> expected_result;
-    expected_result.push_back(expected_children);
-    REQUIRE(equalChildren(test_token.getChildren(), expected_result));
+    SECTION("Invalid Print missing ;") {
+        sparser.statementNumber = 1;
+        std::vector<std::string> test_tokens{ "test" };
+        try {
+            sparser.parsePrint(test_tokens);
+        }
+        catch (std::invalid_argument e) {
+            REQUIRE(e.what() == std::string("Received invalid Print:Line 1"));
+        }
+    }
+
+    SECTION("Invalid Print extra operands") {
+        sparser.statementNumber = 1;
+        std::vector<std::string> test_tokens{ "test", ";", ";" };
+        try {
+            sparser.parsePrint(test_tokens);
+        }
+        catch (std::invalid_argument e) {
+            REQUIRE(e.what() == std::string("Received invalid Print:Line 1"));
+        }
+    }
 }
-*/
+
+TEST_CASE("parse call") {
+    SECTION("Invalid Call missing ;") {
+        sparser.statementNumber = 1;
+        std::vector<std::string> test_tokens{ "test" };
+        try {
+            sparser.parseCall(test_tokens);
+        }
+        catch (std::invalid_argument e) {
+            REQUIRE(e.what() == std::string("Received invalid Call:Line 1"));
+        }
+    }
+
+    SECTION("Invalid Call extra operands") {
+        sparser.statementNumber = 1;
+        std::vector<std::string> test_tokens{ "test", ";", ";" };
+        try {
+            sparser.parseCall(test_tokens);
+        }
+        catch (std::invalid_argument e) {
+            REQUIRE(e.what() == std::string("Received invalid Call:Line 1"));
+        }
+    }
+}
+
+TEST_CASE("parse procedure") {
+    SECTION("Invalid Procedure missing {") {
+        sparser.statementNumber = 1;
+        std::vector<std::string> test_tokens{ "test" };
+        try {
+            sparser.parseProcedure(test_tokens);
+        }
+        catch (std::invalid_argument e) {
+            REQUIRE(e.what() == std::string("Received invalid Procedure:Line 1"));
+        }
+    }
+
+    SECTION("Invalid Procedure extra operands") {
+        sparser.statementNumber = 1;
+        std::vector<std::string> test_tokens{ "test", "{", "{" };
+        try {
+            sparser.parseProcedure(test_tokens);
+        }
+        catch (std::invalid_argument e) {
+            REQUIRE(e.what() == std::string("Received invalid Procedure:Line 1"));
+        }
+    }
+}
+
+TEST_CASE("parse while") {
+    SECTION("Invalid while missing {") {
+        sparser.statementNumber = 1;
+        std::vector<std::string> test_tokens{"(","test", " == ","abc","+","c",")"};
+        try {
+            sparser.parseWhile(test_tokens);
+        }
+        catch (std::invalid_argument e) {
+            REQUIRE(e.what() == std::string("Received invalid While:Line 1"));
+        }
+    }
+
+    SECTION("Invalid while not enough tokens") {
+        sparser.statementNumber = 1;
+        std::vector<std::string> test_tokens{ "(","test",")","{"};
+        try {
+            sparser.parseWhile(test_tokens);
+        }
+        catch (std::invalid_argument e) {
+            REQUIRE(e.what() == std::string("Received invalid While:Line 1"));
+        }
+    }
+}
+
+TEST_CASE("parse If") {
+    SECTION("Invalid if missing {") {
+        sparser.statementNumber = 1;
+        std::vector<std::string> test_tokens{ "(","test", " == ","abc","+","c",")","then"};
+        try {
+            sparser.parseIf(test_tokens);
+        }
+        catch (std::invalid_argument e) {
+            REQUIRE(e.what() == std::string("Received invalid If:Line 1"));
+        }
+    }
+
+    SECTION("Invalid while not enough tokens") {
+        sparser.statementNumber = 1;
+        std::vector<std::string> test_tokens{ "(","test",")","then","{"};
+        try {
+            sparser.parseIf(test_tokens);
+        }
+        catch (std::invalid_argument e) {
+            REQUIRE(e.what() == std::string("Received invalid If:Line 1"));
+        }
+    }
+
+    SECTION("Invalid if missing then") {
+        sparser.statementNumber = 1;
+        std::vector<std::string> test_tokens{ "(","test", " == ","abc","+","c",")","{" };
+        try {
+            sparser.parseIf(test_tokens);
+        }
+        catch (std::invalid_argument e) {
+            REQUIRE(e.what() == std::string("Received invalid If:Line 1"));
+        }
+    }
+}
+
+TEST_CASE("parse condition") {
+    SECTION("valid condition") {
+        std::vector<std::string> test_tokens{ "(","(", "(","!","(", "1", "<", "ab1", ")",")", "&&", "(", "abc", "==","123",")"
+    , ")", "||", "(", "1", "<=", "abc", ")", ")" };
+        std::vector<SimpleToken> test_result = sparser.parseCondition(test_tokens);
+
+        std::vector<SimpleToken> resultTokens;
+        resultTokens.push_back(SimpleToken(SpTokenType::TCONSTANT, "1", 0));
+        resultTokens.push_back(SimpleToken(SpTokenType::TVARIABLE, "ab1", 0));
+        resultTokens.push_back(SimpleToken(SpTokenType::TVARIABLE, "abc", 0));
+        resultTokens.push_back(SimpleToken(SpTokenType::TCONSTANT, "123", 0));
+        resultTokens.push_back(SimpleToken(SpTokenType::TCONSTANT, "1", 0));
+        resultTokens.push_back(SimpleToken(SpTokenType::TVARIABLE, "abc", 0));
+        REQUIRE(equalChildren(test_result, resultTokens));
+    }
+
+    SECTION("invalid condition missing (") {
+        std::vector<std::string> test_tokens{ "abc","<","123", ")" };
+        try {
+            sparser.parseCondition(test_tokens);
+        }
+        catch (std::invalid_argument e) {
+            REQUIRE(e.what() == std::string("Received invalid condition. Missing brackets"));
+        }
+    }
+
+    SECTION("invalid condition missing )") {
+        std::vector<std::string> test_tokens{"(", "abc","<","123" };
+        try {
+            sparser.parseCondition(test_tokens);
+        }
+        catch (std::invalid_argument e) {
+            REQUIRE(e.what() == std::string("Received invalid condition. Missing brackets"));
+        }
+    }
+
+    SECTION("invalid condition missing !(") {
+        std::vector<std::string> test_tokens{ "(","!", "abc","<","123",")",")"};
+        try {
+            sparser.parseCondition(test_tokens);
+        }
+        catch (std::invalid_argument e) {
+            REQUIRE(e.what() == std::string("Received invalid condition. Missing brackets"));
+        }
+    }
+
+    SECTION("invalid condition missing !)") {
+        std::vector<std::string> test_tokens{ "(","!","(", "abc","<","123",")" };
+        try {
+            sparser.parseCondition(test_tokens);
+        }
+        catch (std::invalid_argument e) {
+            REQUIRE(e.what() == std::string("Received invalid condition. Missing brackets"));
+        }
+    }
+
+    SECTION("invalid condition invalid &&)") {
+        std::vector<std::string> test_tokens{ "(", "abc","<","123", "&&","(","abc","<","123",")",")"};
+        try {
+            sparser.parseCondition(test_tokens);
+        }
+        catch (std::invalid_argument e) {
+            REQUIRE(e.what() == std::string("Received invalid condition. invalid && or ||"));
+        }
+    }
+
+    SECTION("invalid condition invalid ||)") {
+        std::vector<std::string> test_tokens{ "(", "abc","<","123", "||","(","abc","<","123",")",")" };
+        try {
+            sparser.parseCondition(test_tokens);
+        }
+        catch (std::invalid_argument e) {
+            REQUIRE(e.what() == std::string("Received invalid condition. invalid && or ||"));
+        }
+    }
+}
+
+TEST_CASE("parse relexpr") {
+    SECTION("valid relexpr") {
+        std::vector<std::string> test_tokens{ "(","a1234","+","1",")","!=","abc" };
+        std::vector<SimpleToken> test_result = sparser.parseRelExpr(test_tokens);
+
+        std::vector<SimpleToken> resultTokens;
+        resultTokens.push_back(SimpleToken(SpTokenType::TVARIABLE, "a1234", 0));
+        resultTokens.push_back(SimpleToken(SpTokenType::TOPR, "+", 0));
+        resultTokens.push_back(SimpleToken(SpTokenType::TCONSTANT, "1", 0));
+        resultTokens.push_back(SimpleToken(SpTokenType::TVARIABLE, "abc", 0));
+        REQUIRE(equalChildren(test_result, resultTokens));
+    }
+
+    SECTION("invalid relexpr missing comparator") {
+        std::vector<std::string> test_tokens{ "abc", "23"};
+        try {
+            sparser.parseRelExpr(test_tokens);
+        }
+        catch (std::invalid_argument e) {
+            REQUIRE(e.what() == std::string("Received invalid RelExpr missing comparator"));
+        }
+    }
+}
+
+
+TEST_CASE("parse expr") {
+    SECTION("valid expr") {
+        std::vector<std::string> test_tokens{ "(","1","+","(","1",")",")" };
+        SimpleToken test_result = sparser.parseExpr(test_tokens);
+
+        SimpleToken result = SimpleToken(SpTokenType::TEXPR, "", 0);
+
+        std::vector<SimpleToken> resultTokens;
+        resultTokens.push_back(SimpleToken(SpTokenType::TCONSTANT, "1", 0));
+        resultTokens.push_back(SimpleToken(SpTokenType::TOPR, "+", 0));
+        resultTokens.push_back(SimpleToken(SpTokenType::TCONSTANT, "1", 0));
+        result.setChildren(resultTokens);
+        REQUIRE(equalChildren(test_result.getChildren(), result.getChildren()));
+    }
+
+    SECTION("invalid expr missing )") {
+        std::vector<std::string> test_tokens{ "(","1","+","(","1",")"};
+        try {
+            sparser.parseExpr(test_tokens);
+        }
+        catch (std::invalid_argument e) {
+            REQUIRE(e.what() == std::string("Received invalid expression. Wrong tokens. "));
+        }
+    }
+
+    SECTION("invalid expr missing (") {
+        std::vector<std::string> test_tokens{ "(","1","+","1",")",")"};
+        try {
+            sparser.parseExpr(test_tokens);
+        }
+        catch (std::invalid_argument e) {
+            REQUIRE(e.what() == std::string("Unexpected )"));
+        }
+    }
+
+    SECTION("invalid expr ends at operand") {
+        std::vector<std::string> test_tokens{ "(","1",")","+" };
+        try {
+            sparser.parseExpr(test_tokens);
+        }
+        catch (std::invalid_argument e) {
+            REQUIRE(e.what() == std::string("Received invalid expression. Wrong tokens. "));
+        }
+    }
+}
+
+TEST_CASE("parse variable") {
+    SECTION("valid variable") {
+        std::string test_token = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        REQUIRE(sparser.parseVariable(test_token)==
+            std::string("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"));
+    }
+
+    SECTION("invalid variable") {
+        std::string test_token = "abc!";
+        try {
+            sparser.parseVariable(test_token);
+        }
+        catch (std::invalid_argument e) {
+            REQUIRE(e.what() == std::string("Received invalid variable abc!"));
+        }
+    }
+}
+
+TEST_CASE("parse constant") {
+    SECTION("valid variable") {
+        std::string test_token = "1234567890";
+        REQUIRE(sparser.parseConstant(test_token) ==
+            std::string("1234567890"));
+        test_token = "0";
+        REQUIRE(sparser.parseConstant(test_token) ==
+            std::string("0"));
+    }
+
+    SECTION("invalid constant") {
+        std::string test_token = "0123";
+        try {
+            sparser.parseConstant(test_token);
+        }
+        catch (std::invalid_argument e) {
+            REQUIRE(e.what() == std::string("Received invalid constant 0123"));
+        }
+        test_token = "abc";
+        try {
+            sparser.parseConstant(test_token);
+        }
+        catch (std::invalid_argument e) {
+            REQUIRE(e.what() == std::string("Received invalid constant abc"));
+        }
+    }
+}

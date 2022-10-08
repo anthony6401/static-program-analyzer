@@ -5,9 +5,11 @@
 IfState::IfState(SimpleValidator* context) {
     this->context = context;
     expectElse = true;
+    this->hasStmt = false;
 }
 
 void IfState::validLine(SpTokenType type, int statementNumber) {
+    hasStmt = true;
     if (type == SpTokenType::TPROCEDURE || type == SpTokenType::TELSE) {
         throw std::invalid_argument("Received invalid SIMPLE code line. Expected Normal::" + std::to_string(statementNumber));
     }
@@ -19,8 +21,13 @@ bool IfState::validCode() {
 
 void IfState::close() {
     if (expectElse) {
-        expectElse = false;
-        context->setState(new ElseState(context));
+        if (hasStmt) {
+            expectElse = false;
+            hasStmt = false;
+            context->setState(new ElseState(context));
+        } else {
+            throw std::invalid_argument("No stmts where expected");
+        }
     } else {
         context->state = context->parentStates.top();
         context->parentStates.pop();

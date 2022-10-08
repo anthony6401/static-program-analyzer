@@ -1,6 +1,5 @@
 #include <stack>
 #include <stdexcept>
-#include <iostream>
 #include "SimpleParser.h"
 #include "../SimpleToken.h"
 #include "../utils/SpUtils.h"
@@ -44,7 +43,6 @@ void SimpleParser::parseLine(std::string code) {
     if (first == "}") {
         tokens.erase(tokens.begin());
         SimpleToken token = SimpleToken(SpTokenType::TCLOSE, code, statementNumber);
-        validator.validLine(SpTokenType::TCLOSE, statementNumber);
         validator.close();
         extractor->close(statementNumber);
     } else if (tokens.at(1) == "=") {
@@ -52,7 +50,6 @@ void SimpleParser::parseLine(std::string code) {
         validator.validLine(SpTokenType::TASSIGN, statementNumber);
         parseAssign(tokens);
     } else if (first == "procedure") {
-        //std::cout << "procedure" << std::endl;
         tokens.erase(tokens.begin());
         validator.validLine(SpTokenType::TPROCEDURE, statementNumber);
         parseProcedure(tokens);
@@ -98,7 +95,7 @@ void SimpleParser::parseProcedure(std::vector<std::string>& tokens) {
         this->currentProcedure = procedure;
         this->procedures.insert(procedure);
         validator.setState(new NestedState(&validator));
-        extractor->extractProcedure(procedureToken);
+        this->extractor->extractProcedure(procedureToken);
     }
     else {
         throw std::invalid_argument("Received invalid Procedure:Line " + std::to_string(statementNumber));
@@ -142,14 +139,14 @@ void SimpleParser::parseRead(std::vector<std::string>& tokens) {
     if (tokens.size() == 2 && tokens.at(1) == ";") {
         SimpleToken readToken = SimpleToken(SpTokenType::TREAD, parseVariable(tokens.at(0)), statementNumber);
         statementNumber++;
-        extractor->extractRead(readToken);
+        this->extractor->extractRead(readToken);
     } else {
         throw std::invalid_argument("Received invalid Read:Line " + std::to_string(statementNumber));
     }
 }
 
 void SimpleParser::parseWhile(std::vector<std::string>& tokens) {
-    if (tokens.size() < 6 || tokens.back() != "{" || tokens.front() == "!") {
+    if (tokens.size() < 6 || tokens.back() != "{") {
         throw std::invalid_argument("Received invalid While:Line " + std::to_string(statementNumber));
     }
     tokens.pop_back();
@@ -248,7 +245,7 @@ std::vector<SimpleToken> SimpleParser::parseRelExpr(std::vector<std::string>& to
         }
     }
     if (comparatorCount != 1) {
-        throw std::invalid_argument("Received invalid RelExpr");
+        throw std::invalid_argument("Received invalid RelExpr missing comparator");
     }
     std::vector<std::string> firstTokens(tokens.begin(), tokens.begin() + indice);
     SimpleToken firstRelFactor = parseExpr(firstTokens);
