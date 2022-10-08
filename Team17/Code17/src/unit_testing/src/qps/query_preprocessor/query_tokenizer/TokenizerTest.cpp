@@ -537,6 +537,66 @@ TEST_CASE("Valid Attributes Tests") {
         std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
         REQUIRE(testResult == expectedResult);
     }
+
+    SECTION("Test 6") {
+        std::string testQuery = "constant c;\n"
+                                "Select \t\v\r procName   .    varName \r pattern a1 ( \t\"\n\vx\" , \"1\t\")\v";
+        std::vector<TokenObject> expectedResult {constantTokenObject, c_nameTokenObject, semicolonTokenObject,
+                                                 selectTokenObject, attributeTokenObject4, patternTokenObject, a1_nameTokenObject,
+                                                 openBracketTokenObject, x_nameWithQuotesTokenObject, commaTokenObject,
+                                                 one_constantExpressionTokenObject, closedBracketTokenObject};
+        Tokenizer tokenizer = Tokenizer();
+        std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
+        REQUIRE(testResult == expectedResult);
+    }
+
+    SECTION("Test 7") {
+        std::string testQuery = "constant c;\n"
+                                "Select procName   .varName pattern a1 (\"x\" , \"1\")";
+        std::vector<TokenObject> expectedResult {constantTokenObject, c_nameTokenObject, semicolonTokenObject,
+                                                 selectTokenObject, attributeTokenObject4, patternTokenObject, a1_nameTokenObject,
+                                                 openBracketTokenObject, x_nameWithQuotesTokenObject, commaTokenObject,
+                                                 one_constantExpressionTokenObject, closedBracketTokenObject};
+        Tokenizer tokenizer = Tokenizer();
+        std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
+        REQUIRE(testResult == expectedResult);
+    }
+
+    SECTION("Test 8") {
+        std::string testQuery = "constant c;\n"
+                                "Select procName.   varName pattern a1 (\"x\" , \"1\")";
+        std::vector<TokenObject> expectedResult {constantTokenObject, c_nameTokenObject, semicolonTokenObject,
+                                                 selectTokenObject, attributeTokenObject4, patternTokenObject, a1_nameTokenObject,
+                                                 openBracketTokenObject, x_nameWithQuotesTokenObject, commaTokenObject,
+                                                 one_constantExpressionTokenObject, closedBracketTokenObject};
+        Tokenizer tokenizer = Tokenizer();
+        std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
+        REQUIRE(testResult == expectedResult);
+    }
+
+    SECTION("Test 9") {
+        std::string testQuery = "constant c;\n"
+                                "Select procName .  \n varName pattern a1 (\"x\" , \"1\")";
+        std::vector<TokenObject> expectedResult {constantTokenObject, c_nameTokenObject, semicolonTokenObject,
+                                                 selectTokenObject, attributeTokenObject4, patternTokenObject, a1_nameTokenObject,
+                                                 openBracketTokenObject, x_nameWithQuotesTokenObject, commaTokenObject,
+                                                 one_constantExpressionTokenObject, closedBracketTokenObject};
+        Tokenizer tokenizer = Tokenizer();
+        std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
+        REQUIRE(testResult == expectedResult);
+    }
+
+    SECTION("Test 10") {
+        std::string testQuery = "constant c;\n"
+                                "Select procName \n\t\v\r\f . varName pattern a1 (\"x\" , \"1\")";
+        std::vector<TokenObject> expectedResult {constantTokenObject, c_nameTokenObject, semicolonTokenObject,
+                                                 selectTokenObject, attributeTokenObject4, patternTokenObject, a1_nameTokenObject,
+                                                 openBracketTokenObject, x_nameWithQuotesTokenObject, commaTokenObject,
+                                                 one_constantExpressionTokenObject, closedBracketTokenObject};
+        Tokenizer tokenizer = Tokenizer();
+        std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
+        REQUIRE(testResult == expectedResult);
+    }
 }
 
 TEST_CASE("Valid Expressions tests") {
@@ -727,21 +787,21 @@ TEST_CASE("Invalid attributes token") {
         REQUIRE_THROWS_WITH(tokenizer.tokenize(testQuery), "Token Exception Caught");
     }
 
-    SECTION("Test 5") {
-        std::string testQuery = "assign a;\n"
-                                "Select .procName such that Uses (1, \"x\")";
-        Tokenizer tokenizer = Tokenizer();
-        REQUIRE_THROWS_WITH(tokenizer.tokenize(testQuery), "Token Exception Caught");
-    }
+//    SECTION("Test 5") {
+//        std::string testQuery = "assign a;\n"
+//                                "Select .procName such that Uses (1, \"x\")";
+//        Tokenizer tokenizer = Tokenizer();
+//        REQUIRE_THROWS_WITH(tokenizer.tokenize(testQuery), "Token Exception Caught");
+//    }
 
-    SECTION("Test 6") {
+    SECTION("Test 5") {
         std::string testQuery = "assign a;\n"
                                 "Select 1procName.procName such that Uses (1, \"x\")";
         Tokenizer tokenizer = Tokenizer();
         REQUIRE_THROWS_WITH(tokenizer.tokenize(testQuery), "Token Exception Caught");
     }
 
-    SECTION("Test 7") {
+    SECTION("Test 6") {
         std::string testQuery = "assign a;\n"
                                 "Select value.c such that Uses (1, \"x\")";
         Tokenizer tokenizer = Tokenizer();

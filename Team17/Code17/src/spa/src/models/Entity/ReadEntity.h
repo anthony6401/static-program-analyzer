@@ -6,8 +6,11 @@
 
 class ReadEntity : public StatementEntity {
 public:
-	ReadEntity(std::string entityValue);
+	ReadEntity(std::string stmtNumber, std::string n);
 	bool operator==(const ReadEntity& other) const {
-		return value == other.value;
+		return (valueName == other.valueName) && (value == other.value);
 	}
+	std::string getValueName();
+private:
+	std::string valueName;
 };

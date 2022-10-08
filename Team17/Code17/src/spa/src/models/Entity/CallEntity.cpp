@@ -3,4 +3,8 @@
 
 #include <string>
 
-CallEntity::CallEntity(std::string entityValue) : StatementEntity(entityValue) {};
+CallEntity::CallEntity(std::string entityValue, std::string valueName) : StatementEntity(entityValue), valueName(valueName) {};
+
+std::string CallEntity::getValueName() {
+	return this->valueName;
+}

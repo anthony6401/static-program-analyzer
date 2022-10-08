@@ -41,7 +41,10 @@ EntityManager::EntityManager() {
 	entityStore.push_back(varStore);
 	entityStore.push_back(whileStore);
 	entityStore.push_back(stStore);
-	
+
+	stmtMappingStore.push_back(prStore);
+	stmtMappingStore.push_back(callStore);
+	stmtMappingStore.push_back(reStore);
 }
 
 std::vector<EntityStorage*> EntityManager::getEntityStorage() {
@@ -57,9 +60,21 @@ bool EntityManager::storeEntity(Entity* entity) {
 	return ret;
 }
 
+std::string EntityManager::getStatementMapping(std::string& stmtNumber, DesignEntity entityType) {
+	std::string temp;
+
+	for (auto& es : stmtMappingStore) {
+		temp = es->getStatementMapping(stmtNumber, entityType);
+		if (temp != std::string()) {
+			return temp;
+		}
+	}
+
+	return std::string();
+}
+
 std::unordered_set<std::string> EntityManager::getAllEntity(DesignEntity returnType) {
 	std::unordered_set<std::string> temp;
-	std::unordered_set<std::string> ret;
 
 	for (auto& es : entityStore) {
 		temp = es->getAllEntity(returnType);

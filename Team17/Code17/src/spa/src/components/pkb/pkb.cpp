@@ -85,6 +85,10 @@ std::vector<std::pair<std::string, std::string>> PKB::getPatternPair(DesignEntit
 	return patternManager->getPatternPair(designEntity, secondArgument);
 }
 
+std::string PKB::getStatementMapping(std::string& stmtNumber, DesignEntity entityType) {
+	return entityManager->getStatementMapping(stmtNumber, entityType);
+}
+
 EntityManager* PKB::getEntityManager() {
 	return entityManager;
 }
