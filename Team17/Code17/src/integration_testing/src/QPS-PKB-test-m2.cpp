@@ -861,7 +861,7 @@ TEST_CASE("BOOLEAN queries") {
     }
 }
 
-TEST_CASE("TUPLE queries") {
+TEST_CASE("TUPLE queries with synonyms") {
     SECTION("Tuple Test 1 - 2 synonyms present") {
         std::string testQuery = "procedure p, p1;\n "
                                 "Select <p, p1> such that Calls(p, p1)";
@@ -896,6 +896,19 @@ TEST_CASE("TUPLE queries") {
     SECTION("Tuple Test 4 - 3 synonyms present") {
         std::string testQuery = "procedure p, p1; variable v; stmt s;\n "
                                 "Select <p, p1, s> such that Calls(p, p1) and Modifies(s, \"i\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"First Second 6", "Second Third 9", "First Second 5", "Second Third 6", "First Second 9", "Second Third 5"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+}
+
+TEST_CASE("Tuple queries with attributes") {
+    SECTION("Tuple Test 4 - 3 synonyms present") {
+        std::string testQuery = "procedure p, p1; variable v; stmt s;\n "
+                                "Select <p.procName, p1, s> such that Calls(p, p1) and Modifies(s, \"i\")";
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"First Second 6", "Second Third 9", "First Second 5", "Second Third 6", "First Second 9", "Second Third 5"};
         QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
@@ -970,27 +983,27 @@ TEST_CASE("Attribute queries - non alternate attribute names") {
         REQUIRE(testResults == expectedResults);
     }
 
-//    SECTION("Attribute Test 7") {
-//        std::string testQuery = "constant value;\n "
-//                                "Select value.value";
-//        std::list<std::string> testResults;
-//        std::list<std::string> expectedResults = {"0", "5", "2", "1"};
-//        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
-//        testResults.sort();
-//        expectedResults.sort();
-//        REQUIRE(testResults == expectedResults);
-//    }
-//
-//    SECTION("Attribute Test 8") {
-//        std::string testQuery = "variable varName; while w;\n "
-//                                "Select varName.varName such that Modifies(w, varName)";
-//        std::list<std::string> testResults;
-//        std::list<std::string> expectedResults = {"x", "i", "z", "v"};
-//        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
-//        testResults.sort();
-//        expectedResults.sort();
-//        REQUIRE(testResults == expectedResults);
-//    }
+    SECTION("Attribute Test 7") {
+        std::string testQuery = "constant value;\n "
+                                "Select value.value";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"0", "5", "2", "1"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Attribute Test 8") {
+        std::string testQuery = "variable varName; while w;\n "
+                                "Select varName.varName such that Modifies(w, varName)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"x", "i", "z", "v"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
 
     SECTION("Attribute Test 9") {
         std::string testQuery = "constant c;\n "

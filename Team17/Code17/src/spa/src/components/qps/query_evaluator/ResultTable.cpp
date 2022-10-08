@@ -77,13 +77,15 @@ std::unordered_set<std::string> ResultTable::getTupleResultsToBePopulated(std::v
     std::unordered_set<std::string> result({});
     for (auto resultSublist : resultsList) {
         std::vector<std::string> newResultSublist;
-        for (auto tupleObject : tuple) {
-            if (tupleObject.getTokenType() == TokenType::NAME) {
-                auto iterator = std::find(synonymsList.begin(), synonymsList.end(), tupleObject.getValue());
+        for (int i = 0; i < tuple.size(); i++) {
+            if (tuple[i].getTokenType() == TokenType::NAME) {
+                auto iterator = std::find(synonymsList.begin(), synonymsList.end(), tuple[i].getValue());
                 int indexOfSynonym = std::distance(synonymsList.begin(), iterator);
                 newResultSublist.push_back(resultSublist[indexOfSynonym]);
-            } else {
-                // ATTRIBUTES
+            }
+
+            if (tuple[i].getTokenType() == TokenType::ATTRIBUTE_SYNONYM) {
+
             }
         }
         result.insert(ResultTable::formTupleResultString(newResultSublist));

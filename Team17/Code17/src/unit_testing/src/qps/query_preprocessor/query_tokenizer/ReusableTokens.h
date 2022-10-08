@@ -65,6 +65,7 @@ TokenObject attributeTokenObject3 = TokenObject(TokenType::ATTRIBUTE, "c.value")
 TokenObject attributeTokenObject4 = TokenObject(TokenType::ATTRIBUTE, "procName.varName");
 TokenObject attributeTokenObject5 = TokenObject(TokenType::ATTRIBUTE, "s.stmt#");
 TokenObject attributeTokenObject6 = TokenObject(TokenType::ATTRIBUTE, "s1.stmt#");
+TokenObject attributeTokenObject7 = TokenObject(TokenType::ATTRIBUTE, "value.value");
 
 TokenObject oneSyn_tupleTokenObject = TokenObject(TokenType::TUPLE, "<a1>");
 TokenObject twoSyn_tupleTokenObject = TokenObject(TokenType::TUPLE, "<a1,a2>");
@@ -92,6 +93,7 @@ TokenObject cl_nameTokenObject = TokenObject(TokenType::NAME, "cl");
 TokenObject newa_nameTokenObject = TokenObject(TokenType::NAME, "newa");
 TokenObject capital_nameTokenObject = TokenObject(TokenType::NAME, "Statement");
 TokenObject capitalEntity_nameTokenObject = TokenObject(TokenType::NAME, "Variable");
+TokenObject value_nameTokenObject = TokenObject(TokenType::NAME, "value");
 
 TokenObject six_intTokenObject = TokenObject(TokenType::INTEGER, "6");
 TokenObject fourteen_intTokenObject = TokenObject(TokenType::INTEGER, "14");

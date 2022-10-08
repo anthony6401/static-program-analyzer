@@ -537,6 +537,17 @@ TEST_CASE("Valid Attributes Tests") {
         std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
         REQUIRE(testResult == expectedResult);
     }
+
+    SECTION("Test 6") {
+        std::string testQuery = "constant value;\n"
+                                "Select \t\v\r value.value";
+        std::vector<TokenObject> expectedResult {constantTokenObject, value_nameTokenObject, semicolonTokenObject,
+                                                 selectTokenObject, attributeTokenObject7};
+        Tokenizer tokenizer = Tokenizer();
+        std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
+        REQUIRE(testResult == expectedResult);
+    }
+
 }
 
 TEST_CASE("Valid Expressions tests") {
