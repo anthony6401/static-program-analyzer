@@ -22,8 +22,7 @@ public:
         return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9');
     }
 
-    static int prec(char c)
-    {
+    static int prec(char c) {
         if (c == '^') {
             return 3;
         }
@@ -54,11 +53,6 @@ public:
 
                 i++;
                 j++;
-
-                // If array B is completely
-                // traversed
-                if (j == m)
-                    return true;
             }
             // If not,
             // increment i and reset j
@@ -67,6 +61,11 @@ public:
                 j = 0;
             }
         }
+
+        // If array B is completely
+        // traversed
+        if (j == m)
+            return true;
 
         return false;
     }
