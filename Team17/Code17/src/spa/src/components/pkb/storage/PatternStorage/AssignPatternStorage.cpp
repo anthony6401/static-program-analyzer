@@ -28,8 +28,8 @@ bool AssignPatternStorage::storePattern(kb::Pattern* pattern) {
 }
 
 void handleExpressionAndNameForSet(std::string targetString,
-	std::unordered_set<std::pair<std::string, std::string>, pair_hash>* set,
-	std::unordered_set<std::string>& result) {
+								std::unordered_set<std::pair<std::string, std::string>, pair_hash>* set,
+								std::unordered_set<std::string>& result) {
 	for (const auto& ele : *set) {
 		if (ele.second == targetString) {
 			result.insert(ele.first);
@@ -38,8 +38,8 @@ void handleExpressionAndNameForSet(std::string targetString,
 }
 
 void handleSubexpressionForSet(std::string targetString,
-	std::unordered_set<std::pair<std::string, std::string>, pair_hash>* set,
-	std::unordered_set<std::string>& result) {
+								std::unordered_set<std::pair<std::string, std::string>, pair_hash>* set,
+								std::unordered_set<std::string>& result) {
 	for (const auto& ele : *set) {
 		if (PatternUtils::isSubExpression(targetString, ele.second)) {
 			result.insert(ele.first);
@@ -48,15 +48,15 @@ void handleSubexpressionForSet(std::string targetString,
 }
 
 void handleWildcardForSet(std::unordered_set<std::pair<std::string, std::string>, pair_hash>* set,
-	std::unordered_set<std::string>& result) {
+						std::unordered_set<std::string>& result) {
 	for (const auto& ele : *set) {
 		result.insert(ele.first);
 	}
 }
 
 void handleExpressionAndNameForVector(std::string targetString, std::string variable,
-	std::unordered_set<std::pair<std::string, std::string>, pair_hash>* set,
-	std::vector<std::pair<std::string, std::string>>& result) {
+									std::unordered_set<std::pair<std::string, std::string>, pair_hash>* set,
+									std::vector<std::pair<std::string, std::string>>& result) {
 	for (const auto& ele : *set) {
 		if (ele.second == targetString) {
 			result.push_back({ ele.first, variable });
@@ -66,8 +66,8 @@ void handleExpressionAndNameForVector(std::string targetString, std::string vari
 
 
 void handleSubexpressionForVector(std::string targetString, std::string variable,
-	std::unordered_set<std::pair<std::string, std::string>, pair_hash>* set,
-	std::vector<std::pair<std::string, std::string>>& result) {
+								std::unordered_set<std::pair<std::string, std::string>, pair_hash>* set,
+								std::vector<std::pair<std::string, std::string>>& result) {
 	for (const auto& ele : *set) {
 		if (PatternUtils::isSubExpression(targetString, ele.second)) {
 			result.push_back({ ele.first, variable });
@@ -76,8 +76,8 @@ void handleSubexpressionForVector(std::string targetString, std::string variable
 }
 
 void handleWildcardForVector(std::string variable,
-	std::unordered_set<std::pair<std::string, std::string>, pair_hash>* set,
-	std::vector<std::pair<std::string, std::string>>& result) {
+							std::unordered_set<std::pair<std::string, std::string>, pair_hash>* set,
+							std::vector<std::pair<std::string, std::string>>& result) {
 	for (const auto& ele : *set) {
 		result.push_back({ ele.first, variable });
 	}
