@@ -7,6 +7,7 @@
 #include <iterator>
 #include <vector>
 #include <iostream>
+#include <unordered_set>
 
 struct pair_hash {
     template <class T1, class T2>
