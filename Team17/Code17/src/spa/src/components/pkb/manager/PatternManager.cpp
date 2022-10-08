@@ -32,7 +32,7 @@ std::unordered_set<std::string> PatternManager::getPattern(DesignEntity designEn
 
 	for (auto& pt : patternStorage) {
 		ret = pt->getPattern(designEntity, firstArgument, secondArgument);
-		;if (ret.size() != 0) {
+		if (ret.size() != 0) {
 			return ret;
 		}
 	}

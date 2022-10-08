@@ -250,13 +250,11 @@ std::unordered_map<std::string, std::unordered_set<std::string>>* NextRelationsh
 bool NextRelationshipStorage::DFSNextTForward(std::string curr, std::string target, std::unordered_set<std::string>& visited) {
 	visited.insert(curr);
 
-	std::unordered_map<std::string, std::unordered_set<std::string>>::const_iterator neighboursIterator = this->stmtToStmtForwardMap.find(curr);
+	std::unordered_set<std::string> neighbours = RelationshipUtils::getNeighbourWithDefault(&this->stmtToStmtForwardMap, curr);
 
-	if (neighboursIterator != this->stmtToStmtForwardMap.end()) {
-		for (std::string neighbour : neighboursIterator->second) {
-			if (target == neighbour || (visited.find(neighbour) == visited.end() && DFSNextTForward(neighbour, target, visited))) {
-				return true;
-			}
+	for (std::string neighbour : neighbours) {
+		if (target == neighbour || (visited.find(neighbour) == visited.end() && DFSNextTForward(neighbour, target, visited))) {
+			return true;
 		}
 	}
 
@@ -269,17 +267,15 @@ void NextRelationshipStorage::DFSNextTForwardWithSynonym(std::string curr, std::
 													std::unordered_map<std::string, std::unordered_set<std::string>>* storage) {
 	visited.insert(curr);
 
-	std::unordered_map<std::string, std::unordered_set<std::string>>::const_iterator neighboursIterator = storage->find(curr);
+	std::unordered_set<std::string> neighbours = RelationshipUtils::getNeighbourWithDefault(storage, curr);
 
-	if (neighboursIterator != storage->end()) {
-		for (std::string neighbour : neighboursIterator->second) {
-			std::unordered_set<std::string>::const_iterator exist = visited.find(neighbour);
-			if (filter.find(neighbour) != filter.end()) {
-				result.insert(neighbour);
-			}
-			if (exist == visited.end()) {
-				DFSNextTForwardWithSynonym(neighbour, visited, result, filter, storage);
-			}
+	for (std::string neighbour : neighbours) {
+		std::unordered_set<std::string>::const_iterator exist = visited.find(neighbour);
+		if (filter.find(neighbour) != filter.end()) {
+			result.insert(neighbour);
+		}
+		if (exist == visited.end()) {
+			DFSNextTForwardWithSynonym(neighbour, visited, result, filter, storage);
 		}
 	}
 }
