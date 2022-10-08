@@ -39,15 +39,11 @@ TEST_CASE("PKB Entity Managertest") {
 	REQUIRE(pkb.getAllEntity(DesignEntity::READ) == read_set);
 	REQUIRE(pkb.getAllEntity(DesignEntity::CALL) == call_set);
 
-	std::unordered_set<std::string> callSet{ call_value_one };
-	std::unordered_set<std::string> printSet{ print_value_one };
-	std::unordered_set<std::string> readSet{ read_value_one };
+	std::string callMappingResult = procedure_value_one;
+	std::string readMappingResult = variable_value_one;
 
-	std::unordered_set<std::string> callMappingResult{ procedure_value_one };
-	std::unordered_set<std::string> readMappingResult{ variable_value_one };
-
-	std::unordered_set<std::string> callMappingTest = pkb.getStatementMapping(callSet, DesignEntity::CALL);
-	std::unordered_set<std::string> readMappingTest = pkb.getStatementMapping(readSet, DesignEntity::READ);
+	std::string callMappingTest = pkb.getStatementMapping(call_value_one, DesignEntity::CALL);
+	std::string readMappingTest = pkb.getStatementMapping(read_value_one, DesignEntity::READ);
 
 	REQUIRE(callMappingTest == callMappingResult);
 	REQUIRE(readMappingTest == readMappingResult);
@@ -347,17 +343,13 @@ TEST_CASE("All Manager Test") {
 	REQUIRE(pkb.getAllEntity(DesignEntity::VARIABLE) == var_set);
 	REQUIRE(pkb.getAllEntity(DesignEntity::CONSTANT) == const_set);
 
-	std::unordered_set<std::string> callSet{ call_value_one };
-	std::unordered_set<std::string> printSet{ print_value_one };
-	std::unordered_set<std::string> readSet{ read_value_one };
+	std::string callMappingResult = procedure_value_one;
+	std::string printMappingResult = variable_value_one;
+	std::string readMappingResult = variable_value_one;
 
-	std::unordered_set<std::string> callMappingResult{ procedure_value_one };
-	std::unordered_set<std::string> printMappingResult{ variable_value_one };
-	std::unordered_set<std::string> readMappingResult{ variable_value_one };
-
-	std::unordered_set<std::string> callMappingTest = pkb.getStatementMapping(callSet, DesignEntity::CALL);
-	std::unordered_set<std::string> printMappingTest = pkb.getStatementMapping(printSet, DesignEntity::PRINT);
-	std::unordered_set<std::string> readMappingTest = pkb.getStatementMapping(readSet, DesignEntity::READ);
+	std::string callMappingTest = pkb.getStatementMapping(call_value_one, DesignEntity::CALL);
+	std::string printMappingTest = pkb.getStatementMapping(print_value_one, DesignEntity::PRINT);
+	std::string readMappingTest = pkb.getStatementMapping(read_value_one, DesignEntity::READ);
 
 	REQUIRE(callMappingTest == callMappingResult);
 	REQUIRE(printMappingTest == printMappingResult);

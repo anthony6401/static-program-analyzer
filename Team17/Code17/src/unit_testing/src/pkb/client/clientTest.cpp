@@ -106,17 +106,13 @@ TEST_CASE("QPS Client test") {
 	REQUIRE(qpsClient.getAllEntity(DesignEntity::VARIABLE) == var_set);
 	REQUIRE(qpsClient.getAllEntity(DesignEntity::CONSTANT) == const_set);
 
-	std::unordered_set<std::string> callSet{ call_value_one };
-	std::unordered_set<std::string> printSet{ print_value_one };
-	std::unordered_set<std::string> readSet{ read_value_one };
+	std::string callMappingResult = procedure_value_one;
+	std::string printMappingResult = variable_value_one;
+	std::string readMappingResult = variable_value_one;
 
-	std::unordered_set<std::string> callMappingResult{ procedure_value_one };
-	std::unordered_set<std::string> printMappingResult{ variable_value_one };
-	std::unordered_set<std::string> readMappingResult{ variable_value_one };
-
-	std::unordered_set<std::string> callMappingTest = qpsClient.getStatementMapping(callSet, DesignEntity::CALL);
-	std::unordered_set<std::string> printMappingTest = qpsClient.getStatementMapping(printSet, DesignEntity::PRINT);
-	std::unordered_set<std::string> readMappingTest = qpsClient.getStatementMapping(readSet, DesignEntity::READ);
+	std::string callMappingTest = qpsClient.getStatementMapping(call_value_one, DesignEntity::CALL);
+	std::string printMappingTest = qpsClient.getStatementMapping(print_value_one, DesignEntity::PRINT);
+	std::string readMappingTest = qpsClient.getStatementMapping(read_value_one, DesignEntity::READ);
 
 	REQUIRE(callMappingTest == callMappingResult);
 	REQUIRE(printMappingTest == printMappingResult);

@@ -188,23 +188,19 @@ TEST_CASE("Call Entity Storage Test") {
 	REQUIRE(callSet.find(call_value_two) != callSet.end());
 	REQUIRE(callSet.find(call_value_three) == callSet.end());
 
-	std::unordered_set<std::string> stmtSet1 = { call_value_one, call_value_two };
-	std::unordered_set<std::string> stmtSet2 = { call_value_two };
-	std::unordered_set < std::string> stmtSet3 = { call_value_three };
+	std::string expectedResult1 = procedure_value_one;
+	std::string expectedResult2 = procedure_value_two;
+	std::string expectedResult3 = std::string();
 
-	std::unordered_set < std::string> expectedResultSet1 = { procedure_value_one, procedure_value_two };
-	std::unordered_set < std::string> expectedResultSet2 = { procedure_value_two };
-	std::unordered_set < std::string> expectedResultSet3 = { };
+	std::string callSet1 = callEntityStorage->getStatementMapping(call_value_one, DesignEntity::CALL);
+	std::string callSet2 = callEntityStorage->getStatementMapping(call_value_two, DesignEntity::CALL);
+	std::string callSet3 = callEntityStorage->getStatementMapping(call_value_three, DesignEntity::CALL);
+	std::string callSet4 = callEntityStorage->getStatementMapping(call_value_one, DesignEntity::READ);
 
-	std::unordered_set<std::string> callSet1 = callEntityStorage->getStatementMapping(stmtSet1, DesignEntity::CALL);
-	std::unordered_set<std::string> callSet2 = callEntityStorage->getStatementMapping(stmtSet2, DesignEntity::CALL);
-	std::unordered_set<std::string> callSet3 = callEntityStorage->getStatementMapping(stmtSet3, DesignEntity::CALL);
-	std::unordered_set<std::string> callSet4 = callEntityStorage->getStatementMapping(stmtSet1, DesignEntity::READ);
-
-	REQUIRE(callSet1 == expectedResultSet1);
-	REQUIRE(callSet2 == expectedResultSet2);
-	REQUIRE(callSet3 == expectedResultSet3);
-	REQUIRE(callSet4 == expectedResultSet3);
+	REQUIRE(callSet1 == expectedResult1);
+	REQUIRE(callSet2 == expectedResult2);
+	REQUIRE(callSet3 == expectedResult3);
+	REQUIRE(callSet4 == expectedResult3);
 }
 
 TEST_CASE("If Entity Storage Test") {
@@ -323,23 +319,19 @@ TEST_CASE("Print Entity Storage Test") {
 	REQUIRE(printSet.find(print_value_two) != printSet.end());
 	REQUIRE(printSet.find(print_value_three) == printSet.end());
 
-	std::unordered_set<std::string> stmtSet1 = {print_value_one, print_value_two };
-	std::unordered_set<std::string> stmtSet2 = { print_value_two };
-	std::unordered_set < std::string> stmtSet3 = { print_value_three };
+	std::string expectedResult1 = variable_value_one;
+	std::string expectedResult2 = variable_value_two;
+	std::string expectedResult3 = std::string();
 
-	std::unordered_set < std::string> expectedResultSet1 = {variable_value_one, variable_value_two };
-	std::unordered_set < std::string> expectedResultSet2 = { variable_value_two };
-	std::unordered_set < std::string> expectedResultSet3 = { };
+	std::string printSet1 = printEntityStorage->getStatementMapping(print_value_one, DesignEntity::PRINT);
+	std::string printSet2 = printEntityStorage->getStatementMapping(print_value_two, DesignEntity::PRINT);
+	std::string printSet3 = printEntityStorage->getStatementMapping(print_value_three, DesignEntity::PRINT);
+	std::string printSet4 = printEntityStorage->getStatementMapping(print_value_one, DesignEntity::CALL);
 
-	std::unordered_set<std::string> printSet1 = printEntityStorage->getStatementMapping(stmtSet1, DesignEntity::PRINT);
-	std::unordered_set<std::string> printSet2 = printEntityStorage->getStatementMapping(stmtSet2, DesignEntity::PRINT);
-	std::unordered_set<std::string> printSet3 = printEntityStorage->getStatementMapping(stmtSet3, DesignEntity::PRINT);
-	std::unordered_set<std::string> printSet4 = printEntityStorage->getStatementMapping(stmtSet1, DesignEntity::CALL);
-
-	REQUIRE(printSet1 == expectedResultSet1);
-	REQUIRE(printSet2 == expectedResultSet2);
-	REQUIRE(printSet3 == expectedResultSet3);
-	REQUIRE(printSet4 == expectedResultSet3);
+	REQUIRE(printSet1 == expectedResult1);
+	REQUIRE(printSet2 == expectedResult2);
+	REQUIRE(printSet3 == expectedResult3);
+	REQUIRE(printSet4 == expectedResult3);
 }
 
 
@@ -458,23 +450,19 @@ TEST_CASE("Read Entity Storage Test") {
 	REQUIRE(readSet.find(read_value_two) != readSet.end());
 	REQUIRE(readSet.find(read_value_three) == readSet.end());
 
-	std::unordered_set<std::string> stmtSet1 = { read_value_one, read_value_two };
-	std::unordered_set<std::string> stmtSet2 = { read_value_two };
-	std::unordered_set < std::string> stmtSet3 = { read_value_three };
+	std::string expectedResult1 = variable_value_one;
+	std::string expectedResult2 = variable_value_two;
+	std::string expectedResult3 = std::string();
 
-	std::unordered_set < std::string> expectedResultSet1 = { variable_value_one, variable_value_two };
-	std::unordered_set < std::string> expectedResultSet2 = { variable_value_two };
-	std::unordered_set < std::string> expectedResultSet3 = { };
+	std::string readSet1 = readEntityStorage->getStatementMapping(read_value_one, DesignEntity::READ);
+	std::string readSet2 = readEntityStorage->getStatementMapping(read_value_two, DesignEntity::READ);
+	std::string readSet3 = readEntityStorage->getStatementMapping(read_value_three, DesignEntity::READ);
+	std::string readSet4 = readEntityStorage->getStatementMapping(read_value_one, DesignEntity::CALL);
 
-	std::unordered_set<std::string> readSet1 = readEntityStorage->getStatementMapping(stmtSet1, DesignEntity::READ);
-	std::unordered_set<std::string> readSet2 = readEntityStorage->getStatementMapping(stmtSet2, DesignEntity::READ);
-	std::unordered_set<std::string> readSet3 = readEntityStorage->getStatementMapping(stmtSet3, DesignEntity::READ);
-	std::unordered_set<std::string> readSet4 = readEntityStorage->getStatementMapping(stmtSet1, DesignEntity::CALL);
-
-	REQUIRE(readSet1 == expectedResultSet1);
-	REQUIRE(readSet2 == expectedResultSet2);
-	REQUIRE(readSet3 == expectedResultSet3);
-	REQUIRE(readSet4 == expectedResultSet3);
+	REQUIRE(readSet1 == expectedResult1);
+	REQUIRE(readSet2 == expectedResult2);
+	REQUIRE(readSet3 == expectedResult3);
+	REQUIRE(readSet4 == expectedResult3);
 }
 
 TEST_CASE("Variable Entity Storage Test") {
