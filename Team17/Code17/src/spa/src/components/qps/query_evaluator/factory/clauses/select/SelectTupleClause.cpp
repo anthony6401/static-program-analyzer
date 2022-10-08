@@ -22,12 +22,13 @@ ResultTable SelectTupleClause::evaluateClause() {
             } else {
                 intermediate = SelectTupleClause::evaluateSynonymInTuple(tupleObjectValue, returnType);
             }
-        } else if (tupleObjectType == TokenType::ATTRIBUTE_SYNONYM) {
-            std::string attributeName = tuple[i + 1].getValue(); // Type: ATTRIBUTE_NAME
+        }
+
+        if (tupleObjectType == TokenType::ATTRIBUTE_SYNONYM) {
             if (synonymsInTable.find(tupleObjectValue) != synonymsInTable.end()) {
                 continue;
             } else {
-                intermediate = SelectTupleClause::evaluateAttributeInTuple(tupleObjectValue, attributeName, returnType);
+                intermediate = SelectTupleClause::evaluateAttributeInTuple(tupleObjectValue,  returnType);
             }
         }
         resultTable.combineResult(intermediate);
@@ -43,9 +44,9 @@ ResultTable SelectTupleClause::evaluateSynonymInTuple(std::string synonym, Desig
     return {synonym, results};
 }
 
-ResultTable SelectTupleClause::evaluateAttributeInTuple(std::string synonym, std::string attributeName, DesignEntity returnType) {
-
-    return {};
+ResultTable SelectTupleClause::evaluateAttributeInTuple(std::string synonym, DesignEntity returnType) {
+    std::unordered_set<std::string> results = qpsClient.getAllEntity(returnType);
+    return {synonym, results};
 }
 
 size_t SelectTupleClause::getNumberOfSynonyms() {
