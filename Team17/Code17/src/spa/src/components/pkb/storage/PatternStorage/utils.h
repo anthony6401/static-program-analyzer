@@ -7,6 +7,7 @@
 #include <iterator>
 #include <vector>
 #include <iostream>
+#include <unordered_set>
 
 struct pair_hash {
     template <class T1, class T2>
@@ -159,5 +160,11 @@ public:
         }
 
         return result;
+    }
+
+    static void populatePairFromSet(std::unordered_set<std::string>* set, std::string key, std::vector<std::pair<std::string, std::string>>* result) {
+        for (const auto& elem : *set) {
+            result->push_back({ elem, key });
+        }
     }
 };

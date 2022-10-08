@@ -1,10 +1,9 @@
 #pragma once
-#include "Pattern.h"
+#include "ThreeValuePattern.h"
 #include <string>
 
-using namespace kb;
 
-class AssignPattern : public kb::Pattern {
+class AssignPattern : public ThreeValuePattern {
 
 public:
 	AssignPattern(std::string lineNum, std::string firstValue, std::string secondValue);
