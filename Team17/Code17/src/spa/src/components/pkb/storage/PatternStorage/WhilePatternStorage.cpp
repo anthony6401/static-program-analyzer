@@ -8,7 +8,7 @@
 WhilePattern::WhilePattern() : PatternStorage(), whilePatternStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()) {}
 
 bool WhilePattern::storePattern(kb::Pattern* pattern) {
-	IfPattern* ifPattern = dynamic_cast<IfPattern*>(pattern);
+	WhilePattern* ifPattern = dynamic_cast<WhilePattern*>(pattern);
 	if (ifPattern) {
 		std::string lineNum = ifPattern->getLineNum();
 		std::string firstValue = ifPattern->getFirstValue();
@@ -33,7 +33,7 @@ bool WhilePattern::storePattern(kb::Pattern* pattern) {
 std::unordered_set<std::string> WhilePattern::getPattern(DesignEntity designEntity, TokenObject firstArgument, TokenObject secondArgument) {
 	std::unordered_set<std::string> result;
 
-	if (designEntity == DesignEntity::IF) {
+	if (designEntity == DesignEntity::WHILE) {
 		if (this->ifPatternStorage.find(firstArgument.getValue()) != this->ifPatternStorage.end()) {
 			return this->ifPatternStorage.find(firstArgument.getValue())->second;
 		}
@@ -45,7 +45,7 @@ std::unordered_set<std::string> WhilePattern::getPattern(DesignEntity designEnti
 // This method is used to answer pattern query with SYNONYM and WILDCARD TokenType for the firstArgument i.e. if(v,_,_), if(_,_,_)
 std::vector<std::pair<std::string, std::string>> WhilePattern::getPatternPair(DesignEntity designEntity, TokenObject secondArgument) {
 	std::vector<std::pair<std::string, std::string>> result;
-	if (designEntity == DesignEntity::IF) {
+	if (designEntity == DesignEntity::WHILE) {
 		for (auto it = this->ifPatternStorage.begin(); it != this->ifPatternStorage.end(); it++) {
 			std::string variable = it->first;
 			std::unordered_set<std::string>* set = &this->ifPatternStorage.find(variable)->second;
