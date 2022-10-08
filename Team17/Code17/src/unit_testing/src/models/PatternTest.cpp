@@ -1,5 +1,6 @@
 #include "models/Pattern/Pattern.h"
 #include "models/Pattern/AssignPattern.h"
+#include "models/Pattern/IfPattern.h"
 
 #include <catch.hpp>
 
@@ -23,4 +24,13 @@ TEST_CASE("Assign Pattern Test") {
     REQUIRE(assignPattern.getLineNum() == assignLineNum);
     REQUIRE(assignPattern.getFirstValue() == assignFirstValue);
     REQUIRE(assignPattern.getSecondValue() == assignSecondValue);
+}
+
+TEST_CASE("If Pattern Test") {
+    std::string ifLineNum = "1";
+    std::string ifFirstValue = "firstValue";
+
+    Pattern assignPattern = IfPattern(ifLineNum, ifFirstValue);
+    REQUIRE(assignPattern.getLineNum() == ifLineNum);
+    REQUIRE(assignPattern.getFirstValue() == ifFirstValue);
 }
