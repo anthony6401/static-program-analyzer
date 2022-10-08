@@ -861,6 +861,15 @@ TEST_CASE("BOOLEAN queries") {
     }
 }
 
+TEST_CASE("BOOLEAN declared as synonym") {
+    std::string testQuery = "procedure p, BOOLEAN;\n "
+                            "Select BOOLEAN such that Calls(p, BOOLEAN)";
+    std::list<std::string> testResults;
+    std::list<std::string> expectedResults = { "Second", "Third" };
+    QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+    REQUIRE(testResults == expectedResults);
+}
+
 TEST_CASE("TUPLE queries") {
     SECTION("Tuple Test 1 - 2 synonyms present") {
         std::string testQuery = "procedure p, p1;\n "
