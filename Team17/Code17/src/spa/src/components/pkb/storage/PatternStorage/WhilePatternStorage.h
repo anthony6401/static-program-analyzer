@@ -6,10 +6,10 @@
 #include "utils.h"
 #include "components/qps/query_preprocessor/query_tokenizer/TokenObject.h"
 
-class WilePatternStorage : public PatternStorage {
+class WhilePatternStorage : public PatternStorage {
 
 public:
-	WilePatternStorage();
+	WhilePatternStorage();
 	bool storePattern(kb::Pattern* pattern);
 	std::unordered_set<std::string> getPattern(DesignEntity designEntity, TokenObject firstArgument, TokenObject secondArgument);
 	std::vector<std::pair<std::string, std::string>> getPatternPair(DesignEntity designEntity, TokenObject secondArgument);
