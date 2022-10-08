@@ -2,6 +2,7 @@
 
 #include "components/pkb/storage/PatternStorage/PatternStorage.h"
 #include "components/pkb/storage/PatternStorage/AssignPatternStorage.h"
+#include "components/pkb/storage/PatternStorage/IfPatternStorage.h"
 #include "../PatternObject.h"
 #include "../ReuseableTokenObject.h"
 
@@ -87,4 +88,33 @@ TEST_CASE("Assign Pattern Storage Test") {
 	REQUIRE(assignGetPatternPairNameSubexprTwo == expectedGetPatternPairNameSubexprTwo);
 	REQUIRE(assignGetPatternPairNameSubexprThree == expectedGetPatternPairNameSubexprThree);
 	REQUIRE(assignGetPatternPairNameWildcard == expectedGetPatternPairNameWilcard);
+}
+
+TEST_CASE("If Pattern Storage Test") {
+	PatternStorage* ifPatternStorage = new IfPatternStorage();
+
+	REQUIRE(ifPatternStorage->storePattern(ifPatternOne));
+	REQUIRE(ifPatternStorage->storePattern(ifPatternTwo));
+	REQUIRE(ifPatternStorage->storePattern(ifPatternOneDup));
+
+
+	std::unordered_set<std::string> ifGetPatternNameNameOne = ifPatternStorage->getPattern(DesignEntity::IF, ifPatternTokenObjectFirstOne, TokenObject());
+	std::unordered_set<std::string> ifGetPatternNameNameTwo = ifPatternStorage->getPattern(DesignEntity::IF, ifPatternTokenObjectFirstTwo, TokenObject());
+
+	std::unordered_set<std::string> expectedResultIfGetPatternOne({ ifLineNumOne });
+	std::unordered_set<std::string> expectedResultIfGetPatternTwo({ ifLineNumTwo });
+
+	std::vector<std::pair<std::string, std::string>> ifGetPatternPairNameNameOne = ifPatternStorage->getPatternPair(DesignEntity::IF, ifPatternTokenObjectFirstOne);
+	std::vector<std::pair<std::string, std::string>> ifGetPatternPairNameNameTwo = ifPatternStorage->getPatternPair(DesignEntity::IF, ifPatternTokenObjectFirstTwo);
+	
+	std::vector<std::pair<std::string, std::string>> expectedGetPatternPairNameNameOne{ {ifFirstValueOne, ifLineNumOne},
+																						{ifFirstValueTwo, ifLineNumTwo},
+																						{ifFirstValueTwo, ifLineNumOne} };
+
+	std::vector<std::pair<std::string, std::string>> expectedGetPatternPairNameNameTwo{ {ifFirstValueOne, ifLineNumOne},
+																						{ifFirstValueTwo, ifLineNumTwo},
+																						{ifFirstValueTwo, ifLineNumOne} };
+
+	REQUIRE(ifGetPatternPairNameNameOne == expectedGetPatternPairNameNameOne);
+	REQUIRE(ifGetPatternPairNameNameTwo == expectedGetPatternPairNameNameTwo);
 }
