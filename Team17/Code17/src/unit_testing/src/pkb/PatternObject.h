@@ -3,6 +3,7 @@
 #include "models/Pattern/Pattern.h"
 #include "models/Pattern/AssignPattern.h"
 #include "models/Pattern/IfPattern.h"
+#include "models/Pattern/WhilePattern.h"
 
 static std::string assignLineNumOne = "1";
 static std::string assignFirstValueOne = "a";
@@ -61,6 +62,6 @@ static std::string whileFirstValueOne = "y";
 static std::string whileLineNumTwo = "400";
 static std::string whileFirstValueTwo = "def";
 
-static kb::Pattern* whilePatternOne = new IfPattern(ifLineNumOne, ifFirstValueOne);
-static kb::Pattern* whilePatternOneDup = new IfPattern(ifLineNumOne, ifFirstValueTwo);
-static kb::Pattern* whilePatternTwo = new IfPattern(ifLineNumTwo, ifFirstValueTwo);
+static kb::Pattern* whilePatternOne = new WhilePattern(whileLineNumOne, whileFirstValueOne);
+static kb::Pattern* whilePatternOneDup = new WhilePattern(whileLineNumOne, whileFirstValueTwo);
+static kb::Pattern* whilePatternTwo = new WhilePattern(whileLineNumTwo, whileFirstValueTwo);
