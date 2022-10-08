@@ -906,7 +906,7 @@ TEST_CASE("TUPLE queries with synonyms") {
 }
 
 TEST_CASE("Tuple queries with attributes") {
-    SECTION("Tuple Test 4 - 3 synonyms present") {
+    SECTION("Tuple Test 1 - 1 attribute present") {
         std::string testQuery = "procedure p, p1; variable v; stmt s;\n "
                                 "Select <p.procName, p1, s> such that Calls(p, p1) and Modifies(s, \"i\")";
         std::list<std::string> testResults;
@@ -917,11 +917,22 @@ TEST_CASE("Tuple queries with attributes") {
         REQUIRE(testResults == expectedResults);
     }
 
-    SECTION("Tuple Test 4 - 3 synonyms present") {
+    SECTION("Tuple Test 2 - 3 attributes present") {
         std::string testQuery = "procedure p, p1; variable v; stmt s;\n "
                                 "Select <p.procName, p1.procName, s.stmt#> such that Calls(p, p1) and Modifies(s, \"i\")";
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"First Second 6", "Second Third 9", "First Second 5", "Second Third 6", "First Second 9", "Second Third 5"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Tuple Test 3 - 2 attributes present") {
+        std::string testQuery = "procedure p, p1; variable v; stmt s; constant c;\n "
+                                "Select <c.value, p.procName> such that Calls(p, p1) and Modifies(s, \"i\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"0 First", "0 Second", "5 First", "5 Second", "2 First", "2 Second", "1 First", "1 Second"};
         QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
         testResults.sort();
         expectedResults.sort();
