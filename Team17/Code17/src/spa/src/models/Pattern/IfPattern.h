@@ -7,5 +7,5 @@ using namespace kb;
 class IfPattern : public kb::Pattern {
 
 public:
-	IfPattern(std::string lineNum, std::string firstValue, std::string secondValue = "");
+	IfPattern(std::string lineNum, std::string firstValue);
 };
