@@ -54,12 +54,11 @@ public:
 
                 i++;
                 j++;
+                // If array B is completely
+                // traversed
+                if (j == m)
+                    return true;
             }
-
-            // If array B is completely
-            // traversed
-            if (j == m)
-                return true;
 
             // If not,
             // increment i and reset j
