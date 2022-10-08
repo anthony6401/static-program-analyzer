@@ -3,6 +3,7 @@
 #include "components/pkb/storage/PatternStorage/PatternStorage.h"
 #include "components/pkb/storage/PatternStorage/AssignPatternStorage.h"
 #include "components/pkb/storage/PatternStorage/IfPatternStorage.h"
+#include "components/pkb/storage/PatternStorage/WhilePatternStorage.h"
 #include "../PatternObject.h"
 #include "../ReuseableTokenObject.h"
 
@@ -118,4 +119,38 @@ TEST_CASE("If Pattern Storage Test") {
 
 	REQUIRE(ifGetPatternPairNameNameOne == expectedGetPatternPairNameNameOne);
 	REQUIRE(ifGetPatternPairNameNameTwo == expectedGetPatternPairNameNameTwo);
+}
+
+TEST_CASE("While Pattern Storage Test") {
+	PatternStorage* whilePatternStorage = new WhilePatternStorage();
+
+
+	REQUIRE(whilePatternStorage->storePattern(whilePatternOne));
+	REQUIRE(whilePatternStorage->storePattern(whilePatternTwo));
+	REQUIRE(whilePatternStorage->storePattern(whilePatternOneDup));
+
+  
+	std::unordered_set<std::string> whileGetPatternNameNameOne = whilePatternStorage->getPattern(DesignEntity::WHILE, whilePatternTokenObjectFirstOne, TokenObject());
+	std::unordered_set<std::string> whileGetPatternNameNameTwo = whilePatternStorage->getPattern(DesignEntity::WHILE, whilePatternTokenObjectFirstTwo, TokenObject());
+
+	std::unordered_set<std::string> expectedResultIfGetPatternOne({ whileLineNumOne });
+	std::unordered_set<std::string> expectedResultIfGetPatternTwo({ whileLineNumTwo });
+
+	std::vector<std::pair<std::string, std::string>> whileGetPatternPairNameNameOne = whilePatternStorage->getPatternPair(DesignEntity::WHILE, whilePatternTokenObjectFirstOne);
+	sort(whileGetPatternPairNameNameOne.begin(), whileGetPatternPairNameNameOne.end());
+	std::vector<std::pair<std::string, std::string>> whileGetPatternPairNameNameTwo = whilePatternStorage->getPatternPair(DesignEntity::WHILE, whilePatternTokenObjectFirstTwo);
+	sort(whileGetPatternPairNameNameTwo.begin(), whileGetPatternPairNameNameTwo.end());
+
+	std::vector<std::pair<std::string, std::string>> expectedGetPatternPairNameNameOne{ { whileLineNumOne, whileFirstValueOne },
+																						{ whileLineNumTwo, whileFirstValueTwo},
+																						{ whileLineNumOne, whileFirstValueTwo} };
+	sort(expectedGetPatternPairNameNameOne.begin(), expectedGetPatternPairNameNameOne.end());
+
+	std::vector<std::pair<std::string, std::string>> expectedGetPatternPairNameNameTwo{ { whileLineNumOne, whileFirstValueOne },
+																						{ whileLineNumTwo, whileFirstValueTwo},
+																						{ whileLineNumOne, whileFirstValueTwo} };
+	sort(expectedGetPatternPairNameNameTwo.begin(), expectedGetPatternPairNameNameTwo.end());
+
+	REQUIRE(whileGetPatternPairNameNameOne == expectedGetPatternPairNameNameOne);
+	REQUIRE(whileGetPatternPairNameNameTwo == expectedGetPatternPairNameNameTwo);
 }
