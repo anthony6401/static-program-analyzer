@@ -17,6 +17,9 @@ public:
 	PKB();
 	//For getting entity
 	std::unordered_set<std::string> getAllEntity(DesignEntity returnType);
+
+	// For getting entity mapping
+	std::string getStatementMapping(std::string& stmtNumber, DesignEntity entityType);
 	
 	// For constant
 	bool storeConstant(Entity* entity);

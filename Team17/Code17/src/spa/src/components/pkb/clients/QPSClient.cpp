@@ -38,3 +38,6 @@ std::vector<std::pair<std::string, std::string>> QPSClient::getPatternPair(Desig
 	return pkb->getPatternPair(designEntity, secondArgument);
 }
 
+std::string QPSClient::getStatementMapping(std::string& stmtNumber, DesignEntity entityType) {
+	return pkb->getStatementMapping(stmtNumber, entityType);
+}
