@@ -7,27 +7,27 @@
 
 IfPatternStorage::IfPatternStorage() : PatternStorage(), ifPatternStorage(std::unordered_map<std::string, std::unordered_set<std::string>> ()) {}
 
-//bool IfPatternStorage::storePattern(kb::Pattern* pattern) {
-//	IfPattern* ifPattern = dynamic_cast<IfPattern*>(pattern);
-//	if (ifPattern) {
-//		std::string lineNum = ifPattern->getLineNum();
-//		std::string firstValue = ifPattern->getFirstValue();
-//		
-//		if (this->ifPatternStorage.find(firstValue) != this->ifPatternStorage.end()) {
-//			this->ifPatternStorage.insert({ firstValue, std::unordered_set<std::string>()});
-//		}
-//
-//		return this->ifPatternStorage.find(firstValue)->second.insert(lineNum).second;
-//		
-//	}
-//
-//	return false;
-//}
+bool IfPatternStorage::storePattern(kb::Pattern* pattern) {
+	IfPattern* ifPattern = dynamic_cast<IfPattern*>(pattern);
+	if (ifPattern) {
+		std::string lineNum = ifPattern->getLineNum();
+		std::string firstValue = ifPattern->getFirstValue();
+		
+		if (this->ifPatternStorage.find(firstValue) == this->ifPatternStorage.end()) {
+			this->ifPatternStorage.insert({ firstValue, std::unordered_set<std::string>()});
+		}
 
-bool IfPatternStorage::storePattern(kb::Pattern* pattern)
-{
+		return this->ifPatternStorage.find(firstValue)->second.insert(lineNum).second;
+		
+	}
+
 	return false;
 }
+
+//bool IfPatternStorage::storePattern(kb::Pattern* pattern)
+//{
+//	return false;
+//}
 
 // This method is used to answer pattern query with NAME_WITH_QUOTES TokenType for the firstArgument i.e. if("x",_,_)
 std::unordered_set<std::string> IfPatternStorage::getPattern(DesignEntity designEntity, TokenObject firstArgument, TokenObject secondArgument) {
