@@ -2,6 +2,8 @@
 
 #include "models/Pattern/Pattern.h"
 #include "models/Pattern/AssignPattern.h"
+#include "models/Pattern/IfPattern.h"
+#include "models/Pattern/WhilePattern.h"
 
 static std::string assignLineNumOne = "1";
 static std::string assignFirstValueOne = "a";
@@ -44,3 +46,22 @@ static kb::Pattern* assignPatternFive = new AssignPattern(assignLineNumFive, ass
 static kb::Pattern* assignPatternSix = new AssignPattern(assignLineNumSix, assignFirstValueSix, assignSecondValueSix);
 static kb::Pattern* assignPatternSeven = new AssignPattern(assignLineNumSeven, assignFirstValueSeven, assignSecondValueSeven);
 static kb::Pattern* assignPatternEight = new AssignPattern(assignLineNumEight, assignFirstValueEight, assignSecondValueEight);
+
+
+static std::string ifLineNumOne = "100";
+static std::string ifFirstValueOne = "x";
+static std::string ifLineNumTwo = "200";
+static std::string ifFirstValueTwo = "abc";
+
+static kb::Pattern* ifPatternOne = new IfPattern(ifLineNumOne, ifFirstValueOne);
+static kb::Pattern* ifPatternOneDup = new IfPattern(ifLineNumOne, ifFirstValueTwo);
+static kb::Pattern* ifPatternTwo = new IfPattern(ifLineNumTwo, ifFirstValueTwo);
+
+static std::string whileLineNumOne = "300";
+static std::string whileFirstValueOne = "y";
+static std::string whileLineNumTwo = "400";
+static std::string whileFirstValueTwo = "def";
+
+static kb::Pattern* whilePatternOne = new WhilePattern(whileLineNumOne, whileFirstValueOne);
+static kb::Pattern* whilePatternOneDup = new WhilePattern(whileLineNumOne, whileFirstValueTwo);
+static kb::Pattern* whilePatternTwo = new WhilePattern(whileLineNumTwo, whileFirstValueTwo);
