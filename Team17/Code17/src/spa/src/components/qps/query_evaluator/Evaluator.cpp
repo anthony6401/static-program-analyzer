@@ -37,13 +37,13 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
         ResultTable selectTable = selectClause -> evaluateClause();
         evaluatedResults.combineResult(selectTable);
         // std::cout << "evaluated results aft combining: " << evaluatedResults.getHasAlternativeAttributeName() << std::endl;
-        Evaluator::populateResultsList(evaluatedResults, select, results, qpsClient);
+        Evaluator::populateResultsList(evaluatedResults, select, results, qpsClient, synonymToDesignEntityMap);
     }
 }
 
 
 
-void Evaluator::populateResultsList(ResultTable &evaluatedResults, Select select, std::list<std::string> &results, QPSClient qpsClient) {
+void Evaluator::populateResultsList(ResultTable &evaluatedResults, Select select, std::list<std::string> &results, QPSClient qpsClient, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap) {
     std::string selectSynonym = select.getReturnValues().front().getValue();
     TokenType returnType = select.getReturnType();
     if (returnType == TokenType::BOOLEAN) {
@@ -67,7 +67,7 @@ void Evaluator::populateResultsList(ResultTable &evaluatedResults, Select select
 
     if (returnType == TokenType::TUPLE) {
         std::vector<TokenObject> tuple = select.getReturnValues();
-        std::unordered_set<std::string> resultsToPopulate = evaluatedResults.getTupleResultsToBePopulated(tuple);
+        std::unordered_set<std::string> resultsToPopulate = evaluatedResults.getTupleResultsToBePopulated(tuple, synonymToDesignEntityMap);
         for (std::string result : resultsToPopulate) {
             results.emplace_back(result);
         }

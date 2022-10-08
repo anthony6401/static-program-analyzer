@@ -1,5 +1,4 @@
 #include "SelectTupleClause.h"
-#include "SelectAttributeClause.h"
 #include "components/pkb/pkb.h"
 #include "components/pkb/clients/QPSClient.h"
 #include "iostream"

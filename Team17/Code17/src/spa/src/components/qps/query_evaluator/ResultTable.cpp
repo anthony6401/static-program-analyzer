@@ -3,8 +3,11 @@
 #include "string"
 #include "iostream"
 #include "components/qps/query_preprocessor/query_tokenizer/TokenObject.h"
-#include <map>
+#include "./factory/clauses/select/SelectAttributeClause.h"
+#include "Evaluator.h"
+#include <unordered_map>
 #include <initializer_list>
+#include "../../../models/Entity/DesignEntity.h"
 
 ResultTable::ResultTable() : resultsList({}), isFalseResult(false), synonymsList({}) {}
 
@@ -73,7 +76,7 @@ std::unordered_set<std::string> ResultTable::getSynonymResultsToBePopulated(std:
     return result;
 }
 
-std::unordered_set<std::string> ResultTable::getTupleResultsToBePopulated(std::vector<TokenObject> tuple) {
+std::unordered_set<std::string> ResultTable::getTupleResultsToBePopulated(std::vector<TokenObject> tuple, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap) {
     std::unordered_set<std::string> result({});
     for (auto resultSublist : resultsList) {
         std::vector<std::string> newResultSublist;
@@ -85,7 +88,15 @@ std::unordered_set<std::string> ResultTable::getTupleResultsToBePopulated(std::v
             }
 
             if (tuple[i].getTokenType() == TokenType::ATTRIBUTE_SYNONYM) {
-
+                std::string attributeName = tuple[i + 1].getValue();
+                DesignEntity returnType = synonymToDesignEntityMap[tuple[i].getValue()];
+                if (SelectAttributeClause::checkIsAlternateAttributeName(returnType, attributeName)) {
+                    // call pkb api
+                } else {
+                    auto iterator = std::find(synonymsList.begin(), synonymsList.end(), tuple[i].getValue());
+                    int indexOfSynonym = std::distance(synonymsList.begin(), iterator);
+                    newResultSublist.push_back(resultSublist[indexOfSynonym]);
+                }
             }
         }
         result.insert(ResultTable::formTupleResultString(newResultSublist));
