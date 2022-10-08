@@ -5,25 +5,27 @@
 #include <typeinfo>
 #include <vector>
 
-IfPatternStorage::IfPatternStorage() : PatternStorage(), ifPatternStorage(std::unordered_map<std::string, std::unordered_set<std::pair<std::string, std::string>, pair_hash>>()) {}
+IfPatternStorage::IfPatternStorage() : PatternStorage(), ifPatternStorage(std::unordered_map<std::string, std::unordered_set<std::string>> ()) {}
 
-bool IfPatternStorage::storePattern(kb::Pattern* pattern) {
-	IfPattern* ifPattern = dynamic_cast<IfPattern*>(pattern);
-	if (ifPattern) {
-		std::string lineNum = ifPattern->getLineNum();
-		std::string firstValue = ifPattern->getFirstValue();
-		std::string secondValue = PatternUtils::convertInfixToPostfix(ifPattern->getSecondValue());
+//bool IfPatternStorage::storePattern(kb::Pattern* pattern) {
+//	IfPattern* ifPattern = dynamic_cast<IfPattern*>(pattern);
+//	if (ifPattern) {
+//		std::string lineNum = ifPattern->getLineNum();
+//		std::string firstValue = ifPattern->getFirstValue();
+//		
+//		if (this->ifPatternStorage.find(firstValue) != this->ifPatternStorage.end()) {
+//			this->ifPatternStorage.insert({ firstValue, std::unordered_set<std::string>()});
+//		}
+//
+//		return this->ifPatternStorage.find(firstValue)->second.insert(lineNum).second;
+//		
+//	}
+//
+//	return false;
+//}
 
-
-		std::pair<std::string, std::string> pairValue(lineNum, secondValue);
-
-		if (this->ifPatternStorage.find(firstValue) == this->ifPatternStorage.end()) {
-			this->ifPatternStorage.insert({ firstValue, std::unordered_set<std::pair<std::string, std::string>, pair_hash>() });
-		}
-
-		return this->ifPatternStorage.find(firstValue)->second.insert(pairValue).second;
-	}
-
+bool IfPatternStorage::storePattern(kb::Pattern* pattern)
+{
 	return false;
 }
 
@@ -33,10 +35,7 @@ std::unordered_set<std::string> IfPatternStorage::getPattern(DesignEntity design
 
 	if (designEntity == DesignEntity::IF) {
 		if (this->ifPatternStorage.find(firstArgument.getValue()) != this->ifPatternStorage.end()) {
-			std::unordered_set<std::pair<std::string, std::string>, pair_hash>* set = &this->ifPatternStorage.find(firstArgument.getValue())->second;
-			for (auto it = set->begin(); it != set->end(); ++it) {
-				result.insert(it->first);
-			}
+			return this->ifPatternStorage.find(firstArgument.getValue())->second;
 		}
 	}
 
@@ -49,9 +48,9 @@ std::vector<std::pair<std::string, std::string>> IfPatternStorage::getPatternPai
 	if (designEntity == DesignEntity::IF) {
 		for (auto it = this->ifPatternStorage.begin(); it != this->ifPatternStorage.end(); it++) {
 			std::string variable = it->first;
-			std::unordered_set<std::pair<std::string, std::string>, pair_hash>* set = &this->ifPatternStorage.find(variable)->second;
-			for (auto pair = set->begin(); pair != set->end(); ++pair) {
-				result.push_back({ variable, pair->first });
+			std::unordered_set<std::string>* set = &this->ifPatternStorage.find(variable)->second;
+			for (const auto& elem : *set){
+				result.push_back({ elem, variable });
 			}
 		}
 	}
