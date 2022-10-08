@@ -459,10 +459,6 @@ std::vector<TokenObject> Tokenizer::tokenize(std::string query) {
         s.erase(std::remove_if(s.begin(), s.end(), ::isspace), s.end());
     }
 
-    for (auto s : tokenValues) {
-        std::cout << s << std::endl;
-    }
-
     for (std::string s : tokenValues) {
         s = trimString(s);
         if (stringToTokenMap.find(s) != stringToTokenMap.end()) {
@@ -473,11 +469,9 @@ std::vector<TokenObject> Tokenizer::tokenize(std::string query) {
                 TokenObject object = TokenObject(TokenType::TUPLE, s);
                 tokenList.push_back(object);
             } else if (isValidAttribute(s)) {
-                std::cout << "is valid attribute: " << s << std::endl;
                 TokenObject object = TokenObject(TokenType::ATTRIBUTE, s);
                 tokenList.push_back(object);
             } else if (isName(s)) {
-                std::cout << "is valid NAME: " << s << std::endl;
                 TokenObject object = TokenObject(TokenType::NAME, s);
                 tokenList.push_back(object);
             } else if (isInteger(s)) {
