@@ -107,15 +107,17 @@ TEST_CASE("If Pattern Storage Test") {
 	std::unordered_set<std::string> expectedResultIfGetPatternTwo({ ifLineNumTwo });
 
 	std::vector<std::pair<std::string, std::string>> ifGetPatternPairNameNameOne = ifPatternStorage->getPatternPair(DesignEntity::IF, ifPatternTokenObjectFirstOne);
+	sort(ifGetPatternPairNameNameOne.begin(), ifGetPatternPairNameNameOne.end());
 	std::vector<std::pair<std::string, std::string>> ifGetPatternPairNameNameTwo = ifPatternStorage->getPatternPair(DesignEntity::IF, ifPatternTokenObjectFirstTwo);
-	
+	sort(ifGetPatternPairNameNameTwo.begin(), ifGetPatternPairNameNameTwo.end());
 	std::vector<std::pair<std::string, std::string>> expectedGetPatternPairNameNameOne{ { ifLineNumOne, ifFirstValueOne },
 																						{ ifLineNumTwo, ifFirstValueTwo},
 																						{ ifLineNumOne, ifFirstValueTwo} };
-
+	sort(expectedGetPatternPairNameNameOne.begin(), expectedGetPatternPairNameNameOne.end());
 	std::vector<std::pair<std::string, std::string>> expectedGetPatternPairNameNameTwo{ { ifLineNumOne, ifFirstValueOne },
 																						{ ifLineNumTwo, ifFirstValueTwo},
 																						{ ifLineNumOne, ifFirstValueTwo} };
+	sort(expectedGetPatternPairNameNameTwo.begin(), expectedGetPatternPairNameNameTwo.end());
 
 	REQUIRE(ifGetPatternPairNameNameOne == expectedGetPatternPairNameNameOne);
 	REQUIRE(ifGetPatternPairNameNameTwo == expectedGetPatternPairNameNameTwo);
