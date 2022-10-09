@@ -24,22 +24,29 @@ TEST_CASE("PKB Entity Managertest") {
 
 	//Currenty one test is sufficient
 	REQUIRE(pkb.storeRelationship(usesRel));
+	REQUIRE(pkb.storeRelationship(followsRelationshipReadCallOne));
 	REQUIRE(pkb.storeConstant(constantEntity));
 
-	std::unordered_set<std::string> ass_set;
-	ass_set.insert(assign_value_one);
-
-	std::unordered_set<std::string> var_set;
-	var_set.insert(variable_value_one);
-
-	std::unordered_set<std::string> const_set;
-	const_set.insert(constant_value_one);
+	std::unordered_set<std::string> ass_set = {assign_value_one};
+	std::unordered_set<std::string> var_set = {variable_value_one};
+	std::unordered_set<std::string> const_set = {constant_value_one};
+	std::unordered_set<std::string> read_set = { read_value_one };
+	std::unordered_set<std::string> call_set = { call_value_one };
 
 	REQUIRE(pkb.getAllEntity(DesignEntity::ASSIGN) == ass_set);
 	REQUIRE(pkb.getAllEntity(DesignEntity::VARIABLE) == var_set);
 	REQUIRE(pkb.getAllEntity(DesignEntity::CONSTANT) == const_set);
+	REQUIRE(pkb.getAllEntity(DesignEntity::READ) == read_set);
+	REQUIRE(pkb.getAllEntity(DesignEntity::CALL) == call_set);
 
-	
+	std::string callMappingResult = procedure_value_one;
+	std::string readMappingResult = variable_value_one;
+
+	std::string callMappingTest = pkb.getStatementMapping(call_value_one, DesignEntity::CALL);
+	std::string readMappingTest = pkb.getStatementMapping(read_value_one, DesignEntity::READ);
+
+	REQUIRE(callMappingTest == callMappingResult);
+	REQUIRE(readMappingTest == readMappingResult);
 }
 
 TEST_CASE("PKB Pattern Manager test") {
@@ -335,6 +342,18 @@ TEST_CASE("All Manager Test") {
 	REQUIRE(pkb.getAllEntity(DesignEntity::ASSIGN) == ass_set);
 	REQUIRE(pkb.getAllEntity(DesignEntity::VARIABLE) == var_set);
 	REQUIRE(pkb.getAllEntity(DesignEntity::CONSTANT) == const_set);
+
+	std::string callMappingResult = procedure_value_one;
+	std::string printMappingResult = variable_value_one;
+	std::string readMappingResult = variable_value_one;
+
+	std::string callMappingTest = pkb.getStatementMapping(call_value_one, DesignEntity::CALL);
+	std::string printMappingTest = pkb.getStatementMapping(print_value_one, DesignEntity::PRINT);
+	std::string readMappingTest = pkb.getStatementMapping(read_value_one, DesignEntity::READ);
+
+	REQUIRE(callMappingTest == callMappingResult);
+	REQUIRE(printMappingTest == printMappingResult);
+	REQUIRE(readMappingTest == readMappingResult);
 
 	//Relationship
 	REQUIRE(pkb.getRelationship(RelationshipType::USES, stmtTokenObject1, variableTokenObject));

@@ -54,7 +54,7 @@ TEST_CASE("Uses Relationship Test") {
 
     std::string printValue = "4";
     std::string varPrintValue = "variableD";
-    Entity* printEntity = new PrintEntity(printValue);
+    Entity* printEntity = new PrintEntity(printValue, varPrintValue);
     Entity* varPrintEntity = new VariableEntity(varPrintValue);
     Relationship* printUsesRelationship = new UsesRelationship(printEntity, varPrintEntity);
 
@@ -101,7 +101,7 @@ TEST_CASE("Modify Relationship Test") {
 
     std::string printValue = "4";
     std::string varReadValue = "variableD";
-    Entity* readEntity = new ReadEntity(printValue);
+    Entity* readEntity = new ReadEntity(printValue, varReadValue);
     Entity* varReadEntity = new VariableEntity(varReadValue);
     Relationship* readModifyRelationship = new ModifyRelationship(readEntity, varReadEntity);
 
@@ -137,14 +137,15 @@ TEST_CASE("Parent Relationship Test") {
     std::string callValue = "6";
     std::string whileValue2 = "7";
     std::string ifValue2 = "8";
+    std::string varValue = "x";
     
     Entity* whileEntity = new WhileEntity(whileValue);
     Entity* ifEntity =  new IfEntity(ifValue);
 
-    Entity* readEntity = new ReadEntity(readValue);
-    Entity* printEntity = new PrintEntity(printValue);
+    Entity* readEntity = new ReadEntity(readValue, varValue);
+    Entity* printEntity = new PrintEntity(printValue, varValue);
     Entity* assignEntity = new AssignEntity(ifValue);
-    Entity* callEntity = new CallEntity(callValue);
+    Entity* callEntity = new CallEntity(callValue, varValue);
     Entity* whileEntity2 = new WhileEntity(whileValue2);
     Entity* ifEntity2= new IfEntity(ifValue2);
 
@@ -201,14 +202,15 @@ TEST_CASE("ParentT Relationship Test") {
     std::string callValue = "6";
     std::string whileValue2 = "7";
     std::string ifValue2 = "8";
+    std::string varValue = "x";
 
     Entity* whileEntity = new WhileEntity(whileValue);
     Entity* ifEntity = new IfEntity(ifValue);
 
-    Entity* readEntity = new ReadEntity(readValue);
-    Entity* printEntity = new PrintEntity(printValue);
+    Entity* readEntity = new ReadEntity(readValue, varValue);
+    Entity* printEntity = new PrintEntity(printValue, varValue);
     Entity* assignEntity = new AssignEntity(ifValue);
-    Entity* callEntity = new CallEntity(callValue);
+    Entity* callEntity = new CallEntity(callValue, varValue);
     Entity* whileEntity2 = new WhileEntity(whileValue2);
     Entity* ifEntity2 = new IfEntity(ifValue2);
 
@@ -265,14 +267,15 @@ TEST_CASE("Follows Relationship Test") {
     std::string callValue = "6";
     std::string whileValue2 = "7";
     std::string ifValue2 = "8";
+    std::string varValue = "x";
 
     Entity* whileEntity = new WhileEntity(whileValue);
     Entity* ifEntity = new IfEntity(ifValue);
 
-    Entity* readEntity = new ReadEntity(readValue);
-    Entity* printEntity = new PrintEntity(printValue);
+    Entity* readEntity = new ReadEntity(readValue, varValue);
+    Entity* printEntity = new PrintEntity(printValue, varValue);
     Entity* assignEntity = new AssignEntity(ifValue);
-    Entity* callEntity = new CallEntity(callValue);
+    Entity* callEntity = new CallEntity(callValue, varValue);
     Entity* whileEntity2 = new WhileEntity(whileValue2);
     Entity* ifEntity2 = new IfEntity(ifValue2);
 
@@ -308,14 +311,15 @@ TEST_CASE("FollowsT Relationship Test") {
     std::string callValue = "6";
     std::string whileValue2 = "7";
     std::string ifValue2 = "8";
+    std::string varValue = "x";
 
     Entity* whileEntity = new WhileEntity(whileValue);
     Entity* ifEntity = new IfEntity(ifValue);
 
-    Entity* readEntity = new ReadEntity(readValue);
-    Entity* printEntity = new PrintEntity(printValue);
+    Entity* readEntity = new ReadEntity(readValue, varValue);
+    Entity* printEntity = new PrintEntity(printValue, varValue);
     Entity* assignEntity = new AssignEntity(ifValue);
-    Entity* callEntity = new CallEntity(callValue);
+    Entity* callEntity = new CallEntity(callValue, varValue);
     Entity* whileEntity2 = new WhileEntity(whileValue2);
     Entity* ifEntity2 = new IfEntity(ifValue2);
 
@@ -348,13 +352,15 @@ TEST_CASE("Next Relationship Test") {
     std::string readValue = "4";
     std::string printValue = "5";
     std::string callValue = "6";
+    std::string varValue = "x";
 
     Entity* whileEntity = new WhileEntity(whileValue);
     Entity* ifEntity = new IfEntity(ifValue);
-    Entity* readEntity = new ReadEntity(readValue);
-    Entity* printEntity = new PrintEntity(printValue);
+
+    Entity* readEntity = new ReadEntity(readValue, varValue);
+    Entity* printEntity = new PrintEntity(printValue, varValue);
     Entity* assignEntity = new AssignEntity(ifValue);
-    Entity* callEntity = new CallEntity(callValue);
+    Entity* callEntity = new CallEntity(callValue, varValue);
 
     Relationship* whileAssignRel = new NextRelationship(whileEntity, assignEntity);
     Relationship* readIfRel = new NextRelationship(readEntity, ifEntity);

@@ -102,10 +102,10 @@ void IfStack::extractModify(std::vector<SimpleToken> modifies) {
 
 Entity* IfStack::generateEntity(SimpleToken token) {
     if (token.type == SpTokenType::TREAD) {
-        return new ReadEntity(std::to_string(token.statementNumber));
+        return new ReadEntity(std::to_string(token.statementNumber), "");
     }
     if (token.type == SpTokenType::TPRINT) {
-        return new PrintEntity(std::to_string(token.statementNumber));
+        return new PrintEntity(std::to_string(token.statementNumber), "");
     }
     if (token.type == SpTokenType::TASSIGN) {
         return new AssignEntity(std::to_string(token.statementNumber));
@@ -126,7 +126,7 @@ Entity* IfStack::generateEntity(SimpleToken token) {
         return new ProcedureEntity(token.value);
     }
     if (token.type == SpTokenType::TCALL) {
-        return new CallEntity(std::to_string(token.statementNumber));
+        return new CallEntity(std::to_string(token.statementNumber), "");
     }
     return new Entity(std::to_string(token.statementNumber)); // Should not happen
 }
