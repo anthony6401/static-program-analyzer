@@ -13,8 +13,8 @@
 
 SimpleParser::SimpleParser(Extractor* extractor) {
     this->extractor = extractor;
-    validator = SimpleValidator();
-    statementNumber = 1;
+    this->validator = SimpleValidator();
+    this->statementNumber = 1;
 }
 
 void SimpleParser::parseCode(std::string code) {
@@ -31,12 +31,6 @@ void SimpleParser::parseCode(std::string code) {
     extractor->endOfParser(callProcedures);
 }
 
-/// <summary>
-/// Identifies type of code line and returns a SimpleToken of it
-/// </summary>
-/// <param name="tokens">code of line that has been split into tokens</param>
-/// <param name="code">original line of code before splitting</param>
-/// <returns>SimpleToken identifying line type and value containing code</returns>
 void SimpleParser::parseLine(std::string code) {
     std::vector<std::string> tokens = SimpleTokenizer::tokenizeLine(code);
     std::string first = tokens.front();
@@ -47,38 +41,38 @@ void SimpleParser::parseLine(std::string code) {
         extractor->close(statementNumber);
     } else if (tokens.at(1) == "=") {
         tokens.erase(tokens.begin() + 1);
-        validator.validLine(SpTokenType::TASSIGN, statementNumber);
+        validator.isValidLine(SpTokenType::TASSIGN, statementNumber);
         parseAssign(tokens);
     } else if (first == "procedure") {
         tokens.erase(tokens.begin());
-        validator.validLine(SpTokenType::TPROCEDURE, statementNumber);
+        validator.isValidLine(SpTokenType::TPROCEDURE, statementNumber);
         parseProcedure(tokens);
     } else if (first == "call") {
         tokens.erase(tokens.begin());
-        validator.validLine(SpTokenType::TCALL, statementNumber);
+        validator.isValidLine(SpTokenType::TCALL, statementNumber);
         parseCall(tokens);
     } else if (first == "read") {
         tokens.erase(tokens.begin());
-        validator.validLine(SpTokenType::TREAD, statementNumber);
+        validator.isValidLine(SpTokenType::TREAD, statementNumber);
         parseRead(tokens);
     } else if (first == "print") {
         tokens.erase(tokens.begin());
-        validator.validLine(SpTokenType::TPRINT, statementNumber);
+        validator.isValidLine(SpTokenType::TPRINT, statementNumber);
         parsePrint(tokens);
     } else if (first == "while") {
         tokens.erase(tokens.begin());
-        validator.validLine(SpTokenType::TWHILE, statementNumber);
+        validator.isValidLine(SpTokenType::TWHILE, statementNumber);
         parseWhile(tokens);
     } else if (first == "if") {
         tokens.erase(tokens.begin());
-        validator.validLine(SpTokenType::TIF, statementNumber);
+        validator.isValidLine(SpTokenType::TIF, statementNumber);
         parseIf(tokens);
     } else if (first == "else") {
         if (tokens.at(1) != "{") {
             throw std::invalid_argument("Received invalid SIMPLE code line " + std::to_string(SimpleParser::statementNumber));
         }
         tokens.erase(tokens.begin());
-        validator.validLine(SpTokenType::TELSE, statementNumber);
+        validator.isValidLine(SpTokenType::TELSE, statementNumber);
         validator.close();
     } else {
         throw std::invalid_argument("Received invalid SIMPLE code line " + std::to_string(SimpleParser::statementNumber));
@@ -87,13 +81,13 @@ void SimpleParser::parseLine(std::string code) {
 
 void SimpleParser::parseProcedure(std::vector<std::string>& tokens) {
     if (tokens.size() == 2 && tokens.at(1) == "{") {
-        std::string procedure = parseVariable(tokens.at(0));
-        if (!(validator.validateProcedure(procedure))) {
+        std::string procedureName = parseVariable(tokens.at(0));
+        if (!(validator.isValidProcedure(procedureName))) {
             throw std::invalid_argument("Received invalid or duplicate Procedure:Line " + std::to_string(statementNumber));
         }
-        SimpleToken procedureToken = SimpleToken(SpTokenType::TPROCEDURE, procedure, 0);
-        this->currentProcedure = procedure;
-        this->procedures.insert(procedure);
+        SimpleToken procedureToken = SimpleToken(SpTokenType::TPROCEDURE, procedureName, 0);
+        this->currentProcedure = procedureName;
+        this->procedures.insert(procedureName);
         validator.setState(new NestedState(&validator));
         this->extractor->extractProcedure(procedureToken);
     }
@@ -174,7 +168,7 @@ void SimpleParser::parseIf(std::vector<std::string>& tokens) {
 }
 
 void SimpleParser::parseAssign(std::vector<std::string>& tokens) {
-    if (SimpleValidator::validateVariable(tokens.front()) && tokens.back() == ";") {
+    if (SimpleValidator::isValidVariable(tokens.front()) && tokens.back() == ";") {
         tokens.pop_back();
         std::vector<SimpleToken> children;
         children.push_back(SimpleToken(SpTokenType::TVARIABLE, tokens.front(), 0));
@@ -275,7 +269,7 @@ SimpleToken SimpleParser::parseExpr(std::vector<std::string>& tokens) {
 }
 
 std::string SimpleParser::parseVariable(std::string& token) {
-    if (SimpleValidator::validateVariable(token)) {
+    if (SimpleValidator::isValidVariable(token)) {
         return token;
     } else {
         throw std::invalid_argument("Received invalid variable " + token);
@@ -283,7 +277,7 @@ std::string SimpleParser::parseVariable(std::string& token) {
 }
 
 std::string SimpleParser::parseConstant(std::string& token) {
-    if (SimpleValidator::validateConstant(token)) {
+    if (SimpleValidator::isValidConstant(token)) {
         return token;
     } else {
         throw std::invalid_argument("Received invalid constant " + token);
