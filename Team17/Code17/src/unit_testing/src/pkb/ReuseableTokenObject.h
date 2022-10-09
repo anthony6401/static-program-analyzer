@@ -45,9 +45,9 @@ static TokenObject assignPatternTokenObjectSubexprThree = TokenObject(TokenType:
 
 static TokenObject wildCardTokenObject = TokenObject(TokenType::WILDCARD, "");
 
-static TokenObject ifPatternTokenObjectFirstOne = TokenObject(TokenType::NAME_WITH_QUOTATION, ifLineNumOne);
-static TokenObject ifPatternTokenObjectFirstTwo = TokenObject(TokenType::NAME_WITH_QUOTATION, ifLineNumTwo);
+static TokenObject ifPatternTokenObjectFirstOne = TokenObject(TokenType::NAME_WITH_QUOTATION, ifFirstValueOne);
+static TokenObject ifPatternTokenObjectFirstTwo = TokenObject(TokenType::NAME_WITH_QUOTATION, ifFirstValueTwo);
 
-static TokenObject whilePatternTokenObjectFirstOne = TokenObject(TokenType::NAME_WITH_QUOTATION, whileLineNumOne);
-static TokenObject whilePatternTokenObjectFirstTwo = TokenObject(TokenType::NAME_WITH_QUOTATION, whileLineNumTwo);
+static TokenObject whilePatternTokenObjectFirstOne = TokenObject(TokenType::NAME_WITH_QUOTATION, whileFirstValueOne);
+static TokenObject whilePatternTokenObjectFirstTwo = TokenObject(TokenType::NAME_WITH_QUOTATION, whileFirstValueTwo);
 

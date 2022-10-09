@@ -34,10 +34,15 @@ std::unordered_map<std::string, std::unordered_set<std::string>> QPSClient::getA
 std::unordered_set<std::string> QPSClient::getPattern(DesignEntity designEntity, TokenObject firstArgument, TokenObject secondArgument) {
 	return pkb->getPattern(designEntity, firstArgument, secondArgument);
 }
+std::unordered_set<std::string> QPSClient::getContainerPattern(DesignEntity designEntity, TokenObject firstArgument) {
+	return pkb->getPattern(designEntity, firstArgument, TokenObject());
+}
 std::vector<std::pair<std::string, std::string>> QPSClient::getPatternPair(DesignEntity designEntity, TokenObject secondArgument) {
 	return pkb->getPatternPair(designEntity, secondArgument);
 }
-
+std::vector<std::pair<std::string, std::string>> QPSClient::getContainerPatternPair(DesignEntity designEntity) {
+	return pkb->getPatternPair(designEntity, TokenObject());
+}
 std::string QPSClient::getStatementMapping(std::string& stmtNumber, DesignEntity entityType) {
 	return pkb->getStatementMapping(stmtNumber, entityType);
 }
