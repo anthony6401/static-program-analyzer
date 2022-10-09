@@ -69,7 +69,7 @@ void Evaluator::populateResultsList(ResultTable &evaluatedResults, Select select
 
     if (returnType == TokenType::TUPLE) {
         std::vector<TokenObject> tuple = select.getReturnValues();
-        std::unordered_set<std::string> resultsToPopulate = evaluatedResults.getTupleResultsToBePopulated(tuple, synonymToDesignEntityMap);
+        std::unordered_set<std::string> resultsToPopulate = evaluatedResults.getTupleResultsToBePopulated(tuple, synonymToDesignEntityMap, qpsClient);
         for (std::string result : resultsToPopulate) {
             results.emplace_back(result);
         }

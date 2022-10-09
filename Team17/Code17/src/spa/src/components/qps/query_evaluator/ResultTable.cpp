@@ -76,7 +76,7 @@ std::unordered_set<std::string> ResultTable::getSynonymResultsToBePopulated(std:
     return result;
 }
 
-std::unordered_set<std::string> ResultTable::getTupleResultsToBePopulated(std::vector<TokenObject> tuple, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap) {
+std::unordered_set<std::string> ResultTable::getTupleResultsToBePopulated(std::vector<TokenObject> tuple, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) {
     std::unordered_set<std::string> result({});
     for (auto resultSublist : resultsList) {
         std::vector<std::string> newResultSublist;
@@ -92,6 +92,12 @@ std::unordered_set<std::string> ResultTable::getTupleResultsToBePopulated(std::v
                 DesignEntity returnType = synonymToDesignEntityMap[tuple[i].getValue()];
                 if (SelectAttributeClause::checkIsAlternateAttributeName(returnType, attributeName)) {
                     // call pkb api
+                    DesignEntity entityType = synonymToDesignEntityMap[tuple[i].getValue()];
+                    auto iterator = std::find(synonymsList.begin(), synonymsList.end(), tuple[i].getValue());
+                    int indexOfSynonym = std::distance(synonymsList.begin(), iterator);
+                    std::string statementNumber = resultSublist[indexOfSynonym];
+                    std::string alternative = qpsClient.getStatementMapping(statementNumber, entityType);
+                    newResultSublist.push_back(alternative);
                 } else {
                     auto iterator = std::find(synonymsList.begin(), synonymsList.end(), tuple[i].getValue());
                     int indexOfSynonym = std::distance(synonymsList.begin(), iterator);

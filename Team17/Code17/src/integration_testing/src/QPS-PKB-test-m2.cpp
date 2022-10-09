@@ -938,6 +938,39 @@ TEST_CASE("Tuple queries with attributes") {
         expectedResults.sort();
         REQUIRE(testResults == expectedResults);
     }
+
+    SECTION("Tuple Test 4 - 1 alternative attribute present") {
+        std::string testQuery = "procedure p, p1; variable v; stmt s; constant c;\n "
+                                "Select <v.varName, p.procName> such that Calls(p, p1) and Modifies(s, \"i\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"x First", "x Second", "y First", "y Second", "i First", "i Second", "z First", "z Second", "v First", "v Second"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Tuple Test 5") {
+        std::string testQuery = "procedure p, p1; variable v; stmt s;\n "
+                                "Select <v.varName, p.procName> such that Calls(p, p1) and Modifies(s, \"i\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"x First", "x Second", "y First", "y Second", "i First", "i Second", "z First", "z Second", "v First", "v Second"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Tuple Test 6") {
+        std::string testQuery = "procedure p, p1; read re; stmt s; call c;\n "
+                                "Select <re.varName, c.procName> such that Calls(p, p1) and Modifies(s, \"i\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"x Second", "z Second", "x Third", "z Third"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
 }
 
 TEST_CASE("Attribute queries - alternate attribute names") {
