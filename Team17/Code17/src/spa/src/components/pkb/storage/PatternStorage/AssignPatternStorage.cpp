@@ -5,7 +5,7 @@
 #include <typeinfo>
 #include <vector>
 
-AssignPatternStorage::AssignPatternStorage() : PatternStorage(), assignPatternStorage(std::unordered_map<std::string, std::unordered_set<std::pair<std::string, std::string>, pair_hash>>()) {}
+AssignPatternStorage::AssignPatternStorage() : PatternStorage() {}
 
 bool AssignPatternStorage::storePattern(kb::Pattern* pattern) {
 	AssignPattern* assignPattern = dynamic_cast<AssignPattern*>(pattern);
@@ -13,8 +13,6 @@ bool AssignPatternStorage::storePattern(kb::Pattern* pattern) {
 		std::string lineNum = assignPattern->getLineNum();
 		std::string firstValue =assignPattern->getFirstValue();
 		std::string secondValue = PatternUtils::convertInfixToPostfix(assignPattern->getSecondValue());
-
-
 		std::pair<std::string, std::string> pairValue(lineNum, secondValue);
 
 		if (this->assignPatternStorage.find(firstValue) == this->assignPatternStorage.end()) {

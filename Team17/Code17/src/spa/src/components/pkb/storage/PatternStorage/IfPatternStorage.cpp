@@ -5,7 +5,7 @@
 #include <typeinfo>
 #include <vector>
 
-IfPatternStorage::IfPatternStorage() : PatternStorage(), ifPatternStorage(std::unordered_map<std::string, std::unordered_set<std::string>> ()) {}
+IfPatternStorage::IfPatternStorage() : PatternStorage() {}
 
 bool IfPatternStorage::storePattern(kb::Pattern* pattern) {
 	IfPattern* ifPattern = dynamic_cast<IfPattern*>(pattern);

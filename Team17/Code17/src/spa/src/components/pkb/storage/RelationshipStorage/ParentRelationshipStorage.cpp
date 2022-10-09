@@ -18,31 +18,7 @@
 #include <iostream>
 
 
-ParentRelationshipStorage::ParentRelationshipStorage() : RelationshipStorage(),
-														ifToReadForwardMap(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-														ifToPrintForwardMap(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-														ifToAssignForwardMap(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-														ifToCallForwardMap(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-														ifToWhileForwardMap(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-														ifToIfForwardMap(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-														ifToStmtForwardMap(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-														ifToStmtBackwardMap(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-														whileToReadForwardMap(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-														whileToPrintForwardMap(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-														whileToAssignForwardMap(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-														whileToCallForwardMap(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-														whileToWhileForwardMap(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-														whileToIfForwardMap(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-														whileToStmtForwardMap(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-														whileToStmtBackwardMap(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-														stmtToReadForwardMap(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-														stmtToPrintForwardMap(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-														stmtToAssignForwardMap(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-														stmtToCallForwardMap(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-														stmtToWhileForwardMap(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-														stmtToIfForwardMap(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-														stmtToStmtForwardMap(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-														stmtToStmtBackwardMap(std::unordered_map<std::string, std::unordered_set<std::string>>()) {}
+ParentRelationshipStorage::ParentRelationshipStorage() : RelationshipStorage() {}
 
 std::unordered_map<std::string, std::unordered_set<std::string>>*ParentRelationshipStorage::getStorage(DesignEntity left, DesignEntity right, bool isForward = false) {
 	if (left == DesignEntity::WHILE) {

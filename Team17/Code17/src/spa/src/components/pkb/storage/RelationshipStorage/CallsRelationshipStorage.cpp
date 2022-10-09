@@ -5,9 +5,7 @@
 #include "typeinfo"
 
 // Note that every DesignEntity passed in here is assume as Procedure
-CallsRelationshipStorage::CallsRelationshipStorage() : RelationshipStorage(),
-														procForwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-														procBackwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()) {}
+CallsRelationshipStorage::CallsRelationshipStorage() : RelationshipStorage() {}
 
 bool CallsRelationshipStorage::storeRelationship(Relationship* rel) {
 	CallsRelationship* callsRelationship = dynamic_cast<CallsRelationship*>(rel);

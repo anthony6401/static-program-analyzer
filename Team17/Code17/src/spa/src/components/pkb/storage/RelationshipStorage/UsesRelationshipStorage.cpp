@@ -8,17 +8,7 @@
 #include "utils.h"
 #include "typeinfo"
 
-UsesRelationshipStorage::UsesRelationshipStorage() : RelationshipStorage(),
-													procForwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-													assignForwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-													printForwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-													ifForwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-													whileForwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-													procBackwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-													assignBackwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-													printBackwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-													ifBackwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-													whileBackwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()) {}
+UsesRelationshipStorage::UsesRelationshipStorage() : RelationshipStorage() {}
 
 std::unordered_map<std::string, std::unordered_set<std::string>>* UsesRelationshipStorage::getRelationshipMap(DesignEntity designEntity, bool isForward) {
 	if (designEntity == DesignEntity::PROCEDURE) {

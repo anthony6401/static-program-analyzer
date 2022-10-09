@@ -5,7 +5,7 @@
 #include <typeinfo>
 #include <vector>
 
-WhilePatternStorage::WhilePatternStorage() : PatternStorage(), whilePatternStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()) {}
+WhilePatternStorage::WhilePatternStorage() : PatternStorage() {}
 
 bool WhilePatternStorage::storePattern(kb::Pattern* pattern) {
 	WhilePattern* ifPattern = dynamic_cast<WhilePattern*>(pattern);
