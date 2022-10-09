@@ -971,6 +971,17 @@ TEST_CASE("Tuple queries with attributes") {
         expectedResults.sort();
         REQUIRE(testResults == expectedResults);
     }
+
+    SECTION("Tuple Test 7") {
+        std::string testQuery = "procedure p, p1; read re; stmt s; call c;\n "
+                                "Select <re.varName> such that Calls(p, p1) and Modifies(s, \"i\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"x", "z"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
 }
 
 TEST_CASE("Attribute queries - alternate attribute names") {
