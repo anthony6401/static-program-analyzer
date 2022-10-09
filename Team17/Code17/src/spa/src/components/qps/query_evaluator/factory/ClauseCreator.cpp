@@ -40,10 +40,10 @@ std::shared_ptr<Clause> ClauseCreator::createClause(Select select, std::unordere
 }
 
 std::shared_ptr<Clause> ClauseCreator::createClause(qps::Pattern pattern, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) {
-    TokenObject left = pattern.getLeft();
-    TokenObject right = pattern.getRight();
-    std::string assignSynonym = pattern.getSynonym();
-    return std::make_shared<AssignPatternClause>(assignSynonym, left, right, qpsClient);
+    TokenObject firstArgument = pattern.getLeft();
+    TokenObject secondArgument = pattern.getRight();
+    std::string patternSynonym = pattern.getSynonym();
+    return std::make_shared<AssignPatternClause>(patternSynonym, firstArgument, secondArgument, qpsClient);
 }
 
 std::shared_ptr<Clause> ClauseCreator::createClause(SuchThat relationship, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) {
