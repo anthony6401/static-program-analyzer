@@ -52,6 +52,7 @@ TEST_CASE("PKB Entity Managertest") {
 TEST_CASE("PKB Pattern Manager test") {
 	PKB pkb = PKB();
 
+	//ASSIGN
 	REQUIRE(pkb.storePattern(assignPatternOne));
 	REQUIRE(pkb.storePattern(assignPatternTwo));
 	REQUIRE(pkb.storePattern(assignPatternThree));
@@ -61,6 +62,17 @@ TEST_CASE("PKB Pattern Manager test") {
 	REQUIRE(pkb.storePattern(assignPatternSeven));
 	REQUIRE(pkb.storePattern(assignPatternEight));
 
+	//IF
+	REQUIRE(pkb.storePattern(ifPatternOne));
+	REQUIRE(pkb.storePattern(ifPatternOneDup));
+	REQUIRE(pkb.storePattern(ifPatternTwo));
+
+	//WHILE
+	REQUIRE(pkb.storePattern(whilePatternOne));
+	REQUIRE(pkb.storePattern(whilePatternOneDup));
+	REQUIRE(pkb.storePattern(whilePatternTwo));
+
+	//ASSIGN
 	std::unordered_set<std::string> assignGetPatternNameNameOne = pkb.getPattern(DesignEntity::ASSIGN, assignPatternTokenObjectFirstOne, assignPatternTokenObjectSecondOne);
 	std::unordered_set<std::string> assignGetPatternNameNameTwo = pkb.getPattern(DesignEntity::ASSIGN, assignPatternTokenObjectFirstTwo, assignPatternTokenObjectSecondTwo);
 	std::unordered_set<std::string> assignGetPatternNameSubexprOne = pkb.getPattern(DesignEntity::ASSIGN, assignPatternTokenObjectFirstOne, assignPatternTokenObjectSubexprOne);
@@ -69,6 +81,15 @@ TEST_CASE("PKB Pattern Manager test") {
 	std::unordered_set<std::string> assignGetPatternNameWildcardOne = pkb.getPattern(DesignEntity::ASSIGN, assignPatternTokenObjectFirstOne, wildCardTokenObject);
 	std::unordered_set<std::string> assignGetPatternNameWildcardTwo = pkb.getPattern(DesignEntity::ASSIGN, assignPatternTokenObjectFirstTwo, wildCardTokenObject);
 
+	//IF
+	std::unordered_set<std::string> ifGetPatternNameNameOne = pkb.getPattern(DesignEntity::IF, ifPatternTokenObjectFirstOne, TokenObject());
+	std::unordered_set<std::string> ifGetPatternNameNameTwo = pkb.getPattern(DesignEntity::IF, ifPatternTokenObjectFirstTwo, TokenObject());
+
+	//WHILE
+	std::unordered_set<std::string> whileGetPatternNameNameOne = pkb.getPattern(DesignEntity::WHILE, whilePatternTokenObjectFirstOne, TokenObject());
+	std::unordered_set<std::string> whileGetPatternNameNameTwo = pkb.getPattern(DesignEntity::WHILE, whilePatternTokenObjectFirstTwo, TokenObject());
+
+	//ASSIGN
 	std::unordered_set<std::string> expectedGetPatternNameNameOne({ assignLineNumOne, assignLineNumEight });
 	std::unordered_set<std::string> expectedGetPatternNameNameTwo({ assignLineNumSix });
 	std::unordered_set<std::string> expectedGetPatternNameSubexprOne({ assignLineNumFive });
@@ -76,6 +97,14 @@ TEST_CASE("PKB Pattern Manager test") {
 	std::unordered_set<std::string> expectedGetPatternNameSubexprThree({ assignLineNumOne, assignLineNumFive, assignLineNumEight });
 	std::unordered_set<std::string> expectedGetPatternNameWildcardOne({ assignLineNumOne, assignLineNumFive, assignLineNumEight });
 	std::unordered_set<std::string> expectedGetPatternNameWilcardTwo({ assignLineNumTwo, assignLineNumSix });
+	
+	//IF
+	std::unordered_set<std::string> expectedResultIfGetPatternOne({ ifLineNumOne });
+	std::unordered_set<std::string> expectedResultIfGetPatternTwo({ ifLineNumOne, ifLineNumTwo });
+
+	//WHILE
+	std::unordered_set<std::string> expectedResultWhileGetPatternOne({ whileLineNumOne });
+	std::unordered_set<std::string> expectedResultWhileGetPatternTwo({ whileLineNumOne, whileLineNumTwo });
 
 	REQUIRE(assignGetPatternNameNameOne == expectedGetPatternNameNameOne);
 	REQUIRE(assignGetPatternNameNameOne == expectedGetPatternNameNameOne);
@@ -86,6 +115,15 @@ TEST_CASE("PKB Pattern Manager test") {
 	REQUIRE(assignGetPatternNameWildcardOne == expectedGetPatternNameWildcardOne);
 	REQUIRE(assignGetPatternNameWildcardTwo == expectedGetPatternNameWilcardTwo);
 
+	//IF
+	REQUIRE(ifGetPatternNameNameOne == expectedResultIfGetPatternOne);
+	REQUIRE(ifGetPatternNameNameTwo == expectedResultIfGetPatternTwo);
+
+	//WHILE
+	REQUIRE(whileGetPatternNameNameOne == expectedResultWhileGetPatternOne);
+	REQUIRE(whileGetPatternNameNameTwo == expectedResultWhileGetPatternTwo);
+
+	//ASSIGN
 	std::vector<std::pair<std::string, std::string>> assignGetPatternPairNameNameOne = pkb.getPatternPair(DesignEntity::ASSIGN, assignPatternTokenObjectSecondOne);
 	std::vector<std::pair<std::string, std::string>> assignGetPatternPairNameNameTwo = pkb.getPatternPair(DesignEntity::ASSIGN, assignPatternTokenObjectSecondTwo);
 	std::vector<std::pair<std::string, std::string>> assignGetPatternPairNameSubexprOne = pkb.getPatternPair(DesignEntity::ASSIGN, assignPatternTokenObjectSubexprOne);
@@ -93,6 +131,15 @@ TEST_CASE("PKB Pattern Manager test") {
 	std::vector<std::pair<std::string, std::string>> assignGetPatternPairNameSubexprThree = pkb.getPatternPair(DesignEntity::ASSIGN, assignPatternTokenObjectSubexprThree);
 	std::vector<std::pair<std::string, std::string>> assignGetPatternPairNameWildcard = pkb.getPatternPair(DesignEntity::ASSIGN, wildCardTokenObject);
 
+	//IF
+	std::vector<std::pair<std::string, std::string>> ifGetPatternPairNameNameOne = pkb.getPatternPair(DesignEntity::IF, ifPatternTokenObjectFirstOne);
+	std::vector<std::pair<std::string, std::string>> ifGetPatternPairNameNameTwo = pkb.getPatternPair(DesignEntity::IF, ifPatternTokenObjectFirstTwo);
+
+	//WHILE
+	std::vector<std::pair<std::string, std::string>> whileGetPatternPairNameNameOne = pkb.getPatternPair(DesignEntity::WHILE, whilePatternTokenObjectFirstOne);
+	std::vector<std::pair<std::string, std::string>> whileGetPatternPairNameNameTwo = pkb.getPatternPair(DesignEntity::WHILE, whilePatternTokenObjectFirstTwo);
+
+	//ASSIGN
 	std::vector<std::pair<std::string, std::string>> expectedGetPatternPairNameNameOne{ {assignLineNumOne, assignFirstValueOne},
 																						{assignLineNumEight, assignFirstValueEight} };
 	std::vector<std::pair<std::string, std::string>> expectedGetPatternPairNameNameTwo{ {assignLineNumSix, assignFirstValueSix},
@@ -119,6 +166,24 @@ TEST_CASE("PKB Pattern Manager test") {
 																						{assignLineNumSeven, assignFirstValueSeven},
 																						{assignLineNumEight, assignFirstValueEight} };
 
+	//IF
+	std::vector<std::pair<std::string, std::string>> ifExpectedGetPatternPairNameNameOne{ { ifLineNumOne, ifFirstValueOne },
+																							{ ifLineNumTwo, ifFirstValueTwo},
+																							{ ifLineNumOne, ifFirstValueTwo} };
+
+	std::vector<std::pair<std::string, std::string>> ifExpectedGetPatternPairNameNameTwo{ { ifLineNumOne, ifFirstValueOne },
+																							{ ifLineNumTwo, ifFirstValueTwo},
+																							{ ifLineNumOne, ifFirstValueTwo} };
+
+	//WHILE
+	std::vector<std::pair<std::string, std::string>> whileExpectedGetPatternPairNameNameOne{ { whileLineNumOne, whileFirstValueOne },
+																							{ whileLineNumTwo, whileFirstValueTwo},
+																							{ whileLineNumOne, whileFirstValueTwo} };
+
+	std::vector<std::pair<std::string, std::string>> whileExpectedGetPatternPairNameNameTwo{ { whileLineNumOne, whileFirstValueOne },
+																							{ whileLineNumTwo, whileFirstValueTwo},
+																							{ whileLineNumOne, whileFirstValueTwo} };
+
 	sort(assignGetPatternPairNameNameOne.begin(), assignGetPatternPairNameNameOne.end());
 	sort(assignGetPatternPairNameNameTwo.begin(), assignGetPatternPairNameNameTwo.end());
 	sort(assignGetPatternPairNameSubexprOne.begin(), assignGetPatternPairNameSubexprOne.end());
@@ -126,12 +191,31 @@ TEST_CASE("PKB Pattern Manager test") {
 	sort(assignGetPatternPairNameSubexprThree.begin(), assignGetPatternPairNameSubexprThree.end());
 	sort(assignGetPatternPairNameWildcard.begin(), assignGetPatternPairNameWildcard.end());
 
+	sort(ifGetPatternPairNameNameOne.begin(), ifGetPatternPairNameNameOne.end());
+	sort(ifGetPatternPairNameNameTwo.begin(), ifGetPatternPairNameNameTwo.end());
+	sort(ifExpectedGetPatternPairNameNameOne.begin(), ifExpectedGetPatternPairNameNameOne.end());
+	sort(ifExpectedGetPatternPairNameNameTwo.begin(), ifExpectedGetPatternPairNameNameTwo.end());
+
+	sort(whileGetPatternPairNameNameOne.begin(), whileGetPatternPairNameNameOne.end());
+	sort(whileGetPatternPairNameNameTwo.begin(), whileGetPatternPairNameNameTwo.end());
+	sort(whileExpectedGetPatternPairNameNameOne.begin(), whileExpectedGetPatternPairNameNameOne.end());
+	sort(whileExpectedGetPatternPairNameNameTwo.begin(), whileExpectedGetPatternPairNameNameTwo.end());
+
+	//ASSIGN
 	REQUIRE(assignGetPatternPairNameNameOne == expectedGetPatternPairNameNameOne);
 	REQUIRE(assignGetPatternPairNameNameTwo == expectedGetPatternPairNameNameTwo);
 	REQUIRE(assignGetPatternPairNameSubexprOne == expectedGetPatternPairNameSubexprOne);
 	REQUIRE(assignGetPatternPairNameSubexprTwo == expectedGetPatternPairNameSubexprTwo);
 	REQUIRE(assignGetPatternPairNameSubexprThree == expectedGetPatternPairNameSubexprThree);
 	REQUIRE(assignGetPatternPairNameWildcard == expectedGetPatternPairNameWilcard);
+
+	//IF
+	REQUIRE(ifGetPatternPairNameNameOne == ifExpectedGetPatternPairNameNameOne);
+	REQUIRE(ifGetPatternPairNameNameTwo == ifExpectedGetPatternPairNameNameTwo);
+
+	//WHILE
+	REQUIRE(whileGetPatternPairNameNameOne == whileExpectedGetPatternPairNameNameOne);
+	REQUIRE(whileGetPatternPairNameNameTwo == whileExpectedGetPatternPairNameNameTwo);
 }
 
 TEST_CASE("PKB Relationship Manager test") {
@@ -281,6 +365,7 @@ TEST_CASE("All Manager Test") {
 	PKB pkb = PKB();
 
 	//Pattern
+	//ASSIGN
 	REQUIRE(pkb.storePattern(assignPatternOne));
 	REQUIRE(pkb.storePattern(assignPatternTwo));
 	REQUIRE(pkb.storePattern(assignPatternThree));
@@ -290,6 +375,17 @@ TEST_CASE("All Manager Test") {
 	REQUIRE(pkb.storePattern(assignPatternSeven));
 	REQUIRE(pkb.storePattern(assignPatternEight));
 	REQUIRE(pkb.storeConstant(constantEntity));
+
+	//IF
+	REQUIRE(pkb.storePattern(ifPatternOne));
+	REQUIRE(pkb.storePattern(ifPatternOneDup));
+	REQUIRE(pkb.storePattern(ifPatternTwo));
+
+	//WHILE
+	REQUIRE(pkb.storePattern(whilePatternOne));
+	REQUIRE(pkb.storePattern(whilePatternOneDup));
+	REQUIRE(pkb.storePattern(whilePatternTwo));
+
 
 	//Relationship + Entity
 	REQUIRE(pkb.storeRelationship(usesRelationshipAssignOne));
@@ -409,6 +505,7 @@ TEST_CASE("All Manager Test") {
 	REQUIRE(pkb.getAllRelationship(RelationshipType::FOLLOWS_T, DesignEntity::READ, DesignEntity::PRINT) == expectedResultFollowsTAll);
 
 	//Pattern
+	//ASSIGN
 	std::unordered_set<std::string> assignGetPatternNameNameOne = pkb.getPattern(DesignEntity::ASSIGN, assignPatternTokenObjectFirstOne, assignPatternTokenObjectSecondOne);
 	std::unordered_set<std::string> assignGetPatternNameNameTwo = pkb.getPattern(DesignEntity::ASSIGN, assignPatternTokenObjectFirstTwo, assignPatternTokenObjectSecondTwo);
 	std::unordered_set<std::string> assignGetPatternNameSubexprOne = pkb.getPattern(DesignEntity::ASSIGN, assignPatternTokenObjectFirstOne, assignPatternTokenObjectSubexprOne);
@@ -417,6 +514,15 @@ TEST_CASE("All Manager Test") {
 	std::unordered_set<std::string> assignGetPatternNameWildcardOne = pkb.getPattern(DesignEntity::ASSIGN, assignPatternTokenObjectFirstOne, wildCardTokenObject);
 	std::unordered_set<std::string> assignGetPatternNameWildcardTwo = pkb.getPattern(DesignEntity::ASSIGN, assignPatternTokenObjectFirstTwo, wildCardTokenObject);
 
+	//IF
+	std::unordered_set<std::string> ifGetPatternNameNameOne = pkb.getPattern(DesignEntity::IF, ifPatternTokenObjectFirstOne, TokenObject());
+	std::unordered_set<std::string> ifGetPatternNameNameTwo = pkb.getPattern(DesignEntity::IF, ifPatternTokenObjectFirstTwo, TokenObject());
+
+	//WHILE
+	std::unordered_set<std::string> whileGetPatternNameNameOne = pkb.getPattern(DesignEntity::WHILE, whilePatternTokenObjectFirstOne, TokenObject());
+	std::unordered_set<std::string> whileGetPatternNameNameTwo = pkb.getPattern(DesignEntity::WHILE, whilePatternTokenObjectFirstTwo, TokenObject());
+
+	//ASSIGN
 	std::unordered_set<std::string> expectedGetPatternNameNameOne({ assignLineNumOne, assignLineNumEight });
 	std::unordered_set<std::string> expectedGetPatternNameNameTwo({ assignLineNumSix });
 	std::unordered_set<std::string> expectedGetPatternNameSubexprOne({ assignLineNumFive });
@@ -425,6 +531,15 @@ TEST_CASE("All Manager Test") {
 	std::unordered_set<std::string> expectedGetPatternNameWildcardOne({ assignLineNumOne, assignLineNumFive, assignLineNumEight });
 	std::unordered_set<std::string> expectedGetPatternNameWilcardTwo({ assignLineNumTwo, assignLineNumSix });
 
+	//IF
+	std::unordered_set<std::string> expectedResultIfGetPatternOne({ ifLineNumOne });
+	std::unordered_set<std::string> expectedResultIfGetPatternTwo({ ifLineNumOne, ifLineNumTwo });
+
+	//WHILE
+	std::unordered_set<std::string> expectedResultWhileGetPatternOne({ whileLineNumOne });
+	std::unordered_set<std::string> expectedResultWhileGetPatternTwo({ whileLineNumOne, whileLineNumTwo });
+
+	//ASSIGN
 	REQUIRE(assignGetPatternNameNameOne == expectedGetPatternNameNameOne);
 	REQUIRE(assignGetPatternNameNameOne == expectedGetPatternNameNameOne);
 	REQUIRE(assignGetPatternNameNameTwo == expectedGetPatternNameNameTwo);
@@ -434,6 +549,15 @@ TEST_CASE("All Manager Test") {
 	REQUIRE(assignGetPatternNameWildcardOne == expectedGetPatternNameWildcardOne);
 	REQUIRE(assignGetPatternNameWildcardTwo == expectedGetPatternNameWilcardTwo);
 
+	//IF
+	REQUIRE(ifGetPatternNameNameOne == expectedResultIfGetPatternOne);
+	REQUIRE(ifGetPatternNameNameTwo == expectedResultIfGetPatternTwo);
+
+	//WHILE
+	REQUIRE(whileGetPatternNameNameOne == expectedResultWhileGetPatternOne);
+	REQUIRE(whileGetPatternNameNameTwo == expectedResultWhileGetPatternTwo);
+
+	//ASSIGN
 	std::vector<std::pair<std::string, std::string>> assignGetPatternPairNameNameOne = pkb.getPatternPair(DesignEntity::ASSIGN, assignPatternTokenObjectSecondOne);
 	std::vector<std::pair<std::string, std::string>> assignGetPatternPairNameNameTwo = pkb.getPatternPair(DesignEntity::ASSIGN, assignPatternTokenObjectSecondTwo);
 	std::vector<std::pair<std::string, std::string>> assignGetPatternPairNameSubexprOne = pkb.getPatternPair(DesignEntity::ASSIGN, assignPatternTokenObjectSubexprOne);
@@ -441,6 +565,15 @@ TEST_CASE("All Manager Test") {
 	std::vector<std::pair<std::string, std::string>> assignGetPatternPairNameSubexprThree = pkb.getPatternPair(DesignEntity::ASSIGN, assignPatternTokenObjectSubexprThree);
 	std::vector<std::pair<std::string, std::string>> assignGetPatternPairNameWildcard = pkb.getPatternPair(DesignEntity::ASSIGN, wildCardTokenObject);
 
+	//IF
+	std::vector<std::pair<std::string, std::string>> ifGetPatternPairNameNameOne = pkb.getPatternPair(DesignEntity::IF, ifPatternTokenObjectFirstOne);
+	std::vector<std::pair<std::string, std::string>> ifGetPatternPairNameNameTwo = pkb.getPatternPair(DesignEntity::IF, ifPatternTokenObjectFirstTwo);
+
+	//WHILE
+	std::vector<std::pair<std::string, std::string>> whileGetPatternPairNameNameOne = pkb.getPatternPair(DesignEntity::WHILE, whilePatternTokenObjectFirstOne);
+	std::vector<std::pair<std::string, std::string>> whileGetPatternPairNameNameTwo = pkb.getPatternPair(DesignEntity::WHILE, whilePatternTokenObjectFirstTwo);
+
+	//ASSIGN
 	std::vector<std::pair<std::string, std::string>> expectedGetPatternPairNameNameOne{ {assignLineNumOne, assignFirstValueOne},
 																						{assignLineNumEight, assignFirstValueEight} };
 	std::vector<std::pair<std::string, std::string>> expectedGetPatternPairNameNameTwo{ {assignLineNumSix, assignFirstValueSix},
@@ -466,6 +599,23 @@ TEST_CASE("All Manager Test") {
 																						{assignLineNumSix, assignFirstValueSix},
 																						{assignLineNumSeven, assignFirstValueSeven},
 																						{assignLineNumEight, assignFirstValueEight} };
+	//IF
+	std::vector<std::pair<std::string, std::string>> ifExpectedGetPatternPairNameNameOne{ { ifLineNumOne, ifFirstValueOne },
+																							{ ifLineNumTwo, ifFirstValueTwo},
+																							{ ifLineNumOne, ifFirstValueTwo} };
+
+	std::vector<std::pair<std::string, std::string>> ifExpectedGetPatternPairNameNameTwo{ { ifLineNumOne, ifFirstValueOne },
+																							{ ifLineNumTwo, ifFirstValueTwo},
+																							{ ifLineNumOne, ifFirstValueTwo} };
+
+	//WHILE
+	std::vector<std::pair<std::string, std::string>> whileExpectedGetPatternPairNameNameOne{ { whileLineNumOne, whileFirstValueOne },
+																							{ whileLineNumTwo, whileFirstValueTwo},
+																							{ whileLineNumOne, whileFirstValueTwo} };
+
+	std::vector<std::pair<std::string, std::string>> whileExpectedGetPatternPairNameNameTwo{ { whileLineNumOne, whileFirstValueOne },
+																							{ whileLineNumTwo, whileFirstValueTwo},
+																							{ whileLineNumOne, whileFirstValueTwo} };
 
 	sort(assignGetPatternPairNameNameOne.begin(), assignGetPatternPairNameNameOne.end());
 	sort(assignGetPatternPairNameNameTwo.begin(), assignGetPatternPairNameNameTwo.end());
@@ -474,10 +624,29 @@ TEST_CASE("All Manager Test") {
 	sort(assignGetPatternPairNameSubexprThree.begin(), assignGetPatternPairNameSubexprThree.end());
 	sort(assignGetPatternPairNameWildcard.begin(), assignGetPatternPairNameWildcard.end());
 
+	sort(ifGetPatternPairNameNameOne.begin(), ifGetPatternPairNameNameOne.end());
+	sort(ifGetPatternPairNameNameTwo.begin(), ifGetPatternPairNameNameTwo.end());
+	sort(ifExpectedGetPatternPairNameNameOne.begin(), ifExpectedGetPatternPairNameNameOne.end());
+	sort(ifExpectedGetPatternPairNameNameTwo.begin(), ifExpectedGetPatternPairNameNameTwo.end());
+
+	sort(whileGetPatternPairNameNameOne.begin(), whileGetPatternPairNameNameOne.end());
+	sort(whileGetPatternPairNameNameTwo.begin(), whileGetPatternPairNameNameTwo.end());
+	sort(whileExpectedGetPatternPairNameNameOne.begin(), whileExpectedGetPatternPairNameNameOne.end());
+	sort(whileExpectedGetPatternPairNameNameTwo.begin(), whileExpectedGetPatternPairNameNameTwo.end());
+
+	//ASSIGN
 	REQUIRE(assignGetPatternPairNameNameOne == expectedGetPatternPairNameNameOne);
 	REQUIRE(assignGetPatternPairNameNameTwo == expectedGetPatternPairNameNameTwo);
 	REQUIRE(assignGetPatternPairNameSubexprOne == expectedGetPatternPairNameSubexprOne);
 	REQUIRE(assignGetPatternPairNameSubexprTwo == expectedGetPatternPairNameSubexprTwo);
 	REQUIRE(assignGetPatternPairNameSubexprThree == expectedGetPatternPairNameSubexprThree);
 	REQUIRE(assignGetPatternPairNameWildcard == expectedGetPatternPairNameWilcard);
+
+	//IF
+	REQUIRE(ifGetPatternPairNameNameOne == ifExpectedGetPatternPairNameNameOne);
+	REQUIRE(ifGetPatternPairNameNameTwo == ifExpectedGetPatternPairNameNameTwo);
+
+	//WHILE
+	REQUIRE(whileGetPatternPairNameNameOne == whileExpectedGetPatternPairNameNameOne);
+	REQUIRE(whileGetPatternPairNameNameTwo == whileExpectedGetPatternPairNameNameTwo);
 }
