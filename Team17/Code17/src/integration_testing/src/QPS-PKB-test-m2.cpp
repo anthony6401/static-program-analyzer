@@ -982,7 +982,53 @@ TEST_CASE("Attribute queries - alternate attribute names") {
         QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
         REQUIRE(testResults == expectedResults);
     }
+
+    SECTION("Attribute Test 2") {
+        std::string testQuery = "print p;\n "
+                                "Select p.varName such that Uses(p, \"x\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Attribute Test 3") {
+        std::string testQuery = "print p;\n "
+                                "Select p.varName such that Uses(p, \"v\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"v"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Attribute Test 4") {
+        std::string testQuery = "read re;\n "
+                                "Select re.varName such that Uses(re, \"v\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Attribute Test 5") {
+        std::string testQuery = "read re;\n "
+                                "Select re.varName such that Modifies(re, \"x\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"x"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Attribute Test 6") {
+        std::string testQuery = "read re; call c;\n "
+                                "Select c.procName such that Follows(2, c)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"Second"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
 }
+
 
 TEST_CASE("Attribute queries - non alternate attribute names") {
     SECTION("Attribute Test 1") {
