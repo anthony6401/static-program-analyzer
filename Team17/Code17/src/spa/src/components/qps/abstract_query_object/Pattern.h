@@ -8,6 +8,7 @@ namespace qps {
 
     class Pattern {
     private:
+        TokenType patternType;
         std::string synonym;
         TokenObject left;
         TokenObject right;
@@ -15,6 +16,8 @@ namespace qps {
     public:
         Pattern();
         Pattern(std::string synonym, TokenObject left, TokenObject right);
+        Pattern(TokenType patternType, std::string synonym, TokenObject left, TokenObject right);
+        TokenType getPatternType();
         std::string getSynonym();
         TokenObject getLeft();
         TokenObject getRight();
