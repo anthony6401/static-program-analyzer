@@ -29,6 +29,11 @@ ResultTable SelectAttributeClause::evaluateClause() {
         // evaluate by synonym
         std::unordered_set<std::string> results = qpsClient.getAllEntity(returnType);
         resultTable = std::move(ResultTable(selectSynonymValue, results));
+        if (checkIsAlternateAttributeName(returnType, attributeName)) {
+            std::cout << "has alternate attribute name" << std::endl;
+            resultTable.setHasAlternativeAttributeNameToTrue();
+            return resultTable;
+        }
         return resultTable;
     }
 }

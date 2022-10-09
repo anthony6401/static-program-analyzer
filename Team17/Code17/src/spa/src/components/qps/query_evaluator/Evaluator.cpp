@@ -44,6 +44,8 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
 
 
 void Evaluator::populateResultsList(ResultTable &evaluatedResults, Select select, std::list<std::string> &results, QPSClient qpsClient, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap) {
+    bool hasAlternativeAttributeName = evaluatedResults.getHasAlternativeAttributeName();
+    std::cout << hasAlternativeAttributeName << std::endl;
     std::string selectSynonym = select.getReturnValues().front().getValue();
     TokenType returnType = select.getReturnType();
     if (returnType == TokenType::BOOLEAN) {

@@ -940,6 +940,17 @@ TEST_CASE("Tuple queries with attributes") {
     }
 }
 
+TEST_CASE("Attribute queries - alternate attribute names") {
+    SECTION("Attribute Test 1") {
+        std::string testQuery = "print p;\n "
+                                "Select p.varName";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"v"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+}
+
 TEST_CASE("Attribute queries - non alternate attribute names") {
     SECTION("Attribute Test 1") {
         std::string testQuery = "procedure p, p1;\n "
