@@ -109,11 +109,6 @@ void SimpleParser::parseCall(std::vector<std::string>& tokens) {
     }
 }
 
-/// <summary>
-/// Process print stmts for design extractor
-/// </summary>
-/// <param name="printStmt">SimpleToken of TPRINT type</param>
-/// <param name="tokens">parameters for print statement</param>
 void SimpleParser::parsePrint(std::vector<std::string>& tokens) {
     if (tokens.size() == 2 && tokens.at(1) == ";") {
         SimpleToken printToken = SimpleToken(SpTokenType::TPRINT, parseVariable(tokens.at(0)), statementNumber);
@@ -124,11 +119,6 @@ void SimpleParser::parsePrint(std::vector<std::string>& tokens) {
     }
 }
 
-/// <summary>
-/// Process read stmts for design extractor
-/// </summary>
-/// <param name="printStmt">SimpleToken of TREAD type</param>
-/// <param name="tokens">parameters for read statement</param>
 void SimpleParser::parseRead(std::vector<std::string>& tokens) {
     if (tokens.size() == 2 && tokens.at(1) == ";") {
         SimpleToken readToken = SimpleToken(SpTokenType::TREAD, parseVariable(tokens.at(0)), statementNumber);
@@ -152,7 +142,7 @@ void SimpleParser::parseWhile(std::vector<std::string>& tokens) {
 }
 
 void SimpleParser::parseIf(std::vector<std::string>& tokens) {
-    if (tokens.size() < 7 || tokens.back() != "{" || tokens.front() == "!") {
+    if (tokens.size() < 7 || tokens.back() != "{") {
         throw std::invalid_argument("Received invalid If:Line " + std::to_string(statementNumber));
     }
     tokens.pop_back();
@@ -176,7 +166,7 @@ void SimpleParser::parseAssign(std::vector<std::string>& tokens) {
         children.push_back(SimpleParser::parseExpr(tokens));
         SimpleToken assignToken = SimpleToken(SpTokenType::TASSIGN, "", statementNumber);
         statementNumber++;
-        assignToken.setChildren(children);//add modifies, uses
+        assignToken.setChildren(children);
         extractor->extractAssign(assignToken);
     } else {
         throw std::invalid_argument("Received invalid assign:Line " + std::to_string(statementNumber));
