@@ -76,16 +76,18 @@ void Evaluator::populateResultsList(ResultTable &evaluatedResults, Select select
     if (returnType == TokenType::ATTRIBUTE) {
         std::unordered_set<std::string> resultsToPopulate = evaluatedResults.getSynonymResultsToBePopulated(selectSynonym);
         bool hasAlternativeAttributeName = evaluatedResults.getHasAlternativeAttributeName();
+        std::string selectSynonymValue = select.getReturnValues().front().getValue();
+        DesignEntity entityType = synonymToDesignEntityMap[selectSynonymValue];
         if (hasAlternativeAttributeName) {
             std::unordered_set<std::string> alternativeAttributeValueSet;
             // call pkb api
-            for (auto r : resultsToPopulate) {
-                std::string alternative;
+            for (auto statementNumber : resultsToPopulate) {
+                std::string alternative = qpsClient.getStatementMapping(statementNumber, entityType);
                 alternativeAttributeValueSet.insert(alternative);
             }
 
-            for (auto s : alternativeAttributeValueSet) {
-                results.emplace_back(s);
+            for (const auto& alternativeAttribute : alternativeAttributeValueSet) {
+                results.emplace_back(alternativeAttribute);
             }
 
         } else {
