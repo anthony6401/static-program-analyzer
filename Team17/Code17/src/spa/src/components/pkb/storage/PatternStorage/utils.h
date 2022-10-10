@@ -23,8 +23,7 @@ public:
         return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9');
     }
 
-    static int prec(char c)
-    {
+    static int prec(char c) {
         if (c == '^') {
             return 3;
         }
@@ -55,12 +54,12 @@ public:
 
                 i++;
                 j++;
-
                 // If array B is completely
                 // traversed
                 if (j == m)
                     return true;
             }
+
             // If not,
             // increment i and reset j
             else {
@@ -94,12 +93,9 @@ public:
     }
 
     static std::string convertInfixToPostfix(std::string pattern) {
-        // Using stack
         std::stack<char> st;
         
         std::string result;
-
-        //bool hasAddedSpace = false;
 
         for (int i = 0; i < pattern.length(); i++) {
             char c = pattern[i];
@@ -138,10 +134,6 @@ public:
 
             // If an operator is scanned
             else {
-              /*  if (!hasAddedSpace) {
-                    result += " ";
-                    hasAddedSpace = true;
-                }*/
                 while (!st.empty()
                     && prec(pattern[i]) <= prec(st.top())) {
                     result += st.top();

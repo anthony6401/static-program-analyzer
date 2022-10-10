@@ -1,12 +1,6 @@
 #include "UsesRelationshipStorage.h"
 #include "models/Relationship/UsesRelationship.h"
-#include "models/Entity/ProcedureEntity.h"
-#include "models/Entity/AssignEntity.h"
-#include "models/Entity/PrintEntity.h"
-#include "models/Entity/IfEntity.h"
-#include "models/Entity/WhileEntity.h"
 #include "utils.h"
-#include "typeinfo"
 
 UsesRelationshipStorage::UsesRelationshipStorage() : RelationshipStorage() {}
 

@@ -1,5 +1,4 @@
 #include "IfEntityStorage.h"
-#include <typeinfo>
 #include "models/Entity/IfEntity.h"
 
 IfEntityStorage::IfEntityStorage() : EntityStorage() {}

@@ -1,17 +1,5 @@
 #pragma once
-#include "models/Entity/DesignEntity.h"
-
-
 #include "../pkb.h"
-
-#include <string>
-#include <unordered_set>
-
-#include "models/Entity/DesignEntity.h"
-#include "components/qps/query_preprocessor/query_tokenizer/TokenType.h"
-#include "components/qps/query_preprocessor/query_tokenizer/TokenObject.h"
-
-#include "models/Relationship/RelationshipType.h"
 
 class QPSClient {
 

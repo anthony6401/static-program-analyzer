@@ -1,5 +1,4 @@
 #include "PrintEntityStorage.h"
-#include <typeinfo>
 #include "models/Entity/PrintEntity.h"
 
 PrintEntityStorage::PrintEntityStorage() : EntityMappingStorage() {}

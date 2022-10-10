@@ -1,47 +1,8 @@
 #include "ParentTRelationshipStorage.h"
 #include "models/Relationship/ParentTRelationship.h"
-#include "models/Relationship/RelationshipType.h"
-#include "models/Entity/ProcedureEntity.h"
-#include "models/Entity/AssignEntity.h"
-#include "models/Entity/ReadEntity.h"
-#include "models/Entity/CallEntity.h"
-#include "models/Entity/IfEntity.h"
-#include "models/Entity/WhileEntity.h"
-#include "models/Entity/PrintEntity.h"
-#include "models/Entity/Entity.h"
-#include "models/Entity/DesignEntity.h"
-
 #include "utils.h"
 
-#include "typeinfo"
-#include <iostream>
-
-
-ParentTRelationshipStorage::ParentTRelationshipStorage() : RelationshipStorage(),
-															ifToReadForwardMap(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-															ifToPrintForwardMap(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-															ifToAssignForwardMap(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-															ifToCallForwardMap(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-															ifToWhileForwardMap(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-															ifToIfForwardMap(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-															ifToStmtForwardMap(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-															ifToStmtBackwardMap(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-															whileToReadForwardMap(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-															whileToPrintForwardMap(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-															whileToAssignForwardMap(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-															whileToCallForwardMap(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-															whileToWhileForwardMap(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-															whileToIfForwardMap(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-															whileToStmtForwardMap(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-															whileToStmtBackwardMap(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-															stmtToReadForwardMap(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-															stmtToPrintForwardMap(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-															stmtToAssignForwardMap(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-															stmtToCallForwardMap(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-															stmtToWhileForwardMap(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-															stmtToIfForwardMap(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-															stmtToStmtForwardMap(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-															stmtToStmtBackwardMap(std::unordered_map<std::string, std::unordered_set<std::string>>()) {}
+ParentTRelationshipStorage::ParentTRelationshipStorage() : RelationshipStorage() {}
 
 
 std::unordered_map<std::string, std::unordered_set<std::string>>* ParentTRelationshipStorage::getWhileToSpecificStorage(DesignEntity right) {
@@ -66,6 +27,8 @@ std::unordered_map<std::string, std::unordered_set<std::string>>* ParentTRelatio
 	if (right == DesignEntity::STMT) {
 		return &(this->whileToStmtForwardMap);
 	}
+
+	return nullptr;
 }
 
 std::unordered_map<std::string, std::unordered_set<std::string>>* ParentTRelationshipStorage::getIfToSpecificStorage(DesignEntity right) {
@@ -91,6 +54,8 @@ std::unordered_map<std::string, std::unordered_set<std::string>>* ParentTRelatio
 	else if (right == DesignEntity::STMT) {
 		return &(this->ifToStmtForwardMap);
 	}
+
+	return nullptr;
 }
 
 std::unordered_map<std::string, std::unordered_set<std::string>>* ParentTRelationshipStorage::getStmtToSpecificStorage(DesignEntity right) {
@@ -116,6 +81,8 @@ std::unordered_map<std::string, std::unordered_set<std::string>>* ParentTRelatio
 	else if (right == DesignEntity::STMT) {
 		return &(this->stmtToStmtForwardMap);
 	}
+
+	return nullptr;
 }
 
 std::unordered_map<std::string, std::unordered_set<std::string>>* ParentTRelationshipStorage::getStorageForward(DesignEntity left, DesignEntity right) {

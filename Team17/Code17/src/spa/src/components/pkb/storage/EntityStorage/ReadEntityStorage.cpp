@@ -1,5 +1,4 @@
 #include "ReadEntityStorage.h"
-#include <typeinfo>
 #include "models/Entity/ReadEntity.h"
 
 ReadEntityStorage::ReadEntityStorage() : EntityMappingStorage() {}

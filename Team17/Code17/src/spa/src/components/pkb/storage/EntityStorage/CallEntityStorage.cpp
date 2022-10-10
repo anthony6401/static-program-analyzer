@@ -1,5 +1,4 @@
 #include "CallEntityStorage.h"
-#include <typeinfo>
 #include "models/Entity/CallEntity.h"
 
 CallEntityStorage::CallEntityStorage() : EntityMappingStorage() {}

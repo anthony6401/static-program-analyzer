@@ -1,17 +1,5 @@
 #pragma once
-#include "models/Relationship/Relationship.h"
-#include "models/Relationship/RelationshipType.h"
-
-#include "models/Entity/DesignEntity.h"
-
 #include "RelationshipStorage.h"
-
-#include "components/qps/query_preprocessor/query_tokenizer/TokenType.h"
-#include "components/qps/query_preprocessor/query_tokenizer/TokenObject.h"
-
-#include <unordered_set>
-#include <unordered_map>
-#include <string>
 
 class FollowsRelationshipStorage : public RelationshipStorage {
 public:
