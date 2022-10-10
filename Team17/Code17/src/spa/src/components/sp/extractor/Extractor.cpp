@@ -38,12 +38,7 @@ void Extractor::extractAssign(SimpleToken assignToken) {
 
 	SimpleToken exprToken = assignToken.getChildren().at(1);
 	extractExpr(assignToken, exprToken);
-
-	std::string lineNum = std::to_string(assignToken.statementNumber);
-	std::string firstVal = varToken.value;
-	std::string seconVal = getExpressionAsString(exprToken);
-	AssignPattern * assignPattern = new AssignPattern(lineNum, firstVal, seconVal);
-	this->client->storePattern(assignPattern);
+	extractAssignPattern(assignToken);
 }
 
 std::string Extractor::getExpressionAsString(SimpleToken expression) {
@@ -56,9 +51,20 @@ std::string Extractor::getExpressionAsString(SimpleToken expression) {
 	return expressionString;
 }
 
+void Extractor::extractAssignPattern(SimpleToken assignToken) {
+	SimpleToken varToken = assignToken.getChildren().at(0);
+	SimpleToken exprToken = assignToken.getChildren().at(1);
+	std::string lineNum = std::to_string(assignToken.statementNumber);
+	std::string firstVal = varToken.value;
+	std::string seconVal = getExpressionAsString(exprToken);
+	AssignPattern* assignPattern = new AssignPattern(lineNum, firstVal, seconVal);
+	this->client->storePattern(assignPattern);
+}
+
 void Extractor::extractWhile(SimpleToken whileToken) {
 	this->currentStack->stmts.push_back(whileToken);
 	extractExpr(whileToken, whileToken);
+	extractWhilePattern(whileToken);
 	this->parentStack.push(currentStack);
 	this->currentStack = new WhileStack(whileToken, this);
 }
@@ -66,8 +72,33 @@ void Extractor::extractWhile(SimpleToken whileToken) {
 void Extractor::extractIf(SimpleToken ifToken) {
 	this->currentStack->stmts.push_back(ifToken);
 	extractExpr(ifToken, ifToken);
+	extractIfPattern(ifToken);
 	this->parentStack.push(currentStack);
 	this->currentStack = new IfStack(ifToken, this);
+}
+
+void Extractor::extractWhilePattern(SimpleToken whileToken) {
+	std::vector<SimpleToken> condExpr = whileToken.getChildren();
+	for (int i = 0; i < condExpr.size(); i++) {
+		if (condExpr.at(i).type == SpTokenType::TVARIABLE) {
+			std::string lineNum = std::to_string(whileToken.statementNumber);
+			std::string value = condExpr.at(i).value;
+			WhilePattern* whilePattern = new WhilePattern(lineNum, value);
+			this->client->storePattern(whilePattern);
+		}
+	}
+}
+
+void Extractor::extractIfPattern(SimpleToken ifToken) {
+	std::vector<SimpleToken> condExpr = ifToken.getChildren();
+	for (int i = 0; i < condExpr.size(); i++) {
+		if (condExpr.at(i).type == SpTokenType::TVARIABLE) {
+			std::string lineNum = std::to_string(ifToken.statementNumber);
+			std::string value = condExpr.at(i).value;
+			IfPattern* ifPattern = new IfPattern(lineNum, value);
+			this->client->storePattern(ifPattern);
+		}
+	}
 }
 
 void Extractor::extractExpr(SimpleToken stmtToken, SimpleToken exprToken) {

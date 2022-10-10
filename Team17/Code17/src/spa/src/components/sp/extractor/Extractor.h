@@ -31,6 +31,8 @@
 #include "ProcedureStack.h"
 
 #include "../../../models/Pattern/AssignPattern.h"
+#include "../../../models/Pattern/WhilePattern.h"
+#include "../../../models/Pattern/IfPattern.h"
 
 #include "../../pkb/clients/SPClient.h"
 
@@ -49,8 +51,11 @@ public:
 	void extractPrint(SimpleToken printToken);
 	void extractAssign(SimpleToken assignToken);
 	std::string getExpressionAsString(SimpleToken exprToken);
+	void extractAssignPattern(SimpleToken assignToken);
 	void extractWhile(SimpleToken whileToken);
 	void extractIf(SimpleToken ifToken);
+	void extractWhilePattern(SimpleToken whileToken);
+	void extractIfPattern(SimpleToken ifToken);
 	void extractExpr(SimpleToken stmtToken, SimpleToken exprToken);
 	void extractCall(SimpleToken callToken, std::string currentProcedure);
 	void extractProcedure(SimpleToken procedureToken);
