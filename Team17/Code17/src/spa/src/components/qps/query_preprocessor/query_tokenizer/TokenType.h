@@ -58,7 +58,10 @@ namespace qps {
         STMTREF,
         ENTREF,
         EXPRESSION_SPEC,
-        RESULT_CL
+        RESULT_CL,
+        REF,
+        ATTRIBUTE_SYNONYM,
+        ATTRIBUTE_NAME
     };
 }
 

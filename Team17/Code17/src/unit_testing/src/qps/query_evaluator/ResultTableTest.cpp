@@ -151,3 +151,12 @@ TEST_CASE("Merge results with no common synonyms - multiple synonym clauses") {
     REQUIRE(firstRawResult.synonymsList == expectedSynonymsList);
     REQUIRE(firstRawResult.resultsList == expectedResultsList);
 }
+
+TEST_CASE("Merge with alternative attribute Select clause") {
+    ResultTable firstTable;
+    ResultTable secondTable;
+    secondTable.setHasAlternativeAttributeNameToTrue();
+    firstTable.combineResult(secondTable);
+    REQUIRE(firstTable.getHasAlternativeAttributeName() == true);
+    REQUIRE(secondTable.getHasAlternativeAttributeName() == true);
+}

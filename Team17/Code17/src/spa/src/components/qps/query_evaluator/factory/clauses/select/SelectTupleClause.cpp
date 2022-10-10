@@ -9,19 +9,26 @@ SelectTupleClause::SelectTupleClause(std::vector<TokenObject> tuple, std::unorde
 ResultTable SelectTupleClause::evaluateClause() {
     ResultTable resultTable;
     // TokenObjects can be synonyms of attributes
-    for (auto tupleObject : tuple) {
+    for (int i = 0; i < tuple.size() - 1; i++) {
         ResultTable intermediate;
-        TokenType tupleObjectType = tupleObject.getTokenType();
-        std::string tupleObjectValue = tupleObject.getValue();
+        TokenType tupleObjectType = tuple[i].getTokenType();
+        std::string tupleObjectValue = tuple[i].getValue();
+        DesignEntity returnType = synonymToDesignEntityMap[tupleObjectValue];
         if (tupleObjectType == TokenType::NAME) {
             // If select synonym is found -> just select from table
             if (synonymsInTable.find(tupleObjectValue) != synonymsInTable.end()) {
                 continue;
             } else {
-                intermediate = SelectTupleClause::evaluateSynonymInTuple(tupleObjectValue);
+                intermediate = SelectTupleClause::evaluateSynonymInTuple(tupleObjectValue, returnType);
             }
-        } else if (tupleObjectType == TokenType::ATTRIBUTE) {
+        }
 
+        if (tupleObjectType == TokenType::ATTRIBUTE_SYNONYM) {
+            if (synonymsInTable.find(tupleObjectValue) != synonymsInTable.end()) {
+                continue;
+            } else {
+                intermediate = SelectTupleClause::evaluateAttributeInTuple(tupleObjectValue,  returnType);
+            }
         }
         resultTable.combineResult(intermediate);
     }
@@ -29,14 +36,16 @@ ResultTable SelectTupleClause::evaluateClause() {
     return resultTable;
 }
 
-ResultTable SelectTupleClause::evaluateSynonymInTuple(std::string synonym) {
-    DesignEntity returnType = synonymToDesignEntityMap[synonym];
+
+
+ResultTable SelectTupleClause::evaluateSynonymInTuple(std::string synonym, DesignEntity returnType) {
     std::unordered_set<std::string> results = qpsClient.getAllEntity(returnType);
     return {synonym, results};
 }
 
-ResultTable SelectTupleClause::evaluateAttributeInTuple() {
-    return {};
+ResultTable SelectTupleClause::evaluateAttributeInTuple(std::string synonym, DesignEntity returnType) {
+    std::unordered_set<std::string> results = qpsClient.getAllEntity(returnType);
+    return {synonym, results};
 }
 
 size_t SelectTupleClause::getNumberOfSynonyms() {
@@ -48,7 +57,7 @@ size_t SelectTupleClause::getNumberOfSynonyms() {
             numberOfSynonyms++;
         }
 
-        if (tupleObjectType == TokenType::ATTRIBUTE) {
+        if (tupleObjectType == TokenType::ATTRIBUTE_SYNONYM) {
             numberOfSynonyms++;
         }
     }
@@ -64,7 +73,7 @@ std::set<std::string> SelectTupleClause::getAllSynonyms() {
             synonyms.emplace(tupleObjectValue);
         }
 
-        if (tupleObjectType == TokenType::ATTRIBUTE) {
+        if (tupleObjectType == TokenType::ATTRIBUTE_SYNONYM) {
             synonyms.emplace(tupleObjectValue);
         }
     }

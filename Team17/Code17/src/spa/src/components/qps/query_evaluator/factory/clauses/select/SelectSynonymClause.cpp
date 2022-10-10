@@ -19,7 +19,6 @@ ResultTable SelectSynonymClause::evaluateClause() {
         resultTable = std::move(ResultTable(selectSynonymValue, results));
         return resultTable;
     }
-
 }
 
 size_t SelectSynonymClause::getNumberOfSynonyms() {

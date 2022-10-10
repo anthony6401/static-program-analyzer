@@ -3,8 +3,11 @@
 #include "string"
 #include "iostream"
 #include "components/qps/query_preprocessor/query_tokenizer/TokenObject.h"
-#include <map>
+#include "./factory/clauses/select/SelectAttributeClause.h"
+#include "Evaluator.h"
+#include <unordered_map>
 #include <initializer_list>
+#include "../../../models/Entity/DesignEntity.h"
 
 ResultTable::ResultTable() : resultsList({}), isFalseResult(false), synonymsList({}) {}
 
@@ -53,6 +56,14 @@ void ResultTable::setIsFalseResultToTrue() {
     isFalseResult = true;
 }
 
+void ResultTable::setHasAlternativeAttributeNameToTrue() {
+    hasAlternativeAttributeName = true;
+}
+
+bool ResultTable::getHasAlternativeAttributeName() {
+    return hasAlternativeAttributeName;
+}
+
 std::unordered_set<std::string> ResultTable::getSynonymResultsToBePopulated(std::string selectSynonym) {
     std::unordered_set<std::string> result({});
     auto iterator = std::find(synonymsList.begin(), synonymsList.end(), selectSynonym);
@@ -65,17 +76,33 @@ std::unordered_set<std::string> ResultTable::getSynonymResultsToBePopulated(std:
     return result;
 }
 
-std::unordered_set<std::string> ResultTable::getTupleResultsToBePopulated(std::vector<TokenObject> tuple) {
+std::unordered_set<std::string> ResultTable::getTupleResultsToBePopulated(std::vector<TokenObject> tuple, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) {
     std::unordered_set<std::string> result({});
     for (auto resultSublist : resultsList) {
         std::vector<std::string> newResultSublist;
-        for (auto tupleObject : tuple) {
-            if (tupleObject.getTokenType() == TokenType::NAME) {
-                auto iterator = std::find(synonymsList.begin(), synonymsList.end(), tupleObject.getValue());
+        for (int i = 0; i < tuple.size(); i++) {
+            if (tuple[i].getTokenType() == TokenType::NAME) {
+                auto iterator = std::find(synonymsList.begin(), synonymsList.end(), tuple[i].getValue());
                 int indexOfSynonym = std::distance(synonymsList.begin(), iterator);
                 newResultSublist.push_back(resultSublist[indexOfSynonym]);
-            } else {
-                // ATTRIBUTES
+            }
+
+            if (tuple[i].getTokenType() == TokenType::ATTRIBUTE_SYNONYM) {
+                std::string attributeName = tuple[i + 1].getValue();
+                DesignEntity returnType = synonymToDesignEntityMap[tuple[i].getValue()];
+                if (SelectAttributeClause::checkIsAlternateAttributeName(returnType, attributeName)) {
+                    // call pkb api
+                    DesignEntity entityType = synonymToDesignEntityMap[tuple[i].getValue()];
+                    auto iterator = std::find(synonymsList.begin(), synonymsList.end(), tuple[i].getValue());
+                    int indexOfSynonym = std::distance(synonymsList.begin(), iterator);
+                    std::string statementNumber = resultSublist[indexOfSynonym];
+                    std::string alternative = qpsClient.getStatementMapping(statementNumber, entityType);
+                    newResultSublist.push_back(alternative);
+                } else {
+                    auto iterator = std::find(synonymsList.begin(), synonymsList.end(), tuple[i].getValue());
+                    int indexOfSynonym = std::distance(synonymsList.begin(), iterator);
+                    newResultSublist.push_back(resultSublist[indexOfSynonym]);
+                }
             }
         }
         result.insert(ResultTable::formTupleResultString(newResultSublist));
@@ -115,10 +142,18 @@ void ResultTable::filterBySelectSynonym(std::set<std::string> &&synonyms) {
     resultsList = std::move(newResultsList);
 }
 
+void ResultTable::updateHasCommonAttributeName(ResultTable &nextResult) {
+    if (nextResult.getHasAlternativeAttributeName()) {
+        setHasAlternativeAttributeNameToTrue();
+    }
+}
 
 
 // Find common synonyms and merge resultsLists
 void ResultTable::combineResult(ResultTable &nextResult) {
+
+    ResultTable::updateHasCommonAttributeName(nextResult);
+
     if (isFalseResult) {
         return;
     } else {

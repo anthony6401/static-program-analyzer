@@ -17,18 +17,23 @@
 #include "components/qps/query_evaluator/factory/clauses/select/SelectBooleanClause.h"
 #include "components/qps/query_evaluator/factory/clauses/select/SelectSynonymClause.h"
 #include "components/qps/query_evaluator/factory/clauses/select/SelectTupleClause.h"
+#include "components/qps/query_evaluator/factory/clauses/select/SelectAttributeClause.h"
 
 std::shared_ptr<Clause> ClauseCreator::createClause(Select select, std::unordered_set<std::string> &synonymsInTable, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) {
     TokenType selectReturnType = select.getReturnType();
     std::vector<TokenObject> selectReturnValues = select.getReturnValues();
     if (selectReturnType == TokenType::SYNONYM) {
+        // NAME
         return std::make_shared<SelectSynonymClause>(selectReturnValues.front(), synonymsInTable, synonymToDesignEntityMap, qpsClient);
     } else if (selectReturnType == TokenType::BOOLEAN) {
         return std::make_shared<SelectBooleanClause>();
     } else if (selectReturnType == TokenType::TUPLE) {
+        // NAME, ATTRIBUTE_SYNONYM, ATTRIBUTE_NAME
         return std::make_shared<SelectTupleClause>(selectReturnValues, synonymsInTable, synonymToDesignEntityMap, qpsClient);
     } else if (selectReturnType == TokenType::ATTRIBUTE) {
-        return std::make_shared<SelectSynonymClause>(selectReturnValues.front(), synonymsInTable, synonymToDesignEntityMap, qpsClient);
+        // ATTRIBUTE_SYNONYM, ATTRIBUTE_NAME
+        std::string attributeName = selectReturnValues.back().getValue();
+        return std::make_shared<SelectAttributeClause>(selectReturnValues.front(), attributeName, synonymsInTable, synonymToDesignEntityMap, qpsClient);
     } else {
         return nullptr;
     }
