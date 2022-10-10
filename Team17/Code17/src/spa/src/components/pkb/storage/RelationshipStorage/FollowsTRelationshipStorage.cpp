@@ -42,6 +42,7 @@ std::unordered_map<std::string, std::unordered_set<std::string>>* FollowsTRelati
 	if (right == DesignEntity::STMT) {
 		return &(this->readToStmtForwardMap);
 	}
+	return nullptr;
 }
 
 std::unordered_map<std::string, std::unordered_set<std::string>>* FollowsTRelationshipStorage::getPrintSpecificEntityStorage(DesignEntity right) {
@@ -66,6 +67,7 @@ std::unordered_map<std::string, std::unordered_set<std::string>>* FollowsTRelati
 	if (right == DesignEntity::STMT) {
 		return &(this->printToStmtForwardMap);
 	}
+	return nullptr;
 }
 
 std::unordered_map<std::string, std::unordered_set<std::string>>* FollowsTRelationshipStorage::getAssignSpecificEntityStorage(DesignEntity right) {
@@ -91,6 +93,7 @@ std::unordered_map<std::string, std::unordered_set<std::string>>* FollowsTRelati
 	if (right == DesignEntity::STMT) {
 		return &(this->assignToStmtForwardMap);
 	}
+	return nullptr;
 }
 
 std::unordered_map<std::string, std::unordered_set<std::string>>* FollowsTRelationshipStorage::getCallSpecificEntityStorage(DesignEntity right) {
@@ -115,6 +118,7 @@ std::unordered_map<std::string, std::unordered_set<std::string>>* FollowsTRelati
 	if (right == DesignEntity::STMT) {
 		return &(this->callToStmtForwardMap);
 	}
+	return nullptr;
 }
 
 std::unordered_map<std::string, std::unordered_set<std::string>>* FollowsTRelationshipStorage::getWhileSpecificEntityStorage(DesignEntity right) {
@@ -140,6 +144,7 @@ std::unordered_map<std::string, std::unordered_set<std::string>>* FollowsTRelati
 	if (right == DesignEntity::STMT) {
 		return &(this->whileToStmtForwardMap);
 	}
+	return nullptr;
 }
 
 std::unordered_map<std::string, std::unordered_set<std::string>>* FollowsTRelationshipStorage::getIfSpecificEntityStorage(DesignEntity right) {
@@ -165,6 +170,7 @@ std::unordered_map<std::string, std::unordered_set<std::string>>* FollowsTRelati
 	if (right == DesignEntity::STMT) {
 		return &(this->ifToStmtForwardMap);
 	}
+	return nullptr;
 }
 
 std::unordered_map<std::string, std::unordered_set<std::string>>* FollowsTRelationshipStorage::getStmtSpecificEntityStorage(DesignEntity right) {
@@ -190,6 +196,7 @@ std::unordered_map<std::string, std::unordered_set<std::string>>* FollowsTRelati
 	if (right == DesignEntity::STMT) {
 		return &(this->stmtToStmtForwardMap);
 	}
+	return nullptr;
 }
 
 std::unordered_map<std::string, std::unordered_set<std::string>>* FollowsTRelationshipStorage::getStorageForward(DesignEntity left, DesignEntity right) {

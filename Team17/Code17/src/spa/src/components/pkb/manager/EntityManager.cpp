@@ -1,6 +1,4 @@
 #include "EntityManager.h"
-#include "../../../models/Entity/Entity.h"
-
 #include "../storage/EntityStorage/AssignEntityStorage.h"
 #include "../storage/EntityStorage/CallEntityStorage.h"
 #include "../storage/EntityStorage/ConstantEntityStorage.h"
@@ -11,8 +9,6 @@
 #include "../storage/EntityStorage/StatementEntityStorage.h"
 #include "../storage/EntityStorage/VariableEntityStorage.h"
 #include "../storage/EntityStorage/WhileEntityStorage.h"
-
-#include "../../qps/query_preprocessor/query_tokenizer/TokenType.h"
 
 EntityManager::EntityManager() {
 	AssignEntityStorage* assStore = new AssignEntityStorage();

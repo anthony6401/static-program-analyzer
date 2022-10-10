@@ -42,6 +42,8 @@ std::unordered_map<std::string, std::unordered_set<std::string>>* ParentTRelatio
 	if (right == DesignEntity::STMT) {
 		return &(this->whileToStmtForwardMap);
 	}
+
+	return nullptr;
 }
 
 std::unordered_map<std::string, std::unordered_set<std::string>>* ParentTRelationshipStorage::getIfToSpecificStorage(DesignEntity right) {
@@ -67,6 +69,8 @@ std::unordered_map<std::string, std::unordered_set<std::string>>* ParentTRelatio
 	else if (right == DesignEntity::STMT) {
 		return &(this->ifToStmtForwardMap);
 	}
+
+	return nullptr;
 }
 
 std::unordered_map<std::string, std::unordered_set<std::string>>* ParentTRelationshipStorage::getStmtToSpecificStorage(DesignEntity right) {
@@ -92,6 +96,8 @@ std::unordered_map<std::string, std::unordered_set<std::string>>* ParentTRelatio
 	else if (right == DesignEntity::STMT) {
 		return &(this->stmtToStmtForwardMap);
 	}
+
+	return nullptr;
 }
 
 std::unordered_map<std::string, std::unordered_set<std::string>>* ParentTRelationshipStorage::getStorageForward(DesignEntity left, DesignEntity right) {

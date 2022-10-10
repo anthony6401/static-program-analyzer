@@ -2,7 +2,6 @@
 
 #include "../storage/EntityStorage/EntityStorage.h"
 #include "../storage/EntityStorage/EntityMappingStorage.h"
-#include  "models/Entity/DesignEntity.h"
 
 #include <string>
 #include <vector>
