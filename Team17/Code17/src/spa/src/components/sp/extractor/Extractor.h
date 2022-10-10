@@ -43,24 +43,20 @@ public:
 	std::map<std::string, ProcedureStack*> procedures;
 	StmtStack* currentStack;
 
-
 	Extractor(SPClient* client);
-
-	void close(int statementNumber);
 
 	void extractRead(SimpleToken readToken);
 	void extractPrint(SimpleToken printToken);
 	void extractAssign(SimpleToken assignToken);
+	std::string getExpressionAsString(SimpleToken exprToken);
 	void extractWhile(SimpleToken whileToken);
 	void extractIf(SimpleToken ifToken);
 	void extractExpr(SimpleToken stmtToken, SimpleToken exprToken);
 	void extractCall(SimpleToken callToken, std::string currentProcedure);
 	void extractProcedure(SimpleToken procedureToken);
+	void close(int statementNumber);
 	void endOfParser(std::multimap<std::string, std::string> callProcedures);
 	void addNestedRelationships(StmtStack* parent, StmtStack* called, std::string name);
-	std::string getExpressionAsString(SimpleToken exprToken);
-	Entity* generateEntity(SimpleToken token);
 
-	void extractConstants(SimpleToken procedureToken);
-	std::vector<ConstantEntity*> extractConstantsVector(SimpleToken procedureToken);
+	Entity* generateEntity(SimpleToken token);
 };

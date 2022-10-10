@@ -7,17 +7,18 @@ class IfStack : public StmtStack {
 public:
     IfStack(SimpleToken parent, Extractor* context);
     void close(int statemetNumber);
-    std::vector<SimpleToken> ifFollows; // statementNumber
-    void extractFollows(std::vector<SimpleToken> follows);
-    void extractParent(std::vector<SimpleToken> follows);
-    void extractParentT(std::vector<SimpleToken> parentT);
-    void extractUses(std::vector<SimpleToken> uses);
-    void extractModify(std::vector<SimpleToken> modifies);
-    Entity* generateEntity(SimpleToken token);
     void mergeStack();
+    std::vector<SimpleToken> ifStmts; // statementNumber
+    void extractFollows(std::vector<SimpleToken> stmts);
+    void extractFollowsT(std::vector<SimpleToken> stmts);
+    void extractParent(std::vector<SimpleToken> stmts);
+    void extractParentT(std::vector<SimpleToken> stmtsNested);
+    void extractUses(std::vector<SimpleToken> varUse);
+    void extractModify(std::vector<SimpleToken> varMod);
+    Entity* generateEntity(SimpleToken token);
 
 private:
-    SimpleToken parent;
     bool expectElse;
+    SimpleToken parent;
     Extractor* context;
 };

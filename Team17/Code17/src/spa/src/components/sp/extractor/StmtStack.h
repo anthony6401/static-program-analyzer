@@ -12,12 +12,11 @@ public:
     SimpleToken parent;
     virtual void close(int statementNumber) = 0;
     virtual void mergeStack() = 0;
-    std::vector<SimpleToken> modifies;
-    std::vector<SimpleToken> uses;
-    std::vector<SimpleToken> follows;
-    std::vector<SimpleToken> parentT;
+    std::vector<SimpleToken> varMod;
+    std::vector<SimpleToken> varUse;
+    std::vector<SimpleToken> stmts;
+    std::vector<SimpleToken> stmtsNested;
 
 protected:
     StmtStack(SimpleToken parent, Extractor* context) : parent(parent) {};
-
 };
