@@ -1,21 +1,6 @@
 #include "FollowsRelationshipStorage.h"
 #include "models/Relationship/FollowsRelationship.h"
-#include "models/Relationship/RelationshipType.h"
-#include "models/Entity/ProcedureEntity.h"
-#include "models/Entity/AssignEntity.h"
-#include "models/Entity/ReadEntity.h"
-#include "models/Entity/CallEntity.h"
-#include "models/Entity/IfEntity.h"
-#include "models/Entity/WhileEntity.h"
-#include "models/Entity/PrintEntity.h"
-#include "models/Entity/Entity.h"
-#include "models/Entity/DesignEntity.h"
-
 #include "utils.h"
-
-#include "utils.h"
-#include "typeinfo"
-#include <iostream>
 
 FollowsRelationshipStorage::FollowsRelationshipStorage() : RelationshipStorage() {}
 

@@ -1,8 +1,6 @@
 #include "CallsRelationshipStorage.h"
 #include "models/Relationship/CallsRelationship.h"
-#include "models/Entity/ProcedureEntity.h"
 #include "utils.h"
-#include "typeinfo"
 
 // Note that every DesignEntity passed in here is assume as Procedure
 CallsRelationshipStorage::CallsRelationshipStorage() : RelationshipStorage() {}

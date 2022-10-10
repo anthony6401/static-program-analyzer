@@ -1,12 +1,6 @@
 #include "ModifyRelationshipStorage.h"
 #include "models/Relationship/ModifyRelationship.h"
-#include "models/Entity/ProcedureEntity.h"
-#include "models/Entity/AssignEntity.h"
-#include "models/Entity/ReadEntity.h"
-#include "models/Entity/IfEntity.h"
-#include "models/Entity/WhileEntity.h"
 #include "utils.h"
-#include "typeinfo"
 
 ModifyRelationshipStorage::ModifyRelationshipStorage() : RelationshipStorage() {}
 
