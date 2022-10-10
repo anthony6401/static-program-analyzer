@@ -23,6 +23,7 @@ private:
 	std::unordered_map<std::string, std::unordered_set<std::string>> ifForwardStorage;
 	std::unordered_map<std::string, std::unordered_set<std::string>> whileForwardStorage;
 	std::unordered_map<std::string, std::unordered_set<std::string>> procForwardStorage;
+	std::unordered_map<std::string, std::unordered_set<std::string>> callsForwardStorage;
 
 	// To answer Uses(s, "x"), Uses(a, v)
 	std::unordered_map<std::string, std::unordered_set<std::string>> procBackwardStorage;
@@ -30,4 +31,5 @@ private:
 	std::unordered_map<std::string, std::unordered_set<std::string>> printBackwardStorage;
 	std::unordered_map<std::string, std::unordered_set<std::string>> ifBackwardStorage;
 	std::unordered_map<std::string, std::unordered_set<std::string>> whileBackwardStorage;
+	std::unordered_map<std::string, std::unordered_set<std::string>> callsBackwardStorage;
 };
