@@ -142,7 +142,7 @@ ClauseDivider Evaluator::extractClausesToEvaluate(QueryObject queryObject, std::
     ClauseDivider clauseDivider;
     std::vector<SuchThat> relationships = queryObject.getRelationships();
     std::vector<Pattern> patterns = queryObject.getPattern();
-    Select synonym = queryObject.getSelect();
+    std::vector<With> withs = queryObject.getWith();
 
     for (const auto& r : relationships) {
         std::shared_ptr<Clause> relationshipClauseToEvaluate = ClauseCreator::createClause(r, synonymToDesignEntityMap, qpsClient);
@@ -152,6 +152,11 @@ ClauseDivider Evaluator::extractClausesToEvaluate(QueryObject queryObject, std::
     for (const auto& p : patterns) {
         std::shared_ptr<Clause> patternClauseToEvaluate = ClauseCreator::createClause(p, synonymToDesignEntityMap, qpsClient);
         clauseDivider.addClauseToDivider(patternClauseToEvaluate);
+    }
+
+    for (const auto& w : withs) {
+        std::shared_ptr<Clause> withClauseToEvaluate = ClauseCreator::createClause(w, synonymToDesignEntityMap, qpsClient);
+        clauseDivider.addClauseToDivider(withClauseToEvaluate);
     }
 
     return clauseDivider;
