@@ -10,6 +10,7 @@
 #include "set"
 #include "../../../models/Entity/DesignEntity.h"
 #include "components/pkb/clients/QPSClient.h"
+#include "components/qps/query_evaluator/factory/utils/HashFunction.h"
 
 class ResultTable {
 
@@ -24,6 +25,7 @@ public:
     ResultTable(const std::string &synonym, const std::unordered_set<std::string> &results);
     ResultTable(std::string leftSynonym, std::string rightSynonym,
                 std::vector<std::pair<std::string, std::string>> results);
+    ResultTable(std::string leftSynonym, std::string rightSynonym, std::unordered_set<std::pair<std::string, std::string>, hashFunction> results);
     void filterBySelectSynonym(std::set<std::string> &&synonyms);
     void combineResult(ResultTable &nextResult);
     std::map<std::string, size_t> computeSynonymToIndexMap();

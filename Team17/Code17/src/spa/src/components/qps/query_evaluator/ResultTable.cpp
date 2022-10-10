@@ -8,6 +8,7 @@
 #include <unordered_map>
 #include <initializer_list>
 #include "../../../models/Entity/DesignEntity.h"
+#include "components/qps/query_evaluator/factory/utils/HashFunction.h"
 
 ResultTable::ResultTable() : resultsList({}), isFalseResult(false), synonymsList({}) {}
 
@@ -35,6 +36,18 @@ ResultTable::ResultTable(std::string leftSynonym, std::string rightSynonym, std:
     synonymsList.emplace_back(rightSynonym);
     for (auto pairResult : results) {
         // {{1, x}, {3, y}, {5, z}}
+        std::vector<std::string> resultSublist = {pairResult.first, pairResult.second};
+        resultsList.emplace_back(resultSublist);
+    }
+}
+
+ResultTable::ResultTable(std::string leftSynonym, std::string rightSynonym, std::unordered_set<std::pair<std::string, std::string>, hashFunction> results) {
+    if (results.empty()) {
+        setIsFalseResultToTrue();
+    }
+    synonymsList.emplace_back(leftSynonym);
+    synonymsList.emplace_back(rightSynonym);
+    for (auto pairResult : results) {
         std::vector<std::string> resultSublist = {pairResult.first, pairResult.second};
         resultsList.emplace_back(resultSublist);
     }

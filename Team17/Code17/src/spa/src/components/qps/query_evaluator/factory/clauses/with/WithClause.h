@@ -22,6 +22,7 @@ public:
     ResultTable evaluateClause() override;
     size_t getNumberOfSynonyms() override;
     std::set<std::string> getAllSynonyms() override;
+    std::unordered_set<std::string> findCommonAttributeNames(std::unordered_set<std::string> leftNameResult, std::unordered_set<std::string> rightNameResult);
     ResultTable evaluateAttributeAttribute();
     ResultTable evaluateAttributeInteger();
     ResultTable evaluateAttributeNameQuotes();
