@@ -21,25 +21,49 @@ ModifyRelationshipStorage::ModifyRelationshipStorage() : RelationshipStorage(),
 														whileBackwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()) {}
 
 
-std::unordered_map<std::string, std::unordered_set<std::string>>* ModifyRelationshipStorage::getRelationshipMap(DesignEntity designEntity, bool isForward) {
+std::unordered_map<std::string, std::unordered_set<std::string>>* ModifyRelationshipStorage::getStorageForward(DesignEntity designEntity) {
 	if (designEntity == DesignEntity::PROCEDURE) {
-		return isForward ? &this->procForwardStorage : &this->procBackwardStorage;
+		return &this->procForwardStorage;
 	}
 
 	if (designEntity == DesignEntity::ASSIGN) {
-		return isForward ? &this->assignForwardStorage : &this->assignBackwardStorage;
+		return  &this->assignForwardStorage;
 	}
 
 	if (designEntity == DesignEntity::READ) {
-		return isForward ? &this->readForwardStorage : &this->readBackwardStorage;
+		return &this->readForwardStorage;
 	}
 
 	if (designEntity == DesignEntity::IF) {
-		return isForward ? &this->ifForwardStorage : &this->ifBackwardStorage;
+		return &this->ifForwardStorage;
 	}
 
 	if (designEntity == DesignEntity::WHILE) {
-		return isForward ? &this->whileForwardStorage : &this->whileBackwardStorage;
+		return &this->whileForwardStorage;
+	}
+
+	return nullptr;
+}
+
+std::unordered_map<std::string, std::unordered_set<std::string>>* ModifyRelationshipStorage::getStorageBackward(DesignEntity designEntity) {
+	if (designEntity == DesignEntity::PROCEDURE) {
+		return &this->procBackwardStorage;
+	}
+
+	if (designEntity == DesignEntity::ASSIGN) {
+		return  &this->assignBackwardStorage;
+	}
+
+	if (designEntity == DesignEntity::READ) {
+		return &this->readBackwardStorage;
+	}
+
+	if (designEntity == DesignEntity::IF) {
+		return &this->ifBackwardStorage;
+	}
+
+	if (designEntity == DesignEntity::WHILE) {
+		return &this->whileBackwardStorage;
 	}
 
 	return nullptr;
@@ -106,8 +130,8 @@ bool ModifyRelationshipStorage::storeRelationship(Relationship* rel) {
 		bool result = false;
 
 		DesignEntity designEntityLeft = RelationshipUtils::entityToDesignEntity(leftEntity);
-		std::unordered_map<std::string, std::unordered_set<std::string>>* forwardStorage = getRelationshipMap(designEntityLeft, true);
-		std::unordered_map<std::string, std::unordered_set<std::string>>* backwardStorage = getRelationshipMap(designEntityLeft, false);
+		std::unordered_map<std::string, std::unordered_set<std::string>>* forwardStorage = getStorageForward(designEntityLeft);
+		std::unordered_map<std::string, std::unordered_set<std::string>>* backwardStorage = getStorageBackward(designEntityLeft);
 
 		bool resultOne = RelationshipUtils::insertEntity(forwardStorage, leftValue, rightValue);
 		bool resultTwo = RelationshipUtils::insertEntity(backwardStorage, rightValue, leftValue);
@@ -157,7 +181,7 @@ std::unordered_set<std::string> ModifyRelationshipStorage::getRelationshipBySeco
 			return *getSetBySecond(secondArgument);
 		}
 
-		std::unordered_map<std::string, std::unordered_set<std::string>>* storage = getRelationshipMap(returnType, false);
+		std::unordered_map<std::string, std::unordered_set<std::string>>* storage = getStorageBackward(returnType);
 
 		if (storage == nullptr) {
 			return std::unordered_set<std::string>();
@@ -188,7 +212,7 @@ std::unordered_map<std::string, std::unordered_set<std::string>> ModifyRelations
 			return map;
 		}
 
-		std::unordered_map<std::string, std::unordered_set<std::string>>* storage = getRelationshipMap(returnType1, true);
+		std::unordered_map<std::string, std::unordered_set<std::string>>* storage = getStorageForward(returnType1);
 
 		if (storage == nullptr) {
 			return std::unordered_map<std::string, std::unordered_set<std::string>>();

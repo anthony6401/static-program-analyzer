@@ -36,11 +36,14 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
         selectClause = ClauseCreator::createClause(select, synonymsInTable, synonymToDesignEntityMap, qpsClient);
         ResultTable selectTable = selectClause -> evaluateClause();
         evaluatedResults.combineResult(selectTable);
-        Evaluator::populateResultsList(evaluatedResults, select, results);
+        Evaluator::populateResultsList(evaluatedResults, select, results, qpsClient, synonymToDesignEntityMap);
     }
 }
 
-void Evaluator::populateResultsList(ResultTable &evaluatedResults, Select select, std::list<std::string> &results) {
+
+
+void Evaluator::populateResultsList(ResultTable &evaluatedResults, Select select, std::list<std::string> &results, QPSClient qpsClient, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap) {
+    std::string selectSynonym = select.getReturnValues().front().getValue();
     TokenType returnType = select.getReturnType();
     if (returnType == TokenType::BOOLEAN) {
         if (evaluatedResults.getIsFalseResult()) {
@@ -48,26 +51,50 @@ void Evaluator::populateResultsList(ResultTable &evaluatedResults, Select select
         } else {
             results.emplace_back("TRUE");
         }
-    } else if (returnType == TokenType::SYNONYM) {
+    }
+
+    if (returnType == TokenType::SYNONYM) {
         if (evaluatedResults.getIsFalseResult()) {
             return;
         } else {
-            std::string selectSynonym = select.getReturnValues().front().getValue();
             std::unordered_set<std::string> resultsToPopulate = evaluatedResults.getSynonymResultsToBePopulated(selectSynonym);
             for (std::string result : resultsToPopulate) {
                 results.emplace_back(result);
             }
         }
-    } else if (returnType == TokenType::TUPLE) {
+    }
+
+    if (returnType == TokenType::TUPLE) {
         std::vector<TokenObject> tuple = select.getReturnValues();
-        std::unordered_set<std::string> resultsToPopulate = evaluatedResults.getTupleResultsToBePopulated(tuple);
+        std::unordered_set<std::string> resultsToPopulate = evaluatedResults.getTupleResultsToBePopulated(tuple, synonymToDesignEntityMap, qpsClient);
         for (std::string result : resultsToPopulate) {
             results.emplace_back(result);
         }
-    } else {
-        // Attribute result
     }
 
+    if (returnType == TokenType::ATTRIBUTE) {
+        std::unordered_set<std::string> resultsToPopulate = evaluatedResults.getSynonymResultsToBePopulated(selectSynonym);
+        bool hasAlternativeAttributeName = evaluatedResults.getHasAlternativeAttributeName();
+        std::string selectSynonymValue = select.getReturnValues().front().getValue();
+        DesignEntity entityType = synonymToDesignEntityMap[selectSynonymValue];
+        if (hasAlternativeAttributeName) {
+            std::unordered_set<std::string> alternativeAttributeValueSet;
+            // call pkb api
+            for (auto statementNumber : resultsToPopulate) {
+                std::string alternative = qpsClient.getStatementMapping(statementNumber, entityType);
+                alternativeAttributeValueSet.insert(alternative);
+            }
+
+            for (const auto& alternativeAttribute : alternativeAttributeValueSet) {
+                results.emplace_back(alternativeAttribute);
+            }
+
+        } else {
+            for (std::string result : resultsToPopulate) {
+                results.emplace_back(result);
+            }
+        }
+    }
 }
 
 // Returns boolean, check for False or Empty Clauses
