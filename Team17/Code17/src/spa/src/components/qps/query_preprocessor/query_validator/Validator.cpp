@@ -181,23 +181,20 @@ bool Validator::withClauseIsSemanticallyCorrect() {
 		// If ref is IDENT or INTEGER, no need to validate. Hence, we only check if attribute is valid
 		std::vector<TokenObject> left = with.getLeft();
 
-		if (left.size() < 2) {
-			continue;
-		}
-
-		if (!isValidAttrRef(left)) {
-			return false;
+		if (left.size() > 1) {
+			if (!isValidAttrRef(left)) {
+				return false;
+			}
 		}
 
 		std::vector<TokenObject> right = with.getRight();
 
-		if (right.size() < 2) {
-			continue;
+		if (right.size() > 1) {
+			if (!isValidAttrRef(right)) {
+				return false;
+			}
 		}
 
-		if (!isValidAttrRef(right)) {
-			return false;
-		}
 
 	}
 
@@ -396,7 +393,7 @@ bool Validator::isValidAttrNameToAttrSynonym(std::string attrName, DesignEntity 
 };
 
 bool Validator::isValidAttrRef(std::vector<TokenObject> ref) {
-	DesignEntity currAttributeSynonymDesignEntity;
+	DesignEntity currAttributeSynonymDesignEntity{};
 	std::unordered_map<std::string, DesignEntity> mappedSynonyms = this->parsedQuery.getSynonymToDesignEntityMap();
 
 	for (TokenObject token : ref) {

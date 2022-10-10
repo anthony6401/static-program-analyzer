@@ -5,6 +5,7 @@
 #include "components/qps/abstract_query_object/Select.h"
 #include "components/qps/abstract_query_object/SuchThat.h"
 #include "components/qps/abstract_query_object/Pattern.h"
+#include "components/qps/abstract_query_object/With.h"
 
 #include <catch.hpp>
 #include <unordered_map>
@@ -185,6 +186,101 @@ TEST_CASE("Query returns tuple") {
     int numOfDeclaredSynonyms = 3;
 
     QueryObject testParsedQuery = QueryObject(select, suchThat, pattern, mappedSynonyms, numOfDeclaredSynonyms);
+
+
+    Validator validator = Validator(testParsedQuery);
+    QueryObject validatedQuery = validator.validate();
+
+    REQUIRE(validatedQuery.isSemanticallyValid() == true);
+};
+
+TEST_CASE("With clause - attributes") {
+    Select select = Select(TokenType::TUPLE, { TokenObject(TokenType::NAME, std::string("r")), TokenObject(TokenType::ATTRIBUTE_SYNONYM, std::string("r")), TokenObject(TokenType::ATTRIBUTE_NAME, std::string("varName")) });
+    std::vector<SuchThat> suchThat{ SuchThat(TokenType::CALLS, TokenObject(TokenType::NAME, "p"), TokenObject(TokenType::NAME, "q")) };
+    std::vector<qps::Pattern> pattern{};
+    std::vector<With> with{ With(TokenType::NAME, TokenType::NAME,
+        {TokenObject(TokenType::ATTRIBUTE_SYNONYM, std::string("r")), TokenObject(TokenType::ATTRIBUTE_NAME, std::string("varName"))},
+        {TokenObject(TokenType::ATTRIBUTE_SYNONYM, std::string("p")), TokenObject(TokenType::ATTRIBUTE_NAME, std::string("procName"))}) };
+    std::unordered_map<std::string, DesignEntity> mappedSynonyms{ {"r", DesignEntity::READ}, {"p", DesignEntity::PROCEDURE}, {"q", DesignEntity::PROCEDURE} };
+    int numOfDeclaredSynonyms = 3;
+
+    QueryObject testParsedQuery = QueryObject(select, suchThat, pattern, with, mappedSynonyms, numOfDeclaredSynonyms);
+
+
+    Validator validator = Validator(testParsedQuery);
+    QueryObject validatedQuery = validator.validate();
+
+    REQUIRE(validatedQuery.isSemanticallyValid() == true);
+};
+
+TEST_CASE("With clause - attributes stmt#") {
+    Select select = Select(TokenType::TUPLE, { TokenObject(TokenType::NAME, std::string("r")), TokenObject(TokenType::ATTRIBUTE_SYNONYM, std::string("r")), TokenObject(TokenType::ATTRIBUTE_NAME, std::string("varName")) });
+    std::vector<SuchThat> suchThat{ SuchThat(TokenType::CALLS, TokenObject(TokenType::NAME, "p"), TokenObject(TokenType::NAME, "q")) };
+    std::vector<qps::Pattern> pattern{};
+    std::vector<With> with{ With(TokenType::NAME, TokenType::NAME,
+        {TokenObject(TokenType::ATTRIBUTE_SYNONYM, std::string("r")), TokenObject(TokenType::ATTRIBUTE_NAME, std::string("stmt#"))},
+        {TokenObject(TokenType::ATTRIBUTE_SYNONYM, std::string("p")), TokenObject(TokenType::ATTRIBUTE_NAME, std::string("procName"))}) };
+    std::unordered_map<std::string, DesignEntity> mappedSynonyms{ {"r", DesignEntity::READ}, {"p", DesignEntity::PROCEDURE}, {"q", DesignEntity::PROCEDURE} };
+    int numOfDeclaredSynonyms = 3;
+
+    QueryObject testParsedQuery = QueryObject(select, suchThat, pattern, with, mappedSynonyms, numOfDeclaredSynonyms);
+
+
+    Validator validator = Validator(testParsedQuery);
+    QueryObject validatedQuery = validator.validate();
+
+    REQUIRE(validatedQuery.isSemanticallyValid() == true);
+};
+
+TEST_CASE("With clause - integer") {
+    Select select = Select(TokenType::TUPLE, { TokenObject(TokenType::NAME, std::string("r")), TokenObject(TokenType::ATTRIBUTE_SYNONYM, std::string("r")), TokenObject(TokenType::ATTRIBUTE_NAME, std::string("varName")) });
+    std::vector<SuchThat> suchThat{ SuchThat(TokenType::CALLS, TokenObject(TokenType::NAME, "p"), TokenObject(TokenType::NAME, "q")) };
+    std::vector<qps::Pattern> pattern{};
+    std::vector<With> with{ With(TokenType::INTEGER, TokenType::INTEGER,
+        {TokenObject(TokenType::INTEGER, std::string("2"))},
+        {TokenObject(TokenType::INTEGER, std::string("3"))}) };
+    std::unordered_map<std::string, DesignEntity> mappedSynonyms{ {"r", DesignEntity::READ}, {"p", DesignEntity::PROCEDURE}, {"q", DesignEntity::PROCEDURE} };
+    int numOfDeclaredSynonyms = 3;
+
+    QueryObject testParsedQuery = QueryObject(select, suchThat, pattern, with, mappedSynonyms, numOfDeclaredSynonyms);
+
+
+    Validator validator = Validator(testParsedQuery);
+    QueryObject validatedQuery = validator.validate();
+
+    REQUIRE(validatedQuery.isSemanticallyValid() == true);
+};
+
+TEST_CASE("With clause - constant.value") {
+    Select select = Select(TokenType::TUPLE, { TokenObject(TokenType::NAME, std::string("r")), TokenObject(TokenType::ATTRIBUTE_SYNONYM, std::string("c")), TokenObject(TokenType::ATTRIBUTE_NAME, std::string("value")) });
+    std::vector<SuchThat> suchThat{ SuchThat(TokenType::CALLS, TokenObject(TokenType::NAME, "p"), TokenObject(TokenType::NAME, "q")) };
+    std::vector<qps::Pattern> pattern{};
+    std::vector<With> with{ With(TokenType::INTEGER, TokenType::INTEGER,
+        {TokenObject(TokenType::INTEGER, std::string("2"))},
+        {TokenObject(TokenType::ATTRIBUTE_SYNONYM, std::string("c")), TokenObject(TokenType::ATTRIBUTE_NAME, std::string("value"))}) };
+    std::unordered_map<std::string, DesignEntity> mappedSynonyms{ {"r", DesignEntity::READ}, {"p", DesignEntity::PROCEDURE}, {"q", DesignEntity::PROCEDURE}, {"c", DesignEntity::CONSTANT} };
+    int numOfDeclaredSynonyms = 4;
+
+    QueryObject testParsedQuery = QueryObject(select, suchThat, pattern, with, mappedSynonyms, numOfDeclaredSynonyms);
+
+
+    Validator validator = Validator(testParsedQuery);
+    QueryObject validatedQuery = validator.validate();
+
+    REQUIRE(validatedQuery.isSemanticallyValid() == true);
+};
+
+TEST_CASE("With clause - ident") {
+    Select select = Select(TokenType::TUPLE, { TokenObject(TokenType::NAME, std::string("r")), TokenObject(TokenType::ATTRIBUTE_SYNONYM, std::string("r")), TokenObject(TokenType::ATTRIBUTE_NAME, std::string("varName")) });
+    std::vector<SuchThat> suchThat{ SuchThat(TokenType::CALLS, TokenObject(TokenType::NAME, "p"), TokenObject(TokenType::NAME, "q")) };
+    std::vector<qps::Pattern> pattern{};
+    std::vector<With> with{ With(TokenType::NAME, TokenType::NAME,
+        {TokenObject(TokenType::NAME_WITH_QUOTATION, std::string("2"))},
+        {TokenObject(TokenType::NAME_WITH_QUOTATION, std::string("3"))}) };
+    std::unordered_map<std::string, DesignEntity> mappedSynonyms{ {"r", DesignEntity::READ}, {"p", DesignEntity::PROCEDURE}, {"q", DesignEntity::PROCEDURE} };
+    int numOfDeclaredSynonyms = 3;
+
+    QueryObject testParsedQuery = QueryObject(select, suchThat, pattern, with, mappedSynonyms, numOfDeclaredSynonyms);
 
 
     Validator validator = Validator(testParsedQuery);
@@ -613,3 +709,116 @@ TEST_CASE("Next* where first param is not statement") {
     REQUIRE(validatedQuery.isSemanticallyValid() == false);
 };
 
+TEST_CASE("With clause - attributes with non-declared synonyms") {
+    Select select = Select(TokenType::TUPLE, { TokenObject(TokenType::NAME, std::string("r")), TokenObject(TokenType::ATTRIBUTE_SYNONYM, std::string("r")), TokenObject(TokenType::ATTRIBUTE_NAME, std::string("varName")) });
+    std::vector<SuchThat> suchThat{ SuchThat(TokenType::CALLS, TokenObject(TokenType::NAME, "p"), TokenObject(TokenType::NAME, "q")) };
+    std::vector<qps::Pattern> pattern{};
+    std::vector<With> with{ With(TokenType::NAME, TokenType::NAME,
+        {TokenObject(TokenType::ATTRIBUTE_SYNONYM, std::string("r")), TokenObject(TokenType::ATTRIBUTE_NAME, std::string("varName"))},
+        {TokenObject(TokenType::ATTRIBUTE_SYNONYM, std::string("call")), TokenObject(TokenType::ATTRIBUTE_NAME, std::string("procName"))}) };
+    std::unordered_map<std::string, DesignEntity> mappedSynonyms{ {"r", DesignEntity::READ}, {"p", DesignEntity::PROCEDURE}, {"q", DesignEntity::PROCEDURE} };
+    int numOfDeclaredSynonyms = 3;
+
+    QueryObject testParsedQuery = QueryObject(select, suchThat, pattern, with, mappedSynonyms, numOfDeclaredSynonyms);
+
+
+    Validator validator = Validator(testParsedQuery);
+    QueryObject validatedQuery = validator.validate();
+
+    REQUIRE(validatedQuery.isSemanticallyValid() == false);
+};
+
+TEST_CASE("With clause - procedure using varName as attrName") {
+    Select select = Select(TokenType::TUPLE, { TokenObject(TokenType::NAME, std::string("r")), TokenObject(TokenType::ATTRIBUTE_SYNONYM, std::string("r")), TokenObject(TokenType::ATTRIBUTE_NAME, std::string("varName")) });
+    std::vector<SuchThat> suchThat{ SuchThat(TokenType::CALLS, TokenObject(TokenType::NAME, "p"), TokenObject(TokenType::NAME, "q")) };
+    std::vector<qps::Pattern> pattern{};
+    std::vector<With> with{ With(TokenType::NAME, TokenType::NAME,
+        {TokenObject(TokenType::ATTRIBUTE_SYNONYM, std::string("r")), TokenObject(TokenType::ATTRIBUTE_NAME, std::string("varName"))},
+        {TokenObject(TokenType::ATTRIBUTE_SYNONYM, std::string("p")), TokenObject(TokenType::ATTRIBUTE_NAME, std::string("varName"))}) };
+    std::unordered_map<std::string, DesignEntity> mappedSynonyms{ {"r", DesignEntity::READ}, {"p", DesignEntity::PROCEDURE}, {"q", DesignEntity::PROCEDURE} };
+    int numOfDeclaredSynonyms = 3;
+
+    QueryObject testParsedQuery = QueryObject(select, suchThat, pattern, with, mappedSynonyms, numOfDeclaredSynonyms);
+
+
+    Validator validator = Validator(testParsedQuery);
+    QueryObject validatedQuery = validator.validate();
+
+    REQUIRE(validatedQuery.isSemanticallyValid() == false);
+};
+
+TEST_CASE("With clause - statement using procName as attrName") {
+    Select select = Select(TokenType::TUPLE, { TokenObject(TokenType::NAME, std::string("r")), TokenObject(TokenType::ATTRIBUTE_SYNONYM, std::string("r")), TokenObject(TokenType::ATTRIBUTE_NAME, std::string("varName")) });
+    std::vector<SuchThat> suchThat{ SuchThat(TokenType::CALLS, TokenObject(TokenType::NAME, "p"), TokenObject(TokenType::NAME, "q")) };
+    std::vector<qps::Pattern> pattern{};
+    std::vector<With> with{ With(TokenType::NAME, TokenType::NAME,
+        {TokenObject(TokenType::ATTRIBUTE_SYNONYM, std::string("r")), TokenObject(TokenType::ATTRIBUTE_NAME, std::string("procName"))},
+        {TokenObject(TokenType::ATTRIBUTE_SYNONYM, std::string("p")), TokenObject(TokenType::ATTRIBUTE_NAME, std::string("procName"))}) };
+    std::unordered_map<std::string, DesignEntity> mappedSynonyms{ {"r", DesignEntity::READ}, {"p", DesignEntity::PROCEDURE}, {"q", DesignEntity::PROCEDURE} };
+    int numOfDeclaredSynonyms = 3;
+
+    QueryObject testParsedQuery = QueryObject(select, suchThat, pattern, with, mappedSynonyms, numOfDeclaredSynonyms);
+
+
+    Validator validator = Validator(testParsedQuery);
+    QueryObject validatedQuery = validator.validate();
+
+    REQUIRE(validatedQuery.isSemanticallyValid() == false);
+};
+
+TEST_CASE("With clause - invalid constant attribute") {
+    Select select = Select(TokenType::TUPLE, { TokenObject(TokenType::NAME, std::string("r")), TokenObject(TokenType::ATTRIBUTE_SYNONYM, std::string("c")), TokenObject(TokenType::ATTRIBUTE_NAME, std::string("value")) });
+    std::vector<SuchThat> suchThat{ SuchThat(TokenType::CALLS, TokenObject(TokenType::NAME, "p"), TokenObject(TokenType::NAME, "q")) };
+    std::vector<qps::Pattern> pattern{};
+    std::vector<With> with{ With(TokenType::INTEGER, TokenType::INTEGER,
+        {TokenObject(TokenType::INTEGER, std::string("2"))},
+        {TokenObject(TokenType::ATTRIBUTE_SYNONYM, std::string("c")), TokenObject(TokenType::ATTRIBUTE_NAME, std::string("stmt#"))}) };
+    std::unordered_map<std::string, DesignEntity> mappedSynonyms{ {"r", DesignEntity::READ}, {"p", DesignEntity::PROCEDURE}, {"q", DesignEntity::PROCEDURE}, {"c", DesignEntity::CONSTANT} };
+    int numOfDeclaredSynonyms = 4;
+
+    QueryObject testParsedQuery = QueryObject(select, suchThat, pattern, with, mappedSynonyms, numOfDeclaredSynonyms);
+
+
+    Validator validator = Validator(testParsedQuery);
+    QueryObject validatedQuery = validator.validate();
+
+    REQUIRE(validatedQuery.isSemanticallyValid() == false);
+};
+
+TEST_CASE("With clause - invalid value attribute") {
+    Select select = Select(TokenType::TUPLE, { TokenObject(TokenType::NAME, std::string("r")), TokenObject(TokenType::ATTRIBUTE_SYNONYM, std::string("c")), TokenObject(TokenType::ATTRIBUTE_NAME, std::string("value")) });
+    std::vector<SuchThat> suchThat{ SuchThat(TokenType::CALLS, TokenObject(TokenType::NAME, "p"), TokenObject(TokenType::NAME, "q")) };
+    std::vector<qps::Pattern> pattern{};
+    std::vector<With> with{ With(TokenType::INTEGER, TokenType::INTEGER,
+        {TokenObject(TokenType::INTEGER, std::string("2"))},
+        {TokenObject(TokenType::ATTRIBUTE_SYNONYM, std::string("r")), TokenObject(TokenType::ATTRIBUTE_NAME, std::string("value"))}) };
+    std::unordered_map<std::string, DesignEntity> mappedSynonyms{ {"r", DesignEntity::READ}, {"p", DesignEntity::PROCEDURE}, {"q", DesignEntity::PROCEDURE}, {"c", DesignEntity::CONSTANT} };
+    int numOfDeclaredSynonyms = 4;
+
+    QueryObject testParsedQuery = QueryObject(select, suchThat, pattern, with, mappedSynonyms, numOfDeclaredSynonyms);
+
+
+    Validator validator = Validator(testParsedQuery);
+    QueryObject validatedQuery = validator.validate();
+
+    REQUIRE(validatedQuery.isSemanticallyValid() == false);
+};
+
+TEST_CASE("With clause - incompatible types") {
+    Select select = Select(TokenType::TUPLE, { TokenObject(TokenType::NAME, std::string("r")), TokenObject(TokenType::ATTRIBUTE_SYNONYM, std::string("c")), TokenObject(TokenType::ATTRIBUTE_NAME, std::string("value")) });
+    std::vector<SuchThat> suchThat{ SuchThat(TokenType::CALLS, TokenObject(TokenType::NAME, "p"), TokenObject(TokenType::NAME, "q")) };
+    std::vector<qps::Pattern> pattern{};
+    std::vector<With> with{ With(TokenType::NAME, TokenType::INTEGER,
+        {TokenObject(TokenType::ATTRIBUTE_SYNONYM, std::string("p")), TokenObject(TokenType::ATTRIBUTE_NAME, std::string("procName"))},
+        {TokenObject(TokenType::ATTRIBUTE_SYNONYM, std::string("c")), TokenObject(TokenType::ATTRIBUTE_NAME, std::string("value"))}) };
+    std::unordered_map<std::string, DesignEntity> mappedSynonyms{ {"r", DesignEntity::READ}, {"p", DesignEntity::PROCEDURE}, {"q", DesignEntity::PROCEDURE}, {"c", DesignEntity::CONSTANT} };
+    int numOfDeclaredSynonyms = 4;
+
+    QueryObject testParsedQuery = QueryObject(select, suchThat, pattern, with, mappedSynonyms, numOfDeclaredSynonyms);
+
+
+    Validator validator = Validator(testParsedQuery);
+    QueryObject validatedQuery = validator.validate();
+
+    REQUIRE(validatedQuery.isSemanticallyValid() == false);
+};
