@@ -1,9 +1,6 @@
 #include "AssignPatternStorage.h"
-#include "models/Pattern/Pattern.h"
 #include "models/Pattern/AssignPattern.h"
 
-#include <typeinfo>
-#include <vector>
 
 AssignPatternStorage::AssignPatternStorage() : PatternStorage() {}
 

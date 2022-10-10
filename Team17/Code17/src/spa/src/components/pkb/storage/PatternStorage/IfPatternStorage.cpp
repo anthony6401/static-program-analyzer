@@ -1,9 +1,5 @@
 #include "IfPatternStorage.h"
-#include "models/Pattern/Pattern.h"
 #include "models/Pattern/IfPattern.h"
-
-#include <typeinfo>
-#include <vector>
 
 IfPatternStorage::IfPatternStorage() : PatternStorage() {}
 

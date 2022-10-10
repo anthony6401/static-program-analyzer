@@ -1,9 +1,5 @@
 #include "WhilePatternStorage.h"
-#include "models/Pattern/Pattern.h"
 #include "models/Pattern/WhilePattern.h"
-
-#include <typeinfo>
-#include <vector>
 
 WhilePatternStorage::WhilePatternStorage() : PatternStorage() {}
 

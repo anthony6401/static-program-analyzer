@@ -1,10 +1,6 @@
 #pragma once
-#include <unordered_set>
-#include <unordered_map>
-#include <string>
 #include "PatternStorage.h"
 #include "utils.h"
-#include "components/qps/query_preprocessor/query_tokenizer/TokenObject.h"
 
 class IfPatternStorage : public PatternStorage {
 
