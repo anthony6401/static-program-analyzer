@@ -921,7 +921,7 @@ TEST_CASE("Tuple queries with attributes") {
         std::string testQuery = "procedure p, p1; variable v; stmt s;\n "
                                 "Select <p.procName, p1.procName, s.stmt#> such that Calls(p, p1) and Modifies(s, \"i\")";
         std::list<std::string> testResults;
-        std::list<std::string> expectedResults = { "First Second 3", "First Third 3", "First Second 6", "Second Third 9", "First Second 5", "Second Third 6", "First Second 9", "Second Third 5"};
+        std::list<std::string> expectedResults = { "First Second 3", "Second Third 3", "First Second 6", "Second Third 9", "First Second 5", "Second Third 6", "First Second 9", "Second Third 5"};
         QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
         testResults.sort();
         expectedResults.sort();
