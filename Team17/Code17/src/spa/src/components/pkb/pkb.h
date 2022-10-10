@@ -1,16 +1,7 @@
 #pragma once
-
-#include "../../models/Relationship/Relationship.h"
-#include  "models/Entity/Entity.h"
-#include  "models/Entity/DesignEntity.h"
-
 #include "./manager/EntityManager.h"
 #include "./manager/RelationshipManager.h"
 #include "./manager/PatternManager.h"
-
-#include "../qps/query_preprocessor/query_tokenizer/TokenType.h"
-
-#include <unordered_set>
 
 class PKB {
 public:
@@ -42,7 +33,6 @@ public:
 	PatternManager* getPatternManager();
 
 private:
-	//Add managers
 	EntityManager* entityManager;
 	RelationshipManager* relManager;
 	PatternManager* patternManager;

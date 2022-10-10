@@ -1,14 +1,4 @@
-#include "models/Relationship/Relationship.h"
-
-#include "./manager/EntityManager.h"
-#include "./manager/RelationshipManager.h"
-#include "./manager/PatternManager.h"
-
 #include "pkb.h"
-
-#include "components/qps/query_preprocessor/query_tokenizer/TokenType.h"
-
-#include <unordered_set>
 
 PKB::PKB() {
 	entityManager = new EntityManager();
@@ -28,7 +18,6 @@ bool PKB::storeRelationship(Relationship* rel) {
 	bool resultTwo = entityManager->storeEntity(rel->getRightEntity());
 	ret = ret || resultOne || resultTwo;
 
-	//TODO need to store relationship soon!!
 	bool resultStoreRel = relManager->storeRelationship(rel);
 	
 	ret = ret || resultStoreRel;

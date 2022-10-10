@@ -93,7 +93,6 @@ public:
     }
 
     static std::string convertInfixToPostfix(std::string pattern) {
-        // Using stack
         std::stack<char> st;
         
         std::string result;

@@ -1,8 +1,5 @@
 #pragma once
-
 #include "../pkb.h"
-#include "models/Relationship/Relationship.h"
-#include "models/Pattern/Pattern.h"
 
 class SPClient {
 private:
