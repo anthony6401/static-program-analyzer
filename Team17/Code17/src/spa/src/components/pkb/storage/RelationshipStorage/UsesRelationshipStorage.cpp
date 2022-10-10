@@ -8,17 +8,7 @@
 #include "utils.h"
 #include "typeinfo"
 
-UsesRelationshipStorage::UsesRelationshipStorage() : RelationshipStorage(),
-													procForwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-													assignForwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-													printForwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-													ifForwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-													whileForwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-													procBackwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-													assignBackwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-													printBackwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-													ifBackwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-													whileBackwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()) {}
+UsesRelationshipStorage::UsesRelationshipStorage() : RelationshipStorage() {}
 
 std::unordered_map<std::string, std::unordered_set<std::string>>* UsesRelationshipStorage::getStorageForward(DesignEntity designEntity) {
 	if (designEntity == DesignEntity::PROCEDURE) {
@@ -41,6 +31,9 @@ std::unordered_map<std::string, std::unordered_set<std::string>>* UsesRelationsh
 		return &this->whileForwardStorage;
 	}
 
+	if (designEntity == DesignEntity::CALL) {
+		return &this->callsForwardStorage;
+	}
 	return nullptr;
 }
 
@@ -63,6 +56,10 @@ std::unordered_map<std::string, std::unordered_set<std::string>>* UsesRelationsh
 
 	if (designEntity == DesignEntity::WHILE) {
 		return &this->whileBackwardStorage;
+	}
+
+	if (designEntity == DesignEntity::CALL) {
+		return &this->callsBackwardStorage;
 	}
 
 	return nullptr;
@@ -89,6 +86,10 @@ std::unordered_set<std::string>* UsesRelationshipStorage::getSetByFirst(TokenObj
 		return &this->procForwardStorage.find(firstArgument.getValue())->second;
 	}
 
+	if (this->callsForwardStorage.find(firstArgument.getValue()) != this->callsForwardStorage.end()) {
+		return &this->callsForwardStorage.find(firstArgument.getValue())->second;
+	}
+
 	return nullptr;
 }
 
@@ -112,6 +113,11 @@ std::unordered_set<std::string>* UsesRelationshipStorage::getSetBySecond(TokenOb
 
 	if (this->ifBackwardStorage.find(secondArgument.getValue()) != this->ifBackwardStorage.end()) {
 		std::unordered_set<std::string>* temp = &this->ifBackwardStorage.find(secondArgument.getValue())->second;
+		set->insert(temp->begin(), temp->end());
+	}
+
+	if (this->callsBackwardStorage.find(secondArgument.getValue()) != this->callsBackwardStorage.end()) {
+		std::unordered_set<std::string>* temp = &this->callsBackwardStorage.find(secondArgument.getValue())->second;
 		set->insert(temp->begin(), temp->end());
 	}
 
@@ -206,6 +212,7 @@ std::unordered_map<std::string, std::unordered_set<std::string>> UsesRelationshi
 			map.insert(this->printForwardStorage.begin(), this->printForwardStorage.end());
 			map.insert(this->whileForwardStorage.begin(), this->whileForwardStorage.end());
 			map.insert(this->ifForwardStorage.begin(), this->ifForwardStorage.end());
+			map.insert(this->callsForwardStorage.begin(), this->callsForwardStorage.end());
 
 			return map;
 		}

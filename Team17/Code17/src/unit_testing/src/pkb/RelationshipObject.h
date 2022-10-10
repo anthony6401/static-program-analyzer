@@ -42,6 +42,11 @@ static Relationship* usesRelationshipIfTwo = new UsesRelationship(ifEntityTwo, v
 static Relationship* usesRelationshipIfOneDuplicate = new UsesRelationship(ifEntityDuplicate, variableEntityThree);
 static Relationship* usesRelationshipIfTwoDuplicate = new UsesRelationship(ifEntityTwoDuplicate, variableEntity);
 
+static Relationship* usesRelationshipCallOne = new UsesRelationship(callEntity, variableEntity);
+static Relationship* usesRelationshipCallTwo = new UsesRelationship(callEntityTwo, variableEntityTwo);
+static Relationship* usesRelationshipCallOneDuplicate = new UsesRelationship(callEntityDuplicate, variableEntityThree);
+static Relationship* usesRelationshipCallTwoDuplicate = new UsesRelationship(callEntityTwoDuplicate, variableEntity);
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 static Relationship* modifyRelationshipAssignOne = new ModifyRelationship(assignEntity, variableEntity);
@@ -73,6 +78,11 @@ static Relationship* modifyRelationshipIfOne = new ModifyRelationship(ifEntity, 
 static Relationship* modifyRelationshipIfTwo = new ModifyRelationship(ifEntityTwo, variableEntityTwo);
 static Relationship* modifyRelationshipIfOneDuplicate = new ModifyRelationship(ifEntityDuplicate, variableEntityThree);
 static Relationship* modifyRelationshipIfTwoDuplicate = new ModifyRelationship(ifEntityTwoDuplicate, variableEntity);
+
+static Relationship* modifyRelationshipCallOne = new ModifyRelationship(callEntity, variableEntity);
+static Relationship* modifyRelationshipCallTwo = new ModifyRelationship(callEntityTwo, variableEntityTwo);
+static Relationship* modifyRelationshipCallOneDuplicate = new ModifyRelationship(callEntityDuplicate, variableEntityThree);
+static Relationship* modifyRelationshipCallTwoDuplicate = new ModifyRelationship(callEntityTwoDuplicate, variableEntity);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
