@@ -20,6 +20,8 @@ public:
 
 	// For getting entity mapping
 	std::string getStatementMapping(std::string& stmtNumber, DesignEntity entityType);
+	std::unordered_set<std::string> getStatementByName(std::string& name, DesignEntity entityType);
+	std::unordered_set<std::string> getAllName(DesignEntity entityType);
 	
 	// For constant
 	bool storeConstant(Entity* entity);
