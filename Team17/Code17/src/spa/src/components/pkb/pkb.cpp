@@ -89,6 +89,14 @@ std::string PKB::getStatementMapping(std::string& stmtNumber, DesignEntity entit
 	return entityManager->getStatementMapping(stmtNumber, entityType);
 }
 
+std::unordered_set<std::string> PKB::getStatementByName(std::string& name, DesignEntity entityType) {
+	return entityManager->getStatementByName(name, entityType);
+}
+
+std::unordered_set<std::string> PKB::getAllName(DesignEntity entityType) {
+	return entityManager->getAllName(entityType);
+}
+
 EntityManager* PKB::getEntityManager() {
 	return entityManager;
 }

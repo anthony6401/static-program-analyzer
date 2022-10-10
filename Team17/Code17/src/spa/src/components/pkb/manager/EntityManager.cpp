@@ -85,3 +85,25 @@ std::unordered_set<std::string> EntityManager::getAllEntity(DesignEntity returnT
 
 	return std::unordered_set<std::string>();
 }
+
+std::unordered_set<std::string> EntityManager::getStatementByName(std::string& name, DesignEntity entityType) {
+	std::unordered_set<std::string> result;
+	for (auto& es : stmtMappingStore) {
+		result = es->getStatementByName(name, entityType);
+		if (result != std::unordered_set<std::string>()) {
+			return result;
+		}
+	}
+	return std::unordered_set<std::string>();
+}
+
+std::unordered_set<std::string> EntityManager::getAllName(DesignEntity entityType) {
+	std::unordered_set<std::string> result;
+	for (auto& es : stmtMappingStore) {
+		result = es->getAllName(entityType);
+		if (result != std::unordered_set<std::string>()) {
+			return result;
+		}
+	}
+	return std::unordered_set<std::string>();
+}
