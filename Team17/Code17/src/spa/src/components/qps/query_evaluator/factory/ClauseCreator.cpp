@@ -18,6 +18,8 @@
 #include "components/qps/query_evaluator/factory/clauses/select/SelectSynonymClause.h"
 #include "components/qps/query_evaluator/factory/clauses/select/SelectTupleClause.h"
 #include "components/qps/query_evaluator/factory/clauses/select/SelectAttributeClause.h"
+#include "components/qps/query_evaluator/factory/clauses/patterns/IfPatternClause.h"
+#include "components/qps/query_evaluator/factory/clauses/patterns/WhilePatternClause.h"
 
 std::shared_ptr<Clause> ClauseCreator::createClause(Select select, std::unordered_set<std::string> &synonymsInTable, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) {
     TokenType selectReturnType = select.getReturnType();
@@ -40,10 +42,20 @@ std::shared_ptr<Clause> ClauseCreator::createClause(Select select, std::unordere
 }
 
 std::shared_ptr<Clause> ClauseCreator::createClause(qps::Pattern pattern, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) {
-    TokenObject left = pattern.getLeft();
-    TokenObject right = pattern.getRight();
-    std::string assignSynonym = pattern.getSynonym();
-    return std::make_shared<AssignPatternClause>(assignSynonym, left, right, qpsClient);
+    TokenObject firstArgument = pattern.getLeft();
+    TokenObject secondArgument = pattern.getRight();
+    std::string patternSynonym = pattern.getSynonym();
+    TokenType patternType = pattern.getPatternType();
+
+    if (patternType == TokenType::IF) {
+        return std::make_shared<IfPatternClause>(patternSynonym, firstArgument, qpsClient);
+    }
+
+    if (patternType == TokenType::WHILE) {
+        return std::make_shared<WhilePatternClause>(patternSynonym, firstArgument, qpsClient);
+    }
+
+    return std::make_shared<AssignPatternClause>(patternSynonym, firstArgument, secondArgument, qpsClient);
 }
 
 std::shared_ptr<Clause> ClauseCreator::createClause(SuchThat relationship, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) {
