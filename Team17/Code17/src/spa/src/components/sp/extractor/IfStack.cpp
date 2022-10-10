@@ -21,6 +21,8 @@ void IfStack::close(int statementNumber) {
         extractParentT(context->currentStack->stmtsNested);
         extractUses(context->currentStack->varUse);
         extractModify(context->currentStack->varMod);
+        extractNext(ifStmts);
+        extractNext(stmts);
 
         mergeStack();
 
@@ -102,6 +104,29 @@ void IfStack::extractModify(std::vector<SimpleToken> varMod) {
         context->client->storeRelationship(modifyRel);
     }
 }
+
+void IfStack::extractNext(std::vector<SimpleToken> stmts) {
+    SimpleToken ifStmt = parent;
+    SimpleToken firstStmt = stmts.at(0);
+    Entity* ifStmtEnt = generateEntity(ifStmt);
+    Entity* firstStmtEnt = generateEntity(firstStmt);
+    NextRelationship* initialNextRel = new NextRelationship(ifStmtEnt, firstStmtEnt);
+    context->client->storeRelationship(initialNextRel);
+
+    for (size_t i = 0; i < stmts.size() - 1; i++) {
+        if (stmts.at(i).type != SpTokenType::TIF) {
+            SimpleToken first = stmts.at(i);
+            SimpleToken second = stmts.at(i + 1);
+            Entity* firstEntity = generateEntity(first);
+            Entity* secondEntity = generateEntity(second);
+            NextRelationship* nextRel = new NextRelationship(firstEntity, secondEntity);
+            context->client->storeRelationship(nextRel);
+        }
+    }
+
+    // how to implement the last next?
+}
+
 
 Entity* IfStack::generateEntity(SimpleToken token) {
     if (token.type == SpTokenType::TREAD) {
