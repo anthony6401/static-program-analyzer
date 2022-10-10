@@ -28,10 +28,8 @@ public:
     ResultTable evaluateAttributeInteger();
     ResultTable evaluateAttributeNameQuotes();
     ResultTable evaluateIntegerAttribute();
-    ResultTable evaluateIntegerInteger();
-    ResultTable evaluateIntegerNameQuotes();
+    ResultTable evaluateIntegerOrNameQuotes();
     ResultTable evaluateNameQuotesAttribute();
-    ResultTable evaluateNameQuotesInteger();
     ResultTable evaluateNameQuotesNameQuotes();
 };
 

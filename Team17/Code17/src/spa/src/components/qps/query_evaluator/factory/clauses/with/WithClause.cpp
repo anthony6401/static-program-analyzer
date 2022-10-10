@@ -11,6 +11,125 @@ WithClause::WithClause(qps::TokenType leftType, qps::TokenType rightType, std::v
 ResultTable WithClause::evaluateClause() {
     if (leftType == TokenType::ATTRIBUTE && rightType == TokenType::ATTRIBUTE) {
         return WithClause::evaluateAttributeAttribute();
+    } else if (leftType == TokenType::ATTRIBUTE && rightType == TokenType::INTEGER) {
+        return WithClause::evaluateAttributeInteger();
+    } else if (leftType == TokenType::ATTRIBUTE && rightType == TokenType::NAME_WITH_QUOTATION) {
+        return WithClause::evaluateAttributeNameQuotes();
+    } else if (leftType == TokenType::INTEGER && rightType == TokenType::ATTRIBUTE) {
+        return WithClause::evaluateIntegerAttribute();
+    } else if (leftType == TokenType::NAME_WITH_QUOTATION && rightType == TokenType::ATTRIBUTE) {
+        return WithClause::evaluateNameQuotesAttribute();
+    } else {
+        return WithClause::evaluateIntegerOrNameQuotes();
+    }
+}
+
+ResultTable WithClause::evaluateIntegerOrNameQuotes() {
+    std::string leftValue = left.front().getValue();
+    std::string rightValue = right.front().getValue();
+    if (leftValue == rightValue) {
+        return {true};
+    } else {
+        return {false};
+    }
+}
+
+
+ResultTable WithClause::evaluateNameQuotesAttribute() {
+    ResultTable resultTable;
+    std::string attributeSynonym = right.front().getValue();
+    std::string nameQuotesValue = left.front().getValue();
+    DesignEntity attributeDesignEntityType = synonymToDesignEntityMap[attributeSynonym];
+    std::string attributeName = right.back().getValue();
+    bool isAlternativeAttribute = SelectAttributeClause::checkIsAlternateAttributeName(attributeDesignEntityType,
+                                                                                       attributeName);
+
+    if (isAlternativeAttribute) {
+        // Call PKB API to get pkb statement by name
+        std::unordered_set<std::string> attributeResult;
+        if (attributeResult.empty()) {
+            resultTable.setIsFalseResultToTrue();
+            return resultTable;
+        } else {
+            std::unordered_set<std::string> results;
+            results.insert(nameQuotesValue);
+            return {attributeSynonym, results};
+        }
+    } else {
+        std::unordered_set<std::string> attributeResult = qpsClient.getAllEntity(attributeDesignEntityType);
+        if (attributeResult.find(nameQuotesValue) == attributeResult.end()) {
+            resultTable.setIsFalseResultToTrue();
+            return resultTable;
+        } else {
+            std::unordered_set<std::string> results;
+            results.insert(nameQuotesValue);
+            return {attributeSynonym, results};
+        }
+    }
+}
+
+
+ResultTable WithClause::evaluateIntegerAttribute() {
+    ResultTable resultTable;
+    std::string attributeSynonym = right.front().getValue();
+    std::string integerValue = left.front().getValue();
+    DesignEntity attributeDesignEntityType = synonymToDesignEntityMap[attributeSynonym];
+    std::unordered_set<std::string> attributeResult = qpsClient.getAllEntity(attributeDesignEntityType);
+    if (attributeResult.find(integerValue) == attributeResult.end()) {
+        resultTable.setIsFalseResultToTrue();
+        return resultTable;
+    } else {
+        std::unordered_set<std::string> results;
+        results.insert(integerValue);
+        return {attributeSynonym, results};
+    }
+}
+
+ResultTable WithClause::evaluateAttributeNameQuotes() {
+    ResultTable resultTable;
+    std::string attributeSynonym = left.front().getValue();
+    std::string nameQuotesValue = right.front().getValue();
+    DesignEntity attributeDesignEntityType = synonymToDesignEntityMap[attributeSynonym];
+    std::string attributeName = left.back().getValue();
+    bool isAlternativeAttribute = SelectAttributeClause::checkIsAlternateAttributeName(attributeDesignEntityType, attributeName);
+
+    if (isAlternativeAttribute) {
+        // Call PKB API to get pkb statement by name
+        std::unordered_set<std::string> attributeResult;
+        if (attributeResult.empty()) {
+            resultTable.setIsFalseResultToTrue();
+            return resultTable;
+        } else {
+            std::unordered_set<std::string> results;
+            results.insert(nameQuotesValue);
+            return {attributeSynonym, results};
+        }
+    } else {
+        std::unordered_set<std::string> attributeResult = qpsClient.getAllEntity(attributeDesignEntityType);
+        if (attributeResult.find(nameQuotesValue) == attributeResult.end()) {
+            resultTable.setIsFalseResultToTrue();
+            return resultTable;
+        } else {
+            std::unordered_set<std::string> results;
+            results.insert(nameQuotesValue);
+            return {attributeSynonym, results};
+        }
+    }
+}
+
+ResultTable WithClause::evaluateAttributeInteger() {
+    ResultTable resultTable;
+    std::string attributeSynonym = left.front().getValue();
+    std::string integerValue = right.front().getValue();
+    DesignEntity attributeDesignEntityType = synonymToDesignEntityMap[attributeSynonym];
+    std::unordered_set<std::string> attributeResult = qpsClient.getAllEntity(attributeDesignEntityType);
+    if (attributeResult.find(integerValue) == attributeResult.end()) {
+        resultTable.setIsFalseResultToTrue();
+        return resultTable;
+    } else {
+        std::unordered_set<std::string> results;
+        results.insert(integerValue);
+        return {attributeSynonym, results};
     }
 }
 
