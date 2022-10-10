@@ -106,4 +106,16 @@ TEST_CASE("Entity Manager getAllEntity method test") {
 	REQUIRE(callGetStmtByNameTest == callStmtByNameExpectedResult);
 	REQUIRE(printGetStmgByNameTest == printStmtByNameExpectedResult);
 	REQUIRE(readGetStmtByNameTest == readStmtByNameExpectedResult);
+
+	std::unordered_set<std::string> callGetAllNameTest = entityManager.getAllName(DesignEntity::CALL);
+	std::unordered_set<std::string> printGetAllNameTest = entityManager.getAllName(DesignEntity::PRINT);
+	std::unordered_set<std::string> readGetAllNameTest = entityManager.getAllName(DesignEntity::READ);
+
+	std::unordered_set<std::string> callGetAllNameExpectedResult({ procedure_value_one });
+	std::unordered_set<std::string> printGetAllNameExpectedResult({ variable_value_one });
+	std::unordered_set<std::string> readGetAllNameExpectedResult({ variable_value_one });
+
+	REQUIRE(callGetAllNameTest == callGetAllNameExpectedResult);
+	REQUIRE(printGetAllNameTest == printGetAllNameExpectedResult);
+	REQUIRE(readGetAllNameTest == readGetAllNameExpectedResult);
 }
