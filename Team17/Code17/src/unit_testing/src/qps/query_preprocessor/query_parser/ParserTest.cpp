@@ -116,6 +116,30 @@ TEST_CASE("Attribute return type") {
     REQUIRE(expectedResult == actualResult);
 };
 
+TEST_CASE("Attribute return type - synonym name same as attrName") {
+    std::vector<TokenObject> testTokenObject{
+        TokenObject(TokenType::CONSTANT, std::string("constant")),
+        TokenObject(TokenType::NAME, std::string("value")),
+        TokenObject(TokenType::SEMI_COLON, std::string(";")),
+        TokenObject(TokenType::SELECT, std::string("Select")),
+        TokenObject(TokenType::ATTRIBUTE, std::string("value.value"))
+    };
+
+    Select expectedSelect = Select(TokenType::ATTRIBUTE, { TokenObject(TokenType::ATTRIBUTE_SYNONYM, std::string("value")), TokenObject(TokenType::ATTRIBUTE_NAME, std::string("value")) });
+    std::vector<SuchThat> expectedSuchThat{};
+    std::vector<Pattern> expectedPattern{};
+    std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"value", DesignEntity::CONSTANT} };
+    int expectedNumOfDeclaredSynonyms = 1;
+
+    QueryObject expectedResult = QueryObject(expectedSelect, expectedSuchThat, expectedPattern, expectedMappedSynonyms, expectedNumOfDeclaredSynonyms);
+
+    Parser parser = Parser(testTokenObject);
+    QueryObject actualResult = parser.parse();
+
+    REQUIRE(expectedResult == actualResult);
+    REQUIRE(actualResult.isSyntacticallyCorrect() == true);
+};
+
 TEST_CASE("Tuple return type - only synonyms") {
     std::vector<TokenObject> testTokenObject{
         TokenObject(TokenType::VARIABLE, std::string("variable")),
@@ -477,26 +501,6 @@ TEST_CASE("Single clause query - with clause") {
 
     Parser parser = Parser(testTokenObject);
     QueryObject actualResult = parser.parse();
-
-    //std::vector<TokenObject> expectedDeclaration{ TokenObject(TokenType::VARIABLE, std::string("variable")),
-    //    TokenObject(TokenType::NAME, std::string("v")),
-    //    TokenObject(TokenType::SEMI_COLON, std::string(";")),
-    //    TokenObject(TokenType::CALL, std::string("call")),
-    //    TokenObject(TokenType::NAME, std::string("c")),
-    //    TokenObject(TokenType::SEMI_COLON, std::string(";")), };
-    //std::vector<TokenObject> expectedSelect{ TokenObject(TokenType::SELECT, std::string("Select")),
-    //    TokenObject(TokenType::NAME, std::string("v")), };
-    //std::vector<TokenObject> expectedSuchThat{};
-    //std::vector<TokenObject> expectedPattern{};
-    //std::vector<TokenObject> expectedWith{TokenObject(TokenType::WITH, "with"),
-    //    TokenObject(TokenType::ATTRIBUTE, "v.varName"),
-    //    TokenObject(TokenType::EQUALS, "="),
-    //    TokenObject(TokenType::ATTRIBUTE, "c.procName") };
-
-    //std::vector<std::vector<TokenObject>> expectedResult = { expectedDeclaration, expectedSelect, expectedSuchThat, expectedPattern, expectedWith};
-
-    //Parser parser = Parser(testTokenObject);
-    //std::vector<std::vector<TokenObject>> actualResult = parser.groupQueryIntoClause();
 
     REQUIRE(expectedResult == actualResult);
 };
@@ -2058,6 +2062,34 @@ TEST_CASE("SyntaxError - with clause with missing equals") {
         TokenObject(TokenType::WITH, "with"),
         TokenObject(TokenType::WITH, "with"),
         TokenObject(TokenType::NAME_WITH_QUOTATION, "v"),
+        TokenObject(TokenType::ATTRIBUTE, "with.procName")
+
+    };
+
+    QueryObject expectedResult = QueryObject();
+
+    Parser parser = Parser(testTokenObject);
+    QueryObject actualResult = parser.parse();
+    REQUIRE(expectedResult == actualResult);
+
+}
+
+TEST_CASE("SyntaxError - with clause invalid and clause") {
+    std::vector<TokenObject> testTokenObject{
+        TokenObject(TokenType::VARIABLE, std::string("variable")),
+        TokenObject(TokenType::NAME, std::string("v")),
+        TokenObject(TokenType::SEMI_COLON, std::string(";")),
+        TokenObject(TokenType::CALL, std::string("call")),
+        TokenObject(TokenType::WITH, std::string("with")),
+        TokenObject(TokenType::SEMI_COLON, std::string(";")),
+        TokenObject(TokenType::SELECT, std::string("Select")),
+        TokenObject(TokenType::WITH, "with"),
+        TokenObject(TokenType::WITH, "with"),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "v"),
+        TokenObject(TokenType::EQUALS, "="),
+        TokenObject(TokenType::ATTRIBUTE, "with.procName"),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "v"),
+        TokenObject(TokenType::EQUALS, "="),
         TokenObject(TokenType::ATTRIBUTE, "with.procName")
 
     };
