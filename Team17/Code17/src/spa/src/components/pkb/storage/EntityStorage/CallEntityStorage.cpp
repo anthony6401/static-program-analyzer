@@ -13,8 +13,8 @@ bool CallEntityStorage::storeEntity(Entity* entity) {
 		if (backwardMap.find(procName) == backwardMap.end()) {
 			backwardMap.insert({ procName, std::unordered_set<std::string> ()});
 		}
-		std::unordered_set<std::string> mapValue = backwardMap.find(procName)->second;
-		bool result2 =  mapValue.insert(stmtNum).second;
+		std::unordered_set<std::string>* set = &backwardMap.find(procName)->second;
+		bool result2 =  set->insert(stmtNum).second;
 
 		return result1 || result2;
 	}
