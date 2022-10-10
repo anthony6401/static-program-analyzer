@@ -24,11 +24,6 @@
 #include "../../../models/Relationship/ModifyRelationship.h"
 #include "../../../models/Relationship/CallsRelationship.h"
 #include "../../../models/Relationship/CallsTRelationship.h"
-#include "FollowsExtractor.h"
-#include "ParentExtractor.h"
-#include "UsesExtractor.h"
-#include "ModifyExtractor.h"
-#include "PatternExtractor.h"
 
 #include "StmtStack.h"
 #include "WhileStack.h"

@@ -7,7 +7,6 @@ Extractor::Extractor(SPClient* client) : currentStack(nullptr) {
 }
 
 void Extractor::extractRead(SimpleToken readToken) {
-	//std::cout << "extractRead\n";
 	this->currentStack->follows.push_back(readToken);
 	this->currentStack->modifies.push_back(readToken);
 
@@ -18,7 +17,6 @@ void Extractor::extractRead(SimpleToken readToken) {
 }
 
 void Extractor::extractPrint(SimpleToken printToken) {
-	//std::cout << "extractPrint\n";
 	this->currentStack->follows.push_back(printToken);
 	this->currentStack->uses.push_back(printToken);
 
@@ -29,7 +27,6 @@ void Extractor::extractPrint(SimpleToken printToken) {
 }
 
 void Extractor::extractAssign(SimpleToken assignToken) {
-	//std::cout << "extractAssign\n";
 	this->currentStack->follows.push_back(assignToken);
 	SimpleToken varToken = assignToken.getChildren().at(0);
 	this->currentStack->modifies.push_back(varToken);
@@ -60,7 +57,6 @@ std::string Extractor::getExpressionAsString(SimpleToken expression) {
 }
 
 void Extractor::extractWhile(SimpleToken whileToken) {
-	//std::cout << "extractWhile\n";
 	this->currentStack->follows.push_back(whileToken);
 	extractExpr(whileToken, whileToken);
 	this->parentStack.push(currentStack);
@@ -68,7 +64,6 @@ void Extractor::extractWhile(SimpleToken whileToken) {
 }
 
 void Extractor::extractIf(SimpleToken ifToken) {
-	//std::cout << "extractIf\n";
 	this->currentStack->follows.push_back(ifToken);
 	extractExpr(ifToken, ifToken);
 	this->parentStack.push(currentStack);
@@ -94,7 +89,6 @@ void Extractor::extractExpr(SimpleToken stmtToken, SimpleToken exprToken) {
 }
 
 void Extractor::extractCall(SimpleToken callToken, std::string currentProcedure) {
-	//std::cout << "extractCall\n";
 	this->currentStack->follows.push_back(callToken);
 
 	Entity* left = generateEntity(SimpleToken(SpTokenType::TPROCEDURE, currentProcedure, 0));
@@ -138,7 +132,6 @@ void Extractor::endOfParser(std::multimap<std::string, std::string> callProcedur
 }
 
 void Extractor::addNestedRelationships(StmtStack* parentStack, StmtStack* calledStack, std::string name) {
-	//std::cout << "addNestedRels\n";
 	std::vector<SimpleToken> follows = calledStack->follows;
 	std::vector<SimpleToken> parentT = calledStack->parentT;
 	std::vector<SimpleToken> uses = calledStack->uses;
