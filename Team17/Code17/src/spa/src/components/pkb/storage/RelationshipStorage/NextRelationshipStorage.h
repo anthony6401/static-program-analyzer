@@ -25,7 +25,15 @@ public:
 	std::unordered_set<std::string> getNextBackward(std::string c);
 
 private:
-	std::unordered_map<std::string, std::unordered_set<std::string>>* getStorage(DesignEntity left, DesignEntity right, bool isForward);
+	std::unordered_map<std::string, std::unordered_set<std::string>>* getReadSpecificEntityStorage(DesignEntity right);
+	std::unordered_map<std::string, std::unordered_set<std::string>>* getPrintSpecificEntityStorage(DesignEntity right);
+	std::unordered_map<std::string, std::unordered_set<std::string>>* getAssignSpecificEntityStorage(DesignEntity right);
+	std::unordered_map<std::string, std::unordered_set<std::string>>* getCallSpecificEntityStorage(DesignEntity right);
+	std::unordered_map<std::string, std::unordered_set<std::string>>* getWhileSpecificEntityStorage(DesignEntity right);
+	std::unordered_map<std::string, std::unordered_set<std::string>>* getIfSpecificEntityStorage(DesignEntity right);
+	std::unordered_map<std::string, std::unordered_set<std::string>>* getStmtSpecificEntityStorage(DesignEntity right);
+	std::unordered_map<std::string, std::unordered_set<std::string>>* getStorageForward(DesignEntity left, DesignEntity right);
+	std::unordered_map<std::string, std::unordered_set<std::string>>* getStorageBackward(DesignEntity left);
 
 	std::unordered_map<std::string, std::unordered_set<std::string>> readToReadForwardMap;
 	std::unordered_map<std::string, std::unordered_set<std::string>> readToPrintForwardMap;

@@ -2,6 +2,8 @@
 #include "models/Pattern/Pattern.h"
 #include "models/Entity/DesignEntity.h"
 #include "../storage/PatternStorage/AssignPatternStorage.h"
+#include "../storage/PatternStorage/IfPatternStorage.h"
+#include "../storage/PatternStorage/WhilePatternStorage.h"
 
 #include "../../qps/query_preprocessor/query_tokenizer/TokenType.h"
 
@@ -9,8 +11,12 @@
 
 PatternManager::PatternManager() {
 	AssignPatternStorage* assignStorage = new AssignPatternStorage();
+	IfPatternStorage* ifPatternStorage = new IfPatternStorage();
+	WhilePatternStorage* whilePatternStorage = new WhilePatternStorage();
 
 	patternStorage.push_back(assignStorage);
+	patternStorage.push_back(ifPatternStorage);
+	patternStorage.push_back(whilePatternStorage);
 
 }
 

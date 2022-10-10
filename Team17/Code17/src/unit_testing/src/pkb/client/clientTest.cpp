@@ -27,6 +27,7 @@ TEST_CASE("SP Client test") {
 	REQUIRE(spClient.storeConstant(constantEntity));
 
 	//Pattern
+	//ASSIGN
 	REQUIRE(spClient.storePattern(assignPatternOne));
 	REQUIRE(spClient.storePattern(assignPatternTwo));
 	REQUIRE(spClient.storePattern(assignPatternThree));
@@ -35,6 +36,16 @@ TEST_CASE("SP Client test") {
 	REQUIRE(spClient.storePattern(assignPatternSix));
 	REQUIRE(spClient.storePattern(assignPatternSeven));
 	REQUIRE(spClient.storePattern(assignPatternEight));
+
+	//IF
+	REQUIRE(spClient.storePattern(ifPatternOne));
+	REQUIRE(spClient.storePattern(ifPatternOneDup));
+	REQUIRE(spClient.storePattern(ifPatternTwo));
+
+	//WHILE
+	REQUIRE(spClient.storePattern(whilePatternOne));
+	REQUIRE(spClient.storePattern(whilePatternOneDup));
+	REQUIRE(spClient.storePattern(whilePatternTwo));
 
 	//Relationship
 	REQUIRE(spClient.storeRelationship(usesRelationshipAssignOne));
@@ -119,6 +130,7 @@ TEST_CASE("QPS Client test") {
 	REQUIRE(readMappingTest == readMappingResult);
 
 	//Pattern
+	//ASSIGN
 	std::unordered_set<std::string> assignGetPatternNameNameOne = qpsClient.getPattern(DesignEntity::ASSIGN, assignPatternTokenObjectFirstOne, assignPatternTokenObjectSecondOne);
 	std::unordered_set<std::string> assignGetPatternNameNameTwo = qpsClient.getPattern(DesignEntity::ASSIGN, assignPatternTokenObjectFirstTwo, assignPatternTokenObjectSecondTwo);
 	std::unordered_set<std::string> assignGetPatternNameSubexprOne = qpsClient.getPattern(DesignEntity::ASSIGN, assignPatternTokenObjectFirstOne, assignPatternTokenObjectSubexprOne);
@@ -127,6 +139,15 @@ TEST_CASE("QPS Client test") {
 	std::unordered_set<std::string> assignGetPatternNameWildcardOne = qpsClient.getPattern(DesignEntity::ASSIGN, assignPatternTokenObjectFirstOne, wildCardTokenObject);
 	std::unordered_set<std::string> assignGetPatternNameWildcardTwo = qpsClient.getPattern(DesignEntity::ASSIGN, assignPatternTokenObjectFirstTwo, wildCardTokenObject);
 
+	//IF
+	std::unordered_set<std::string> ifGetPatternNameNameOne = qpsClient.getContainerPattern(DesignEntity::IF, ifPatternTokenObjectFirstOne);
+	std::unordered_set<std::string> ifGetPatternNameNameTwo = qpsClient.getContainerPattern(DesignEntity::IF, ifPatternTokenObjectFirstTwo);
+
+	//WHILE
+	std::unordered_set<std::string> whileGetPatternNameNameOne = qpsClient.getContainerPattern(DesignEntity::WHILE, whilePatternTokenObjectFirstOne);
+	std::unordered_set<std::string> whileGetPatternNameNameTwo = qpsClient.getContainerPattern(DesignEntity::WHILE, whilePatternTokenObjectFirstTwo);
+
+	//ASSIGN
 	std::unordered_set<std::string> expectedGetPatternNameNameOne({ assignLineNumOne, assignLineNumEight });
 	std::unordered_set<std::string> expectedGetPatternNameNameTwo({ assignLineNumSix });
 	std::unordered_set<std::string> expectedGetPatternNameSubexprOne({ assignLineNumFive });
@@ -134,6 +155,14 @@ TEST_CASE("QPS Client test") {
 	std::unordered_set<std::string> expectedGetPatternNameSubexprThree({ assignLineNumOne, assignLineNumFive, assignLineNumEight });
 	std::unordered_set<std::string> expectedGetPatternNameWildcardOne({ assignLineNumOne, assignLineNumFive, assignLineNumEight });
 	std::unordered_set<std::string> expectedGetPatternNameWilcardTwo({ assignLineNumTwo, assignLineNumSix });
+
+	//IF
+	std::unordered_set<std::string> expectedResultIfGetPatternOne({ ifLineNumOne });
+	std::unordered_set<std::string> expectedResultIfGetPatternTwo({ ifLineNumOne, ifLineNumTwo });
+
+	//WHILE
+	std::unordered_set<std::string> expectedResultWhileGetPatternOne({ whileLineNumOne });
+	std::unordered_set<std::string> expectedResultWhileGetPatternTwo({ whileLineNumOne, whileLineNumTwo });
 
 	REQUIRE(assignGetPatternNameNameOne == expectedGetPatternNameNameOne);
 	REQUIRE(assignGetPatternNameNameOne == expectedGetPatternNameNameOne);
@@ -144,6 +173,15 @@ TEST_CASE("QPS Client test") {
 	REQUIRE(assignGetPatternNameWildcardOne == expectedGetPatternNameWildcardOne);
 	REQUIRE(assignGetPatternNameWildcardTwo == expectedGetPatternNameWilcardTwo);
 
+	//IF
+	REQUIRE(ifGetPatternNameNameOne == expectedResultIfGetPatternOne);
+	REQUIRE(ifGetPatternNameNameTwo == expectedResultIfGetPatternTwo);
+
+	//WHILE
+	REQUIRE(whileGetPatternNameNameOne == expectedResultWhileGetPatternOne);
+	REQUIRE(whileGetPatternNameNameTwo == expectedResultWhileGetPatternTwo);
+
+	//ASSIGN
 	std::vector<std::pair<std::string, std::string>> assignGetPatternPairNameNameOne = qpsClient.getPatternPair(DesignEntity::ASSIGN, assignPatternTokenObjectSecondOne);
 	std::vector<std::pair<std::string, std::string>> assignGetPatternPairNameNameTwo = qpsClient.getPatternPair(DesignEntity::ASSIGN, assignPatternTokenObjectSecondTwo);
 	std::vector<std::pair<std::string, std::string>> assignGetPatternPairNameSubexprOne = qpsClient.getPatternPair(DesignEntity::ASSIGN, assignPatternTokenObjectSubexprOne);
@@ -151,6 +189,15 @@ TEST_CASE("QPS Client test") {
 	std::vector<std::pair<std::string, std::string>> assignGetPatternPairNameSubexprThree = qpsClient.getPatternPair(DesignEntity::ASSIGN, assignPatternTokenObjectSubexprThree);
 	std::vector<std::pair<std::string, std::string>> assignGetPatternPairNameWildcard = qpsClient.getPatternPair(DesignEntity::ASSIGN, wildCardTokenObject);
 
+	//IF
+	std::vector<std::pair<std::string, std::string>> ifGetPatternPairNameNameOne = qpsClient.getContainerPatternPair(DesignEntity::IF);
+	std::vector<std::pair<std::string, std::string>> ifGetPatternPairNameNameTwo = qpsClient.getContainerPatternPair(DesignEntity::IF);
+
+	//WHILE
+	std::vector<std::pair<std::string, std::string>> whileGetPatternPairNameNameOne = qpsClient.getContainerPatternPair(DesignEntity::WHILE);
+	std::vector<std::pair<std::string, std::string>> whileGetPatternPairNameNameTwo = qpsClient.getContainerPatternPair(DesignEntity::WHILE);
+
+	//ASSIGN
 	std::vector<std::pair<std::string, std::string>> expectedGetPatternPairNameNameOne{ {assignLineNumOne, assignFirstValueOne},
 																						{assignLineNumEight, assignFirstValueEight} };
 	std::vector<std::pair<std::string, std::string>> expectedGetPatternPairNameNameTwo{ {assignLineNumSix, assignFirstValueSix},
@@ -176,6 +223,23 @@ TEST_CASE("QPS Client test") {
 																						{assignLineNumSix, assignFirstValueSix},
 																						{assignLineNumSeven, assignFirstValueSeven},
 																						{assignLineNumEight, assignFirstValueEight} };
+	//IF
+	std::vector<std::pair<std::string, std::string>> ifExpectedGetPatternPairNameNameOne{ { ifLineNumOne, ifFirstValueOne },
+																							{ ifLineNumTwo, ifFirstValueTwo},
+																							{ ifLineNumOne, ifFirstValueTwo} };
+
+	std::vector<std::pair<std::string, std::string>> ifExpectedGetPatternPairNameNameTwo{ { ifLineNumOne, ifFirstValueOne },
+																							{ ifLineNumTwo, ifFirstValueTwo},
+																							{ ifLineNumOne, ifFirstValueTwo} };
+
+	//WHILE
+	std::vector<std::pair<std::string, std::string>> whileExpectedGetPatternPairNameNameOne{ { whileLineNumOne, whileFirstValueOne },
+																							{ whileLineNumTwo, whileFirstValueTwo},
+																							{ whileLineNumOne, whileFirstValueTwo} };
+
+	std::vector<std::pair<std::string, std::string>> whileExpectedGetPatternPairNameNameTwo{ { whileLineNumOne, whileFirstValueOne },
+																							{ whileLineNumTwo, whileFirstValueTwo},
+																							{ whileLineNumOne, whileFirstValueTwo} };
 
 	sort(assignGetPatternPairNameNameOne.begin(), assignGetPatternPairNameNameOne.end());
 	sort(assignGetPatternPairNameNameTwo.begin(), assignGetPatternPairNameNameTwo.end());
@@ -184,12 +248,30 @@ TEST_CASE("QPS Client test") {
 	sort(assignGetPatternPairNameSubexprThree.begin(), assignGetPatternPairNameSubexprThree.end());
 	sort(assignGetPatternPairNameWildcard.begin(), assignGetPatternPairNameWildcard.end());
 
+	sort(ifGetPatternPairNameNameOne.begin(), ifGetPatternPairNameNameOne.end());
+	sort(ifGetPatternPairNameNameTwo.begin(), ifGetPatternPairNameNameTwo.end());
+	sort(ifExpectedGetPatternPairNameNameOne.begin(), ifExpectedGetPatternPairNameNameOne.end());
+	sort(ifExpectedGetPatternPairNameNameTwo.begin(), ifExpectedGetPatternPairNameNameTwo.end());
+
+	sort(whileGetPatternPairNameNameOne.begin(), whileGetPatternPairNameNameOne.end());
+	sort(whileGetPatternPairNameNameTwo.begin(), whileGetPatternPairNameNameTwo.end());
+	sort(whileExpectedGetPatternPairNameNameOne.begin(), whileExpectedGetPatternPairNameNameOne.end());
+	sort(whileExpectedGetPatternPairNameNameTwo.begin(), whileExpectedGetPatternPairNameNameTwo.end());
+
+	//ASSIGN
 	REQUIRE(assignGetPatternPairNameNameOne == expectedGetPatternPairNameNameOne);
 	REQUIRE(assignGetPatternPairNameNameTwo == expectedGetPatternPairNameNameTwo);
 	REQUIRE(assignGetPatternPairNameSubexprOne == expectedGetPatternPairNameSubexprOne);
 	REQUIRE(assignGetPatternPairNameSubexprTwo == expectedGetPatternPairNameSubexprTwo);
 	REQUIRE(assignGetPatternPairNameSubexprThree == expectedGetPatternPairNameSubexprThree);
 	REQUIRE(assignGetPatternPairNameWildcard == expectedGetPatternPairNameWilcard);
+
+	REQUIRE(ifGetPatternPairNameNameOne == ifExpectedGetPatternPairNameNameOne);
+	REQUIRE(ifGetPatternPairNameNameTwo == ifExpectedGetPatternPairNameNameTwo);
+
+	//WHILE
+	REQUIRE(whileGetPatternPairNameNameOne == whileExpectedGetPatternPairNameNameOne);
+	REQUIRE(whileGetPatternPairNameNameTwo == whileExpectedGetPatternPairNameNameTwo);
 
 	//Relationship
 	REQUIRE(qpsClient.getRelationship(RelationshipType::USES, stmtTokenObject1, variableTokenObject));

@@ -104,20 +104,27 @@ TEST_CASE("If Pattern Storage Test") {
 	std::unordered_set<std::string> ifGetPatternNameNameTwo = ifPatternStorage->getPattern(DesignEntity::IF, ifPatternTokenObjectFirstTwo, TokenObject());
 
 	std::unordered_set<std::string> expectedResultIfGetPatternOne({ ifLineNumOne });
-	std::unordered_set<std::string> expectedResultIfGetPatternTwo({ ifLineNumTwo });
+	std::unordered_set<std::string> expectedResultIfGetPatternTwo({ ifLineNumOne, ifLineNumTwo });
+
+	REQUIRE(ifGetPatternNameNameOne == expectedResultIfGetPatternOne);
+	REQUIRE(ifGetPatternNameNameTwo == expectedResultIfGetPatternTwo);
 
 	std::vector<std::pair<std::string, std::string>> ifGetPatternPairNameNameOne = ifPatternStorage->getPatternPair(DesignEntity::IF, ifPatternTokenObjectFirstOne);
-	sort(ifGetPatternPairNameNameOne.begin(), ifGetPatternPairNameNameOne.end());
+	
 	std::vector<std::pair<std::string, std::string>> ifGetPatternPairNameNameTwo = ifPatternStorage->getPatternPair(DesignEntity::IF, ifPatternTokenObjectFirstTwo);
-	sort(ifGetPatternPairNameNameTwo.begin(), ifGetPatternPairNameNameTwo.end());
+	
 	std::vector<std::pair<std::string, std::string>> expectedGetPatternPairNameNameOne{ { ifLineNumOne, ifFirstValueOne },
 																						{ ifLineNumTwo, ifFirstValueTwo},
 																						{ ifLineNumOne, ifFirstValueTwo} };
-	sort(expectedGetPatternPairNameNameOne.begin(), expectedGetPatternPairNameNameOne.end());
+	
 	std::vector<std::pair<std::string, std::string>> expectedGetPatternPairNameNameTwo{ { ifLineNumOne, ifFirstValueOne },
 																						{ ifLineNumTwo, ifFirstValueTwo},
 																						{ ifLineNumOne, ifFirstValueTwo} };
+	
+	sort(ifGetPatternPairNameNameOne.begin(), ifGetPatternPairNameNameOne.end());
+	sort(ifGetPatternPairNameNameTwo.begin(), ifGetPatternPairNameNameTwo.end());
 	sort(expectedGetPatternPairNameNameTwo.begin(), expectedGetPatternPairNameNameTwo.end());
+	sort(expectedGetPatternPairNameNameOne.begin(), expectedGetPatternPairNameNameOne.end());
 
 	REQUIRE(ifGetPatternPairNameNameOne == expectedGetPatternPairNameNameOne);
 	REQUIRE(ifGetPatternPairNameNameTwo == expectedGetPatternPairNameNameTwo);
@@ -135,22 +142,28 @@ TEST_CASE("While Pattern Storage Test") {
 	std::unordered_set<std::string> whileGetPatternNameNameOne = whilePatternStorage->getPattern(DesignEntity::WHILE, whilePatternTokenObjectFirstOne, TokenObject());
 	std::unordered_set<std::string> whileGetPatternNameNameTwo = whilePatternStorage->getPattern(DesignEntity::WHILE, whilePatternTokenObjectFirstTwo, TokenObject());
 
-	std::unordered_set<std::string> expectedResultIfGetPatternOne({ whileLineNumOne });
-	std::unordered_set<std::string> expectedResultIfGetPatternTwo({ whileLineNumTwo });
+	std::unordered_set<std::string> expectedResultWhileGetPatternOne({ whileLineNumOne });
+	std::unordered_set<std::string> expectedResultWhileGetPatternTwo({ whileLineNumOne, whileLineNumTwo });
+
+	REQUIRE(whileGetPatternNameNameOne == expectedResultWhileGetPatternOne);
+	REQUIRE(whileGetPatternNameNameTwo == expectedResultWhileGetPatternTwo);
 
 	std::vector<std::pair<std::string, std::string>> whileGetPatternPairNameNameOne = whilePatternStorage->getPatternPair(DesignEntity::WHILE, whilePatternTokenObjectFirstOne);
-	sort(whileGetPatternPairNameNameOne.begin(), whileGetPatternPairNameNameOne.end());
+	
 	std::vector<std::pair<std::string, std::string>> whileGetPatternPairNameNameTwo = whilePatternStorage->getPatternPair(DesignEntity::WHILE, whilePatternTokenObjectFirstTwo);
-	sort(whileGetPatternPairNameNameTwo.begin(), whileGetPatternPairNameNameTwo.end());
+	
 
 	std::vector<std::pair<std::string, std::string>> expectedGetPatternPairNameNameOne{ { whileLineNumOne, whileFirstValueOne },
 																						{ whileLineNumTwo, whileFirstValueTwo},
 																						{ whileLineNumOne, whileFirstValueTwo} };
-	sort(expectedGetPatternPairNameNameOne.begin(), expectedGetPatternPairNameNameOne.end());
+	
 
 	std::vector<std::pair<std::string, std::string>> expectedGetPatternPairNameNameTwo{ { whileLineNumOne, whileFirstValueOne },
 																						{ whileLineNumTwo, whileFirstValueTwo},
 																						{ whileLineNumOne, whileFirstValueTwo} };
+	sort(whileGetPatternPairNameNameOne.begin(), whileGetPatternPairNameNameOne.end());
+	sort(whileGetPatternPairNameNameTwo.begin(), whileGetPatternPairNameNameTwo.end());
+	sort(expectedGetPatternPairNameNameOne.begin(), expectedGetPatternPairNameNameOne.end());
 	sort(expectedGetPatternPairNameNameTwo.begin(), expectedGetPatternPairNameNameTwo.end());
 
 	REQUIRE(whileGetPatternPairNameNameOne == expectedGetPatternPairNameNameOne);

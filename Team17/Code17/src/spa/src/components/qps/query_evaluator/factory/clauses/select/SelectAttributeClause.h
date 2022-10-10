@@ -1,5 +1,5 @@
-#ifndef SPA_SELECTTUPLECLAUSE_H
-#define SPA_SELECTTUPLECLAUSE_H
+#ifndef SPA_SELECTATTRIBUTECLAUSE_H
+#define SPA_SELECTATTRIBUTECLAUSE_H
 
 #include <unordered_map>
 #include <list>
@@ -8,20 +8,20 @@
 #include "components/pkb/clients/QPSClient.h"
 #include "models/Entity/DesignEntity.h"
 
-class SelectTupleClause : public Clause {
+class SelectAttributeClause : public Clause {
 private:
     std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap;
     std::unordered_set<std::string> synonymsInTable;
-    std::vector<TokenObject> tuple;
+    TokenObject selectSynonym;
+    std::string attributeName;
     QPSClient qpsClient;
 
 public:
-    SelectTupleClause(std::vector<TokenObject> tuple, std::unordered_set<std::string> &synonymsInTable, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
+    SelectAttributeClause(TokenObject selectSynonym, std::string attributeName, std::unordered_set<std::string> &synonymsInTable, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
     ResultTable evaluateClause() override;
-    ResultTable evaluateSynonymInTuple(std::string synonym, DesignEntity returnType);
-    ResultTable evaluateAttributeInTuple(std::string synonym, DesignEntity returnType);
     size_t getNumberOfSynonyms() override;
     std::set<std::string> getAllSynonyms() override;
+    static bool checkIsAlternateAttributeName(DesignEntity returnType, std::string attributeName);
 };
 
-#endif //SPA_SELECTTUPLECLAUSE_H
+#endif //SPA_SELECTATTRIBUTECLAUSE_H
