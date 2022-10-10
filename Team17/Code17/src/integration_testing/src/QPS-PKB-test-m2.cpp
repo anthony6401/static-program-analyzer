@@ -1137,14 +1137,3 @@ TEST_CASE("Attribute queries - non alternate attribute names") {
         REQUIRE(testResults == expectedResults);
     }
 }
-
-TEST_CASE("TEST") {
-    SECTION("a") {
-        std::string testQuery = "read re; print p1, p2; call c; stmt s;\n "
-                            "Select c such that Uses(c, \"v\")";
-        std::list<std::string> testResults;
-        std::list<std::string> expectedResults = { "3", "8" };
-        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
-        REQUIRE(testResults == expectedResults);
-    }
-}
