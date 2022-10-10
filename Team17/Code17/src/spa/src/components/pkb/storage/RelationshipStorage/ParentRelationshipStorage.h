@@ -22,8 +22,11 @@ public:
 	std::unordered_set<std::string> getRelationshipBySecond(RelationshipType relType, DesignEntity returnType, TokenObject secondArgument);
 	std::unordered_map<std::string, std::unordered_set<std::string>> getAllRelationship(RelationshipType relType, DesignEntity returnType1, DesignEntity returntype2);
 private:
-
-	std::unordered_map<std::string, std::unordered_set<std::string>>* getStorage(DesignEntity left, DesignEntity right, bool isForward);
+	std::unordered_map<std::string, std::unordered_set<std::string>>* getStorageForward(DesignEntity left, DesignEntity right);
+	std::unordered_map<std::string, std::unordered_set<std::string>>* getStorageBackward(DesignEntity left);
+	std::unordered_map<std::string, std::unordered_set<std::string>>* getIfToSpecificStorage(DesignEntity right);
+	std::unordered_map<std::string, std::unordered_set<std::string>>* getWhileToSpecificStorage(DesignEntity right);
+	std::unordered_map<std::string, std::unordered_set<std::string>>* getStmtToSpecificStorage(DesignEntity right);
 
 	// FOR IF STATEMENT (total 7)
 	//Parent(if,r)
