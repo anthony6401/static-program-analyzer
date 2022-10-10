@@ -7,7 +7,15 @@ CallEntityStorage::CallEntityStorage() : EntityMappingStorage() {}
 bool CallEntityStorage::storeEntity(Entity* entity) {
 	CallEntity* callEntity = dynamic_cast<CallEntity*>(entity);
 	if (callEntity) {
-		return map.insert({ callEntity->getValue(), callEntity->getValueName() }).second;
+		std::string stmtNum = callEntity->getValue();
+		std::string procName = callEntity->getValueName();
+		bool result1 = forwardMap.insert({ stmtNum, procName }).second;
+		if (backwardMap.find(procName) == backwardMap.end()) {
+			backwardMap.insert({ procName, std::unordered_set<std::string> ()});
+		}
+		bool result2 = backwardMap.find(procName)->second.insert(stmtNum).second;
+
+		return result1 || result2;
 	}
 
 	return false;
@@ -16,7 +24,7 @@ bool CallEntityStorage::storeEntity(Entity* entity) {
 std::unordered_set<std::string> CallEntityStorage::getAllEntity(DesignEntity returnType) {
 	if (returnType == DesignEntity::CALL) {
 		std::unordered_set<std::string> result;
-		for (const auto& [key, _] : map) {
+		for (const auto& [key, _] : forwardMap) {
 			result.insert(key);
 		}
 
@@ -27,10 +35,31 @@ std::unordered_set<std::string> CallEntityStorage::getAllEntity(DesignEntity ret
 
 std::string CallEntityStorage::getStatementMapping(std::string& stmtNumber, DesignEntity entityType) {
 	if (entityType == DesignEntity::CALL) {
-		if (map.find(stmtNumber) != map.end()) {
-			return map.find(stmtNumber)->second;
+		if (forwardMap.find(stmtNumber) != forwardMap.end()) {
+			return forwardMap.find(stmtNumber)->second;
 		}
 	}
 
 	return std::string();
+}
+
+std::unordered_set<std::string> CallEntityStorage::getStatementByName(std::string& name, DesignEntity entityType) {
+	if (entityType == DesignEntity::CALL) {
+		if (backwardMap.find(name) != backwardMap.end()) {
+			return backwardMap.find(name)->second;
+		}
+	}
+	return std::unordered_set<std::string>();
+}
+
+std::unordered_set<std::string> CallEntityStorage::getAllName(DesignEntity returnType) {
+	if (returnType == DesignEntity::CALL) {
+		std::unordered_set<std::string> result;
+		for (const auto& [key, _] : backwardMap) {
+			result.insert(key);
+		}
+
+		return result;
+	}
+	return std::unordered_set<std::string>();
 }
