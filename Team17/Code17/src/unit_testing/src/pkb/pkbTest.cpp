@@ -47,6 +47,24 @@ TEST_CASE("PKB Entity Managertest") {
 
 	REQUIRE(callMappingTest == callMappingResult);
 	REQUIRE(readMappingTest == readMappingResult);
+
+	std::unordered_set<std::string> callGetStmtByNameTest = pkb.getStatementByName(procedure_value_one, DesignEntity::CALL);
+	std::unordered_set<std::string> readGetStmtByNameTest = pkb.getStatementByName(variable_value_one, DesignEntity::READ);
+
+	std::unordered_set<std::string> callGetStmtByNameExpectedResult({ call_value_one });
+	std::unordered_set<std::string> readGetStmtByNameExpectedResult({ read_value_one });
+
+	REQUIRE(callGetStmtByNameTest == callGetStmtByNameExpectedResult);
+	REQUIRE(readGetStmtByNameTest == readGetStmtByNameExpectedResult);
+
+	std::unordered_set<std::string> callGetAllNameTest = pkb.getAllName(DesignEntity::CALL);
+	std::unordered_set<std::string> readGetAllNameTest = pkb.getAllName(DesignEntity::READ);
+
+	std::unordered_set<std::string> callGetAllNameExpectedResult({ procedure_value_one });
+	std::unordered_set<std::string> readGetAllNameExpectedResult({ variable_value_one });
+
+	REQUIRE(callGetAllNameTest == callGetAllNameExpectedResult);
+	REQUIRE(readGetAllNameTest == readGetAllNameExpectedResult);
 }
 
 TEST_CASE("PKB Pattern Manager test") {
