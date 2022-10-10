@@ -175,7 +175,7 @@ Entity* Extractor::generateEntity(SimpleToken token) {
 		return new ReadEntity(std::to_string(token.statementNumber), token.value);
 	}
 	if (token.type == SpTokenType::TPRINT) {
-		return new PrintEntity(std::to_string(token.statementNumber), token.value;
+		return new PrintEntity(std::to_string(token.statementNumber), token.value);
 	}
 	if (token.type == SpTokenType::TASSIGN) {
 		return new AssignEntity(std::to_string(token.statementNumber));
