@@ -15,7 +15,7 @@ public:
 	std::vector<std::pair<std::string, std::string>> getPatternPair(DesignEntity designEntity, TokenObject secondArgument);
 
 private:
-	void AssignPatternStorage::getPatternController(TokenObject token,
+	void getPatternController(TokenObject token,
 		std::unordered_set<std::pair<std::string, std::string>, pair_hash>* set,
 		std::unordered_set<std::string>& result);
 	void handleExpressionAndNameForSet(std::string targetString,
@@ -26,7 +26,7 @@ private:
 		std::unordered_set<std::string>& result);
 	void handleWildcardForSet(std::unordered_set<std::pair<std::string, std::string>, pair_hash>* set,
 		std::unordered_set<std::string>& result);
-	void AssignPatternStorage::getPatternPairsController(TokenObject token, std::string variable,
+	void getPatternPairsController(TokenObject token, std::string variable,
 		std::unordered_set<std::pair<std::string, std::string>, pair_hash>* set,
 		std::vector<std::pair<std::string, std::string>>& result);
 	void handleExpressionAndNameForVector(std::string targetString, std::string variable,
