@@ -71,12 +71,4 @@ public:
 
 		return DesignEntity::NOT_FOUND;
 	}
-
-	static std::unordered_set<std::string> getNeighbourWithDefault(std::unordered_map<std::string, std::unordered_set<std::string>>* map, std::string c) {
-		if (map->find(c) != map->end()) {
-			return map->find(c)->second;
-		}
-
-		return std::unordered_set<std::string>();
-	}
 };

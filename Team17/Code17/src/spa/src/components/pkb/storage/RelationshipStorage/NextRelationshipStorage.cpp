@@ -184,38 +184,20 @@ std::unordered_map<std::string, std::unordered_set<std::string>>* NextRelationsh
 	return nullptr;
 }
 
-// DFS search to answer Next* queries with 2 integer values
-bool NextRelationshipStorage::DFSNextTForward(std::string curr, std::string target, std::unordered_set<std::string>& visited) {
-	visited.insert(curr);
-
-	std::unordered_set<std::string> neighbours = RelationshipUtils::getNeighbourWithDefault(&this->stmtToStmtForwardMap, curr);
-
-	for (std::string neighbour : neighbours) {
-		if (target == neighbour || (visited.find(neighbour) == visited.end() && DFSNextTForward(neighbour, target, visited))) {
-			return true;
-		}
+std::unordered_set<std::string> NextRelationshipStorage::getNextForward(std::string c) {
+	if (this->stmtToStmtForwardMap.find(c) != this->stmtToStmtForwardMap.end()) {
+		return this->stmtToStmtForwardMap.find(c)->second;
 	}
 
-	return false;
+	return std::unordered_set<std::string>();
 }
 
-// DFS search to answer Next* queries with synonyms
-void NextRelationshipStorage::DFSNextTForwardWithSynonym(std::string curr, std::unordered_set<std::string>& visited,
-													std::unordered_set<std::string>& result, std::unordered_set<std::string>& filter,
-													std::unordered_map<std::string, std::unordered_set<std::string>>* storage) {
-	visited.insert(curr);
-
-	std::unordered_set<std::string> neighbours = RelationshipUtils::getNeighbourWithDefault(storage, curr);
-
-	for (std::string neighbour : neighbours) {
-		std::unordered_set<std::string>::const_iterator exist = visited.find(neighbour);
-		if (filter.find(neighbour) != filter.end()) {
-			result.insert(neighbour);
-		}
-		if (exist == visited.end()) {
-			DFSNextTForwardWithSynonym(neighbour, visited, result, filter, storage);
-		}
+std::unordered_set<std::string> NextRelationshipStorage::getNextBackward(std::string c) {
+	if (this->stmtToStmtBackwardMap.find(c) != this->stmtToStmtBackwardMap.end()) {
+		return this->stmtToStmtBackwardMap.find(c)->second;
 	}
+
+	return std::unordered_set<std::string>();
 }
 
 bool NextRelationshipStorage::storeRelationship(Relationship* rel) {
@@ -254,7 +236,7 @@ bool NextRelationshipStorage::storeRelationship(Relationship* rel) {
 	return false;
 }
 
-// Answer Next(1, 2) and Next*(1, 2)
+// Answer Next(1, 2)
 bool NextRelationshipStorage::getRelationship(RelationshipType relType, TokenObject firstArgument, TokenObject secondArgument) {
 	if (relType == RelationshipType::NEXT) {
 		std::unordered_map<std::string, std::unordered_set<std::string>>* storage{};
@@ -273,14 +255,7 @@ bool NextRelationshipStorage::getRelationship(RelationshipType relType, TokenObj
 	return false;
 }
 
-// Handle Next* Relationship for 2 integer values i.e. Next(1, 2)
-bool NextRelationshipStorage::getNextTRelationship(TokenObject firstArgument, TokenObject secondArgument) {
-	std::unordered_set<std::string> visited;
-	return DFSNextTForward(firstArgument.getValue(), secondArgument.getValue(), visited);
-
-}
-
-// Answer Next(1,a) and Next*(1,a)
+// Answer Next(1,a)
 std::unordered_set<std::string> NextRelationshipStorage::getRelationshipByFirst(RelationshipType relType, 
 																			TokenObject firstArgument, 
 																			DesignEntity returnType) {
@@ -305,16 +280,7 @@ std::unordered_set<std::string> NextRelationshipStorage::getRelationshipByFirst(
 	return std::unordered_set<std::string>();
 }
 
-// Handle Next* Relationship for first argument integer value and second argument synonym i.e. Next*(1, a)
-std::unordered_set<std::string> NextRelationshipStorage::getNextTRelationshipByFirst(TokenObject firstArgument, std::unordered_set<std::string>& filter) {
-	std::unordered_set<std::string> visited;
-	std::unordered_set<std::string> result;
-	std::unordered_map<std::string, std::unordered_set<std::string>>* storage = getStorage(DesignEntity::STMT, DesignEntity::STMT, true);
-	DFSNextTForwardWithSynonym(firstArgument.getValue(), visited, result, filter, storage);
-	return result;
-}
-
-// Answer Next(s, 2) and Next*(s, 2)
+// Answer Next(s, 2)
 std::unordered_set<std::string> NextRelationshipStorage::getRelationshipBySecond(RelationshipType relType, 
 																				DesignEntity returnType, 
 																				TokenObject secondArgument) {
@@ -338,15 +304,6 @@ std::unordered_set<std::string> NextRelationshipStorage::getRelationshipBySecond
 	return std::unordered_set<std::string>();
 }
 
-std::unordered_set<std::string> NextRelationshipStorage::getNextTRelationshipBySecond(TokenObject secondArgument, std::unordered_set<std::string>& filter) {
-	std::unordered_set<std::string> visited;
-	std::unordered_set<std::string> result;
-	std::unordered_map<std::string, std::unordered_set<std::string>>* storage = getStorage(DesignEntity::STMT, DesignEntity::STMT, false);
-	DFSNextTForwardWithSynonym(secondArgument.getValue(), visited, result, filter, storage);
-	return result;
-}
-
-
 std::unordered_map<std::string, std::unordered_set<std::string>> NextRelationshipStorage::getAllRelationship(RelationshipType relType, 
 																											DesignEntity returnType1, 
 																											DesignEntity returnType2) {
@@ -363,22 +320,4 @@ std::unordered_map<std::string, std::unordered_set<std::string>> NextRelationshi
 
 	}
 	return std::unordered_map<std::string, std::unordered_set<std::string>>();
-}
-
-std::unordered_map<std::string, std::unordered_set<std::string>> NextRelationshipStorage::getAllNextTRelationship(DesignEntity returnType1, 
-																												std::unordered_set<std::string>& filter) {
-	std::unordered_map<std::string, std::unordered_set<std::string>> result_map;
-	std::unordered_map<std::string, std::unordered_set<std::string>>* storageForFilter = getStorage(returnType1, DesignEntity::STMT, true);
-	std::unordered_map<std::string, std::unordered_set<std::string>>* DFSstorage = getStorage(DesignEntity::STMT, DesignEntity::STMT, true);
-	for (std::unordered_map<std::string, std::unordered_set<std::string>>::iterator it = storageForFilter->begin(); it != storageForFilter->end(); ++it) {
-		std::unordered_set<std::string> visited;
-		std::unordered_set<std::string> result;
-		std::string start = it->first;
-		DFSNextTForwardWithSynonym(start, visited, result, filter, DFSstorage);
-		if (result.size() != 0) {
-			result_map[start] = result;
-		}
-	}
-
-	return result_map;
 }
