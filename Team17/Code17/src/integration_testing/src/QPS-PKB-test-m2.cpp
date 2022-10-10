@@ -982,7 +982,30 @@ TEST_CASE("Tuple queries with attributes") {
         expectedResults.sort();
         REQUIRE(testResults == expectedResults);
     }
+
+    SECTION("Tuple Test 8") {
+        std::string testQuery = "read re; print p1, p2; call c; stmt s;\n "
+                                "Select <s.stmt#, re.stmt#, re.varName, p1.varName, c.stmt#> such that Uses(s, \"y\") such that Modifies(re, \"y\") and Modifies(1, \"x\") and Uses(p1, \"v\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"7 2 z v 3", "6 2 z v 3", "15 2 z v 3", "7 2 z v 8", "6 2 z v 8", "15 2 z v 8"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+
+//    SECTION("Tuple Test 9") {
+//        std::string testQuery = "read re; print p1, p2; call c; stmt s;\n "
+//                                "Select <c.stmt#, c.procName, s.stmt#> such that Uses(c, \"v\") such that Modifies(s, \"x\") such that Uses(s, \"y\")";
+//        std::list<std::string> testResults;
+//        std::list<std::string> expectedResults = {"8 Third 15", "8 Third 7"};
+//        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+//        testResults.sort();
+//        expectedResults.sort();
+//        REQUIRE(testResults == expectedResults);
+//    }
 }
+
 
 TEST_CASE("Attribute queries - alternate attribute names") {
     SECTION("Attribute Test 1") {
