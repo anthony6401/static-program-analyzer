@@ -24,6 +24,7 @@
 #include "../../../models/Relationship/ModifyRelationship.h"
 #include "../../../models/Relationship/CallsRelationship.h"
 #include "../../../models/Relationship/CallsTRelationship.h"
+#include "../../../models/Relationship/NextRelationship.h"
 
 #include "StmtStack.h"
 #include "WhileStack.h"

@@ -15,6 +15,7 @@ void ProcedureStack::close(int statementNumber) {
     extractParentT(context->currentStack->stmtsNested);
     extractUses(context->currentStack->varUse);
     extractModify(context->currentStack->varMod);
+    extractNext(context->currentStack->stmts);
 
     context->procedures.insert(std::pair<std::string, ProcedureStack*>(parent.value, this));
 }
@@ -84,6 +85,19 @@ void ProcedureStack::extractModify(std::vector<SimpleToken> varMod) {
         Entity* secondEntity = generateEntity(SimpleToken(SpTokenType::TVARIABLE, second.value, 0));
         ModifyRelationship* modifyRel = new ModifyRelationship(firstEntity, secondEntity);
         context->client->storeRelationship(modifyRel);
+    }
+}
+
+void ProcedureStack::extractNext(std::vector<SimpleToken> stmts) {
+    for (size_t i = 0; i < stmts.size() - 1; i++) {
+        if (stmts.at(i).type != SpTokenType::TIF) {
+            SimpleToken first = stmts.at(i);
+            SimpleToken second = stmts.at(i + 1);
+            Entity* firstEntity = generateEntity(first);
+            Entity* secondEntity = generateEntity(second);
+            NextRelationship* nextRel = new NextRelationship(firstEntity, secondEntity);
+            context->client->storeRelationship(nextRel);
+        }
     }
 }
 
