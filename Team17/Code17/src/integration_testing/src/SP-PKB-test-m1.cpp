@@ -49,7 +49,7 @@ TEST_CASE("test SP PKB integration") {
 	      normSq = cenX * cenX + cenY * cenY;\
     }");
 }
-
+/*
 // pkbSP APIs queries
 TEST_CASE("Select all queries for SP") {
     SECTION("Select if statements") {
@@ -303,3 +303,4 @@ TEST_CASE("Relationships and patterns for SP") {
         REQUIRE(testResults == expectedResults);
     }
 }
+*/
