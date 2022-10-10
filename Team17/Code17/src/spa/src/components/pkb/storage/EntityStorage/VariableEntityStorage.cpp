@@ -1,5 +1,4 @@
 #include "VariableEntityStorage.h"
-#include <typeinfo>
 #include "models/Entity/VariableEntity.h"
 
 VariableEntityStorage::VariableEntityStorage() : EntityStorage() {}
