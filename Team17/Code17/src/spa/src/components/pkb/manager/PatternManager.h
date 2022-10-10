@@ -1,7 +1,5 @@
 #pragma once
-
 #include "../storage/PatternStorage/PatternStorage.h"
-#include  "models/Entity/DesignEntity.h"
 
 #include <string>
 #include <vector>

@@ -1,12 +1,6 @@
 #pragma once
-
-#include "models/Relationship/Relationship.h"
-
-#include "components/qps/query_preprocessor/query_tokenizer/TokenType.h"
-
 #include "components/pkb/storage/RelationshipStorage/RelationshipStorage.h"
 #include "components/pkb/runtimeEvaluator/RuntimeRelationshipEvaluator.h"
-#include "models/Entity/DesignEntity.h"
 
 #include <string>
 #include <vector>

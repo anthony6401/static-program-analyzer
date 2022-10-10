@@ -1,13 +1,7 @@
 #include "PatternManager.h"
-#include "models/Pattern/Pattern.h"
-#include "models/Entity/DesignEntity.h"
 #include "../storage/PatternStorage/AssignPatternStorage.h"
 #include "../storage/PatternStorage/IfPatternStorage.h"
 #include "../storage/PatternStorage/WhilePatternStorage.h"
-
-#include "../../qps/query_preprocessor/query_tokenizer/TokenType.h"
-
-#include <unordered_set>
 
 PatternManager::PatternManager() {
 	AssignPatternStorage* assignStorage = new AssignPatternStorage();

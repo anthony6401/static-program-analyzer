@@ -1,9 +1,4 @@
 #include "RelationshipManager.h"
-
-#include "models/Relationship/Relationship.h"
-
-#include "components/qps/query_preprocessor/query_tokenizer/TokenType.h"
-
 #include "components/pkb/storage/RelationshipStorage/RelationshipStorage.h"
 #include "components/pkb/storage/RelationshipStorage/ModifyRelationshipStorage.h"
 #include "components/pkb/storage/RelationshipStorage/UsesRelationshipStorage.h"
@@ -14,14 +9,7 @@
 #include "components/pkb/storage/RelationshipStorage/CallsRelationshipStorage.h"
 #include "components/pkb/storage/RelationshipStorage/CallsTRelationshipStorage.h"
 #include "components/pkb/storage/RelationshipStorage/NextRelationshipStorage.h"
-
 #include "components/pkb/runtimeEvaluator/NextTRelationshipEvaluator.h"
-
-#include "models/Entity/DesignEntity.h"
-
-#include "models/Relationship/RelationshipType.h"
-
-#include <iostream>
 
 RelationshipManager::RelationshipManager() {
 	ModifyRelationshipStorage* modifyRelStorage = new ModifyRelationshipStorage();
