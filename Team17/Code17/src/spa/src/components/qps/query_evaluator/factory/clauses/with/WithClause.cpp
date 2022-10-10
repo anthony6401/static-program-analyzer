@@ -29,29 +29,64 @@ ResultTable WithClause::evaluateAttributeAttribute() {
         // Call PKB API to get all names
         std::unordered_set<std::string> leftNameResult;
         std::unordered_set<std::string> rightNameResult;
-        std::unordered_set<std::string> commonAttributeNames = WithClause::findCommonAttributeNames(leftNameResult, rightNameResult);
+        std::unordered_set<std::string> commonAttributeValues = WithClause::findCommonAttributeValues(leftNameResult, rightNameResult);
 
-        for (auto commonName : commonAttributeNames) {
+        for (auto commonValue : commonAttributeValues) {
             // Call PKB API to get back statement by name
             std::string statementFromNameLeft;
             std::string statementFromNameRight;
-            pairResult.emplace(std::make_pair(statementFromNameLeft, statementFromNameRight));
+            pairResult.insert(std::make_pair(statementFromNameLeft, statementFromNameRight));
         }
     } else if (isLeftAlternativeAttribute) {
-
+        // Call PKB API to get all names
+        std::unordered_set<std::string> leftNameResult;
+        std::unordered_set<std::string> rightResult = qpsClient.getAllEntity(rightDesignEntityType);
+        std::unordered_set<std::string> commonAttributeValues = WithClause::findCommonAttributeValues(leftNameResult, rightResult);
+        for (auto commonValue : commonAttributeValues) {
+            // Call PKB API to get back statement by name
+            std::string statementFromNameLeft;
+            for (auto result : rightResult) {
+                pairResult.insert(std::make_pair(statementFromNameLeft, result));
+            }
+        }
+    } else if (isRightAlternativeAttribute) {
+        // Call PKB API to get all names
+        std::unordered_set<std::string> rightNameResult;
+        std::unordered_set<std::string> leftResult = qpsClient.getAllEntity(leftDesignEntityType);
+        std::unordered_set<std::string> commonAttributeValues = WithClause::findCommonAttributeValues(rightNameResult, leftResult);
+        for (auto commonValue : commonAttributeValues) {
+            // Call PKB API to get back statement by name
+            std::string statementFromNameRight;
+            for (auto result : leftResult) {
+                pairResult.insert(std::make_pair(result, statementFromNameRight));
+            }
+        }
+    } else {
+        std::unordered_set<std::string> rightResult = qpsClient.getAllEntity(rightDesignEntityType);
+        std::unordered_set<std::string> leftResult = qpsClient.getAllEntity(leftDesignEntityType);
+        pairResult = WithClause::findCommonAttributeStatements(leftResult, rightResult);
     }
 
     return {leftSynonym, rightSynonym, pairResult};
 }
 
-std::unordered_set<std::string> WithClause::findCommonAttributeNames(std::unordered_set<std::string> leftNameResult, std::unordered_set<std::string> rightNameResult) {
+std::unordered_set<std::string> WithClause::findCommonAttributeValues(std::unordered_set<std::string> leftNameResult, std::unordered_set<std::string> rightNameResult) {
     std::unordered_set<std::string> commonAttributeNames;
-    for (auto name : leftNameResult) {
+    for (auto &name : leftNameResult) {
         if (rightNameResult.find(name) != rightNameResult.end()) {
             commonAttributeNames.insert(name);
         }
     }
     return commonAttributeNames;
+}
+
+std::unordered_set<std::pair<std::string, std::string>, hashFunction> WithClause::findCommonAttributeStatements(std::unordered_set<std::string> leftResult, std::unordered_set<std::string> rightResult) {
+    std::unordered_set<std::pair<std::string, std::string>, hashFunction> commonAttributeStatements;
+    for (const auto &statement : leftResult) {
+        if (rightResult.find(statement) != rightResult.end()) {
+            commonAttributeStatements.insert(std::make_pair(statement, statement));
+        }
+    }
 }
 
 size_t WithClause::getNumberOfSynonyms() {
