@@ -15,6 +15,8 @@
 #include "components/pkb/storage/RelationshipStorage/CallsTRelationshipStorage.h"
 #include "components/pkb/storage/RelationshipStorage/NextRelationshipStorage.h"
 
+#include "components/pkb/runtimeEvaluator/NextTRelationshipEvaluator.h"
+
 #include "models/Entity/DesignEntity.h"
 
 #include "models/Relationship/RelationshipType.h"
@@ -32,7 +34,7 @@ RelationshipManager::RelationshipManager() {
 	CallsTRelationshipStorage* callsTRelStorage = new CallsTRelationshipStorage();
 	NextRelationshipStorage* nextRelStorage = new NextRelationshipStorage();
 
-	this->nextStorage = nextRelStorage;
+	NextTRelationshipEvaluator* nextTRelEvaluator = new NextTRelationshipEvaluator(nextRelStorage);
 
 	relStorages.push_back(modifyRelStorage);
 	relStorages.push_back(usesRelStorage);
@@ -43,6 +45,8 @@ RelationshipManager::RelationshipManager() {
 	relStorages.push_back(callsRelStorage);
 	relStorages.push_back(callsTRelStorage);
 	relStorages.push_back(nextRelStorage);
+
+	runtimeRelStorages.push_back(nextTRelEvaluator);
 }
 
 std::vector<RelationshipStorage*> RelationshipManager::getRelationshipStorage() {
@@ -113,19 +117,57 @@ bool RelationshipManager::storeRelationship(Relationship* rel) {
 	return ret;
 }
 
-bool RelationshipManager::getNextTRelationship(TokenObject firstArgument, TokenObject secondArgument) {
-	return nextStorage->getNextTRelationship(firstArgument, secondArgument);
+bool RelationshipManager::getRuntimeRelationship(RelationshipType relType, TokenObject firstArgument, TokenObject secondArgument) {
+	bool ret = false;
+
+	for (auto& store : runtimeRelStorages) {
+		ret = store->getRuntimeRelationship(relType, firstArgument, secondArgument);
+		if (ret) {
+			return ret;
+		}
+	}
+	return false;
 }
 
-std::unordered_set<std::string> RelationshipManager::getNextTRelationshipByFirst(TokenObject firstArgument, std::unordered_set<std::string>& filter) {
-	return nextStorage->getNextTRelationshipByFirst(firstArgument, filter);
+std::unordered_set<std::string> RelationshipManager::getRuntimeRelationshipByFirst(RelationshipType relType, TokenObject firstArgument, std::unordered_set<std::string>& filter) {
+	std::unordered_set<std::string> set = std::unordered_set<std::string>();
+	std::unordered_set<std::string> emptySet = std::unordered_set<std::string>();
+
+	for (auto& store : runtimeRelStorages) {
+		set = store->getRuntimeRelationshipByFirst(relType, firstArgument, filter);
+		if (set != emptySet) {
+			return set;
+		}
+	}
+	return emptySet;
 }
 
-std::unordered_set<std::string> RelationshipManager::getNextTRelationshipBySecond(TokenObject secondArgument, std::unordered_set<std::string>& filter) {
-	return nextStorage->getNextTRelationshipBySecond(secondArgument, filter);
+std::unordered_set<std::string> RelationshipManager::getRuntimeRelationshipBySecond(RelationshipType relType, TokenObject secondArgument, std::unordered_set<std::string>& filter) {
+	std::unordered_set<std::string> set = std::unordered_set<std::string>();
+	std::unordered_set<std::string> emptySet = std::unordered_set<std::string>();
+
+	for (auto& store : runtimeRelStorages) {
+		set = store->getRuntimeRelationshipBySecond(relType, secondArgument, filter);
+		if (set != emptySet) {
+			return set;
+		}
+	}
+	return emptySet;
 }
 
-std::unordered_map<std::string, std::unordered_set<std::string>> RelationshipManager::getAllNextTRelationship(DesignEntity returnType1, 
-																										std::unordered_set<std::string>& filter) {
-	return nextStorage->getAllNextTRelationship(returnType1, filter);
+std::unordered_map<std::string, std::unordered_set<std::string>> RelationshipManager::getAllRuntimeRelationship(RelationshipType relType,
+																									std::unordered_set<std::string>& filter1,
+																									std::unordered_set<std::string>& filter2) {
+	std::unordered_map<std::string, std::unordered_set<std::string>> map = std::unordered_map<std::string, std::unordered_set<std::string>>();
+	std::unordered_map<std::string, std::unordered_set<std::string>> emptyMap = std::unordered_map<std::string, std::unordered_set<std::string>>();
+
+
+	for (auto& store : runtimeRelStorages) {
+		map = store->getAllRuntimeRelationship(relType, filter1, filter2);
+		if (map != emptyMap) {
+			return map;
+		}
+	}
+
+	return emptyMap;
 }

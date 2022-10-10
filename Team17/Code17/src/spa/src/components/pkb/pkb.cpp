@@ -42,7 +42,7 @@ bool PKB::storeConstant(Entity* entity) {
 
 bool PKB::getRelationship(RelationshipType relType, TokenObject firstArgument, TokenObject secondArgument) {
 	if (relType == RelationshipType::NEXT_T) {
-		return relManager->getNextTRelationship(firstArgument, secondArgument);
+		return relManager->getRuntimeRelationship(relType, firstArgument, secondArgument);
 	}
 	return relManager->getRelationship(relType, firstArgument, secondArgument);
 }
@@ -50,7 +50,7 @@ bool PKB::getRelationship(RelationshipType relType, TokenObject firstArgument, T
 std::unordered_set<std::string> PKB::getRelationshipByFirst(RelationshipType relType, TokenObject firstArgument, DesignEntity returnType) {
 	if (relType == RelationshipType::NEXT_T) {
 		std::unordered_set<std::string> filter = entityManager->getAllEntity(returnType);
-		return relManager->getNextTRelationshipByFirst(firstArgument, filter);
+		return relManager->getRuntimeRelationshipByFirst(relType, firstArgument, filter);
 	}
 
 	return relManager->getRelationshipByFirst(relType, firstArgument, returnType);
@@ -59,7 +59,7 @@ std::unordered_set<std::string> PKB::getRelationshipByFirst(RelationshipType rel
 std::unordered_set<std::string> PKB::getRelationshipBySecond(RelationshipType relType, DesignEntity returnType, TokenObject secondArgument) {
 	if (relType == RelationshipType::NEXT_T) {
 		std::unordered_set<std::string> filter = entityManager->getAllEntity(returnType);
-		return relManager->getNextTRelationshipBySecond(secondArgument, filter);
+		return relManager->getRuntimeRelationshipBySecond(relType, secondArgument, filter);
 	}
 
 	return relManager->getRelationshipBySecond(relType, returnType, secondArgument);
@@ -67,8 +67,9 @@ std::unordered_set<std::string> PKB::getRelationshipBySecond(RelationshipType re
 
 std::unordered_map<std::string, std::unordered_set<std::string>> PKB::getAllRelationship(RelationshipType relType, DesignEntity returnType1, DesignEntity returnType2) {
 	if (relType == RelationshipType::NEXT_T) {
-		std::unordered_set<std::string> filter = entityManager->getAllEntity(returnType2);
-		return relManager->getAllNextTRelationship(returnType1, filter);
+		std::unordered_set<std::string> filter1 = entityManager->getAllEntity(returnType1);
+		std::unordered_set<std::string> filter2 = entityManager->getAllEntity(returnType2);
+		return relManager->getAllRuntimeRelationship(relType, filter1, filter2);
 	}
 	return relManager->getAllRelationship(relType, returnType1, returnType2);
 }

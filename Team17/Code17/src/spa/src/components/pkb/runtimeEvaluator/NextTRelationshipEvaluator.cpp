@@ -36,7 +36,7 @@ void NextTRelationshipEvaluator::DFSNextTForwardWithSynonym(std::string curr, st
 	}
 }
 
-// DFS search to answer Next* queries with synonym
+// DFS search backward to answer Next* queries with synonym
 void NextTRelationshipEvaluator::DFSNextTBackwardWithSynonym(std::string curr, std::unordered_set<std::string>& visited,
 													std::unordered_set<std::string>& result,
 													std::unordered_set<std::string>& filter) {
@@ -51,6 +51,21 @@ void NextTRelationshipEvaluator::DFSNextTBackwardWithSynonym(std::string curr, s
 		}
 		if (exist == visited.end()) {
 			DFSNextTBackwardWithSynonym(neighbour, visited, result, filter);
+		}
+	}
+}
+
+// DFS search to answer Next* queries with 2 synonyms
+void NextTRelationshipEvaluator::DFSNextTWithTwoSynonyms(std::unordered_set<std::string>& filter1,
+												std::unordered_set<std::string>& filter2,
+												std::unordered_map<std::string, std::unordered_set<std::string>>& result_map) {
+	for (const auto& ele : filter1) {
+		std::unordered_set<std::string> visited;
+		std::unordered_set<std::string> result;
+		std::string start = ele;
+		DFSNextTForwardWithSynonym(start, visited, result, filter2);
+		if (result.size() != 0) {
+			result_map[start] = result;
 		}
 	}
 }
@@ -89,16 +104,7 @@ std::unordered_map<std::string, std::unordered_set<std::string>> NextTRelationsh
 																									std::unordered_set<std::string>& filter2) {
 	if (relType == RelationshipType::NEXT_T) {
 		std::unordered_map<std::string, std::unordered_set<std::string>> result_map;
-		for (const auto& ele : filter1) {
-			std::unordered_set<std::string> visited;
-			std::unordered_set<std::string> result;
-			std::string start = ele;
-			DFSNextTForwardWithSynonym(start, visited, result, filter);
-			if (result.size() != 0) {
-				result_map[start] = result;
-			}
-		}
-
+		DFSNextTWithTwoSynonyms(filter1, filter2, result_map);
 		return result_map;
 	}
 	return std::unordered_map<std::string, std::unordered_set<std::string>>();

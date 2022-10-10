@@ -5,10 +5,11 @@
 #include "models/Relationship/Relationship.h"
 #include "models/Relationship/RelationshipType.h"
 #include "models/Entity/DesignEntity.h"
+#include "RuntimeRelationshipEvaluator.h"
 #include "components/pkb/storage/RelationshipStorage/NextRelationshipStorage.h"
-#include "../../../qps/query_preprocessor/query_tokenizer/TokenObject.h"
+#include "components/qps/query_preprocessor/query_tokenizer/TokenObject.h"
 
-class NextTRelationshipEvaluator {
+class NextTRelationshipEvaluator : public RuntimeRelationshipEvaluator {
 
 public:
 	NextTRelationshipEvaluator(NextRelationshipStorage* nextStorage);
@@ -21,7 +22,10 @@ private:
 	void DFSNextTForwardWithSynonym(std::string curr, std::unordered_set<std::string>& visited,
 						std::unordered_set<std::string>& result, std::unordered_set<std::string>& filter);
 	void DFSNextTBackwardWithSynonym(std::string curr, std::unordered_set<std::string>& visited,
-		std::unordered_set<std::string>& result, std::unordered_set<std::string>& filter);
+						std::unordered_set<std::string>& result, std::unordered_set<std::string>& filter);
+	void DFSNextTWithTwoSynonyms(std::unordered_set<std::string>& filter1, 
+						std::unordered_set<std::string>& filter2, 
+						std::unordered_map<std::string, std::unordered_set<std::string>>& result_map);
 
 	NextRelationshipStorage* nextStorage;
 };
