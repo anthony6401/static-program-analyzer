@@ -13,7 +13,8 @@ bool PrintEntityStorage::storeEntity(Entity* entity) {
 		if (backwardMap.find(varName) == backwardMap.end()) {
 			backwardMap.insert({ varName, std::unordered_set<std::string>() });
 		}
-		bool result2 = backwardMap.find(varName)->second.insert(stmtNum).second;
+		std::unordered_set<std::string> mapValue = backwardMap.find(varName)->second;
+		bool result2 = mapValue.insert(stmtNum).second;
 
 		return result1 || result2;
 	}
