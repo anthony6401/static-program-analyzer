@@ -24,6 +24,8 @@
 #include "models/Relationship/CallsTRelationship.h"
 #include "models/Pattern/Pattern.h"
 #include "models/Pattern/AssignPattern.h"
+#include "models/Pattern/WhilePattern.h"
+#include "models/Pattern/IfPattern.h"
 #include "components/qps/QPS.h"
 #include <iostream>
 
@@ -250,6 +252,13 @@ static kb::Pattern* assignPattern9 = new AssignPattern("15", "x", "x*y+z");
 static kb::Pattern* assignPattern10 = new AssignPattern("16", "z", "5");
 static kb::Pattern* assignPattern11 = new AssignPattern("17", "v", "z");
 
+// While Pattern
+static kb::Pattern* whilePattern1 = new WhilePattern("6", "i");
+
+// If Pattern
+static kb::Pattern* ifPattern1 = new IfPattern("10", "x");
+
+
 static int initPKB() {
     pkb_m2->storeConstant(constant0);
     pkb_m2->storeConstant(constant1);
@@ -426,6 +435,10 @@ static int initPKB() {
     pkb_m2->storePattern(assignPattern9);
     pkb_m2->storePattern(assignPattern10);
     pkb_m2->storePattern(assignPattern11);
+
+    pkb_m2->storePattern(ifPattern1);
+
+    pkb_m2->storePattern(whilePattern1);
 
     return 0;
 }
@@ -1328,16 +1341,16 @@ TEST_CASE("If Pattern queries") {
         REQUIRE(testResults == expectedResults);
     }
 
-    SECTION("If Pattern test 2") {
-        std::string testQuery = "if ifs; variable v; constant c;\n "
-                                "Select <ifs, v, c> pattern ifs(v,_,_)";
-        std::list<std::string> testResults;
-        std::list<std::string> expectedResults = {"10 x 1"};
-        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
-        testResults.sort();
-        expectedResults.sort();
-        REQUIRE(testResults == expectedResults);
-    }
+//    SECTION("If Pattern test 2") {
+//        std::string testQuery = "if ifs; variable v; constant c;\n "
+//                                "Select <ifs, v, c> pattern ifs(v,_,_)";
+//        std::list<std::string> testResults;
+//        std::list<std::string> expectedResults = {"10 x 1", "10 x 5", "10 x 2", "10 x 0"};
+//        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+//        testResults.sort();
+//        expectedResults.sort();
+//        REQUIRE(testResults == expectedResults);
+//    }
 
     SECTION("If Pattern test 3") {
         std::string testQuery = "if ifs; variable v; constant c;\n "
@@ -1362,6 +1375,17 @@ TEST_CASE("If Pattern queries") {
     }
 }
 
+TEST_CASE("djfhdjfhd") {
+            std::string testQuery = "if ifs; variable v; constant c;\n "
+                                "Select <ifs, v, c> pattern ifs(v,_,_)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"10 x 1", "10 x 5", "10 x 2", "10 x 0"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+}
+
 TEST_CASE("While Pattern queries") {
     SECTION("While Pattern test 1") {
         std::string testQuery = "while w;\n "
@@ -1376,7 +1400,7 @@ TEST_CASE("While Pattern queries") {
 
     SECTION("While Pattern test 2") {
         std::string testQuery = "variable v; while w;\n "
-                                "<w, v> pattern w(v,_)";
+                                "Select <w, v> pattern w(v,_)";
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"6 i"};
         QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
@@ -1385,20 +1409,20 @@ TEST_CASE("While Pattern queries") {
         REQUIRE(testResults == expectedResults);
     }
 
-    SECTION("While Pattern test 2") {
-        std::string testQuery = "variable v; while w;\n "
-                                "<w, v> pattern w(\"i\",_)";
-        std::list<std::string> testResults;
-        std::list<std::string> expectedResults = {"6 i"};
-        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
-        testResults.sort();
-        expectedResults.sort();
-        REQUIRE(testResults == expectedResults);
-    }
+//    SECTION("While Pattern test 3") {
+//        std::string testQuery = "variable v; while w;\n "
+//                                "Select <w, v> pattern w(\"i\",_)";
+//        std::list<std::string> testResults;
+//        std::list<std::string> expectedResults = {"6 i"};
+//        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+//        testResults.sort();
+//        expectedResults.sort();
+//        REQUIRE(testResults == expectedResults);
+//    }
 
-    SECTION("While Pattern test 3") {
+    SECTION("While Pattern test 4") {
         std::string testQuery = "variable v; while w;\n "
-                                "<w, v> pattern w(\"z\",_)";
+                                "Select <w, v> pattern w(\"z\",_)";
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {};
         QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
