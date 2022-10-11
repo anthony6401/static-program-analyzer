@@ -57,7 +57,7 @@ TEST_CASE("Single clause queries - such that Next") {
 TEST_CASE("Single clause queries - pattern") {
     Select select = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("v")) });
     std::vector<SuchThat> suchThat;
-    std::vector<qps::Pattern> pattern{ Pattern("a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
+    std::vector<qps::Pattern> pattern{ Pattern(TokenType::ASSIGN, "a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
     std::unordered_map<std::string, DesignEntity> mappedSynonyms{ {"v", DesignEntity::VARIABLE}, {"a", DesignEntity::ASSIGN}};
     int numOfDeclaredSynonyms = 1;
 
@@ -71,7 +71,7 @@ TEST_CASE("Single clause queries - pattern") {
 TEST_CASE("Multi clause queries") {
     Select select = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("v")) });
     std::vector<SuchThat> suchThat{ SuchThat(TokenType::MODIFIES, TokenObject(TokenType::NAME, "p"),TokenObject(TokenType::WILDCARD, "_")) };
-    std::vector<qps::Pattern> pattern{ Pattern("a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::SUBEXPRESSION, "_\"x\"_")) };
+    std::vector<qps::Pattern> pattern{ Pattern(TokenType::ASSIGN, "a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::SUBEXPRESSION, "_\"x\"_")) };
     std::unordered_map<std::string, DesignEntity> mappedSynonyms{ {"v", DesignEntity::VARIABLE}, {"a", DesignEntity::ASSIGN}, {"p", DesignEntity::PROCEDURE} };
     int numOfDeclaredSynonyms = 2;
 
@@ -85,7 +85,7 @@ TEST_CASE("Multi clause queries") {
 TEST_CASE("Multi clause queries where return type is not used in other clauses -  variable v, v1; call c; assign a; Select v such that Follows(c, _) pattern a(v1, _)") {
     Select select = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("v")) });
     std::vector<SuchThat> suchThat{ SuchThat(TokenType::FOLLOWS, TokenObject(TokenType::NAME, "c"),TokenObject(TokenType::WILDCARD, "_")) };
-    std::vector<qps::Pattern> pattern{ Pattern("a", TokenObject(TokenType::NAME, "v1"), TokenObject(TokenType::WILDCARD, "_")) };
+    std::vector<qps::Pattern> pattern{ Pattern(TokenType::ASSIGN, "a", TokenObject(TokenType::NAME, "v1"), TokenObject(TokenType::WILDCARD, "_")) };
     std::unordered_map<std::string, DesignEntity> mappedSynonyms{ {"v", DesignEntity::VARIABLE}, {"v1", DesignEntity::VARIABLE}, {"a", DesignEntity::ASSIGN}, {"c", DesignEntity::CALL} };
     int numOfDeclaredSynonyms = 4;
 
@@ -535,7 +535,7 @@ TEST_CASE("Follows where second param is not statement - constant c; Select c su
 TEST_CASE("Pattern with non-assign synonym - variable v; assign a; Select v pattern v(\"_\", \"x\")") {
     Select select = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("v")) });
     std::vector<SuchThat> suchThat{};
-    std::vector<qps::Pattern> pattern{ Pattern("v", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
+    std::vector<qps::Pattern> pattern{ Pattern(TokenType::ASSIGN, "v", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
     std::unordered_map<std::string, DesignEntity> mappedSynonyms{ {"v", DesignEntity::VARIABLE}, {"a", DesignEntity::ASSIGN} };
     int numOfDeclaredSynonyms = 2;
 
@@ -551,7 +551,7 @@ TEST_CASE("Pattern with non-assign synonym - variable v; assign a; Select v patt
 TEST_CASE("Pattern with no assign declaration variable v; Select v pattern a(\"_\", \"x\")") {
     Select select = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("v")) });
     std::vector<SuchThat> suchThat{};
-    std::vector<qps::Pattern> pattern{ Pattern("a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
+    std::vector<qps::Pattern> pattern{ Pattern(TokenType::ASSIGN, "a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
     std::unordered_map<std::string, DesignEntity> mappedSynonyms{ {"v", DesignEntity::VARIABLE} };
     int numOfDeclaredSynonyms = 1;
 
@@ -567,7 +567,7 @@ TEST_CASE("Pattern with no assign declaration variable v; Select v pattern a(\"_
 TEST_CASE("Pattern with param not declared - variable v; assign a; Select v pattern a(s, \"x\")") {
     Select select = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("v")) });
     std::vector<SuchThat> suchThat{};
-    std::vector<qps::Pattern> pattern{ Pattern("a", TokenObject(TokenType::NAME, "s"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
+    std::vector<qps::Pattern> pattern{ Pattern(TokenType::ASSIGN, "a", TokenObject(TokenType::NAME, "s"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
     std::unordered_map<std::string, DesignEntity> mappedSynonyms{ {"v", DesignEntity::VARIABLE}, {"a", DesignEntity::ASSIGN} };
     int numOfDeclaredSynonyms = 2;
 
@@ -583,7 +583,7 @@ TEST_CASE("Pattern with param not declared - variable v; assign a; Select v patt
 TEST_CASE("First param of pattern not variable - variable v; assign a; Select v pattern a(a, \"x\")") {
     Select select = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("v")) });
     std::vector<SuchThat> suchThat{};
-    std::vector<qps::Pattern> pattern{ Pattern("a", TokenObject(TokenType::NAME, "a"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
+    std::vector<qps::Pattern> pattern{ Pattern(TokenType::ASSIGN, "a", TokenObject(TokenType::NAME, "a"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
     std::unordered_map<std::string, DesignEntity> mappedSynonyms{ {"v", DesignEntity::VARIABLE}, {"a", DesignEntity::ASSIGN} };
     int numOfDeclaredSynonyms = 2;
 
@@ -599,7 +599,7 @@ TEST_CASE("First param of pattern not variable - variable v; assign a; Select v 
 TEST_CASE("Parent takes in cosntant as param") {
     Select select = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("v")) });
     std::vector<SuchThat> suchThat{SuchThat(TokenType::PARENT, TokenObject(TokenType::NAME, "c"), TokenObject(TokenType::WILDCARD, "_"))};
-    std::vector<qps::Pattern> pattern{ Pattern("a", TokenObject(TokenType::NAME, "a"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
+    std::vector<qps::Pattern> pattern{ Pattern(TokenType::ASSIGN, "a", TokenObject(TokenType::NAME, "a"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
     std::unordered_map<std::string, DesignEntity> mappedSynonyms{ {"v", DesignEntity::VARIABLE}, {"a", DesignEntity::ASSIGN}, {"c", DesignEntity::CONSTANT}};
     int numOfDeclaredSynonyms = 2;
 
@@ -616,7 +616,7 @@ TEST_CASE("Parent takes in cosntant as param") {
 TEST_CASE("Uses takes in cosntant as param") {
     Select select = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("v")) });
     std::vector<SuchThat> suchThat{ SuchThat(TokenType::USES, TokenObject(TokenType::NAME, "c"), TokenObject(TokenType::WILDCARD, "_")) };
-    std::vector<qps::Pattern> pattern{ Pattern("a", TokenObject(TokenType::NAME, "a"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
+    std::vector<qps::Pattern> pattern{ Pattern(TokenType::ASSIGN, "a", TokenObject(TokenType::NAME, "a"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
     std::unordered_map<std::string, DesignEntity> mappedSynonyms{ {"v", DesignEntity::VARIABLE}, {"a", DesignEntity::ASSIGN}, {"c", DesignEntity::CONSTANT} };
     int numOfDeclaredSynonyms = 2;
 
@@ -632,7 +632,7 @@ TEST_CASE("Uses takes in cosntant as param") {
 TEST_CASE("Modifies takes in cosntant as param") {
     Select select = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("v")) });
     std::vector<SuchThat> suchThat{ SuchThat(TokenType::MODIFIES, TokenObject(TokenType::NAME, "c"), TokenObject(TokenType::WILDCARD, "_")) };
-    std::vector<qps::Pattern> pattern{ Pattern("a", TokenObject(TokenType::NAME, "a"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
+    std::vector<qps::Pattern> pattern{ Pattern(TokenType::ASSIGN, "a", TokenObject(TokenType::NAME, "a"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
     std::unordered_map<std::string, DesignEntity> mappedSynonyms{ {"v", DesignEntity::VARIABLE}, {"a", DesignEntity::ASSIGN}, {"c", DesignEntity::CONSTANT} };
     int numOfDeclaredSynonyms = 2;
 
