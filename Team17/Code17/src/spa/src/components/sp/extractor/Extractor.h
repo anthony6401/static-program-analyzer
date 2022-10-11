@@ -46,6 +46,11 @@ public:
 	std::map<std::string, ProcedureStack*> procedures;
 	StmtStack* currentStack;
 
+	SimpleToken* previousStmt;
+	std::vector<SimpleToken*> lastStmtsOfIf;
+	std::stack<SimpleToken*> whileTokens;
+	std::stack<SimpleToken*> ifTokens;
+
 	Extractor(SPClient* client);
 
 	void extractRead(SimpleToken readToken);

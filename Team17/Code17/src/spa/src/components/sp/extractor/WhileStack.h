@@ -14,7 +14,6 @@ public:
     void extractParentT(std::vector<SimpleToken> stmtsNested);
     void extractUses(std::vector<SimpleToken> varUse);
     void extractModify(std::vector<SimpleToken> varMod);
-    void extractNext(std::vector<SimpleToken> stmts);
     Entity* generateEntity(SimpleToken token);
 
 private:
