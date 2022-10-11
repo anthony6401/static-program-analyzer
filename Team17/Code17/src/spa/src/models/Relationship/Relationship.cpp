@@ -1,6 +1,7 @@
 #include "Relationship.h"
 #include <string>
 #include "../Entity/Entity.h"
+#include <iostream>
 
 Relationship::Relationship(Entity* leftEntity, Entity* rightEntity) : leftEntity(leftEntity), rightEntity(rightEntity) {}
 
@@ -10,4 +11,9 @@ Entity* Relationship::getLeftEntity() {
 
 Entity* Relationship::getRightEntity() {
 	return this->rightEntity;
+}
+
+Relationship::~Relationship() {
+	delete leftEntity;
+	delete rightEntity;
 }
