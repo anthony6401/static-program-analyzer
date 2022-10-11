@@ -24,6 +24,8 @@
 #include "models/Relationship/CallsTRelationship.h"
 #include "models/Pattern/Pattern.h"
 #include "models/Pattern/AssignPattern.h"
+#include "models/Pattern/WhilePattern.h"
+#include "models/Pattern/IfPattern.h"
 #include "components/qps/QPS.h"
 #include <iostream>
 
@@ -250,6 +252,12 @@ static kb::Pattern* assignPattern9 = new AssignPattern("15", "x", "x*y+z");
 static kb::Pattern* assignPattern10 = new AssignPattern("16", "z", "5");
 static kb::Pattern* assignPattern11 = new AssignPattern("17", "v", "z");
 
+// While Pattern
+static kb::Pattern* whilePattern1 = new WhilePattern("6", "i");
+
+// If Pattern
+static kb::Pattern* ifPattern1 = new IfPattern("10", "x");
+
 static int initPKB() {
     pkb_m2->storeConstant(constant0);
     pkb_m2->storeConstant(constant1);
@@ -426,6 +434,10 @@ static int initPKB() {
     pkb_m2->storePattern(assignPattern9);
     pkb_m2->storePattern(assignPattern10);
     pkb_m2->storePattern(assignPattern11);
+
+    pkb_m2->storePattern(ifPattern1);
+
+    pkb_m2->storePattern(whilePattern1);
 
     return 0;
 }
