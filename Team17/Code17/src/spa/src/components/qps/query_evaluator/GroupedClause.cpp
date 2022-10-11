@@ -13,7 +13,7 @@ std::set<std::string> GroupedClause::getAllSynonyms() {
 }
 
 
-bool GroupedClause::hasCommonSynonymWithClause(std::shared_ptr<Clause> clause) {
+bool GroupedClause::hasCommonSynonymWithClause(std::shared_ptr<Clause> &clause) {
     std::set<std::string> synonymsOfClause = clause -> getAllSynonyms();
     for (const auto& s : synonymsOfClause) {
         for (const auto& sgc : synonyms) {
@@ -25,7 +25,7 @@ bool GroupedClause::hasCommonSynonymWithClause(std::shared_ptr<Clause> clause) {
     return false;
 }
 
-void GroupedClause::addClauseToGroup(std::shared_ptr<Clause> clause) {
+void GroupedClause::addClauseToGroup(std::shared_ptr<Clause> &clause) {
     std::set<std::string> synonymsOfClause = clause -> getAllSynonyms();
     for (const std::string& synonym : synonymsOfClause) {
         synonyms.insert(synonym);

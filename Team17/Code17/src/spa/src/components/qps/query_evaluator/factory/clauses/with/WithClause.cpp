@@ -200,6 +200,12 @@ ResultTable WithClause::evaluateAttributeAttribute() {
         pairResult = WithClause::findCommonAttributeStatements(leftResult, rightResult);
     }
 
+    if (pairResult.empty()) {
+        ResultTable table;
+        table.setIsFalseResultToTrue();
+        return table;
+    }
+
     return {leftSynonym, rightSynonym, pairResult};
 }
 
@@ -213,13 +219,14 @@ std::unordered_set<std::string> WithClause::findCommonAttributeValues(std::unord
     return commonAttributeNames;
 }
 
-std::unordered_set<std::pair<std::string, std::string>, hashFunction> WithClause::findCommonAttributeStatements(std::unordered_set<std::string> leftResult, std::unordered_set<std::string> rightResult) {
+std::unordered_set<std::pair<std::string, std::string>, hashFunction> WithClause::findCommonAttributeStatements(const std::unordered_set<std::string>& leftResult, const std::unordered_set<std::string> rightResult) {
     std::unordered_set<std::pair<std::string, std::string>, hashFunction> commonAttributeStatements;
     for (const auto &statement : leftResult) {
         if (rightResult.find(statement) != rightResult.end()) {
             commonAttributeStatements.insert(std::make_pair(statement, statement));
         }
     }
+    return commonAttributeStatements;
 }
 
 size_t WithClause::getNumberOfSynonyms() {
@@ -233,6 +240,7 @@ size_t WithClause::getNumberOfSynonyms() {
     if (rightType == TokenType::ATTRIBUTE_SYNONYM) {
         numberOfSynonyms++;
     }
+
     return numberOfSynonyms;
 }
 
@@ -250,5 +258,6 @@ std::set<std::string> WithClause::getAllSynonyms() {
         std::string rightSynonym = right.front().getValue();
         synonyms.emplace(rightSynonym);
     }
+
     return synonyms;
 }

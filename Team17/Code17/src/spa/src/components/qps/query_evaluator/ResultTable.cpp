@@ -89,57 +89,6 @@ std::unordered_set<std::string> ResultTable::getSynonymResultsToBePopulated(std:
     return result;
 }
 
-bool ResultTable::hasDuplicatedSynonymsInTuple(std::vector<TokenObject> tuple) {
-    std::vector<std::string> appearedSynonyms = {};
-    for (auto tupleObject : tuple) {
-        if (tupleObject.getTokenType() == TokenType::NAME || tupleObject.getTokenType() == TokenType::ATTRIBUTE_SYNONYM) {
-            std::string synonym = tupleObject.getValue();
-            if (std::find(appearedSynonyms.begin(), appearedSynonyms.end(), synonym) != appearedSynonyms.end()) {
-                auto iterator = std::find(synonymsList.begin(), synonymsList.end(), synonym);
-                int indexOfSynonym = std::distance(synonymsList.begin(), iterator);
-                std::unordered_set<std::string> values;
-                for (auto resultSublist : resultsList) {
-                    values.insert(resultSublist[indexOfSynonym]);
-                }
-                if (values.size() > 1) {
-                    return true;
-                }
-            } else {
-                appearedSynonyms.emplace_back(synonym);
-            }
-        }
-    }
-    return false;
-}
-
-//std::unordered_set<std::string> ResultTable::handleDuplicateSynonymsInTuple(std::vector<TokenObject> tuple, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) {
-//    std::unordered_set<std::string> result({});
-//    std::vector<std::vector<std::string>> newValuesToJoin = {};
-//    for (int i = 0; i < tuple.size(); i++) {
-//        if (tuple[i].getTokenType() == TokenType::NAME) {
-//            std::set<std::string> tempSet = {};
-//            std::vector<std::string> tempVector = {};
-//            std::string synonym = tuple[i].getValue();
-//            auto iterator = std::find(synonymsList.begin(), synonymsList.end(), synonym);
-//            int indexOfSynonym = std::distance(synonymsList.begin(), iterator);
-//            for (auto resultSublist : resultsList) {
-//                tempSet.insert(resultSublist[indexOfSynonym]);
-//            }
-//
-//            tempVector.assign(tempSet.begin(), tempSet.end());
-//            newValuesToJoin.emplace_back(tempVector);
-//        }
-//
-//        if (tuple[i].getTokenType() == TokenType::ATTRIBUTE_SYNONYM) {
-//            std::string attributeName = tuple[i + 1].getValue();
-//            DesignEntity returnType = synonymToDesignEntityMap[tuple[i].getValue()];
-//            bool isAlternativeAttribute = SelectAttributeClause::checkIsAlternateAttributeName(returnType, attributeName);
-//        }
-//    }
-//}
-
-
-
 std::unordered_set<std::string> ResultTable::getTupleResultsToBePopulated(std::vector<TokenObject> tuple, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) {
     std::unordered_set<std::string> result({});
     for (auto resultSublist : resultsList) {

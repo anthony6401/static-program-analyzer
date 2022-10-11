@@ -20,11 +20,11 @@ private:
     std::vector<GroupedClause> selectSynonymNotPresentGroups;
 public:
     ClauseDivider();
-    void addClauseToDivider(std::shared_ptr<Clause> clause);
+    void addClauseToDivider(std::shared_ptr<Clause> &clause);
     GroupedClause getNoSynonymsPresent();
     std::vector<GroupedClause> getSelectSynonymPresentGroups();
     std::vector<GroupedClause> getSelectSynonymNotPresentGroups();
-    void divideCommonSynonymGroupsBySelect(std::shared_ptr<Clause> selectClause);
+    void divideCommonSynonymGroupsBySelect(std::shared_ptr<Clause> &selectClause);
 
 };
 

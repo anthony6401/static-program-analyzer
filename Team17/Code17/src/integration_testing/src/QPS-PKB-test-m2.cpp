@@ -1292,4 +1292,59 @@ TEST_CASE("With clause queries") {
         expectedResults.sort();
         REQUIRE(testResults == expectedResults);
     }
+
+    SECTION("With clause Test 8") {
+        std::string testQuery = "stmt s, s1;\n "
+                                "Select s such that Uses(s, \"i\") and Modifies(s1, \"x\") with s.stmt# = s1.stmt#";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"6", "3"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
 }
+
+TEST_CASE("dhsjuhd") {
+    std::string testQuery = "stmt s, s1;\n "
+                            "Select s such that Uses(s, \"i\") and Modifies(s, \"x\")";
+    std::list<std::string> testResults;
+    std::list<std::string> expectedResults = {"6", "3"};
+    QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+    testResults.sort();
+    expectedResults.sort();
+    REQUIRE(testResults == expectedResults);
+}
+
+TEST_CASE("dhsjvfvfuhd") {
+    std::string testQuery = "stmt s, s1;\n "
+                            "Select s such that Uses(s, \"i\") and Modifies(s1, \"x\") with s.stmt# = s1.stmt#";
+    std::list<std::string> testResults;
+    std::list<std::string> expectedResults = {"6", "3"};
+    QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+    testResults.sort();
+    expectedResults.sort();
+    REQUIRE(testResults == expectedResults);
+}
+//
+//TEST_CASE("dhsjvfvvfvfuhd") {
+//    std::string testQuery = "stmt s, s1;\n "
+//                            "Select s such that Uses(s, \"i\")";
+//    std::list<std::string> testResults;
+//    std::list<std::string> expectedResults = {"6", "3"};
+//    QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+//    testResults.sort();
+//    expectedResults.sort();
+//    REQUIRE(testResults == expectedResults);
+//}
+//
+//TEST_CASE("dhsjvuhd") {
+//    std::string testQuery = "stmt s, s1;\n "
+//                            "Select s1 such that Modifies(s1, \"x\")";
+//    std::list<std::string> testResults;
+//    std::list<std::string> expectedResults = {"6", "3"};
+//    QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+//    testResults.sort();
+//    expectedResults.sort();
+//    REQUIRE(testResults == expectedResults);
+//}
