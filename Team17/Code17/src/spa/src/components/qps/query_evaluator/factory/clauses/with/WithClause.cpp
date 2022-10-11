@@ -28,7 +28,6 @@ ResultTable WithClause::evaluateClause() {
 }
 
 ResultTable WithClause::evaluateIntegerOrNameQuotes() {
-    std::cout << "IN WITH CLAUSE INTEGER OR NAME QUOTE:" << std::endl;
     std::string leftValue = left.front().getValue();
     std::string rightValue = right.front().getValue();
     if (leftValue == rightValue) {
@@ -40,7 +39,6 @@ ResultTable WithClause::evaluateIntegerOrNameQuotes() {
 
 
 ResultTable WithClause::evaluateNameQuotesAttribute() {
-    std::cout << "IN WITH CLAUSE NAMEQUOTE ATTRIBUTE:" << std::endl;
     ResultTable resultTable;
     std::string attributeSynonym = right.front().getValue();
     std::string nameQuotesValue = left.front().getValue();
@@ -73,7 +71,6 @@ ResultTable WithClause::evaluateNameQuotesAttribute() {
 
 
 ResultTable WithClause::evaluateIntegerAttribute() {
-    std::cout << "IN WITH CLAUSE INTEGER ATTRIBUTE:" << std::endl;
     ResultTable resultTable;
     std::string attributeSynonym = right.front().getValue();
     std::string integerValue = left.front().getValue();
@@ -90,7 +87,6 @@ ResultTable WithClause::evaluateIntegerAttribute() {
 }
 
 ResultTable WithClause::evaluateAttributeNameQuotes() {
-    std::cout << "IN WITH CLAUSE ATTRIBUTE NAMEQUOTE:" << std::endl;
     ResultTable resultTable;
     std::string attributeSynonym = left.front().getValue();
     std::string nameQuotesValue = right.front().getValue();
@@ -121,7 +117,6 @@ ResultTable WithClause::evaluateAttributeNameQuotes() {
 }
 
 ResultTable WithClause::evaluateAttributeInteger() {
-    std::cout << "IN WITH CLAUSE ATTRIBUTE INTEGER:" << std::endl;
     ResultTable resultTable;
     std::string attributeSynonym = left.front().getValue();
     std::string integerValue = right.front().getValue();
@@ -138,7 +133,6 @@ ResultTable WithClause::evaluateAttributeInteger() {
 }
 
 ResultTable WithClause::evaluateAttributeAttribute() {
-    std::cout << "IN WITH CLAUSE ATTRIBUTE ATTRIBUTE:" << std::endl;
     std::string leftSynonym = left.front().getValue();
     std::string rightSynonym = right.front().getValue();
     DesignEntity leftDesignEntityType = synonymToDesignEntityMap[leftSynonym];

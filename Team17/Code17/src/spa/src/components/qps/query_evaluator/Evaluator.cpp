@@ -20,23 +20,11 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
         ClauseDivider clausesToEvaluate = extractClausesToEvaluate(queryObject, synonymToDesignEntityMap, qpsClient);
         clausesToEvaluate.divideCommonSynonymGroupsBySelect(selectClause);
         GroupedClause noSynonymsClauses = clausesToEvaluate.getNoSynonymsPresent();
-        std::cout << "NO SYNONYMS CLAUSES SIZE:" << noSynonymsClauses.getClauses().size() << std::endl;
+
         std::vector<GroupedClause> hasSelectSynonymPresent = clausesToEvaluate.getSelectSynonymPresentGroups();
-        std::cout << "RELATED CLAUSE GROUPS SIZE:" << hasSelectSynonymPresent.size() << std::endl;
-        for (int i = 0; i < hasSelectSynonymPresent.size(); i++) {
-            std::cout << i << " group:" << std::endl;
-            for (auto s : hasSelectSynonymPresent[i].getAllSynonyms()) {
-                std::cout << s << std::endl;
-            }
-        }
+
         std::vector<GroupedClause> noSelectSynonymPresent = clausesToEvaluate.getSelectSynonymNotPresentGroups();
-        std::cout << "UNRELATED CLAUSES SIZE:" << noSelectSynonymPresent.size() << std::endl;
-        for (int i = 0; i < noSelectSynonymPresent.size(); i++) {
-            std::cout << i << " group:" << std::endl;
-            for (auto s : noSelectSynonymPresent[i].getAllSynonyms()) {
-                std::cout << s << std::endl;
-            }
-        }
+
         bool isFalseNoSynonymClauseEvaluation = Evaluator::evaluateNoSynonymClauses(noSynonymsClauses);
         bool isFalseNoSelectSynonymEvaluation = Evaluator::evaluateNoSelectSynonymClauses(noSelectSynonymPresent);
 
@@ -46,14 +34,10 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
             evaluatedResults = Evaluator::evaluateHasSelectSynonymClauses(hasSelectSynonymPresent, selectClause);
         }
 
-        std::cout << "Initial table:" << std::endl;
-        std::cout << evaluatedResults << std::endl;
-
         synonymsInTable = {evaluatedResults.synonymsList.begin(), evaluatedResults.synonymsList.end()};
         selectClause = ClauseCreator::createClause(select, synonymsInTable, synonymToDesignEntityMap, qpsClient);
         ResultTable selectTable = selectClause -> evaluateClause();
-        std::cout << "select table:" << std::endl;
-        std::cout << selectTable << std::endl;
+
         evaluatedResults.combineResult(selectTable);
         Evaluator::populateResultsList(evaluatedResults, select, results, qpsClient, synonymToDesignEntityMap);
     }
@@ -62,8 +46,6 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
 
 
 void Evaluator::populateResultsList(ResultTable &evaluatedResults, Select select, std::list<std::string> &results, QPSClient qpsClient, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap) {
-    std::cout << "IN POPULATE RESULTS LIST:" << std::endl;
-    std::cout << evaluatedResults << std::endl;
     std::string selectSynonym = select.getReturnValues().front().getValue();
     TokenType returnType = select.getReturnType();
     if (returnType == TokenType::BOOLEAN) {
@@ -79,7 +61,7 @@ void Evaluator::populateResultsList(ResultTable &evaluatedResults, Select select
             return;
         } else {
             std::unordered_set<std::string> resultsToPopulate = evaluatedResults.getSynonymResultsToBePopulated(selectSynonym);
-            for (std::string result : resultsToPopulate) {
+            for (const std::string& result : resultsToPopulate) {
                 results.emplace_back(result);
             }
         }
@@ -88,7 +70,7 @@ void Evaluator::populateResultsList(ResultTable &evaluatedResults, Select select
     if (returnType == TokenType::TUPLE) {
         std::vector<TokenObject> tuple = select.getReturnValues();
         std::unordered_set<std::string> resultsToPopulate = evaluatedResults.getTupleResultsToBePopulated(tuple, synonymToDesignEntityMap, qpsClient);
-        for (std::string result : resultsToPopulate) {
+        for (const std::string& result : resultsToPopulate) {
             results.emplace_back(result);
         }
     }
@@ -111,7 +93,7 @@ void Evaluator::populateResultsList(ResultTable &evaluatedResults, Select select
             }
 
         } else {
-            for (std::string result : resultsToPopulate) {
+            for (const std::string& result : resultsToPopulate) {
                 results.emplace_back(result);
             }
         }
