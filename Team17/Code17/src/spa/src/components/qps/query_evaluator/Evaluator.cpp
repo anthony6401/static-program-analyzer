@@ -20,7 +20,9 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
         ClauseDivider clausesToEvaluate = extractClausesToEvaluate(queryObject, synonymToDesignEntityMap, qpsClient);
         clausesToEvaluate.divideCommonSynonymGroupsBySelect(selectClause);
         GroupedClause noSynonymsClauses = clausesToEvaluate.getNoSynonymsPresent();
+
         std::vector<GroupedClause> hasSelectSynonymPresent = clausesToEvaluate.getSelectSynonymPresentGroups();
+
         std::vector<GroupedClause> noSelectSynonymPresent = clausesToEvaluate.getSelectSynonymNotPresentGroups();
 
         bool isFalseNoSynonymClauseEvaluation = Evaluator::evaluateNoSynonymClauses(noSynonymsClauses);
@@ -35,6 +37,7 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
         synonymsInTable = {evaluatedResults.synonymsList.begin(), evaluatedResults.synonymsList.end()};
         selectClause = ClauseCreator::createClause(select, synonymsInTable, synonymToDesignEntityMap, qpsClient);
         ResultTable selectTable = selectClause -> evaluateClause();
+
         evaluatedResults.combineResult(selectTable);
         Evaluator::populateResultsList(evaluatedResults, select, results, qpsClient, synonymToDesignEntityMap);
     }
@@ -58,7 +61,7 @@ void Evaluator::populateResultsList(ResultTable &evaluatedResults, Select select
             return;
         } else {
             std::unordered_set<std::string> resultsToPopulate = evaluatedResults.getSynonymResultsToBePopulated(selectSynonym);
-            for (std::string result : resultsToPopulate) {
+            for (const std::string& result : resultsToPopulate) {
                 results.emplace_back(result);
             }
         }
@@ -67,7 +70,7 @@ void Evaluator::populateResultsList(ResultTable &evaluatedResults, Select select
     if (returnType == TokenType::TUPLE) {
         std::vector<TokenObject> tuple = select.getReturnValues();
         std::unordered_set<std::string> resultsToPopulate = evaluatedResults.getTupleResultsToBePopulated(tuple, synonymToDesignEntityMap, qpsClient);
-        for (std::string result : resultsToPopulate) {
+        for (const std::string& result : resultsToPopulate) {
             results.emplace_back(result);
         }
     }
@@ -90,7 +93,7 @@ void Evaluator::populateResultsList(ResultTable &evaluatedResults, Select select
             }
 
         } else {
-            for (std::string result : resultsToPopulate) {
+            for (const std::string& result : resultsToPopulate) {
                 results.emplace_back(result);
             }
         }
@@ -103,7 +106,7 @@ bool Evaluator::evaluateNoSynonymClauses(GroupedClause noSynonymsClauses) {
         return false;
     } else {
         std::vector<std::shared_ptr<Clause>> clauses = noSynonymsClauses.getClauses();
-        for (auto c : clauses) {
+        for (auto &c : clauses) {
             ResultTable result = c -> evaluateClause();
             if (result.getIsFalseResult()) {
                 return true;
@@ -126,7 +129,7 @@ bool Evaluator::evaluateNoSelectSynonymClauses(std::vector<GroupedClause> noSele
 
 ResultTable Evaluator::evaluateHasSelectSynonymClauses(std::vector<GroupedClause> hasSelectSynonymPresent, std::shared_ptr<Clause> &selectClause) {
     ResultTable combinedResultTable;
-    for (GroupedClause gc : hasSelectSynonymPresent) {
+    for (GroupedClause &gc : hasSelectSynonymPresent) {
         ResultTable intermediate = gc.evaluateGroupedClause();
         if (intermediate.getIsFalseResult()) {
             combinedResultTable = std::move(intermediate);
@@ -142,7 +145,7 @@ ClauseDivider Evaluator::extractClausesToEvaluate(QueryObject queryObject, std::
     ClauseDivider clauseDivider;
     std::vector<SuchThat> relationships = queryObject.getRelationships();
     std::vector<Pattern> patterns = queryObject.getPattern();
-    Select synonym = queryObject.getSelect();
+    std::vector<With> withs = queryObject.getWith();
 
     for (const auto& r : relationships) {
         std::shared_ptr<Clause> relationshipClauseToEvaluate = ClauseCreator::createClause(r, synonymToDesignEntityMap, qpsClient);
@@ -152,6 +155,11 @@ ClauseDivider Evaluator::extractClausesToEvaluate(QueryObject queryObject, std::
     for (const auto& p : patterns) {
         std::shared_ptr<Clause> patternClauseToEvaluate = ClauseCreator::createClause(p, synonymToDesignEntityMap, qpsClient);
         clauseDivider.addClauseToDivider(patternClauseToEvaluate);
+    }
+
+    for (const auto& w : withs) {
+        std::shared_ptr<Clause> withClauseToEvaluate = ClauseCreator::createClause(w, synonymToDesignEntityMap, qpsClient);
+        clauseDivider.addClauseToDivider(withClauseToEvaluate);
     }
 
     return clauseDivider;

@@ -1,4 +1,5 @@
 #include "IfPatternClause.h"
+#include "iostream"
 
 IfPatternClause::IfPatternClause(std::string ifSynonym, TokenObject firstArgument, QPSClient qpsClient)
         : ifSynonym(ifSynonym), firstArgument(firstArgument), qpsClient(qpsClient) {}

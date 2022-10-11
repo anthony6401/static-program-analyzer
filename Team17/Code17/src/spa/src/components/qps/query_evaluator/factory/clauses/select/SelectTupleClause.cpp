@@ -8,14 +8,12 @@ SelectTupleClause::SelectTupleClause(std::vector<TokenObject> tuple, std::unorde
 
 ResultTable SelectTupleClause::evaluateClause() {
     ResultTable resultTable;
-    // TokenObjects can be synonyms of attributes
-    for (int i = 0; i < tuple.size() - 1; i++) {
+    for (auto & i : tuple) {
         ResultTable intermediate;
-        TokenType tupleObjectType = tuple[i].getTokenType();
-        std::string tupleObjectValue = tuple[i].getValue();
+        TokenType tupleObjectType = i.getTokenType();
+        std::string tupleObjectValue = i.getValue();
         DesignEntity returnType = synonymToDesignEntityMap[tupleObjectValue];
         if (tupleObjectType == TokenType::NAME) {
-            // If select synonym is found -> just select from table
             if (synonymsInTable.find(tupleObjectValue) != synonymsInTable.end()) {
                 continue;
             } else {

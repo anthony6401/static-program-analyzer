@@ -475,6 +475,22 @@ TEST_CASE("Valid tuples with attributes") {
 
         REQUIRE(testResult == expectedResult);
     }
+
+    SECTION("Test 6") {
+        std::string testQuery = "assign a; procedure p; constant c; variable v; Select <c.stmt#, c.procName, s.stmt#> such that Affects (a1, a2)";
+        std::vector<TokenObject> expectedResult{assignTokenObject, a_nameTokenObject, semicolonTokenObject,
+                                                procTokenObject, p_nameTokenObject, semicolonTokenObject,
+                                                constantTokenObject, c_nameTokenObject, semicolonTokenObject,
+                                                variableTokenObject, v_nameTokenObject, semicolonTokenObject,
+                                                selectTokenObject, threeAttri_tupleTokenObject, suchTokenObject,
+                                                thatTokenObject,
+                                                affectsTokenObject, openBracketTokenObject, a1_nameTokenObject,
+                                                commaTokenObject, a2_nameTokenObject, closedBracketTokenObject};
+        Tokenizer tokenizer = Tokenizer();
+        std::vector<TokenObject> testResult = tokenizer.tokenize(testQuery);
+
+        REQUIRE(testResult == expectedResult);
+    }
 }
 
 TEST_CASE("Valid Attributes Tests") {
