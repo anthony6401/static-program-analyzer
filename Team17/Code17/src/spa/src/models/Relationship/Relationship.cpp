@@ -1,7 +1,6 @@
 #include "Relationship.h"
 #include <string>
 #include "../Entity/Entity.h"
-#include <iostream>
 
 Relationship::Relationship(Entity* leftEntity, Entity* rightEntity) : leftEntity(leftEntity), rightEntity(rightEntity) {}
 
