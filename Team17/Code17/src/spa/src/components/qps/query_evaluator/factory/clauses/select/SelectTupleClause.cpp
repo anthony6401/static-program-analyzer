@@ -7,14 +7,16 @@ SelectTupleClause::SelectTupleClause(std::vector<TokenObject> tuple, std::unorde
         : tuple(tuple), synonymsInTable(synonymsInTable), synonymToDesignEntityMap(synonymToDesignEntityMap), qpsClient(qpsClient) {}
 
 ResultTable SelectTupleClause::evaluateClause() {
+    std::cout << "IN EVALUATE TUPLE CLAUSE" << std::endl;
     ResultTable resultTable;
     // TokenObjects can be synonyms of attributes
-    for (int i = 0; i < tuple.size() - 1; i++) {
+    for (int i = 0; i < tuple.size(); i++) {
         ResultTable intermediate;
         TokenType tupleObjectType = tuple[i].getTokenType();
         std::string tupleObjectValue = tuple[i].getValue();
         DesignEntity returnType = synonymToDesignEntityMap[tupleObjectValue];
         if (tupleObjectType == TokenType::NAME) {
+            std::cout << "IN EVALUATE TUPLE CLAUSE NAME" << std::endl;
             // If select synonym is found -> just select from table
             if (synonymsInTable.find(tupleObjectValue) != synonymsInTable.end()) {
                 continue;
@@ -24,6 +26,7 @@ ResultTable SelectTupleClause::evaluateClause() {
         }
 
         if (tupleObjectType == TokenType::ATTRIBUTE_SYNONYM) {
+            std::cout << "IN EVALUATE TUPLE CLAUSE ATTRI" << std::endl;
             if (synonymsInTable.find(tupleObjectValue) != synonymsInTable.end()) {
                 continue;
             } else {

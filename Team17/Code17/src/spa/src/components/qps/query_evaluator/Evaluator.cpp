@@ -52,6 +52,8 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
         synonymsInTable = {evaluatedResults.synonymsList.begin(), evaluatedResults.synonymsList.end()};
         selectClause = ClauseCreator::createClause(select, synonymsInTable, synonymToDesignEntityMap, qpsClient);
         ResultTable selectTable = selectClause -> evaluateClause();
+        std::cout << "select table:" << std::endl;
+        std::cout << selectTable << std::endl;
         evaluatedResults.combineResult(selectTable);
         Evaluator::populateResultsList(evaluatedResults, select, results, qpsClient, synonymToDesignEntityMap);
     }

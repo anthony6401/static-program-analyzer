@@ -1409,16 +1409,16 @@ TEST_CASE("While Pattern queries") {
         REQUIRE(testResults == expectedResults);
     }
 
-//    SECTION("While Pattern test 3") {
-//        std::string testQuery = "variable v; while w;\n "
-//                                "Select <w, v> pattern w(\"i\",_)";
-//        std::list<std::string> testResults;
-//        std::list<std::string> expectedResults = {"6 i"};
-//        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
-//        testResults.sort();
-//        expectedResults.sort();
-//        REQUIRE(testResults == expectedResults);
-//    }
+    SECTION("While Pattern test 3") {
+        std::string testQuery = "variable v; while w;\n "
+                                "Select <w, v> pattern w(\"i\",_)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"6 x", "6 y", "6 i", "6 z", "6 v"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
 
     SECTION("While Pattern test 4") {
         std::string testQuery = "variable v; while w;\n "
