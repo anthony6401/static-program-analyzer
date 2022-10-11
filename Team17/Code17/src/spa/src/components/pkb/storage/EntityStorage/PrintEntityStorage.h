@@ -10,4 +10,6 @@ public:
 	bool storeEntity(Entity* entity);
 	std::unordered_set<std::string> getAllEntity(DesignEntity returnType);
 	std::string getStatementMapping(std::string& stmtSet, DesignEntity entityType);
+	std::unordered_set<std::string> getStatementByName(std::string& name, DesignEntity entityType);
+	std::unordered_set<std::string> getAllName(DesignEntity entityType);
 };

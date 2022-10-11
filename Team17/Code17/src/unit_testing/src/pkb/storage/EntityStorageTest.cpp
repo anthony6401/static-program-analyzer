@@ -192,6 +192,7 @@ TEST_CASE("Call Entity Storage Test") {
 	std::string expectedResult2 = procedure_value_two;
 	std::string expectedResult3 = std::string();
 
+	// Testing getStatementMapping()
 	std::string callSet1 = callEntityStorage->getStatementMapping(call_value_one, DesignEntity::CALL);
 	std::string callSet2 = callEntityStorage->getStatementMapping(call_value_two, DesignEntity::CALL);
 	std::string callSet3 = callEntityStorage->getStatementMapping(call_value_three, DesignEntity::CALL);
@@ -201,6 +202,24 @@ TEST_CASE("Call Entity Storage Test") {
 	REQUIRE(callSet2 == expectedResult2);
 	REQUIRE(callSet3 == expectedResult3);
 	REQUIRE(callSet4 == expectedResult3);
+
+	// Testing getStatementByName()
+	std::unordered_set<std::string> getStmtByName1 = callEntityStorage->getStatementByName(procedure_value_one, DesignEntity::CALL);
+	std::unordered_set<std::string> getStmtByName2 = callEntityStorage->getStatementByName(procedure_value_two, DesignEntity::CALL);
+
+	std::unordered_set<std::string> expectedResutStmtByName1({ call_value_one });
+	std::unordered_set<std::string> expectedResutStmtByName2({ call_value_two });
+
+	REQUIRE(getStmtByName1 == expectedResutStmtByName1);
+	REQUIRE(getStmtByName2 == expectedResutStmtByName2);
+
+	// Testing getAllName()
+
+	std::unordered_set<std::string> getAllName = callEntityStorage->getAllName(DesignEntity::CALL);
+
+	std::unordered_set<std::string> expectedResultGetAllName({ procedure_value_one, procedure_value_two });
+
+	REQUIRE(getAllName == expectedResultGetAllName);
 }
 
 TEST_CASE("If Entity Storage Test") {
@@ -332,6 +351,24 @@ TEST_CASE("Print Entity Storage Test") {
 	REQUIRE(printSet2 == expectedResult2);
 	REQUIRE(printSet3 == expectedResult3);
 	REQUIRE(printSet4 == expectedResult3);
+
+	// Testing getStatementByName()
+	std::unordered_set<std::string> getStmtByName1 = printEntityStorage->getStatementByName(variable_value_one, DesignEntity::PRINT);
+	std::unordered_set<std::string> getStmtByName2 = printEntityStorage->getStatementByName(variable_value_two, DesignEntity::PRINT);
+
+	std::unordered_set<std::string> expectedResutStmtByName1({ print_value_one });
+	std::unordered_set<std::string> expectedResutStmtByName2({ print_value_two });
+
+	REQUIRE(getStmtByName1 == expectedResutStmtByName1);
+	REQUIRE(getStmtByName2 == expectedResutStmtByName2);
+
+	// Testing getAllName()
+
+	std::unordered_set<std::string> getAllName = printEntityStorage->getAllName(DesignEntity::PRINT);
+
+	std::unordered_set<std::string> expectedResultGetAllName({ variable_value_one, variable_value_two });
+
+	REQUIRE(getAllName == expectedResultGetAllName);
 }
 
 
@@ -463,6 +500,24 @@ TEST_CASE("Read Entity Storage Test") {
 	REQUIRE(readSet2 == expectedResult2);
 	REQUIRE(readSet3 == expectedResult3);
 	REQUIRE(readSet4 == expectedResult3);
+
+	// Testing getStatementByName()
+	std::unordered_set<std::string> getStmtByName1 = readEntityStorage->getStatementByName(variable_value_one, DesignEntity::READ);
+	std::unordered_set<std::string> getStmtByName2 = readEntityStorage->getStatementByName(variable_value_two, DesignEntity::READ);
+
+	std::unordered_set<std::string> expectedResutStmtByName1({ read_value_one });
+	std::unordered_set<std::string> expectedResutStmtByName2({ read_value_two });
+
+	REQUIRE(getStmtByName1 == expectedResutStmtByName1);
+	REQUIRE(getStmtByName2 == expectedResutStmtByName2);
+
+	// Testing getAllName()
+
+	std::unordered_set<std::string> getAllName = readEntityStorage->getAllName(DesignEntity::READ);
+
+	std::unordered_set<std::string> expectedResultGetAllName({ variable_value_one, variable_value_two });
+
+	REQUIRE(getAllName == expectedResultGetAllName);
 }
 
 TEST_CASE("Variable Entity Storage Test") {

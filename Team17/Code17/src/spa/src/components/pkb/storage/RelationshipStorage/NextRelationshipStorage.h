@@ -1,17 +1,5 @@
 #pragma once
-#include "models/Relationship/Relationship.h"
-#include "models/Relationship/RelationshipType.h"
-
-#include "models/Entity/DesignEntity.h"
-
 #include "RelationshipStorage.h"
-
-#include "components/qps/query_preprocessor/query_tokenizer/TokenType.h"
-#include "components/qps/query_preprocessor/query_tokenizer/TokenObject.h"
-
-#include <unordered_set>
-#include <unordered_map>
-#include <string>
 
 class NextRelationshipStorage : public RelationshipStorage {
 public:
@@ -21,17 +9,19 @@ public:
 	std::unordered_set<std::string> getRelationshipByFirst(RelationshipType relType, TokenObject firstArgument, DesignEntity returnType);
 	std::unordered_set<std::string> getRelationshipBySecond(RelationshipType relType, DesignEntity returnType, TokenObject secondArgument);
 	std::unordered_map<std::string, std::unordered_set<std::string>> getAllRelationship(RelationshipType relType, DesignEntity returnType1, DesignEntity returntype2);
-	bool getNextTRelationship(TokenObject firstArgument, TokenObject secondArgument);
-	std::unordered_set<std::string> getNextTRelationshipByFirst(TokenObject firstArgument, std::unordered_set<std::string>& filter);
-	std::unordered_set<std::string> getNextTRelationshipBySecond(TokenObject secondArgument, std::unordered_set<std::string>& filter);
-	std::unordered_map<std::string, std::unordered_set<std::string>> getAllNextTRelationship(DesignEntity returnType1, std::unordered_set<std::string>& filter);
+	std::unordered_set<std::string> getNextForward(std::string c);
+	std::unordered_set<std::string> getNextBackward(std::string c);
 
 private:
-	std::unordered_map<std::string, std::unordered_set<std::string>>* getStorage(DesignEntity left, DesignEntity right, bool isForward);
-	bool DFSNextTForward(std::string curr, std::string target, std::unordered_set<std::string>& visited);
-	void DFSNextTForwardWithSynonym(std::string curr, std::unordered_set<std::string>& visited,
-								std::unordered_set<std::string>& result, std::unordered_set<std::string>& filter,
-								std::unordered_map<std::string, std::unordered_set<std::string>>* storage);
+	std::unordered_map<std::string, std::unordered_set<std::string>>* getReadSpecificEntityStorage(DesignEntity right);
+	std::unordered_map<std::string, std::unordered_set<std::string>>* getPrintSpecificEntityStorage(DesignEntity right);
+	std::unordered_map<std::string, std::unordered_set<std::string>>* getAssignSpecificEntityStorage(DesignEntity right);
+	std::unordered_map<std::string, std::unordered_set<std::string>>* getCallSpecificEntityStorage(DesignEntity right);
+	std::unordered_map<std::string, std::unordered_set<std::string>>* getWhileSpecificEntityStorage(DesignEntity right);
+	std::unordered_map<std::string, std::unordered_set<std::string>>* getIfSpecificEntityStorage(DesignEntity right);
+	std::unordered_map<std::string, std::unordered_set<std::string>>* getStmtSpecificEntityStorage(DesignEntity right);
+	std::unordered_map<std::string, std::unordered_set<std::string>>* getStorageForward(DesignEntity left, DesignEntity right);
+	std::unordered_map<std::string, std::unordered_set<std::string>>* getStorageBackward(DesignEntity left);
 
 	std::unordered_map<std::string, std::unordered_set<std::string>> readToReadForwardMap;
 	std::unordered_map<std::string, std::unordered_set<std::string>> readToPrintForwardMap;

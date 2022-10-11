@@ -44,6 +44,11 @@ TEST_CASE("Uses Relationship Storage Test") {
 	REQUIRE(usesRelationshipStorage->storeRelationship(usesRelationshipIfOneDuplicate));
 	REQUIRE(usesRelationshipStorage->storeRelationship(usesRelationshipIfTwoDuplicate));
 
+	REQUIRE(usesRelationshipStorage->storeRelationship(usesRelationshipCallOne));
+	REQUIRE(usesRelationshipStorage->storeRelationship(usesRelationshipCallTwo));
+	REQUIRE(usesRelationshipStorage->storeRelationship(usesRelationshipCallOneDuplicate));
+	REQUIRE(usesRelationshipStorage->storeRelationship(usesRelationshipCallTwoDuplicate));
+
 	REQUIRE(!usesRelationshipStorage->storeRelationship(modifyRelationshipAssignOne));
 
 	REQUIRE(usesRelationshipStorage->getRelationship(RelationshipType::USES, stmtTokenObject1, variableTokenObject));
@@ -55,6 +60,11 @@ TEST_CASE("Uses Relationship Storage Test") {
 	REQUIRE(usesRelationshipStorage->getRelationship(RelationshipType::USES, procedureTokenObject, variableTokenObjectThree));
 	REQUIRE(usesRelationshipStorage->getRelationship(RelationshipType::USES, procedureTokenObjectTwo, variableTokenObject));
 	REQUIRE(usesRelationshipStorage->getRelationship(RelationshipType::USES, procedureTokenObjectTwo, variableTokenObjectTwo));
+
+	REQUIRE(usesRelationshipStorage->getRelationship(RelationshipType::USES, stmtTokenObject2, variableTokenObject));
+	REQUIRE(usesRelationshipStorage->getRelationship(RelationshipType::USES, stmtTokenObject2, variableTokenObjectThree));
+	REQUIRE(usesRelationshipStorage->getRelationship(RelationshipType::USES, stmtTokenObject8, variableTokenObject));
+	REQUIRE(usesRelationshipStorage->getRelationship(RelationshipType::USES, stmtTokenObject8, variableTokenObjectTwo));
 
 	REQUIRE(usesRelationshipStorage->getRelationship(RelationshipType::USES, stmtTokenObject3, variableTokenObject));
 	REQUIRE(usesRelationshipStorage->getRelationship(RelationshipType::USES, stmtTokenObject3, variableTokenObjectThree));
@@ -143,13 +153,13 @@ TEST_CASE("Uses Relationship Storage Test") {
 	REQUIRE(usesRelationshipStorage->getRelationshipByFirst(RelationshipType::PARENT_T, stmtTokenObject1, DesignEntity::VARIABLE) == expectedResult3);
 
 	REQUIRE(getUsesRelationshipByStmt1 == expectedResult1);
-	REQUIRE(getUsesRelationshipByStmt2 == expectedResult3);
+	REQUIRE(getUsesRelationshipByStmt2 == expectedResult1);
 	REQUIRE(getUsesRelationshipByStmt3 == expectedResult1);
 	REQUIRE(getUsesRelationshipByStmt4 == expectedResult1);
 	REQUIRE(getUsesRelationshipByStmt5 == expectedResult3);
 	REQUIRE(getUsesRelationshipByStmt6 == expectedResult1);
 	REQUIRE(getUsesRelationshipByStmt7 == expectedResult2);
-	REQUIRE(getUsesRelationshipByStmt8 == expectedResult3);
+	REQUIRE(getUsesRelationshipByStmt8 == expectedResult2);
 	REQUIRE(getUsesRelationshipByStmt9 == expectedResult2);
 	REQUIRE(getUsesRelationshipByStmt10 == expectedResult2);
 	REQUIRE(getUsesRelationshipByStmt11 == expectedResult3);
@@ -179,6 +189,9 @@ TEST_CASE("Uses Relationship Storage Test") {
 	std::unordered_set<std::string> getUsesIfRelationshipByVarOne = usesRelationshipStorage->getRelationshipBySecond(RelationshipType::USES, DesignEntity::IF, variableTokenObject);
 	std::unordered_set<std::string> getUsesIfRelationshipByVarTwo = usesRelationshipStorage->getRelationshipBySecond(RelationshipType::USES, DesignEntity::IF, variableTokenObjectTwo);
 	std::unordered_set<std::string> getUsesIfRelationshipByVarThree = usesRelationshipStorage->getRelationshipBySecond(RelationshipType::USES, DesignEntity::IF, variableTokenObjectThree);
+	std::unordered_set<std::string> getUsesCallRelationshipByVarOne = usesRelationshipStorage->getRelationshipBySecond(RelationshipType::USES, DesignEntity::CALL, variableTokenObject);
+	std::unordered_set<std::string> getUsesCallRelationshipByVarTwo = usesRelationshipStorage->getRelationshipBySecond(RelationshipType::USES, DesignEntity::CALL, variableTokenObjectTwo);
+	std::unordered_set<std::string> getUsesCallRelationshipByVarThree = usesRelationshipStorage->getRelationshipBySecond(RelationshipType::USES, DesignEntity::CALL, variableTokenObjectThree);
 	std::unordered_set<std::string> getUsesStmtRelationshipByVarOne = usesRelationshipStorage->getRelationshipBySecond(RelationshipType::USES, DesignEntity::STMT, variableTokenObject);
 	std::unordered_set<std::string> getUsesStmtRelationshipByVarTwo = usesRelationshipStorage->getRelationshipBySecond(RelationshipType::USES, DesignEntity::STMT, variableTokenObjectTwo);
 	std::unordered_set<std::string> getUsesStmtRelationshipByVarThree = usesRelationshipStorage->getRelationshipBySecond(RelationshipType::USES, DesignEntity::STMT, variableTokenObjectThree);
@@ -195,12 +208,15 @@ TEST_CASE("Uses Relationship Storage Test") {
 	std::unordered_set<std::string> expectedResultWhileByVarOne({ while_value_one, while_value_two });
 	std::unordered_set<std::string> expectedResultWhileByVarTwo({ while_value_two });
 	std::unordered_set<std::string> expectedResultWhileByVarThree({ while_value_one });
+	std::unordered_set<std::string> expectedResultCallByVarOne({ call_value_one, call_value_two });
+	std::unordered_set<std::string> expectedResultCallByVarTwo({ call_value_two });
+	std::unordered_set<std::string> expectedResultCallByVarThree({ call_value_one });
 	std::unordered_set<std::string> expectedResultIfByVarOne({ if_value_one, if_value_two });
 	std::unordered_set<std::string> expectedResultIfByVarTwo({ if_value_two });
 	std::unordered_set<std::string> expectedResultIfByVarThree({ if_value_one });
-	std::unordered_set<std::string> expectedResultStmtByVarOne({ assign_value_one, assign_value_two, print_value_one, print_value_two, while_value_one, while_value_two, if_value_one, if_value_two });
-	std::unordered_set<std::string> expectedResultStmtByVarTwo({ assign_value_two, print_value_two, while_value_two, if_value_two});
-	std::unordered_set<std::string> expectedResultStmtByVarThree({ assign_value_one, print_value_one, while_value_one, if_value_one });
+	std::unordered_set<std::string> expectedResultStmtByVarOne({ assign_value_one, assign_value_two, print_value_one, print_value_two, while_value_one, while_value_two, if_value_one, if_value_two, call_value_one, call_value_two });
+	std::unordered_set<std::string> expectedResultStmtByVarTwo({ assign_value_two, print_value_two, while_value_two, if_value_two, call_value_two});
+	std::unordered_set<std::string> expectedResultStmtByVarThree({ assign_value_one, print_value_one, while_value_one, if_value_one, call_value_one });
 
 	REQUIRE(usesRelationshipStorage->getRelationshipBySecond(RelationshipType::MODIFIES, DesignEntity::ASSIGN, variableTokenObject) == expectedResult3);
 	REQUIRE(usesRelationshipStorage->getRelationshipBySecond(RelationshipType::FOLLOWS, DesignEntity::ASSIGN, variableTokenObject) == expectedResult3);
@@ -223,6 +239,9 @@ TEST_CASE("Uses Relationship Storage Test") {
 	REQUIRE(getUsesIfRelationshipByVarOne == expectedResultIfByVarOne);
 	REQUIRE(getUsesIfRelationshipByVarTwo == expectedResultIfByVarTwo);
 	REQUIRE(getUsesIfRelationshipByVarThree == expectedResultIfByVarThree);
+	REQUIRE(getUsesCallRelationshipByVarOne == expectedResultCallByVarOne);
+	REQUIRE(getUsesCallRelationshipByVarTwo == expectedResultCallByVarTwo);
+	REQUIRE(getUsesCallRelationshipByVarThree == expectedResultCallByVarThree);
 	REQUIRE(getUsesStmtRelationshipByVarOne == expectedResultStmtByVarOne);
 	REQUIRE(getUsesStmtRelationshipByVarTwo == expectedResultStmtByVarTwo);
 	REQUIRE(getUsesStmtRelationshipByVarThree == expectedResultStmtByVarThree);
@@ -232,6 +251,7 @@ TEST_CASE("Uses Relationship Storage Test") {
 	std::unordered_map<std::string, std::unordered_set<std::string>> getAllPrintUsesRelationship = usesRelationshipStorage->getAllRelationship(RelationshipType::USES, DesignEntity::PRINT, DesignEntity::VARIABLE);
 	std::unordered_map<std::string, std::unordered_set<std::string>> getAllWhileUsesRelationship = usesRelationshipStorage->getAllRelationship(RelationshipType::USES, DesignEntity::WHILE, DesignEntity::VARIABLE);
 	std::unordered_map<std::string, std::unordered_set<std::string>> getAllIfUsesRelationship = usesRelationshipStorage->getAllRelationship(RelationshipType::USES, DesignEntity::IF, DesignEntity::VARIABLE);
+	std::unordered_map<std::string, std::unordered_set<std::string>> getAllCallUsesRelationship = usesRelationshipStorage->getAllRelationship(RelationshipType::USES, DesignEntity::CALL, DesignEntity::VARIABLE);
 	std::unordered_map<std::string, std::unordered_set<std::string>> getAllStmtUsesRelationship = usesRelationshipStorage->getAllRelationship(RelationshipType::USES, DesignEntity::STMT, DesignEntity::VARIABLE);
 
 	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultAllUsesNone({});
@@ -245,11 +265,14 @@ TEST_CASE("Uses Relationship Storage Test") {
 																									{ while_value_two, std::unordered_set<std::string>({variable_value_one, variable_value_two}) } };
 	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultAllUsesIf{ { if_value_one, std::unordered_set<std::string>({variable_value_one, variable_value_three}) },
 																									{ if_value_two, std::unordered_set<std::string>({variable_value_one, variable_value_two}) } };
+	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultAllUsesCall{ { call_value_one, std::unordered_set<std::string>({variable_value_one, variable_value_three}) },
+																								{ call_value_two, std::unordered_set<std::string>({variable_value_one, variable_value_two}) } };
 	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultAllUsesStmt;
 	expectedResultAllUsesStmt.insert(expectedResultAllUsesAssign.begin(), expectedResultAllUsesAssign.end());
 	expectedResultAllUsesStmt.insert(expectedResultAllUsesPrint.begin(), expectedResultAllUsesPrint.end());
 	expectedResultAllUsesStmt.insert(expectedResultAllUsesWhile.begin(), expectedResultAllUsesWhile.end());
 	expectedResultAllUsesStmt.insert(expectedResultAllUsesIf.begin(), expectedResultAllUsesIf.end());
+	expectedResultAllUsesStmt.insert(expectedResultAllUsesCall.begin(), expectedResultAllUsesCall.end());
 
 	REQUIRE(usesRelationshipStorage->getAllRelationship(RelationshipType::MODIFIES, DesignEntity::ASSIGN, DesignEntity::VARIABLE) == expectedResultAllUsesNone);
 	REQUIRE(usesRelationshipStorage->getAllRelationship(RelationshipType::FOLLOWS, DesignEntity::ASSIGN, DesignEntity::VARIABLE) == expectedResultAllUsesNone);
@@ -262,6 +285,7 @@ TEST_CASE("Uses Relationship Storage Test") {
 	REQUIRE(getAllPrintUsesRelationship == expectedResultAllUsesPrint);
 	REQUIRE(getAllWhileUsesRelationship == expectedResultAllUsesWhile);
 	REQUIRE(getAllIfUsesRelationship == expectedResultAllUsesIf);
+	REQUIRE(getAllCallUsesRelationship == expectedResultAllUsesCall);
 	REQUIRE(getAllStmtUsesRelationship == expectedResultAllUsesStmt);
 }
 
@@ -293,12 +317,22 @@ TEST_CASE("modify Relationship Storage Test") {
 	REQUIRE(modifyRelationshipStorage->storeRelationship(modifyRelationshipIfOneDuplicate));
 	REQUIRE(modifyRelationshipStorage->storeRelationship(modifyRelationshipIfTwoDuplicate));
 
+	REQUIRE(modifyRelationshipStorage->storeRelationship(modifyRelationshipCallOne));
+	REQUIRE(modifyRelationshipStorage->storeRelationship(modifyRelationshipCallTwo));
+	REQUIRE(modifyRelationshipStorage->storeRelationship(modifyRelationshipCallOneDuplicate));
+	REQUIRE(modifyRelationshipStorage->storeRelationship(modifyRelationshipCallTwoDuplicate));
+
 	REQUIRE(!modifyRelationshipStorage->storeRelationship(modifyRelationshipAssignOne));
 
 	REQUIRE(modifyRelationshipStorage->getRelationship(RelationshipType::MODIFIES, stmtTokenObject1, variableTokenObject));
 	REQUIRE(modifyRelationshipStorage->getRelationship(RelationshipType::MODIFIES, stmtTokenObject1, variableTokenObjectThree));
 	REQUIRE(modifyRelationshipStorage->getRelationship(RelationshipType::MODIFIES, stmtTokenObject7, variableTokenObject));
 	REQUIRE(modifyRelationshipStorage->getRelationship(RelationshipType::MODIFIES, stmtTokenObject7, variableTokenObjectTwo));
+
+	REQUIRE(modifyRelationshipStorage->getRelationship(RelationshipType::MODIFIES, stmtTokenObject2, variableTokenObject));
+	REQUIRE(modifyRelationshipStorage->getRelationship(RelationshipType::MODIFIES, stmtTokenObject2, variableTokenObjectThree));
+	REQUIRE(modifyRelationshipStorage->getRelationship(RelationshipType::MODIFIES, stmtTokenObject8, variableTokenObject));
+	REQUIRE(modifyRelationshipStorage->getRelationship(RelationshipType::MODIFIES, stmtTokenObject8, variableTokenObjectTwo));
 
 	REQUIRE(modifyRelationshipStorage->getRelationship(RelationshipType::MODIFIES, procedureTokenObject, variableTokenObject));
 	REQUIRE(modifyRelationshipStorage->getRelationship(RelationshipType::MODIFIES, procedureTokenObject, variableTokenObjectThree));
@@ -392,13 +426,13 @@ TEST_CASE("modify Relationship Storage Test") {
 	REQUIRE(modifyRelationshipStorage->getRelationshipByFirst(RelationshipType::PARENT_T, stmtTokenObject1, DesignEntity::VARIABLE) == expectedResult3);
 
 	REQUIRE(getModifyRelationshipByStmt1 == expectedResult1);
-	REQUIRE(getModifyRelationshipByStmt2 == expectedResult3);
+	REQUIRE(getModifyRelationshipByStmt2 == expectedResult1);
 	REQUIRE(getModifyRelationshipByStmt3 == expectedResult1);
 	REQUIRE(getModifyRelationshipByStmt4 == expectedResult3);
 	REQUIRE(getModifyRelationshipByStmt5 == expectedResult1);
 	REQUIRE(getModifyRelationshipByStmt6 == expectedResult1);
 	REQUIRE(getModifyRelationshipByStmt7 == expectedResult2);
-	REQUIRE(getModifyRelationshipByStmt8 == expectedResult3);
+	REQUIRE(getModifyRelationshipByStmt8 == expectedResult2);
 	REQUIRE(getModifyRelationshipByStmt9 == expectedResult2);
 	REQUIRE(getModifyRelationshipByStmt10 == expectedResult3);
 	REQUIRE(getModifyRelationshipByStmt11 == expectedResult2);
@@ -428,6 +462,9 @@ TEST_CASE("modify Relationship Storage Test") {
 	std::unordered_set<std::string> getModifyIfRelationshipByVarOne = modifyRelationshipStorage->getRelationshipBySecond(RelationshipType::MODIFIES, DesignEntity::IF, variableTokenObject);
 	std::unordered_set<std::string> getModifyIfRelationshipByVarTwo = modifyRelationshipStorage->getRelationshipBySecond(RelationshipType::MODIFIES, DesignEntity::IF, variableTokenObjectTwo);
 	std::unordered_set<std::string> getModifyIfRelationshipByVarThree = modifyRelationshipStorage->getRelationshipBySecond(RelationshipType::MODIFIES, DesignEntity::IF, variableTokenObjectThree);
+	std::unordered_set<std::string> getModifyCallRelationshipByVarOne = modifyRelationshipStorage->getRelationshipBySecond(RelationshipType::MODIFIES, DesignEntity::CALL, variableTokenObject);
+	std::unordered_set<std::string> getModifyCallRelationshipByVarTwo = modifyRelationshipStorage->getRelationshipBySecond(RelationshipType::MODIFIES, DesignEntity::CALL, variableTokenObjectTwo);
+	std::unordered_set<std::string> getModifyCallRelationshipByVarThree = modifyRelationshipStorage->getRelationshipBySecond(RelationshipType::MODIFIES, DesignEntity::CALL, variableTokenObjectThree);
 	std::unordered_set<std::string> getModifyStmtRelationshipByVarOne = modifyRelationshipStorage->getRelationshipBySecond(RelationshipType::MODIFIES, DesignEntity::STMT, variableTokenObject);
 	std::unordered_set<std::string> getModifyStmtRelationshipByVarTwo = modifyRelationshipStorage->getRelationshipBySecond(RelationshipType::MODIFIES, DesignEntity::STMT, variableTokenObjectTwo);
 	std::unordered_set<std::string> getModifyStmtRelationshipByVarThree = modifyRelationshipStorage->getRelationshipBySecond(RelationshipType::MODIFIES, DesignEntity::STMT, variableTokenObjectThree);
@@ -447,9 +484,12 @@ TEST_CASE("modify Relationship Storage Test") {
 	std::unordered_set<std::string> expectedResultIfByVarOne({ if_value_one, if_value_two });
 	std::unordered_set<std::string> expectedResultIfByVarTwo({ if_value_two });
 	std::unordered_set<std::string> expectedResultIfByVarThree({ if_value_one });
-	std::unordered_set<std::string> expectedResultStmtByVarOne({ assign_value_one, assign_value_two, read_value_one, read_value_two, while_value_one, while_value_two, if_value_one, if_value_two });
-	std::unordered_set<std::string> expectedResultStmtByVarTwo({ assign_value_two, read_value_two, while_value_two, if_value_two });
-	std::unordered_set<std::string> expectedResultStmtByVarThree({ assign_value_one, read_value_one, while_value_one, if_value_one });
+	std::unordered_set<std::string> expectedResultCallByVarOne({ call_value_one, call_value_two });
+	std::unordered_set<std::string> expectedResultCallByVarTwo({ call_value_two });
+	std::unordered_set<std::string> expectedResultCallByVarThree({ call_value_one });
+	std::unordered_set<std::string> expectedResultStmtByVarOne({ assign_value_one, assign_value_two, read_value_one, read_value_two, while_value_one, while_value_two, if_value_one, if_value_two, call_value_one, call_value_two });
+	std::unordered_set<std::string> expectedResultStmtByVarTwo({ assign_value_two, read_value_two, while_value_two, if_value_two, call_value_two });
+	std::unordered_set<std::string> expectedResultStmtByVarThree({ assign_value_one, read_value_one, while_value_one, if_value_one, call_value_one });
 
 	REQUIRE(modifyRelationshipStorage->getRelationshipBySecond(RelationshipType::USES, DesignEntity::ASSIGN, variableTokenObject) == expectedResult3);
 	REQUIRE(modifyRelationshipStorage->getRelationshipBySecond(RelationshipType::FOLLOWS, DesignEntity::ASSIGN, variableTokenObject) == expectedResult3);
@@ -472,6 +512,9 @@ TEST_CASE("modify Relationship Storage Test") {
 	REQUIRE(getModifyIfRelationshipByVarOne == expectedResultIfByVarOne);
 	REQUIRE(getModifyIfRelationshipByVarTwo == expectedResultIfByVarTwo);
 	REQUIRE(getModifyIfRelationshipByVarThree == expectedResultIfByVarThree);
+	REQUIRE(getModifyCallRelationshipByVarOne == expectedResultCallByVarOne);
+	REQUIRE(getModifyCallRelationshipByVarTwo == expectedResultCallByVarTwo);
+	REQUIRE(getModifyCallRelationshipByVarThree == expectedResultCallByVarThree);
 	REQUIRE(getModifyStmtRelationshipByVarOne == expectedResultStmtByVarOne);
 	REQUIRE(getModifyStmtRelationshipByVarTwo == expectedResultStmtByVarTwo);
 	REQUIRE(getModifyStmtRelationshipByVarThree == expectedResultStmtByVarThree);
@@ -481,6 +524,7 @@ TEST_CASE("modify Relationship Storage Test") {
 	std::unordered_map<std::string, std::unordered_set<std::string>> getAllReadModifyRelationship = modifyRelationshipStorage->getAllRelationship(RelationshipType::MODIFIES, DesignEntity::READ, DesignEntity::VARIABLE);
 	std::unordered_map<std::string, std::unordered_set<std::string>> getAllWhileModifyRelationship = modifyRelationshipStorage->getAllRelationship(RelationshipType::MODIFIES, DesignEntity::WHILE, DesignEntity::VARIABLE);
 	std::unordered_map<std::string, std::unordered_set<std::string>> getAllIfModifyRelationship = modifyRelationshipStorage->getAllRelationship(RelationshipType::MODIFIES, DesignEntity::IF, DesignEntity::VARIABLE);
+	std::unordered_map<std::string, std::unordered_set<std::string>> getAllCallModifyRelationship = modifyRelationshipStorage->getAllRelationship(RelationshipType::MODIFIES, DesignEntity::CALL, DesignEntity::VARIABLE);
 	std::unordered_map<std::string, std::unordered_set<std::string>> getAllStmtModifyRelationship = modifyRelationshipStorage->getAllRelationship(RelationshipType::MODIFIES, DesignEntity::STMT, DesignEntity::VARIABLE);
 
 	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultAllModifyNone({});
@@ -494,11 +538,14 @@ TEST_CASE("modify Relationship Storage Test") {
 																									{ while_value_two, std::unordered_set<std::string>({variable_value_one, variable_value_two}) } };
 	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultAllModifyIf{ { if_value_one, std::unordered_set<std::string>({variable_value_one, variable_value_three}) },
 																									{ if_value_two, std::unordered_set<std::string>({variable_value_one, variable_value_two}) } };
+	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultAllModifyCall{ { call_value_one, std::unordered_set<std::string>({variable_value_one, variable_value_three}) },
+																									{ call_value_two, std::unordered_set<std::string>({variable_value_one, variable_value_two}) } };
 	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultAllModifyStmt;
 	expectedResultAllModifyStmt.insert(expectedResultAllModifyAssign.begin(), expectedResultAllModifyAssign.end());
 	expectedResultAllModifyStmt.insert(expectedResultAllModifyRead.begin(), expectedResultAllModifyRead.end());
 	expectedResultAllModifyStmt.insert(expectedResultAllModifyWhile.begin(), expectedResultAllModifyWhile.end());
 	expectedResultAllModifyStmt.insert(expectedResultAllModifyIf.begin(), expectedResultAllModifyIf.end());
+	expectedResultAllModifyStmt.insert(expectedResultAllModifyCall.begin(), expectedResultAllModifyCall.end());
 
 	REQUIRE(modifyRelationshipStorage->getAllRelationship(RelationshipType::USES, DesignEntity::ASSIGN, DesignEntity::VARIABLE) == expectedResultAllModifyNone);
 	REQUIRE(modifyRelationshipStorage->getAllRelationship(RelationshipType::FOLLOWS, DesignEntity::ASSIGN, DesignEntity::VARIABLE) == expectedResultAllModifyNone);
@@ -511,6 +558,7 @@ TEST_CASE("modify Relationship Storage Test") {
 	REQUIRE(getAllReadModifyRelationship == expectedResultAllModifyRead);
 	REQUIRE(getAllWhileModifyRelationship == expectedResultAllModifyWhile);
 	REQUIRE(getAllIfModifyRelationship == expectedResultAllModifyIf);
+	REQUIRE(getAllCallModifyRelationship == expectedResultAllModifyCall);
 	REQUIRE(getAllStmtModifyRelationship == expectedResultAllModifyStmt);
 }
 
@@ -1949,142 +1997,6 @@ TEST_CASE("Next Relationship Storage Test") {
 	REQUIRE(whileIfAllResult == expectedResultWhileIfAll);
 	REQUIRE(ifReadAllResult == expectedResultIfReadAll);
 	REQUIRE(stmtStmtAllResult == expectedStmtStmtAll);
-}
-
-TEST_CASE("NextT Relationship Storage Test") {
-	NextRelationshipStorage* nextRelationshipStorage = new NextRelationshipStorage();
-
-	// Populate PKB
-	REQUIRE(nextRelationshipStorage->storeRelationship(nextRelationshipAssignCallOne));
-	REQUIRE(nextRelationshipStorage->storeRelationship(nextRelationshipCallIfOne));
-	REQUIRE(nextRelationshipStorage->storeRelationship(nextRelationshipIfPrintOne));
-	REQUIRE(nextRelationshipStorage->storeRelationship(nextRelationshipPrintReadOne));
-	REQUIRE(nextRelationshipStorage->storeRelationship(nextRelationshipReadWhileOne));
-
-	// Test for Next*(1, 2)
-	REQUIRE(nextRelationshipStorage->getNextTRelationship(stmtTokenObject1, stmtTokenObject6));
-	REQUIRE(nextRelationshipStorage->getNextTRelationship(stmtTokenObject2, stmtTokenObject6));
-	REQUIRE(nextRelationshipStorage->getNextTRelationship(stmtTokenObject3, stmtTokenObject6));
-	REQUIRE(nextRelationshipStorage->getNextTRelationship(stmtTokenObject2, stmtTokenObject5));
-	REQUIRE(nextRelationshipStorage->getNextTRelationship(stmtTokenObject3, stmtTokenObject4));
-	REQUIRE(!nextRelationshipStorage->getNextTRelationship(stmtTokenObject2, stmtTokenObject7));
-	REQUIRE(!nextRelationshipStorage->getNextTRelationship(stmtTokenObject3, stmtTokenObject1));
-
-	std::unordered_set<std::string> stmt_filter = {assign_value_one, call_value_one, if_value_one, print_value_one, read_value_one, while_value_one };
-	std::unordered_set<std::string> a_filter = { assign_value_one };
-	std::unordered_set<std::string> c_filter = { call_value_one };
-	std::unordered_set<std::string> if_filter = { if_value_one };
-	std::unordered_set<std::string> pr_filter = { print_value_one };
-	std::unordered_set<std::string> r_filter = { read_value_one };
-	std::unordered_set<std::string> w_filter = { while_value_one };
-
-	std::unordered_set<std::string> empty = {};
-
-	// Test for Next*(1, s)
-	std::unordered_set<std::string> expectedResultByFirstStmt = { call_value_one, if_value_one, print_value_one, read_value_one, while_value_one };
-	std::unordered_set<std::string> expectedResultByFirstPrint = { print_value_one };
-	std::unordered_set<std::string> expectedResultByFirstRead = { read_value_one };
-	std::unordered_set<std::string> expectedResultByFirstWhile = { while_value_one };
-
-	REQUIRE(nextRelationshipStorage->getNextTRelationshipByFirst(stmtTokenObject1, stmt_filter) == expectedResultByFirstStmt);
-	REQUIRE(nextRelationshipStorage->getNextTRelationshipByFirst(stmtTokenObject2, pr_filter) == expectedResultByFirstPrint);
-	REQUIRE(nextRelationshipStorage->getNextTRelationshipByFirst(stmtTokenObject3, r_filter) == expectedResultByFirstRead);
-	REQUIRE(nextRelationshipStorage->getNextTRelationshipByFirst(stmtTokenObject4, w_filter) == expectedResultByFirstWhile);
-	REQUIRE(nextRelationshipStorage->getNextTRelationshipByFirst(stmtTokenObject1, a_filter) == empty);
-
-	// Test for Next*(s, 2)
-	std::unordered_set<std::string> expectedResultBySecondStmt = { assign_value_one, call_value_one, if_value_one, print_value_one, read_value_one };
-	std::unordered_set<std::string> expectedResultBySecondAssign = { assign_value_one };
-	std::unordered_set<std::string> expectedResultBySecondCall = { call_value_one };
-	std::unordered_set<std::string> expectedResultBySecondIf = { if_value_one };
-
-	REQUIRE(nextRelationshipStorage->getNextTRelationshipBySecond(stmtTokenObject6, stmt_filter) == expectedResultBySecondStmt);
-	REQUIRE(nextRelationshipStorage->getNextTRelationshipBySecond(stmtTokenObject5, if_filter) == expectedResultBySecondIf);
-	REQUIRE(nextRelationshipStorage->getNextTRelationshipBySecond(stmtTokenObject4, c_filter) == expectedResultBySecondCall);
-	REQUIRE(nextRelationshipStorage->getNextTRelationshipBySecond(stmtTokenObject3, a_filter) == expectedResultBySecondAssign);
-	REQUIRE(nextRelationshipStorage->getNextTRelationshipBySecond(stmtTokenObject6, w_filter) == empty);
-
-	std::unordered_map<std::string, std::unordered_set<std::string>> emptyMap = {};
-	// Test for Next*(s1, s2)
-	std::unordered_map<std::string, std::unordered_set<std::string>> expectedStmtStmtAll{
-									{ assign_value_one, std::unordered_set<std::string>({call_value_one, if_value_one, print_value_one, read_value_one, while_value_one})},
-									{ call_value_one, std::unordered_set<std::string>({if_value_one, print_value_one, read_value_one, while_value_one})},
-									{ if_value_one, std::unordered_set<std::string>({print_value_one, read_value_one, while_value_one})},
-									{ print_value_one, std::unordered_set<std::string>({read_value_one, while_value_one})},
-									{ read_value_one, std::unordered_set<std::string>({while_value_one})} };
-	std::unordered_map<std::string, std::unordered_set<std::string>> expectedStmtWhileAll{
-									{ assign_value_one, std::unordered_set<std::string>({while_value_one})},
-									{ call_value_one, std::unordered_set<std::string>({while_value_one})},
-									{ if_value_one, std::unordered_set<std::string>({while_value_one})},
-									{ print_value_one, std::unordered_set<std::string>({while_value_one})},
-									{ read_value_one, std::unordered_set<std::string>({while_value_one})} };
-
-
-	REQUIRE(nextRelationshipStorage->getAllNextTRelationship(DesignEntity::STMT, stmt_filter) == expectedStmtStmtAll);
-	REQUIRE(nextRelationshipStorage->getAllNextTRelationship(DesignEntity::STMT, w_filter) == expectedStmtWhileAll);
-	REQUIRE(nextRelationshipStorage->getAllNextTRelationship(DesignEntity::WHILE, stmt_filter) == emptyMap);
-}
-
-TEST_CASE("Calls Relationship Storage Test") {
-	RelationshipStorage* callsRelationshipStorage = new CallsRelationshipStorage();
-
-	// TESTING FOR STORING
-
-	REQUIRE(callsRelationshipStorage->storeRelationship(callsRelationshipOne));
-	REQUIRE(!callsRelationshipStorage->storeRelationship(callsRelationshipOneDup));
-	REQUIRE(callsRelationshipStorage->storeRelationship(callsRelationshipTwo));
-	REQUIRE(!callsRelationshipStorage->storeRelationship(callsRelationshipTwoDup));
-	REQUIRE(callsRelationshipStorage->storeRelationship(callsRelationshipThree));
-	REQUIRE(!callsRelationshipStorage->storeRelationship(callsRelationshipThreeDup));
-
-	REQUIRE(!callsRelationshipStorage->storeRelationship(followsRelationshipAssignAssignOne));
-
-	// Testing for Calls("proc1", "proc2") query
-	REQUIRE(callsRelationshipStorage->getRelationship(RelationshipType::CALLS, procedureTokenObject, procedureTokenObjectTwo));
-	REQUIRE(callsRelationshipStorage->getRelationship(RelationshipType::CALLS, procedureTokenObject, procedureTokenObjectThree));
-	REQUIRE(callsRelationshipStorage->getRelationship(RelationshipType::CALLS, procedureTokenObjectTwo, procedureTokenObjectThree));
-	REQUIRE(!callsRelationshipStorage->getRelationship(RelationshipType::CALLS, procedureTokenObject, procedureTokenObjectFour));
-
-	REQUIRE(!callsRelationshipStorage->getRelationship(RelationshipType::FOLLOWS, procedureTokenObject, procedureTokenObjectTwo));
-
-	//Testing for Calls("proc1", p)
-	std::unordered_set<std::string> emptySet{};
-
-	std::unordered_set<std::string> getRelationshipByFirstTest1{ procedure_value_two, procedure_value_three };
-	std::unordered_set<std::string> getRelationshipByFirstTest2{ procedure_value_three };
-
-	REQUIRE(callsRelationshipStorage->getRelationshipByFirst(RelationshipType::CALLS, procedureTokenObject, DesignEntity::PROCEDURE) == getRelationshipByFirstTest1);
-	REQUIRE(callsRelationshipStorage->getRelationshipByFirst(RelationshipType::CALLS, procedureTokenObjectTwo, DesignEntity::PROCEDURE) == getRelationshipByFirstTest2);
-	REQUIRE(callsRelationshipStorage->getRelationshipByFirst(RelationshipType::CALLS, procedureTokenObjectThree, DesignEntity::PROCEDURE) == emptySet);
-
-	REQUIRE(callsRelationshipStorage->getRelationshipByFirst(RelationshipType::FOLLOWS, procedureTokenObject, DesignEntity::PROCEDURE) == emptySet);
-
-	//Testing for Calls(p, "proc2")
-	std::unordered_set<std::string> getRelationshipBySecondTest1{ procedure_value_one, procedure_value_two };
-	std::unordered_set<std::string> getRelationshipBySecondTest2{ procedure_value_one };
-
-	REQUIRE(callsRelationshipStorage->getRelationshipBySecond(RelationshipType::CALLS, DesignEntity::PROCEDURE, procedureTokenObject) == emptySet);
-	REQUIRE(callsRelationshipStorage->getRelationshipBySecond(RelationshipType::CALLS, DesignEntity::PROCEDURE, procedureTokenObjectTwo) == getRelationshipBySecondTest2);
-	REQUIRE(callsRelationshipStorage->getRelationshipBySecond(RelationshipType::CALLS, DesignEntity::PROCEDURE, procedureTokenObjectThree) == getRelationshipBySecondTest1);
-
-	REQUIRE(callsRelationshipStorage->getRelationshipBySecond(RelationshipType::FOLLOWS, DesignEntity::PROCEDURE, procedureTokenObjectThree) == emptySet);
-
-	//Testing for Calls(p1, p2)
-	std::unordered_map<std::string, std::unordered_set<std::string>> emptyMap{};
-	std::unordered_map<std::string, std::unordered_set<std::string>> getAllRelationshipTestAll{
-										{ procedure_value_one, std::unordered_set<std::string>({procedure_value_two, procedure_value_three})},
-										{ procedure_value_two, std::unordered_set<std::string>({procedure_value_three})}, };
-
-
-	std::unordered_map<std::string, std::unordered_set<std::string>> getAllRelationshipResult = callsRelationshipStorage->getAllRelationship(RelationshipType::CALLS,
-		DesignEntity::PROCEDURE, DesignEntity::PROCEDURE);
-
-	std::unordered_map<std::string, std::unordered_set<std::string>> getAllRelationshipEmptyResult = callsRelationshipStorage->getAllRelationship(RelationshipType::FOLLOWS,
-		DesignEntity::PROCEDURE, DesignEntity::PROCEDURE);
-
-
-	REQUIRE(getAllRelationshipResult == getAllRelationshipTestAll);
-	REQUIRE(getAllRelationshipEmptyResult == emptyMap);
 }
 
 TEST_CASE("Calls* Relationship Storage Test") {

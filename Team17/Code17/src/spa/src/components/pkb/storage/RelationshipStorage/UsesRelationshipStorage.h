@@ -1,12 +1,6 @@
 #pragma once
-#include <unordered_set>
-#include <unordered_map>
-#include <string>
-#include "models/Relationship/Relationship.h"
-#include "models/Relationship/RelationshipType.h"
 #include "RelationshipStorage.h"
-#include "../../../qps/query_preprocessor/query_tokenizer/TokenType.h"
-#include "../../../qps/query_preprocessor/query_tokenizer/TokenObject.h"
+
 
 class UsesRelationshipStorage : public RelationshipStorage {
 
@@ -19,7 +13,8 @@ public:
 	std::unordered_map<std::string, std::unordered_set<std::string>> getAllRelationship(RelationshipType relType, DesignEntity returnType1, DesignEntity returnType2);
 
 private:
-	std::unordered_map<std::string, std::unordered_set<std::string>>* getRelationshipMap(DesignEntity designEntity, bool isForward);
+	std::unordered_map<std::string, std::unordered_set<std::string>>* getStorageForward(DesignEntity designEntity);
+	std::unordered_map<std::string, std::unordered_set<std::string>>* getStorageBackward(DesignEntity designEntity);
 	std::unordered_set<std::string>* getSetByFirst(TokenObject firstArgument);
 	std::unordered_set<std::string>* getSetBySecond(TokenObject secondArgument);
 	// To answer Uses(1, "x"), Uses(1, v)
@@ -28,6 +23,7 @@ private:
 	std::unordered_map<std::string, std::unordered_set<std::string>> ifForwardStorage;
 	std::unordered_map<std::string, std::unordered_set<std::string>> whileForwardStorage;
 	std::unordered_map<std::string, std::unordered_set<std::string>> procForwardStorage;
+	std::unordered_map<std::string, std::unordered_set<std::string>> callsForwardStorage;
 
 	// To answer Uses(s, "x"), Uses(a, v)
 	std::unordered_map<std::string, std::unordered_set<std::string>> procBackwardStorage;
@@ -35,4 +31,5 @@ private:
 	std::unordered_map<std::string, std::unordered_set<std::string>> printBackwardStorage;
 	std::unordered_map<std::string, std::unordered_set<std::string>> ifBackwardStorage;
 	std::unordered_map<std::string, std::unordered_set<std::string>> whileBackwardStorage;
+	std::unordered_map<std::string, std::unordered_set<std::string>> callsBackwardStorage;
 };

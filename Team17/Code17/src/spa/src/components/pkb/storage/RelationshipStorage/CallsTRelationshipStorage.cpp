@@ -1,13 +1,9 @@
 #include "CallsTRelationshipStorage.h"
 #include "models/Relationship/CallsTRelationship.h"
-#include "models/Entity/ProcedureEntity.h"
 #include "utils.h"
-#include "typeinfo"
 
 // Note that every DesignEntity passed in here is assume as Procedure
-CallsTRelationshipStorage::CallsTRelationshipStorage() : RelationshipStorage(),
-														procForwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()),
-														procBackwardStorage(std::unordered_map<std::string, std::unordered_set<std::string>>()) {}
+CallsTRelationshipStorage::CallsTRelationshipStorage() : RelationshipStorage() {}
 
 bool CallsTRelationshipStorage::storeRelationship(Relationship* rel) {
 	CallsTRelationship* callsTRelationship = dynamic_cast<CallsTRelationship*>(rel);

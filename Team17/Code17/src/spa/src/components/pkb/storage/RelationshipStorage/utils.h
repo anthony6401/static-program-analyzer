@@ -13,19 +13,21 @@
 #include "models/Entity/VariableEntity.h"
 #include "models/Entity/WhileEntity.h"
 #include <string>
+#include <iostream>
 
 class RelationshipUtils {
 public:
-	static bool insertEntity(std::unordered_map<std::string, std::unordered_set<std::string>>* map, std::string& leftValueTest, std::string& rightValueTest) {
+	static bool insertEntity(std::unordered_map<std::string, std::unordered_set<std::string>>* map, std::string& leftValue, std::string& rightValue) {
 		if (map == nullptr) {
 			return false;
 		}
 
-		if (map->find(leftValueTest) == map->end()) {
-			map->insert({ leftValueTest, std::unordered_set<std::string>() });
+		if (map->find(leftValue) == map->end()) {
+			map->insert({ leftValue, std::unordered_set<std::string>() });
 		}
 
-		return map->find(leftValueTest)->second.insert(rightValueTest).second;
+		std::unordered_map<std::string, std::unordered_set<std::string>>::iterator it = map->find(leftValue);
+		return it->second.insert(rightValue).second;
 	}
 
 	static DesignEntity entityToDesignEntity(Entity* entity) {

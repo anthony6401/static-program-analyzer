@@ -1,5 +1,4 @@
 #include "WhileEntityStorage.h"
-#include <typeinfo>
 #include "models/Entity/WhileEntity.h"
 
 WhileEntityStorage::WhileEntityStorage() : EntityStorage() {}

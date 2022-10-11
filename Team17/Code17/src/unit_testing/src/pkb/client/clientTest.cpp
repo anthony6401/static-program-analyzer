@@ -129,6 +129,30 @@ TEST_CASE("QPS Client test") {
 	REQUIRE(printMappingTest == printMappingResult);
 	REQUIRE(readMappingTest == readMappingResult);
 
+	std::unordered_set<std::string> callGetStmtByNameTest = qpsClient.getStatementByName(procedure_value_one, DesignEntity::CALL);
+	std::unordered_set<std::string> printGetStmtByNameTest = qpsClient.getStatementByName(variable_value_one, DesignEntity::PRINT);
+	std::unordered_set<std::string> readGetStmtByNameTest = qpsClient.getStatementByName(variable_value_one, DesignEntity::READ);
+
+	std::unordered_set<std::string> callGetStmtByNameExpectedResult({ call_value_one });
+	std::unordered_set<std::string> printGetStmtByNameExpectedResult({ print_value_one });
+	std::unordered_set<std::string> readGetStmtByNameExpectedResult({ read_value_one });
+
+	REQUIRE(callGetStmtByNameTest == callGetStmtByNameExpectedResult);
+	REQUIRE(printGetStmtByNameTest == printGetStmtByNameExpectedResult);
+	REQUIRE(readGetStmtByNameTest == readGetStmtByNameExpectedResult);
+
+	std::unordered_set<std::string> callGetAllNameTest = qpsClient.getAllName(DesignEntity::CALL);
+	std::unordered_set<std::string> printGetAllNameTest = qpsClient.getAllName(DesignEntity::PRINT);
+	std::unordered_set<std::string> readGetAllNameTest = qpsClient.getAllName(DesignEntity::READ);
+
+	std::unordered_set<std::string> callGetAllNameExpectedResult({ procedure_value_one });
+	std::unordered_set<std::string> printGetAllNameExpectedResult({ variable_value_one });
+	std::unordered_set<std::string> readGetAllNameExpectedResult({ variable_value_one });
+
+	REQUIRE(callGetAllNameTest == callGetAllNameExpectedResult);
+	REQUIRE(printGetAllNameTest == printGetAllNameExpectedResult);
+	REQUIRE(readGetAllNameTest == readGetAllNameExpectedResult);
+
 	//Pattern
 	//ASSIGN
 	std::unordered_set<std::string> assignGetPatternNameNameOne = qpsClient.getPattern(DesignEntity::ASSIGN, assignPatternTokenObjectFirstOne, assignPatternTokenObjectSecondOne);

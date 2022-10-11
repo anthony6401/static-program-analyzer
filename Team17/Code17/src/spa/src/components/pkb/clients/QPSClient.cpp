@@ -1,12 +1,5 @@
 #include "QPSClient.h"
 
-#include "models/Entity/DesignEntity.h"
-
-#include "../pkb.h"
-
-#include <string>
-#include <unordered_set>
-
 QPSClient::QPSClient(PKB* knowledge) {
 	pkb = knowledge;
 }
@@ -45,4 +38,12 @@ std::vector<std::pair<std::string, std::string>> QPSClient::getContainerPatternP
 }
 std::string QPSClient::getStatementMapping(std::string& stmtNumber, DesignEntity entityType) {
 	return pkb->getStatementMapping(stmtNumber, entityType);
+}
+
+std::unordered_set<std::string> QPSClient::getStatementByName(std::string& name, DesignEntity entityType) {
+	return pkb->getStatementByName(name, entityType);
+}
+
+std::unordered_set<std::string> QPSClient::getAllName(DesignEntity entityType) {
+	return pkb->getAllName(entityType);
 }

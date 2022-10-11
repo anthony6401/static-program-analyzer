@@ -1,13 +1,7 @@
 #include "PatternManager.h"
-#include "models/Pattern/Pattern.h"
-#include "models/Entity/DesignEntity.h"
 #include "../storage/PatternStorage/AssignPatternStorage.h"
 #include "../storage/PatternStorage/IfPatternStorage.h"
 #include "../storage/PatternStorage/WhilePatternStorage.h"
-
-#include "../../qps/query_preprocessor/query_tokenizer/TokenType.h"
-
-#include <unordered_set>
 
 PatternManager::PatternManager() {
 	AssignPatternStorage* assignStorage = new AssignPatternStorage();
@@ -38,7 +32,7 @@ std::unordered_set<std::string> PatternManager::getPattern(DesignEntity designEn
 
 	for (auto& pt : patternStorage) {
 		ret = pt->getPattern(designEntity, firstArgument, secondArgument);
-		;if (ret.size() != 0) {
+		if (ret.size() != 0) {
 			return ret;
 		}
 	}

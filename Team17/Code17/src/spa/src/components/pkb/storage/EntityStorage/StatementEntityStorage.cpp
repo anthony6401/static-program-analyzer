@@ -1,5 +1,4 @@
 #include "StatementEntityStorage.h"
-#include <typeinfo>
 #include "models/Entity/StatementEntity.h"
 
 StatementEntityStorage::StatementEntityStorage() : EntityStorage() {}

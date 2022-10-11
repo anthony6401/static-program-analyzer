@@ -1,17 +1,5 @@
 #pragma once
-#include "models/Relationship/Relationship.h"
-#include "models/Relationship/RelationshipType.h"
-
-#include "models/Entity/DesignEntity.h"
-
 #include "RelationshipStorage.h"
-
-#include "components/qps/query_preprocessor/query_tokenizer/TokenType.h"
-#include "components/qps/query_preprocessor/query_tokenizer/TokenObject.h"
-
-#include <unordered_set>
-#include <unordered_map>
-#include <string>
 
 class FollowsRelationshipStorage : public RelationshipStorage {
 public:
@@ -23,7 +11,15 @@ public:
 	std::unordered_map<std::string, std::unordered_set<std::string>> getAllRelationship(RelationshipType relType, DesignEntity returnType1, DesignEntity returntype2);
 
 private:
-	std::unordered_map<std::string, std::unordered_set<std::string>>* getStorage(DesignEntity left, DesignEntity right, bool isForward);
+	std::unordered_map<std::string, std::unordered_set<std::string>>* getReadSpecificEntityStorage(DesignEntity right);
+	std::unordered_map<std::string, std::unordered_set<std::string>>* getPrintSpecificEntityStorage(DesignEntity right);
+	std::unordered_map<std::string, std::unordered_set<std::string>>* getAssignSpecificEntityStorage(DesignEntity right);
+	std::unordered_map<std::string, std::unordered_set<std::string>>* getCallSpecificEntityStorage(DesignEntity right);
+	std::unordered_map<std::string, std::unordered_set<std::string>>* getWhileSpecificEntityStorage(DesignEntity right);
+	std::unordered_map<std::string, std::unordered_set<std::string>>* getIfSpecificEntityStorage(DesignEntity right);
+	std::unordered_map<std::string, std::unordered_set<std::string>>* getStmtSpecificEntityStorage(DesignEntity right);
+	std::unordered_map<std::string, std::unordered_set<std::string>>* getStorageForward(DesignEntity left, DesignEntity right);
+	std::unordered_map<std::string, std::unordered_set<std::string>>* getStorageBackward(DesignEntity left);
 
 	std::unordered_map<std::string, std::unordered_set<std::string>> readToReadForwardMap;
 	std::unordered_map<std::string, std::unordered_set<std::string>> readToPrintForwardMap;
