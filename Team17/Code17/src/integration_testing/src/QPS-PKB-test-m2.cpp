@@ -903,6 +903,20 @@ TEST_CASE("TUPLE queries with synonyms") {
         expectedResults.sort();
         REQUIRE(testResults == expectedResults);
     }
+
+    SECTION("Tuple Test 5") {
+        std::string testQuery = "read re; print p1, p2; call c; stmt s;\n "
+                                "Select <c, s> such that Uses(c, \"v\") such that Modifies(s, \"x\") such that Uses(s, \"y\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"3 6", "8 6",
+                                                  "3 7", "8 7",
+                                                  "3 15", "8 15",
+                                                  "3 3", "8 3"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
 }
 
 TEST_CASE("Tuple queries with attributes") {
@@ -987,7 +1001,8 @@ TEST_CASE("Tuple queries with attributes") {
         std::string testQuery = "read re; print p1, p2; call c; stmt s;\n "
                                 "Select <s.stmt#, re.stmt#, re.varName, p1.varName, c.stmt#> such that Uses(s, \"y\") such that Modifies(re, \"y\") and Modifies(1, \"x\") and Uses(p1, \"v\")";
         std::list<std::string> testResults;
-        std::list<std::string> expectedResults = {"7 2 z v 3", "6 2 z v 3", "15 2 z v 3", "7 2 z v 8", "6 2 z v 8", "15 2 z v 8"};
+        std::list<std::string> expectedResults = {"7 2 z v 3", "6 2 z v 3", "15 2 z v 3", "3 2 z v 3",
+                                                  "7 2 z v 8", "6 2 z v 8", "15 2 z v 8", "3 2 z v 8"};
         QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
         testResults.sort();
         expectedResults.sort();
@@ -998,7 +1013,10 @@ TEST_CASE("Tuple queries with attributes") {
 //        std::string testQuery = "read re; print p1, p2; call c; stmt s;\n "
 //                                "Select <c.stmt#, c.procName, s.stmt#> such that Uses(c, \"v\") such that Modifies(s, \"x\") such that Uses(s, \"y\")";
 //        std::list<std::string> testResults;
-//        std::list<std::string> expectedResults = {"8 Third 15", "8 Third 7"};
+//        std::list<std::string> expectedResults = {"8 Third 6", "3 Third 6", "8 Second 6", "3 Second 6",
+//                                                  "8 Third 7", "3 Third 7", "8 Second 7", "3 Second 7",
+//                                                  "8 Third 15", "3 Third 15", "8 Second 15", "3 Second 15",
+//                                                  "8 Third 3", "3 Third 3", "8 Second 3", "3 Second 3"};
 //        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
 //        testResults.sort();
 //        expectedResults.sort();
@@ -1006,6 +1024,19 @@ TEST_CASE("Tuple queries with attributes") {
 //    }
 }
 
+TEST_CASE("fhjehfje") {
+    std::string testQuery = "read re; print p1, p2; call c; stmt s;\n "
+                            "Select <c.stmt#, c.procName, s.stmt#> such that Uses(c, \"v\") such that Modifies(s, \"x\") such that Uses(s, \"y\")";
+    std::list<std::string> testResults;
+    std::list<std::string> expectedResults = {"8 Third 6", "3 Third 6", "8 Second 6", "3 Second 6",
+                                              "8 Third 7", "3 Third 7", "8 Second 7", "3 Second 7",
+                                              "8 Third 15", "3 Third 15", "8 Second 15", "3 Second 15",
+                                              "8 Third 3", "3 Third 3", "8 Second 3", "3 Second 3"};
+    QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+    testResults.sort();
+    expectedResults.sort();
+    REQUIRE(testResults == expectedResults);
+}
 
 TEST_CASE("Attribute queries - alternate attribute names") {
     SECTION("Attribute Test 1") {

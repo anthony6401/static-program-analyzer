@@ -118,11 +118,14 @@ std::unordered_set<std::string> ResultTable::getTupleResultsToBePopulated(std::v
                 }
             }
         }
+
         result.insert(ResultTable::formTupleResultString(newResultSublist));
     }
 
     return result;
 }
+
+// 3
 
 std::string ResultTable::formTupleResultString(std::vector<std::string> newResultsList) {
     std::string tupleResultString;
