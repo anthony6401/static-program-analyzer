@@ -426,7 +426,7 @@ TEST_CASE("Single clause query - pattern") {
 
     Select expectedSelect = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("v")) });
     std::vector<SuchThat> expectedSuchThat{};
-    std::vector<Pattern> expectedPattern{ Pattern("a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x"))};
+    std::vector<Pattern> expectedPattern{ Pattern(TokenType::ASSIGN, "a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x"))};
     std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"v", DesignEntity::VARIABLE}, {"a", DesignEntity::ASSIGN}};
     int expectedNumOfDeclaredSynonyms = 2;
 
@@ -459,8 +459,109 @@ TEST_CASE("Single clause query - pattern with synonym name pattern") {
 
     Select expectedSelect = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("pattern")) });
     std::vector<SuchThat> expectedSuchThat{};
-    std::vector<Pattern> expectedPattern{ Pattern("a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
+    std::vector<Pattern> expectedPattern{ Pattern(TokenType::ASSIGN, "a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
     std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"pattern", DesignEntity::VARIABLE}, {"a", DesignEntity::ASSIGN} };
+    int expectedNumOfDeclaredSynonyms = 2;
+
+    QueryObject expectedResult = QueryObject(expectedSelect, expectedSuchThat, expectedPattern, expectedMappedSynonyms, expectedNumOfDeclaredSynonyms);
+
+    Parser parser = Parser(testTokenObject);
+    QueryObject actualResult = parser.parse();
+
+    REQUIRE(expectedResult == actualResult);
+};
+
+TEST_CASE("Single clause query - while pattern") {
+    std::vector<TokenObject> testTokenObject{
+        TokenObject(TokenType::VARIABLE, std::string("variable")),
+        TokenObject(TokenType::PATTERN, std::string("pattern")),
+        TokenObject(TokenType::SEMI_COLON, std::string(";")),
+        TokenObject(TokenType::WHILE, std::string("while")),
+        TokenObject(TokenType::NAME, std::string("w")),
+        TokenObject(TokenType::SEMI_COLON, std::string(";")),
+        TokenObject(TokenType::SELECT, std::string("Select")),
+        TokenObject(TokenType::PATTERN, std::string("pattern")),
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::NAME, "w"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+
+    Select expectedSelect = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("pattern")) });
+    std::vector<SuchThat> expectedSuchThat{};
+    std::vector<Pattern> expectedPattern{ Pattern(TokenType::WHILE, "w", TokenObject(TokenType::NAME_WITH_QUOTATION, "x"), TokenObject(TokenType::WILDCARD, "_")) };
+    std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"pattern", DesignEntity::VARIABLE}, {"w", DesignEntity::WHILE} };
+    int expectedNumOfDeclaredSynonyms = 2;
+
+    QueryObject expectedResult = QueryObject(expectedSelect, expectedSuchThat, expectedPattern, expectedMappedSynonyms, expectedNumOfDeclaredSynonyms);
+
+    Parser parser = Parser(testTokenObject);
+    QueryObject actualResult = parser.parse();
+
+    REQUIRE(expectedResult == actualResult);
+};
+
+TEST_CASE("Single clause query - assign pattern with while syntax") {
+    std::vector<TokenObject> testTokenObject{
+        TokenObject(TokenType::VARIABLE, std::string("variable")),
+        TokenObject(TokenType::PATTERN, std::string("pattern")),
+        TokenObject(TokenType::SEMI_COLON, std::string(";")),
+        TokenObject(TokenType::ASSIGN, std::string("assign")),
+        TokenObject(TokenType::NAME, std::string("w")),
+        TokenObject(TokenType::SEMI_COLON, std::string(";")),
+        TokenObject(TokenType::SELECT, std::string("Select")),
+        TokenObject(TokenType::PATTERN, std::string("pattern")),
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::NAME, "w"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+
+    Select expectedSelect = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("pattern")) });
+    std::vector<SuchThat> expectedSuchThat{};
+    std::vector<Pattern> expectedPattern{ Pattern(TokenType::WHILE, "w", TokenObject(TokenType::NAME_WITH_QUOTATION, "x"), TokenObject(TokenType::WILDCARD, "_")) };
+    std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"pattern", DesignEntity::VARIABLE}, {"w", DesignEntity::ASSIGN} };
+    int expectedNumOfDeclaredSynonyms = 2;
+
+    QueryObject expectedResult = QueryObject(expectedSelect, expectedSuchThat, expectedPattern, expectedMappedSynonyms, expectedNumOfDeclaredSynonyms);
+
+    Parser parser = Parser(testTokenObject);
+    QueryObject actualResult = parser.parse();
+
+    REQUIRE(expectedResult == actualResult);
+};
+
+TEST_CASE("Single clause query - if pattern") {
+    std::vector<TokenObject> testTokenObject{
+        TokenObject(TokenType::VARIABLE, std::string("variable")),
+        TokenObject(TokenType::PATTERN, std::string("pattern")),
+        TokenObject(TokenType::SEMI_COLON, std::string(";")),
+        TokenObject(TokenType::IF, std::string("if")),
+        TokenObject(TokenType::NAME, std::string("w")),
+        TokenObject(TokenType::SEMI_COLON, std::string(";")),
+        TokenObject(TokenType::SELECT, std::string("Select")),
+        TokenObject(TokenType::PATTERN, std::string("pattern")),
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::NAME, "w"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+
+    Select expectedSelect = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("pattern")) });
+    std::vector<SuchThat> expectedSuchThat{};
+    std::vector<Pattern> expectedPattern{ Pattern(TokenType::IF, "w", TokenObject(TokenType::NAME_WITH_QUOTATION, "x"), TokenObject(TokenType::WILDCARD, "_")) };
+    std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"pattern", DesignEntity::VARIABLE}, {"w", DesignEntity::IF} };
     int expectedNumOfDeclaredSynonyms = 2;
 
     QueryObject expectedResult = QueryObject(expectedSelect, expectedSuchThat, expectedPattern, expectedMappedSynonyms, expectedNumOfDeclaredSynonyms);
@@ -605,7 +706,7 @@ TEST_CASE("Multi clause query") {
 
     Select expectedSelect = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("v")) });
     std::vector<SuchThat> expectedSuchThat{ SuchThat(TokenType::USES, TokenObject(TokenType::INTEGER, "6"), TokenObject(TokenType::NAME, "v")) };
-    std::vector<Pattern> expectedPattern{ Pattern("a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
+    std::vector<Pattern> expectedPattern{ Pattern(TokenType::ASSIGN, "a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
     std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"v", DesignEntity::VARIABLE}, {"a", DesignEntity::ASSIGN} };
     int expectedNumOfDeclaredSynonyms = 2;
 
@@ -646,7 +747,7 @@ TEST_CASE("Muti-clause query - synonym name is same as design entity") {
 
     Select expectedSelect = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("variable")) });
     std::vector<SuchThat> expectedSuchThat{ SuchThat(TokenType::USES, TokenObject(TokenType::INTEGER, "6"), TokenObject(TokenType::NAME, "variable")) };
-    std::vector<Pattern> expectedPattern{ Pattern("assign", TokenObject(TokenType::NAME, std::string("variable")), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
+    std::vector<Pattern> expectedPattern{ Pattern(TokenType::ASSIGN, "assign", TokenObject(TokenType::NAME, std::string("variable")), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
     std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"variable", DesignEntity::VARIABLE}, {"assign", DesignEntity::ASSIGN} };
     int expectedNumOfDeclaredSynonyms = 2;
 
@@ -691,7 +792,7 @@ TEST_CASE("Muti-clause query - synonym name is same as other clause tokens") {
 
     Select expectedSelect = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("Select")) });
     std::vector<SuchThat> expectedSuchThat{ SuchThat(TokenType::USES, TokenObject(TokenType::INTEGER, "6"), TokenObject(TokenType::NAME, "such")) };
-    std::vector<Pattern> expectedPattern{ Pattern("assign", TokenObject(TokenType::NAME, std::string("Follows")), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
+    std::vector<Pattern> expectedPattern{ Pattern(TokenType::ASSIGN, "assign", TokenObject(TokenType::NAME, std::string("Follows")), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
     std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"such", DesignEntity::VARIABLE}, {"Follows", DesignEntity::VARIABLE}, {"Select", DesignEntity::VARIABLE},{"assign", DesignEntity::ASSIGN} };
     int expectedNumOfDeclaredSynonyms = 4;
 
@@ -736,7 +837,7 @@ TEST_CASE("Muti-clause query - synonym name is same as new Calls and Next tokens
 
     Select expectedSelect = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("Next")) });
     std::vector<SuchThat> expectedSuchThat{ SuchThat(TokenType::USES, TokenObject(TokenType::INTEGER, "6"), TokenObject(TokenType::NAME, "Calls")) };
-    std::vector<Pattern> expectedPattern{ Pattern("assign", TokenObject(TokenType::NAME, std::string("Next")), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
+    std::vector<Pattern> expectedPattern{ Pattern(TokenType::ASSIGN, "assign", TokenObject(TokenType::NAME, std::string("Next")), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
     std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"Calls", DesignEntity::VARIABLE}, {"Next", DesignEntity::VARIABLE}, {"Select", DesignEntity::VARIABLE},{"assign", DesignEntity::ASSIGN} };
     int expectedNumOfDeclaredSynonyms = 4;
 
@@ -777,14 +878,14 @@ TEST_CASE("Multi clause query - return type is not used in other clauses") {
     TokenObject(TokenType::OPEN_BRACKET, "("),
     TokenObject(TokenType::NAME, std::string("v1")),
     TokenObject(TokenType::COMMA, ","),
-    TokenObject(TokenType::WILDCARD, "_"),
+    TokenObject(TokenType::EXPRESSION, "expr"),
     TokenObject(TokenType::CLOSED_BRACKET, ")")
     };
 
 
     Select expectedSelect = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("v")) });
     std::vector<SuchThat> expectedSuchThat{ SuchThat(TokenType::FOLLOWS, TokenObject(TokenType::INTEGER, "6"),TokenObject(TokenType::WILDCARD, "_")) };
-    std::vector<Pattern> expectedPattern{ Pattern("a", TokenObject(TokenType::NAME, "v1"), TokenObject(TokenType::WILDCARD, "_")) };
+    std::vector<Pattern> expectedPattern{ Pattern(TokenType::ASSIGN, "a", TokenObject(TokenType::NAME, "v1"), TokenObject(TokenType::EXPRESSION, "expr")) };
     std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"v", DesignEntity::VARIABLE}, {"v1", DesignEntity::VARIABLE}, {"a", DesignEntity::ASSIGN}, {"c", DesignEntity::CALL} };
     int expectedNumOfDeclaredSynonyms = 4;
 
@@ -970,7 +1071,7 @@ TEST_CASE("Multi clause query - 2 such that with 1 pattern in the middle") {
     Select expectedSelect = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("v")) });
     std::vector<SuchThat> expectedSuchThat{ SuchThat(TokenType::USES, TokenObject(TokenType::INTEGER, "6"), TokenObject(TokenType::NAME, "v")),
         SuchThat(TokenType::USES, TokenObject(TokenType::INTEGER, "6"), TokenObject(TokenType::NAME, "v")) };
-    std::vector<Pattern> expectedPattern{ Pattern("a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
+    std::vector<Pattern> expectedPattern{ Pattern(TokenType::ASSIGN, "a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
     std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"v", DesignEntity::VARIABLE}, {"a", DesignEntity::ASSIGN} };
     int expectedNumOfDeclaredSynonyms = 2;
 
@@ -1026,9 +1127,9 @@ TEST_CASE("Multi clause query - and as select synonym") {
 
     Select expectedSelect = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("and")) });
     std::vector<SuchThat> expectedSuchThat{ SuchThat(TokenType::USES, TokenObject(TokenType::INTEGER, "6"), TokenObject(TokenType::NAME, "and"))};
-    std::vector<Pattern> expectedPattern{Pattern("a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")), 
-        Pattern("pattern", TokenObject(TokenType::NAME, "pattern"), TokenObject(TokenType::EXPRESSION, "x")),
-        Pattern("and", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
+    std::vector<Pattern> expectedPattern{Pattern(TokenType::ASSIGN, "a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")), 
+        Pattern(TokenType::ASSIGN, "pattern", TokenObject(TokenType::NAME, "pattern"), TokenObject(TokenType::EXPRESSION, "x")),
+        Pattern(TokenType::ASSIGN, "and", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
     std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"a", DesignEntity::ASSIGN}, {"and", DesignEntity::ASSIGN}, {"pattern", DesignEntity::ASSIGN}, };
     int expectedNumOfDeclaredSynonyms = 3;
 
@@ -1094,9 +1195,9 @@ TEST_CASE("Multi clause query - pattern and such that clause with same pattern a
     Select expectedSelect = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("v")) });
     std::vector<SuchThat> expectedSuchThat{ SuchThat(TokenType::USES, TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")),
         SuchThat(TokenType::USES, TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
-    std::vector<Pattern> expectedPattern{ Pattern("a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")), 
-        Pattern("pattern", TokenObject(TokenType::NAME, "pattern"), TokenObject(TokenType::EXPRESSION, "x")),
-        Pattern("Uses", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
+    std::vector<Pattern> expectedPattern{ Pattern(TokenType::ASSIGN, "a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")), 
+        Pattern(TokenType::ASSIGN, "pattern", TokenObject(TokenType::NAME, "pattern"), TokenObject(TokenType::EXPRESSION, "x")),
+        Pattern(TokenType::ASSIGN, "Uses", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
     std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"v", DesignEntity::VARIABLE}, {"a", DesignEntity::ASSIGN}, {"Uses", DesignEntity::ASSIGN} };
     int expectedNumOfDeclaredSynonyms = 3;
 
@@ -1105,11 +1206,7 @@ TEST_CASE("Multi clause query - pattern and such that clause with same pattern a
     Parser parser = Parser(testTokenObject);
     QueryObject actualResult = parser.parse();
 
-    //REQUIRE(expectedResult == actualResult);
-    REQUIRE(expectedResult.getSelect() == actualResult.getSelect());
-    REQUIRE(expectedResult.getRelationships() == actualResult.getRelationships());
-    REQUIRE(expectedResult.getPattern() == actualResult.getPattern());
-    REQUIRE(expectedResult.getSynonymToDesignEntityMap() == actualResult.getSynonymToDesignEntityMap());
+    REQUIRE(expectedResult == actualResult);
 };
 
 TEST_CASE("Multi clause query - 2 pattern clause 1 such that clause in the middle") {
@@ -1148,8 +1245,8 @@ TEST_CASE("Multi clause query - 2 pattern clause 1 such that clause in the middl
 
     Select expectedSelect = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("v")) });
     std::vector<SuchThat> expectedSuchThat{ SuchThat(TokenType::USES, TokenObject(TokenType::INTEGER, "6"), TokenObject(TokenType::NAME, "v")) };
-    std::vector<Pattern> expectedPattern{ Pattern("a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")), 
-        Pattern("a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
+    std::vector<Pattern> expectedPattern{ Pattern(TokenType::ASSIGN, "a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")), 
+        Pattern(TokenType::ASSIGN, "a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
     std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"v", DesignEntity::VARIABLE}, {"a", DesignEntity::ASSIGN} };
     int expectedNumOfDeclaredSynonyms = 2;
 
@@ -1189,8 +1286,8 @@ TEST_CASE("Multi clause query - more than one pattern") {
 
     Select expectedSelect = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("v")) });
     std::vector<SuchThat> expectedSuchThat{};
-    std::vector<Pattern> expectedPattern{ Pattern("a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")),
-        Pattern("a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
+    std::vector<Pattern> expectedPattern{ Pattern(TokenType::ASSIGN, "a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")),
+        Pattern(TokenType::ASSIGN, "a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
     std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"v", DesignEntity::VARIABLE}, {"a", DesignEntity::ASSIGN} };
     int expectedNumOfDeclaredSynonyms = 2;
 
@@ -1230,8 +1327,8 @@ TEST_CASE("Multi clause query - more than one pattern using and clause") {
 
     Select expectedSelect = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("v")) });
     std::vector<SuchThat> expectedSuchThat{};
-    std::vector<Pattern> expectedPattern{ Pattern("a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")),
-        Pattern("a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
+    std::vector<Pattern> expectedPattern{ Pattern(TokenType::ASSIGN, "a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")),
+        Pattern(TokenType::ASSIGN, "a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
     std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"v", DesignEntity::VARIABLE}, {"a", DesignEntity::ASSIGN} };
     int expectedNumOfDeclaredSynonyms = 2;
 
@@ -1278,9 +1375,9 @@ TEST_CASE("Multi clause query - more than 2 and clause for pattern") {
 
     Select expectedSelect = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("v")) });
     std::vector<SuchThat> expectedSuchThat{};
-    std::vector<Pattern> expectedPattern{ Pattern("a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")),
-        Pattern("a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")), 
-        Pattern("a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
+    std::vector<Pattern> expectedPattern{ Pattern(TokenType::ASSIGN, "a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")),
+        Pattern(TokenType::ASSIGN, "a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")), 
+        Pattern(TokenType::ASSIGN, "a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
     std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"v", DesignEntity::VARIABLE}, {"a", DesignEntity::ASSIGN} };
     int expectedNumOfDeclaredSynonyms = 2;
 
@@ -1330,11 +1427,71 @@ TEST_CASE("Multi clause query - more than 2 and clause for pattern with new retu
         TokenObject(TokenType::NAME, std::string("a")), TokenObject(TokenType::NAME, std::string("v")), 
         TokenObject(TokenType::ATTRIBUTE_SYNONYM, std::string("a")), TokenObject(TokenType::ATTRIBUTE_NAME, std::string("value")) });
     std::vector<SuchThat> expectedSuchThat{};
-    std::vector<Pattern> expectedPattern{ Pattern("a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")),
-        Pattern("a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")),
-        Pattern("a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
+    std::vector<Pattern> expectedPattern{ Pattern(TokenType::ASSIGN, "a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")),
+        Pattern(TokenType::ASSIGN, "a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")),
+        Pattern(TokenType::ASSIGN, "a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
     std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"v", DesignEntity::VARIABLE}, {"a", DesignEntity::ASSIGN} };
     int expectedNumOfDeclaredSynonyms = 2;
+
+    QueryObject expectedResult = QueryObject(expectedSelect, expectedSuchThat, expectedPattern, expectedMappedSynonyms, expectedNumOfDeclaredSynonyms);
+
+    Parser parser = Parser(testTokenObject);
+    QueryObject actualResult = parser.parse();
+
+    REQUIRE(expectedResult == actualResult);
+};
+
+TEST_CASE("Multi clause query - more than one pattern clause with different pattern types") {
+    std::vector<TokenObject> testTokenObject{
+        TokenObject(TokenType::VARIABLE, std::string("variable")),
+        TokenObject(TokenType::NAME, std::string("v")),
+        TokenObject(TokenType::SEMI_COLON, std::string(";")),
+        TokenObject(TokenType::ASSIGN, std::string("assign")),
+        TokenObject(TokenType::IF, std::string("if")),
+        TokenObject(TokenType::SEMI_COLON, std::string(";")),
+        TokenObject(TokenType::IF, std::string("if")),
+        TokenObject(TokenType::WHILE, std::string("while")),
+        TokenObject(TokenType::SEMI_COLON, std::string(";")),
+        TokenObject(TokenType::WHILE, std::string("while")),
+        TokenObject(TokenType::ASSIGN, std::string("assign")),
+        TokenObject(TokenType::SEMI_COLON, std::string(";")),
+        TokenObject(TokenType::SELECT, std::string("Select")),
+        TokenObject(TokenType::TUPLE, std::string("<v.varName,v,a,a,v,a.value>")),
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::IF, "if"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::AND, "and"),
+        TokenObject(TokenType::ASSIGN, "assign"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::AND, "and"),
+        TokenObject(TokenType::WHILE, "while"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+
+    Select expectedSelect = Select(TokenType::TUPLE, { TokenObject(TokenType::ATTRIBUTE_SYNONYM, std::string("v")), TokenObject(TokenType::ATTRIBUTE_NAME, std::string("varName")),
+        TokenObject(TokenType::NAME, std::string("v")), TokenObject(TokenType::NAME, std::string("a")),
+        TokenObject(TokenType::NAME, std::string("a")), TokenObject(TokenType::NAME, std::string("v")),
+        TokenObject(TokenType::ATTRIBUTE_SYNONYM, std::string("a")), TokenObject(TokenType::ATTRIBUTE_NAME, std::string("value")) });
+    std::vector<SuchThat> expectedSuchThat{};
+    std::vector<Pattern> expectedPattern{ Pattern(TokenType::ASSIGN, "if", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")),
+        Pattern(TokenType::WHILE, "assign", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::WILDCARD, "_")), 
+        Pattern(TokenType::IF, "while", TokenObject(TokenType::NAME_WITH_QUOTATION, "x"), TokenObject(TokenType::WILDCARD, "_")) };
+    std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"v", DesignEntity::VARIABLE}, {"if", DesignEntity::ASSIGN}, {"while", DesignEntity::IF}, {"assign", DesignEntity::WHILE}};
+    int expectedNumOfDeclaredSynonyms = 4;
 
     QueryObject expectedResult = QueryObject(expectedSelect, expectedSuchThat, expectedPattern, expectedMappedSynonyms, expectedNumOfDeclaredSynonyms);
 
@@ -1565,8 +1722,8 @@ TEST_CASE("Multi clause query - multiple such that, pattern and with clauses") {
     std::vector<SuchThat> expectedSuchThat{ SuchThat(TokenType::MODIFIES, TokenObject(TokenType::NAME, "a"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")),
         SuchThat(TokenType::PARENT_T, TokenObject(TokenType::NAME, "w"), TokenObject(TokenType::NAME, "a")),
         SuchThat(TokenType::NEXT_T, TokenObject(TokenType::INTEGER, "1"), TokenObject(TokenType::NAME, "a")) };
-    std::vector<Pattern> expectedPattern{ Pattern("a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")),
-        Pattern("a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
+    std::vector<Pattern> expectedPattern{ Pattern(TokenType::ASSIGN, "a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")),
+        Pattern(TokenType::ASSIGN, "a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
     std::vector<With> expectedWith{ With(TokenType::NAME, TokenType::NAME,
         {TokenObject(TokenType::ATTRIBUTE_SYNONYM, std::string("with")), TokenObject(TokenType::ATTRIBUTE_NAME, std::string("varName"))},
         {TokenObject(TokenType::ATTRIBUTE_SYNONYM, std::string("c")), TokenObject(TokenType::ATTRIBUTE_NAME, std::string("procName"))}),
@@ -1744,6 +1901,56 @@ TEST_CASE("SyntaxError - SyntaxError in pattern clause") {
         TokenObject(TokenType::WILDCARD, "_"),
         TokenObject(TokenType::COMMA, ","),
         TokenObject(TokenType::INTEGER, "6"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+
+    QueryObject expectedResult = QueryObject();
+
+    Parser parser = Parser(testTokenObject);
+    QueryObject actualResult = parser.parse();
+    REQUIRE(expectedResult == actualResult);
+};
+
+TEST_CASE("SyntaxError - invalid second parameter for if pattern clause") {
+    std::vector<TokenObject> testTokenObject{
+        TokenObject(TokenType::ASSIGN, std::string("assign")),
+        TokenObject(TokenType::NAME, std::string("a")),
+        TokenObject(TokenType::SEMI_COLON, std::string(";")),
+        TokenObject(TokenType::SELECT, std::string("Select")),
+        TokenObject(TokenType::NAME, std::string("a")),
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::NAME, "a"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::EXPRESSION, "x"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+
+    QueryObject expectedResult = QueryObject();
+
+    Parser parser = Parser(testTokenObject);
+    QueryObject actualResult = parser.parse();
+    REQUIRE(expectedResult == actualResult);
+};
+
+TEST_CASE("SyntaxError - invalid third parameter for if pattern clause") {
+    std::vector<TokenObject> testTokenObject{
+        TokenObject(TokenType::ASSIGN, std::string("assign")),
+        TokenObject(TokenType::NAME, std::string("a")),
+        TokenObject(TokenType::SEMI_COLON, std::string(";")),
+        TokenObject(TokenType::SELECT, std::string("Select")),
+        TokenObject(TokenType::NAME, std::string("a")),
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::NAME, "a"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::EXPRESSION, "x"),
         TokenObject(TokenType::CLOSED_BRACKET, ")")
     };
 
@@ -2216,7 +2423,7 @@ TEST_CASE("Pattern used as name") {
 
     Select expectedSelect = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("pattern")) });
     std::vector<SuchThat> expectedSuchThat{};
-    std::vector<Pattern> expectedPattern{qps::Pattern("pattern", TokenObject(TokenType::NAME, "v"),
+    std::vector<Pattern> expectedPattern{qps::Pattern(TokenType::ASSIGN, "pattern", TokenObject(TokenType::NAME, "v"),
                                                       TokenObject(TokenType::NAME_WITH_QUOTATION, "\"expr\""))};
     std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"pattern", DesignEntity::ASSIGN},
                                                                           {"v", DesignEntity::VARIABLE}};
@@ -2525,7 +2732,7 @@ TEST_CASE("Semantically incorrect - pattern with non-assign synonym") {
  
     Select expectedSelect = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("v")) });
     std::vector<SuchThat> expectedSuchThat{};
-    std::vector<Pattern> expectedPattern{ Pattern("v", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x"))};
+    std::vector<Pattern> expectedPattern{ Pattern(TokenType::ASSIGN, "v", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x"))};
     std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"v", DesignEntity::VARIABLE}, {"a", DesignEntity::ASSIGN}};
     int expectedNumOfDeclaredSynonyms = 2;
 
@@ -2555,7 +2762,7 @@ TEST_CASE("Semantically incorrect - pattern with no assign declaration") {
 
     Select expectedSelect = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("v")) });
     std::vector<SuchThat> expectedSuchThat{};
-    std::vector<Pattern> expectedPattern{Pattern("a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x"))};
+    std::vector<Pattern> expectedPattern{Pattern(TokenType::ASSIGN, "a", TokenObject(TokenType::WILDCARD, "_"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x"))};
     std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"v", DesignEntity::VARIABLE}};
     int expectedNumOfDeclaredSynonyms = 1;
 
@@ -2588,7 +2795,7 @@ TEST_CASE("Semantically incorrect - pattern with param not declared") {
     
     Select expectedSelect = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("v")) });
     std::vector<SuchThat> expectedSuchThat{};
-    std::vector<Pattern> expectedPattern{ Pattern("a", TokenObject(TokenType::NAME, "s"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x"))};
+    std::vector<Pattern> expectedPattern{ Pattern(TokenType::ASSIGN, "a", TokenObject(TokenType::NAME, "s"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x"))};
     std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"v", DesignEntity::VARIABLE}, {"a", DesignEntity::ASSIGN} };
     int expectedNumOfDeclaredSynonyms = 2;
 
@@ -2621,7 +2828,7 @@ TEST_CASE("Semantically incorrect - first param of pattern not variable") {
 
     Select expectedSelect = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("v")) });
     std::vector<SuchThat> expectedSuchThat{};
-    std::vector<Pattern> expectedPattern{ Pattern("a", TokenObject(TokenType::NAME, "a"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
+    std::vector<Pattern> expectedPattern{ Pattern(TokenType::ASSIGN, "a", TokenObject(TokenType::NAME, "a"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
     std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"v", DesignEntity::VARIABLE}, {"a", DesignEntity::ASSIGN} };
     int expectedNumOfDeclaredSynonyms = 2;
 
@@ -2654,7 +2861,7 @@ TEST_CASE("Semantically incorrect - synonym in result clause not declared") {
 
     Select expectedSelect = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("v1")) });
     std::vector<SuchThat> expectedSuchThat{};
-    std::vector<Pattern> expectedPattern{ Pattern("a", TokenObject(TokenType::NAME_WITH_QUOTATION, "a"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
+    std::vector<Pattern> expectedPattern{ Pattern(TokenType::ASSIGN, "a", TokenObject(TokenType::NAME_WITH_QUOTATION, "a"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
     std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"v", DesignEntity::VARIABLE}, {"a", DesignEntity::ASSIGN} };
     int expectedNumOfDeclaredSynonyms = 2;
 
@@ -2687,7 +2894,7 @@ TEST_CASE("Semantically incorrect - synonym in tuple result clause not declared"
 
     Select expectedSelect = Select(TokenType::TUPLE, { TokenObject(TokenType::NAME, std::string("v1")) });
     std::vector<SuchThat> expectedSuchThat{};
-    std::vector<Pattern> expectedPattern{ Pattern("a", TokenObject(TokenType::NAME_WITH_QUOTATION, "a"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
+    std::vector<Pattern> expectedPattern{ Pattern(TokenType::ASSIGN, "a", TokenObject(TokenType::NAME_WITH_QUOTATION, "a"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
     std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"v", DesignEntity::VARIABLE}, {"a", DesignEntity::ASSIGN} };
     int expectedNumOfDeclaredSynonyms = 2;
 
@@ -2720,7 +2927,7 @@ TEST_CASE("Semantically incorrect - synonym in attribute result clause not decla
 
     Select expectedSelect = Select(TokenType::ATTRIBUTE, { TokenObject(TokenType::ATTRIBUTE_SYNONYM, std::string("v1")), TokenObject(TokenType::ATTRIBUTE_NAME, std::string("varName")) });
     std::vector<SuchThat> expectedSuchThat{};
-    std::vector<Pattern> expectedPattern{ Pattern("a", TokenObject(TokenType::NAME_WITH_QUOTATION, "a"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
+    std::vector<Pattern> expectedPattern{ Pattern(TokenType::ASSIGN, "a", TokenObject(TokenType::NAME_WITH_QUOTATION, "a"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
     std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"v", DesignEntity::VARIABLE}, {"a", DesignEntity::ASSIGN} };
     int expectedNumOfDeclaredSynonyms = 2;
 
@@ -2753,8 +2960,76 @@ TEST_CASE("Semantically incorrect - attribute name does not match attribute syno
 
     Select expectedSelect = Select(TokenType::ATTRIBUTE, { TokenObject(TokenType::ATTRIBUTE_SYNONYM, std::string("v")), TokenObject(TokenType::ATTRIBUTE_NAME, std::string("stmt#")) });
     std::vector<SuchThat> expectedSuchThat{};
-    std::vector<Pattern> expectedPattern{ Pattern("a", TokenObject(TokenType::NAME_WITH_QUOTATION, "a"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
+    std::vector<Pattern> expectedPattern{ Pattern(TokenType::ASSIGN, "a", TokenObject(TokenType::NAME_WITH_QUOTATION, "a"), TokenObject(TokenType::NAME_WITH_QUOTATION, "x")) };
     std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"v", DesignEntity::VARIABLE}, {"a", DesignEntity::ASSIGN} };
+    int expectedNumOfDeclaredSynonyms = 2;
+
+    QueryObject expectedResult = QueryObject(expectedSelect, expectedSuchThat, expectedPattern, expectedMappedSynonyms, expectedNumOfDeclaredSynonyms);
+
+    Parser parser = Parser(testTokenObject);
+    QueryObject actualResult = parser.parse();
+
+    REQUIRE(expectedResult == actualResult);
+};
+
+TEST_CASE("Semantically incorrect - non-if synonym for if pattern clause") {
+    std::vector<TokenObject> testTokenObject{
+        TokenObject(TokenType::VARIABLE, std::string("variable")),
+        TokenObject(TokenType::NAME, std::string("v")),
+        TokenObject(TokenType::SEMI_COLON, std::string(";")),
+        TokenObject(TokenType::ASSIGN, std::string("assign")),
+        TokenObject(TokenType::NAME, std::string("a")),
+        TokenObject(TokenType::SEMI_COLON, std::string(";")),
+        TokenObject(TokenType::SELECT, std::string("Select")),
+        TokenObject(TokenType::ATTRIBUTE, std::string("v.varName")),
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::NAME, "a"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "a"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+
+    Select expectedSelect = Select(TokenType::ATTRIBUTE, { TokenObject(TokenType::ATTRIBUTE_SYNONYM, std::string("v")), TokenObject(TokenType::ATTRIBUTE_NAME, std::string("varName")) });
+    std::vector<SuchThat> expectedSuchThat{};
+    std::vector<Pattern> expectedPattern{ Pattern(TokenType::IF, "a", TokenObject(TokenType::NAME_WITH_QUOTATION, "a"), TokenObject(TokenType::WILDCARD, "_")) };
+    std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"v", DesignEntity::VARIABLE}, {"a", DesignEntity::ASSIGN} };
+    int expectedNumOfDeclaredSynonyms = 2;
+
+    QueryObject expectedResult = QueryObject(expectedSelect, expectedSuchThat, expectedPattern, expectedMappedSynonyms, expectedNumOfDeclaredSynonyms);
+
+    Parser parser = Parser(testTokenObject);
+    QueryObject actualResult = parser.parse();
+
+    REQUIRE(expectedResult == actualResult);
+};
+
+TEST_CASE("Semantically incorrect - non-while synonym for while pattern clause") {
+    std::vector<TokenObject> testTokenObject{
+        TokenObject(TokenType::VARIABLE, std::string("variable")),
+        TokenObject(TokenType::NAME, std::string("v")),
+        TokenObject(TokenType::SEMI_COLON, std::string(";")),
+        TokenObject(TokenType::IF, std::string("if")),
+        TokenObject(TokenType::NAME, std::string("a")),
+        TokenObject(TokenType::SEMI_COLON, std::string(";")),
+        TokenObject(TokenType::SELECT, std::string("Select")),
+        TokenObject(TokenType::ATTRIBUTE, std::string("v.varName")),
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::NAME, "a"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "a"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+
+    Select expectedSelect = Select(TokenType::ATTRIBUTE, { TokenObject(TokenType::ATTRIBUTE_SYNONYM, std::string("v")), TokenObject(TokenType::ATTRIBUTE_NAME, std::string("varName")) });
+    std::vector<SuchThat> expectedSuchThat{};
+    std::vector<Pattern> expectedPattern{ Pattern(TokenType::WHILE, "a", TokenObject(TokenType::NAME_WITH_QUOTATION, "a"), TokenObject(TokenType::WILDCARD, "_")) };
+    std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"v", DesignEntity::VARIABLE}, {"a", DesignEntity::IF} };
     int expectedNumOfDeclaredSynonyms = 2;
 
     QueryObject expectedResult = QueryObject(expectedSelect, expectedSuchThat, expectedPattern, expectedMappedSynonyms, expectedNumOfDeclaredSynonyms);
