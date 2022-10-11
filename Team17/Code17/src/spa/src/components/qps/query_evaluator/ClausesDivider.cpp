@@ -16,11 +16,26 @@ std::vector<GroupedClause> ClauseDivider::getSelectSynonymNotPresentGroups() {
 }
 
 void ClauseDivider::divideCommonSynonymGroupsBySelect(std::shared_ptr<Clause> &selectClause) {
+    if (!commonSynonymsGroups.empty()) {
+        updateConnectedSynonymGroups();
+    }
     for (auto &gc : commonSynonymsGroups) {
         if (gc.hasCommonSynonymWithClause(selectClause)) {
             selectSynonymPresentGroups.emplace_back(gc);
         } else {
             selectSynonymNotPresentGroups.emplace_back(gc);
+        }
+    }
+}
+
+void ClauseDivider::updateConnectedSynonymGroups() {
+    for (int i = commonSynonymsGroups.size() - 1; i > 0; --i) {
+        for (int j = i - 1; j >= 0; --j) {
+            if (commonSynonymsGroups.at(j).isConnected(commonSynonymsGroups.at(i))) {
+                commonSynonymsGroups.at(j).mergeGroupedClause(commonSynonymsGroups.at(i));
+                commonSynonymsGroups.erase(commonSynonymsGroups.begin() + i);
+                break;
+            }
         }
     }
 }

@@ -50,4 +50,28 @@ ResultTable GroupedClause::evaluateGroupedClause() {
     return evaluatedGroupRawResult;
 }
 
+void GroupedClause::mergeGroupedClause(GroupedClause &clause_group) {
+    auto other_synonyms = clause_group.getAllSynonyms();
+    auto other_clauses = clause_group.getClauses();
 
+    synonyms.insert(other_synonyms.begin(), other_synonyms.end());
+    clauses.insert(clauses.end(), other_clauses.begin(), other_clauses.end());
+}
+
+
+bool GroupedClause::isConnected(GroupedClause &clause_group) {
+    // find common element
+    auto other_synonyms = clause_group.getAllSynonyms();
+    auto synonyms_it = synonyms.begin();
+    auto other_it = other_synonyms.begin();
+    while (synonyms_it!=synonyms.end() && other_it!=other_synonyms.end()) {
+        if (*synonyms_it < *other_it) {
+            ++synonyms_it;
+        } else if (*other_it < *synonyms_it) {
+            ++other_it;
+        } else {
+            return true;
+        }
+    }
+    return false;
+}

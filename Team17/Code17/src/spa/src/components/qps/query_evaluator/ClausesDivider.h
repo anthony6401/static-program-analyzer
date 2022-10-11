@@ -24,6 +24,7 @@ public:
     GroupedClause getNoSynonymsPresent();
     std::vector<GroupedClause> getSelectSynonymPresentGroups();
     std::vector<GroupedClause> getSelectSynonymNotPresentGroups();
+    void updateConnectedSynonymGroups();
     void divideCommonSynonymGroupsBySelect(std::shared_ptr<Clause> &selectClause);
 
 };
