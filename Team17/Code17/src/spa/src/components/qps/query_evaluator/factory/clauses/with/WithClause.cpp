@@ -1,23 +1,26 @@
 #include "WithClause.h"
-#include "../select//SelectAttributeClause.h"
+#include "../select/SelectAttributeClause.h"
 #include "components/qps/query_evaluator/factory/utils/HashFunction.h"
+#include "iostream"
 
-WithClause::WithClause(qps::TokenType leftType, qps::TokenType rightType, std::vector<TokenObject> left,
+WithClause::WithClause(std::vector<TokenObject> left,
                        std::vector<TokenObject> right,
-                       std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) : leftType(leftType), rightType(rightType), left(left), right(right), synonymToDesignEntityMap(synonymToDesignEntityMap),
+                       std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) : left(left), right(right), synonymToDesignEntityMap(synonymToDesignEntityMap),
                                                                                                                       qpsClient(qpsClient) {}
 
 
 ResultTable WithClause::evaluateClause() {
-    if (leftType == TokenType::ATTRIBUTE && rightType == TokenType::ATTRIBUTE) {
+    TokenType leftType = left.front().getTokenType();
+    TokenType rightType = right.front().getTokenType();
+    if (leftType == TokenType::ATTRIBUTE_SYNONYM && rightType == TokenType::ATTRIBUTE_SYNONYM) {
         return WithClause::evaluateAttributeAttribute();
-    } else if (leftType == TokenType::ATTRIBUTE && rightType == TokenType::INTEGER) {
+    } else if (leftType == TokenType::ATTRIBUTE_SYNONYM && rightType == TokenType::INTEGER) {
         return WithClause::evaluateAttributeInteger();
-    } else if (leftType == TokenType::ATTRIBUTE && rightType == TokenType::NAME_WITH_QUOTATION) {
+    } else if (leftType == TokenType::ATTRIBUTE_SYNONYM && rightType == TokenType::NAME_WITH_QUOTATION) {
         return WithClause::evaluateAttributeNameQuotes();
-    } else if (leftType == TokenType::INTEGER && rightType == TokenType::ATTRIBUTE) {
+    } else if (leftType == TokenType::INTEGER && rightType == TokenType::ATTRIBUTE_SYNONYM) {
         return WithClause::evaluateIntegerAttribute();
-    } else if (leftType == TokenType::NAME_WITH_QUOTATION && rightType == TokenType::ATTRIBUTE) {
+    } else if (leftType == TokenType::NAME_WITH_QUOTATION && rightType == TokenType::ATTRIBUTE_SYNONYM) {
         return WithClause::evaluateNameQuotesAttribute();
     } else {
         return WithClause::evaluateIntegerOrNameQuotes();
@@ -25,6 +28,7 @@ ResultTable WithClause::evaluateClause() {
 }
 
 ResultTable WithClause::evaluateIntegerOrNameQuotes() {
+    std::cout << "IN WITH CLAUSE INTEGER OR NAME QUOTE:" << std::endl;
     std::string leftValue = left.front().getValue();
     std::string rightValue = right.front().getValue();
     if (leftValue == rightValue) {
@@ -36,6 +40,7 @@ ResultTable WithClause::evaluateIntegerOrNameQuotes() {
 
 
 ResultTable WithClause::evaluateNameQuotesAttribute() {
+    std::cout << "IN WITH CLAUSE NAMEQUOTE ATTRIBUTE:" << std::endl;
     ResultTable resultTable;
     std::string attributeSynonym = right.front().getValue();
     std::string nameQuotesValue = left.front().getValue();
@@ -68,6 +73,7 @@ ResultTable WithClause::evaluateNameQuotesAttribute() {
 
 
 ResultTable WithClause::evaluateIntegerAttribute() {
+    std::cout << "IN WITH CLAUSE INTEGER ATTRIBUTE:" << std::endl;
     ResultTable resultTable;
     std::string attributeSynonym = right.front().getValue();
     std::string integerValue = left.front().getValue();
@@ -84,6 +90,7 @@ ResultTable WithClause::evaluateIntegerAttribute() {
 }
 
 ResultTable WithClause::evaluateAttributeNameQuotes() {
+    std::cout << "IN WITH CLAUSE ATTRIBUTE NAMEQUOTE:" << std::endl;
     ResultTable resultTable;
     std::string attributeSynonym = left.front().getValue();
     std::string nameQuotesValue = right.front().getValue();
@@ -114,6 +121,7 @@ ResultTable WithClause::evaluateAttributeNameQuotes() {
 }
 
 ResultTable WithClause::evaluateAttributeInteger() {
+    std::cout << "IN WITH CLAUSE ATTRIBUTE INTEGER:" << std::endl;
     ResultTable resultTable;
     std::string attributeSynonym = left.front().getValue();
     std::string integerValue = right.front().getValue();
@@ -130,6 +138,7 @@ ResultTable WithClause::evaluateAttributeInteger() {
 }
 
 ResultTable WithClause::evaluateAttributeAttribute() {
+    std::cout << "IN WITH CLAUSE ATTRIBUTE ATTRIBUTE:" << std::endl;
     std::string leftSynonym = left.front().getValue();
     std::string rightSynonym = right.front().getValue();
     DesignEntity leftDesignEntityType = synonymToDesignEntityMap[leftSynonym];
@@ -214,12 +223,14 @@ std::unordered_set<std::pair<std::string, std::string>, hashFunction> WithClause
 }
 
 size_t WithClause::getNumberOfSynonyms() {
+    TokenType leftType = left.front().getTokenType();
+    TokenType rightType = right.front().getTokenType();
     size_t numberOfSynonyms = 0;
-    if (leftType == TokenType::ATTRIBUTE) {
+    if (leftType == TokenType::ATTRIBUTE_SYNONYM) {
         numberOfSynonyms++;
     }
 
-    if (rightType == TokenType::ATTRIBUTE) {
+    if (rightType == TokenType::ATTRIBUTE_SYNONYM) {
         numberOfSynonyms++;
     }
     return numberOfSynonyms;
@@ -227,13 +238,15 @@ size_t WithClause::getNumberOfSynonyms() {
 
 
 std::set<std::string> WithClause::getAllSynonyms() {
+    TokenType leftType = left.front().getTokenType();
+    TokenType rightType = right.front().getTokenType();
     std::set<std::string> synonyms = {};
-    if (leftType == TokenType::ATTRIBUTE) {
+    if (leftType == TokenType::ATTRIBUTE_SYNONYM) {
         std::string leftSynonym = left.front().getValue();
         synonyms.emplace(leftSynonym);
     }
 
-    if (rightType == TokenType::ATTRIBUTE) {
+    if (rightType == TokenType::ATTRIBUTE_SYNONYM) {
         std::string rightSynonym = right.front().getValue();
         synonyms.emplace(rightSynonym);
     }

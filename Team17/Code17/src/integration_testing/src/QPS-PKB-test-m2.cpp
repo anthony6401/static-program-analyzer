@@ -1226,3 +1226,70 @@ TEST_CASE("Attribute queries - non alternate attribute names") {
         REQUIRE(testResults == expectedResults);
     }
 }
+
+TEST_CASE("With clause queries") {
+    SECTION("With clause Test 1") {
+        std::string testQuery = "procedure p; call c; while w;\n "
+                                "Select p such that Calls (\"Second\", p) and Parent (w, c) with c.procName = p.procName";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"Third"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("With clause Test 2") {
+        std::string testQuery = "procedure p, q;\n "
+                                "Select p such that Calls (p, q) with q.procName = \"Third\" such that Modifies (p, \"i\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"Second"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("With clause Test 3") {
+        std::string testQuery = "procedure p, q;\n "
+                                "Select p such that Calls (p, q) with q.procName = \"Third\" and p.procName = \"Second\" such that Modifies (p, \"i\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"Second"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("With clause Test 4") {
+        std::string testQuery = "procedure p, q;\n "
+                                "Select p such that Calls (p, q) with q.procName = \"Third\" and p.procName = \"First\" such that Modifies (p, \"i\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("With clause Test 5") {
+        std::string testQuery = "procedure p, q;\n "
+                                "Select p such that Calls (p, q) with \"x\" = \"y\" such that Modifies (p, \"i\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("With clause Test 6") {
+        std::string testQuery = "read re; print p1, p2; call c; stmt s;\n "
+                                "Select s.stmt# such that Modifies(s, \"x\") such that Uses(s, \"y\") with s.stmt# = s.stmt# and 3 = 4";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("With clause Test 7") {
+        std::string testQuery = "procedure p, q;\n "
+                                "Select p such that Calls (p, q) with 3=3 such that Modifies (p, \"i\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"First", "Second"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+}

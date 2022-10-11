@@ -43,6 +43,8 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
 
 
 void Evaluator::populateResultsList(ResultTable &evaluatedResults, Select select, std::list<std::string> &results, QPSClient qpsClient, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap) {
+    std::cout << "IN POPULATE RESULTS LIST:" << std::endl;
+    std::cout << evaluatedResults << std::endl;
     std::string selectSynonym = select.getReturnValues().front().getValue();
     TokenType returnType = select.getReturnType();
     if (returnType == TokenType::BOOLEAN) {
@@ -66,7 +68,6 @@ void Evaluator::populateResultsList(ResultTable &evaluatedResults, Select select
 
     if (returnType == TokenType::TUPLE) {
         std::vector<TokenObject> tuple = select.getReturnValues();
-        std::cout << evaluatedResults << std::endl;
         std::unordered_set<std::string> resultsToPopulate = evaluatedResults.getTupleResultsToBePopulated(tuple, synonymToDesignEntityMap, qpsClient);
         for (std::string result : resultsToPopulate) {
             results.emplace_back(result);

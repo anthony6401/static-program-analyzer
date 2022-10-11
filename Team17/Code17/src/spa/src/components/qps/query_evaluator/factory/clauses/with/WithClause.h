@@ -10,15 +10,13 @@
 
 class WithClause : public Clause {
 private:
-    TokenType leftType;
-    TokenType rightType;
     std::vector<TokenObject> left;
     std::vector<TokenObject> right;
     std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap;
     QPSClient qpsClient;
 
 public:
-    WithClause(TokenType leftType, TokenType rightType, std::vector<TokenObject> left, std::vector<TokenObject> right, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
+    WithClause(std::vector<TokenObject> left, std::vector<TokenObject> right, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
     ResultTable evaluateClause() override;
     size_t getNumberOfSynonyms() override;
     std::set<std::string> getAllSynonyms() override;

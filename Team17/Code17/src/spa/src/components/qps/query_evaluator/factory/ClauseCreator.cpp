@@ -27,11 +27,11 @@
 std::shared_ptr<Clause> ClauseCreator::createClause(With with,
                                                     std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap,
                                                     QPSClient qpsClient) {
-    TokenType leftType = with.getLeftType();
-    TokenType rightType = with.getRightType();
+
     std::vector<TokenObject> left = with.getLeft();
     std::vector<TokenObject> right = with.getRight();
-    return std::make_shared<WithClause>(leftType, rightType, left, right, synonymToDesignEntityMap, qpsClient);
+
+    return std::make_shared<WithClause>(left, right, synonymToDesignEntityMap, qpsClient);
 }
 
 std::shared_ptr<Clause> ClauseCreator::createClause(Select select, std::unordered_set<std::string> &synonymsInTable, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) {
