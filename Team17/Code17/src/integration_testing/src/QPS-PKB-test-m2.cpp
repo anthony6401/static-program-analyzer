@@ -258,7 +258,6 @@ static kb::Pattern* whilePattern1 = new WhilePattern("6", "i");
 // If Pattern
 static kb::Pattern* ifPattern1 = new IfPattern("10", "x");
 
-
 static int initPKB() {
     pkb_m2->storeConstant(constant0);
     pkb_m2->storeConstant(constant1);
