@@ -7,6 +7,7 @@
 #include <unordered_map>
 #include <stdexcept>
 #include <memory>
+#include <iostream>
 
 using namespace qps;
 
@@ -133,8 +134,10 @@ bool Validator::suchThatClauseIsSemanticallyCorrect() {
 
 bool Validator::patternClauseIsSemanticallyCorrect() {
 	std::vector<Pattern> patternClause = this->parsedQuery.getPattern();
+	int index = 0;
 
-	for (Pattern pattern : patternClause) {
+	while (index < patternClause.size()) {
+		Pattern pattern = patternClause.at(index);
 		TokenType patternType = pattern.getPatternType();
 		std::string patternSynonym = pattern.getSynonym();
 		TokenObject leftParam = pattern.getLeft();
@@ -157,7 +160,7 @@ bool Validator::patternClauseIsSemanticallyCorrect() {
 				return false;
 			}
 
-			pattern.setPatternType(TokenType::ASSIGN);
+			this->parsedQuery.setPatternTypeToAssign(index);
 
 		}
 
@@ -175,6 +178,8 @@ bool Validator::patternClauseIsSemanticallyCorrect() {
 			}
 
 		}
+
+		index++;
 
 	}
 

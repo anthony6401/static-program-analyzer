@@ -596,6 +596,120 @@ TEST_CASE("First param of pattern not variable - variable v; assign a; Select v 
     REQUIRE(validatedQuery.isSemanticallyValid() == false);
 };
 
+TEST_CASE("Valid while pattern - variable v; while a; Select v pattern a(v, _)") {
+    Select select = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("v")) });
+    std::vector<SuchThat> suchThat{};
+    std::vector<qps::Pattern> pattern{ Pattern(TokenType::WHILE, "a", TokenObject(TokenType::NAME, "v"), TokenObject(TokenType::WILDCARD, "_")) };
+    std::unordered_map<std::string, DesignEntity> mappedSynonyms{ {"v", DesignEntity::VARIABLE}, {"a", DesignEntity::WHILE} };
+    int numOfDeclaredSynonyms = 2;
+
+    QueryObject testParsedQuery = QueryObject(select, suchThat, pattern, mappedSynonyms, numOfDeclaredSynonyms);
+
+
+    Validator validator = Validator(testParsedQuery);
+    QueryObject validatedQuery = validator.validate();
+
+    REQUIRE(validatedQuery.isSemanticallyValid() == true);
+};
+
+TEST_CASE("Valid if pattern - variable v; if a; Select v pattern a(v, _, _)") {
+    Select select = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("v")) });
+    std::vector<SuchThat> suchThat{};
+    std::vector<qps::Pattern> pattern{ Pattern(TokenType::IF, "a", TokenObject(TokenType::NAME, "v"), TokenObject(TokenType::WILDCARD, "_")) };
+    std::unordered_map<std::string, DesignEntity> mappedSynonyms{ {"v", DesignEntity::VARIABLE}, {"a", DesignEntity::IF} };
+    int numOfDeclaredSynonyms = 2;
+
+    QueryObject testParsedQuery = QueryObject(select, suchThat, pattern, mappedSynonyms, numOfDeclaredSynonyms);
+
+
+    Validator validator = Validator(testParsedQuery);
+    QueryObject validatedQuery = validator.validate();
+
+    REQUIRE(validatedQuery.isSemanticallyValid() == true);
+};
+
+TEST_CASE("Valid while pattern with assign synonym - variable v; assign a; Select v pattern a(v, _)") {
+    Select select = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("v")) });
+    std::vector<SuchThat> suchThat{};
+    std::vector<qps::Pattern> pattern{ Pattern(TokenType::WHILE, "a", TokenObject(TokenType::NAME, "v"), TokenObject(TokenType::WILDCARD, "_")) };
+    std::unordered_map<std::string, DesignEntity> mappedSynonyms{ {"v", DesignEntity::VARIABLE}, {"a", DesignEntity::ASSIGN} };
+    int numOfDeclaredSynonyms = 2;
+
+    QueryObject testParsedQuery = QueryObject(select, suchThat, pattern, mappedSynonyms, numOfDeclaredSynonyms);
+
+
+    Validator validator = Validator(testParsedQuery);
+    QueryObject validatedQuery = validator.validate();
+
+    REQUIRE(validatedQuery.isSemanticallyValid() == true);
+    REQUIRE(validatedQuery.getPattern()[0].getPatternType() == TokenType::ASSIGN);
+};
+
+TEST_CASE("Valid while pattern with if synonym - variable v; if a; Select v pattern a(v, _)") {
+    Select select = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("v")) });
+    std::vector<SuchThat> suchThat{};
+    std::vector<qps::Pattern> pattern{ Pattern(TokenType::WHILE, "a", TokenObject(TokenType::NAME, "v"), TokenObject(TokenType::WILDCARD, "_")) };
+    std::unordered_map<std::string, DesignEntity> mappedSynonyms{ {"v", DesignEntity::VARIABLE}, {"a", DesignEntity::IF} };
+    int numOfDeclaredSynonyms = 2;
+
+    QueryObject testParsedQuery = QueryObject(select, suchThat, pattern, mappedSynonyms, numOfDeclaredSynonyms);
+
+
+    Validator validator = Validator(testParsedQuery);
+    QueryObject validatedQuery = validator.validate();
+
+    REQUIRE(validatedQuery.isSemanticallyValid() == false);
+};
+
+TEST_CASE("Valid if pattern with while synonym - variable v; if a; Select v pattern a(v, _, _)") {
+    Select select = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("v")) });
+    std::vector<SuchThat> suchThat{};
+    std::vector<qps::Pattern> pattern{ Pattern(TokenType::IF, "a", TokenObject(TokenType::NAME, "v"), TokenObject(TokenType::WILDCARD, "_")) };
+    std::unordered_map<std::string, DesignEntity> mappedSynonyms{ {"v", DesignEntity::VARIABLE}, {"a", DesignEntity::WHILE} };
+    int numOfDeclaredSynonyms = 2;
+
+    QueryObject testParsedQuery = QueryObject(select, suchThat, pattern, mappedSynonyms, numOfDeclaredSynonyms);
+
+
+    Validator validator = Validator(testParsedQuery);
+    QueryObject validatedQuery = validator.validate();
+
+    REQUIRE(validatedQuery.isSemanticallyValid() == false);
+};
+
+TEST_CASE("Valid if pattern with assign synonym - variable v; if a; Select v pattern a(v, _, _)") {
+    Select select = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("v")) });
+    std::vector<SuchThat> suchThat{};
+    std::vector<qps::Pattern> pattern{ Pattern(TokenType::IF, "a", TokenObject(TokenType::NAME, "v"), TokenObject(TokenType::WILDCARD, "_")) };
+    std::unordered_map<std::string, DesignEntity> mappedSynonyms{ {"v", DesignEntity::VARIABLE}, {"a", DesignEntity::ASSIGN} };
+    int numOfDeclaredSynonyms = 2;
+
+    QueryObject testParsedQuery = QueryObject(select, suchThat, pattern, mappedSynonyms, numOfDeclaredSynonyms);
+
+
+    Validator validator = Validator(testParsedQuery);
+    QueryObject validatedQuery = validator.validate();
+
+    REQUIRE(validatedQuery.isSemanticallyValid() == false);
+};
+
+TEST_CASE("Valid assign pattern with while synonym - variable v; if a; Select v pattern a(v, \"x\")") {
+    Select select = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("v")) });
+    std::vector<SuchThat> suchThat{};
+    std::vector<qps::Pattern> pattern{ Pattern(TokenType::ASSIGN, "a", TokenObject(TokenType::NAME, "v"), TokenObject(TokenType::EXPRESSION, "x")) };
+    std::unordered_map<std::string, DesignEntity> mappedSynonyms{ {"v", DesignEntity::VARIABLE}, {"a", DesignEntity::WHILE} };
+    int numOfDeclaredSynonyms = 2;
+
+    QueryObject testParsedQuery = QueryObject(select, suchThat, pattern, mappedSynonyms, numOfDeclaredSynonyms);
+
+
+    Validator validator = Validator(testParsedQuery);
+    QueryObject validatedQuery = validator.validate();
+
+    REQUIRE(validatedQuery.isSemanticallyValid() == false);
+};
+
+
 TEST_CASE("Parent takes in cosntant as param") {
     Select select = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, std::string("v")) });
     std::vector<SuchThat> suchThat{SuchThat(TokenType::PARENT, TokenObject(TokenType::NAME, "c"), TokenObject(TokenType::WILDCARD, "_"))};
