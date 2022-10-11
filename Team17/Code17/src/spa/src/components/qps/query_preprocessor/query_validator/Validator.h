@@ -43,12 +43,11 @@ private:
 	bool isValidFollowsParentNext(SuchThat relationship);
 	bool isValidCalls(SuchThat relationship);
 	bool isStatement(std::string synonym);
-	bool isVariable(std::string synonym);
-	bool isAssign(std::string synonym);
-	bool isProcedure(std::string synonym);
+	bool isValidDesignEntity(std::string synonym, DesignEntity designEntityToMatch);
 	bool isValidUsesAndModifiesLeftParameter(std::string synonym);
 	bool isValidAttrNameToAttrSynonym(std::string attrName, DesignEntity attrSynonymDesignEntity);
 	bool isValidAttrRef(std::vector<TokenObject> ref);
+	bool isValidPatternSynonym(TokenType patternType, std::string patternSynonym);
 
 public:
 	Validator(QueryObject parsedQuery);

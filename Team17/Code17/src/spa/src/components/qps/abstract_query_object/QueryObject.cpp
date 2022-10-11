@@ -79,3 +79,7 @@ void QueryObject::setSemanticallyInvalid() {
 void QueryObject::setReturnTypeToSynonym() {
 	this->select.setReturnTypeToSynonym();
 }
+
+void QueryObject::setPatternTypeToAssign(int index) {
+	this->patterns.at(index).setPatternType(TokenType::ASSIGN);
+}

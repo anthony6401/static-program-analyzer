@@ -30,3 +30,7 @@ TokenObject Pattern::getLeft() {
 TokenObject Pattern::getRight() {
     return right;
 }
+
+void Pattern::setPatternType(TokenType newPatternType) {
+    this->patternType = newPatternType;
+}

@@ -400,7 +400,10 @@ std::vector<Pattern> Parser::parseTokensIntoPatternObjects(std::vector<TokenObje
 	std::vector<Pattern> patterns;
 	bool isNewPattern = true;
 	bool isFirstParam = true;
-	std::string assignSynonym = "";
+	bool isWhilePattern = false;
+	bool isIfPattern = false;
+	TokenType patternType{};
+	std::string patternSynonym = "";
 	TokenObject leftParam = TokenObject();
 	TokenObject rightParam = TokenObject();
 
@@ -412,10 +415,23 @@ std::vector<Pattern> Parser::parseTokensIntoPatternObjects(std::vector<TokenObje
 		}
 
 		if (currTokenType == TokenType::CLOSED_BRACKET) {
+			if (isWhilePattern) {
+				patternType = TokenType::WHILE;
+			} else if (isIfPattern) {
+				patternType = TokenType::IF;
+			} else {
+				patternType = TokenType::ASSIGN;
+			}
+
+			Pattern pattern = Pattern(patternType, patternSynonym, leftParam, rightParam);
+			patterns.push_back(pattern);
+
 			// For multi such that clauses in advanced SPA
 			isNewPattern = true;
 			isFirstParam = true;
-			assignSynonym = "";
+			isWhilePattern = false;
+			isIfPattern = false;
+			patternSynonym = "";
 			continue;
 		}
 
@@ -425,6 +441,11 @@ std::vector<Pattern> Parser::parseTokensIntoPatternObjects(std::vector<TokenObje
 		}
 
 		if (currTokenType == TokenType::COMMA) {
+			if (!isFirstParam) {
+				isIfPattern = true;
+				isWhilePattern = false;
+			}
+
 			isFirstParam = false;
 			continue;
 		}
@@ -438,8 +459,8 @@ std::vector<Pattern> Parser::parseTokensIntoPatternObjects(std::vector<TokenObje
 			}
 		}
 
-		if (assignSynonym.empty()) {
-			assignSynonym = token.getValue();
+		if (patternSynonym.empty()) {
+			patternSynonym = token.getValue();
 			continue;
 		}
 
@@ -449,8 +470,11 @@ std::vector<Pattern> Parser::parseTokensIntoPatternObjects(std::vector<TokenObje
 		}
 
 		rightParam = token;
-		Pattern pattern = Pattern(assignSynonym, leftParam, rightParam);
-		patterns.push_back(pattern);
+
+		// If second param is wildcard, assume pattern is while pattern
+		if (currTokenType == TokenType::WILDCARD && !isIfPattern) {
+			isWhilePattern = true;
+		}
 
 	}
 	return patterns;

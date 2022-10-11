@@ -11,3 +11,8 @@ Entity* Relationship::getLeftEntity() {
 Entity* Relationship::getRightEntity() {
 	return this->rightEntity;
 }
+
+Relationship::~Relationship() {
+	delete leftEntity;
+	delete rightEntity;
+}
