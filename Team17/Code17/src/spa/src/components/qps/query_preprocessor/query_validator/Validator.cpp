@@ -7,6 +7,7 @@
 #include <unordered_map>
 #include <stdexcept>
 #include <memory>
+#include <iostream>
 
 using namespace qps;
 
@@ -133,18 +134,34 @@ bool Validator::suchThatClauseIsSemanticallyCorrect() {
 
 bool Validator::patternClauseIsSemanticallyCorrect() {
 	std::vector<Pattern> patternClause = this->parsedQuery.getPattern();
+	int index = 0;
 
-	for (Pattern pattern : patternClause) {
-		std::string assignSynonym = pattern.getSynonym();
+	while (index < patternClause.size()) {
+		Pattern pattern = patternClause.at(index);
+		TokenType patternType = pattern.getPatternType();
+		std::string patternSynonym = pattern.getSynonym();
 		TokenObject leftParam = pattern.getLeft();
 
 		// Check that synonym is declared and declared as assign design entity
-		if (!isDeclaredSynonym(assignSynonym)) {
+		if (!isDeclaredSynonym(patternSynonym)) {
 			return false;
 		}
 
-		if (!isAssign(assignSynonym)) {
+		if (patternType == TokenType::ASSIGN && !isValidDesignEntity(patternSynonym, DesignEntity::ASSIGN)) {
 			return false;
+		}
+
+		if (patternType == TokenType::IF && !isValidDesignEntity(patternSynonym, DesignEntity::IF)) {
+			return false;
+		}
+
+		if (patternType == TokenType::WHILE && !isValidDesignEntity(patternSynonym, DesignEntity::WHILE)) {
+			if (!isValidDesignEntity(patternSynonym, DesignEntity::ASSIGN)) {
+				return false;
+			}
+
+			this->parsedQuery.setPatternTypeToAssign(index);
+
 		}
 
 		// Check first parameter is valid
@@ -156,11 +173,13 @@ bool Validator::patternClauseIsSemanticallyCorrect() {
 				return false;
 			}
 
-			if (!isVariable(synonymName)) {
+			if (!isValidDesignEntity(synonymName, DesignEntity::VARIABLE)) {
 				return false;
 			}
 
 		}
+
+		index++;
 
 	}
 
@@ -234,7 +253,7 @@ bool Validator::isValidUsesAndModifies(SuchThat relationship) {
 			return false;
 		}
 
-		if (!isVariable(synonymName)) {
+		if (!isValidDesignEntity(synonymName, DesignEntity::VARIABLE)) {
 			return false;
 		}
 
@@ -294,7 +313,7 @@ bool Validator::isValidCalls(SuchThat relationship) {
 			return false;
 		}
 
-		if (!isProcedure(synonymName)) {
+		if (!isValidDesignEntity(synonymName, DesignEntity::PROCEDURE)) {
 			return false;
 		}
 
@@ -309,7 +328,7 @@ bool Validator::isValidCalls(SuchThat relationship) {
 			return false;
 		}
 
-		if (!isProcedure(synonymName)) {
+		if (!isValidDesignEntity(synonymName, DesignEntity::PROCEDURE)) {
 			return false;
 		}
 
@@ -339,30 +358,10 @@ bool Validator::isStatement(std::string synonym) {
 	return true;
 };
 
-bool Validator::isVariable(std::string synonym) {
+bool Validator::isValidDesignEntity(std::string synonym, DesignEntity designEntityToMatch) {
 	DesignEntity designEntityOfSynonym = this->parsedQuery.getSynonymToDesignEntityMap().at(synonym);
 
-	if (designEntityOfSynonym != DesignEntity::VARIABLE) {
-		return false;
-	}
-
-	return true;
-};
-
-bool Validator::isAssign(std::string synonym) {
-	DesignEntity designEntityOfSynonym = this->parsedQuery.getSynonymToDesignEntityMap().at(synonym);
-
-	if (designEntityOfSynonym != DesignEntity::ASSIGN) {
-		return false;
-	}
-
-	return true;
-};
-
-bool Validator::isProcedure(std::string synonym) {
-	DesignEntity designEntityOfSynonym = this->parsedQuery.getSynonymToDesignEntityMap().at(synonym);
-
-	if (designEntityOfSynonym != DesignEntity::PROCEDURE) {
+	if (designEntityOfSynonym != designEntityToMatch) {
 		return false;
 	}
 
@@ -427,4 +426,3 @@ bool Validator::isValidAttrRef(std::vector<TokenObject> ref) {
 	return true;
 
 }
-

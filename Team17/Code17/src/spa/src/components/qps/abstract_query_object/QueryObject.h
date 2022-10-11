@@ -37,6 +37,7 @@ public:
     int getNumOfDeclaredSynonyms();
     void setSemanticallyInvalid();
     void setReturnTypeToSynonym();
+    void setPatternTypeToAssign(int index);
     bool operator==(const QueryObject& other) const {
         return relationships == other.relationships
             && patterns == other.patterns

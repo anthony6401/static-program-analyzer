@@ -21,8 +21,10 @@ namespace qps {
         std::string getSynonym();
         TokenObject getLeft();
         TokenObject getRight();
+        void setPatternType(TokenType newPatternType);
         bool operator==(const Pattern& other) const {
-            return synonym == other.synonym
+            return patternType == other.patternType
+                && synonym == other.synonym
                 && left == other.left
                 && right == other.right;
         }
