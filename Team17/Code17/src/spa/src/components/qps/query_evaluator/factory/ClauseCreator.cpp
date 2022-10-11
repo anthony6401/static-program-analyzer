@@ -62,13 +62,11 @@ std::shared_ptr<Clause> ClauseCreator::createClause(qps::Pattern pattern, std::u
 
     if (patternType == TokenType::IF) {
         return std::make_shared<IfPatternClause>(patternSynonym, firstArgument, qpsClient);
-    }
-
-    if (patternType == TokenType::WHILE) {
+    } else if (patternType == TokenType::WHILE) {
         return std::make_shared<WhilePatternClause>(patternSynonym, firstArgument, qpsClient);
+    } else {
+        return std::make_shared<AssignPatternClause>(patternSynonym, firstArgument, secondArgument, qpsClient);
     }
-
-    return std::make_shared<AssignPatternClause>(patternSynonym, firstArgument, secondArgument, qpsClient);
 }
 
 std::shared_ptr<Clause> ClauseCreator::createClause(SuchThat relationship, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) {
