@@ -23,13 +23,13 @@ public:
     ResultTable();
     ResultTable(bool pkbBooleanResult);
     ResultTable(const std::string &synonym, const std::unordered_set<std::string> &results);
-    ResultTable(std::string leftSynonym, std::string rightSynonym,
-                std::vector<std::pair<std::string, std::string>> results);
-    ResultTable(std::string leftSynonym, std::string rightSynonym, std::unordered_set<std::pair<std::string, std::string>, hashFunction> results);
+    ResultTable(const std::string& leftSynonym, const std::string& rightSynonym,
+                const std::vector<std::pair<std::string, std::string>>& results);
+    ResultTable(const std::string& leftSynonym, const std::string& rightSynonym, const std::unordered_set<std::pair<std::string, std::string>, hashFunction>& results);
     void filterBySelectSynonym(std::set<std::string> &&synonyms);
     void combineResult(ResultTable &nextResult);
     std::map<std::string, size_t> computeSynonymToIndexMap();
-    std::unordered_set<std::string> getSynonymResultsToBePopulated(std::string selectSynonym);
+    std::unordered_set<std::string> getSynonymResultsToBePopulated(const std::string& selectSynonym);
     std::unordered_set<std::string> getTupleResultsToBePopulated(std::vector<TokenObject> tuple, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
     std::unordered_set<std::string> handleDuplicateSynonymsInTuple(std::vector<TokenObject> tuple, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
     bool hasDuplicatedSynonymsInTuple(std::vector<TokenObject> tuple);
@@ -39,13 +39,13 @@ public:
     std::vector<size_t> findNotCommonSynonymsIndex(std::vector<std::string> nextSynonymsList, std::map<std::string, size_t> synonymToIndexMap);
     std::string formTupleResultString(std::vector<std::string> newResultsList);
     friend std::ostream &operator<<(std::ostream &os, const ResultTable &table);
-    bool getIsFalseResult();
+    bool getIsFalseResult() const;
     void setIsFalseResult(bool pkbBooleanResult);
     void setIsFalseResultToTrue();
     void setHasAlternativeAttributeNameToTrue();
     void updateHasCommonAttributeName(ResultTable &nextResult);
-    bool getHasAlternativeAttributeName();
-    bool isEmptyResult();
+    bool getHasAlternativeAttributeName() const;
+    bool isEmptyResult() const;
 };
 
 #endif //SPA_RESULTTABLE_H
