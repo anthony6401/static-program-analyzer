@@ -17,9 +17,6 @@ std::unordered_set<char> expressionSymbolsAndBrackets = {'(', ')', '+', '-', '*'
 std::unordered_set<std::string> expressionSymbols = {"+", "-", "*", "/", "%"};
 
 Tokenizer::Tokenizer() {
-    /**
-     * Initialises unordered map of string values to tokens with initializer list.
-     */
     stringToTokenMap = {
             {"Select", TokenType::SELECT},
             {"such", TokenType::SUCH},
@@ -61,22 +58,7 @@ Tokenizer::Tokenizer() {
 }
 
 
-template <typename Out>
-void splitIterator(const std::string query, char delim, Out result) {
-    std::istringstream iss(query);
-    std::string item;
-    while (std::getline(iss, item, delim)) {
-        *result++ = item;
-    }
-}
-
-std::vector<std::string> splitByDelimiter(const std::string query, char delim) {
-    std::vector<std::string> elems;
-    splitIterator(query, delim, std::back_inserter(elems));
-    return elems;
-}
-
-std::vector<std::string> formatCharToStringVector(std::string s, char delimiter) {
+std::vector<std::string> formatCharToStringVector(const std::string& s, char delimiter) {
     std::vector<std::string> tokenValueString;
     std::stringstream ss(s);
     std::string tokenValue;
@@ -84,6 +66,7 @@ std::vector<std::string> formatCharToStringVector(std::string s, char delimiter)
     while (getline(ss, tokenValue, delimiter)) {
         tokenValueString.push_back(tokenValue);
     }
+
     return tokenValueString;
 }
 
@@ -108,7 +91,7 @@ void removeDelimiter(std::vector<char> &char_output, char delimiter) {
     }
 }
 
-std::vector<std::string> splitQuery(std::string query) {
+std::vector<std::string> splitQuery(const std::string& query) {
     std::vector<char> char_output;
     char delimiter = '|';
     bool isWildcard = false;
@@ -141,10 +124,6 @@ std::vector<std::string> splitQuery(std::string query) {
                 }
                 break;
             case '=':
-                if (!isTuple) {
-                    char_output.push_back(delimiter);
-                }
-                break;
             case ';':
                 if (!isTuple) {
                     char_output.push_back(delimiter);
@@ -204,14 +183,11 @@ std::vector<std::string> splitQuery(std::string query) {
         }
     }
 
-    std::string string_output = std::string(char_output.begin(), char_output.end());
-    std::vector<std::string> splittedQuery = formatCharToStringVector(string_output, delimiter);
-    return splittedQuery;
+    std::string stringOutput = std::string(char_output.begin(), char_output.end());
+    std::vector<std::string> splitQuery = formatCharToStringVector(stringOutput, delimiter);
+    return splitQuery;
 }
 
-/**
- * Trim the string to remove leading and trailing spaces
- */
 std::string trimString(const std::string& s) {
     const auto beginning = s.find_first_not_of(whitespace);
     const auto ending = s.find_last_not_of(whitespace);
@@ -219,13 +195,12 @@ std::string trimString(const std::string& s) {
     return s.substr(beginning, range);
 }
 
-/**
- * Checks that string s follows the NAME lexical syntax
- */
+
 bool Tokenizer::isName(std::string s) {
     if (!isalpha(s[0]) || s.empty()) {
         return false;
     }
+
     for (const auto c : s) {
         if (!isalnum(c)) {
             return false;
@@ -234,13 +209,12 @@ bool Tokenizer::isName(std::string s) {
     return true;
 }
 
-/**
- * Checks that string s follows the INTEGER lexical syntax
- */
+
 bool Tokenizer::isInteger(std::string s) {
     if (s[0] == '0' && s.length() > 1) {
         return false;
     }
+
     for (const auto c : s) {
         if (!isdigit(c)) {
             return false;
@@ -253,41 +227,89 @@ std::string trimQuotesOrWildcard(std::string s) {
     return s.substr(1, s.size() - 2);
 }
 
-/**
- * Checks that string s follows the IDENTITY lexical syntax with Quotation Marks
- */
+
 bool Tokenizer::isIdentity(std::string s) {
     if (s.size() <= 2) {
         return false;
-    } else {
-        s = trimString(s);
-        if (s.front() == '"' && s.back() == '"') {
-            if (isName(trimQuotesOrWildcard(s))) {
-                return true;
-            }
+    }
+
+    s = trimString(s);
+    if (s.front() == '"' && s.back() == '"') {
+        if (isName(trimQuotesOrWildcard(s))) {
+            return true;
         }
     }
     return false;
 }
 
-std::vector<std::string> Tokenizer::convertExpressionToStringVector(std::string s) {
-    std::vector<std::string> expressionTokens;
+//std::vector<std::string> Tokenizer::convertExpressionToStringVector(const std::string& s) {
+//    std::vector<std::string> expressionTokens;
+//    std::vector<std::string> invalidExpression;
+//    std::string temp;
+//    for (char character : s) {
+//        auto symbolsIterator = expressionSymbolsAndBrackets.find(character);
+//        if (symbolsIterator != expressionSymbolsAndBrackets.cend()) {
+//            if (!temp.empty()) {
+//                if (isName(temp) || Tokenizer::isInteger(temp)) {
+//                    expressionTokens.push_back(temp);
+//                    temp.clear();
+//                } else {
+//                    return invalidExpression;
+//                }
+//            }
+//
+//            expressionTokens.emplace_back(1, character);
+//        } else {
+//            temp.push_back(character);
+//        }
+//    }
+//
+//    if (!temp.empty()) {
+//        if (!isName(temp) && !isInteger(temp)) {
+//            return invalidExpression;
+//        } else {
+//            expressionTokens.push_back(temp);
+//        }
+//    }
+//
+//    return expressionTokens;
+//}
+
+
+
+void Tokenizer::symbolsFoundHandler(std::string &temp, std::vector<std::string> &expressionTokens, bool &isInvalidExpression) {
     std::vector<std::string> invalidExpression;
+    std::string tempString = temp;
+    if (!temp.empty()) {
+        if (isName(tempString) || isInteger(tempString)) {
+            expressionTokens.push_back(temp);
+            temp.clear();
+        } else {
+            isInvalidExpression = true;
+        }
+    }
+}
+
+void Tokenizer::characterInExpressionHandler(char character, std::string &temp, std::vector<std::string> &expressionTokens, bool &isInvalidExpression) {
+    auto symbolsIterator = expressionSymbolsAndBrackets.find(character);
+    if (symbolsIterator == expressionSymbolsAndBrackets.cend()) {
+        temp.push_back(character);
+    } else {
+        symbolsFoundHandler(temp, expressionTokens, isInvalidExpression);
+        expressionTokens.emplace_back(1, character);
+    }
+}
+
+std::vector<std::string> Tokenizer::convertExpressionToStringVector(const std::string& s) {
+    std::vector<std::string> invalidExpression;
+    std::vector<std::string> expressionTokens;
+
+    bool isInvalidExpression = false;
     std::string temp;
     for (char character : s) {
-        auto symbolsIterator = std::find(expressionSymbolsAndBrackets.begin(), expressionSymbolsAndBrackets.end(), character);
-        if (symbolsIterator != expressionSymbolsAndBrackets.cend()) {
-            if (!temp.empty()) {
-                if (isName(temp) || Tokenizer::isInteger(temp)) {
-                    expressionTokens.push_back(temp);
-                    temp.clear();
-                } else {
-                    return invalidExpression;
-                }
-            }
-            expressionTokens.push_back(std::string(1, character));
-        } else {
-            temp.push_back(character);
+        characterInExpressionHandler(character, temp, expressionTokens, isInvalidExpression);
+        if (isInvalidExpression) {
+            return invalidExpression;
         }
     }
 
@@ -304,10 +326,10 @@ std::vector<std::string> Tokenizer::convertExpressionToStringVector(std::string 
 
 bool Tokenizer::validateExpression(std::vector<std::string> expressionVector) {
     std::stack<std::string> expressionStack;
-    std::string prev = "";
+    std::string prev;
     bool isPrevName = false;
     bool isPrevInteger = false;
-    for (auto string : expressionVector) {
+    for (const auto& string : expressionVector) {
         if (string == "(") {
             if (isPrevInteger || isPrevName) {
                 return false;
@@ -326,7 +348,6 @@ bool Tokenizer::validateExpression(std::vector<std::string> expressionVector) {
             isPrevInteger = false;
             isPrevName = false;
         } else {
-            // Name, Integer or Mathematical symbols
             if (isName(string)) {
                 if (isPrevName) {
                     return false;
@@ -362,7 +383,7 @@ bool Tokenizer::validateExpression(std::vector<std::string> expressionVector) {
     return true;
 }
 
-//"x+(x+2)" // "x+1" // "1"
+
 bool Tokenizer::isExpression(std::string s) {
     if (s.size() < 3) {
         return false;
@@ -372,23 +393,20 @@ bool Tokenizer::isExpression(std::string s) {
     }
 
     if (s.front() == '"' && s.back() == '"') {
-        // Removes quotations
         std::string trimmedQuotes = trimQuotesOrWildcard(s);
-        // Break string into char and validate char
         std::vector<std::string> expressionVector = convertExpressionToStringVector(trimmedQuotes);
-        // Invalid expression
+
         if (expressionVector.empty()) {
             return false;
         } else {
-            // Validate expression
-            bool isValidExpresion = validateExpression(expressionVector);
-            return isValidExpresion;
+            bool isValidExpression = validateExpression(expressionVector);
+            return isValidExpression;
         }
     }
     return false;
 }
 
-// _"x+1"_, _"x"_, _"1"_
+
 bool Tokenizer::isSubExpression(std::string s) {
     if (s.size() < 5) {
         return false;
@@ -423,9 +441,7 @@ bool Tokenizer::isTuple(std::string s) {
                 }
 
                 currString = currString.substr(commaIndex + 1, currString.length() - commaIndex - 1);
-            } else if (isName(currString)) {
-                return true;
-            } else if (isValidAttribute(currString)) {
+            } else if (isName(currString) || isValidAttribute(currString)) {
                 return true;
             } else {
                 return false;
@@ -454,22 +470,7 @@ bool Tokenizer::isValidAttribute(std::string s) {
     return true;
 }
 
-//std::vector<std::string> Tokenizer::getValidAttribute(std::string s) {
-//    std::vector<std::string> attribute = {};
-//    std::unordered_set<std::string> attributeNameList = {"procName", "varName", "value", "stmt#"};
-//    size_t fullstopIndex = s.find('.');
-//    std::string synonymName = s.substr(0, fullstopIndex);
-//    std::string attributeName = s.substr(fullstopIndex + 1, s.length() - fullstopIndex - 1);
-//    if (isName(synonymName) && attributeNameList.count(attributeName)) {
-//        return {synonymName, attributeName};
-//    } else {
-//        return attribute;
-//    }
-//}
 
-/**
- * Tokenizes each character or string according to Token Types and outputs vector<TokenObject>
- */
 std::vector<TokenObject> Tokenizer::tokenize(std::string query) {
     std::vector<TokenObject> tokenList;
     std::vector<std::string> tokenValues = splitQuery(query);
@@ -481,6 +482,7 @@ std::vector<TokenObject> Tokenizer::tokenize(std::string query) {
     for (auto &s : tokenValues) {
         s.erase(std::remove_if(s.begin(), s.end(), ::isspace), s.end());
     }
+
     for (std::string s : tokenValues) {
         s = trimString(s);
         if (stringToTokenMap.find(s) != stringToTokenMap.end()) {
