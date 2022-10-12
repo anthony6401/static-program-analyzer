@@ -91,6 +91,23 @@ bool charTypeToggler(bool isCharType) {
     return !isCharType;
 }
 
+bool isEmptySpace(char character) {
+    std::vector<char> emptyCharVector = {' ', '\n', '\t', '\v', '\f', '\r'};
+    bool isEmpty = std::count(emptyCharVector.begin(), emptyCharVector.end(), character);
+    return isEmpty;
+}
+
+void removeDelimiter(std::vector<char> &char_output, char delimiter) {
+    int currLength = char_output.size() - 1;
+    for (int i = currLength; i >= 0; i--) {
+        if (char_output[i] == delimiter || isEmptySpace(char_output[i])) {
+            char_output.erase(char_output.begin() + i);
+        } else {
+            break;
+        }
+    }
+}
+
 std::vector<std::string> splitQuery(std::string query) {
     std::vector<char> char_output;
     char delimiter = '|';
@@ -124,6 +141,10 @@ std::vector<std::string> splitQuery(std::string query) {
                 }
                 break;
             case '=':
+                if (!isTuple) {
+                    char_output.push_back(delimiter);
+                }
+                break;
             case ';':
                 if (!isTuple) {
                     char_output.push_back(delimiter);
@@ -153,10 +174,12 @@ std::vector<std::string> splitQuery(std::string query) {
                 break;
             case '.':
                 isAttribute = charTypeToggler(isAttribute);
+                removeDelimiter(char_output, delimiter);
+                break;
             default: break;
         }
 
-        if (c != ' ') {
+        if (c != ' ' && !isEmptySpace(c)) {
             char_output.push_back(c);
             if (isAttribute && c != '.') {
                 isAttribute = charTypeToggler(isAttribute);
@@ -339,30 +362,30 @@ bool Tokenizer::validateExpression(std::vector<std::string> expressionVector) {
     return true;
 }
 
- //"x+(x+2)" // "x+1" // "1"
+//"x+(x+2)" // "x+1" // "1"
 bool Tokenizer::isExpression(std::string s) {
-     if (s.size() < 3) {
-         return false;
-     }
-     if (s.front() != '"' || s.back() != '"') {
-         return false;
-     }
+    if (s.size() < 3) {
+        return false;
+    }
+    if (s.front() != '"' || s.back() != '"') {
+        return false;
+    }
 
-     if (s.front() == '"' && s.back() == '"') {
-         // Removes quotations
-         std::string trimmedQuotes = trimQuotesOrWildcard(s);
-         // Break string into char and validate char
-         std::vector<std::string> expressionVector = convertExpressionToStringVector(trimmedQuotes);
-         // Invalid expression
-         if (expressionVector.empty()) {
-             return false;
-         } else {
-             // Validate expression
-             bool isValidExpresion = validateExpression(expressionVector);
-             return isValidExpresion;
-         }
-     }
-     return false;
+    if (s.front() == '"' && s.back() == '"') {
+        // Removes quotations
+        std::string trimmedQuotes = trimQuotesOrWildcard(s);
+        // Break string into char and validate char
+        std::vector<std::string> expressionVector = convertExpressionToStringVector(trimmedQuotes);
+        // Invalid expression
+        if (expressionVector.empty()) {
+            return false;
+        } else {
+            // Validate expression
+            bool isValidExpresion = validateExpression(expressionVector);
+            return isValidExpresion;
+        }
+    }
+    return false;
 }
 
 // _"x+1"_, _"x"_, _"1"_
@@ -374,9 +397,9 @@ bool Tokenizer::isSubExpression(std::string s) {
             std::string withoutWildcard = trimQuotesOrWildcard(s);
             bool isIdentity = Tokenizer::isIdentity(withoutWildcard);
             bool isExpression = Tokenizer::isExpression(withoutWildcard);
-           if (isIdentity || isExpression) {
-               return true;
-           }
+            if (isIdentity || isExpression) {
+                return true;
+            }
         }
     }
     return false;
@@ -431,18 +454,18 @@ bool Tokenizer::isValidAttribute(std::string s) {
     return true;
 }
 
-std::vector<std::string> Tokenizer::getValidAttribute(std::string s) {
-    std::vector<std::string> attribute = {};
-    std::unordered_set<std::string> attributeNameList = {"procName", "varName", "value", "stmt#"};
-    size_t fullstopIndex = s.find('.');
-    std::string synonymName = s.substr(0, fullstopIndex);
-    std::string attributeName = s.substr(fullstopIndex + 1, s.length() - fullstopIndex - 1);
-    if (isName(synonymName) && attributeNameList.count(attributeName)) {
-        return {synonymName, attributeName};
-    } else {
-        return attribute;
-    }
-}
+//std::vector<std::string> Tokenizer::getValidAttribute(std::string s) {
+//    std::vector<std::string> attribute = {};
+//    std::unordered_set<std::string> attributeNameList = {"procName", "varName", "value", "stmt#"};
+//    size_t fullstopIndex = s.find('.');
+//    std::string synonymName = s.substr(0, fullstopIndex);
+//    std::string attributeName = s.substr(fullstopIndex + 1, s.length() - fullstopIndex - 1);
+//    if (isName(synonymName) && attributeNameList.count(attributeName)) {
+//        return {synonymName, attributeName};
+//    } else {
+//        return attribute;
+//    }
+//}
 
 /**
  * Tokenizes each character or string according to Token Types and outputs vector<TokenObject>
@@ -458,7 +481,6 @@ std::vector<TokenObject> Tokenizer::tokenize(std::string query) {
     for (auto &s : tokenValues) {
         s.erase(std::remove_if(s.begin(), s.end(), ::isspace), s.end());
     }
-
     for (std::string s : tokenValues) {
         s = trimString(s);
         if (stringToTokenMap.find(s) != stringToTokenMap.end()) {
