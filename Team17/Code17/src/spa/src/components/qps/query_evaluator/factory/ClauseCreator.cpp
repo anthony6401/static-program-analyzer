@@ -21,6 +21,7 @@
 #include "components/qps/query_evaluator/factory/clauses/patterns/IfPatternClause.h"
 #include "components/qps/query_evaluator/factory/clauses/patterns/WhilePatternClause.h"
 #include "components/qps/query_evaluator/factory/clauses/relationship/UsesClause.h"
+#include "components/qps/query_evaluator/factory/clauses/relationship/ModifiesClause.h"
 
 
 std::shared_ptr<Clause> ClauseCreator::createClause(With with,
@@ -72,16 +73,8 @@ std::shared_ptr<Clause> ClauseCreator::createClause(SuchThat relationship, std::
     TokenType relationshipType = relationship.getRelationshipType();
     TokenObject left = relationship.getLeft();
     TokenObject right = relationship.getRight();
-
     if (relationshipType == TokenType::MODIFIES) {
-        if (isStmtRelationship(left, synonymToDesignEntityMap)) {
-            return std::make_shared<ModifiesSClause>(left, right, synonymToDesignEntityMap, qpsClient);
-        }
-
-        if (isProcRelationship(left, synonymToDesignEntityMap)) {
-            return std::make_shared<ModifiesPClause>(left, right, synonymToDesignEntityMap, qpsClient);
-        }
-
+       return std::make_shared<ModifiesClause>(left, right, synonymToDesignEntityMap, qpsClient);
     } else if (relationshipType == TokenType::USES) {
         return std::make_shared<UsesClause>(left, right, synonymToDesignEntityMap, qpsClient);
     } else if (relationshipType == TokenType::FOLLOWS) {
