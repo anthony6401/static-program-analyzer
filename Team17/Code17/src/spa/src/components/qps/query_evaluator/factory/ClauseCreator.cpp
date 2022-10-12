@@ -6,8 +6,6 @@
 #include "components/qps/query_evaluator/factory/clauses/relationship/ParentClause.h"
 #include "components/qps/query_evaluator/factory/clauses/relationship/ParentTClause.h"
 #include "components/qps/query_evaluator/factory/clauses/patterns/AssignPatternClause.h"
-#include "components/qps/query_evaluator/factory/clauses/relationship/UsesSClause.h"
-#include "components/qps/query_evaluator/factory/clauses/relationship/UsesPClause.h"
 #include <memory>
 #include "iostream"
 #include "components/qps/query_evaluator/factory/clauses/relationship/CallsClause.h"
