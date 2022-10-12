@@ -36,7 +36,6 @@ void SimpleParser::parseLine(std::string code) {
     std::string first = tokens.front();
     if (first == "}") {
         tokens.erase(tokens.begin());
-        SimpleToken token = SimpleToken(SpTokenType::TCLOSE, code, statementNumber);
         validator.close();
         extractor->close(statementNumber);
     } else if (tokens.at(1) == "=") {
@@ -68,10 +67,7 @@ void SimpleParser::parseLine(std::string code) {
         validator.isValidLine(SpTokenType::TIF, statementNumber);
         parseIf(tokens);
     } else if (first == "else") {
-        if (tokens.at(1) != "{") {
-            throw std::invalid_argument("Received invalid SIMPLE code line " + std::to_string(SimpleParser::statementNumber));
-        }
-        tokens.erase(tokens.begin());
+        parseElse(tokens);
         validator.isValidLine(SpTokenType::TELSE, statementNumber);
         validator.close();
     } else {
@@ -155,6 +151,15 @@ void SimpleParser::parseIf(std::vector<std::string>& tokens) {
     ifToken.setChildren(parseCondition(tokens));
     validator.setState(new IfState(&validator));
     extractor->extractIf(ifToken);
+}
+
+void SimpleParser::parseElse(std::vector<std::string>& tokens) {
+    if (tokens.size() != 2) {
+        throw std::invalid_argument("Received invalid Else:Line " + std::to_string(statementNumber));
+    } else if (tokens.at(1) != "{") {
+        throw std::invalid_argument("Received invalid Else:Line " + std::to_string(statementNumber));
+    }
+    tokens.erase(tokens.begin());
 }
 
 void SimpleParser::parseAssign(std::vector<std::string>& tokens) {

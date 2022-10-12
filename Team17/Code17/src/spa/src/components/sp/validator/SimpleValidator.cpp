@@ -7,7 +7,7 @@
 #include "../utils/SpUtils.h"
 
 SimpleValidator::SimpleValidator() {
-    state = new ProgramState(this);
+    this->state = new ProgramState(this);
 }
 
 bool SimpleValidator::validCode() {
