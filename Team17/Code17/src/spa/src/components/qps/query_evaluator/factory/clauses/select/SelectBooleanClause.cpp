@@ -1,6 +1,6 @@
 #include "SelectBooleanClause.h"
 
-SelectBooleanClause::SelectBooleanClause() {}
+SelectBooleanClause::SelectBooleanClause() = default;
 
 ResultTable SelectBooleanClause::evaluateClause() {
     ResultTable resultTable;
