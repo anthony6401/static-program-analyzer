@@ -56,26 +56,26 @@ RelationshipType UsesClause::getRelationshipType() {
 ResultTable UsesClause::evaluateSynonymSynonym() {
     std::string leftValue = left.getValue();
     std::string rightValue = right.getValue();
-    DesignEntity stmtType = synonymToDesignEntityMap[leftValue];
+    DesignEntity leftType = synonymToDesignEntityMap[leftValue];
     DesignEntity rightType = synonymToDesignEntityMap[rightValue];
-    std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(getRelationshipType(), stmtType, rightType);
+    std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(getRelationshipType(), leftType, rightType);
     std::vector<std::pair<std::string, std::string>> processedMap = ClauseUtils::processMapToVectorPair(results);
     return {leftValue, rightValue, processedMap};
 }
 
 ResultTable UsesClause::evaluateSynonymWildcard() {
     std::string leftValue = left.getValue();
-    DesignEntity stmtType = synonymToDesignEntityMap[leftValue];
+    DesignEntity leftType = synonymToDesignEntityMap[leftValue];
     DesignEntity rightType = DesignEntity::VARIABLE;
-    std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(getRelationshipType(), stmtType, rightType);
+    std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(getRelationshipType(), leftType, rightType);
     std::unordered_set<std::string> processedMap = ClauseUtils::processMapToSetFromFirst(results);
     return {leftValue, processedMap};
 }
 
 ResultTable UsesClause::evaluateSynonymNameQuotes() {
     std::string leftValue = left.getValue();
-    DesignEntity stmtType = synonymToDesignEntityMap[leftValue];
-    std::unordered_set<std::string> results = qpsClient.getRelationshipBySecond(getRelationshipType(), stmtType, right);
+    DesignEntity leftType = synonymToDesignEntityMap[leftValue];
+    std::unordered_set<std::string> results = qpsClient.getRelationshipBySecond(getRelationshipType(), leftType, right);
     return {leftValue, results};
 }
 
