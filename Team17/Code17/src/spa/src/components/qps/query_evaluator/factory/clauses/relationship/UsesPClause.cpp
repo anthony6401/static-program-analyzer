@@ -1,5 +1,6 @@
 #include "UsesPClause.h"
 #include "iostream"
+#include "components/qps/query_evaluator/factory/utils/ClauseUtils.h"
 
 UsesPClause::UsesPClause(TokenObject left, TokenObject right,
                          std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) :
@@ -19,10 +20,8 @@ ResultTable UsesPClause::evaluateClause() {
         return UsesPClause::evaluateNameQuotesSynonym();
     } else if (leftType == TokenType::NAME_WITH_QUOTATION && rightType == TokenType::WILDCARD) {
         return UsesPClause::evaluateNameQuotesWildcard();
-    } else if (leftType == TokenType::NAME_WITH_QUOTATION && rightType == TokenType::NAME_WITH_QUOTATION) {
-        return UsesPClause::evaluateNameQuotesNameQuotes();
     } else {
-        return {};
+        return UsesPClause::evaluateNameQuotesNameQuotes();
     }
 }
 
@@ -48,48 +47,26 @@ std::set<std::string> UsesPClause::getAllSynonyms() {
     return synonyms;
 }
 
-std::vector<std::pair<std::string, std::string>> UsesPClause::processMapToVectorPair(std::unordered_map<std::string, std::unordered_set<std::string>> results) {
-    std::vector<std::pair<std::string, std::string>> processedResult;
-    for (auto entry : results) {
-        std::string firstSynonym = entry.first;
-        std::unordered_set<std::string> secondSynonymList = entry.second;
-        for (auto secondSynonym : secondSynonymList) {
-            std::pair<std::string, std::string> newPair = {firstSynonym, secondSynonym};
-            processedResult.emplace_back(newPair);
-        }
-    }
-    return processedResult;
-}
-
-std::unordered_set<std::string> UsesPClause::processMapToSetFromFirst(std::unordered_map<std::string, std::unordered_set<std::string>> results) {
-    std::unordered_set<std::string> processedResult;
-    for (auto entry : results) {
-        std::string firstSynonym = entry.first;
-        processedResult.insert(firstSynonym);
-    }
-    return processedResult;
-}
-
 RelationshipType UsesPClause::getRelationshipType() {
     return RelationshipType::USES;
 }
 
 ResultTable UsesPClause::evaluateSynonymSynonym() {
-    DesignEntity stmtType = synonymToDesignEntityMap[left.getValue()]; // Procedure
-    DesignEntity rightType = synonymToDesignEntityMap[right.getValue()];
     std::string leftValue = left.getValue();
     std::string rightValue = right.getValue();
+    DesignEntity stmtType = synonymToDesignEntityMap[leftValue];
+    DesignEntity rightType = synonymToDesignEntityMap[rightValue];
     std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(getRelationshipType(), stmtType, rightType);
-    std::vector<std::pair<std::string, std::string>> processedMap = UsesPClause::processMapToVectorPair(results); // {{"1", "x"}, {"2", "y"}}
+    std::vector<std::pair<std::string, std::string>> processedMap = ClauseUtils::processMapToVectorPair(results);
     return {leftValue, rightValue, processedMap};
 }
 
 ResultTable UsesPClause::evaluateSynonymWildcard() {
-    DesignEntity stmtType = synonymToDesignEntityMap[left.getValue()]; // Procedure
+    DesignEntity stmtType = synonymToDesignEntityMap[left.getValue()];
     DesignEntity rightType = DesignEntity::VARIABLE;
     std::string leftValue = left.getValue();
     std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(getRelationshipType(), stmtType, rightType);
-    std::unordered_set<std::string> processedMap = UsesPClause::processMapToSetFromFirst(results);
+    std::unordered_set<std::string> processedMap = ClauseUtils::processMapToSetFromFirst(results);
     return {leftValue, processedMap};
 }
 
@@ -110,15 +87,12 @@ ResultTable UsesPClause::evaluateNameQuotesSynonym() {
 ResultTable UsesPClause::evaluateNameQuotesWildcard() {
     DesignEntity rightType = DesignEntity::VARIABLE;
     std::unordered_set<std::string> results = qpsClient.getRelationshipByFirst(getRelationshipType(), left, rightType);
-    bool booleanResult = !results.empty();
-    // {1,2,3} -> boolean result = true
-    return {booleanResult}; //true
+    bool result = !results.empty();
+    return {result}; //true
 }
 
 ResultTable UsesPClause::evaluateNameQuotesNameQuotes() {
-    // Returns boolean
     bool result = qpsClient.getRelationship(getRelationshipType(), left, right);
-    // result = true -> setIsFalseResult(true) -> isFalseResult = false
     return {result};
 }
 

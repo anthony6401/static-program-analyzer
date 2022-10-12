@@ -22,6 +22,7 @@
 #include "components/qps/query_evaluator/factory/clauses/with/WithClause.h"
 #include "components/qps/query_evaluator/factory/clauses/patterns/IfPatternClause.h"
 #include "components/qps/query_evaluator/factory/clauses/patterns/WhilePatternClause.h"
+#include "components/qps/query_evaluator/factory/clauses/relationship/UsesClause.h"
 
 
 std::shared_ptr<Clause> ClauseCreator::createClause(With with,
@@ -84,13 +85,7 @@ std::shared_ptr<Clause> ClauseCreator::createClause(SuchThat relationship, std::
         }
 
     } else if (relationshipType == TokenType::USES) {
-        if (isProcRelationship(left, synonymToDesignEntityMap)) {
-            return std::make_shared<UsesPClause>(left, right, synonymToDesignEntityMap, qpsClient);
-        }
-
-        if (isStmtRelationship(left, synonymToDesignEntityMap)) {
-            return std::make_shared<UsesSClause>(left, right, synonymToDesignEntityMap, qpsClient);
-        }
+        return std::make_shared<UsesClause>(left, right, synonymToDesignEntityMap, qpsClient);
     } else if (relationshipType == TokenType::FOLLOWS) {
         return std::make_shared<FollowsClause>(left, right, synonymToDesignEntityMap, qpsClient);
     } else if (relationshipType == TokenType::FOLLOWS_T) {

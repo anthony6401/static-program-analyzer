@@ -1,32 +1,32 @@
-#include "UsesSClause.h"
+#include "UsesClause.h"
 #include <utility>
 #include "components/qps/query_evaluator/factory/utils/ClauseUtils.h"
 
-UsesSClause::UsesSClause(TokenObject left, TokenObject right,
+UsesClause::UsesClause(TokenObject left, TokenObject right,
                          std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient)
-                         : left(std::move(left)), right(std::move(right)), synonymToDesignEntityMap(std::move(synonymToDesignEntityMap))
-                         , qpsClient(qpsClient) {};
+        : left(std::move(left)), right(std::move(right)), synonymToDesignEntityMap(std::move(synonymToDesignEntityMap))
+        , qpsClient(qpsClient) {};
 
 
-ResultTable UsesSClause::evaluateClause() {
+ResultTable UsesClause::evaluateClause() {
     TokenType leftType = left.getTokenType();
     TokenType rightType = right.getTokenType();
     if (leftType == TokenType::NAME && rightType == TokenType::NAME) {
-        return UsesSClause::evaluateSynonymSynonym();
+        return UsesClause::evaluateSynonymSynonym();
     } else if (leftType == TokenType::NAME && rightType == TokenType::WILDCARD) {
-        return UsesSClause::evaluateSynonymWildcard();
+        return UsesClause::evaluateSynonymWildcard();
     } else if (leftType == TokenType::NAME && rightType == TokenType::NAME_WITH_QUOTATION) {
-        return UsesSClause::evaluateSynonymNameQuotes();
-    } else if (leftType == TokenType::INTEGER && rightType == TokenType::NAME) {
-        return UsesSClause::evaluateIntegerSynonym();
-    } else if (leftType == TokenType::INTEGER && rightType == TokenType::WILDCARD) {
-        return UsesSClause::evaluateIntegerWildcard();
+        return UsesClause::evaluateSynonymNameQuotes();
+    } else if ((leftType == TokenType::INTEGER || leftType == TokenType::NAME_WITH_QUOTATION) && rightType == TokenType::NAME) {
+        return UsesClause::evaluateSecondAsSynonym();
+    } else if ((leftType == TokenType::INTEGER || leftType == TokenType::NAME_WITH_QUOTATION) && rightType == TokenType::WILDCARD) {
+        return UsesClause::evaluateSecondAsWildcard();
     } else {
-        return UsesSClause::evaluateIntegerNameQuotes();
+        return UsesClause::evaluateWithoutSynonymOrWildCard();
     }
 }
 
-size_t UsesSClause::getNumberOfSynonyms() {
+size_t UsesClause::getNumberOfSynonyms() {
     size_t numberOfSynonyms = 0;
     if (left.getTokenType() == TokenType::NAME) {
         numberOfSynonyms++;
@@ -37,7 +37,7 @@ size_t UsesSClause::getNumberOfSynonyms() {
     return numberOfSynonyms;
 }
 
-std::set<std::string> UsesSClause::getAllSynonyms() {
+std::set<std::string> UsesClause::getAllSynonyms() {
     std::set<std::string> synonyms = {};
     if (left.getTokenType() == TokenType::NAME) {
         synonyms.emplace(left.getValue());
@@ -48,12 +48,12 @@ std::set<std::string> UsesSClause::getAllSynonyms() {
     return synonyms;
 }
 
-RelationshipType UsesSClause::getRelationshipType() {
+RelationshipType UsesClause::getRelationshipType() {
     return RelationshipType::USES;
 }
 
 
-ResultTable UsesSClause::evaluateSynonymSynonym() {
+ResultTable UsesClause::evaluateSynonymSynonym() {
     std::string leftValue = left.getValue();
     std::string rightValue = right.getValue();
     DesignEntity stmtType = synonymToDesignEntityMap[leftValue];
@@ -63,7 +63,7 @@ ResultTable UsesSClause::evaluateSynonymSynonym() {
     return {leftValue, rightValue, processedMap};
 }
 
-ResultTable UsesSClause::evaluateSynonymWildcard() {
+ResultTable UsesClause::evaluateSynonymWildcard() {
     std::string leftValue = left.getValue();
     DesignEntity stmtType = synonymToDesignEntityMap[leftValue];
     DesignEntity rightType = DesignEntity::VARIABLE;
@@ -72,28 +72,28 @@ ResultTable UsesSClause::evaluateSynonymWildcard() {
     return {leftValue, processedMap};
 }
 
-ResultTable UsesSClause::evaluateSynonymNameQuotes() {
+ResultTable UsesClause::evaluateSynonymNameQuotes() {
     std::string leftValue = left.getValue();
     DesignEntity stmtType = synonymToDesignEntityMap[leftValue];
     std::unordered_set<std::string> results = qpsClient.getRelationshipBySecond(getRelationshipType(), stmtType, right);
     return {leftValue, results};
 }
 
-ResultTable UsesSClause::evaluateIntegerSynonym() {
+ResultTable UsesClause::evaluateSecondAsSynonym() {
     std::string rightValue = right.getValue();
     DesignEntity rightType = synonymToDesignEntityMap[rightValue];
     std::unordered_set<std::string> results = qpsClient.getRelationshipByFirst(getRelationshipType(), left, rightType);
     return {rightValue, results};
 }
 
-ResultTable UsesSClause::evaluateIntegerWildcard() {
+ResultTable UsesClause::evaluateSecondAsWildcard() {
     DesignEntity rightType = DesignEntity::VARIABLE;
     std::unordered_set<std::string> results = qpsClient.getRelationshipByFirst(getRelationshipType(), left, rightType);
     bool result = !results.empty();
     return {result};
 }
 
-ResultTable UsesSClause::evaluateIntegerNameQuotes() {
+ResultTable UsesClause::evaluateWithoutSynonymOrWildCard() {
     bool result = qpsClient.getRelationship(getRelationshipType(), left, right);
     return {result};
 }
