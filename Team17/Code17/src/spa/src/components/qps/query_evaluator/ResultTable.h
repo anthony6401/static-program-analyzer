@@ -21,7 +21,7 @@ public:
     std::vector<std::string> synonymsList;
     std::vector<std::vector<std::string>> resultsList;
     ResultTable();
-    ResultTable(bool pkbBooleanResult);
+    ResultTable(bool result);
     ResultTable(const std::string &synonym, const std::unordered_set<std::string> &results);
     ResultTable(const std::string& leftSynonym, const std::string& rightSynonym,
                 const std::vector<std::pair<std::string, std::string>>& results);
@@ -31,8 +31,6 @@ public:
     std::map<std::string, size_t> computeSynonymToIndexMap();
     std::unordered_set<std::string> getSynonymResultsToBePopulated(const std::string& selectSynonym);
     std::unordered_set<std::string> getTupleResultsToBePopulated(std::vector<TokenObject> tuple, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
-    std::unordered_set<std::string> handleDuplicateSynonymsInTuple(std::vector<TokenObject> tuple, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
-    bool hasDuplicatedSynonymsInTuple(std::vector<TokenObject> tuple);
     void tupleIteratorResultsHandler(std::vector<TokenObject> tuple, int index, std::vector<std::string> &resultSublist, std::vector<std::string> &newResultSublist, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
     void joinResultSublistListWithCommonSynonym(std::vector<std::vector<std::string>> &nextResultsList, std::vector<std::vector<std::string>> &newResultsList,
                                                 const std::vector<std::pair<size_t, size_t>>& commonSynonymsIndexPairs, std::vector<std::string> &resultSublist, const std::vector<size_t>& notCommonNextSynonymIndex);
@@ -43,14 +41,13 @@ public:
     void joinResultsListWithNoCommonSynonym(ResultTable nextResult);
     std::vector<size_t> findNotCommonSynonymsIndex(std::vector<std::string> nextSynonymsList, std::map<std::string, size_t> synonymToIndexMap);
     std::string formTupleResultString(std::vector<std::string> newResultsList);
-    friend std::ostream &operator<<(std::ostream &os, const ResultTable &table);
-    bool getIsFalseResult() const;
+    [[nodiscard]] bool getIsFalseResult() const;
     void setIsFalseResult(bool pkbBooleanResult);
     void setIsFalseResultToTrue();
     void setHasAlternativeAttributeNameToTrue();
     void updateHasCommonAttributeName(ResultTable &nextResult);
-    bool getHasAlternativeAttributeName() const;
-    bool isEmptyResult() const;
+    [[nodiscard]] bool getHasAlternativeAttributeName() const;
+    [[nodiscard]] bool isEmptyResult() const;
 };
 
 #endif //SPA_RESULTTABLE_H

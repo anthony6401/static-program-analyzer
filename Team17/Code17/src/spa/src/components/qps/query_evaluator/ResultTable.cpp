@@ -288,24 +288,3 @@ std::vector<std::pair<size_t, size_t>> ResultTable::findCommonSynonymsIndexPairs
     }
     return indexPairs;
 }
-
-std::ostream &operator<<(std::ostream &os, const ResultTable &table) {
-    for (const auto &attribute : table.synonymsList) {
-        os << attribute << "\t";
-    }
-    os << std::endl;
-    os << "_______________________________________________________" << std::endl;
-
-    for (const auto &record : table.resultsList) {
-        for (const auto &value : record) {
-            os << value << "\t";
-        }
-        os << std::endl;
-    }
-
-    return os;
-}
-
-
-
-
