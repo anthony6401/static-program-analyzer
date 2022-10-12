@@ -1,9 +1,12 @@
 #include "CallsTClause.h"
 
+#include <utility>
+#include "components/qps/query_evaluator/factory/utils/ClauseUtils.h"
+
 CallsTClause::CallsTClause(TokenObject left, TokenObject right,
                          std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap,
-                         QPSClient qpsClient) : left(left), right(right),
-                                                synonymToDesignEntityMap(synonymToDesignEntityMap), qpsClient(qpsClient) {};
+                         QPSClient qpsClient) : left(std::move(left)), right(std::move(right)),
+                                                synonymToDesignEntityMap(std::move(synonymToDesignEntityMap)), qpsClient(qpsClient) {};
 
 ResultTable CallsTClause::evaluateClause() {
     TokenType leftType = left.getTokenType();
@@ -24,10 +27,8 @@ ResultTable CallsTClause::evaluateClause() {
         return CallsTClause::evaluateNameQuotesSynonym();
     } else if (leftType == TokenType::NAME_WITH_QUOTATION && rightType == TokenType::WILDCARD) {
         return CallsTClause::evaluateNameQuotesWildcard();
-    } else if (leftType == TokenType::NAME_WITH_QUOTATION && rightType == TokenType::NAME_WITH_QUOTATION) {
-        return CallsTClause::evaluateNameQuotesNameQuotes();
     } else {
-        return {};
+        return CallsTClause::evaluateNameQuotesNameQuotes();
     }
 }
 
@@ -53,40 +54,6 @@ std::set<std::string> CallsTClause::getAllSynonyms() {
     return synonyms;
 }
 
-std::vector<std::pair<std::string, std::string>> CallsTClause::processMapToVectorPair(std::unordered_map<std::string, std::unordered_set<std::string>> results) {
-    std::vector<std::pair<std::string, std::string>> processedResult;
-    for (auto entry : results) {
-        std::string firstSynonym = entry.first;
-        std::unordered_set<std::string> secondSynonymList = entry.second;
-        for (auto secondSynonym : secondSynonymList) {
-            std::pair<std::string, std::string> newPair = {firstSynonym, secondSynonym};
-            processedResult.emplace_back(newPair);
-        }
-    }
-    return processedResult;
-}
-
-std::unordered_set<std::string> CallsTClause::processMapToSetFromFirst(std::unordered_map<std::string, std::unordered_set<std::string>> results) {
-    std::unordered_set<std::string> processedResult;
-    for (auto entry : results) {
-        std::string firstSynonym = entry.first;
-        processedResult.insert(firstSynonym);
-    }
-    return processedResult;
-}
-
-std::unordered_set<std::string> CallsTClause::processMapToSetFromSecond(std::unordered_map<std::string, std::unordered_set<std::string>> results) {
-    std::unordered_set<std::string> processedResult;
-    for (auto entry : results) {
-        std::unordered_set<std::string> valuesInRow = entry.second;
-        processedResult.insert(valuesInRow.begin(), valuesInRow.end());
-    }
-    return processedResult;
-}
-
-RelationshipType CallsTClause::getRelationshipType() {
-    return RelationshipType::CALLS_T;
-}
 
 ResultTable CallsTClause::evaluateSynonymSynonym() {
     DesignEntity procType = DesignEntity::PROCEDURE;
@@ -95,45 +62,45 @@ ResultTable CallsTClause::evaluateSynonymSynonym() {
     if (leftValue == rightValue) {
         return {false};
     }
-    std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(getRelationshipType(), procType, procType);
-    std::vector<std::pair<std::string, std::string>> processedMap = CallsTClause::processMapToVectorPair(results); // {{"1", "x"}, {"2", "y"}}
+    std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(RelationshipType::CALLS_T, procType, procType);
+    std::vector<std::pair<std::string, std::string>> processedMap = ClauseUtils::processMapToVectorPair(results);
     return {leftValue, rightValue, processedMap};
 }
 
 ResultTable CallsTClause::evaluateSynonymWildcard() {
     DesignEntity procType = DesignEntity::PROCEDURE;
     std::string leftValue = left.getValue();
-    std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(getRelationshipType(), procType, procType);
-    std::unordered_set<std::string> processedMap = CallsTClause::processMapToSetFromFirst(results);
+    std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(RelationshipType::CALLS_T, procType, procType);
+    std::unordered_set<std::string> processedMap = ClauseUtils::processMapToSetFromFirst(results);
     return {leftValue, processedMap};
 }
 
 ResultTable CallsTClause::evaluateSynonymNameQuotes() {
     DesignEntity procType = DesignEntity::PROCEDURE;
     std::string leftValue = left.getValue();
-    std::unordered_set<std::string> results = qpsClient.getRelationshipBySecond(getRelationshipType(), procType, right);
+    std::unordered_set<std::string> results = qpsClient.getRelationshipBySecond(RelationshipType::CALLS_T, procType, right);
     return {leftValue, results};
 }
 
 ResultTable CallsTClause::evaluateWildcardSynonym() {
     DesignEntity procType = DesignEntity::PROCEDURE;
     std::string rightValue = right.getValue();
-    std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(getRelationshipType(), procType, procType);
-    std::unordered_set<std::string> processedMap = CallsTClause::processMapToSetFromSecond(results);
+    std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(RelationshipType::CALLS_T, procType, procType);
+    std::unordered_set<std::string> processedMap = ClauseUtils::processMapToSetFromSecond(results);
     return {rightValue, processedMap};
 }
 
 ResultTable CallsTClause::evaluateWildcardWildcard() {
     DesignEntity procType = DesignEntity::PROCEDURE;
-    std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(getRelationshipType(), procType, procType);
-    bool booleanResult = !results.empty();
-    return {booleanResult};
+    std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(RelationshipType::CALLS_T, procType, procType);
+    bool result = !results.empty();
+    return {result};
 }
 
 ResultTable CallsTClause::evaluateWildcardNameQuotes() {
     DesignEntity procType = DesignEntity::PROCEDURE;
     std::string leftValue = left.getValue();
-    std::unordered_set<std::string> results = qpsClient.getRelationshipBySecond(getRelationshipType(), procType, right);
+    std::unordered_set<std::string> results = qpsClient.getRelationshipBySecond(RelationshipType::CALLS_T, procType, right);
     bool booleanResult = !results.empty();
     return {booleanResult};
 }
@@ -141,22 +108,19 @@ ResultTable CallsTClause::evaluateWildcardNameQuotes() {
 ResultTable CallsTClause::evaluateNameQuotesSynonym() {
     DesignEntity procType = DesignEntity::PROCEDURE;
     std::string rightValue = right.getValue();
-    std::unordered_set<std::string> results = qpsClient.getRelationshipByFirst(getRelationshipType(), left, procType);
+    std::unordered_set<std::string> results = qpsClient.getRelationshipByFirst(RelationshipType::CALLS_T, left, procType);
     return {rightValue, results};
 }
 
 ResultTable CallsTClause::evaluateNameQuotesWildcard() {
     DesignEntity procType = DesignEntity::PROCEDURE;
-    std::unordered_set<std::string> results = qpsClient.getRelationshipByFirst(getRelationshipType(), left, procType);
-    bool booleanResult = !results.empty();
-    // {1,2,3} -> boolean result = true
-    return {booleanResult}; //true
+    std::unordered_set<std::string> results = qpsClient.getRelationshipByFirst(RelationshipType::CALLS_T, left, procType);
+    bool result = !results.empty();
+    return {result};
 }
 
 ResultTable CallsTClause::evaluateNameQuotesNameQuotes() {
-    // Returns boolean
-    bool result = qpsClient.getRelationship(getRelationshipType(), left, right);
-    // result = true -> setIsFalseResult(true) -> isFalseResult = false
+    bool result = qpsClient.getRelationship(RelationshipType::CALLS_T, left, right);
     return {result};
 }
 
