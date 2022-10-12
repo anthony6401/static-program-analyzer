@@ -3,9 +3,11 @@
 #include "components/qps/abstract_query_object/Select.h"
 #include "components/qps/abstract_query_object/SuchThat.h"
 #include "components/qps/abstract_query_object/Pattern.h"
+#include "components/qps/abstract_query_object/With.h"
 #include <unordered_map>
 #include <stdexcept>
 #include <memory>
+#include <iostream>
 
 using namespace qps;
 
@@ -53,15 +55,47 @@ bool Validator::isSemanticallyValid() {
 		return false;
 	}
 
+	if (!withClauseIsSemanticallyCorrect()) {
+		return false;
+	}
+
 	return true;
 };
 
 bool Validator::selectClauseIsSemanticallyCorrect() {
 	Select selectClause = this->parsedQuery.getSelect();
-	std::string returnValue = selectClause.getSynonym();
+	TokenType returnType = selectClause.getReturnType();
+	std::vector<TokenObject> returnValues = selectClause.getReturnValues();
+
+	std::vector<TokenObject> attributeTokens{};
+
 	std::unordered_map<std::string, DesignEntity> mappedSynonyms = this->parsedQuery.getSynonymToDesignEntityMap();
+
+	for (TokenObject token : returnValues) {
+		TokenType currTokenType = token.getTokenType();
+		std::string tokenValue = token.getValue();
+
+		if ((currTokenType == TokenType::ATTRIBUTE_SYNONYM) || currTokenType == TokenType::ATTRIBUTE_NAME) {
+			attributeTokens.push_back(token);
+			continue;
+		}
+
+		// Synonym is not declared
+		if (mappedSynonyms.find(tokenValue) == mappedSynonyms.end()) {
+			if (tokenValue == "BOOLEAN" && returnType == TokenType::BOOLEAN) {
+				continue;
+			}
+			return false;
+		}
+
+		// BOOLEAN used as a synonym in declaration, convert return type to SYNONYM
+		if (tokenValue == "BOOLEAN" && returnType == TokenType::BOOLEAN) {
+			this->parsedQuery.setReturnTypeToSynonym();
+		}
+
+	}
 	
-	if (mappedSynonyms.find(returnValue) == mappedSynonyms.end()) {
+	if (!isValidAttrRef(attributeTokens)) {
 		return false;
 	}
 
@@ -100,18 +134,34 @@ bool Validator::suchThatClauseIsSemanticallyCorrect() {
 
 bool Validator::patternClauseIsSemanticallyCorrect() {
 	std::vector<Pattern> patternClause = this->parsedQuery.getPattern();
+	int index = 0;
 
-	for (Pattern pattern : patternClause) {
-		std::string assignSynonym = pattern.getSynonym();
+	while (index < patternClause.size()) {
+		Pattern pattern = patternClause.at(index);
+		TokenType patternType = pattern.getPatternType();
+		std::string patternSynonym = pattern.getSynonym();
 		TokenObject leftParam = pattern.getLeft();
 
 		// Check that synonym is declared and declared as assign design entity
-		if (!isDeclaredSynonym(assignSynonym)) {
+		if (!isDeclaredSynonym(patternSynonym)) {
 			return false;
 		}
 
-		if (!isAssign(assignSynonym)) {
+		if (patternType == TokenType::ASSIGN && !isValidDesignEntity(patternSynonym, DesignEntity::ASSIGN)) {
 			return false;
+		}
+
+		if (patternType == TokenType::IF && !isValidDesignEntity(patternSynonym, DesignEntity::IF)) {
+			return false;
+		}
+
+		if (patternType == TokenType::WHILE && !isValidDesignEntity(patternSynonym, DesignEntity::WHILE)) {
+			if (!isValidDesignEntity(patternSynonym, DesignEntity::ASSIGN)) {
+				return false;
+			}
+
+			this->parsedQuery.setPatternTypeToAssign(index);
+
 		}
 
 		// Check first parameter is valid
@@ -123,11 +173,47 @@ bool Validator::patternClauseIsSemanticallyCorrect() {
 				return false;
 			}
 
-			if (!isVariable(synonymName)) {
+			if (!isValidDesignEntity(synonymName, DesignEntity::VARIABLE)) {
 				return false;
 			}
 
 		}
+
+		index++;
+
+	}
+
+	return true;
+};
+
+bool Validator::withClauseIsSemanticallyCorrect() {
+	std::vector<With> withClause = this->parsedQuery.getWith();
+
+	for (With with : withClause) {
+		TokenType leftType = with.getLeftType();
+		TokenType rightType = with.getRightType();
+
+		if (leftType != rightType) {
+			return false;
+		}
+
+		// If ref is IDENT or INTEGER, no need to validate. Hence, we only check if attribute is valid
+		std::vector<TokenObject> left = with.getLeft();
+
+		if (left.size() > 1) {
+			if (!isValidAttrRef(left)) {
+				return false;
+			}
+		}
+
+		std::vector<TokenObject> right = with.getRight();
+
+		if (right.size() > 1) {
+			if (!isValidAttrRef(right)) {
+				return false;
+			}
+		}
+
 
 	}
 
@@ -167,7 +253,7 @@ bool Validator::isValidUsesAndModifies(SuchThat relationship) {
 			return false;
 		}
 
-		if (!isVariable(synonymName)) {
+		if (!isValidDesignEntity(synonymName, DesignEntity::VARIABLE)) {
 			return false;
 		}
 
@@ -227,7 +313,7 @@ bool Validator::isValidCalls(SuchThat relationship) {
 			return false;
 		}
 
-		if (!isProcedure(synonymName)) {
+		if (!isValidDesignEntity(synonymName, DesignEntity::PROCEDURE)) {
 			return false;
 		}
 
@@ -242,7 +328,7 @@ bool Validator::isValidCalls(SuchThat relationship) {
 			return false;
 		}
 
-		if (!isProcedure(synonymName)) {
+		if (!isValidDesignEntity(synonymName, DesignEntity::PROCEDURE)) {
 			return false;
 		}
 
@@ -272,30 +358,10 @@ bool Validator::isStatement(std::string synonym) {
 	return true;
 };
 
-bool Validator::isVariable(std::string synonym) {
+bool Validator::isValidDesignEntity(std::string synonym, DesignEntity designEntityToMatch) {
 	DesignEntity designEntityOfSynonym = this->parsedQuery.getSynonymToDesignEntityMap().at(synonym);
 
-	if (designEntityOfSynonym != DesignEntity::VARIABLE) {
-		return false;
-	}
-
-	return true;
-};
-
-bool Validator::isAssign(std::string synonym) {
-	DesignEntity designEntityOfSynonym = this->parsedQuery.getSynonymToDesignEntityMap().at(synonym);
-
-	if (designEntityOfSynonym != DesignEntity::ASSIGN) {
-		return false;
-	}
-
-	return true;
-};
-
-bool Validator::isProcedure(std::string synonym) {
-	DesignEntity designEntityOfSynonym = this->parsedQuery.getSynonymToDesignEntityMap().at(synonym);
-
-	if (designEntityOfSynonym != DesignEntity::PROCEDURE) {
+	if (designEntityOfSynonym != designEntityToMatch) {
 		return false;
 	}
 
@@ -314,3 +380,49 @@ bool Validator::isValidUsesAndModifiesLeftParameter(std::string synonym) {
 
 	return true;
 };
+
+bool Validator::isValidAttrNameToAttrSynonym(std::string attrName, DesignEntity attrSynonymDesignEntity) {
+	std::vector<DesignEntity> validDesignEntities = this->attrNameToValidDesignEntity.at(attrName);
+
+	if (std::find(validDesignEntities.begin(), validDesignEntities.end(), attrSynonymDesignEntity) == validDesignEntities.end()) {
+		return false;
+	}
+
+	return true;
+};
+
+bool Validator::isValidAttrRef(std::vector<TokenObject> ref) {
+	DesignEntity currAttributeSynonymDesignEntity{};
+	std::unordered_map<std::string, DesignEntity> mappedSynonyms = this->parsedQuery.getSynonymToDesignEntityMap();
+
+	for (TokenObject token : ref) {
+		TokenType currTokenType = token.getTokenType();
+		std::string tokenValue = token.getValue();
+
+		if (currTokenType == TokenType::ATTRIBUTE_SYNONYM) {
+			// Synonym is not declared
+			if (mappedSynonyms.find(tokenValue) == mappedSynonyms.end()) {
+				return false;
+			}
+
+			currAttributeSynonymDesignEntity = mappedSynonyms.at(tokenValue);
+			continue;
+		}
+
+		if (currTokenType == TokenType::ATTRIBUTE_NAME) {
+			bool isValidAttrName = isValidAttrNameToAttrSynonym(tokenValue, currAttributeSynonymDesignEntity);
+
+			if (!isValidAttrName) {
+				return false;
+			}
+			continue;
+		}
+
+		// token is neither attribute synonym nor attribute name, thus not valid attribute
+		// should never reach here!!
+		throw std::runtime_error("Error validating attribute");
+	}
+
+	return true;
+
+}

@@ -1,17 +1,5 @@
 #pragma once
-#include "models/Entity/DesignEntity.h"
-
-
 #include "../pkb.h"
-
-#include <string>
-#include <unordered_set>
-
-#include "models/Entity/DesignEntity.h"
-#include "components/qps/query_preprocessor/query_tokenizer/TokenType.h"
-#include "components/qps/query_preprocessor/query_tokenizer/TokenObject.h"
-
-#include "models/Relationship/RelationshipType.h"
 
 class QPSClient {
 
@@ -22,6 +10,11 @@ public:
 	//For getting entity
 	std::unordered_set<std::string> getAllEntity(DesignEntity returnType);
 
+	// For getting Entity Mapping
+	std::string getStatementMapping(std::string& stmtNumber, DesignEntity entityType);
+	std::unordered_set<std::string> getStatementByName(std::string& name, DesignEntity entityType);
+	std::unordered_set<std::string> getAllName(DesignEntity entityType);
+
 	//For Relationship
 	bool storeRelationship(Relationship* rel);
 	bool getRelationship(RelationshipType relType, TokenObject firstArgument, TokenObject secondArgument);
@@ -31,7 +24,9 @@ public:
 
 	//For Pattern
 	std::unordered_set<std::string> getPattern(DesignEntity designEntity, TokenObject firstArgument, TokenObject secondArgument);
+	std::unordered_set<std::string> getContainerPattern(DesignEntity designEntity, TokenObject firstArgument);
 	std::vector<std::pair<std::string, std::string>> getPatternPair(DesignEntity designEntity, TokenObject secondArgument);
+	std::vector<std::pair<std::string, std::string>> getContainerPatternPair(DesignEntity designEntity);
 
 private:
 	PKB* pkb;

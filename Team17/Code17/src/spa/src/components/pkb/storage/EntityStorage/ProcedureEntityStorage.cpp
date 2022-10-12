@@ -1,5 +1,4 @@
 #include "ProcedureEntityStorage.h"
-#include <typeinfo>
 #include "models/Entity/ProcedureEntity.h"
 
 ProcedureEntityStorage::ProcedureEntityStorage() : EntityStorage() {}

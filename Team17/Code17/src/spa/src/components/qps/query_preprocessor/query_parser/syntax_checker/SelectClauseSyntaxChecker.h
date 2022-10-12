@@ -11,6 +11,7 @@ using namespace qps;
 class SelectClauseSyntaxChecker : public SyntaxChecker {
 private:
     std::stack<TokenType> selectSyntax;
+    bool isSynonymToken(TokenType tokenType);
 public:
     SelectClauseSyntaxChecker();
     ~SelectClauseSyntaxChecker();

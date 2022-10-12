@@ -26,6 +26,8 @@ TokenObject closedBracketTokenObject = TokenObject(TokenType::CLOSED_BRACKET, ")
 
 TokenObject andTokenObject = TokenObject(TokenType::AND, "and");
 TokenObject booleanTokenObject = TokenObject(TokenType::BOOLEAN, "BOOLEAN");
+TokenObject withTokenObject = TokenObject(TokenType::WITH, "with");
+TokenObject equalsTokenObject = TokenObject(TokenType::EQUALS, "=");
 
 TokenObject stmtTokenObject = TokenObject(TokenType::STMT, "stmt");
 TokenObject procTokenObject = TokenObject(TokenType::PROCEDURE, "procedure");
@@ -57,9 +59,22 @@ TokenObject expressionTokenObject2 = TokenObject(TokenType::EXPRESSION, "((x+y))
 TokenObject expressionTokenObject3 = TokenObject(TokenType::EXPRESSION, "((x1+y))*(1/3)");
 TokenObject expressionTokenObject4 = TokenObject(TokenType::EXPRESSION, "((x/(s-y)))*(www/(3*(2/x)))");
 
+TokenObject attributeTokenObject1 = TokenObject(TokenType::ATTRIBUTE, "a.stmt#");
+TokenObject attributeTokenObject2 = TokenObject(TokenType::ATTRIBUTE, "procName.procName");
+TokenObject attributeTokenObject3 = TokenObject(TokenType::ATTRIBUTE, "c.value");
+TokenObject attributeTokenObject4 = TokenObject(TokenType::ATTRIBUTE, "procName.varName");
+TokenObject attributeTokenObject5 = TokenObject(TokenType::ATTRIBUTE, "s.stmt#");
+TokenObject attributeTokenObject6 = TokenObject(TokenType::ATTRIBUTE, "s1.stmt#");
+TokenObject attributeTokenObject7 = TokenObject(TokenType::ATTRIBUTE, "value.value");
 
+TokenObject oneSyn_tupleTokenObject = TokenObject(TokenType::TUPLE, "<a1>");
 TokenObject twoSyn_tupleTokenObject = TokenObject(TokenType::TUPLE, "<a1,a2>");
 TokenObject threeSyn_tupleTokenObject = TokenObject(TokenType::TUPLE, "<a,a1,a2>");
+TokenObject attriSyn_tupleTokenObject1 = TokenObject(TokenType::TUPLE, "<a.stmt#,a1,a2>");
+TokenObject attriSyn_tupleTokenObject2 = TokenObject(TokenType::TUPLE, "<a,p.procName,a2>");
+TokenObject fourAttri_tupleTokenObject = TokenObject(TokenType::TUPLE, "<a.stmt#,p.procName,c.value,v.varName>");
+TokenObject oneAttri_tupleTokenObject = TokenObject(TokenType::TUPLE, "<p.procName>");
+TokenObject threeAttri_tupleTokenObject = TokenObject(TokenType::TUPLE, "<c.stmt#,c.procName,s.stmt#>");
 
 TokenObject v_nameTokenObject = TokenObject(TokenType::NAME, "v");
 TokenObject v1_nameTokenObject = TokenObject(TokenType::NAME, "v1");
@@ -79,6 +94,7 @@ TokenObject cl_nameTokenObject = TokenObject(TokenType::NAME, "cl");
 TokenObject newa_nameTokenObject = TokenObject(TokenType::NAME, "newa");
 TokenObject capital_nameTokenObject = TokenObject(TokenType::NAME, "Statement");
 TokenObject capitalEntity_nameTokenObject = TokenObject(TokenType::NAME, "Variable");
+TokenObject value_nameTokenObject = TokenObject(TokenType::NAME, "value");
 
 TokenObject six_intTokenObject = TokenObject(TokenType::INTEGER, "6");
 TokenObject fourteen_intTokenObject = TokenObject(TokenType::INTEGER, "14");

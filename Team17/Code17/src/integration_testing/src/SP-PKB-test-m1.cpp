@@ -30,7 +30,7 @@ auto spClient = new SPClient(pkbSP);
 TEST_CASE("test SP PKB integration") {
     Extractor extractor = Extractor(spClient);
     SimpleParser simpleParser = SimpleParser(&extractor);
-    simpleParser.parseCode("    procedure computeCentroid {\
+    /*simpleParser.parseCode("    procedure computeCentroid {\
 		      count = 0;\
 	      cenX = 0;\
 	      cenY = 0;\
@@ -47,9 +47,9 @@ TEST_CASE("test SP PKB integration") {
 		          cenY = cenY / count;\
 	}\
 	      normSq = cenX * cenX + cenY * cenY;\
-    }");
+    }");*/
 }
-
+/*
 // pkbSP APIs queries
 TEST_CASE("Select all queries for SP") {
     SECTION("Select if statements") {
@@ -303,3 +303,4 @@ TEST_CASE("Relationships and patterns for SP") {
         REQUIRE(testResults == expectedResults);
     }
 }
+*/

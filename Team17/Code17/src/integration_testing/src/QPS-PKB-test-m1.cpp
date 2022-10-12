@@ -251,6 +251,7 @@ int initPKB() {
 
 int dummyForRun = initPKB();
 
+
 TEST_CASE("Select synonyms queries") {
 
     SECTION("Select if statements") {
@@ -266,6 +267,8 @@ TEST_CASE("Select synonyms queries") {
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"1", "2", "3", "5", "6", "7", "9", "10", "11", "12"};
         QPS::processQueryResult(testQuery, testResults, qpsClient);
+        testResults.sort();
+        expectedResults.sort();
         REQUIRE(testResults.size() == expectedResults.size());
     }
 
@@ -308,6 +311,8 @@ TEST_CASE("Select synonyms queries") {
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"count", "cenX", "cenY", "x", "y", "flag", "normSq"};
         QPS::processQueryResult(testQuery, testResults, qpsClient);
+        testResults.sort();
+        expectedResults.sort();
         REQUIRE(testResults.size() == expectedResults.size());
     }
 
@@ -316,6 +321,8 @@ TEST_CASE("Select synonyms queries") {
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"0", "1"};
         QPS::processQueryResult(testQuery, testResults, qpsClient);
+        testResults.sort();
+        expectedResults.sort();
         REQUIRE(testResults.size() == expectedResults.size());
     }
 }
@@ -595,6 +602,7 @@ TEST_CASE("Syntax and Semantics Checks") {
     }
 }
 
+
 TEST_CASE("Milestone 1 Integration Test 1") {
 
     SECTION("Refactor multiclause test") {
@@ -618,6 +626,8 @@ TEST_CASE("Milestone 1 Integration Test 1") {
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"10", "3", "2", "1", "6", "5"};
         QPS::processQueryResult(testQuery, testResults, qpsClient);
+        testResults.sort();
+        expectedResults.sort();
         REQUIRE(testResults == expectedResults);
     }
 
@@ -626,6 +636,8 @@ TEST_CASE("Milestone 1 Integration Test 1") {
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"11", "6", "9", "5", "7", "10"};
         QPS::processQueryResult(testQuery, testResults, qpsClient);
+        testResults.sort();
+        expectedResults.sort();
         REQUIRE(testResults == expectedResults);
     }
 
@@ -680,6 +692,8 @@ TEST_CASE("Milestone 1 Integration Test 1") {
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"9", "5"};
         QPS::processQueryResult(testQuery, testResults, qpsClient);
+        testResults.sort();
+        expectedResults.sort();
         REQUIRE(testResults == expectedResults);
     }
 
@@ -699,6 +713,8 @@ TEST_CASE("Milestone 1 Integration test 2") {
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"normSq", "flag", "cenY", "cenX", "count", "y", "x"};
         QPS::processQueryResult(testQuery, testResults, qpsClient);
+        testResults.sort();
+        expectedResults.sort();
         REQUIRE(testResults == expectedResults);
     }
 
@@ -716,6 +732,8 @@ TEST_CASE("Milestone 1 Integration test 2") {
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"cenX", "cenY"};
         QPS::processQueryResult(testQuery, testResults, qpsClient);
+        testResults.sort();
+        expectedResults.sort();
         REQUIRE(testResults.size() == expectedResults.size());
     }
 
@@ -724,6 +742,8 @@ TEST_CASE("Milestone 1 Integration test 2") {
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"1", "2", "3", "5", "6", "7", "9", "10", "11", "12"};
         QPS::processQueryResult(testQuery, testResults, qpsClient);
+        testResults.sort();
+        expectedResults.sort();
         REQUIRE(testResults.size() == expectedResults.size());
     }
 
@@ -748,6 +768,8 @@ TEST_CASE("Milestone 1 Integration test 2") {
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"count", "cenX", "cenY", "x", "y", "flag", "normSq"};
         QPS::processQueryResult(testQuery, testResults, qpsClient);
+        testResults.sort();
+        expectedResults.sort();
         REQUIRE(testResults.size() == expectedResults.size());
     }
 
@@ -756,6 +778,8 @@ TEST_CASE("Milestone 1 Integration test 2") {
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = { "count", "cenX", "cenY", "x", "y", "flag", "normSq" };
         QPS::processQueryResult(testQuery, testResults, qpsClient);
+        testResults.sort();
+        expectedResults.sort();
         REQUIRE(testResults.size() == expectedResults.size());
     }
 
@@ -772,6 +796,8 @@ TEST_CASE("Milestone 1 Integration test 2") {
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"1", "2", "3", "12", "6", "9", "11", "5", "7", "10"};
         QPS::processQueryResult(testQuery, testResults, qpsClient);
+        testResults.sort();
+        expectedResults.sort();
         REQUIRE(testResults == expectedResults);
     }
 
@@ -862,6 +888,8 @@ TEST_CASE("Milestone 1 Integration test 2") {
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"12", "8", "4", "3", "2"};
         QPS::processQueryResult(testQuery, testResults, qpsClient);
+        testResults.sort();
+        expectedResults.sort();
         REQUIRE(testResults == expectedResults);
     }
 
@@ -870,6 +898,8 @@ TEST_CASE("Milestone 1 Integration test 2") {
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"4", "8"};
         QPS::processQueryResult(testQuery, testResults, qpsClient);
+        testResults.sort();
+        expectedResults.sort();
         REQUIRE(testResults == expectedResults);
     }
 
@@ -891,5 +921,3 @@ TEST_CASE("Milestone 1 Integration test 2") {
         REQUIRE(testResults.empty());
     }
 }
-
-

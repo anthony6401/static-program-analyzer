@@ -20,11 +20,12 @@
 #include "models/Relationship/ParentRelationship.h"
 #include "models/Relationship/ParentTRelationship.h"
 #include "models/Relationship/NextRelationship.h"
-#include "models/Relationship/NextTRelationship.h"
 #include "models/Relationship/CallsRelationship.h"
 #include "models/Relationship/CallsTRelationship.h"
 #include "models/Pattern/Pattern.h"
 #include "models/Pattern/AssignPattern.h"
+#include "models/Pattern/WhilePattern.h"
+#include "models/Pattern/IfPattern.h"
 #include "components/qps/QPS.h"
 #include <iostream>
 
@@ -33,14 +34,14 @@ PKB* pkb_m2 = new PKB();
 auto qpsClient_m2 = QPSClient(pkb_m2);
 
 // Stmt Entity
-static Entity* stmt1 = new ReadEntity("1");
-static Entity* stmt2 = new ReadEntity("2");
-static Entity* stmt3 = new CallEntity("3");
+static Entity* stmt1 = new ReadEntity("1", "x");
+static Entity* stmt2 = new ReadEntity("2", "z");
+static Entity* stmt3 = new CallEntity("3", "Second");
 static Entity* stmt4 = new AssignEntity("4");
 static Entity* stmt5 = new AssignEntity("5");
 static Entity* stmt6 = new WhileEntity("6");
 static Entity* stmt7 = new AssignEntity("7");
-static Entity* stmt8 = new CallEntity("8");
+static Entity* stmt8 = new CallEntity("8", "Third");
 static Entity* stmt9 = new AssignEntity("9");
 static Entity* stmt10 = new IfEntity("10");
 static Entity* stmt11 = new AssignEntity("11");
@@ -50,7 +51,7 @@ static Entity* stmt14 = new AssignEntity("14");
 static Entity* stmt15 = new AssignEntity("15");
 static Entity* stmt16 = new AssignEntity("16");
 static Entity* stmt17 = new AssignEntity("17");
-static Entity* stmt18 = new PrintEntity("18");
+static Entity* stmt18 = new PrintEntity("18", "v");
 
 // Proc Entity
 static Entity* procFirst = new ProcedureEntity("First");
@@ -229,89 +230,6 @@ static Relationship* nextRelationship15 = new NextRelationship(stmt14, stmt15);
 static Relationship* nextRelationship16 = new NextRelationship(stmt16, stmt17);
 static Relationship* nextRelationship17 = new NextRelationship(stmt17, stmt18);
 
-// Next* Relationship
-static Relationship* nextTRelationship1 = new NextTRelationship(stmt1, stmt2);
-static Relationship* nextTRelationship2 = new NextTRelationship(stmt1, stmt3);
-static Relationship* nextTRelationship3 = new NextTRelationship(stmt2, stmt3);
-static Relationship* nextTRelationship4 = new NextTRelationship(stmt4, stmt5);
-static Relationship* nextTRelationship5 = new NextTRelationship(stmt4, stmt6);
-static Relationship* nextTRelationship6 = new NextTRelationship(stmt4, stmt7);
-static Relationship* nextTRelationship7 = new NextTRelationship(stmt4, stmt8);
-static Relationship* nextTRelationship8 = new NextTRelationship(stmt4, stmt9);
-static Relationship* nextTRelationship9 = new NextTRelationship(stmt4, stmt10);
-static Relationship* nextTRelationship10 = new NextTRelationship(stmt4, stmt11);
-static Relationship* nextTRelationship11 = new NextTRelationship(stmt4, stmt12);
-static Relationship* nextTRelationship12 = new NextTRelationship(stmt4, stmt13);
-static Relationship* nextTRelationship13 = new NextTRelationship(stmt4, stmt14);
-static Relationship* nextTRelationship14 = new NextTRelationship(stmt4, stmt15);
-static Relationship* nextTRelationship15 = new NextTRelationship(stmt5, stmt6);
-static Relationship* nextTRelationship16 = new NextTRelationship(stmt5, stmt7);
-static Relationship* nextTRelationship17 = new NextTRelationship(stmt5, stmt8);
-static Relationship* nextTRelationship18 = new NextTRelationship(stmt5, stmt9);
-static Relationship* nextTRelationship19 = new NextTRelationship(stmt5, stmt10);
-static Relationship* nextTRelationship20 = new NextTRelationship(stmt5, stmt11);
-static Relationship* nextTRelationship21 = new NextTRelationship(stmt5, stmt12);
-static Relationship* nextTRelationship22 = new NextTRelationship(stmt5, stmt13);
-static Relationship* nextTRelationship23 = new NextTRelationship(stmt5, stmt14);
-static Relationship* nextTRelationship24 = new NextTRelationship(stmt5, stmt15);
-static Relationship* nextTRelationship25 = new NextTRelationship(stmt6, stmt6);
-static Relationship* nextTRelationship26 = new NextTRelationship(stmt6, stmt7);
-static Relationship* nextTRelationship27 = new NextTRelationship(stmt6, stmt8);
-static Relationship* nextTRelationship28 = new NextTRelationship(stmt6, stmt9);
-static Relationship* nextTRelationship29 = new NextTRelationship(stmt6, stmt10);
-static Relationship* nextTRelationship30 = new NextTRelationship(stmt6, stmt11);
-static Relationship* nextTRelationship31 = new NextTRelationship(stmt6, stmt12);
-static Relationship* nextTRelationship32 = new NextTRelationship(stmt6, stmt13);
-static Relationship* nextTRelationship33 = new NextTRelationship(stmt6, stmt14);
-static Relationship* nextTRelationship34 = new NextTRelationship(stmt6, stmt15);
-static Relationship* nextTRelationship35 = new NextTRelationship(stmt7, stmt6);
-static Relationship* nextTRelationship36 = new NextTRelationship(stmt7, stmt7);
-static Relationship* nextTRelationship37 = new NextTRelationship(stmt7, stmt8);
-static Relationship* nextTRelationship38 = new NextTRelationship(stmt7, stmt9);
-static Relationship* nextTRelationship39 = new NextTRelationship(stmt7, stmt10);
-static Relationship* nextTRelationship40 = new NextTRelationship(stmt7, stmt11);
-static Relationship* nextTRelationship41 = new NextTRelationship(stmt7, stmt12);
-static Relationship* nextTRelationship42 = new NextTRelationship(stmt7, stmt13);
-static Relationship* nextTRelationship43 = new NextTRelationship(stmt7, stmt14);
-static Relationship* nextTRelationship44 = new NextTRelationship(stmt7, stmt15);
-static Relationship* nextTRelationship45 = new NextTRelationship(stmt8, stmt6);
-static Relationship* nextTRelationship46 = new NextTRelationship(stmt8, stmt7);
-static Relationship* nextTRelationship47 = new NextTRelationship(stmt8, stmt8);
-static Relationship* nextTRelationship48 = new NextTRelationship(stmt8, stmt9);
-static Relationship* nextTRelationship49 = new NextTRelationship(stmt8, stmt10);
-static Relationship* nextTRelationship50 = new NextTRelationship(stmt8, stmt11);
-static Relationship* nextTRelationship51 = new NextTRelationship(stmt8, stmt12);
-static Relationship* nextTRelationship52 = new NextTRelationship(stmt8, stmt13);
-static Relationship* nextTRelationship53 = new NextTRelationship(stmt8, stmt14);
-static Relationship* nextTRelationship54 = new NextTRelationship(stmt8, stmt15);
-static Relationship* nextTRelationship55 = new NextTRelationship(stmt9, stmt6);
-static Relationship* nextTRelationship56 = new NextTRelationship(stmt9, stmt7);
-static Relationship* nextTRelationship57 = new NextTRelationship(stmt9, stmt8);
-static Relationship* nextTRelationship58 = new NextTRelationship(stmt9, stmt9);
-static Relationship* nextTRelationship59 = new NextTRelationship(stmt9, stmt10);
-static Relationship* nextTRelationship60 = new NextTRelationship(stmt9, stmt11);
-static Relationship* nextTRelationship61 = new NextTRelationship(stmt9, stmt12);
-static Relationship* nextTRelationship62 = new NextTRelationship(stmt9, stmt13);
-static Relationship* nextTRelationship63 = new NextTRelationship(stmt9, stmt14);
-static Relationship* nextTRelationship64 = new NextTRelationship(stmt9, stmt15);
-static Relationship* nextTRelationship65 = new NextTRelationship(stmt10, stmt11);
-static Relationship* nextTRelationship66 = new NextTRelationship(stmt10, stmt12);
-static Relationship* nextTRelationship67 = new NextTRelationship(stmt10, stmt13);
-static Relationship* nextTRelationship68 = new NextTRelationship(stmt10, stmt14);
-static Relationship* nextTRelationship69 = new NextTRelationship(stmt10, stmt15);
-static Relationship* nextTRelationship70 = new NextTRelationship(stmt11, stmt13);
-static Relationship* nextTRelationship71 = new NextTRelationship(stmt11, stmt14);
-static Relationship* nextTRelationship72 = new NextTRelationship(stmt11, stmt15);
-static Relationship* nextTRelationship73 = new NextTRelationship(stmt12, stmt13);
-static Relationship* nextTRelationship74 = new NextTRelationship(stmt12, stmt14);
-static Relationship* nextTRelationship75 = new NextTRelationship(stmt12, stmt15);
-static Relationship* nextTRelationship76 = new NextTRelationship(stmt13, stmt14);
-static Relationship* nextTRelationship77 = new NextTRelationship(stmt13, stmt15);
-static Relationship* nextTRelationship78 = new NextTRelationship(stmt14, stmt15);
-static Relationship* nextTRelationship79 = new NextTRelationship(stmt16, stmt17);
-static Relationship* nextTRelationship80 = new NextTRelationship(stmt16, stmt18);
-static Relationship* nextTRelationship81 = new NextTRelationship(stmt17, stmt18);
-
 // Calls Relationship
 static Relationship* callsRelationship1 = new CallsRelationship(procFirst, procSecond);
 static Relationship* callsRelationship2 = new CallsRelationship(procSecond, procThird);
@@ -333,6 +251,12 @@ static kb::Pattern* assignPattern8 = new AssignPattern("14", "y", "z+2");
 static kb::Pattern* assignPattern9 = new AssignPattern("15", "x", "x*y+z");
 static kb::Pattern* assignPattern10 = new AssignPattern("16", "z", "5");
 static kb::Pattern* assignPattern11 = new AssignPattern("17", "v", "z");
+
+// While Pattern
+static kb::Pattern* whilePattern1 = new WhilePattern("6", "i");
+
+// If Pattern
+static kb::Pattern* ifPattern1 = new IfPattern("10", "x");
 
 static int initPKB() {
     pkb_m2->storeConstant(constant0);
@@ -492,88 +416,6 @@ static int initPKB() {
     pkb_m2->storeRelationship(nextRelationship16);
     pkb_m2->storeRelationship(nextRelationship17);
 
-    pkb_m2->storeRelationship(nextTRelationship1);
-    pkb_m2->storeRelationship(nextTRelationship2);
-    pkb_m2->storeRelationship(nextTRelationship3);
-    pkb_m2->storeRelationship(nextTRelationship4);
-    pkb_m2->storeRelationship(nextTRelationship5);
-    pkb_m2->storeRelationship(nextTRelationship6);
-    pkb_m2->storeRelationship(nextTRelationship7);
-    pkb_m2->storeRelationship(nextTRelationship8);
-    pkb_m2->storeRelationship(nextTRelationship9);
-    pkb_m2->storeRelationship(nextTRelationship10);
-    pkb_m2->storeRelationship(nextTRelationship11);
-    pkb_m2->storeRelationship(nextTRelationship12);
-    pkb_m2->storeRelationship(nextTRelationship13);
-    pkb_m2->storeRelationship(nextTRelationship14);
-    pkb_m2->storeRelationship(nextTRelationship15);
-    pkb_m2->storeRelationship(nextTRelationship16);
-    pkb_m2->storeRelationship(nextTRelationship17);
-    pkb_m2->storeRelationship(nextTRelationship18);
-    pkb_m2->storeRelationship(nextTRelationship19);
-    pkb_m2->storeRelationship(nextTRelationship20);
-    pkb_m2->storeRelationship(nextTRelationship21);
-    pkb_m2->storeRelationship(nextTRelationship22);
-    pkb_m2->storeRelationship(nextTRelationship23);
-    pkb_m2->storeRelationship(nextTRelationship24);
-    pkb_m2->storeRelationship(nextTRelationship25);
-    pkb_m2->storeRelationship(nextTRelationship26);
-    pkb_m2->storeRelationship(nextTRelationship27);
-    pkb_m2->storeRelationship(nextTRelationship28);
-    pkb_m2->storeRelationship(nextTRelationship29);
-    pkb_m2->storeRelationship(nextTRelationship30);
-    pkb_m2->storeRelationship(nextTRelationship31);
-    pkb_m2->storeRelationship(nextTRelationship32);
-    pkb_m2->storeRelationship(nextTRelationship33);
-    pkb_m2->storeRelationship(nextTRelationship34);
-    pkb_m2->storeRelationship(nextTRelationship35);
-    pkb_m2->storeRelationship(nextTRelationship36);
-    pkb_m2->storeRelationship(nextTRelationship37);
-    pkb_m2->storeRelationship(nextTRelationship38);
-    pkb_m2->storeRelationship(nextTRelationship39);
-    pkb_m2->storeRelationship(nextTRelationship40);
-    pkb_m2->storeRelationship(nextTRelationship41);
-    pkb_m2->storeRelationship(nextTRelationship42);
-    pkb_m2->storeRelationship(nextTRelationship43);
-    pkb_m2->storeRelationship(nextTRelationship44);
-    pkb_m2->storeRelationship(nextTRelationship45);
-    pkb_m2->storeRelationship(nextTRelationship46);
-    pkb_m2->storeRelationship(nextTRelationship47);
-    pkb_m2->storeRelationship(nextTRelationship48);
-    pkb_m2->storeRelationship(nextTRelationship49);
-    pkb_m2->storeRelationship(nextTRelationship50);
-    pkb_m2->storeRelationship(nextTRelationship51);
-    pkb_m2->storeRelationship(nextTRelationship52);
-    pkb_m2->storeRelationship(nextTRelationship53);
-    pkb_m2->storeRelationship(nextTRelationship54);
-    pkb_m2->storeRelationship(nextTRelationship55);
-    pkb_m2->storeRelationship(nextTRelationship56);
-    pkb_m2->storeRelationship(nextTRelationship57);
-    pkb_m2->storeRelationship(nextTRelationship58);
-    pkb_m2->storeRelationship(nextTRelationship59);
-    pkb_m2->storeRelationship(nextTRelationship60);
-    pkb_m2->storeRelationship(nextTRelationship61);
-    pkb_m2->storeRelationship(nextTRelationship62);
-    pkb_m2->storeRelationship(nextTRelationship63);
-    pkb_m2->storeRelationship(nextTRelationship64);
-    pkb_m2->storeRelationship(nextTRelationship65);
-    pkb_m2->storeRelationship(nextTRelationship66);
-    pkb_m2->storeRelationship(nextTRelationship67);
-    pkb_m2->storeRelationship(nextTRelationship68);
-    pkb_m2->storeRelationship(nextTRelationship69);
-    pkb_m2->storeRelationship(nextTRelationship70);
-    pkb_m2->storeRelationship(nextTRelationship71);
-    pkb_m2->storeRelationship(nextTRelationship72);
-    pkb_m2->storeRelationship(nextTRelationship73);
-    pkb_m2->storeRelationship(nextTRelationship74);
-    pkb_m2->storeRelationship(nextTRelationship75);
-    pkb_m2->storeRelationship(nextTRelationship76);
-    pkb_m2->storeRelationship(nextTRelationship77);
-    pkb_m2->storeRelationship(nextTRelationship78);
-    pkb_m2->storeRelationship(nextTRelationship79);
-    pkb_m2->storeRelationship(nextTRelationship80);
-    pkb_m2->storeRelationship(nextTRelationship81);
-
     pkb_m2->storeRelationship(callsRelationship1);
     pkb_m2->storeRelationship(callsRelationship2);
 
@@ -593,6 +435,10 @@ static int initPKB() {
     pkb_m2->storePattern(assignPattern10);
     pkb_m2->storePattern(assignPattern11);
 
+    pkb_m2->storePattern(ifPattern1);
+
+    pkb_m2->storePattern(whilePattern1);
+
     return 0;
 }
 
@@ -606,6 +452,8 @@ TEST_CASE("Calls queries") {
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"Third", "Second", "First"};
         QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
         REQUIRE(testResults == expectedResults);
     }
 
@@ -615,6 +463,8 @@ TEST_CASE("Calls queries") {
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"Second", "First"};
         QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
         REQUIRE(testResults == expectedResults);
     }
 
@@ -663,6 +513,8 @@ TEST_CASE("Calls queries") {
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"8", "3"};
         QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
         REQUIRE(testResults == expectedResults);
     }
 
@@ -710,6 +562,8 @@ TEST_CASE("Calls* queries") {
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"Third", "Second", "First"};
         QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
         REQUIRE(testResults == expectedResults);
     }
 
@@ -719,6 +573,8 @@ TEST_CASE("Calls* queries") {
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"Third", "Second", "First"};
         QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
         REQUIRE(testResults == expectedResults);
     }
 
@@ -728,6 +584,8 @@ TEST_CASE("Calls* queries") {
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"Second", "Third"};
         QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
         REQUIRE(testResults == expectedResults);
     }
 
@@ -737,6 +595,8 @@ TEST_CASE("Calls* queries") {
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = { "Second", "Third" };
         QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
         REQUIRE(testResults == expectedResults);
     }
 
@@ -746,6 +606,8 @@ TEST_CASE("Calls* queries") {
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = { "Third", "Second", "First" };
         QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
         REQUIRE(testResults == expectedResults);
     }
 
@@ -793,6 +655,8 @@ TEST_CASE("Next queries") {
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"Third", "Second", "First"};
         QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
         REQUIRE(testResults == expectedResults);
     }
 
@@ -813,6 +677,8 @@ TEST_CASE("Next* queries") {
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"14", "13", "15", "12", "11", "9", "7"};
         QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
         REQUIRE(testResults == expectedResults);
     }
 
@@ -852,6 +718,8 @@ TEST_CASE("Multi-clause queries") {
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = {"14", "12", "11", "6", "9", "13", "10", "8", "7"};
         QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
         REQUIRE(testResults == expectedResults);
     }
 
@@ -906,6 +774,8 @@ TEST_CASE("Multi-clause queries") {
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = { "7", "9" };
         QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
         REQUIRE(testResults == expectedResults);
     }
 
@@ -927,4 +797,636 @@ TEST_CASE("Multi-clause queries") {
         REQUIRE(testResults == expectedResults);
     }
 
+}
+
+TEST_CASE("BOOLEAN queries") {
+    SECTION("BOOLEAN Test 1 - 1 True") {
+        std::string testQuery = "assign a; while w; \n "
+                                "Select BOOLEAN such that Modifies(7, \"x\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "TRUE" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("BOOLEAN Test 2 - 1 True") {
+        std::string testQuery = "assign a; while w; \n "
+                                "Select BOOLEAN such that Modifies(2, \"y\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "TRUE" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("BOOLEAN Test 3 - 1 False") {
+        std::string testQuery = "assign a; while w; \n "
+                                "Select BOOLEAN such that Modifies(18, \"v\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "FALSE" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("BOOLEAN Test 4 - 2 False") {
+        std::string testQuery = "assign a; while w; \n "
+                                "Select BOOLEAN such that Modifies(18, \"v\") and Parent(w, 13)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "FALSE" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("BOOLEAN Test 5 - 2 True") {
+        std::string testQuery = "procedure p; \n "
+                                "Select BOOLEAN such that Uses(18, \"v\") and Calls(\"First\", p)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "TRUE" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("BOOLEAN Test 6 - 1 False, 1 True") {
+        std::string testQuery = "procedure p; \n "
+                                "Select BOOLEAN such that Modifies(2, \"z\") such that Calls(p, \"Third\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "FALSE" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("BOOLEAN Test 7 - 1 True, 1 False") {
+        std::string testQuery = "variable v; assign a;\n "
+                                "Select BOOLEAN pattern a(\"x\", _\"x\"_) such that Modifies(2, \"x\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "FALSE" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("BOOLEAN Test 8 - Calls itself") {
+        std::string testQuery = "procedure p,p1;\n "
+                                "Select BOOLEAN such that Calls(p, p)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "FALSE" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+}
+
+TEST_CASE("TUPLE queries with synonyms") {
+    SECTION("Tuple Test 1 - 2 synonyms present") {
+        std::string testQuery = "procedure p, p1;\n "
+                                "Select <p, p1> such that Calls(p, p1)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "First Second", "Second Third" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Tuple Test 2 - 3 synonyms present") {
+        std::string testQuery = "procedure p, p1; variable v; stmt s;\n "
+                                "Select <p, p1, v> such that Calls(p, p1) and Modifies(14, v)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "First Second y", "Second Third y" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Tuple Test 3 - 3 synonyms present with False result") {
+        std::string testQuery = "procedure p, p1; variable v; stmt s;\n "
+                                "Select <p, p1, v> such that Calls(p, p1) and Modifies(18, v)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Tuple Test 4 - 3 synonyms present") {
+        std::string testQuery = "procedure p, p1; variable v; stmt s;\n "
+                                "Select <p, p1, s> such that Calls(p, p1) and Modifies(s, \"i\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "First Second 3", "Second Third 3", "First Second 6", "Second Third 9", "First Second 5", "Second Third 6", "First Second 9", "Second Third 5"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Tuple Test 5") {
+        std::string testQuery = "read re; print p1, p2; call c; stmt s;\n "
+                                "Select <c, s> such that Uses(c, \"v\") such that Modifies(s, \"x\") such that Uses(s, \"y\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"3 6", "8 6",
+                                                  "3 7", "8 7",
+                                                  "3 15", "8 15",
+                                                  "3 3", "8 3"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Tuple Test 6") {
+        std::string testQuery = "read re; print p1, p2; call c; stmt s;\n "
+                                "Select <s, s> such that Uses(c, \"v\") such that Modifies(s, \"x\") such that Uses(s, \"y\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"15 15", "3 3", "6 6", "7 7"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+}
+
+TEST_CASE("Tuple queries with attributes") {
+    SECTION("Tuple Test 1 - 1 attribute present") {
+        std::string testQuery = "procedure p, p1; variable v; stmt s;\n "
+                                "Select <p.procName, p1, s> such that Calls(p, p1) and Modifies(s, \"i\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"First Second 3", "Second Third 3", "First Second 6", "Second Third 9", "First Second 5", "Second Third 6", "First Second 9", "Second Third 5"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Tuple Test 2 - 3 attributes present") {
+        std::string testQuery = "procedure p, p1; variable v; stmt s;\n "
+                                "Select <p.procName, p1.procName, s.stmt#> such that Calls(p, p1) and Modifies(s, \"i\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "First Second 3", "Second Third 3", "First Second 6", "Second Third 9", "First Second 5", "Second Third 6", "First Second 9", "Second Third 5"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Tuple Test 3 - 2 attributes present") {
+        std::string testQuery = "procedure p, p1; variable v; stmt s; constant c;\n "
+                                "Select <c.value, p.procName> such that Calls(p, p1) and Modifies(s, \"i\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"0 First", "0 Second", "5 First", "5 Second", "2 First", "2 Second", "1 First", "1 Second"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Tuple Test 4 - 1 alternative attribute present") {
+        std::string testQuery = "procedure p, p1; variable v; stmt s; constant c;\n "
+                                "Select <v.varName, p.procName> such that Calls(p, p1) and Modifies(s, \"i\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"x First", "x Second", "y First", "y Second", "i First", "i Second", "z First", "z Second", "v First", "v Second"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Tuple Test 5") {
+        std::string testQuery = "procedure p, p1; variable v; stmt s;\n "
+                                "Select <v.varName, p.procName> such that Calls(p, p1) and Modifies(s, \"i\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"x First", "x Second", "y First", "y Second", "i First", "i Second", "z First", "z Second", "v First", "v Second"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Tuple Test 6") {
+        std::string testQuery = "procedure p, p1; read re; stmt s; call c;\n "
+                                "Select <re.varName, c.procName> such that Calls(p, p1) and Modifies(s, \"i\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"x Second", "z Second", "x Third", "z Third"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Tuple Test 7") {
+        std::string testQuery = "procedure p, p1; read re; stmt s; call c;\n "
+                                "Select <re.varName> such that Calls(p, p1) and Modifies(s, \"i\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"x", "z"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Tuple Test 8") {
+        std::string testQuery = "read re; print p1, p2; call c; stmt s;\n "
+                                "Select <s.stmt#, re.stmt#, re.varName, p1.varName, c.stmt#> such that Uses(s, \"y\") such that Modifies(re, \"y\") and Modifies(1, \"x\") and Uses(p1, \"v\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"7 2 z v 3", "6 2 z v 3", "15 2 z v 3", "3 2 z v 3",
+                                                  "7 2 z v 8", "6 2 z v 8", "15 2 z v 8", "3 2 z v 8"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Tuple Test 9") {
+        std::string testQuery = "read re; print p1, p2; call c; stmt s;\n "
+                                "Select <c.stmt#, c.procName, s.stmt#> such that Uses(c, \"v\") such that Modifies(s, \"x\") such that Uses(s, \"y\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"8 Third 6", "3 Second 6",
+                                                  "8 Third 7", "3 Second 7",
+                                                  "8 Third 15", "3 Second 15",
+                                                  "8 Third 3", "3 Second 3"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Tuple Test 10") {
+        std::string testQuery = "read re; print p1, p2; call c; stmt s;\n "
+                                "Select <c.procName, c.procName, s.stmt#> such that Uses(c, \"v\") such that Modifies(s, \"x\") such that Uses(s, \"y\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"Second Second 6", "Second Second 7", "Second Second 15", "Second Second 3",
+                                                  "Third Third 6", "Third Third 7", "Third Third 15", "Third Third 3"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Tuple Test 11") {
+        std::string testQuery = "read re; print p1, p2; call c; stmt s;\n "
+                                "Select <c, c.procName, s.stmt#> such that Uses(c, \"v\") such that Modifies(s, \"x\") such that Uses(s, \"y\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"8 Third 6", "3 Second 6",
+                                                  "8 Third 7", "3 Second 7",
+                                                  "8 Third 15", "3 Second 15",
+                                                  "8 Third 3", "3 Second 3"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Tuple Test 12") {
+        std::string testQuery = "read re; print p1, p2; call c; stmt s;\n "
+                                "Select <s.stmt#, s.stmt#, s.stmt#> such that Uses(c, \"v\") such that Modifies(s, \"x\") such that Uses(s, \"y\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"6 6 6", "7 7 7", "15 15 15", "3 3 3"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+}
+
+
+TEST_CASE("Attribute queries - alternate attribute names") {
+    SECTION("Attribute Test 1") {
+        std::string testQuery = "print p;\n "
+                                "Select p.varName";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"v"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Attribute Test 2") {
+        std::string testQuery = "print p;\n "
+                                "Select p.varName such that Uses(p, \"x\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Attribute Test 3") {
+        std::string testQuery = "print p;\n "
+                                "Select p.varName such that Uses(p, \"v\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"v"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Attribute Test 4") {
+        std::string testQuery = "read re;\n "
+                                "Select re.varName such that Uses(re, \"v\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Attribute Test 5") {
+        std::string testQuery = "read re;\n "
+                                "Select re.varName such that Modifies(re, \"x\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"x"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Attribute Test 6") {
+        std::string testQuery = "read re; call c;\n "
+                                "Select c.procName such that Follows(2, c)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"Second"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+}
+
+
+TEST_CASE("Attribute queries - non alternate attribute names") {
+    SECTION("Attribute Test 1") {
+        std::string testQuery = "procedure p, p1;\n "
+                                "Select p.procName such that Calls(p, p1)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "First", "Second" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Attribute Test 2") {
+        std::string testQuery = "stmt s; procedure p,p1;\n "
+                                "Select s.stmt# such that Calls(p, p1)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "11", "7", "18", "16", "15", "3", "17", "2", "9", "14", "13", "12", "4", "8", "10", "6", "5", "1" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Attribute Test 3") {
+        std::string testQuery = "while w; assign a;\n "
+                                "Select w.stmt# such that Modifies(w, \"v\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"6"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Attribute Test 4") {
+        std::string testQuery = "variable v; while w;\n "
+                                "Select v.varName such that Modifies(w, v)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"x", "i", "z", "v"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Attribute Test 5") {
+        std::string testQuery = "constant c;\n "
+                                "Select c.value";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"0", "5", "2", "1"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Attribute Test 6") {
+        std::string testQuery = "print p;\n "
+                                "Select p.stmt#";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"18"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Attribute Test 7") {
+        std::string testQuery = "constant value;\n "
+                                "Select value.value";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"0", "5", "2", "1"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Attribute Test 8") {
+        std::string testQuery = "variable varName; while w;\n "
+                                "Select varName.varName such that Modifies(w, varName)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"x", "i", "z", "v"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Attribute Test 9") {
+        std::string testQuery = "constant c;\n "
+                                "Select c.procName";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"SemanticError"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+}
+
+TEST_CASE("With clause queries") {
+    SECTION("With clause Test 1") {
+        std::string testQuery = "procedure p; call c; while w;\n "
+                                "Select p such that Calls (\"Second\", p) and Parent (w, c) with c.procName = p.procName";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"Third"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("With clause Test 2") {
+        std::string testQuery = "procedure p, q;\n "
+                                "Select p such that Calls (p, q) with q.procName = \"Third\" such that Modifies (p, \"i\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"Second"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("With clause Test 3") {
+        std::string testQuery = "procedure p, q;\n "
+                                "Select p such that Calls (p, q) with q.procName = \"Third\" and p.procName = \"Second\" such that Modifies (p, \"i\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"Second"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("With clause Test 4") {
+        std::string testQuery = "procedure p, q;\n "
+                                "Select p such that Calls (p, q) with q.procName = \"Third\" and p.procName = \"First\" such that Modifies (p, \"i\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("With clause Test 5") {
+        std::string testQuery = "procedure p, q;\n "
+                                "Select p such that Calls (p, q) with \"x\" = \"y\" such that Modifies (p, \"i\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("With clause Test 6") {
+        std::string testQuery = "read re; print p1, p2; call c; stmt s;\n "
+                                "Select s.stmt# such that Modifies(s, \"x\") such that Uses(s, \"y\") with s.stmt# = s.stmt# and 3 = 4";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("With clause Test 7") {
+        std::string testQuery = "procedure p, q;\n "
+                                "Select p such that Calls (p, q) with 3=3 such that Modifies (p, \"i\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"First", "Second"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("With clause Test 8") {
+        std::string testQuery = "stmt s, s1;\n "
+                                "Select s such that Uses(s, \"i\") and Modifies(s1, \"x\") with s.stmt# = s1.stmt#";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"6", "3"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("With clause Test 9") {
+        std::string testQuery = "stmt s, s1;\n "
+                                "Select s1 such that Uses(s, \"i\") and Modifies(s1, \"x\") with s.stmt# = s1.stmt#";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"6", "3"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+}
+
+TEST_CASE("If Pattern queries") {
+    SECTION("If Pattern test 1") {
+        std::string testQuery = "if ifs;\n "
+                                "Select ifs pattern ifs(_, _, _)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"10"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+
+//    SECTION("If Pattern test 2") {
+//        std::string testQuery = "if ifs; variable v; constant c;\n "
+//                                "Select <ifs, v, c> pattern ifs(v,_,_)";
+//        std::list<std::string> testResults;
+//        std::list<std::string> expectedResults = {"10 x 1", "10 x 5", "10 x 2", "10 x 0"};
+//        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+//        testResults.sort();
+//        expectedResults.sort();
+//        REQUIRE(testResults == expectedResults);
+//    }
+
+    SECTION("If Pattern test 3") {
+        std::string testQuery = "if ifs; variable v; constant c;\n "
+                                "Select ifs pattern ifs(\"x\",_,_)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"10"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("If Pattern test 4") {
+        std::string testQuery = "if if; variable v; constant c;\n "
+                                "Select if pattern if(\"y\",_,_)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+}
+
+TEST_CASE("djfhdjfhd") {
+            std::string testQuery = "if ifs; variable v; constant c;\n "
+                                "Select <ifs, v, c> pattern ifs(v,_,_)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"10 x 1", "10 x 5", "10 x 2", "10 x 0"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+}
+
+TEST_CASE("While Pattern queries") {
+    SECTION("While Pattern test 1") {
+        std::string testQuery = "while w;\n "
+                                "Select w pattern w(_, _)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"6"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("While Pattern test 2") {
+        std::string testQuery = "variable v; while w;\n "
+                                "Select <w, v> pattern w(v,_)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"6 i"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("While Pattern test 3") {
+        std::string testQuery = "variable v; while w;\n "
+                                "Select <w, v> pattern w(\"i\",_)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"6 x", "6 y", "6 i", "6 z", "6 v"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("While Pattern test 4") {
+        std::string testQuery = "variable v; while w;\n "
+                                "Select <w, v> pattern w(\"z\",_)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
 }

@@ -2,6 +2,8 @@
 
 #include "components/pkb/storage/PatternStorage/PatternStorage.h"
 #include "components/pkb/storage/PatternStorage/AssignPatternStorage.h"
+#include "components/pkb/storage/PatternStorage/IfPatternStorage.h"
+#include "components/pkb/storage/PatternStorage/WhilePatternStorage.h"
 #include "../PatternObject.h"
 #include "../ReuseableTokenObject.h"
 
@@ -87,4 +89,83 @@ TEST_CASE("Assign Pattern Storage Test") {
 	REQUIRE(assignGetPatternPairNameSubexprTwo == expectedGetPatternPairNameSubexprTwo);
 	REQUIRE(assignGetPatternPairNameSubexprThree == expectedGetPatternPairNameSubexprThree);
 	REQUIRE(assignGetPatternPairNameWildcard == expectedGetPatternPairNameWilcard);
+}
+
+TEST_CASE("If Pattern Storage Test") {
+	PatternStorage* ifPatternStorage = new IfPatternStorage();
+
+
+	REQUIRE(ifPatternStorage->storePattern(ifPatternOne));
+	REQUIRE(ifPatternStorage->storePattern(ifPatternTwo));
+	REQUIRE(ifPatternStorage->storePattern(ifPatternOneDup));
+
+
+	std::unordered_set<std::string> ifGetPatternNameNameOne = ifPatternStorage->getPattern(DesignEntity::IF, ifPatternTokenObjectFirstOne, TokenObject());
+	std::unordered_set<std::string> ifGetPatternNameNameTwo = ifPatternStorage->getPattern(DesignEntity::IF, ifPatternTokenObjectFirstTwo, TokenObject());
+
+	std::unordered_set<std::string> expectedResultIfGetPatternOne({ ifLineNumOne });
+	std::unordered_set<std::string> expectedResultIfGetPatternTwo({ ifLineNumOne, ifLineNumTwo });
+
+	REQUIRE(ifGetPatternNameNameOne == expectedResultIfGetPatternOne);
+	REQUIRE(ifGetPatternNameNameTwo == expectedResultIfGetPatternTwo);
+
+	std::vector<std::pair<std::string, std::string>> ifGetPatternPairNameNameOne = ifPatternStorage->getPatternPair(DesignEntity::IF, ifPatternTokenObjectFirstOne);
+	
+	std::vector<std::pair<std::string, std::string>> ifGetPatternPairNameNameTwo = ifPatternStorage->getPatternPair(DesignEntity::IF, ifPatternTokenObjectFirstTwo);
+	
+	std::vector<std::pair<std::string, std::string>> expectedGetPatternPairNameNameOne{ { ifLineNumOne, ifFirstValueOne },
+																						{ ifLineNumTwo, ifFirstValueTwo},
+																						{ ifLineNumOne, ifFirstValueTwo} };
+	
+	std::vector<std::pair<std::string, std::string>> expectedGetPatternPairNameNameTwo{ { ifLineNumOne, ifFirstValueOne },
+																						{ ifLineNumTwo, ifFirstValueTwo},
+																						{ ifLineNumOne, ifFirstValueTwo} };
+	
+	sort(ifGetPatternPairNameNameOne.begin(), ifGetPatternPairNameNameOne.end());
+	sort(ifGetPatternPairNameNameTwo.begin(), ifGetPatternPairNameNameTwo.end());
+	sort(expectedGetPatternPairNameNameTwo.begin(), expectedGetPatternPairNameNameTwo.end());
+	sort(expectedGetPatternPairNameNameOne.begin(), expectedGetPatternPairNameNameOne.end());
+
+	REQUIRE(ifGetPatternPairNameNameOne == expectedGetPatternPairNameNameOne);
+	REQUIRE(ifGetPatternPairNameNameTwo == expectedGetPatternPairNameNameTwo);
+}
+
+TEST_CASE("While Pattern Storage Test") {
+	PatternStorage* whilePatternStorage = new WhilePatternStorage();
+
+
+	REQUIRE(whilePatternStorage->storePattern(whilePatternOne));
+	REQUIRE(whilePatternStorage->storePattern(whilePatternTwo));
+	REQUIRE(whilePatternStorage->storePattern(whilePatternOneDup));
+
+  
+	std::unordered_set<std::string> whileGetPatternNameNameOne = whilePatternStorage->getPattern(DesignEntity::WHILE, whilePatternTokenObjectFirstOne, TokenObject());
+	std::unordered_set<std::string> whileGetPatternNameNameTwo = whilePatternStorage->getPattern(DesignEntity::WHILE, whilePatternTokenObjectFirstTwo, TokenObject());
+
+	std::unordered_set<std::string> expectedResultWhileGetPatternOne({ whileLineNumOne });
+	std::unordered_set<std::string> expectedResultWhileGetPatternTwo({ whileLineNumOne, whileLineNumTwo });
+
+	REQUIRE(whileGetPatternNameNameOne == expectedResultWhileGetPatternOne);
+	REQUIRE(whileGetPatternNameNameTwo == expectedResultWhileGetPatternTwo);
+
+	std::vector<std::pair<std::string, std::string>> whileGetPatternPairNameNameOne = whilePatternStorage->getPatternPair(DesignEntity::WHILE, whilePatternTokenObjectFirstOne);
+	
+	std::vector<std::pair<std::string, std::string>> whileGetPatternPairNameNameTwo = whilePatternStorage->getPatternPair(DesignEntity::WHILE, whilePatternTokenObjectFirstTwo);
+	
+
+	std::vector<std::pair<std::string, std::string>> expectedGetPatternPairNameNameOne{ { whileLineNumOne, whileFirstValueOne },
+																						{ whileLineNumTwo, whileFirstValueTwo},
+																						{ whileLineNumOne, whileFirstValueTwo} };
+	
+
+	std::vector<std::pair<std::string, std::string>> expectedGetPatternPairNameNameTwo{ { whileLineNumOne, whileFirstValueOne },
+																						{ whileLineNumTwo, whileFirstValueTwo},
+																						{ whileLineNumOne, whileFirstValueTwo} };
+	sort(whileGetPatternPairNameNameOne.begin(), whileGetPatternPairNameNameOne.end());
+	sort(whileGetPatternPairNameNameTwo.begin(), whileGetPatternPairNameNameTwo.end());
+	sort(expectedGetPatternPairNameNameOne.begin(), expectedGetPatternPairNameNameOne.end());
+	sort(expectedGetPatternPairNameNameTwo.begin(), expectedGetPatternPairNameNameTwo.end());
+
+	REQUIRE(whileGetPatternPairNameNameOne == expectedGetPatternPairNameNameOne);
+	REQUIRE(whileGetPatternPairNameNameTwo == expectedGetPatternPairNameNameTwo);
 }

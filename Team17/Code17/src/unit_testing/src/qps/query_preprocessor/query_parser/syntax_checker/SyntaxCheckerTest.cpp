@@ -3,6 +3,7 @@
 #include "components/qps/query_preprocessor/query_parser/syntax_checker/SelectClauseSyntaxChecker.h"
 #include "components/qps/query_preprocessor/query_parser/syntax_checker/SuchThatClauseSyntaxChecker.h"
 #include "components/qps/query_preprocessor/query_parser/syntax_checker/PatternClauseSyntaxChecker.h"
+#include "components/qps/query_preprocessor/query_parser/syntax_checker/WithClauseSyntaxChecker.h"
 #include "components/qps/query_preprocessor/query_tokenizer/TokenObject.h"
 #include "components/qps/query_preprocessor/query_tokenizer/TokenType.h"
 
@@ -232,6 +233,36 @@ TEST_CASE("Syntactically correct Select with synonym name as pattern") {
     REQUIRE(actualResult == true);
 };
 
+TEST_CASE("Syntactically correct Select with attribute as return type") {
+    SelectClauseSyntaxChecker checker = SelectClauseSyntaxChecker();
+    std::vector<TokenObject> validSelectTokens{
+        TokenObject(TokenType::SELECT, "Select"),
+        TokenObject(TokenType::ATTRIBUTE, "proc.procName"),
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validSelectTokens);
+    REQUIRE(actualResult == true);
+};
+
+TEST_CASE("Syntactically correct Select with boolean as return type") {
+    SelectClauseSyntaxChecker checker = SelectClauseSyntaxChecker();
+    std::vector<TokenObject> validSelectTokens{
+        TokenObject(TokenType::SELECT, "Select"),
+        TokenObject(TokenType::BOOLEAN, "BOOLEAN"),
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validSelectTokens);
+    REQUIRE(actualResult == true);
+};
+
+TEST_CASE("Syntactically correct Select with tuple as return type") {
+    SelectClauseSyntaxChecker checker = SelectClauseSyntaxChecker();
+    std::vector<TokenObject> validSelectTokens{
+        TokenObject(TokenType::SELECT, "Select"),
+        TokenObject(TokenType::TUPLE, "<a, a1, v, v1>"),
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validSelectTokens);
+    REQUIRE(actualResult == true);
+};
+
 TEST_CASE("Syntactically incorrect Select with synonym") {
     SelectClauseSyntaxChecker checker = SelectClauseSyntaxChecker();
     std::vector<TokenObject> invalidSelectTokens{
@@ -250,6 +281,28 @@ TEST_CASE("Syntactically incorrect Select with multiple synonyms") {
         TokenObject(TokenType::NAME, "v"),
         TokenObject(TokenType::COMMA, ","),
         TokenObject(TokenType::NAME, "y")
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(invalidSelectTokens);
+    REQUIRE(actualResult == false);
+};
+
+TEST_CASE("Syntactically incorrect Select with multiple return types") {
+    SelectClauseSyntaxChecker checker = SelectClauseSyntaxChecker();
+    std::vector<TokenObject> invalidSelectTokens{
+        TokenObject(TokenType::SELECT, "Select"),
+        TokenObject(TokenType::NAME, "v"),
+        TokenObject(TokenType::BOOLEAN, "BOOLEAN"),
+        TokenObject(TokenType::TUPLE, "<v>")
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(invalidSelectTokens);
+    REQUIRE(actualResult == false);
+};
+
+TEST_CASE("Syntactically incorrect Select with invalid return type") {
+    SelectClauseSyntaxChecker checker = SelectClauseSyntaxChecker();
+    std::vector<TokenObject> invalidSelectTokens{
+        TokenObject(TokenType::SELECT, "Select"),
+        TokenObject(TokenType::INTEGER, "1")
     };
     bool actualResult = checker.isSyntacticallyCorrect(invalidSelectTokens);
     REQUIRE(actualResult == false);
@@ -1161,6 +1214,39 @@ TEST_CASE("Valid pattern clause - assign synonym name is pattern") {
     REQUIRE(actualResult == true);
 };
 
+TEST_CASE("Valid pattern clause - while pattern") {
+    PatternClauseSyntaxChecker checker = PatternClauseSyntaxChecker();
+    std::vector<TokenObject> validPatternTokens{
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::WHILE, "while"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WHILE, "while"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validPatternTokens);
+    REQUIRE(actualResult == true);
+};
+
+TEST_CASE("Valid pattern clause - if pattern") {
+    PatternClauseSyntaxChecker checker = PatternClauseSyntaxChecker();
+    std::vector<TokenObject> validPatternTokens{
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::IF, "if"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::IF, "if"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validPatternTokens);
+    REQUIRE(actualResult == true);
+};
+
+
 TEST_CASE("Valid pattern clause - more than one pattern") {
     PatternClauseSyntaxChecker checker = PatternClauseSyntaxChecker();
     std::vector<TokenObject> validPatternTokens{
@@ -1333,6 +1419,107 @@ TEST_CASE("Valid pattern clause - relref as synonym name with valid pattern and 
 
 };
 
+TEST_CASE("Valid pattern clause - multiple while pattern") {
+    PatternClauseSyntaxChecker checker = PatternClauseSyntaxChecker();
+    std::vector<TokenObject> validPatternTokens{
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::NAME, "w"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::WHILE, "while"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WHILE, "while"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::AND, "and"),
+        TokenObject(TokenType::USES, "Uses"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+
+    bool actualResult = checker.isSyntacticallyCorrect(validPatternTokens);
+    REQUIRE(actualResult == true);
+
+};
+
+TEST_CASE("Valid pattern clause - multiple if pattern") {
+    PatternClauseSyntaxChecker checker = PatternClauseSyntaxChecker();
+    std::vector<TokenObject> validPatternTokens{
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::NAME, "f"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::IF, "if"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::IF, "if"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::AND, "and"),
+        TokenObject(TokenType::USES, "Uses"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+
+    bool actualResult = checker.isSyntacticallyCorrect(validPatternTokens);
+    REQUIRE(actualResult == true);
+
+};
+
+TEST_CASE("Valid pattern clause - assign, if and while pattern") {
+    PatternClauseSyntaxChecker checker = PatternClauseSyntaxChecker();
+    std::vector<TokenObject> validPatternTokens{
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::NAME, "a"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::WHILE, "while"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WHILE, "while"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")"),
+        TokenObject(TokenType::AND, "and"),
+        TokenObject(TokenType::USES, "Uses"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+
+    bool actualResult = checker.isSyntacticallyCorrect(validPatternTokens);
+    REQUIRE(actualResult == true);
+
+};
+
 TEST_CASE("Syntactically incorrect - Invalid parameters") {
     PatternClauseSyntaxChecker checker = PatternClauseSyntaxChecker();
     std::vector<TokenObject> validPatternTokens{
@@ -1377,6 +1564,88 @@ TEST_CASE("Syntactically incorrect - extra tokens") {
     bool actualResult = checker.isSyntacticallyCorrect(validPatternTokens);
     REQUIRE(actualResult == false);
  };
+
+TEST_CASE("Syntactically incorrect - invalid second param for if pattern") {
+    PatternClauseSyntaxChecker checker = PatternClauseSyntaxChecker();
+    std::vector<TokenObject> validPatternTokens{
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::IF, "if"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::EXPRESSION, "a"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validPatternTokens);
+    REQUIRE(actualResult == false);
+};
+
+TEST_CASE("Syntactically incorrect - invalid third param for if pattern") {
+    PatternClauseSyntaxChecker checker = PatternClauseSyntaxChecker();
+    std::vector<TokenObject> validPatternTokens{
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::IF, "if"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::IF, "if"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validPatternTokens);
+    REQUIRE(actualResult == false);
+};
+
+TEST_CASE("Syntactically incorrect - missing comma for if") {
+    PatternClauseSyntaxChecker checker = PatternClauseSyntaxChecker();
+    std::vector<TokenObject> validPatternTokens{
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::IF, "if"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validPatternTokens);
+    REQUIRE(actualResult == false);
+};
+
+TEST_CASE("Syntactically incorrect - missing bracket for if") {
+    PatternClauseSyntaxChecker checker = PatternClauseSyntaxChecker();
+    std::vector<TokenObject> validPatternTokens{
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::IF, "if"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::WILDCARD, "_"),
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validPatternTokens);
+    REQUIRE(actualResult == false);
+};
+
+TEST_CASE("Syntactically incorrect - missing third param for if") {
+    PatternClauseSyntaxChecker checker = PatternClauseSyntaxChecker();
+    std::vector<TokenObject> validPatternTokens{
+        TokenObject(TokenType::PATTERN, "pattern"),
+        TokenObject(TokenType::IF, "if"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::WILDCARD, "_"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validPatternTokens);
+    REQUIRE(actualResult == false);
+};
 
 TEST_CASE("Syntactically incorrect - pattern start with and") {
     PatternClauseSyntaxChecker checker = PatternClauseSyntaxChecker();
@@ -1610,4 +1879,327 @@ TEST_CASE("Syntactically incorrect - pattern token after and") {
     bool actualResult = checker.isSyntacticallyCorrect(validPatternTokens);
     REQUIRE(actualResult == false);
 
+};
+
+// Tests for WithClauseSyntaxChecker
+TEST_CASE("Instantiate WithClauseSyntaxChecker") {
+    WithClauseSyntaxChecker checker = WithClauseSyntaxChecker();
+    std::vector<TokenObject> emptyDeclaration{};
+    bool withSyntaxIsEmpty = checker.isSyntacticallyCorrect(emptyDeclaration);
+    REQUIRE(withSyntaxIsEmpty == false);
+};
+
+TEST_CASE("Syntactically correct - attribute = attribute") {
+    WithClauseSyntaxChecker checker = WithClauseSyntaxChecker();
+    std::vector<TokenObject> validWithTokens{
+        TokenObject(TokenType::WITH, "with"),
+        TokenObject(TokenType::ATTRIBUTE, "v.varName"),
+        TokenObject(TokenType::EQUALS, "="),
+        TokenObject(TokenType::ATTRIBUTE, "c.procName")
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validWithTokens);
+    REQUIRE(actualResult == true);
+};
+
+TEST_CASE("Syntactically correct - ident = integer") {
+    WithClauseSyntaxChecker checker = WithClauseSyntaxChecker();
+    std::vector<TokenObject> validWithTokens{
+        TokenObject(TokenType::WITH, "with"),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "v"),
+        TokenObject(TokenType::EQUALS, "="),
+        TokenObject(TokenType::INTEGER, "1")
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validWithTokens);
+    REQUIRE(actualResult == true);
+};
+
+TEST_CASE("Syntactically correct with and clause") {
+    WithClauseSyntaxChecker checker = WithClauseSyntaxChecker();
+    std::vector<TokenObject> validWithTokens{
+        TokenObject(TokenType::WITH, "with"),
+        TokenObject(TokenType::INTEGER, "1"),
+        TokenObject(TokenType::EQUALS, "="),
+        TokenObject(TokenType::INTEGER, "1"),
+        TokenObject(TokenType::AND, "and"),
+        TokenObject(TokenType::ATTRIBUTE, "p.procName"),
+        TokenObject(TokenType::EQUALS, "="),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "IDENT"),
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validWithTokens);
+    REQUIRE(actualResult == true);
+};
+
+TEST_CASE("Syntactically correct with multiple and clause") {
+    WithClauseSyntaxChecker checker = WithClauseSyntaxChecker();
+    std::vector<TokenObject> validWithTokens{
+        TokenObject(TokenType::WITH, "with"),
+        TokenObject(TokenType::INTEGER, "1"),
+        TokenObject(TokenType::EQUALS, "="),
+        TokenObject(TokenType::INTEGER, "1"),
+        TokenObject(TokenType::AND, "and"),
+        TokenObject(TokenType::ATTRIBUTE, "p.procName"),
+        TokenObject(TokenType::EQUALS, "="),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "IDENT"),
+        TokenObject(TokenType::AND, "and"),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "p"),
+        TokenObject(TokenType::EQUALS, "="),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "IDENT"),
+        TokenObject(TokenType::AND, "and"),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "p"),
+        TokenObject(TokenType::EQUALS, "="),
+        TokenObject(TokenType::ATTRIBUTE, "calls.stmt#"),
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validWithTokens);
+    REQUIRE(actualResult == true);
+};
+
+TEST_CASE("Syntactically correct with multiple with clause") {
+    WithClauseSyntaxChecker checker = WithClauseSyntaxChecker();
+    std::vector<TokenObject> validWithTokens{
+        TokenObject(TokenType::WITH, "with"),
+        TokenObject(TokenType::INTEGER, "1"),
+        TokenObject(TokenType::EQUALS, "="),
+        TokenObject(TokenType::INTEGER, "1"),
+        TokenObject(TokenType::WITH, "with"),
+        TokenObject(TokenType::ATTRIBUTE, "p.procName"),
+        TokenObject(TokenType::EQUALS, "="),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "IDENT"),
+        TokenObject(TokenType::WITH, "with"),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "p"),
+        TokenObject(TokenType::EQUALS, "="),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "IDENT"),
+        TokenObject(TokenType::WITH, "with"),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "p"),
+        TokenObject(TokenType::EQUALS, "="),
+        TokenObject(TokenType::ATTRIBUTE, "calls.stmt#"),
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validWithTokens);
+    REQUIRE(actualResult == true);
+};
+
+TEST_CASE("Syntactically correct with both and and with clause") {
+    WithClauseSyntaxChecker checker = WithClauseSyntaxChecker();
+    std::vector<TokenObject> validWithTokens{
+        TokenObject(TokenType::WITH, "with"),
+        TokenObject(TokenType::INTEGER, "1"),
+        TokenObject(TokenType::EQUALS, "="),
+        TokenObject(TokenType::INTEGER, "1"),
+        TokenObject(TokenType::WITH, "with"),
+        TokenObject(TokenType::ATTRIBUTE, "p.procName"),
+        TokenObject(TokenType::EQUALS, "="),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "IDENT"),
+        TokenObject(TokenType::AND, "and"),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "p"),
+        TokenObject(TokenType::EQUALS, "="),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "IDENT"),
+        TokenObject(TokenType::WITH, "with"),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "p"),
+        TokenObject(TokenType::EQUALS, "="),
+        TokenObject(TokenType::ATTRIBUTE, "calls.stmt#"),
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validWithTokens);
+    REQUIRE(actualResult == true);
+};
+
+TEST_CASE("Syntactically incorrect - missing with") {
+    WithClauseSyntaxChecker checker = WithClauseSyntaxChecker();
+    std::vector<TokenObject> validWithTokens{
+        TokenObject(TokenType::INTEGER, "1"),
+        TokenObject(TokenType::EQUALS, "="),
+        TokenObject(TokenType::INTEGER, "1"),
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validWithTokens);
+    REQUIRE(actualResult == false);
+};
+
+TEST_CASE("Syntactically incorrect - name as ref") {
+    WithClauseSyntaxChecker checker = WithClauseSyntaxChecker();
+    std::vector<TokenObject> validWithTokens{
+        TokenObject(TokenType::WITH, "with"),
+        TokenObject(TokenType::NAME, "v"),
+        TokenObject(TokenType::EQUALS, "="),
+        TokenObject(TokenType::INTEGER, "1"),
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validWithTokens);
+    REQUIRE(actualResult == false);
+};
+
+TEST_CASE("Syntactically incorrect - missing first ref") {
+    WithClauseSyntaxChecker checker = WithClauseSyntaxChecker();
+    std::vector<TokenObject> validWithTokens{
+        TokenObject(TokenType::WITH, "with"),
+        TokenObject(TokenType::EQUALS, "="),
+        TokenObject(TokenType::INTEGER, "1"),
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validWithTokens);
+    REQUIRE(actualResult == false);
+};
+
+TEST_CASE("Syntactically incorrect - missing second ref") {
+    WithClauseSyntaxChecker checker = WithClauseSyntaxChecker();
+    std::vector<TokenObject> validWithTokens{
+        TokenObject(TokenType::WITH, "with"),
+        TokenObject(TokenType::INTEGER, "1"),
+        TokenObject(TokenType::EQUALS, "="),
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validWithTokens);
+    REQUIRE(actualResult == false);
+};
+
+TEST_CASE("Syntactically incorrect - missing equals") {
+    WithClauseSyntaxChecker checker = WithClauseSyntaxChecker();
+    std::vector<TokenObject> validWithTokens{
+        TokenObject(TokenType::WITH, "with"),
+        TokenObject(TokenType::INTEGER, "1"),
+        TokenObject(TokenType::INTEGER, "1"),
+
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validWithTokens);
+    REQUIRE(actualResult == false);
+};
+
+TEST_CASE("Syntactically incorrect - missing and") {
+    WithClauseSyntaxChecker checker = WithClauseSyntaxChecker();
+    std::vector<TokenObject> validWithTokens{
+        TokenObject(TokenType::WITH, "with"),
+        TokenObject(TokenType::INTEGER, "v"),
+        TokenObject(TokenType::EQUALS, "="),
+        TokenObject(TokenType::INTEGER, "1"),
+        TokenObject(TokenType::WITH, "with"),
+        TokenObject(TokenType::ATTRIBUTE, "p.procName"),
+        TokenObject(TokenType::EQUALS, "="),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "IDENT"),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "p"),
+        TokenObject(TokenType::EQUALS, "="),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "IDENT"),
+        TokenObject(TokenType::WITH, "with"),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "p"),
+        TokenObject(TokenType::EQUALS, "="),
+        TokenObject(TokenType::ATTRIBUTE, "calls.stmt#"),
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validWithTokens);
+    REQUIRE(actualResult == false);
+};
+
+TEST_CASE("Syntactically incorrect - missing with in multi-clause") {
+    WithClauseSyntaxChecker checker = WithClauseSyntaxChecker();
+    std::vector<TokenObject> validWithTokens{
+        TokenObject(TokenType::WITH, "with"),
+        TokenObject(TokenType::INTEGER, "1"),
+        TokenObject(TokenType::EQUALS, "="),
+        TokenObject(TokenType::INTEGER, "1"),
+        TokenObject(TokenType::WITH, "with"),
+        TokenObject(TokenType::ATTRIBUTE, "p.procName"),
+        TokenObject(TokenType::EQUALS, "="),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "IDENT"),
+        TokenObject(TokenType::AND, "and"),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "p"),
+        TokenObject(TokenType::EQUALS, "="),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "IDENT"),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "p"),
+        TokenObject(TokenType::EQUALS, "="),
+        TokenObject(TokenType::ATTRIBUTE, "calls.stmt#"),
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validWithTokens);
+    REQUIRE(actualResult == false);
+};
+
+TEST_CASE("Syntactically incorrect - extra with") {
+    WithClauseSyntaxChecker checker = WithClauseSyntaxChecker();
+    std::vector<TokenObject> validWithTokens{
+        TokenObject(TokenType::WITH, "with"),
+        TokenObject(TokenType::WITH, "with"),
+        TokenObject(TokenType::INTEGER, "1"),
+        TokenObject(TokenType::EQUALS, "="),
+        TokenObject(TokenType::INTEGER, "1"),
+        TokenObject(TokenType::WITH, "with"),
+        TokenObject(TokenType::ATTRIBUTE, "p.procName"),
+        TokenObject(TokenType::EQUALS, "="),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "IDENT"),
+        TokenObject(TokenType::AND, "and"),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "p"),
+        TokenObject(TokenType::EQUALS, "="),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "IDENT"),
+        TokenObject(TokenType::WITH, "with"),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "p"),
+        TokenObject(TokenType::EQUALS, "="),
+        TokenObject(TokenType::ATTRIBUTE, "calls.stmt#"),
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validWithTokens);
+    REQUIRE(actualResult == false);
+};
+
+TEST_CASE("Syntactically incorrect - extra with in multi-clause") {
+    WithClauseSyntaxChecker checker = WithClauseSyntaxChecker();
+    std::vector<TokenObject> validWithTokens{
+        TokenObject(TokenType::WITH, "with"),
+        TokenObject(TokenType::INTEGER, "1"),
+        TokenObject(TokenType::EQUALS, "="),
+        TokenObject(TokenType::INTEGER, "1"),
+        TokenObject(TokenType::WITH, "with"),
+        TokenObject(TokenType::ATTRIBUTE, "p.procName"),
+        TokenObject(TokenType::EQUALS, "="),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "IDENT"),
+        TokenObject(TokenType::AND, "and"),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "p"),
+        TokenObject(TokenType::EQUALS, "="),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "IDENT"),
+        TokenObject(TokenType::WITH, "with"),
+        TokenObject(TokenType::WITH, "with"),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "p"),
+        TokenObject(TokenType::EQUALS, "="),
+        TokenObject(TokenType::ATTRIBUTE, "calls.stmt#"),
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validWithTokens);
+    REQUIRE(actualResult == false);
+};
+
+TEST_CASE("Syntactically incorrect - extra and") {
+    WithClauseSyntaxChecker checker = WithClauseSyntaxChecker();
+    std::vector<TokenObject> validWithTokens{
+        TokenObject(TokenType::WITH, "with"),
+        TokenObject(TokenType::INTEGER, "1"),
+        TokenObject(TokenType::EQUALS, "="),
+        TokenObject(TokenType::INTEGER, "1"),
+        TokenObject(TokenType::WITH, "with"),
+        TokenObject(TokenType::ATTRIBUTE, "p.procName"),
+        TokenObject(TokenType::EQUALS, "="),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "IDENT"),
+        TokenObject(TokenType::AND, "and"),
+        TokenObject(TokenType::AND, "and"),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "p"),
+        TokenObject(TokenType::EQUALS, "="),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "IDENT"),
+        TokenObject(TokenType::WITH, "with"),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "p"),
+        TokenObject(TokenType::EQUALS, "="),
+        TokenObject(TokenType::ATTRIBUTE, "calls.stmt#"),
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validWithTokens);
+    REQUIRE(actualResult == false);
+};
+
+TEST_CASE("Syntactically incorrect - extra ref") {
+    WithClauseSyntaxChecker checker = WithClauseSyntaxChecker();
+    std::vector<TokenObject> validWithTokens{
+        TokenObject(TokenType::WITH, "with"),
+        TokenObject(TokenType::INTEGER, "1"),
+        TokenObject(TokenType::EQUALS, "="),
+        TokenObject(TokenType::INTEGER, "1"),
+        TokenObject(TokenType::WITH, "with"),
+        TokenObject(TokenType::ATTRIBUTE, "p.procName"),
+        TokenObject(TokenType::ATTRIBUTE, "p.procName"),
+        TokenObject(TokenType::EQUALS, "="),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "IDENT"),
+        TokenObject(TokenType::AND, "and"),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "p"),
+        TokenObject(TokenType::EQUALS, "="),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "IDENT"),
+        TokenObject(TokenType::WITH, "with"),
+        TokenObject(TokenType::NAME_WITH_QUOTATION, "p"),
+        TokenObject(TokenType::EQUALS, "="),
+        TokenObject(TokenType::ATTRIBUTE, "calls.stmt#"),
+    };
+    bool actualResult = checker.isSyntacticallyCorrect(validWithTokens);
+    REQUIRE(actualResult == false);
 };

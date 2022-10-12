@@ -1,5 +1,4 @@
 #include "ConstantEntityStorage.h"
-#include <typeinfo>
 #include "models/Entity/ConstantEntity.h"
 
 ConstantEntityStorage::ConstantEntityStorage() : EntityStorage() {}

@@ -28,7 +28,7 @@ TEST_CASE("Semantically Invalid queries") {
     std::list<std::string> testResults;
     std::vector<SuchThat> relationships = {SuchThat(TokenType::MODIFIES, TokenObject(TokenType::INTEGER, "1"),
                                                   TokenObject(TokenType::WILDCARD, "_"))};
-    std::vector<Pattern> patterns {Pattern("a", TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
+    std::vector<Pattern> patterns {Pattern(TokenType::ASSIGN, "a", TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
                                            TokenObject(TokenType::NAME_WITH_QUOTATION, "y"))};
     Select select = Select( "v");
     std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap = {{"a", DesignEntity::ASSIGN}};
@@ -133,7 +133,7 @@ TEST_CASE("Semantically Invalid queries") {
 //    std::list<std::string> testResults;
 //    std::vector<SuchThat> relationships {SuchThat(TokenType::MODIFIES, TokenObject(TokenType::NAME, "a"),
 //                                                  TokenObject(TokenType::WILDCARD, "_"))};
-//    std::vector<Pattern> patterns {Pattern("a", TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
+//    std::vector<Pattern> patterns {Pattern(TokenType::ASSIGN, "a", TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
 //                                           TokenObject(TokenType::NAME_WITH_QUOTATION, "y"))};
 //    Select select = Select( "a");
 //    std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap = {{"a", DesignEntity::ASSIGN}};
@@ -171,7 +171,7 @@ TEST_CASE("Semantically Invalid queries") {
 //    std::vector<SuchThat> relationships {SuchThat(TokenType::USES,
 //                                                  TokenObject(TokenType::INTEGER, "6"),
 //                                                  TokenObject(TokenType::NAME, "v"))};
-//    std::vector<Pattern> patterns {Pattern("a1", TokenObject(TokenType::WILDCARD, "_"),
+//    std::vector<Pattern> patterns {Pattern(TokenType::ASSIGN, "a1", TokenObject(TokenType::WILDCARD, "_"),
 //                                           TokenObject(TokenType::WILDCARD, "_"))};
 //    Select select = Select( "a1");
 //    std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap = {{"a", DesignEntity::ASSIGN},
@@ -194,7 +194,7 @@ TEST_CASE("Semantically Invalid queries") {
 //    std::vector<SuchThat> relationships {SuchThat(TokenType::USES,
 //                                                  TokenObject(TokenType::INTEGER, "1"),
 //                                                  TokenObject(TokenType::NAME_WITH_QUOTATION, "x"))};
-//    std::vector<Pattern> patterns {Pattern("a", TokenObject(TokenType::NAME, "v"),
+//    std::vector<Pattern> patterns {Pattern(TokenType::ASSIGN, "a", TokenObject(TokenType::NAME, "v"),
 //                                           TokenObject(TokenType::NAME_WITH_QUOTATION, "x"))};
 //    Select select = Select( "v");
 //    std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap = {{"a", DesignEntity::ASSIGN},
@@ -213,7 +213,7 @@ TEST_CASE("Semantically Invalid queries") {
 //    std::list<std::string> testResults;
 //    std::vector<SuchThat> relationships {SuchThat(TokenType::MODIFIES, TokenObject(TokenType::NAME, "a"),
 //                                                  TokenObject(TokenType::NAME, "v"))};
-//    std::vector<Pattern> patterns {Pattern("a", TokenObject(TokenType::NAME, "v"),
+//    std::vector<Pattern> patterns {Pattern(TokenType::ASSIGN, "a", TokenObject(TokenType::NAME, "v"),
 //                                           TokenObject(TokenType::WILDCARD, "_"))};
 //    Select select = Select( "a");
 //    std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap = {{"a", DesignEntity::ASSIGN},
@@ -230,7 +230,7 @@ TEST_CASE("Semantically Invalid queries") {
 //    std::list<std::string> testResults;
 //    std::vector<SuchThat> relationships{SuchThat(TokenType::MODIFIES, TokenObject(TokenType::NAME, "a"),
 //                                                 TokenObject(TokenType::NAME, "v"))};
-//    std::vector<Pattern> patterns{Pattern("a", TokenObject(TokenType::NAME, "v"),
+//    std::vector<Pattern> patterns{Pattern(TokenType::ASSIGN, "a", TokenObject(TokenType::NAME, "v"),
 //                                          TokenObject(TokenType::WILDCARD, "_"))};
 //    Select select = Select("v");
 //    std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap = {{"a", DesignEntity::ASSIGN},
@@ -248,7 +248,7 @@ TEST_CASE("Semantically Invalid queries") {
 //    std::list<std::string> testResults;
 //    std::vector<SuchThat> relationships {SuchThat(TokenType::FOLLOWS_T, TokenObject(TokenType::INTEGER, "1"),
 //                                                  TokenObject(TokenType::NAME, "v"))};
-//    std::vector<Pattern> patterns {Pattern("a", TokenObject(TokenType::WILDCARD, "_"),
+//    std::vector<Pattern> patterns {Pattern(TokenType::ASSIGN, "a", TokenObject(TokenType::WILDCARD, "_"),
 //                                           TokenObject(TokenType::NAME_WITH_QUOTATION, "x"))};
 //    Select select = Select( "a");
 //    std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap = {{"a", DesignEntity::ASSIGN},

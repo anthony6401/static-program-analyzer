@@ -6,33 +6,38 @@
 
 ProcedureStack::ProcedureStack(SimpleToken parent, Extractor* context) : parent(parent), StmtStack(parent, context) {
     this->context = context;
+    this->expectElse = false;
 }
 
 void ProcedureStack::close(int statementNumber) {
-    extractFollows(context->currentStack->follows);
-    extractParent(context->currentStack->follows);
-    extractParentT(context->currentStack->parentT);
-    extractUses(context->currentStack->uses);
-    extractModify(context->currentStack->modifies);
+    extractFollows(context->currentStack->stmts);
+    extractFollowsT(context->currentStack->stmts);
+    extractParent(context->currentStack->stmts);
+    extractParentT(context->currentStack->stmtsNested);
+    extractUses(context->currentStack->varUse);
+    extractModify(context->currentStack->varMod);
 
     context->procedures.insert(std::pair<std::string, ProcedureStack*>(parent.value, this));
 }
 
 void ProcedureStack::mergeStack() {}
 
-void ProcedureStack::extractFollows(std::vector<SimpleToken> follows) {
-    for (size_t i = 0; i < follows.size() - 1; i++) {
-        SimpleToken first = follows.at(i);
-        SimpleToken second = follows.at(i + 1);
+void ProcedureStack::extractFollows(std::vector<SimpleToken> stmts) {
+    for (size_t i = 0; i < stmts.size() - 1; i++) {
+        SimpleToken first = stmts.at(i);
+        SimpleToken second = stmts.at(i + 1);
         Entity* firstEntity = generateEntity(first);
         Entity* secondEntity = generateEntity(second);
         FollowsRelationship* followsRel = new FollowsRelationship(firstEntity, secondEntity);
         context->client->storeRelationship(followsRel);
     }
-    for (int i = 0; i < follows.size(); i++) {
-        for (int j = i + 1; j < follows.size(); j++) {
-            SimpleToken first = follows.at(i);
-            SimpleToken second = follows.at(j);
+}
+
+void ProcedureStack::extractFollowsT(std::vector<SimpleToken> stmts) {
+    for (int i = 0; i < stmts.size(); i++) {
+        for (int j = i + 1; j < stmts.size(); j++) {
+            SimpleToken first = stmts.at(i);
+            SimpleToken second = stmts.at(j);
             Entity* firstEntity = generateEntity(first);
             Entity* secondEntity = generateEntity(second);
             FollowsTRelationship* followsTRel = new FollowsTRelationship(firstEntity, secondEntity);
@@ -41,9 +46,9 @@ void ProcedureStack::extractFollows(std::vector<SimpleToken> follows) {
     }
 }
 
-void ProcedureStack::extractParent(std::vector<SimpleToken> follows) {
-    for (int i = 0; i < follows.size(); i++) {
-        SimpleToken second = follows.at(i);
+void ProcedureStack::extractParent(std::vector<SimpleToken> stmts) {
+    for (int i = 0; i < stmts.size(); i++) {
+        SimpleToken second = stmts.at(i);
         Entity* firstEntity = generateEntity(this->parent);
         Entity* secondEntity = generateEntity(second);
         ParentRelationship* parentRel = new ParentRelationship(firstEntity, secondEntity);
@@ -53,9 +58,9 @@ void ProcedureStack::extractParent(std::vector<SimpleToken> follows) {
     }
 }
 
-void ProcedureStack::extractParentT(std::vector<SimpleToken> parentT) {
-    for (int i = 0; i < parentT.size(); i++) {
-        SimpleToken second = parentT.at(i);
+void ProcedureStack::extractParentT(std::vector<SimpleToken> stmtsNested) {
+    for (int i = 0; i < stmtsNested.size(); i++) {
+        SimpleToken second = stmtsNested.at(i);
         Entity* firstEntity = generateEntity(this->parent);
         Entity* secondEntity = generateEntity(second);
         ParentTRelationship* parentTRel = new ParentTRelationship(firstEntity, secondEntity);
@@ -63,9 +68,9 @@ void ProcedureStack::extractParentT(std::vector<SimpleToken> parentT) {
     }
 }
 
-void ProcedureStack::extractUses(std::vector<SimpleToken> uses) {
-    for (int i = 0; i < uses.size(); i++) {
-        SimpleToken second = uses.at(i);
+void ProcedureStack::extractUses(std::vector<SimpleToken> varUse) {
+    for (int i = 0; i < varUse.size(); i++) {
+        SimpleToken second = varUse.at(i);
         Entity* firstEntity = generateEntity(this->parent);
         Entity* secondEntity = generateEntity(SimpleToken(SpTokenType::TVARIABLE, second.value, 0));
         UsesRelationship* usesRel = new UsesRelationship(firstEntity, secondEntity);
@@ -73,9 +78,9 @@ void ProcedureStack::extractUses(std::vector<SimpleToken> uses) {
     }
 }
 
-void ProcedureStack::extractModify(std::vector<SimpleToken> modifies) {
-    for (int i = 0; i < modifies.size(); i++) {
-        SimpleToken second = modifies.at(i);
+void ProcedureStack::extractModify(std::vector<SimpleToken> varMod) {
+    for (int i = 0; i < varMod.size(); i++) {
+        SimpleToken second = varMod.at(i);
         Entity* firstEntity = generateEntity(this->parent);
         Entity* secondEntity = generateEntity(SimpleToken(SpTokenType::TVARIABLE, second.value, 0));
         ModifyRelationship* modifyRel = new ModifyRelationship(firstEntity, secondEntity);
@@ -85,10 +90,10 @@ void ProcedureStack::extractModify(std::vector<SimpleToken> modifies) {
 
 Entity* ProcedureStack::generateEntity(SimpleToken token) {
     if (token.type == SpTokenType::TREAD) {
-        return new ReadEntity(std::to_string(token.statementNumber));
+        return new ReadEntity(std::to_string(token.statementNumber), token.value);
     }
     if (token.type == SpTokenType::TPRINT) {
-        return new PrintEntity(std::to_string(token.statementNumber));
+        return new PrintEntity(std::to_string(token.statementNumber), token.value);
     }
     if (token.type == SpTokenType::TASSIGN) {
         return new AssignEntity(std::to_string(token.statementNumber));
@@ -109,7 +114,7 @@ Entity* ProcedureStack::generateEntity(SimpleToken token) {
         return new ProcedureEntity(token.value);
     }
     if (token.type == SpTokenType::TCALL) {
-        return new CallEntity(std::to_string(token.statementNumber));
+        return new CallEntity(std::to_string(token.statementNumber), token.value);
     }
     return new Entity(std::to_string(token.statementNumber)); // Should not happen
 }

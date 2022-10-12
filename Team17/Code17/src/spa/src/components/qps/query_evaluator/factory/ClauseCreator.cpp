@@ -14,16 +14,59 @@
 #include "components/qps/query_evaluator/factory/clauses/relationship/CallsTClause.h"
 #include "components/qps/query_evaluator/factory/clauses/relationship/NextClause.h"
 #include "components/qps/query_evaluator/factory/clauses/relationship/NextTClause.h"
+#include "components/qps/query_evaluator/factory/clauses/select/SelectBooleanClause.h"
+#include "components/qps/query_evaluator/factory/clauses/select/SelectSynonymClause.h"
+#include "components/qps/query_evaluator/factory/clauses/select/SelectTupleClause.h"
+#include "components/qps/query_evaluator/factory/clauses/select/SelectAttributeClause.h"
+#include "components/qps/abstract_query_object/With.h"
+#include "components/qps/query_evaluator/factory/clauses/with/WithClause.h"
+#include "components/qps/query_evaluator/factory/clauses/patterns/IfPatternClause.h"
+#include "components/qps/query_evaluator/factory/clauses/patterns/WhilePatternClause.h"
 
-std::shared_ptr<Clause> ClauseCreator::createClause(Select synonym, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) {
-    return std::make_shared<SelectClause>(synonym, synonymToDesignEntityMap, qpsClient);
+
+std::shared_ptr<Clause> ClauseCreator::createClause(With with,
+                                                    std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap,
+                                                    QPSClient qpsClient) {
+
+    std::vector<TokenObject> left = with.getLeft();
+    std::vector<TokenObject> right = with.getRight();
+
+    return std::make_shared<WithClause>(left, right, synonymToDesignEntityMap, qpsClient);
+}
+
+std::shared_ptr<Clause> ClauseCreator::createClause(Select select, std::unordered_set<std::string> &synonymsInTable, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) {
+    TokenType selectReturnType = select.getReturnType();
+    std::vector<TokenObject> selectReturnValues = select.getReturnValues();
+    if (selectReturnType == TokenType::SYNONYM) {
+        // NAME
+        return std::make_shared<SelectSynonymClause>(selectReturnValues.front(), synonymsInTable, synonymToDesignEntityMap, qpsClient);
+    } else if (selectReturnType == TokenType::BOOLEAN) {
+        return std::make_shared<SelectBooleanClause>();
+    } else if (selectReturnType == TokenType::TUPLE) {
+        // NAME, ATTRIBUTE_SYNONYM, ATTRIBUTE_NAME
+        return std::make_shared<SelectTupleClause>(selectReturnValues, synonymsInTable, synonymToDesignEntityMap, qpsClient);
+    } else if (selectReturnType == TokenType::ATTRIBUTE) {
+        // ATTRIBUTE_SYNONYM, ATTRIBUTE_NAME
+        std::string attributeName = selectReturnValues.back().getValue();
+        return std::make_shared<SelectAttributeClause>(selectReturnValues.front(), attributeName, synonymsInTable, synonymToDesignEntityMap, qpsClient);
+    } else {
+        return nullptr;
+    }
 }
 
 std::shared_ptr<Clause> ClauseCreator::createClause(qps::Pattern pattern, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) {
-    TokenObject left = pattern.getLeft();
-    TokenObject right = pattern.getRight();
-    std::string assignSynonym = pattern.getSynonym();
-    return std::make_shared<AssignPatternClause>(assignSynonym, left, right, qpsClient);
+    TokenObject firstArgument = pattern.getLeft();
+    TokenObject secondArgument = pattern.getRight();
+    std::string patternSynonym = pattern.getSynonym();
+    TokenType patternType = pattern.getPatternType();
+
+    if (patternType == TokenType::IF) {
+        return std::make_shared<IfPatternClause>(patternSynonym, firstArgument, qpsClient);
+    } else if (patternType == TokenType::WHILE) {
+        return std::make_shared<WhilePatternClause>(patternSynonym, firstArgument, qpsClient);
+    } else {
+        return std::make_shared<AssignPatternClause>(patternSynonym, firstArgument, secondArgument, qpsClient);
+    }
 }
 
 std::shared_ptr<Clause> ClauseCreator::createClause(SuchThat relationship, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) {

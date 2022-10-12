@@ -6,7 +6,6 @@
 #include "models/Relationship/FollowsRelationship.h"
 #include "models/Relationship/FollowsTRelationship.h"
 #include "models/Relationship/NextRelationship.h"
-#include "models/Relationship/NextTRelationship.h"
 #include "models/Relationship/CallsRelationship.h"
 #include "models/Relationship/CallsTRelationship.h"
 
@@ -55,7 +54,7 @@ TEST_CASE("Uses Relationship Test") {
 
     std::string printValue = "4";
     std::string varPrintValue = "variableD";
-    Entity* printEntity = new PrintEntity(printValue);
+    Entity* printEntity = new PrintEntity(printValue, varPrintValue);
     Entity* varPrintEntity = new VariableEntity(varPrintValue);
     Relationship* printUsesRelationship = new UsesRelationship(printEntity, varPrintEntity);
 
@@ -102,7 +101,7 @@ TEST_CASE("Modify Relationship Test") {
 
     std::string printValue = "4";
     std::string varReadValue = "variableD";
-    Entity* readEntity = new ReadEntity(printValue);
+    Entity* readEntity = new ReadEntity(printValue, varReadValue);
     Entity* varReadEntity = new VariableEntity(varReadValue);
     Relationship* readModifyRelationship = new ModifyRelationship(readEntity, varReadEntity);
 
@@ -138,14 +137,15 @@ TEST_CASE("Parent Relationship Test") {
     std::string callValue = "6";
     std::string whileValue2 = "7";
     std::string ifValue2 = "8";
+    std::string varValue = "x";
     
     Entity* whileEntity = new WhileEntity(whileValue);
     Entity* ifEntity =  new IfEntity(ifValue);
 
-    Entity* readEntity = new ReadEntity(readValue);
-    Entity* printEntity = new PrintEntity(printValue);
+    Entity* readEntity = new ReadEntity(readValue, varValue);
+    Entity* printEntity = new PrintEntity(printValue, varValue);
     Entity* assignEntity = new AssignEntity(ifValue);
-    Entity* callEntity = new CallEntity(callValue);
+    Entity* callEntity = new CallEntity(callValue, varValue);
     Entity* whileEntity2 = new WhileEntity(whileValue2);
     Entity* ifEntity2= new IfEntity(ifValue2);
 
@@ -202,14 +202,15 @@ TEST_CASE("ParentT Relationship Test") {
     std::string callValue = "6";
     std::string whileValue2 = "7";
     std::string ifValue2 = "8";
+    std::string varValue = "x";
 
     Entity* whileEntity = new WhileEntity(whileValue);
     Entity* ifEntity = new IfEntity(ifValue);
 
-    Entity* readEntity = new ReadEntity(readValue);
-    Entity* printEntity = new PrintEntity(printValue);
+    Entity* readEntity = new ReadEntity(readValue, varValue);
+    Entity* printEntity = new PrintEntity(printValue, varValue);
     Entity* assignEntity = new AssignEntity(ifValue);
-    Entity* callEntity = new CallEntity(callValue);
+    Entity* callEntity = new CallEntity(callValue, varValue);
     Entity* whileEntity2 = new WhileEntity(whileValue2);
     Entity* ifEntity2 = new IfEntity(ifValue2);
 
@@ -266,14 +267,15 @@ TEST_CASE("Follows Relationship Test") {
     std::string callValue = "6";
     std::string whileValue2 = "7";
     std::string ifValue2 = "8";
+    std::string varValue = "x";
 
     Entity* whileEntity = new WhileEntity(whileValue);
     Entity* ifEntity = new IfEntity(ifValue);
 
-    Entity* readEntity = new ReadEntity(readValue);
-    Entity* printEntity = new PrintEntity(printValue);
+    Entity* readEntity = new ReadEntity(readValue, varValue);
+    Entity* printEntity = new PrintEntity(printValue, varValue);
     Entity* assignEntity = new AssignEntity(ifValue);
-    Entity* callEntity = new CallEntity(callValue);
+    Entity* callEntity = new CallEntity(callValue, varValue);
     Entity* whileEntity2 = new WhileEntity(whileValue2);
     Entity* ifEntity2 = new IfEntity(ifValue2);
 
@@ -309,14 +311,15 @@ TEST_CASE("FollowsT Relationship Test") {
     std::string callValue = "6";
     std::string whileValue2 = "7";
     std::string ifValue2 = "8";
+    std::string varValue = "x";
 
     Entity* whileEntity = new WhileEntity(whileValue);
     Entity* ifEntity = new IfEntity(ifValue);
 
-    Entity* readEntity = new ReadEntity(readValue);
-    Entity* printEntity = new PrintEntity(printValue);
+    Entity* readEntity = new ReadEntity(readValue, varValue);
+    Entity* printEntity = new PrintEntity(printValue, varValue);
     Entity* assignEntity = new AssignEntity(ifValue);
-    Entity* callEntity = new CallEntity(callValue);
+    Entity* callEntity = new CallEntity(callValue, varValue);
     Entity* whileEntity2 = new WhileEntity(whileValue2);
     Entity* ifEntity2 = new IfEntity(ifValue2);
 
@@ -342,43 +345,6 @@ TEST_CASE("FollowsT Relationship Test") {
     REQUIRE(*(ifReadRel->getRightEntity()) == *readEntity);
 }
 
-TEST_CASE("NextT Relationship Test") {
-    std::string whileValue = "1";
-    std::string ifValue = "2";
-    std::string assignValue = "3";
-    std::string readValue = "4";
-    std::string printValue = "5";
-    std::string callValue = "6";
-
-    Entity* whileEntity = new WhileEntity(whileValue);
-    Entity* ifEntity = new IfEntity(ifValue);
-    Entity* readEntity = new ReadEntity(readValue);
-    Entity* printEntity = new PrintEntity(printValue);
-    Entity* assignEntity = new AssignEntity(ifValue);
-    Entity* callEntity = new CallEntity(callValue);
-
-    Relationship* whileAssignRel = new NextTRelationship(whileEntity, assignEntity);
-    Relationship* readIfRel = new NextTRelationship(readEntity, ifEntity);
-    Relationship* assignPrintRel = new NextTRelationship(assignEntity, printEntity);
-    Relationship* printCallRel = new NextTRelationship(printEntity, callEntity);
-    Relationship* callWhileRel = new NextTRelationship(callEntity, whileEntity);
-    Relationship* ifReadRel = new NextTRelationship(whileEntity, readEntity);
-
-    REQUIRE(*(whileAssignRel->getLeftEntity()) == *whileEntity);
-    REQUIRE(*(readIfRel->getLeftEntity()) == *readEntity);
-    REQUIRE(*(assignPrintRel->getLeftEntity()) == *assignEntity);
-    REQUIRE(*(printCallRel->getLeftEntity()) == *printEntity);
-    REQUIRE(*(callWhileRel->getLeftEntity()) == *callEntity);
-    REQUIRE(*(ifReadRel->getLeftEntity()) == *whileEntity);
-
-    REQUIRE(*(whileAssignRel->getRightEntity()) == *assignEntity);
-    REQUIRE(*(readIfRel->getRightEntity()) == *ifEntity);
-    REQUIRE(*(assignPrintRel->getRightEntity()) == *printEntity);
-    REQUIRE(*(printCallRel->getRightEntity()) == *callEntity);
-    REQUIRE(*(callWhileRel->getRightEntity()) == *whileEntity);
-    REQUIRE(*(ifReadRel->getRightEntity()) == *readEntity);
-}
-
 TEST_CASE("Next Relationship Test") {
     std::string whileValue = "1";
     std::string ifValue = "2";
@@ -386,20 +352,22 @@ TEST_CASE("Next Relationship Test") {
     std::string readValue = "4";
     std::string printValue = "5";
     std::string callValue = "6";
+    std::string varValue = "x";
 
     Entity* whileEntity = new WhileEntity(whileValue);
     Entity* ifEntity = new IfEntity(ifValue);
-    Entity* readEntity = new ReadEntity(readValue);
-    Entity* printEntity = new PrintEntity(printValue);
-    Entity* assignEntity = new AssignEntity(ifValue);
-    Entity* callEntity = new CallEntity(callValue);
 
-    Relationship* whileAssignRel = new NextTRelationship(whileEntity, assignEntity);
-    Relationship* readIfRel = new NextTRelationship(readEntity, ifEntity);
-    Relationship* assignPrintRel = new NextTRelationship(assignEntity, printEntity);
-    Relationship* printCallRel = new NextTRelationship(printEntity, callEntity);
-    Relationship* callWhileRel = new NextTRelationship(callEntity, whileEntity);
-    Relationship* ifReadRel = new NextTRelationship(whileEntity, readEntity);
+    Entity* readEntity = new ReadEntity(readValue, varValue);
+    Entity* printEntity = new PrintEntity(printValue, varValue);
+    Entity* assignEntity = new AssignEntity(ifValue);
+    Entity* callEntity = new CallEntity(callValue, varValue);
+
+    Relationship* whileAssignRel = new NextRelationship(whileEntity, assignEntity);
+    Relationship* readIfRel = new NextRelationship(readEntity, ifEntity);
+    Relationship* assignPrintRel = new NextRelationship(assignEntity, printEntity);
+    Relationship* printCallRel = new NextRelationship(printEntity, callEntity);
+    Relationship* callWhileRel = new NextRelationship(callEntity, whileEntity);
+    Relationship* ifReadRel = new NextRelationship(whileEntity, readEntity);
 
     REQUIRE(*(whileAssignRel->getLeftEntity()) == *whileEntity);
     REQUIRE(*(readIfRel->getLeftEntity()) == *readEntity);

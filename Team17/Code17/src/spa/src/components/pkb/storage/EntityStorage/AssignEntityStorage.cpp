@@ -1,5 +1,4 @@
 #include "AssignEntityStorage.h"
-#include <typeinfo>
 #include "models/Entity/AssignEntity.h"
 
 AssignEntityStorage::AssignEntityStorage() : EntityStorage() {}

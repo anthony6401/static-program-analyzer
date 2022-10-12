@@ -82,4 +82,40 @@ TEST_CASE("Entity Manager getAllEntity method test") {
 	REQUIRE(read_test == read_res);
 	REQUIRE(variable_test == variable_res);
 	REQUIRE(while_test == while_res);
+
+	std::string callMappingResult = procedure_value_one;
+	std::string printMappingResult = variable_value_one;
+	std::string readMappingResult = variable_value_one;
+
+	std::string callMappingTest = entityManager.getStatementMapping(call_value_one, DesignEntity::CALL);
+	std::string printMappingTest = entityManager.getStatementMapping(print_value_one, DesignEntity::PRINT);
+	std::string readMappingTest = entityManager.getStatementMapping(read_value_one, DesignEntity::READ);
+
+	REQUIRE(callMappingTest == callMappingResult);
+	REQUIRE(printMappingTest == printMappingResult);
+	REQUIRE(readMappingTest == readMappingResult);
+
+	std::unordered_set<std::string> callGetStmtByNameTest = entityManager.getStatementByName(procedure_value_one, DesignEntity::CALL);
+	std::unordered_set<std::string> printGetStmgByNameTest = entityManager.getStatementByName(variable_value_one, DesignEntity::PRINT);
+	std::unordered_set<std::string> readGetStmtByNameTest = entityManager.getStatementByName(variable_value_one, DesignEntity::READ);
+
+	std::unordered_set<std::string> callStmtByNameExpectedResult({ call_value_one });
+	std::unordered_set<std::string> printStmtByNameExpectedResult({ print_value_one });
+	std::unordered_set<std::string> readStmtByNameExpectedResult({ read_value_one });
+
+	REQUIRE(callGetStmtByNameTest == callStmtByNameExpectedResult);
+	REQUIRE(printGetStmgByNameTest == printStmtByNameExpectedResult);
+	REQUIRE(readGetStmtByNameTest == readStmtByNameExpectedResult);
+
+	std::unordered_set<std::string> callGetAllNameTest = entityManager.getAllName(DesignEntity::CALL);
+	std::unordered_set<std::string> printGetAllNameTest = entityManager.getAllName(DesignEntity::PRINT);
+	std::unordered_set<std::string> readGetAllNameTest = entityManager.getAllName(DesignEntity::READ);
+
+	std::unordered_set<std::string> callGetAllNameExpectedResult({ procedure_value_one });
+	std::unordered_set<std::string> printGetAllNameExpectedResult({ variable_value_one });
+	std::unordered_set<std::string> readGetAllNameExpectedResult({ variable_value_one });
+
+	REQUIRE(callGetAllNameTest == callGetAllNameExpectedResult);
+	REQUIRE(printGetAllNameTest == printGetAllNameExpectedResult);
+	REQUIRE(readGetAllNameTest == readGetAllNameExpectedResult);
 }

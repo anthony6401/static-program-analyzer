@@ -9,14 +9,12 @@ namespace kb {
 	private:
 		std::string lineNum;
 		std::string firstValue;
-		std::string secondValue;
 
 	public:
-		Pattern(std::string lineNum, std::string firstValue, std::string secondValue);
+		Pattern(std::string lineNum, std::string firstValue);
 		virtual ~Pattern() = default;
 		std::string getLineNum();
 		std::string getFirstValue();
-		std::string getSecondValue();
 	};
 }
 #endif //SPA_PATTERN_PKB_H

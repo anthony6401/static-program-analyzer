@@ -1,22 +1,18 @@
 #pragma once
-
-#include "../../models/Relationship/Relationship.h"
-#include  "models/Entity/Entity.h"
-#include  "models/Entity/DesignEntity.h"
-
 #include "./manager/EntityManager.h"
 #include "./manager/RelationshipManager.h"
 #include "./manager/PatternManager.h"
-
-#include "../qps/query_preprocessor/query_tokenizer/TokenType.h"
-
-#include <unordered_set>
 
 class PKB {
 public:
 	PKB();
 	//For getting entity
 	std::unordered_set<std::string> getAllEntity(DesignEntity returnType);
+
+	// For getting entity mapping
+	std::string getStatementMapping(std::string& stmtNumber, DesignEntity entityType);
+	std::unordered_set<std::string> getStatementByName(std::string& name, DesignEntity entityType);
+	std::unordered_set<std::string> getAllName(DesignEntity entityType);
 	
 	// For constant
 	bool storeConstant(Entity* entity);
@@ -39,7 +35,6 @@ public:
 	PatternManager* getPatternManager();
 
 private:
-	//Add managers
 	EntityManager* entityManager;
 	RelationshipManager* relManager;
 	PatternManager* patternManager;

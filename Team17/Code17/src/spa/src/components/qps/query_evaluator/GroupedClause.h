@@ -5,10 +5,6 @@
 #include "memory"
 #include "components/qps/query_evaluator/factory/interface/Clause.h"
 
-// Represents Groups with common areas in:
-// 1. No Synonym
-// 2. Common synonyms (with and without select synonym)
-
 class GroupedClause {
 private:
     std::set<std::string> synonyms;
@@ -16,12 +12,14 @@ private:
 
 public:
     GroupedClause();
-    void addClauseToGroup(std::shared_ptr<Clause> clause);
+    void addClauseToGroup(std::shared_ptr<Clause> &clause);
     ResultTable evaluateGroupedClause();
     bool isEmpty();
     std::vector<std::shared_ptr<Clause>> getClauses();
     std::set<std::string> getAllSynonyms();
-    bool hasCommonSynonymWithClause(std::shared_ptr<Clause> clause);
+    bool hasCommonSynonymWithClause(std::shared_ptr<Clause> &clause);
+    bool isConnected(GroupedClause &clause_group);
+    void mergeGroupedClause(GroupedClause &clause_group);
 };
 
 #endif //SPA_GROUPEDCLAUSE_H

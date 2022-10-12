@@ -1,17 +1,5 @@
 #pragma once
-#include "models/Relationship/Relationship.h"
-#include "models/Relationship/RelationshipType.h"
-
-#include "models/Entity/DesignEntity.h"
-
 #include "RelationshipStorage.h"
-
-#include "components/qps/query_preprocessor/query_tokenizer/TokenType.h"
-#include "components/qps/query_preprocessor/query_tokenizer/TokenObject.h"
-
-#include <unordered_set>
-#include <unordered_map>
-#include <string>
 
 class ParentRelationshipStorage : public RelationshipStorage {
 public:
@@ -22,8 +10,11 @@ public:
 	std::unordered_set<std::string> getRelationshipBySecond(RelationshipType relType, DesignEntity returnType, TokenObject secondArgument);
 	std::unordered_map<std::string, std::unordered_set<std::string>> getAllRelationship(RelationshipType relType, DesignEntity returnType1, DesignEntity returntype2);
 private:
-
-	std::unordered_map<std::string, std::unordered_set<std::string>>* getStorage(DesignEntity left, DesignEntity right, bool isForward);
+	std::unordered_map<std::string, std::unordered_set<std::string>>* getStorageForward(DesignEntity left, DesignEntity right);
+	std::unordered_map<std::string, std::unordered_set<std::string>>* getStorageBackward(DesignEntity left);
+	std::unordered_map<std::string, std::unordered_set<std::string>>* getIfToSpecificStorage(DesignEntity right);
+	std::unordered_map<std::string, std::unordered_set<std::string>>* getWhileToSpecificStorage(DesignEntity right);
+	std::unordered_map<std::string, std::unordered_set<std::string>>* getStmtToSpecificStorage(DesignEntity right);
 
 	// FOR IF STATEMENT (total 7)
 	//Parent(if,r)

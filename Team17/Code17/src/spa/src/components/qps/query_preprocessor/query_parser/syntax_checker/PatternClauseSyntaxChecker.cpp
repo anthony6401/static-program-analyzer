@@ -18,6 +18,8 @@ PatternClauseSyntaxChecker::~PatternClauseSyntaxChecker() {};
 
 bool PatternClauseSyntaxChecker::isSyntacticallyCorrect(std::vector<TokenObject> tokenizedClause) {
 	bool isPrevTokenClosedBracket = false;
+	bool isSecondParam = false;
+	bool isSecondParamWildcard = false;
 	
 	for (int i = 0; i < tokenizedClause.size(); i++) {
 		TokenObject token = tokenizedClause.at(i);
@@ -42,14 +44,26 @@ bool PatternClauseSyntaxChecker::isSyntacticallyCorrect(std::vector<TokenObject>
 
 		TokenType syntax = this->patternSyntax.top();
 
-		// PATTERN, BRACKET, COMMA tokens
-		if (this->generalSyntax.find(syntax) == this->generalSyntax.end()) {
+		if (syntax == TokenType::CLOSED_BRACKET) {
+			// if pattern
+			if (tokenType == TokenType::COMMA && isSecondParamWildcard) {
+				this->patternSyntax.push(TokenType::WILDCARD);
+				continue;
+			}
+
 			if (tokenType != syntax) {
 				return false;
 			}
 
-			if (tokenType == TokenType::CLOSED_BRACKET) {
-				isPrevTokenClosedBracket = true;
+			isPrevTokenClosedBracket = true;
+			this->patternSyntax.pop();
+			continue;
+		}
+
+		// PATTERN, BRACKET, COMMA tokens
+		if (this->generalSyntax.find(syntax) == this->generalSyntax.end()) {
+			if (tokenType != syntax) {
+				return false;
 			}
 
 			this->patternSyntax.pop();
@@ -64,6 +78,7 @@ bool PatternClauseSyntaxChecker::isSyntacticallyCorrect(std::vector<TokenObject>
 				return false;
 			}
 
+			isSecondParam = true;
 			this->patternSyntax.pop();
 			continue;
 
@@ -84,6 +99,10 @@ bool PatternClauseSyntaxChecker::isSyntacticallyCorrect(std::vector<TokenObject>
 
 		if (!foundToken) {
 			return false;
+		}
+
+		if (tokenType == TokenType::WILDCARD && isSecondParam) {
+			isSecondParamWildcard = true;
 		}
 
 		this->patternSyntax.pop();

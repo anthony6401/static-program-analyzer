@@ -24,11 +24,7 @@
 #include "../../../models/Relationship/ModifyRelationship.h"
 #include "../../../models/Relationship/CallsRelationship.h"
 #include "../../../models/Relationship/CallsTRelationship.h"
-#include "FollowsExtractor.h"
-#include "ParentExtractor.h"
-#include "UsesExtractor.h"
-#include "ModifyExtractor.h"
-#include "PatternExtractor.h"
+#include "../../../models/Relationship/NextRelationship.h"
 
 #include "StmtStack.h"
 #include "WhileStack.h"
@@ -36,6 +32,8 @@
 #include "ProcedureStack.h"
 
 #include "../../../models/Pattern/AssignPattern.h"
+#include "../../../models/Pattern/WhilePattern.h"
+#include "../../../models/Pattern/IfPattern.h"
 
 #include "../../pkb/clients/SPClient.h"
 
@@ -48,24 +46,33 @@ public:
 	std::map<std::string, ProcedureStack*> procedures;
 	StmtStack* currentStack;
 
+	std::vector<SimpleToken> previousStmt;
+	std::vector<SimpleToken> lastStmtsOfIf;
+	std::stack<SimpleToken> whileTokens;
+	std::stack<SimpleToken> ifTokens;
+
+	bool first;
 
 	Extractor(SPClient* client);
-
-	void close(int statementNumber);
 
 	void extractRead(SimpleToken readToken);
 	void extractPrint(SimpleToken printToken);
 	void extractAssign(SimpleToken assignToken);
+	std::string getExpressionAsString(SimpleToken exprToken);
+	void extractAssignPattern(SimpleToken assignToken);
 	void extractWhile(SimpleToken whileToken);
 	void extractIf(SimpleToken ifToken);
+	void extractWhilePattern(SimpleToken whileToken);
+	void extractIfPattern(SimpleToken ifToken);
 	void extractExpr(SimpleToken stmtToken, SimpleToken exprToken);
 	void extractCall(SimpleToken callToken, std::string currentProcedure);
 	void extractProcedure(SimpleToken procedureToken);
+	void close(int statementNumber);
 	void endOfParser(std::multimap<std::string, std::string> callProcedures);
 	void addNestedRelationships(StmtStack* parent, StmtStack* called, std::string name);
-	std::string getExpressionAsString(SimpleToken exprToken);
+	void extractNext(SimpleToken stmtToken);
+	void extractNextWhile();
+	void extractNextIf();
+	
 	Entity* generateEntity(SimpleToken token);
-
-	void extractConstants(SimpleToken procedureToken);
-	std::vector<ConstantEntity*> extractConstantsVector(SimpleToken procedureToken);
 };
