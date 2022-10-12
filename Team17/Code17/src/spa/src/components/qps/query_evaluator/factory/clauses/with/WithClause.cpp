@@ -48,9 +48,7 @@ ResultTable WithClause::evaluateNameQuotesAttribute() {
     std::string attributeName = right.back().getValue();
     bool isAlternativeAttribute = SelectAttributeClause::checkIsAlternateAttributeName(attributeDesignEntityType,
                                                                                        attributeName);
-
     if (isAlternativeAttribute) {
-        // Call PKB API to get pkb statement by name
         std::unordered_set<std::string> attributeResult = qpsClient.getStatementByName(nameQuotesValue, attributeDesignEntityType);
         if (attributeResult.empty()) {
             resultTable.setIsFalseResultToTrue();
@@ -97,7 +95,6 @@ ResultTable WithClause::evaluateAttributeNameQuotes() {
     bool isAlternativeAttribute = SelectAttributeClause::checkIsAlternateAttributeName(attributeDesignEntityType, attributeName);
 
     if (isAlternativeAttribute) {
-        // Call PKB API to get pkb statement by name
         std::unordered_set<std::string> attributeResult = qpsClient.getStatementByName(nameQuotesValue, attributeDesignEntityType);;
         if (attributeResult.empty()) {
             resultTable.setIsFalseResultToTrue();
@@ -214,7 +211,7 @@ std::unordered_set<std::pair<std::string, std::string>, hashFunction> WithClause
 
     auto it1 = intersectionLeft.begin();
     auto it2 = intersectionRight.begin();
-    for (; it1 != intersectionLeft.end() && it2 != intersectionRight.end(); ++it1, ++it2) {
+    for (; it1 != intersectionLeft.end() && it2 != intersectionRight.end(); it1++, it2++) {
         pairResult.insert(std::make_pair(*it1, *it2));
     }
 
