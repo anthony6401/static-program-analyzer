@@ -3,11 +3,13 @@
 #include "unordered_map"
 #include "TokenObject.h"
 #include "vector"
+#include <unordered_set>
+#include <stack>
 
 #ifndef INC_22S1_CP_SPA_TEAM_17_TOKENIZER_H
 #define INC_22S1_CP_SPA_TEAM_17_TOKENIZER_H
 
-#include <unordered_set>
+
 
 using namespace qps;
 
@@ -25,6 +27,8 @@ private:
     bool validateExpression(std::vector<std::string> expressionVector);
     void symbolsFoundHandler(std::string &temp, std::vector<std::string> &expressionTokens, bool &isInvalidExpression);
     void characterInExpressionHandler(char character, std::string &temp, std::vector<std::string> &expressionTokens, bool &isInvalidExpression);
+    void nonBracketInExpressionVectorHandler(std::string &string, std::string &prev, bool &isPrevName, bool &isPrevInteger, std::stack<std::string> &expressionStack, bool &returnFalse);
+    void stringInExpressionVectorHandler(std::string &string, std::string &prev, bool &isPrevName, bool &isPrevInteger, std::stack<std::string> &expressionStack, bool &returnFalse);
 public:
     Tokenizer();
     std::vector<TokenObject> tokenize(std::string query);

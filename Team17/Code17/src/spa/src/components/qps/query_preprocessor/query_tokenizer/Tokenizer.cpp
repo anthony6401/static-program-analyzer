@@ -275,6 +275,66 @@ bool Tokenizer::isIdentity(std::string s) {
 //    return expressionTokens;
 //}
 
+//bool Tokenizer::validateExpression(std::vector<std::string> expressionVector) {
+//    std::stack<std::string> expressionStack;
+//    std::string prev;
+//    bool returnFalse = false;
+//    bool isPrevName = false;
+//    bool isPrevInteger = false;
+//    for (const auto& string : expressionVector) {
+//        if (string == "(") {
+//            if (isPrevInteger || isPrevName) {
+//                return false;
+//            }
+//            expressionStack.push(string);
+//            prev = "(";
+//            isPrevInteger = false;
+//            isPrevName = false;
+//        } else if (string == ")") {
+//            if (expressionStack.empty() || expressionStack.top() != "(" || expressionSymbols.count(prev) || prev == "(") {
+//                return false;
+//            } else {
+//                expressionStack.pop();
+//                prev = ")";
+//            }
+//            isPrevInteger = false;
+//            isPrevName = false;
+//        } else {
+//            if (isName(string)) {
+//                if (isPrevName) {
+//                    return false;
+//                } else {
+//                    isPrevName = true;
+//                    prev = string;
+//                }
+//            } else if (isInteger(string)) {
+//                if (isPrevInteger) {
+//                    return false;
+//                } else {
+//                    isPrevInteger = true;
+//                    prev = string;
+//                }
+//            } else if (expressionSymbols.count(string)) {
+//                if (expressionSymbols.count(prev) || prev == "(" || prev.empty()) {
+//                    return false;
+//                }
+//                prev = string;
+//                isPrevInteger = false;
+//                isPrevName = false;
+//            }
+//        }
+//    }
+//
+//    if (expressionSymbols.count(prev)) {
+//        return false;
+//    }
+//
+//    if (!expressionStack.empty()) {
+//        return false;
+//    }
+//    return true;
+//}
+
 
 
 void Tokenizer::symbolsFoundHandler(std::string &temp, std::vector<std::string> &expressionTokens, bool &isInvalidExpression) {
@@ -324,52 +384,75 @@ std::vector<std::string> Tokenizer::convertExpressionToStringVector(const std::s
     return expressionTokens;
 }
 
+void openBracketInExpressionVectorHandler(std::string &prev, bool &isPrevName, bool &isPrevInteger, std::stack<std::string> &expressionStack, bool &returnFalse) {
+    if (isPrevInteger || isPrevName) {
+        returnFalse = true;
+    }
+    expressionStack.push("(");
+    prev = "(";
+    isPrevInteger = false;
+    isPrevName = false;
+}
+
+void closedBracketInExpressionVectorHandler(std::string &prev, bool &isPrevName, bool &isPrevInteger, std::stack<std::string> &expressionStack, bool &returnFalse) {
+    if (expressionStack.empty() || expressionStack.top() != "(" || expressionSymbols.count(prev) || prev == "(") {
+        returnFalse = true;
+    } else {
+        expressionStack.pop();
+        prev = ")";
+    }
+    isPrevInteger = false;
+    isPrevName = false;
+}
+
+void Tokenizer::nonBracketInExpressionVectorHandler(std::string &string, std::string &prev, bool &isPrevName, bool &isPrevInteger, std::stack<std::string> &expressionStack, bool &returnFalse) {
+    if (isName(string)) {
+        if (isPrevName) {
+            returnFalse = true;
+        } else {
+            isPrevName = true;
+            prev = string;
+        }
+    } else if (isInteger(string)) {
+        if (isPrevInteger) {
+            returnFalse = true;
+        } else {
+            isPrevInteger = true;
+            prev = string;
+        }
+    } else if (expressionSymbols.count(string)) {
+        if (expressionSymbols.count(prev) || prev == "(" || prev.empty()) {
+            returnFalse = true;
+        }
+        prev = string;
+        isPrevInteger = false;
+        isPrevName = false;
+    }
+}
+
+void Tokenizer::stringInExpressionVectorHandler(std::string &string, std::string &prev, bool &isPrevName, bool &isPrevInteger, std::stack<std::string> &expressionStack, bool &returnFalse) {
+    if (string == "(") {
+        openBracketInExpressionVectorHandler(prev, isPrevName, isPrevInteger, expressionStack, returnFalse);
+    } else if (string == ")") {
+        closedBracketInExpressionVectorHandler(prev, isPrevName, isPrevInteger, expressionStack, returnFalse);
+    } else {
+        Tokenizer::nonBracketInExpressionVectorHandler(string, prev, isPrevName, isPrevInteger, expressionStack, returnFalse);
+    }
+}
+
+
+
+
 bool Tokenizer::validateExpression(std::vector<std::string> expressionVector) {
     std::stack<std::string> expressionStack;
     std::string prev;
+    bool returnFalse = false;
     bool isPrevName = false;
     bool isPrevInteger = false;
     for (const auto& string : expressionVector) {
-        if (string == "(") {
-            if (isPrevInteger || isPrevName) {
-                return false;
-            }
-            expressionStack.push(string);
-            prev = "(";
-            isPrevInteger = false;
-            isPrevName = false;
-        } else if (string == ")") {
-            if (expressionStack.empty() || expressionStack.top() != "(" || expressionSymbols.count(prev) || prev == "(") {
-                return false;
-            } else {
-                expressionStack.pop();
-                prev = ")";
-            }
-            isPrevInteger = false;
-            isPrevName = false;
-        } else {
-            if (isName(string)) {
-                if (isPrevName) {
-                    return false;
-                } else {
-                    isPrevName = true;
-                    prev = string;
-                }
-            } else if (isInteger(string)) {
-                if (isPrevInteger) {
-                    return false;
-                } else {
-                    isPrevInteger = true;
-                    prev = string;
-                }
-            } else if (expressionSymbols.count(string)) {
-                if (expressionSymbols.count(prev) || prev == "(" || prev.empty()) {
-                    return false;
-                }
-                prev = string;
-                isPrevInteger = false;
-                isPrevName = false;
-            }
+        stringInExpressionVectorHandler(const_cast<std::string &>(string), prev, isPrevName, isPrevInteger, expressionStack, returnFalse);
+        if (returnFalse) {
+            return false;
         }
     }
 
