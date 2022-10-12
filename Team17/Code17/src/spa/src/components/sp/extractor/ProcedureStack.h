@@ -10,11 +10,12 @@ public:
     ProcedureStack(SimpleToken parent, Extractor* context);
     void close(int statementNumber);
     void mergeStack();
-    void extractFollows(std::vector<SimpleToken> follows);
-    void extractParent(std::vector<SimpleToken> follows);
-    void extractParentT(std::vector<SimpleToken> parentT);
-    void extractUses(std::vector<SimpleToken> uses);
-    void extractModify(std::vector<SimpleToken> modifies);
+    void extractFollows(std::vector<SimpleToken> stmts);
+    void extractFollowsT(std::vector<SimpleToken> stmts);
+    void extractParent(std::vector<SimpleToken> stmts);
+    void extractParentT(std::vector<SimpleToken> stmtsNested);
+    void extractUses(std::vector<SimpleToken> varUse);
+    void extractModify(std::vector<SimpleToken> varMod);
     Entity* generateEntity(SimpleToken token);
 
 private:
