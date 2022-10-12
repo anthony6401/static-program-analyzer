@@ -37,13 +37,13 @@ private:
         {TokenType::CONSTANT, DesignEntity::CONSTANT},
         {TokenType::PROCEDURE, DesignEntity::PROCEDURE}
     };
-    bool isSyntacticallyCorrect(std::vector<TokenObject> tokenizedClause, SyntaxChecker* checker);
     std::vector<std::vector<TokenObject>> groupQueryIntoClause();
+    bool isSyntacticallyCorrect(std::vector<TokenObject> tokenizedClause, SyntaxChecker* checker);
+    std::tuple<int, std::unordered_map<std::string, DesignEntity>> mapSynonymToDesignEntity(std::vector<TokenObject> declarations);
     Select parseTokensIntoSelectObject(std::vector<TokenObject> selectTokens);
     std::vector<SuchThat> parseTokensIntoSuchThatObjects(std::vector<TokenObject> relationshipTokens);
     std::vector<Pattern> parseTokensIntoPatternObjects(std::vector<TokenObject> patternTokens);
     std::vector<With> parseTokensIntoWithObjects(std::vector<TokenObject> withTokens);
-    std::tuple<int, std::unordered_map<std::string, DesignEntity>> mapSynonymToDesignEntity(std::vector<TokenObject> declarations);
     bool isRelationshipToken(TokenType token);
     bool isDesignEntityToken(TokenType token);
     std::vector<TokenObject> parseTupleIntoIndividualTokens(std::string tupleValue);
@@ -52,9 +52,8 @@ private:
 
 public:
     Parser(std::vector<TokenObject> tokenizedQuery);
-    QueryObject parse();
     std::vector<TokenObject> getTokenizedQuery();
-
+    QueryObject parse();
 };
 
 #endif //INC_22S1_CP_SPA_TEAM_17_PARSER_H

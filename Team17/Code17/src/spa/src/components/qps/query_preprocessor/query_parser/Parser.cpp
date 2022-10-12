@@ -15,6 +15,10 @@ Parser::Parser(std::vector<TokenObject> tokenizedQuery) {
 	this->tokenizedQuery = tokenizedQuery;
 };
 
+std::vector<TokenObject> Parser::getTokenizedQuery() {
+	return this->tokenizedQuery;
+}
+
 QueryObject Parser::parse() {
 	std::vector<std::vector<TokenObject>> groupedQueryTokens = groupQueryIntoClause();
 	std::vector<TokenObject> declarationTokenObjects = groupedQueryTokens[0];
@@ -29,7 +33,7 @@ QueryObject Parser::parse() {
 		hasNoSyntaxError = hasNoSyntaxError && isSyntacticallyCorrect(declarationTokenObjects, new DeclarationClauseSyntaxChecker());
 	}
 
-	hasNoSyntaxError = hasNoSyntaxError && isSyntacticallyCorrect(selectTokenObjects, new SelectClauseSyntaxChecker);
+	hasNoSyntaxError = hasNoSyntaxError && isSyntacticallyCorrect(selectTokenObjects, new SelectClauseSyntaxChecker());
 
 	if (relationshipTokenObjects.size() > 0) {
 		hasNoSyntaxError = hasNoSyntaxError && isSyntacticallyCorrect(relationshipTokenObjects, new SuchThatClauseSyntaxChecker());
@@ -229,7 +233,7 @@ std::vector<std::vector<TokenObject>> Parser::groupQueryIntoClause() {
 			continue;
 		}
 
-		// Throw generalized exception for now, will change in the future
+		// Should never reach here
 		throw std::runtime_error("Error parsing query");
 	}
 
@@ -246,10 +250,6 @@ std::vector<std::vector<TokenObject>> Parser::groupQueryIntoClause() {
 
 bool Parser::isSyntacticallyCorrect(std::vector<TokenObject> tokenizedClause, SyntaxChecker* checker) {
 	return checker->isSyntacticallyCorrect(tokenizedClause);
-}
-
-std::vector<TokenObject> Parser::getTokenizedQuery() {
-	return this->tokenizedQuery;
 }
 
 std::tuple<int, std::unordered_map<std::string, DesignEntity>> Parser::mapSynonymToDesignEntity(std::vector<TokenObject> declarations) {
@@ -374,13 +374,13 @@ std::vector<SuchThat> Parser::parseTokensIntoSuchThatObjects(std::vector<TokenOb
 
 
 		// Change TokenType of synonyms tokenized to design entity tokens etc to NAME
-		if ((currTokenType != TokenType::WILDCARD) && (currTokenType != TokenType::INTEGER) && (currTokenType != TokenType::NAME_WITH_QUOTATION)) {
+		if ((currTokenType != TokenType::WILDCARD) && (currTokenType != TokenType::INTEGER) && 
+			(currTokenType != TokenType::NAME_WITH_QUOTATION)) {
 			
 			if (token.getTokenType() != TokenType::NAME) {
 				token.setTokenType(TokenType::NAME);
 			}
 		}
-
 
 		if (isFirstParam) {
 			leftParam = token;
@@ -508,8 +508,7 @@ std::vector<With> Parser::parseTokensIntoWithObjects(std::vector<TokenObject> wi
 				left.push_back(attrName);
 
 				leftType = setTokenTypeOfAttribute(attrName.getValue());
-			}
-			else {
+			} else {
 				// Ref is either NAME_WITH_QUOTATION or INTEGER
 				left.push_back(token);
 				leftType = token.getTokenType() == TokenType::NAME_WITH_QUOTATION ? TokenType::NAME : TokenType::INTEGER;
@@ -526,8 +525,7 @@ std::vector<With> Parser::parseTokensIntoWithObjects(std::vector<TokenObject> wi
 			right.push_back(attrName);
 
 			rightType = setTokenTypeOfAttribute(attrName.getValue());
-		}
-		else {
+		} else {
 			// Ref is either NAME_WITH_QUOTATION or INTEGER
 			right.push_back(token);
 			rightType = token.getTokenType() == TokenType::NAME_WITH_QUOTATION ? TokenType::NAME : TokenType::INTEGER;
