@@ -5,6 +5,7 @@
 
 WhileStack::WhileStack(SimpleToken parent, Extractor* context) : parent(parent), StmtStack(parent, context) {
     this->context = context;
+    this->expectElse = false;
 }
 
 void WhileStack::close(int statementNumber) {

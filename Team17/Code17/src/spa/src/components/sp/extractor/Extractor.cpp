@@ -4,7 +4,7 @@
 
 Extractor::Extractor(SPClient* client) : currentStack(nullptr) {
 	this->client = client;
-	this->previousStmt = NULL;
+	this->first = true;
 }
 
 void Extractor::extractRead(SimpleToken readToken) {
@@ -16,20 +16,7 @@ void Extractor::extractRead(SimpleToken readToken) {
 	ModifyRelationship* relationship = new ModifyRelationship(left, right);
 	this->client->storeRelationship(relationship);
 
-	if (previousStmt != NULL) {
-		Entity* prev = generateEntity(*previousStmt);
-		NextRelationship* nextRel = new NextRelationship(prev, left);
-		this->client->storeRelationship(nextRel);
-	}
-	else if (lastStmtsOfIf.size() != 0) {
-		for (int i = 0; i < lastStmtsOfIf.size(); i++) {
-			Entity* prev = generateEntity(*lastStmtsOfIf.at(i));
-			NextRelationship* nextRel = new NextRelationship(prev, left);
-			this->client->storeRelationship(nextRel);
-		}
-	}
-	lastStmtsOfIf.clear();
-	previousStmt = &readToken;
+	extractNext(readToken);
 }
 
 void Extractor::extractPrint(SimpleToken printToken) {
@@ -41,20 +28,7 @@ void Extractor::extractPrint(SimpleToken printToken) {
 	UsesRelationship* relationship = new UsesRelationship(left, right);
 	this->client->storeRelationship(relationship);
 
-	if (previousStmt != NULL) {
-		Entity* prev = generateEntity(*previousStmt);
-		NextRelationship* nextRel = new NextRelationship(prev, left);
-		this->client->storeRelationship(nextRel);
-	}
-	else if (lastStmtsOfIf.size() != 0) {
-		for (int i = 0; i < lastStmtsOfIf.size(); i++) {
-			Entity* prev = generateEntity(*lastStmtsOfIf.at(i));
-			NextRelationship* nextRel = new NextRelationship(prev, left);
-			this->client->storeRelationship(nextRel);
-		}
-	}
-	lastStmtsOfIf.clear();
-	previousStmt = &printToken;
+	extractNext(printToken);
 }
 
 void Extractor::extractAssign(SimpleToken assignToken) {
@@ -71,20 +45,7 @@ void Extractor::extractAssign(SimpleToken assignToken) {
 	extractExpr(assignToken, exprToken);
 	extractAssignPattern(assignToken);
 
-	if (previousStmt != NULL) {
-		Entity* prev = generateEntity(*previousStmt);
-		NextRelationship* nextRel = new NextRelationship(prev, left);
-		this->client->storeRelationship(nextRel);
-	}
-	else if (lastStmtsOfIf.size() != 0) {
-		for (int i = 0; i < lastStmtsOfIf.size(); i++) {
-			Entity* prev = generateEntity(*lastStmtsOfIf.at(i));
-			NextRelationship* nextRel = new NextRelationship(prev, left);
-			this->client->storeRelationship(nextRel);
-		}
-	}
-	lastStmtsOfIf.clear();
-	previousStmt = &assignToken;
+	extractNext(assignToken);
 }
 
 std::string Extractor::getExpressionAsString(SimpleToken expression) {
@@ -111,52 +72,30 @@ void Extractor::extractWhile(SimpleToken whileToken) {
 	this->currentStack->stmts.push_back(whileToken);
 	extractExpr(whileToken, whileToken);
 	extractWhilePattern(whileToken);
+
+	extractNext(whileToken);
+	whileTokens.push(whileToken);
+
 	this->parentStack.push(currentStack);
 	this->currentStack = new WhileStack(whileToken, this);
-
-	if (previousStmt != NULL) {
-		Entity* prev = generateEntity(*previousStmt);
-		Entity* next = generateEntity(whileToken);
-		NextRelationship* nextRel = new NextRelationship(prev, next);
-		this->client->storeRelationship(nextRel);
-	}
-	else if (lastStmtsOfIf.size() != 0) {
-		for (int i = 0; i < lastStmtsOfIf.size(); i++) {
-			Entity* prev = generateEntity(*lastStmtsOfIf.at(i));
-			Entity* next = generateEntity(whileToken);
-			NextRelationship* nextRel = new NextRelationship(prev, next);
-			this->client->storeRelationship(nextRel);
-		}
-	}
-	lastStmtsOfIf.clear();
-	previousStmt = &whileToken;
-	whileTokens.push(&whileToken);
 }
 
 void Extractor::extractIf(SimpleToken ifToken) {
 	this->currentStack->stmts.push_back(ifToken);
 	extractExpr(ifToken, ifToken);
 	extractIfPattern(ifToken);
+	
+	extractNext(ifToken);
+	if (first) {
+		ifTokens.push(ifToken);
+		first = false;
+	} else {
+		ifTokens.push(ifToken);
+		ifTokens.push(ifToken);
+	}
+
 	this->parentStack.push(currentStack);
 	this->currentStack = new IfStack(ifToken, this);
-
-	if (previousStmt != NULL) {
-		Entity* prev = generateEntity(*previousStmt);
-		Entity* next = generateEntity(ifToken);
-		NextRelationship* nextRel = new NextRelationship(prev, next);
-		this->client->storeRelationship(nextRel);
-	}
-	else if (lastStmtsOfIf.size() != 0) {
-		for (int i = 0; i < lastStmtsOfIf.size(); i++) {
-			Entity* prev = generateEntity(*lastStmtsOfIf.at(i));
-			Entity* next = generateEntity(ifToken);
-			NextRelationship* nextRel = new NextRelationship(prev, next);
-			this->client->storeRelationship(nextRel);
-		}
-	}
-	lastStmtsOfIf.clear();
-	previousStmt = &ifToken;
-	ifTokens.push(&ifToken);
 }
 
 void Extractor::extractWhilePattern(SimpleToken whileToken) {
@@ -218,20 +157,13 @@ void Extractor::extractProcedure(SimpleToken procedureToken) {
 
 void Extractor::close(int statementNumber) {
 	if (currentStack->parent.type == SpTokenType::TWHILE) {
-		previousStmt = whileTokens.top();
-		whileTokens.pop();
+		extractNextWhile();
+	} else if (currentStack->parent.type == SpTokenType::TIF) {
+		extractNextIf();
+	} else if (currentStack->parent.type == SpTokenType::TPROCEDURE) {
+		lastStmtsOfIf.clear();
+		previousStmt.clear();
 	}
-	else if (currentStack->parent.type == SpTokenType::TIF) {
-		lastStmtsOfIf.push_back(previousStmt);
-		if (ifTokens.empty()) {
-			previousStmt = NULL;
-		}
-		else {
-			previousStmt = ifTokens.top();
-			ifTokens.pop();
-		}
-	}
-
 	currentStack->close(statementNumber);
 }
 
@@ -295,6 +227,84 @@ void Extractor::addNestedRelationships(StmtStack* parentStack, StmtStack* called
 		Entity* secondEntity = generateEntity(second);
 		ModifyRelationship* modifyRel = new ModifyRelationship(firstEntity, secondEntity);
 		this->client->storeRelationship(modifyRel);
+	}
+}
+
+void Extractor::extractNext(SimpleToken stmtToken) {
+	if (currentStack->parent.type == SpTokenType::TPROCEDURE) {
+		first = true;
+		for (SimpleToken stmt : lastStmtsOfIf) {
+			Entity* prev = generateEntity(stmt);
+			Entity* next = generateEntity(stmtToken);
+			NextRelationship* nextRel = new NextRelationship(prev, next);
+			this->client->storeRelationship(nextRel);
+			std::cout << prev->getValue() + " " + next->getValue() + "\n";
+		}
+		lastStmtsOfIf.clear();
+		if (previousStmt.size() != 0) {
+			Entity* prev = generateEntity(previousStmt.at(0));
+			Entity* next = generateEntity(stmtToken);
+			NextRelationship* nextRel = new NextRelationship(prev, next);
+			this->client->storeRelationship(nextRel);
+			std::cout << prev->getValue() + " " + next->getValue() + "\n";
+		}
+		previousStmt.clear();
+		previousStmt.push_back(stmtToken);
+	} else {
+		if (previousStmt.size() == 0) {
+			for (SimpleToken stmt : lastStmtsOfIf) {
+				Entity* prev = generateEntity(stmt);
+				Entity* next = generateEntity(stmtToken);
+				NextRelationship* nextRel = new NextRelationship(prev, next);
+				this->client->storeRelationship(nextRel);
+				std::cout << prev->getValue() + " " + next->getValue() + "\n";
+			}
+			lastStmtsOfIf.clear();
+		} else {
+			Entity* prev = generateEntity(previousStmt.at(0));
+			Entity* next = generateEntity(stmtToken);
+			NextRelationship* nextRel = new NextRelationship(prev, next);
+			this->client->storeRelationship(nextRel);
+			std::cout << prev->getValue() + " " + next->getValue() + "\n";
+		}
+		previousStmt.clear();
+		previousStmt.push_back(stmtToken);
+	}
+}
+
+void Extractor::extractNextWhile() {
+	if (previousStmt.size() == 0) {
+		for (SimpleToken stmt : lastStmtsOfIf) {
+			Entity* prev = generateEntity(stmt);
+			Entity* next = generateEntity(whileTokens.top());
+			NextRelationship* nextRel = new NextRelationship(prev, next);
+			this->client->storeRelationship(nextRel);
+			std::cout << prev->getValue() + " " + next->getValue() + "\n";
+		}
+		lastStmtsOfIf.clear();
+	}
+	else {
+		Entity* prev = generateEntity(previousStmt.at(0));
+		Entity* next = generateEntity(whileTokens.top());
+		NextRelationship* nextRel = new NextRelationship(prev, next);
+		this->client->storeRelationship(nextRel);
+		std::cout << prev->getValue() + " " + next->getValue() + "\n";
+	}
+	previousStmt.clear();
+	previousStmt.push_back(whileTokens.top());
+	whileTokens.pop();
+}
+
+void Extractor::extractNextIf() {
+	if (previousStmt.size() != 0 && previousStmt.at(0).type != SpTokenType::TIF) {
+		lastStmtsOfIf.push_back(previousStmt.at(0));
+	}
+	if (ifTokens.empty()) {
+		previousStmt.clear();
+	} else {
+		previousStmt.clear();
+		previousStmt.push_back(ifTokens.top());
+		ifTokens.pop();
 	}
 }
 

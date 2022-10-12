@@ -18,7 +18,7 @@ public:
     Entity* generateEntity(SimpleToken token);
 
 private:
-    bool expectElse;
+    //bool expectElse;
     SimpleToken parent;
     Extractor* context;
 };

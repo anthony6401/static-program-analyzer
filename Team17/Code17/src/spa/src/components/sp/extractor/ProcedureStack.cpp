@@ -6,6 +6,7 @@
 
 ProcedureStack::ProcedureStack(SimpleToken parent, Extractor* context) : parent(parent), StmtStack(parent, context) {
     this->context = context;
+    this->expectElse = false;
 }
 
 void ProcedureStack::close(int statementNumber) {

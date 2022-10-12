@@ -15,7 +15,89 @@ TEST_CASE("test SP PKB integration m2") {
     // Populate PKB with SP
     Extractor extractor_m2 = Extractor(spClient_m2);
     SimpleParser simpleParser_m2 = SimpleParser(&extractor_m2);
-    simpleParser_m2.parseCode("procedure First {\
+    simpleParser_m2.parseCode("\
+procedure basic {\
+    a = 1;\
+    while (2 == 2) {\
+        a = 3;\
+    }\
+    if (4 == 4) then {\
+        a = 5;\
+    } else {\
+        a = 6;\
+    }\
+}\
+procedure whileIf {\
+    a = 7;\
+    while (8 == 8) {\
+        if (9 == 9) then {\
+            a = 10;\
+        } else {\
+            a = 11;\
+        }\
+    }\
+    a = 12;\
+    while (13 == 13) {\
+        a = 14;\
+        if (15 == 15) then {\
+            a = 16;\
+        } else {\
+            a = 17;\
+        }\
+    }\
+    a = 18;\
+    while (19 == 19) {\
+        if (20 == 20) then {\
+            a = 21;\
+        } else {\
+            a = 22;\
+        }\
+        a = 23;\
+    }\
+    while (24 == 24) {\
+        a = 25;\
+        if (26 == 26) then {\
+            a = 27;\
+        } else {\
+            a = 28;\
+        }\
+        a = 29;\
+    }\
+    a = 30;\
+}\
+procedure ifWhile {\
+    a = 31;\
+    if (32 == 32) then {\
+        while (33 == 33) {\
+            a = 34;\
+        }\
+    } else {\
+        a = 35;\
+    }\
+    a = 36;\
+    if (37 == 37) then {\
+        a = 38;\
+    } else {\
+        while (39 == 39) {\
+            a = 40;\
+        }\
+        a = 41;\
+    }\
+    a = 42;\
+    if (43 == 43) then {\
+        while (44 == 44) {\
+            a = 45;\
+        }\
+    } else {\
+        while (46 == 46) {\
+            a = 47;\
+        }\
+    }\
+    a = 48;\
+}");
+}
+
+    /*simpleParser_m2.parseCode("procedure First {\
                                 read x;\
                                 read z;\
                                 call Second; }\
@@ -39,7 +121,7 @@ TEST_CASE("test SP PKB integration m2") {
                                 z = 5;\
                                 v = z;\
                                 print v; }");
-}
+}*/
 /*
 // pkbSP APIs queries
 TEST_CASE("Select all queries for SP m2") {

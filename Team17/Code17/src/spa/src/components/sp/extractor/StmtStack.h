@@ -16,6 +16,7 @@ public:
     std::vector<SimpleToken> varUse;
     std::vector<SimpleToken> stmts;
     std::vector<SimpleToken> stmtsNested;
+    bool expectElse;
 
 protected:
     StmtStack(SimpleToken parent, Extractor* context) : parent(parent) {};

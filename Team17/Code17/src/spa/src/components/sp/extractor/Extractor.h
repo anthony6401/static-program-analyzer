@@ -46,10 +46,12 @@ public:
 	std::map<std::string, ProcedureStack*> procedures;
 	StmtStack* currentStack;
 
-	SimpleToken* previousStmt;
-	std::vector<SimpleToken*> lastStmtsOfIf;
-	std::stack<SimpleToken*> whileTokens;
-	std::stack<SimpleToken*> ifTokens;
+	std::vector<SimpleToken> previousStmt;
+	std::vector<SimpleToken> lastStmtsOfIf;
+	std::stack<SimpleToken> whileTokens;
+	std::stack<SimpleToken> ifTokens;
+
+	bool first;
 
 	Extractor(SPClient* client);
 
@@ -68,6 +70,9 @@ public:
 	void close(int statementNumber);
 	void endOfParser(std::multimap<std::string, std::string> callProcedures);
 	void addNestedRelationships(StmtStack* parent, StmtStack* called, std::string name);
-
+	void extractNext(SimpleToken stmtToken);
+	void extractNextWhile();
+	void extractNextIf();
+	
 	Entity* generateEntity(SimpleToken token);
 };
