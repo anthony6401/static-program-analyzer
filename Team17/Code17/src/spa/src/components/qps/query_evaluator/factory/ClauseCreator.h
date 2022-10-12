@@ -10,11 +10,8 @@
 #include "models/Entity/DesignEntity.h"
 #include "components/qps/abstract_query_object/With.h"
 
-// Factory Class for creating Clauses for evaluation
-
 class ClauseCreator {
 public:
-    ClauseCreator();
     static std::shared_ptr<Clause> createClause(SuchThat relationship, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
     static std::shared_ptr<Clause> createClause(qps::Pattern pattern, const std::unordered_map<std::string, DesignEntity>& synonymToDesignEntityMap, QPSClient qpsClient);
     static std::shared_ptr<Clause> createClause(With with, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);

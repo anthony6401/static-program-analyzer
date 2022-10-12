@@ -7,15 +7,10 @@
 #include "GroupedClause.h"
 #include <memory>
 
-// Separates clauses into groups:
-// 1) Without synonyms to return boolean
-// 2) Common synonyms
-// 3) Checks for select synonym present inside common synonyms list
-
 class ClauseDivider {
 private:
     GroupedClause noSynonymsPresent;
-    std::vector<GroupedClause> commonSynonymsGroups;
+    std::vector<GroupedClause> connectedSynonymsGroups;
     std::vector<GroupedClause> selectSynonymPresentGroups;
     std::vector<GroupedClause> selectSynonymNotPresentGroups;
 public:
@@ -26,6 +21,8 @@ public:
     std::vector<GroupedClause> getSelectSynonymNotPresentGroups();
     void updateConnectedSynonymGroups();
     void divideCommonSynonymGroupsBySelect(std::shared_ptr<Clause> &selectClause);
+    void addHasSynonymsClauseToDivider(std::shared_ptr<Clause> &clause);
+    void checkPreviousGroupsHandler(int previousIndex);
 
 };
 

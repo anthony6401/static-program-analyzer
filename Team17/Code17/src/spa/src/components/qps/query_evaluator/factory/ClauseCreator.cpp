@@ -5,7 +5,6 @@
 #include "components/qps/query_evaluator/factory/clauses/relationship/ParentTClause.h"
 #include "components/qps/query_evaluator/factory/clauses/patterns/AssignPatternClause.h"
 #include <memory>
-#include "iostream"
 #include "components/qps/query_evaluator/factory/clauses/relationship/CallsClause.h"
 #include "components/qps/query_evaluator/factory/clauses/relationship/CallsTClause.h"
 #include "components/qps/query_evaluator/factory/clauses/relationship/NextClause.h"
@@ -36,19 +35,14 @@ std::shared_ptr<Clause> ClauseCreator::createClause(Select select, std::unordere
     TokenType selectReturnType = select.getReturnType();
     std::vector<TokenObject> selectReturnValues = select.getReturnValues();
     if (selectReturnType == TokenType::SYNONYM) {
-        // NAME
         return std::make_shared<SelectSynonymClause>(selectReturnValues.front(), synonymsInTable, synonymToDesignEntityMap, qpsClient);
     } else if (selectReturnType == TokenType::BOOLEAN) {
         return std::make_shared<SelectBooleanClause>();
     } else if (selectReturnType == TokenType::TUPLE) {
-        // NAME, ATTRIBUTE_SYNONYM, ATTRIBUTE_NAME
         return std::make_shared<SelectTupleClause>(selectReturnValues, synonymsInTable, synonymToDesignEntityMap, qpsClient);
-    } else if (selectReturnType == TokenType::ATTRIBUTE) {
-        // ATTRIBUTE_SYNONYM, ATTRIBUTE_NAME
+    } else {
         std::string attributeName = selectReturnValues.back().getValue();
         return std::make_shared<SelectAttributeClause>(selectReturnValues.front(), attributeName, synonymsInTable, synonymToDesignEntityMap, qpsClient);
-    } else {
-        return nullptr;
     }
 }
 
@@ -89,9 +83,7 @@ std::shared_ptr<Clause> ClauseCreator::createClause(SuchThat relationship, std::
         return std::make_shared<CallsTClause>(left, right, synonymToDesignEntityMap, qpsClient);
     } else if (relationshipType == TokenType::NEXT) {
         return std::make_shared<NextClause>(left, right, synonymToDesignEntityMap, qpsClient);
-    } else if (relationshipType == TokenType::NEXT_T) {
-        return std::make_shared<NextTClause>(left, right, synonymToDesignEntityMap, qpsClient);
     } else {
-        return nullptr;
+        return std::make_shared<NextTClause>(left, right, synonymToDesignEntityMap, qpsClient);
     }
 }
