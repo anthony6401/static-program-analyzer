@@ -1,11 +1,13 @@
 #include "WithClause.h"
+
+#include <utility>
 #include "../select/SelectAttributeClause.h"
 #include "components/qps/query_evaluator/factory/utils/HashFunction.h"
 #include "iostream"
 
 WithClause::WithClause(std::vector<TokenObject> left,
                        std::vector<TokenObject> right,
-                       std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) : left(left), right(right), synonymToDesignEntityMap(synonymToDesignEntityMap),
+                       std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) : left(std::move(left)), right(std::move(right)), synonymToDesignEntityMap(std::move(synonymToDesignEntityMap)),
                                                                                                                       qpsClient(qpsClient) {}
 
 
@@ -144,50 +146,12 @@ ResultTable WithClause::evaluateAttributeAttribute() {
     std::unordered_set<std::pair<std::string, std::string>, hashFunction> pairResult;
 
     if (isLeftAlternativeAttribute && isRightAlternativeAttribute) {
-        // Call PKB API to get all names
-        std::unordered_set<std::string> leftNameResult = qpsClient.getAllName(leftDesignEntityType);
-        std::unordered_set<std::string> rightNameResult = qpsClient.getAllName(rightDesignEntityType);
-        std::unordered_set<std::string> commonAttributeValues = WithClause::findCommonAttributeValues(leftNameResult, rightNameResult);
-        std::unordered_set<std::string> intersectionLeft;
-        std::unordered_set<std::string> intersectionRight;
-        for (auto commonValue : commonAttributeValues) {
-            // Call PKB API to get back statement by name
-            std::unordered_set<std::string> statementFromNameLeft = qpsClient.getStatementByName(commonValue, leftDesignEntityType);
-            std::unordered_set<std::string> statementFromNameRight = qpsClient.getStatementByName(commonValue, rightDesignEntityType);
-            intersectionLeft.insert(statementFromNameLeft.begin(), statementFromNameLeft.end());
-            intersectionRight.insert(statementFromNameRight.begin(), statementFromNameRight.end());
-        }
-
-        auto it1 = intersectionLeft.begin();
-        auto it2 = intersectionRight.begin();
-        for (; it1 != intersectionLeft.end() && it2 != intersectionRight.end(); ++it1, ++it2) {
-            pairResult.insert(std::make_pair(*it1, *it2));
-        }
+        pairResult = WithClause::leftAndRightAlternativeAttributeResultsHandler(leftDesignEntityType, rightDesignEntityType);
 
     } else if (isLeftAlternativeAttribute) {
-        // Call PKB API to get all names
-        std::unordered_set<std::string> leftNameResult = qpsClient.getAllName(leftDesignEntityType);
-        std::unordered_set<std::string> rightResult = qpsClient.getAllEntity(rightDesignEntityType);
-        std::unordered_set<std::string> commonAttributeValues = WithClause::findCommonAttributeValues(leftNameResult, rightResult);
-        for (auto commonValue : commonAttributeValues) {
-            // Call PKB API to get back statement by name
-            std::unordered_set<std::string> statementFromNameLeft = qpsClient.getStatementByName(commonValue, leftDesignEntityType);
-            for (auto leftStmt : statementFromNameLeft) {
-                pairResult.insert(std::make_pair(leftStmt, commonValue));
-            }
-        }
+        pairResult = WithClause::leftAlternativeAttributeResultsHandler(leftDesignEntityType, rightDesignEntityType);
     } else if (isRightAlternativeAttribute) {
-        // Call PKB API to get all names
-        std::unordered_set<std::string> rightNameResult = qpsClient.getAllName(rightDesignEntityType);;
-        std::unordered_set<std::string> leftResult = qpsClient.getAllEntity(leftDesignEntityType);
-        std::unordered_set<std::string> commonAttributeValues = WithClause::findCommonAttributeValues(rightNameResult, leftResult);
-        for (auto commonValue : commonAttributeValues) {
-            // Call PKB API to get back statement by name
-            std::unordered_set<std::string> statementFromNameRight = qpsClient.getStatementByName(commonValue, rightDesignEntityType);
-            for (auto rightStmt : statementFromNameRight) {
-                pairResult.insert(std::make_pair(commonValue, rightStmt));
-            }
-        }
+        pairResult = WithClause::rightAlternativeAttributeResultsHandler(leftDesignEntityType, rightDesignEntityType);
     } else {
         std::unordered_set<std::string> rightResult = qpsClient.getAllEntity(rightDesignEntityType);
         std::unordered_set<std::string> leftResult = qpsClient.getAllEntity(leftDesignEntityType);
@@ -201,6 +165,60 @@ ResultTable WithClause::evaluateAttributeAttribute() {
     }
 
     return {leftSynonym, rightSynonym, pairResult};
+}
+
+std::unordered_set<std::pair<std::string, std::string>, hashFunction> WithClause::rightAlternativeAttributeResultsHandler(DesignEntity leftDesignEntityType, DesignEntity rightDesignEntityType) {
+    std::unordered_set<std::pair<std::string, std::string>, hashFunction> pairResult;
+    std::unordered_set<std::string> rightNameResult = qpsClient.getAllName(rightDesignEntityType);;
+    std::unordered_set<std::string> leftResult = qpsClient.getAllEntity(leftDesignEntityType);
+    std::unordered_set<std::string> commonAttributeValues = WithClause::findCommonAttributeValues(rightNameResult, leftResult);
+    for (auto commonValue : commonAttributeValues) {
+        std::unordered_set<std::string> statementFromNameRight = qpsClient.getStatementByName(commonValue, rightDesignEntityType);
+        for (const auto& rightStmt : statementFromNameRight) {
+            pairResult.insert(std::make_pair(commonValue, rightStmt));
+        }
+    }
+
+    return pairResult;
+}
+
+std::unordered_set<std::pair<std::string, std::string>, hashFunction> WithClause::leftAlternativeAttributeResultsHandler(DesignEntity leftDesignEntityType, DesignEntity rightDesignEntityType) {
+    std::unordered_set<std::pair<std::string, std::string>, hashFunction> pairResult;
+    std::unordered_set<std::string> leftNameResult = qpsClient.getAllName(leftDesignEntityType);
+    std::unordered_set<std::string> rightResult = qpsClient.getAllEntity(rightDesignEntityType);
+    std::unordered_set<std::string> commonAttributeValues = WithClause::findCommonAttributeValues(leftNameResult, rightResult);
+    for (auto commonValue : commonAttributeValues) {
+        std::unordered_set<std::string> statementFromNameLeft = qpsClient.getStatementByName(commonValue, leftDesignEntityType);
+        for (const auto& leftStmt : statementFromNameLeft) {
+            pairResult.insert(std::make_pair(leftStmt, commonValue));
+        }
+    }
+
+    return pairResult;
+}
+
+
+std::unordered_set<std::pair<std::string, std::string>, hashFunction> WithClause::leftAndRightAlternativeAttributeResultsHandler(DesignEntity leftDesignEntityType, DesignEntity rightDesignEntityType) {
+    std::unordered_set<std::pair<std::string, std::string>, hashFunction> pairResult;
+    std::unordered_set<std::string> leftNameResult = qpsClient.getAllName(leftDesignEntityType);
+    std::unordered_set<std::string> rightNameResult = qpsClient.getAllName(rightDesignEntityType);
+    std::unordered_set<std::string> commonAttributeValues = WithClause::findCommonAttributeValues(leftNameResult, rightNameResult);
+    std::unordered_set<std::string> intersectionLeft;
+    std::unordered_set<std::string> intersectionRight;
+    for (auto commonValue : commonAttributeValues) {
+        std::unordered_set<std::string> statementFromNameLeft = qpsClient.getStatementByName(commonValue, leftDesignEntityType);
+        std::unordered_set<std::string> statementFromNameRight = qpsClient.getStatementByName(commonValue, rightDesignEntityType);
+        intersectionLeft.insert(statementFromNameLeft.begin(), statementFromNameLeft.end());
+        intersectionRight.insert(statementFromNameRight.begin(), statementFromNameRight.end());
+    }
+
+    auto it1 = intersectionLeft.begin();
+    auto it2 = intersectionRight.begin();
+    for (; it1 != intersectionLeft.end() && it2 != intersectionRight.end(); ++it1, ++it2) {
+        pairResult.insert(std::make_pair(*it1, *it2));
+    }
+
+    return pairResult;
 }
 
 std::unordered_set<std::string> WithClause::findCommonAttributeValues(std::unordered_set<std::string> leftNameResult, std::unordered_set<std::string> rightNameResult) {
