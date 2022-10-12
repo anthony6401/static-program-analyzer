@@ -38,7 +38,10 @@ void SimpleParser::parseLine(std::string code) {
         tokens.erase(tokens.begin());
         validator.close();
         extractor->close(statementNumber);
-    } else if (tokens.at(1) == "=") {
+    } else if (tokens.size() < 2) {
+        throw std::invalid_argument("Received invalid SIMPLE code line not enough tokens::" + std::to_string(statementNumber));
+    }
+    if (tokens.at(1) == "=") {
         tokens.erase(tokens.begin() + 1);
         validator.validateLine(SpTokenType::TASSIGN, statementNumber);
         parseAssign(tokens);
@@ -71,7 +74,7 @@ void SimpleParser::parseLine(std::string code) {
         validator.validateLine(SpTokenType::TELSE, statementNumber);
         validator.close();
     } else {
-        throw std::invalid_argument("Received invalid SIMPLE code line " + std::to_string(SimpleParser::statementNumber));
+        throw std::invalid_argument("Received invalid SIMPLE code line " + std::to_string(statementNumber));
     }
 }
 

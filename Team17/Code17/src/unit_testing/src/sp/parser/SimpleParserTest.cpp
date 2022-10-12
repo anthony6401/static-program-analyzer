@@ -54,14 +54,14 @@ TEST_CASE("parse line") {
         }
     }
 
-    SECTION("invalid else line") {
+    SECTION("invalid code line lacking tokens") {
         SimpleParser parser = SimpleParser(&xtractor);
         parser.statementNumber = 1;
         try {
             parser.parseLine("else");
         }
         catch (std::invalid_argument e) {
-            REQUIRE(e.what() == std::string("Received invalid SIMPLE code line 1"));
+            REQUIRE(e.what() == std::string("Received invalid SIMPLE code line not enough tokens::1"));
         }
     }
 
@@ -209,7 +209,7 @@ TEST_CASE("parse If") {
         }
     }
 
-    SECTION("Invalid while not enough tokens") {
+    SECTION("Invalid if not enough tokens") {
         SimpleParser parser = SimpleParser(&xtractor);
         parser.statementNumber = 1;
         std::vector<std::string> test_tokens{ "(","test",")","then","{"};
@@ -230,6 +230,44 @@ TEST_CASE("parse If") {
         }
         catch (std::invalid_argument e) {
             REQUIRE(e.what() == std::string("Received invalid If:Line 1"));
+        }
+    }
+}
+
+TEST_CASE("parse Else") {
+    SECTION("Invalid Else wrong token") {
+        SimpleParser parser = SimpleParser(&xtractor);
+        parser.statementNumber = 1;
+        std::vector<std::string> test_tokens{ "else;" };
+        try {
+            parser.parseElse(test_tokens);
+        }
+        catch (std::invalid_argument e) {
+            REQUIRE(e.what() == std::string("Received invalid Else:Line 1"));
+        }
+    }
+
+    SECTION("Invalid Else extra tokens") {
+        SimpleParser parser = SimpleParser(&xtractor);
+        parser.statementNumber = 1;
+        std::vector<std::string> test_tokens{ "else { {" };
+        try {
+            parser.parseElse(test_tokens);
+        }
+        catch (std::invalid_argument e) {
+            REQUIRE(e.what() == std::string("Received invalid Else:Line 1"));
+        }
+    }
+
+    SECTION("Invalid read extra operands") {
+        SimpleParser parser = SimpleParser(&xtractor);
+        parser.statementNumber = 1;
+        std::vector<std::string> test_tokens{ "test", ";", ";" };
+        try {
+            parser.parseRead(test_tokens);
+        }
+        catch (std::invalid_argument e) {
+            REQUIRE(e.what() == std::string("Received invalid Read:Line 1"));
         }
     }
 }

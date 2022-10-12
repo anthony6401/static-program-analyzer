@@ -27,5 +27,4 @@ void NestedState::close() {
     } else {
         throw std::invalid_argument("No stmts where expected");
     }
-
 }
