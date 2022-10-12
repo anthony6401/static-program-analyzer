@@ -95,8 +95,8 @@ ResultTable UsesSClause::evaluateSynonymWildcard() {
 }
 
 ResultTable UsesSClause::evaluateSynonymNameQuotes() {
-    DesignEntity stmtType = synonymToDesignEntityMap[left.getValue()];
     std::string leftValue = left.getValue();
+    DesignEntity stmtType = synonymToDesignEntityMap[left.getValue()];
     std::unordered_set<std::string> results = qpsClient.getRelationshipBySecond(getRelationshipType(), stmtType, right);
     return {leftValue, results};
 }
