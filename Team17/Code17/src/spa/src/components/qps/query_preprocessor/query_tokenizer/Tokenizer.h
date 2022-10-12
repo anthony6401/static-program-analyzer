@@ -23,6 +23,8 @@ private:
     bool isExpression(std::string s);
     bool isValidAttribute(std::string s);
     bool isTuple(std::string s);
+    bool isValidTuple(std::string &currString, std::string &currValue);
+    void validateTupleValueHandler(std::string &currString, std::string &currValue, size_t commaIndex, bool &returnFalse);
     std::vector<std::string> convertExpressionToStringVector(const std::string& s);
     bool validateExpression(std::vector<std::string> expressionVector);
     void symbolsFoundHandler(std::string &temp, std::vector<std::string> &expressionTokens, bool &isInvalidExpression);

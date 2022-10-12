@@ -242,100 +242,6 @@ bool Tokenizer::isIdentity(std::string s) {
     return false;
 }
 
-//std::vector<std::string> Tokenizer::convertExpressionToStringVector(const std::string& s) {
-//    std::vector<std::string> expressionTokens;
-//    std::vector<std::string> invalidExpression;
-//    std::string temp;
-//    for (char character : s) {
-//        auto symbolsIterator = expressionSymbolsAndBrackets.find(character);
-//        if (symbolsIterator != expressionSymbolsAndBrackets.cend()) {
-//            if (!temp.empty()) {
-//                if (isName(temp) || Tokenizer::isInteger(temp)) {
-//                    expressionTokens.push_back(temp);
-//                    temp.clear();
-//                } else {
-//                    return invalidExpression;
-//                }
-//            }
-//
-//            expressionTokens.emplace_back(1, character);
-//        } else {
-//            temp.push_back(character);
-//        }
-//    }
-//
-//    if (!temp.empty()) {
-//        if (!isName(temp) && !isInteger(temp)) {
-//            return invalidExpression;
-//        } else {
-//            expressionTokens.push_back(temp);
-//        }
-//    }
-//
-//    return expressionTokens;
-//}
-
-//bool Tokenizer::validateExpression(std::vector<std::string> expressionVector) {
-//    std::stack<std::string> expressionStack;
-//    std::string prev;
-//    bool returnFalse = false;
-//    bool isPrevName = false;
-//    bool isPrevInteger = false;
-//    for (const auto& string : expressionVector) {
-//        if (string == "(") {
-//            if (isPrevInteger || isPrevName) {
-//                return false;
-//            }
-//            expressionStack.push(string);
-//            prev = "(";
-//            isPrevInteger = false;
-//            isPrevName = false;
-//        } else if (string == ")") {
-//            if (expressionStack.empty() || expressionStack.top() != "(" || expressionSymbols.count(prev) || prev == "(") {
-//                return false;
-//            } else {
-//                expressionStack.pop();
-//                prev = ")";
-//            }
-//            isPrevInteger = false;
-//            isPrevName = false;
-//        } else {
-//            if (isName(string)) {
-//                if (isPrevName) {
-//                    return false;
-//                } else {
-//                    isPrevName = true;
-//                    prev = string;
-//                }
-//            } else if (isInteger(string)) {
-//                if (isPrevInteger) {
-//                    return false;
-//                } else {
-//                    isPrevInteger = true;
-//                    prev = string;
-//                }
-//            } else if (expressionSymbols.count(string)) {
-//                if (expressionSymbols.count(prev) || prev == "(" || prev.empty()) {
-//                    return false;
-//                }
-//                prev = string;
-//                isPrevInteger = false;
-//                isPrevName = false;
-//            }
-//        }
-//    }
-//
-//    if (expressionSymbols.count(prev)) {
-//        return false;
-//    }
-//
-//    if (!expressionStack.empty()) {
-//        return false;
-//    }
-//    return true;
-//}
-
-
 
 void Tokenizer::symbolsFoundHandler(std::string &temp, std::vector<std::string> &expressionTokens, bool &isInvalidExpression) {
     std::vector<std::string> invalidExpression;
@@ -441,8 +347,6 @@ void Tokenizer::stringInExpressionVectorHandler(std::string &string, std::string
 }
 
 
-
-
 bool Tokenizer::validateExpression(std::vector<std::string> expressionVector) {
     std::stack<std::string> expressionStack;
     std::string prev;
@@ -490,22 +394,6 @@ bool Tokenizer::isExpression(std::string s) {
 }
 
 
-//bool Tokenizer::isSubExpression(std::string s) {
-//    if (s.size() < 5) {
-//        return false;
-//    } else {
-//        if (s.front() == '_' && s.back() == '_') {
-//            std::string withoutWildcard = trimQuotesOrWildcard(s);
-//            bool isIdentity = Tokenizer::isIdentity(withoutWildcard);
-//            bool isExpression = Tokenizer::isExpression(withoutWildcard);
-//            if (isIdentity || isExpression) {
-//                return true;
-//            }
-//        }
-//    }
-//    return false;
-//}
-
 bool Tokenizer::isSubExpression(std::string s) {
     if (s.size() < 5) {
         return false;
@@ -527,25 +415,39 @@ auto isEmptyOrBlank = [](const std::string &s) {
     return s.find_first_not_of(" \n\t\f\v\r") == std::string::npos;
 };
 
+
+void Tokenizer::validateTupleValueHandler(std::string &currString, std::string &currValue, size_t commaIndex, bool &returnFalse) {
+    currValue = currString.substr(0, commaIndex);
+
+    if (!isName(currValue) && !isValidAttribute(currValue)) {
+        returnFalse = true;
+    }
+
+    currString = currString.substr(commaIndex + 1, currString.length() - commaIndex - 1);
+}
+
+bool Tokenizer::isValidTuple(std::string &currString, std::string &currValue) {
+    bool returnFalse = false;
+    while (currString.length() > 0 && !returnFalse) {
+        size_t commaIndex = currString.find(',');
+        if (commaIndex != std::string::npos && commaIndex > 0) {
+            validateTupleValueHandler(currString, currValue, commaIndex, returnFalse);
+        } else if (isName(currString) || isValidAttribute(currString)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    return false;
+}
+
 bool Tokenizer::isTuple(std::string s) {
     if (s.front() == '<' && s.back() == '>') {
         std::string currString = s.substr(1, s.length() - 2);
         std::string currValue;
         while (currString.length() > 0) {
-            size_t commaIndex = currString.find(',');
-            if (commaIndex != std::string::npos && commaIndex > 0) {
-                currValue = currString.substr(0, commaIndex);
-
-                if (!isName(currValue) && !isValidAttribute(currValue)) {
-                    return false;
-                }
-
-                currString = currString.substr(commaIndex + 1, currString.length() - commaIndex - 1);
-            } else if (isName(currString) || isValidAttribute(currString)) {
-                return true;
-            } else {
-                return false;
-            }
+            bool isTuple = isValidTuple(currString, currValue);
+            return isTuple;
         }
 
         return false;
@@ -588,36 +490,33 @@ std::vector<TokenObject> Tokenizer::tokenize(std::string query) {
         if (stringToTokenMap.find(s) != stringToTokenMap.end()) {
             TokenObject object = TokenObject(stringToTokenMap[s], s);
             tokenList.push_back(object);
+        } else if (isTuple(s)) {
+            TokenObject object = TokenObject(TokenType::TUPLE, s);
+            tokenList.push_back(object);
+        } else if (isValidAttribute(s)) {
+            TokenObject object = TokenObject(TokenType::ATTRIBUTE, s);
+            tokenList.push_back(object);
+        } else if (isName(s)) {
+            TokenObject object = TokenObject(TokenType::NAME, s);
+            tokenList.push_back(object);
+        } else if (isInteger(s)) {
+            TokenObject object = TokenObject(TokenType::INTEGER, s);
+            tokenList.push_back(object);
+        } else if (isIdentity(s)) {
+            std::string trimmedQuotesFromIdentity = trimQuotesOrWildcard(s);
+            TokenObject object = TokenObject(TokenType::NAME_WITH_QUOTATION, trimmedQuotesFromIdentity);
+            tokenList.push_back(object);
+        } else if (isExpression(s)) {
+            std::string trimmedQuotesFromExpression = trimQuotesOrWildcard(s);
+            TokenObject object = TokenObject(TokenType::EXPRESSION, trimmedQuotesFromExpression);
+            tokenList.push_back(object);
+        } else if (isSubExpression(s)) {
+            std::string trimmedQuotesFromSubExpression = trimQuotesOrWildcard(s);
+            std::string trimmedWildcardAndQuotesFromSubExpression = trimQuotesOrWildcard(trimmedQuotesFromSubExpression);
+            TokenObject object = TokenObject(TokenType::SUBEXPRESSION, trimmedWildcardAndQuotesFromSubExpression);
+            tokenList.push_back(object);
         } else {
-            if (isTuple(s)) {
-                TokenObject object = TokenObject(TokenType::TUPLE, s);
-                tokenList.push_back(object);
-            } else if (isValidAttribute(s)) {
-                TokenObject object = TokenObject(TokenType::ATTRIBUTE, s);
-                tokenList.push_back(object);
-            } else if (isName(s)) {
-                TokenObject object = TokenObject(TokenType::NAME, s);
-                tokenList.push_back(object);
-            } else if (isInteger(s)) {
-                TokenObject object = TokenObject(TokenType::INTEGER, s);
-                tokenList.push_back(object);
-            } else if (isIdentity(s)) {
-                std::string trimmedQuotesFromIdentity = trimQuotesOrWildcard(s);
-                TokenObject object = TokenObject(TokenType::NAME_WITH_QUOTATION, trimmedQuotesFromIdentity);
-                tokenList.push_back(object);
-            } else if (isExpression(s)) {
-                // Return trimmed string
-                std::string trimmedQuotesFromExpression = trimQuotesOrWildcard(s);
-                TokenObject object = TokenObject(TokenType::EXPRESSION, trimmedQuotesFromExpression);
-                tokenList.push_back(object);
-            } else if (isSubExpression(s)) {
-                std::string trimmedQuotesFromSubExpression = trimQuotesOrWildcard(s);
-                std::string trimmedWildcardAndQuotesFromSubExpression = trimQuotesOrWildcard(trimmedQuotesFromSubExpression);
-                TokenObject object = TokenObject(TokenType::SUBEXPRESSION, trimmedWildcardAndQuotesFromSubExpression);
-                tokenList.push_back(object);
-            } else {
-                throw TokenException();
-            }
+            throw TokenException();
         }
     }
     return tokenList;
