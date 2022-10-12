@@ -1,10 +1,12 @@
 #include "ParentTClause.h"
+
+#include <utility>
 #include "components/qps/query_evaluator/factory/utils/ClauseUtils.h"
 
 ParentTClause::ParentTClause(TokenObject left, TokenObject right,
                                std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap,
-                               QPSClient qpsClient) : left(left), right(right),
-                                                      synonymToDesignEntityMap(synonymToDesignEntityMap), qpsClient(qpsClient) {}
+                               QPSClient qpsClient) : left(std::move(left)), right(std::move(right)),
+                                                      synonymToDesignEntityMap(std::move(synonymToDesignEntityMap)), qpsClient(qpsClient) {}
 
 ResultTable ParentTClause::evaluateClause() {
     TokenType leftType = left.getTokenType();

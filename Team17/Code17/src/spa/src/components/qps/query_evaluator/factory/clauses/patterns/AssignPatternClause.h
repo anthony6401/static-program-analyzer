@@ -17,18 +17,9 @@ public:
     ResultTable evaluateClause() override;
     size_t getNumberOfSynonyms() override;
     std::set<std::string> getAllSynonyms() override;
-    ResultTable evaluateSynonymWildcard();
-    ResultTable evaluateSynonymExpression();
-    ResultTable evaluateSynonymNameQuotes();
-    ResultTable evaluateSynonymSubExpression();
-    ResultTable evaluateWildcardWildcard();
-    ResultTable evaluateWildcardExpression();
-    ResultTable evaluateWildcardNameQuotes();
-    ResultTable evaluateWildcardSubExpression();
-    ResultTable evaluateNameQuotesWildcard();
-    ResultTable evaluateNameQuotesExpression();
-    ResultTable evaluateNameQuotesNameQuotes();
-    ResultTable evaluateNameQuotesSubExpression();
+    ResultTable evaluateFirstAsSynonym();
+    ResultTable evaluateFirstAsWildcard();
+    ResultTable evaluateFirstAsNameQuotes();
 };
 
 #endif //SPA_ASSIGNPATTERNCLAUSE_H
