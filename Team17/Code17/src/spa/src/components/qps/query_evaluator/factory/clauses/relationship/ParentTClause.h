@@ -21,10 +21,6 @@ public:
     ResultTable evaluateClause() override;
     size_t getNumberOfSynonyms() override;
     std::set<std::string> getAllSynonyms() override;
-    std::vector<std::pair<std::string, std::string>> processMapToVectorPair(std::unordered_map<std::string, std::unordered_set<std::string>> results);
-    std::unordered_set<std::string> processMapToSetFromFirst(std::unordered_map<std::string, std::unordered_set<std::string>> results);
-    std::unordered_set<std::string> processMapToSetFromSecond(std::unordered_map<std::string, std::unordered_set<std::string>> results);
-    static RelationshipType getRelationshipType();
     ResultTable evaluateSynonymSynonym();
     ResultTable evaluateSynonymWildcard();
     ResultTable evaluateSynonymInteger();

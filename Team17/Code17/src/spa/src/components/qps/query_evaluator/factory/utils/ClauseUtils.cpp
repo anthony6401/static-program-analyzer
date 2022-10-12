@@ -24,3 +24,12 @@ std::unordered_set<std::string> ClauseUtils::processMapToSetFromFirst(std::unord
     }
     return processedResult;
 }
+
+std::unordered_set<std::string> ClauseUtils::processMapToSetFromSecond(std::unordered_map<std::string, std::unordered_set<std::string>> results) {
+    std::unordered_set<std::string> processedResult;
+    for (const auto& entry : results) {
+        std::unordered_set<std::string> valuesInRow = entry.second;
+        processedResult.insert(valuesInRow.begin(), valuesInRow.end());
+    }
+    return processedResult;
+}
