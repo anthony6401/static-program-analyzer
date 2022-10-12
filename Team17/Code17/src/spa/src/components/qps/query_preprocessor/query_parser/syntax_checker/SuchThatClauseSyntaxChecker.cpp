@@ -90,6 +90,20 @@ bool SuchThatClauseSyntaxChecker::isSyntacticallyCorrect(std::vector<TokenObject
 	return true;
 };
 
+std::tuple<int, std::vector<TokenObject>> SuchThatClauseSyntaxChecker::getRelationshipClauseTokens(std::vector<TokenObject> tokenizedClause, int relrefIndex) {
+	auto closedBracketTokenIterator = std::find(tokenizedClause.begin() + relrefIndex + 1, tokenizedClause.end(), TokenObject(TokenType::CLOSED_BRACKET, ")"));
+
+	if (closedBracketTokenIterator == tokenizedClause.end()) {
+		return {};
+	}
+
+	int closedBracketTokenIndex = closedBracketTokenIterator - tokenizedClause.begin();
+	std::vector<TokenObject> relationshipClauseTokens(tokenizedClause.begin() + relrefIndex + 1, closedBracketTokenIterator + 1);
+
+	return { closedBracketTokenIndex, relationshipClauseTokens };
+
+}
+
 bool SuchThatClauseSyntaxChecker::isRelationshipSyntacticallyCorrect(std::vector<TokenObject> relationshipClauseTokens, TokenType relrefToken) {
 	if (relationshipClauseTokens.empty()) {
 		return false;
@@ -99,22 +113,15 @@ bool SuchThatClauseSyntaxChecker::isRelationshipSyntacticallyCorrect(std::vector
 
 	if (relrefToken == TokenType::USES || relrefToken == TokenType::MODIFIES) {
 		hasValidSyntax = hasValidUsesModifiesSyntax(relationshipClauseTokens);
-	}
-	else if (relrefToken == TokenType::CALLS || relrefToken == TokenType::CALLS_T) {
+	} else if (relrefToken == TokenType::CALLS || relrefToken == TokenType::CALLS_T) {
 		hasEntrefEntrefSyntax();
 		hasValidSyntax = hasValidRelationshipSyntax(relationshipClauseTokens);
-	}
-	else {
+	} else {
 		hasStmtrefStmtrefSyntax();
 		hasValidSyntax = hasValidRelationshipSyntax(relationshipClauseTokens);
 	}
 
-
-	if (!hasValidSyntax) {
-		return false;
-	}
-
-	return true;
+	return hasValidSyntax;
 }
 
 bool SuchThatClauseSyntaxChecker::hasValidRelationshipSyntax(std::vector<TokenObject> relationshipClauseTokens) {
@@ -224,8 +231,6 @@ bool SuchThatClauseSyntaxChecker::hasValidUsesModifiesSyntax(std::vector<TokenOb
 
 		this->suchThatSyntax.pop();
 		isFirstParameter = false;
-
-
 	}
 
 	return true;
@@ -258,18 +263,4 @@ void SuchThatClauseSyntaxChecker::hasStmtrefStmtrefSyntax() {
 	this->suchThatSyntax.push(TokenType::COMMA);
 	this->suchThatSyntax.push(TokenType::STMTREF);
 	this->suchThatSyntax.push(TokenType::OPEN_BRACKET);
-}
-
-std::tuple<int, std::vector<TokenObject>> SuchThatClauseSyntaxChecker::getRelationshipClauseTokens(std::vector<TokenObject> tokenizedClause, int relrefIndex) {
-	auto closedBracketTokenIterator = std::find(tokenizedClause.begin() + relrefIndex + 1, tokenizedClause.end(), TokenObject(TokenType::CLOSED_BRACKET, ")"));
-
-	if (closedBracketTokenIterator == tokenizedClause.end()) {
-		return {};
-	}
-
-	int closedBracketTokenIndex = closedBracketTokenIterator - tokenizedClause.begin();
-	std::vector<TokenObject> relationshipClauseTokens(tokenizedClause.begin() + relrefIndex + 1, closedBracketTokenIterator + 1);
-
-	return { closedBracketTokenIndex, relationshipClauseTokens };
-
 }

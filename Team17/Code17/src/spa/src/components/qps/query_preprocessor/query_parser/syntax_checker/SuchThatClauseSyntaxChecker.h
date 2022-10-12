@@ -12,13 +12,13 @@ using namespace qps;
 class SuchThatClauseSyntaxChecker : public SyntaxChecker {
 private:
     std::stack<TokenType> suchThatSyntax;
+    std::tuple<int, std::vector<TokenObject>> getRelationshipClauseTokens(std::vector<TokenObject> tokenizedClause, int relrefIndex);
     bool isRelationshipSyntacticallyCorrect(std::vector<TokenObject> relationshipClauseTokens, TokenType relrefToken);
     bool hasValidRelationshipSyntax(std::vector<TokenObject> relationshipClauseTokens);
     bool hasValidUsesModifiesSyntax(std::vector<TokenObject> relationshipClauseTokens);
     bool isSynonymToken(TokenType tokenType);
     void hasEntrefEntrefSyntax();
     void hasStmtrefStmtrefSyntax();
-    std::tuple<int, std::vector<TokenObject>> getRelationshipClauseTokens(std::vector<TokenObject> tokenizedClause, int relrefIndex);
 public:
     SuchThatClauseSyntaxChecker();
     ~SuchThatClauseSyntaxChecker();

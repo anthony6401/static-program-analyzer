@@ -83,7 +83,6 @@ bool PatternClauseSyntaxChecker::isSyntacticallyCorrect(std::vector<TokenObject>
 			continue;
 
 		}
-		
 
 		// SYNONYM, EXPRESSION_SPEC token
 		std::vector<TokenType> possibleTokenTypes = this->generalSyntax.at(syntax);
@@ -101,6 +100,7 @@ bool PatternClauseSyntaxChecker::isSyntacticallyCorrect(std::vector<TokenObject>
 			return false;
 		}
 
+		// Ensure second parameter of if pattern is wildcard
 		if (tokenType == TokenType::WILDCARD && isSecondParam) {
 			isSecondParamWildcard = true;
 		}
