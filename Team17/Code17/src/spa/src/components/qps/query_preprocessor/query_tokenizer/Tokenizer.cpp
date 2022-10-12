@@ -490,19 +490,36 @@ bool Tokenizer::isExpression(std::string s) {
 }
 
 
+//bool Tokenizer::isSubExpression(std::string s) {
+//    if (s.size() < 5) {
+//        return false;
+//    } else {
+//        if (s.front() == '_' && s.back() == '_') {
+//            std::string withoutWildcard = trimQuotesOrWildcard(s);
+//            bool isIdentity = Tokenizer::isIdentity(withoutWildcard);
+//            bool isExpression = Tokenizer::isExpression(withoutWildcard);
+//            if (isIdentity || isExpression) {
+//                return true;
+//            }
+//        }
+//    }
+//    return false;
+//}
+
 bool Tokenizer::isSubExpression(std::string s) {
     if (s.size() < 5) {
         return false;
-    } else {
-        if (s.front() == '_' && s.back() == '_') {
-            std::string withoutWildcard = trimQuotesOrWildcard(s);
-            bool isIdentity = Tokenizer::isIdentity(withoutWildcard);
-            bool isExpression = Tokenizer::isExpression(withoutWildcard);
-            if (isIdentity || isExpression) {
-                return true;
-            }
+    }
+
+    if (s.front() == '_' && s.back() == '_') {
+        std::string withoutWildcard = trimQuotesOrWildcard(s);
+        bool isIdentity = Tokenizer::isIdentity(withoutWildcard);
+        bool isExpression = Tokenizer::isExpression(withoutWildcard);
+        if (isIdentity || isExpression) {
+            return true;
         }
     }
+
     return false;
 }
 
