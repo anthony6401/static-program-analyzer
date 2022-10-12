@@ -8,14 +8,14 @@ IfState::IfState(SimpleValidator* context) {
     this->hasStmt = false;
 }
 
-void IfState::validLine(SpTokenType type, int statementNumber) {
+void IfState::validateLine(SpTokenType type, int statementNumber) {
     hasStmt = true;
     if (type == SpTokenType::TPROCEDURE || type == SpTokenType::TELSE) {
         throw std::invalid_argument("Received invalid SIMPLE code line. Expected Normal::" + std::to_string(statementNumber));
     }
 }
 
-bool IfState::validCode() {
+bool IfState::isValidCode() {
     return false;
 }
 

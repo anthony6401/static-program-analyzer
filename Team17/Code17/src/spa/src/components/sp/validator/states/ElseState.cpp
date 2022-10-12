@@ -6,13 +6,13 @@ ElseState::ElseState(SimpleValidator* context) {
     this->hasStmt = true;
 }
 
-void ElseState::validLine(SpTokenType type, int statementNumber) {
+void ElseState::validateLine(SpTokenType type, int statementNumber) {
     if (type != SpTokenType::TELSE) {
         throw std::invalid_argument("Received invalid SIMPLE code line. Expected Else::" + std::to_string(statementNumber));
     }
 }
 
-bool ElseState::validCode() {
+bool ElseState::isValidCode() {
     return false;
 }
 

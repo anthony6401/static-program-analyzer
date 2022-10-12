@@ -10,8 +10,8 @@ SimpleValidator::SimpleValidator() {
     this->state = new ProgramState(this);
 }
 
-bool SimpleValidator::validCode() {
-    return state->validCode();
+bool SimpleValidator::isValidCode() {
+    return state->isValidCode();
 }
 
 void SimpleValidator::close() {
@@ -23,8 +23,8 @@ void SimpleValidator::setState(ValidatorState* newState) {
     state = newState;
 }
 
-void SimpleValidator::isValidLine(SpTokenType type, int statementNumber) {
-    state->validLine(type, statementNumber);
+void SimpleValidator::validateLine(SpTokenType type, int statementNumber) {
+    state->validateLine(type, statementNumber);
 }
 
 bool SimpleValidator::isValidVariable(std::string& token) {

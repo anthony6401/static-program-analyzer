@@ -6,8 +6,8 @@
 class NestedState : public ValidatorState {
 public:
     NestedState(SimpleValidator* context);
-    void validLine(SpTokenType type, int statementNumber);
-    bool validCode();
+    void validateLine(SpTokenType type, int statementNumber);
+    bool isValidCode();
     void close();
 
 private:

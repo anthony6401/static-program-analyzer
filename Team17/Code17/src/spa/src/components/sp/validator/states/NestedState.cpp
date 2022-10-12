@@ -6,7 +6,7 @@ NestedState::NestedState(SimpleValidator* context) {
     hasStmt = false;
 }
 
-void NestedState::validLine(SpTokenType type, int statementNumber) {
+void NestedState::validateLine(SpTokenType type, int statementNumber) {
     hasStmt = true;
     if (type == SpTokenType::TPROCEDURE) {
         throw std::invalid_argument("Received invalid SIMPLE code line. Unexpected procedure::" + std::to_string(statementNumber));
@@ -15,7 +15,7 @@ void NestedState::validLine(SpTokenType type, int statementNumber) {
     } 
 }
 
-bool NestedState::validCode() {
+bool NestedState::isValidCode() {
     return false;
 }
 

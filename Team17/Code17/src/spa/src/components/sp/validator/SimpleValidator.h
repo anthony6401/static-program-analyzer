@@ -13,10 +13,10 @@ class SimpleValidator {
         ValidatorState* state;
         std::stack<ValidatorState*> parentStates;
         std::set<std::string> procedureNames;
-        bool validCode();
+        bool isValidCode();
         void close();
         void setState(ValidatorState* newState);
-        void isValidLine(SpTokenType type, int statementNumber);
+        void validateLine(SpTokenType type, int statementNumber);
         bool isValidProcedure(std::string& token);
         static bool isValidVariable(std::string& token);
         static bool isValidConstant(std::string& token);

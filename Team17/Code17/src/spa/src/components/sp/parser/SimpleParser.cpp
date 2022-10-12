@@ -26,7 +26,7 @@ void SimpleParser::parseCode(std::string code) {
     for (std::string line : codeLines) {
         SimpleParser::parseLine(line);
     }
-    validator.validCode();
+    validator.isValidCode();
     validator.isValidCalls(callProcedures, procedures);
     extractor->endOfParser(callProcedures);
 }
@@ -40,35 +40,35 @@ void SimpleParser::parseLine(std::string code) {
         extractor->close(statementNumber);
     } else if (tokens.at(1) == "=") {
         tokens.erase(tokens.begin() + 1);
-        validator.isValidLine(SpTokenType::TASSIGN, statementNumber);
+        validator.validateLine(SpTokenType::TASSIGN, statementNumber);
         parseAssign(tokens);
     } else if (first == "procedure") {
         tokens.erase(tokens.begin());
-        validator.isValidLine(SpTokenType::TPROCEDURE, statementNumber);
+        validator.validateLine(SpTokenType::TPROCEDURE, statementNumber);
         parseProcedure(tokens);
     } else if (first == "call") {
         tokens.erase(tokens.begin());
-        validator.isValidLine(SpTokenType::TCALL, statementNumber);
+        validator.validateLine(SpTokenType::TCALL, statementNumber);
         parseCall(tokens);
     } else if (first == "read") {
         tokens.erase(tokens.begin());
-        validator.isValidLine(SpTokenType::TREAD, statementNumber);
+        validator.validateLine(SpTokenType::TREAD, statementNumber);
         parseRead(tokens);
     } else if (first == "print") {
         tokens.erase(tokens.begin());
-        validator.isValidLine(SpTokenType::TPRINT, statementNumber);
+        validator.validateLine(SpTokenType::TPRINT, statementNumber);
         parsePrint(tokens);
     } else if (first == "while") {
         tokens.erase(tokens.begin());
-        validator.isValidLine(SpTokenType::TWHILE, statementNumber);
+        validator.validateLine(SpTokenType::TWHILE, statementNumber);
         parseWhile(tokens);
     } else if (first == "if") {
         tokens.erase(tokens.begin());
-        validator.isValidLine(SpTokenType::TIF, statementNumber);
+        validator.validateLine(SpTokenType::TIF, statementNumber);
         parseIf(tokens);
     } else if (first == "else") {
         parseElse(tokens);
-        validator.isValidLine(SpTokenType::TELSE, statementNumber);
+        validator.validateLine(SpTokenType::TELSE, statementNumber);
         validator.close();
     } else {
         throw std::invalid_argument("Received invalid SIMPLE code line " + std::to_string(SimpleParser::statementNumber));
