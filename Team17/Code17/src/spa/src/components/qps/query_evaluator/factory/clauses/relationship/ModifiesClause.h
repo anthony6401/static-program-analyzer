@@ -22,7 +22,6 @@ public:
     ResultTable evaluateClause() override;
     size_t getNumberOfSynonyms() override;
     std::set<std::string> getAllSynonyms() override;
-    static RelationshipType getRelationshipType();
     ResultTable evaluateSynonymSynonym();
     ResultTable evaluateSynonymWildcard();
     ResultTable evaluateSynonymNameQuotes();
