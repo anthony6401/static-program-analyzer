@@ -33,8 +33,13 @@ public:
     std::unordered_set<std::string> getTupleResultsToBePopulated(std::vector<TokenObject> tuple, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
     std::unordered_set<std::string> handleDuplicateSynonymsInTuple(std::vector<TokenObject> tuple, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
     bool hasDuplicatedSynonymsInTuple(std::vector<TokenObject> tuple);
+    void tupleIteratorResultsHandler(std::vector<TokenObject> tuple, int index, std::vector<std::string> &resultSublist, std::vector<std::string> &newResultSublist, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
+    void joinResultSublistListWithCommonSynonym(std::vector<std::vector<std::string>> &nextResultsList, std::vector<std::vector<std::string>> &newResultsList,
+                                                const std::vector<std::pair<size_t, size_t>>& commonSynonymsIndexPairs, std::vector<std::string> &resultSublist, const std::vector<size_t>& notCommonNextSynonymIndex);
+    void updateResultsListsFromCommonSynonymsIndexPairs(std::vector<std::vector<std::string>> &nextResultsList, std::vector<std::string> &resultSublist, std::vector<std::string> &nextResultSublist,
+                                                        const std::vector<std::pair<size_t, size_t>>& commonSynonymsIndexPairs, bool &isCommon);
     std::vector<std::pair<size_t, size_t>> findCommonSynonymsIndexPairs(std::vector<std::string> nextSynonymsList, std::map<std::string, size_t> synonymToIndexMap);
-    void joinResultsListWithCommonSynonym(ResultTable nextResult, std::vector<std::pair<size_t, size_t>> commonSynonymsIndexPairs, std::vector<size_t> notCommonNextSynonymIndex);
+    void joinResultsListWithCommonSynonym(ResultTable nextResult, const std::vector<std::pair<size_t, size_t>>& commonSynonymsIndexPairs, const std::vector<size_t>& notCommonNextSynonymIndex);
     void joinResultsListWithNoCommonSynonym(ResultTable nextResult);
     std::vector<size_t> findNotCommonSynonymsIndex(std::vector<std::string> nextSynonymsList, std::map<std::string, size_t> synonymToIndexMap);
     std::string formTupleResultString(std::vector<std::string> newResultsList);

@@ -87,34 +87,39 @@ std::unordered_set<std::string> ResultTable::getSynonymResultsToBePopulated(cons
     return result;
 }
 
+void ResultTable::tupleIteratorResultsHandler(std::vector<TokenObject> tuple, int index, std::vector<std::string> &resultSublist, std::vector<std::string> &newResultSublist, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) {
+    TokenType tupleObjectType = tuple[index].getTokenType();
+    std::string tupleObjectValue = tuple[index].getValue();
+    if (tupleObjectType == TokenType::NAME) {
+        auto iterator = std::find(synonymsList.begin(), synonymsList.end(), tuple[index].getValue());
+        int indexOfSynonym = std::distance(synonymsList.begin(), iterator);
+        newResultSublist.push_back(resultSublist[indexOfSynonym]);
+    }
+
+    if (tupleObjectType == TokenType::ATTRIBUTE_SYNONYM) {
+        std::string attributeName = tuple[index + 1].getValue();
+        DesignEntity returnType = synonymToDesignEntityMap[tuple[index].getValue()];
+        if (SelectAttributeClause::checkIsAlternateAttributeName(returnType, attributeName)) {
+            DesignEntity entityType = synonymToDesignEntityMap[tupleObjectValue];
+            auto iterator = std::find(synonymsList.begin(), synonymsList.end(), tupleObjectValue);
+            int indexOfSynonym = std::distance(synonymsList.begin(), iterator);
+            std::string statementNumber = resultSublist[indexOfSynonym];
+            std::string alternative = qpsClient.getStatementMapping(statementNumber, entityType);
+            newResultSublist.push_back(alternative);
+        } else {
+            auto iterator = std::find(synonymsList.begin(), synonymsList.end(), tupleObjectValue);
+            int indexOfSynonym = std::distance(synonymsList.begin(), iterator);
+            newResultSublist.push_back(resultSublist[indexOfSynonym]);
+        }
+    }
+}
+
 std::unordered_set<std::string> ResultTable::getTupleResultsToBePopulated(std::vector<TokenObject> tuple, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) {
     std::unordered_set<std::string> result({});
-    for (auto resultSublist : resultsList) {
+    for (auto &resultSublist : resultsList) {
         std::vector<std::string> newResultSublist;
         for (int i = 0; i < tuple.size(); i++) {
-            TokenType tupleObjectType = tuple[i].getTokenType();
-            if (tuple[i].getTokenType() == TokenType::NAME) {
-                auto iterator = std::find(synonymsList.begin(), synonymsList.end(), tuple[i].getValue());
-                int indexOfSynonym = std::distance(synonymsList.begin(), iterator);
-                newResultSublist.push_back(resultSublist[indexOfSynonym]);
-            }
-
-            if (tuple[i].getTokenType() == TokenType::ATTRIBUTE_SYNONYM) {
-                std::string attributeName = tuple[i + 1].getValue();
-                DesignEntity returnType = synonymToDesignEntityMap[tuple[i].getValue()];
-                if (SelectAttributeClause::checkIsAlternateAttributeName(returnType, attributeName)) {
-                    DesignEntity entityType = synonymToDesignEntityMap[tuple[i].getValue()];
-                    auto iterator = std::find(synonymsList.begin(), synonymsList.end(), tuple[i].getValue());
-                    int indexOfSynonym = std::distance(synonymsList.begin(), iterator);
-                    std::string statementNumber = resultSublist[indexOfSynonym];
-                    std::string alternative = qpsClient.getStatementMapping(statementNumber, entityType);
-                    newResultSublist.push_back(alternative);
-                } else {
-                    auto iterator = std::find(synonymsList.begin(), synonymsList.end(), tuple[i].getValue());
-                    int indexOfSynonym = std::distance(synonymsList.begin(), iterator);
-                    newResultSublist.push_back(resultSublist[indexOfSynonym]);
-                }
-            }
+            tupleIteratorResultsHandler(tuple, i, resultSublist, newResultSublist, synonymToDesignEntityMap, qpsClient);
         }
 
         result.insert(ResultTable::formTupleResultString(newResultSublist));
@@ -163,9 +168,7 @@ void ResultTable::updateHasCommonAttributeName(ResultTable &nextResult) {
 
 
 void ResultTable::combineResult(ResultTable &nextResult) {
-
     ResultTable::updateHasCommonAttributeName(nextResult);
-
     if (isFalseResult) {
         return;
     } else {
@@ -211,21 +214,49 @@ void ResultTable::joinResultsListWithNoCommonSynonym(ResultTable nextResult) {
     } else if (isEmptyResult()) {
         resultsList = std::move(nextResult.resultsList);
         return;
-    } else {
-        for (auto resultSublist : resultsList) {
-            for (auto nextResultSublist : nextResultsList) {
-                std::vector<std::string> newSublist;
-                newSublist.reserve(resultSublist.size() + nextResultSublist.size());
-                newSublist.insert(newSublist.end(), resultSublist.begin(), resultSublist.end());
-                newSublist.insert(newSublist.end(), nextResultSublist.begin(), nextResultSublist.end());
-                newResultsList.emplace_back(newSublist);
-            }
+    }
+
+    for (auto resultSublist : resultsList) {
+        for (auto nextResultSublist : nextResultsList) {
+            std::vector<std::string> newSublist;
+            newSublist.reserve(resultSublist.size() + nextResultSublist.size());
+            newSublist.insert(newSublist.end(), resultSublist.begin(), resultSublist.end());
+            newSublist.insert(newSublist.end(), nextResultSublist.begin(), nextResultSublist.end());
+            newResultsList.emplace_back(newSublist);
         }
-        resultsList = std::move(newResultsList);
+    }
+    resultsList = std::move(newResultsList);
+
+}
+
+void ResultTable::updateResultsListsFromCommonSynonymsIndexPairs(std::vector<std::vector<std::string>> &nextResultsList, std::vector<std::string> &resultSublist,
+                                                                 std::vector<std::string> &nextResultSublist, const std::vector<std::pair<size_t, size_t>>& commonSynonymsIndexPairs, bool &isCommon) {
+    for (auto commonIndexPair : commonSynonymsIndexPairs) {
+        std::string resultSublistValue = resultSublist.at(commonIndexPair.first);
+        std::string nextResultSublistValue = nextResultSublist.at(commonIndexPair.second);
+        if (resultSublistValue != nextResultSublistValue) {
+            isCommon = false;
+            break;
+        }
     }
 }
 
-void ResultTable::joinResultsListWithCommonSynonym(ResultTable nextResult, std::vector<std::pair<size_t, size_t>> commonSynonymsIndexPairs, std::vector<size_t> notCommonNextSynonymIndex) {
+void ResultTable::joinResultSublistListWithCommonSynonym(std::vector<std::vector<std::string>> &nextResultsList, std::vector<std::vector<std::string>> &newResultsList,
+                                                         const std::vector<std::pair<size_t, size_t>>& commonSynonymsIndexPairs, std::vector<std::string> &resultSublist, const std::vector<size_t>& notCommonNextSynonymIndex) {
+    for (auto nextResultSublist : nextResultsList) {
+        bool isCommon = true;
+        updateResultsListsFromCommonSynonymsIndexPairs(nextResultsList, resultSublist, nextResultSublist, commonSynonymsIndexPairs, isCommon);
+        if (isCommon) {
+            auto newResultSublist = resultSublist;
+            for (auto i : notCommonNextSynonymIndex) {
+                newResultSublist.emplace_back(nextResultSublist.at(i));
+            }
+            newResultsList.emplace_back(newResultSublist);
+        }
+    }
+}
+
+void ResultTable::joinResultsListWithCommonSynonym(ResultTable nextResult, const std::vector<std::pair<size_t, size_t>>& commonSynonymsIndexPairs, const std::vector<size_t>& notCommonNextSynonymIndex) {
     for (size_t i : notCommonNextSynonymIndex) {
         synonymsList.emplace_back(nextResult.synonymsList.at(i));
     }
@@ -233,25 +264,7 @@ void ResultTable::joinResultsListWithCommonSynonym(ResultTable nextResult, std::
     std::vector<std::vector<std::string>> newResultsList;
     std::vector<std::vector<std::string>> nextResultsList = nextResult.resultsList;
     for (auto resultSublist : resultsList) {
-        for (auto nextResultSublist : nextResultsList) {
-            bool isCommon = true;
-            for (auto commonIndexPair : commonSynonymsIndexPairs) {
-                std::string resultSublistValue = resultSublist.at(commonIndexPair.first);
-                std::string nextResultSublistValue = nextResultSublist.at(commonIndexPair.second);
-                if (resultSublistValue != nextResultSublistValue) {
-                    isCommon = false;
-                    break;
-                }
-            }
-
-            if (isCommon) {
-                auto newResultSublist = resultSublist;
-                for (auto i : notCommonNextSynonymIndex) {
-                    newResultSublist.emplace_back(nextResultSublist.at(i));
-                }
-                newResultsList.emplace_back(newResultSublist);
-            }
-        }
+        joinResultSublistListWithCommonSynonym(nextResultsList, newResultsList, commonSynonymsIndexPairs, resultSublist, notCommonNextSynonymIndex);
     }
     resultsList = std::move(newResultsList);
 }
