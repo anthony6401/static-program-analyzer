@@ -16,9 +16,11 @@ public:
     void extractUses(std::vector<SimpleToken> varUse);
     void extractModify(std::vector<SimpleToken> varMod);
     Entity* generateEntity(SimpleToken token);
+    void addEndPoints(std::vector<SimpleToken> stmts);
+    void mergeEndPoints();
 
 private:
-    //bool expectElse;
+    bool expectElse;
     SimpleToken parent;
     Extractor* context;
 };

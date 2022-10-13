@@ -13,9 +13,16 @@ void IfStack::close(int statementNumber) {
         ifStmts = stmts;
         stmts.clear();
         this->expectElse = false;
+
+        addEndPoints(ifStmts);
     } else {
+        addEndPoints(stmts);
+        mergeEndPoints();
+
         extractFollows(ifStmts);
         extractFollows(stmts);
+        extractFollowsT(ifStmts);
+        extractFollowsT(stmts);
         extractParent(ifStmts);
         extractParent(stmts);
         extractParentT(context->currentStack->stmtsNested);
@@ -24,8 +31,26 @@ void IfStack::close(int statementNumber) {
 
         mergeStack();
 
+        context->endPoints = this->endPoints;
+
         context->currentStack = context->parentStack.top();
         context->parentStack.pop();
+    }
+}
+
+void IfStack::addEndPoints(std::vector<SimpleToken> stmts) {
+    if (stmts.back().type != SpTokenType::TIF) {
+        std::cout << std::to_string(this->parent.statementNumber) + " is adding endPoint " + std::to_string(stmts.back().statementNumber) + "\n";
+        endPoints.push_back(stmts.back());
+    }
+}
+
+void IfStack::mergeEndPoints() {
+    StmtStack* parent = context->parentStack.top();
+    std::cout << "About to merge endPoints\n";
+    if (parent->parent.type == SpTokenType::TIF || parent->parent.type == SpTokenType::TWHILE) {
+        std::cout << "Merging endPoints now\n";
+        parent->endPoints.insert(parent->endPoints.end(), this->endPoints.begin(), this->endPoints.end());
     }
 }
 
@@ -33,6 +58,7 @@ void IfStack::mergeStack() {
     StmtStack* parent = context->parentStack.top();
     parent->stmtsNested.insert(parent->stmtsNested.end(), this->ifStmts.begin(), this->ifStmts.end());
     parent->stmtsNested.insert(parent->stmtsNested.end(), this->stmts.begin(), this->stmts.end());
+    parent->stmtsNested.insert(parent->stmtsNested.end(), this->stmtsNested.begin(), this->stmtsNested.end());
     parent->varUse.insert(parent->varUse.end(), this->varUse.begin(), this->varUse.end());
     parent->varMod.insert(parent->varMod.end(), this->varMod.begin(), this->varMod.end());
 }

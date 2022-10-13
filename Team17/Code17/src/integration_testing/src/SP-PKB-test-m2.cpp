@@ -16,84 +16,38 @@ TEST_CASE("test SP PKB integration m2") {
     Extractor extractor_m2 = Extractor(spClient_m2);
     SimpleParser simpleParser_m2 = SimpleParser(&extractor_m2);
     simpleParser_m2.parseCode("\
-procedure basic {\
-    a = 1;\
-    while (2 == 2) {\
-        a = 3;\
-    }\
-    if (4 == 4) then {\
-        a = 5;\
+procedure test {\
+    if (1 == 1) then {\
+        if (2 == 2) then {\
+            a = 3;\
+            while (4 == 4) {\
+                if (5 == 5) then {\
+                    a = 6;\
+                } else {\
+                    a = 7;\
+                }\
+            }\
+        } else {\
+            a = 8;\
+        }\
     } else {\
-        a = 6;\
-    }\
-}\
-procedure whileIf {\
-    a = 7;\
-    while (8 == 8) {\
         if (9 == 9) then {\
-            a = 10;\
+            while (10 == 10) {\
+                a = 11;\
+            }\
         } else {\
-            a = 11;\
+            if (12 == 12) then {\
+                if (13 == 13) then {\
+                    a = 14;\
+                } else {\
+                    a = 15;\
+                }\
+            } else {\
+                a = 16;\
+            }\
         }\
     }\
-    a = 12;\
-    while (13 == 13) {\
-        a = 14;\
-        if (15 == 15) then {\
-            a = 16;\
-        } else {\
-            a = 17;\
-        }\
-    }\
-    a = 18;\
-    while (19 == 19) {\
-        if (20 == 20) then {\
-            a = 21;\
-        } else {\
-            a = 22;\
-        }\
-        a = 23;\
-    }\
-    while (24 == 24) {\
-        a = 25;\
-        if (26 == 26) then {\
-            a = 27;\
-        } else {\
-            a = 28;\
-        }\
-        a = 29;\
-    }\
-    a = 30;\
-}\
-procedure ifWhile {\
-    a = 31;\
-    if (32 == 32) then {\
-        while (33 == 33) {\
-            a = 34;\
-        }\
-    } else {\
-        a = 35;\
-    }\
-    a = 36;\
-    if (37 == 37) then {\
-        a = 38;\
-    } else {\
-        while (39 == 39) {\
-            a = 40;\
-        }\
-        a = 41;\
-    }\
-    a = 42;\
-    if (43 == 43) then {\
-        while (44 == 44) {\
-            a = 45;\
-        }\
-    } else {\
-        while (46 == 46) {\
-            a = 47;\
-        }\
-    }\
-    a = 48;\
+    a = 17;\
 }");
 }
 

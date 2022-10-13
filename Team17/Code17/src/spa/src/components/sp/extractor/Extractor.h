@@ -47,10 +47,9 @@ public:
 	StmtStack* currentStack;
 
 	std::vector<SimpleToken> previousStmt;
-	std::vector<SimpleToken> lastStmtsOfIf;
+	std::vector<SimpleToken> endPoints;
 	std::stack<SimpleToken> whileTokens;
 	std::stack<SimpleToken> ifTokens;
-
 	bool first;
 
 	Extractor(SPClient* client);

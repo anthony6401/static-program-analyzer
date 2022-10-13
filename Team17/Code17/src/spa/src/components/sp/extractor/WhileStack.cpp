@@ -5,10 +5,11 @@
 
 WhileStack::WhileStack(SimpleToken parent, Extractor* context) : parent(parent), StmtStack(parent, context) {
     this->context = context;
-    this->expectElse = false;
 }
 
 void WhileStack::close(int statementNumber) {
+    addEndPoints(stmts);
+
     extractFollows(context->currentStack->stmts);
     extractFollowsT(context->currentStack->stmts);
     extractParent(context->currentStack->stmts);
@@ -18,13 +19,23 @@ void WhileStack::close(int statementNumber) {
 
     mergeStack();
 
+    context->endPoints = this->endPoints;
+
     context->currentStack = context->parentStack.top();
     context->parentStack.pop();
+}
+
+void WhileStack::addEndPoints(std::vector<SimpleToken> stmts) {
+    if (stmts.back().type != SpTokenType::TIF) {
+        std::cout << std::to_string(this->parent.statementNumber) + " is adding endPoint " + std::to_string(stmts.back().statementNumber) + "\n";
+        endPoints.push_back(stmts.back());
+    }
 }
 
 void WhileStack::mergeStack() {
     StmtStack* parent = context->parentStack.top();
     parent->stmtsNested.insert(parent->stmtsNested.end(), this->stmts.begin(), this->stmts.end());
+    parent->stmtsNested.insert(parent->stmtsNested.end(), this->stmtsNested.begin(), this->stmtsNested.end());
     parent->varUse.insert(parent->varUse.end(), this->varUse.begin(), this->varUse.end());
     parent->varMod.insert(parent->varMod.end(), this->varMod.begin(), this->varMod.end());
 }
