@@ -1,0 +1,110 @@
+1 - With Test 1
+stmt s;assign with;
+Select s.stmt# such that Follows(with, s) with with.stmt# = 7
+8
+5000
+2 - With Test 2
+call c; procedure proc;
+Select <c> with c.procName = "second" and proc.procName = "first"
+2, 8, 10
+5000
+3 - With Test 3
+call c; procedure proc;
+Select <c    .procName ,c> with c.procName = proc.procName with proc.procName = "second"
+second 2, second 8, second 10
+5000
+4 - With Test 4
+read r; print pn;
+Select <r,pn> with r.varName = pn.varName
+16 15
+5000
+5 - With Test 5
+call c; procedure proc,p; Select p with c.stmt# =5 with p.procName = proc.procName
+
+
+5000
+6 - With Test 6
+call call; procedure procName,procedure; Select procedure with call.stmt# =8 with procedure.procName = procName.procName
+
+procedure, first, second, island
+5000
+7 - With Test 7
+read r; variable v;
+Select BOOLEAN with r.varName = v.varName
+TRUE
+5000
+8 - With Test 8
+read r; variable v; print pn;procedure p;
+Select BOOLEAN with r.varName = v.varName and pn.varName = p.procName and pn.varName = "pass"
+FALSE
+5000
+9 - With Test 9
+read r; variable v; print pn;procedure p; constant BOOLEAN;
+Select BOOLEAN with r.varName = v.varName and pn.varName = p.procName and r.varName = "var2"
+7, 15, 123
+5000
+10 - With Test 10
+read r; variable v; print pn;procedure p; constant BOOLEAN;
+Select <pn.varName, BOOLEAN> with pn.varName = p.procName with r.varName = "var2" with BOOLEAN.value = 123 
+procedure 123, second 123
+5000
+11 - With Test 11
+stmt s; assign a; call c; read r; print pn; while w; if if;Select <s,a,c,r,pn,w,if
+> with s.stmt# = a.stmt# and a.stmt#=c.stmt# and   c.stmt#= r.stmt# and r.stmt# =pn.stmt# and pn.stmt# = w    .stmt# and w.   stmt#=if.stmt#
+
+5000
+12 - With Test 12
+constant and; stmt with;
+Select with with with.stmt# = with.stmt# and and    .value = with.stmt#
+7, 15
+5000
+13 - With Test 13
+
+Select BOOLEAN with "A" = "B"
+FALSE
+5000
+14 - With Test 14
+stmt boolean;
+Select BOOLEAN with 1 = 1
+TRUE
+5000
+15 - With Test 15
+while while;
+Select <while.stmt#, while> with while.varName = "while"
+SemanticError
+5000
+16 - With Test 16
+while while;
+Select <while.stmt#, while> with while.stmt# = "while"
+SemanticError
+5000
+17 - With Test 17
+while while;
+Select <while.stmt#, while> with 1 = "while"
+SemanticError
+5000
+18 - With Test 18
+if if;
+Select BOOLEAN with BOOLEAN.stmt# = if.stmt#  
+SemanticError
+5000
+19 - With Test 19
+
+Select BOOLEAN with 14 = if.stmt#  
+SemanticError
+5000
+20 - With Test 20
+if stmt#;
+Select BOOLEAN with stmt#.stmt# = 14  
+SyntaxError
+5000
+21 - With Test 21
+read r; constant const; procedure p; assign a;
+Select BOOLEAN a.stmt# = const.value
+SyntaxError
+5000
+22 - With Test 22
+read r; constant const; procedure p; assign a;
+Select BOOLEAN with a.stmt# = const.value and r.varName = p.procName and with const.value = r.stmt#
+SyntaxError
+5000
