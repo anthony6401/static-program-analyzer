@@ -1082,6 +1082,17 @@ TEST_CASE("Tuple queries with attributes") {
         expectedResults.sort();
         REQUIRE(testResults == expectedResults);
     }
+
+    SECTION("Tuple Test 13") {
+        std::string testQuery = "read re; print p1, p2; call c; stmt s;\n "
+                                "Select <s.stmt#, s.stmt#, s.stmt#, re> such that Uses(c, \"v\") such that Modifies(s, \"x\") such that Uses(s, \"y\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"6 6 6 1", "7 7 7 1", "15 15 15 1", "3 3 3 1", "6 6 6 2", "7 7 7 2", "15 15 15 2", "3 3 3 2"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
 }
 
 
