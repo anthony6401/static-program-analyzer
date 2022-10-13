@@ -244,14 +244,105 @@ procedure second, procedure first, first second
 5000
 50 - Tuple test 2 Calls
 assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
-Select <p, p1> such that Calls (p, _)
+Select <p, p1> such that Calls(p, _)
+procedure procedure, first procedure, procedure first, first first, procedure second, first second, procedure island, first island
+5000
+51 - Tuple test 3 Calls
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <p, p1> such that Calls (_, p)
+second procedure, first procedure, second first, first first, second second, first second, second island, first island
+5000
+52 - Tuple test 1 Calls*
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <p, p1> such that Calls* (3, "first")
 procedure second, procedure first, first second
 5000
-51 - Tuple test 2 Calls
+53 - Tuple test 2 Calls*
 assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
-Select <p, p1> such that Calls (p, _)
+Select <p, p1> such that Calls*("procedure", "second")
+procedure procedure, first procedure, second procedure, island procedure, procedure first, first first, second first, island first, procedure second, first second, second second, island second, procedure island, first island, second island, island island
+5000
+54 - Tuple test 3 Calls*
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <p, p1> such that Calls*(p, p)
+none
+5000
+55 - Tuple test 1 Next
 
 5000
+56 - Tuple test 2 Next
+
+5000
+57 - Tuple test 3 Next
+
+5000
+58 - Tuple test 1 Next*
+
+5000
+59 - Tuple test 2 Next*
+
+5000
+60 - Tuple test 3 Next*
+
+5000
+61 - Tuple test 1 Assign Pattern
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <a, rd> pattern a (_, _)
+7 6, 11 6, 12 6, 17 6, 18 6, 7 16, 11 16, 12 16, 17 16, 18 16, 7 20, 11 20, 12 20, 17 20, 18 20
+5000
+62 - Tuple test 2 Assign Pattern
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <a, pn.varName> pattern a ("var1", _(var4 / var5)_)
+7 procedure, 7 pass, 7 second
+5000
+63 - Tuple test 3 Assign Pattern
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <a, a.stmt#> pattern a ("assign", _)
+12 12
+5000
+64 - Tuple test 4 Assign Pattern
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <a, v> pattern a (v, _"(7/15)"_)
+17 var1
+5000
+65 - Tuple test 5 Assign Pattern
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <a, v> pattern a (v, _)
+7 var1, 11 var1, 12 assign, 17 var1, 18 CS3203
+5000
+66 - Tuple test 1 If Pattern
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <ifs.stmt#, v.varName> pattern ifs (v, _, _)
+5 var1, 5 var5, 13 Second, 13 second
+5000
+67 - Tuple test 2 If Pattern
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <ifs.stmt#, v.varName> pattern ifs ("var5", _, _)
+5 var1, 5 var5, 13 Second, 13 second
+5000
+68 - Tuple test 3 If Pattern
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <ifs.stmt#> pattern ifs (_, _, _)
+5, 13
+5000
+69 - Tuple test 1 While Pattern
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <w , v> pattern w (v, _)
+4 var1, 4 var2, 9 var1, 9 var2, 14 while, 14 While
+5000
+70 - Tuple test 2 While Pattern
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <ifs.stmt#, v.varName> pattern w ("var5", _)
+none
+5000
+71 - Tuple test 3 While Pattern
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <w.stmt#> pattern w (_, _)
+4, 14, 9
+5000
+
+
+
 
 
 
