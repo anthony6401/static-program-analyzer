@@ -1,6 +1,7 @@
 #include "./NestedState.h"
 #include <stdexcept>
 
+//used for while and procedure
 NestedState::NestedState(SimpleValidator* context) {
     this->context = context;
     hasStmt = false;

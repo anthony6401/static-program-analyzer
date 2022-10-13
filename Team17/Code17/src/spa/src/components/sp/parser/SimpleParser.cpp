@@ -34,7 +34,8 @@ void SimpleParser::parseCode(std::string code) {
 void SimpleParser::parseLine(std::string code) {
     std::vector<std::string> tokens = SimpleTokenizer::tokenizeLine(code);
     std::string first = tokens.front();
-    if (first == "}") {
+
+    if (first == "}") {//only case with one token
         tokens.erase(tokens.begin());
         validator.close();
         extractor->close(statementNumber);
@@ -83,6 +84,7 @@ void SimpleParser::parseProcedure(std::vector<std::string>& tokens) {
         if (!(validator.isValidProcedure(procedureName))) {
             throw std::invalid_argument("Received invalid or duplicate Procedure:Line " + std::to_string(statementNumber));
         }
+
         SimpleToken procedureToken = SimpleToken(SpTokenType::TPROCEDURE, procedureName, 0);
         this->currentProcedure = procedureName;
         this->procedures.insert(procedureName);
@@ -101,8 +103,7 @@ void SimpleParser::parseCall(std::vector<std::string>& tokens) {
         statementNumber++;
         extractor->extractCall(callToken, procedure);
         this->callProcedures.insert(std::pair<std::string, std::string>(procedure, this->currentProcedure));
-    }
-    else {
+    } else {
         throw std::invalid_argument("Received invalid Call:Line " + std::to_string(statementNumber));
     }
 }
@@ -132,6 +133,7 @@ void SimpleParser::parseWhile(std::vector<std::string>& tokens) {
         throw std::invalid_argument("Received invalid While:Line " + std::to_string(statementNumber));
     }
     tokens.pop_back();
+
     SimpleToken whileToken = SimpleToken(SpTokenType::TWHILE, "", statementNumber);
     statementNumber++;
     whileToken.setChildren(parseCondition(tokens));
@@ -148,6 +150,7 @@ void SimpleParser::parseIf(std::vector<std::string>& tokens) {
         throw std::invalid_argument("Received invalid If:Line " + std::to_string(statementNumber));
     }
     tokens.pop_back();
+
     SimpleToken ifToken = SimpleToken(SpTokenType::TIF, "", statementNumber);
     statementNumber++;
     ifToken.setChildren(parseCondition(tokens));
@@ -186,6 +189,7 @@ std::vector<SimpleToken> SimpleParser::parseCondition(std::vector<std::string> t
     }
     tokens.erase(tokens.begin());
     tokens.pop_back();
+
     while (tokens.front() == "!") {
         tokens.erase(tokens.begin());
         if (tokens.front() != "(" || tokens.back() != ")") {
@@ -194,6 +198,7 @@ std::vector<SimpleToken> SimpleParser::parseCondition(std::vector<std::string> t
         tokens.erase(tokens.begin());
         tokens.pop_back();
     }
+
     std::string condition = SpUtils::join(tokens);
     if (condition.find("&&") != std::string::npos || condition.find("||") != std::string::npos) {
         int indice = 0;
@@ -207,11 +212,11 @@ std::vector<SimpleToken> SimpleParser::parseCondition(std::vector<std::string> t
             } else {
                 indice++;
             }
-
         }
         if (indice == tokens.size()) {
             throw std::invalid_argument("Received invalid condition. invalid && or ||");
         }
+
         std::vector<std::string> firstTokens(tokens.begin(), tokens.begin() + indice);
         std::vector<SimpleToken> firstCondition = parseCondition(firstTokens);
         std::vector<std::string> secondTokens(tokens.begin() + indice + 1, tokens.end());
@@ -235,9 +240,11 @@ std::vector<SimpleToken> SimpleParser::parseRelExpr(std::vector<std::string>& to
             comparatorCount++;
         }
     }
+
     if (comparatorCount != 1) {
         throw std::invalid_argument("Received invalid RelExpr missing comparator");
     }
+
     std::vector<std::string> firstTokens(tokens.begin(), tokens.begin() + indice);
     SimpleToken firstRelFactor = parseExpr(firstTokens);
     std::vector<SimpleToken> firstContents = firstRelFactor.getChildren();
@@ -253,6 +260,7 @@ SimpleToken SimpleParser::parseExpr(std::vector<std::string>& tokens) {
     if (tokens.size() == 0) {
         throw std::invalid_argument("Received invalid expression. No tokens ");
     }
+
     for (std::string i : tokens) {
         stack.put(i);
     }

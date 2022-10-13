@@ -25,6 +25,7 @@ std::string SpUtils::join(std::vector<std::string> tokens) {
     return output;
 }
 
+//Return indice of ( that pairs with last )
 int SpUtils::findOpenBracket(std::vector<std::string>& tokens, int end) {
     if (tokens.at(end) != ")") {
         return -1;
@@ -44,6 +45,7 @@ int SpUtils::findOpenBracket(std::vector<std::string>& tokens, int end) {
     return -1;
 }
 
+//Return indice of ) that pairs with first (
 int SpUtils::findCloseBracket(std::vector<std::string>& tokens, int start) {
     if (tokens.at(start) != "(") {
         return -1;
