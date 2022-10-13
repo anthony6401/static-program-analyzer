@@ -338,6 +338,66 @@ TEST_CASE("Invalid name token - start w digit") {
     REQUIRE_THROWS_WITH(QPS::tokenizeAndParseQuery(testQuery), "Token Exception Caught");
 }
 
+TEST_CASE("Invalid subexpression token - start with non-alphanumerical") {
+    std::string testQuery = "assign a; Select a pattern a (_, _\" +temp\"_)";
+    Tokenizer tokenizer = Tokenizer();
+    REQUIRE_THROWS_WITH(tokenizer.tokenize(testQuery), "Token Exception Caught");
+}
+
+TEST_CASE("Invalid expression token - start with non-alphanumerical") {
+    std::string testQuery = "assign a; Select a pattern a (_, \" +temp\")";
+    Tokenizer tokenizer = Tokenizer();
+    REQUIRE_THROWS_WITH(tokenizer.tokenize(testQuery), "Token Exception Caught");
+}
+
+TEST_CASE("Invalid name token - start with non-alphanumerical") {
+    std::string testQuery = "assign +temp; Select +temp";
+    Tokenizer tokenizer = Tokenizer();
+    REQUIRE_THROWS_WITH(tokenizer.tokenize(testQuery), "Token Exception Caught");
+}
+
+TEST_CASE("Invalid attribute token - undefined attribute name") {
+    std::string testQuery = "assign a; Select a.stmt";
+    Tokenizer tokenizer = Tokenizer();
+    REQUIRE_THROWS_WITH(tokenizer.tokenize(testQuery), "Token Exception Caught");
+}
+
+TEST_CASE("Invalid attribute token - invalid attribute name") {
+    std::string testQuery = "assign a; Select a.1";
+    Tokenizer tokenizer = Tokenizer();
+    REQUIRE_THROWS_WITH(tokenizer.tokenize(testQuery), "Token Exception Caught");
+}
+
+TEST_CASE("Invalid tuple token - invalid attribute") {
+    std::string testQuery = "assign a1; Select <a1.assignName>";
+    Tokenizer tokenizer = Tokenizer();
+    REQUIRE_THROWS_WITH(tokenizer.tokenize(testQuery), "Token Exception Caught");
+}
+
+TEST_CASE("Invalid tuple token - missing attribute name") {
+    std::string testQuery = "assign a1; Select <a1., a1>";
+    Tokenizer tokenizer = Tokenizer();
+    REQUIRE_THROWS_WITH(tokenizer.tokenize(testQuery), "Token Exception Caught");
+}
+
+TEST_CASE("Invalid tuple token - missing attribute synonym") {
+    std::string testQuery = "assign a1; Select <.stmt#>";
+    Tokenizer tokenizer = Tokenizer();
+    REQUIRE_THROWS_WITH(tokenizer.tokenize(testQuery), "Token Exception Caught");
+}
+
+TEST_CASE("Invalid tuple token - empty tuple") {
+    std::string testQuery = "assign a1; Select < >";
+    Tokenizer tokenizer = Tokenizer();
+    REQUIRE_THROWS_WITH(tokenizer.tokenize(testQuery), "Token Exception Caught");
+}
+
+TEST_CASE("Invalid tuple token - missing commas") {
+    std::string testQuery = "assign a1; Select <a1.stmt# a1.stmt# >";
+    Tokenizer tokenizer = Tokenizer();
+    REQUIRE_THROWS_WITH(tokenizer.tokenize(testQuery), "Token Exception Caught");
+}
+
 
 //// Edge cases
 TEST_CASE("Presence of white spaces") {
@@ -398,6 +458,112 @@ TEST_CASE("Single line queries without space") {
 
     QueryObject expectedResult = QueryObject(expectedSelect, expectedSuchThat, expectedPattern, expectedMappedSynonyms, expectedNumOfDeclaredSynonyms);
     QueryObject testResult = QPS::tokenizeAndParseQuery(testQuery);
+
+    REQUIRE(testResult == expectedResult);
+}
+
+TEST_CASE("Presence of white spaces in tuple") {
+    std::string testQuery = "call       c;   stmt s ; print  pn; "
+        "Select <s    ,c\n.    procName,       c.stmt#   ,pn, pn        .varName          >   such   that Follows*    (6,   s)";
+
+    Select expectedSelect = Select(TokenType::TUPLE, { TokenObject(TokenType::NAME, std::string("s")), 
+        TokenObject(TokenType::ATTRIBUTE_SYNONYM, std::string("c")), TokenObject(TokenType::ATTRIBUTE_NAME,  std::string("procName")), 
+        TokenObject(TokenType::ATTRIBUTE_SYNONYM, std::string("c")), TokenObject(TokenType::ATTRIBUTE_NAME,  std::string("stmt#")), 
+        TokenObject(TokenType::NAME, std::string("pn")),
+        TokenObject(TokenType::ATTRIBUTE_SYNONYM, std::string("pn")), TokenObject(TokenType::ATTRIBUTE_NAME,  std::string("varName")) });
+    std::vector<SuchThat> expectedSuchThat{ SuchThat(TokenType::FOLLOWS_T, TokenObject(TokenType::INTEGER, "6"), TokenObject(TokenType::NAME, "s")) };
+    std::vector<Pattern> expectedPattern{};
+    std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"c", DesignEntity::CALL}, {"s", DesignEntity::STMT}, {"pn", DesignEntity::PRINT}};
+    int expectedNumOfDeclaredSynonyms = 3;
+
+    QueryObject expectedResult = QueryObject(expectedSelect, expectedSuchThat, expectedPattern, expectedMappedSynonyms, expectedNumOfDeclaredSynonyms);
+    QueryObject testResult = QPS::tokenizeAndParseQuery(testQuery);
+
+    REQUIRE(testResult == expectedResult);
+}
+
+TEST_CASE("No comma in tuple") {
+    std::string testQuery = "call       c;   stmt s ; print  pn; "
+        "Select <s    c\n.    procName,       c.stmt#   ,pnpn        .varName          >   such   that Follows*    (6,   s)";
+
+    Select expectedSelect = Select(TokenType::TUPLE, { TokenObject(TokenType::ATTRIBUTE_SYNONYM, std::string("sc")), TokenObject(TokenType::ATTRIBUTE_NAME,  std::string("procName")),
+        TokenObject(TokenType::ATTRIBUTE_SYNONYM, std::string("c")), TokenObject(TokenType::ATTRIBUTE_NAME,  std::string("stmt#")),
+        TokenObject(TokenType::ATTRIBUTE_SYNONYM, std::string("pnpn")), TokenObject(TokenType::ATTRIBUTE_NAME,  std::string("varName")) });
+    std::vector<SuchThat> expectedSuchThat{ SuchThat(TokenType::FOLLOWS_T, TokenObject(TokenType::INTEGER, "6"), TokenObject(TokenType::NAME, "s")) };
+    std::vector<Pattern> expectedPattern{};
+    std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"c", DesignEntity::CALL}, {"s", DesignEntity::STMT}, {"pn", DesignEntity::PRINT} };
+    int expectedNumOfDeclaredSynonyms = 3;
+
+    QueryObject expectedResult = QueryObject(expectedSelect, expectedSuchThat, expectedPattern, expectedMappedSynonyms, expectedNumOfDeclaredSynonyms);
+    QueryObject testResult = QPS::tokenizeAndParseQuery(testQuery);
+
+    REQUIRE(testResult == expectedResult);
+}
+
+TEST_CASE("Presence of white spaces in attribute") {
+    std::string testQuery = "call       c;   stmt s ; print pn; "
+        "Select  pn     \n   .varName            such   that Follows*    (6,   s)";
+
+    Select expectedSelect = Select(TokenType::ATTRIBUTE, { TokenObject(TokenType::ATTRIBUTE_SYNONYM, std::string("pn")), TokenObject(TokenType::ATTRIBUTE_NAME,  std::string("varName")) });
+    std::vector<SuchThat> expectedSuchThat{ SuchThat(TokenType::FOLLOWS_T, TokenObject(TokenType::INTEGER, "6"), TokenObject(TokenType::NAME, "s")) };
+    std::vector<Pattern> expectedPattern{};
+    std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"c", DesignEntity::CALL}, {"s", DesignEntity::STMT}, {"pn", DesignEntity::PRINT} };
+    int expectedNumOfDeclaredSynonyms = 3;
+
+    QueryObject expectedResult = QueryObject(expectedSelect, expectedSuchThat, expectedPattern, expectedMappedSynonyms, expectedNumOfDeclaredSynonyms);
+    QueryObject testResult = QPS::tokenizeAndParseQuery(testQuery);
+
+    REQUIRE(testResult == expectedResult);
+}
+
+
+// SyntaxError
+TEST_CASE("SyntaxError - missing attribute synonym that passes tokenizer checks ") {
+    std::string testQuery = "variable v; Select          .varName";
+
+    QueryObject expectedResult = QueryObject();
+    QueryObject testResult = QPS::tokenizeAndParseQuery(testQuery);
+
+
+    REQUIRE(testResult == expectedResult);
+}
+
+TEST_CASE("SyntaxError - extra result clause") {
+    std::string testQuery = "variable v;Select     v AND   v .varName";
+
+    QueryObject expectedResult = QueryObject();
+    QueryObject testResult = QPS::tokenizeAndParseQuery(testQuery);
+
+
+    REQUIRE(testResult == expectedResult);
+}
+
+TEST_CASE("SyntaxError - extra result clause without AND") {
+    std::string testQuery = "variable v;Select     v   v .varName";
+
+    QueryObject expectedResult = QueryObject();
+    QueryObject testResult = QPS::tokenizeAndParseQuery(testQuery);
+
+
+    REQUIRE(testResult == expectedResult);
+}
+
+TEST_CASE("SyntaxError - attributes used in such that clause") {
+    std::string testQuery = "stmt s;Select  s  such   that Follows*    (6,   s  .stmt#)";
+
+    QueryObject expectedResult = QueryObject();
+    QueryObject testResult = QPS::tokenizeAndParseQuery(testQuery);
+
+
+    REQUIRE(testResult == expectedResult);
+}
+
+TEST_CASE("SyntaxError - missing brackets in tuple") {
+    std::string testQuery = "assign a1; Select a1, a1.stmt# ";
+
+    QueryObject expectedResult = QueryObject();
+    QueryObject testResult = QPS::tokenizeAndParseQuery(testQuery);
+
 
     REQUIRE(testResult == expectedResult);
 }
