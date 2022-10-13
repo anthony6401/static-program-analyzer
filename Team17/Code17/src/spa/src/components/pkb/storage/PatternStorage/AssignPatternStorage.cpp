@@ -124,8 +124,8 @@ void AssignPatternStorage::handleWildcardForVector(std::unordered_map<std::strin
 // This method is used to answer pattern query with NAME_WITH_QUOTES TokenType for the firstArgument i.e. a("x", "y"), a("x", _"y"_), a("x", _)
 std::unordered_set<std::string> AssignPatternStorage::getPattern(DesignEntity designEntity, TokenObject firstArgument, TokenObject secondArgument) {
 	if (designEntity == DesignEntity::ASSIGN) {
-		std::unordered_set<std::pair<std::string, std::string>, pair_hash>* set = &this->assignPatternStorage.find(firstArgument.getValue())->second;
 		if (this->assignPatternStorage.find(firstArgument.getValue()) != this->assignPatternStorage.end()) {
+			std::unordered_set<std::pair<std::string, std::string>, pair_hash>* set = &this->assignPatternStorage.find(firstArgument.getValue())->second;
 			return getPatternController(secondArgument, set);
 		}
 	}
