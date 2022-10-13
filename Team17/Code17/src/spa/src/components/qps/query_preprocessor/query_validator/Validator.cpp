@@ -31,11 +31,6 @@ bool Validator::isSemanticallyValid() {
 
 	int numOfDeclaredSynonyms = this->parsedQuery.getNumOfDeclaredSynonyms();
 
-	// No declaration clause
-	if (numOfDeclaredSynonyms == 0) {
-		return false;
-	}
-
 	std::unordered_map<std::string, DesignEntity> declaredSynonyms = this->parsedQuery.getSynonymToDesignEntityMap();
 
 	// Declaration contains multiple synonyms with the same name
