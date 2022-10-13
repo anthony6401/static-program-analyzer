@@ -13,13 +13,18 @@ std::set<std::string> GroupedClause::getAllSynonyms() {
 }
 
 
+
 bool GroupedClause::hasCommonSynonymWithClause(std::shared_ptr<Clause> &clause) {
     std::set<std::string> synonymsOfClause = clause -> getAllSynonyms();
-    for (const auto& s : synonymsOfClause) {
-        for (const auto& sgc : synonyms) {
-            if (s == sgc) {
-                return true;
-            }
+    auto synonymsIterator = synonyms.begin();
+    auto clauseSynonymsIterator = synonymsOfClause.begin();
+    while (synonymsIterator != synonyms.end() && clauseSynonymsIterator != synonymsOfClause.end()) {
+        if (*synonymsIterator < *clauseSynonymsIterator) {
+            synonymsIterator++;
+        } else if (*clauseSynonymsIterator < *synonymsIterator) {
+            clauseSynonymsIterator++;
+        } else {
+            return true;
         }
     }
     return false;
@@ -50,25 +55,23 @@ ResultTable GroupedClause::evaluateGroupedClause() {
     return evaluatedGroupRawResult;
 }
 
-void GroupedClause::mergeGroupedClause(GroupedClause &clause_group) {
-    auto other_synonyms = clause_group.getAllSynonyms();
-    auto other_clauses = clause_group.getClauses();
-
-    synonyms.insert(other_synonyms.begin(), other_synonyms.end());
-    clauses.insert(clauses.end(), other_clauses.begin(), other_clauses.end());
+void GroupedClause::mergeGroupedClause(GroupedClause &group) {
+    auto synonymsOfMergingGroup = group.getAllSynonyms();
+    auto clausesOfMergingGroup = group.getClauses();
+    synonyms.insert(synonymsOfMergingGroup.begin(), synonymsOfMergingGroup.end());
+    clauses.insert(clauses.end(), clausesOfMergingGroup.begin(), clausesOfMergingGroup.end());
 }
 
 
-bool GroupedClause::isConnected(GroupedClause &clause_group) {
-    // find common element
-    auto other_synonyms = clause_group.getAllSynonyms();
-    auto synonyms_it = synonyms.begin();
-    auto other_it = other_synonyms.begin();
-    while (synonyms_it!=synonyms.end() && other_it!=other_synonyms.end()) {
-        if (*synonyms_it < *other_it) {
-            ++synonyms_it;
-        } else if (*other_it < *synonyms_it) {
-            ++other_it;
+bool GroupedClause::isConnected(GroupedClause &group) {
+    auto synonymsOfMergingGroup = group.getAllSynonyms();
+    auto synonymsIterator = synonyms.begin();
+    auto mergingGroupSynonymsIterator = synonymsOfMergingGroup.begin();
+    while (synonymsIterator != synonyms.end() && mergingGroupSynonymsIterator != synonymsOfMergingGroup.end()) {
+        if (*synonymsIterator < *mergingGroupSynonymsIterator) {
+            synonymsIterator++;
+        } else if (*mergingGroupSynonymsIterator < *synonymsIterator) {
+            mergingGroupSynonymsIterator++;
         } else {
             return true;
         }

@@ -1,7 +1,9 @@
 #include "WhilePatternClause.h"
 
+#include <utility>
+
 WhilePatternClause::WhilePatternClause(std::string whileSynonym, TokenObject firstArgument, QPSClient qpsClient)
-        : whileSynonym(whileSynonym), firstArgument(firstArgument), qpsClient(qpsClient) {}
+        : whileSynonym(std::move(whileSynonym)), firstArgument(std::move(firstArgument)), qpsClient(qpsClient) {}
 
 ResultTable WhilePatternClause::evaluateClause() {
     TokenType firstArgumentType = firstArgument.getTokenType();
@@ -44,7 +46,7 @@ ResultTable WhilePatternClause::evaluateFirstArgAsNameQuotes() {
 ResultTable WhilePatternClause::evaluateFirstArgAsWildcard() {
     std::vector<std::pair<std::string, std::string>> results = qpsClient.getContainerPatternPair(DesignEntity::WHILE);
     std::unordered_set<std::string> extractedWhile;
-    for (auto pair : results) {
+    for (const auto& pair : results) {
         extractedWhile.insert(pair.first);
     }
     return {whileSynonym, extractedWhile};

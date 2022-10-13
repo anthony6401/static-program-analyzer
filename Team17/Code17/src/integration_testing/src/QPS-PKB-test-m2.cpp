@@ -1082,6 +1082,16 @@ TEST_CASE("Tuple queries with attributes") {
         expectedResults.sort();
         REQUIRE(testResults == expectedResults);
     }
+
+    SECTION("Tuple Test 13") {
+        std::string testQuery = "call       c;   stmt s ; print  pn; "
+            "Select <s    c\n.    procName,       c.stmt#   ,pnpn        .varName          >   such   that Follows*    (6,   s)";
+
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "SemanticError" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
 }
 
 
@@ -1340,16 +1350,16 @@ TEST_CASE("If Pattern queries") {
         REQUIRE(testResults == expectedResults);
     }
 
-//    SECTION("If Pattern test 2") {
-//        std::string testQuery = "if ifs; variable v; constant c;\n "
-//                                "Select <ifs, v, c> pattern ifs(v,_,_)";
-//        std::list<std::string> testResults;
-//        std::list<std::string> expectedResults = {"10 x 1", "10 x 5", "10 x 2", "10 x 0"};
-//        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
-//        testResults.sort();
-//        expectedResults.sort();
-//        REQUIRE(testResults == expectedResults);
-//    }
+    SECTION("If Pattern test 2") {
+        std::string testQuery = "if ifs; variable v; constant c;\n "
+                                "Select <ifs, v, c> pattern ifs(v,_,_)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"10 x 1", "10 x 5", "10 x 2", "10 x 0"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
 
     SECTION("If Pattern test 3") {
         std::string testQuery = "if ifs; variable v; constant c;\n "

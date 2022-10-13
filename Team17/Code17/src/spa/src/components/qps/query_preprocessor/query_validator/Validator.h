@@ -42,6 +42,7 @@ private:
 	bool isValidUsesAndModifies(SuchThat relationship);
 	bool isValidFollowsParentNext(SuchThat relationship);
 	bool isValidCalls(SuchThat relationship);
+	bool isValidParameter(std::string synonymName, DesignEntity validDesignEntity);
 	bool isStatement(std::string synonym);
 	bool isValidDesignEntity(std::string synonym, DesignEntity designEntityToMatch);
 	bool isValidUsesAndModifiesLeftParameter(std::string synonym);

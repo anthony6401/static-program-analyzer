@@ -1,10 +1,13 @@
 #include "FollowsTClause.h"
+
+#include <utility>
 #include "iostream"
+#include "components/qps/query_evaluator/factory/utils/ClauseUtils.h"
 
 FollowsTClause::FollowsTClause(TokenObject left, TokenObject right,
                              std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap,
-                             QPSClient qpsClient) : left(left), right(right),
-                                                    synonymToDesignEntityMap(synonymToDesignEntityMap), qpsClient(qpsClient) {}
+                             QPSClient qpsClient) : left(std::move(left)), right(std::move(right)),
+                                                    synonymToDesignEntityMap(std::move(synonymToDesignEntityMap)), qpsClient(qpsClient) {}
 
 ResultTable FollowsTClause::evaluateClause() {
     TokenType leftType = left.getTokenType();
@@ -25,22 +28,9 @@ ResultTable FollowsTClause::evaluateClause() {
         return FollowsTClause::evaluateWildcardSynonym();
     } else if (leftType == TokenType::WILDCARD && rightType == TokenType::WILDCARD) {
         return FollowsTClause::evaluateWildcardWildcard();
-    } else if (leftType == TokenType::WILDCARD && rightType == TokenType::INTEGER) {
-        return FollowsTClause::evaluateWildcardInteger();
     } else {
-        return {};
+        return FollowsTClause::evaluateWildcardInteger();
     }
-}
-
-size_t FollowsTClause::getNumberOfSynonyms() {
-    size_t numberOfSynonyms = 0;
-    if (left.getTokenType() == TokenType::NAME) {
-        numberOfSynonyms++;
-    }
-    if (right.getTokenType() == TokenType::NAME) {
-        numberOfSynonyms++;
-    }
-    return numberOfSynonyms;
 }
 
 std::set<std::string> FollowsTClause::getAllSynonyms() {
@@ -54,112 +44,86 @@ std::set<std::string> FollowsTClause::getAllSynonyms() {
     return synonyms;
 }
 
-RelationshipType FollowsTClause::getRelationshipType() {
-    return RelationshipType::FOLLOWS_T;
-}
-
-std::vector<std::pair<std::string, std::string>> FollowsTClause::processMapToVectorPair(std::unordered_map<std::string, std::unordered_set<std::string>> results) {
-    std::vector<std::pair<std::string, std::string>> processedResult;
-    for (auto entry : results) {
-        std::string firstSynonym = entry.first;
-        std::unordered_set<std::string> secondSynonymList = entry.second;
-        for (auto secondSynonym : secondSynonymList) {
-            std::pair<std::string, std::string> newPair = {firstSynonym, secondSynonym};
-            processedResult.emplace_back(newPair);
-        }
+size_t FollowsTClause::getNumberOfSynonyms() {
+    size_t numberOfSynonyms = 0;
+    if (left.getTokenType() == TokenType::NAME) {
+        numberOfSynonyms++;
     }
-    return processedResult;
-}
-
-std::unordered_set<std::string> FollowsTClause::processMapToSetFromFirst(std::unordered_map<std::string, std::unordered_set<std::string>> results) {
-    std::unordered_set<std::string> processedResult;
-    for (auto entry : results) {
-        std::string firstSynonym = entry.first;
-        processedResult.insert(firstSynonym);
+    if (right.getTokenType() == TokenType::NAME) {
+        numberOfSynonyms++;
     }
-    return processedResult;
-}
-
-std::unordered_set<std::string> FollowsTClause::processMapToSetFromSecond(std::unordered_map<std::string, std::unordered_set<std::string>> results) {
-    std::unordered_set<std::string> processedResult;
-    for (auto entry : results) {
-        std::unordered_set<std::string> valuesInRow = entry.second;
-        processedResult.insert(valuesInRow.begin(), valuesInRow.end());
-    }
-    return processedResult;
+    return numberOfSynonyms;
 }
 
 ResultTable FollowsTClause::evaluateSynonymSynonym() {
-    DesignEntity leftType = synonymToDesignEntityMap[left.getValue()];
-    DesignEntity rightType = synonymToDesignEntityMap[right.getValue()];
     std::string leftValue = left.getValue();
     std::string rightValue = right.getValue();
+    DesignEntity leftType = synonymToDesignEntityMap[leftValue];
+    DesignEntity rightType = synonymToDesignEntityMap[rightValue];
     if (leftValue == rightValue) {
         return {false};
     }
-    std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(getRelationshipType(), leftType, rightType);
-    std::vector<std::pair<std::string, std::string>> processedMap = FollowsTClause::processMapToVectorPair(results); // {{"1", "x"}, {"2", "y"}}
+    std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(RelationshipType::FOLLOWS_T, leftType, rightType);
+    std::vector<std::pair<std::string, std::string>> processedMap = ClauseUtils::processMapToVectorPair(results);
     return {leftValue, rightValue, processedMap};
 }
 
 ResultTable FollowsTClause::evaluateSynonymWildcard() {
-    DesignEntity leftType = synonymToDesignEntityMap[left.getValue()];
-    DesignEntity rightType = DesignEntity::STMT;
     std::string leftValue = left.getValue();
-    std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(getRelationshipType(), leftType, rightType);
-    std::unordered_set<std::string> processedMap = FollowsTClause::processMapToSetFromFirst(results);
+    DesignEntity leftType = synonymToDesignEntityMap[leftValue];
+    DesignEntity rightType = DesignEntity::STMT;
+    std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(RelationshipType::FOLLOWS_T, leftType, rightType);
+    std::unordered_set<std::string> processedMap = ClauseUtils::processMapToSetFromFirst(results);
     return {leftValue, processedMap};
 }
 
 ResultTable FollowsTClause::evaluateSynonymInteger() {
-    DesignEntity leftType = synonymToDesignEntityMap[left.getValue()];
     std::string leftValue = left.getValue();
-    std::unordered_set<std::string> results = qpsClient.getRelationshipBySecond(getRelationshipType(), leftType, right);
+    DesignEntity leftType = synonymToDesignEntityMap[leftValue];
+    std::unordered_set<std::string> results = qpsClient.getRelationshipBySecond(RelationshipType::FOLLOWS_T, leftType, right);
     return {leftValue, results};
 }
 
 ResultTable FollowsTClause::evaluateIntegerSynonym() {
     std::string rightValue = right.getValue();
-    DesignEntity rightType = synonymToDesignEntityMap[right.getValue()];
-    std::unordered_set<std::string> results = qpsClient.getRelationshipByFirst(getRelationshipType(), left, rightType);
+    DesignEntity rightType = synonymToDesignEntityMap[rightValue];
+    std::unordered_set<std::string> results = qpsClient.getRelationshipByFirst(RelationshipType::FOLLOWS_T, left, rightType);
     return {rightValue, results};
 }
 
 ResultTable FollowsTClause::evaluateIntegerWildcard() {
-    // Returns boolean
     DesignEntity rightType = DesignEntity::STMT;
-    std::unordered_set<std::string> results = qpsClient.getRelationshipByFirst(getRelationshipType(), left, rightType);
-    bool booleanResult = !results.empty();
-    // {1,2,3} -> boolean result = true
-    return {booleanResult};
+    std::unordered_set<std::string> results = qpsClient.getRelationshipByFirst(RelationshipType::FOLLOWS_T, left, rightType);
+    bool result = !results.empty();
+    return {result};
 }
 
 ResultTable FollowsTClause::evaluateIntegerInteger() {
-    // Returns boolean
-    bool result = qpsClient.getRelationship(getRelationshipType(), left, right);
-    // result = true -> setIsFalseResult(true) -> isFalseResult = false
+    bool result = qpsClient.getRelationship(RelationshipType::FOLLOWS_T, left, right);
     return {result};
 }
 
 ResultTable FollowsTClause::evaluateWildcardSynonym() {
     DesignEntity leftType = DesignEntity::STMT;
-    DesignEntity rightType = synonymToDesignEntityMap[right.getValue()];
     std::string rightValue = right.getValue();
-    std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(getRelationshipType(), leftType, rightType);
-    std::unordered_set<std::string> processedMap = FollowsTClause::processMapToSetFromSecond(results);
+    DesignEntity rightType = synonymToDesignEntityMap[rightValue];
+    std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(RelationshipType::FOLLOWS_T, leftType, rightType);
+    std::unordered_set<std::string> processedMap = ClauseUtils::processMapToSetFromSecond(results);
     return {rightValue, processedMap};
 }
 
 ResultTable FollowsTClause::evaluateWildcardWildcard() {
     DesignEntity stmtType = DesignEntity::STMT;
-    std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(getRelationshipType(), stmtType, stmtType);
-    bool booleanResult = !results.empty();
-    return {booleanResult};
+    std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(RelationshipType::FOLLOWS_T, stmtType, stmtType);
+    bool result = !results.empty();
+    return {result};
 }
 
 ResultTable FollowsTClause::evaluateWildcardInteger() {
     DesignEntity leftType = DesignEntity::STMT;
-    std::unordered_set<std::string> results = qpsClient.getRelationshipBySecond(getRelationshipType(), leftType, right);
-    bool booleanResult = !results.empty();
-    return {booleanResult};
+    std::unordered_set<std::string> results = qpsClient.getRelationshipBySecond(RelationshipType::FOLLOWS_T, leftType, right);
+    bool result = !results.empty();
+    return {result};
 }
+
+

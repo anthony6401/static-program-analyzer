@@ -23,12 +23,14 @@ public:
     std::unordered_set<std::string> findCommonAttributeValues(std::unordered_set<std::string> leftNameResult, std::unordered_set<std::string> rightNameResult);
     std::unordered_set<std::pair<std::string, std::string>, hashFunction> findCommonAttributeStatements(const std::unordered_set<std::string>& leftResult, std::unordered_set<std::string> rightResult);
     ResultTable evaluateAttributeAttribute();
+    std::unordered_set<std::pair<std::string, std::string>, hashFunction> leftAndRightAlternativeAttributeResultsHandler(DesignEntity leftDesignEntityType, DesignEntity rightDesignEntityType);
+    std::unordered_set<std::pair<std::string, std::string>, hashFunction> leftAlternativeAttributeResultsHandler(DesignEntity leftDesignEntityType, DesignEntity rightDesignEntityType);
+    std::unordered_set<std::pair<std::string, std::string>, hashFunction> rightAlternativeAttributeResultsHandler(DesignEntity leftDesignEntityType, DesignEntity rightDesignEntityType);
     ResultTable evaluateAttributeInteger();
     ResultTable evaluateAttributeNameQuotes();
     ResultTable evaluateIntegerAttribute();
     ResultTable evaluateIntegerOrNameQuotes();
     ResultTable evaluateNameQuotesAttribute();
-    ResultTable evaluateNameQuotesNameQuotes();
 };
 
 #endif //SPA_WITHCLAUSE_H

@@ -1,8 +1,10 @@
 #include "IfPatternClause.h"
+
+#include <utility>
 #include "iostream"
 
 IfPatternClause::IfPatternClause(std::string ifSynonym, TokenObject firstArgument, QPSClient qpsClient)
-        : ifSynonym(ifSynonym), firstArgument(firstArgument), qpsClient(qpsClient) {}
+        : ifSynonym(std::move(ifSynonym)), firstArgument(std::move(firstArgument)), qpsClient(qpsClient) {}
 
 ResultTable IfPatternClause::evaluateClause() {
     TokenType firstArgumentType = firstArgument.getTokenType();
@@ -45,7 +47,7 @@ ResultTable IfPatternClause::evaluateFirstArgAsNameQuotes() {
 ResultTable IfPatternClause::evaluateFirstArgAsWildcard() {
     std::vector<std::pair<std::string, std::string>> results = qpsClient.getContainerPatternPair(DesignEntity::IF);
     std::unordered_set<std::string> extractedIfs;
-    for (auto pair : results) {
+    for (const auto& pair : results) {
         extractedIfs.insert(pair.first);
     }
     return {ifSynonym, extractedIfs};

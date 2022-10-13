@@ -20,9 +20,7 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
         ClauseDivider clausesToEvaluate = extractClausesToEvaluate(queryObject, synonymToDesignEntityMap, qpsClient);
         clausesToEvaluate.divideCommonSynonymGroupsBySelect(selectClause);
         GroupedClause noSynonymsClauses = clausesToEvaluate.getNoSynonymsPresent();
-
         std::vector<GroupedClause> hasSelectSynonymPresent = clausesToEvaluate.getSelectSynonymPresentGroups();
-
         std::vector<GroupedClause> noSelectSynonymPresent = clausesToEvaluate.getSelectSynonymNotPresentGroups();
 
         bool isFalseNoSynonymClauseEvaluation = Evaluator::evaluateNoSynonymClauses(noSynonymsClauses);
@@ -36,11 +34,14 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
 
         synonymsInTable = {evaluatedResults.synonymsList.begin(), evaluatedResults.synonymsList.end()};
         selectClause = ClauseCreator::createClause(select, synonymsInTable, synonymToDesignEntityMap, qpsClient);
-        ResultTable selectTable = selectClause -> evaluateClause();
-
-        evaluatedResults.combineResult(selectTable);
+        combineResultsWithSelect(selectClause, evaluatedResults);
         Evaluator::populateResultsList(evaluatedResults, select, results, qpsClient, synonymToDesignEntityMap);
     }
+}
+
+void Evaluator::combineResultsWithSelect(std::shared_ptr<Clause> &selectClause, ResultTable &evaluatedResults) {
+    ResultTable selectTable = selectClause -> evaluateClause();
+    evaluatedResults.combineResult(selectTable);
 }
 
 
@@ -76,50 +77,54 @@ void Evaluator::populateResultsList(ResultTable &evaluatedResults, Select select
     }
 
     if (returnType == TokenType::ATTRIBUTE) {
-        std::unordered_set<std::string> resultsToPopulate = evaluatedResults.getSynonymResultsToBePopulated(selectSynonym);
-        bool hasAlternativeAttributeName = evaluatedResults.getHasAlternativeAttributeName();
-        std::string selectSynonymValue = select.getReturnValues().front().getValue();
-        DesignEntity entityType = synonymToDesignEntityMap[selectSynonymValue];
-        if (hasAlternativeAttributeName) {
-            std::unordered_set<std::string> alternativeAttributeValueSet;
-            // call pkb api
-            for (auto statementNumber : resultsToPopulate) {
-                std::string alternative = qpsClient.getStatementMapping(statementNumber, entityType);
-                alternativeAttributeValueSet.insert(alternative);
-            }
+        populateAttributesResultsList(evaluatedResults, select, results, qpsClient, synonymToDesignEntityMap);
+    }
+}
 
-            for (const auto& alternativeAttribute : alternativeAttributeValueSet) {
-                results.emplace_back(alternativeAttribute);
-            }
+void Evaluator::populateAttributesResultsList(ResultTable &evaluatedResults, Select select, std::list<std::string> &results, QPSClient qpsClient, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap) {
+    std::string selectSynonym = select.getReturnValues().front().getValue();
+    std::unordered_set<std::string> resultsToPopulate = evaluatedResults.getSynonymResultsToBePopulated(selectSynonym);
+    bool hasAlternativeAttributeName = evaluatedResults.getHasAlternativeAttributeName();
+    std::string selectSynonymValue = select.getReturnValues().front().getValue();
+    DesignEntity entityType = synonymToDesignEntityMap[selectSynonymValue];
+    if (hasAlternativeAttributeName) {
+        std::unordered_set<std::string> alternativeAttributeValueSet;
+        for (auto statementNumber : resultsToPopulate) {
+            std::string alternative = qpsClient.getStatementMapping(statementNumber, entityType);
+            alternativeAttributeValueSet.insert(alternative);
+        }
 
-        } else {
-            for (const std::string& result : resultsToPopulate) {
-                results.emplace_back(result);
-            }
+        for (const auto& alternativeAttribute : alternativeAttributeValueSet) {
+            results.emplace_back(alternativeAttribute);
+        }
+
+    } else {
+        for (const std::string& result : resultsToPopulate) {
+            results.emplace_back(result);
         }
     }
 }
 
-// Returns boolean, check for False or Empty Clauses
+
 bool Evaluator::evaluateNoSynonymClauses(GroupedClause noSynonymsClauses) {
     if (noSynonymsClauses.isEmpty()) {
         return false;
-    } else {
-        std::vector<std::shared_ptr<Clause>> clauses = noSynonymsClauses.getClauses();
-        for (auto &c : clauses) {
-            ResultTable result = c -> evaluateClause();
-            if (result.getIsFalseResult()) {
-                return true;
-            }
-        }
-        return false;
     }
+
+    std::vector<std::shared_ptr<Clause>> clauses = noSynonymsClauses.getClauses();
+    for (auto &c : clauses) {
+        ResultTable result = c -> evaluateClause();
+        if (result.getIsFalseResult()) {
+            return true;
+        }
+    }
+    return false;
+
 }
 
-// Returns boolean, check for False or Empty Clauses
 bool Evaluator::evaluateNoSelectSynonymClauses(std::vector<GroupedClause> noSelectSynonymPresent) {
     for (GroupedClause gc : noSelectSynonymPresent) {
-        ResultTable result = gc.evaluateGroupedClause(); // Combined result within a grouped clause
+        ResultTable result = gc.evaluateGroupedClause();
         if (result.getIsFalseResult()) {
             return true;
         }
