@@ -27,7 +27,7 @@ void WhileStack::close(int statementNumber) {
 
 void WhileStack::addEndPoints(std::vector<SimpleToken> stmts) {
     if (stmts.back().type != SpTokenType::TIF) {
-        std::cout << std::to_string(this->parent.statementNumber) + " is adding endPoint " + std::to_string(stmts.back().statementNumber) + "\n";
+        //std::cout << std::to_string(this->parent.statementNumber) + " is adding endPoint " + std::to_string(stmts.back().statementNumber) + "\n";
         endPoints.push_back(stmts.back());
     }
 }

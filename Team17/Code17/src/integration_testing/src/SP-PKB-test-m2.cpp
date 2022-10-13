@@ -49,6 +49,82 @@ procedure test {\
     }\
     a = 17;\
 }");
+    simpleParser_m2.statementNumber = 1;
+    simpleParser_m2.parseCode("\
+procedure test2 {\
+    if (1 == 1) then {\
+        if (2 == 2) then {\
+            if (3 == 3) then {\
+                if (4 == 4) then {\
+                    a = 5;\
+                } else {\
+                    a = 6;\
+                }\
+            } else {\
+                a = 7;\
+            }\
+        } else {\
+            a = 8;\
+        }\
+    } else {\
+        a = 9;\
+    }\
+    a = 10;\
+    if (11 == 11) then {\
+        a = 12;\
+    } else {\
+        if (13 == 13) then {\
+            a = 14;\
+        } else {\
+            if (15 == 15) then {\
+                a = 16;\
+            } else {\
+                a = 17;\
+            }\
+        }\
+    }\
+    a = 18;\
+}");
+    simpleParser_m2.statementNumber = 1;
+    simpleParser_m2.parseCode("\
+procedure test3 {\
+    a = 1;\
+    a = 2;\
+    if (3 == 3) then {\
+        a = 4;\
+        a = 5;\
+    } else {\
+        while (6 == 6) {\
+            a = 7;\
+            a = 8;\
+        }\
+    }\
+    a = 9;\
+}");
+    simpleParser_m2.statementNumber = 1;
+    simpleParser_m2.parseCode("\
+procedure test4 {\
+    while (1 == 1) {\
+        if (2 == 2) then {\
+            if (3 == 3) then {\
+                a = 4;\
+            } else {\
+                while (5 == 5) {\
+                    a = 6;\
+                }\
+            }\
+        } else {\
+            while (7 == 7) {\
+                while (8 == 8) {\
+                    while (9 == 9) {\
+                        a = 10;\
+                    }\
+                }\
+            }\
+        }\
+    }\
+    a = 11;\
+}");
 }
 
     /*simpleParser_m2.parseCode("procedure First {\
