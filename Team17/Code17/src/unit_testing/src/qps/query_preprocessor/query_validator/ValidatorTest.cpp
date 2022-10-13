@@ -178,6 +178,22 @@ TEST_CASE("Query returns boolean but BOOLEAN is declared as synonym") {
     REQUIRE(validatedQuery.getSelect().getReturnType() == TokenType::SYNONYM);
 };
 
+TEST_CASE("Query returns boolean with no declaration clause") {
+    Select select = Select(TokenType::BOOLEAN, { TokenObject(TokenType::NAME, std::string("BOOLEAN")) });
+    std::vector<SuchThat> suchThat{ SuchThat(TokenType::CALLS, TokenObject(TokenType::NAME_WITH_QUOTATION, "Second"), TokenObject(TokenType::NAME_WITH_QUOTATION, "Third")) };
+    std::vector<qps::Pattern> pattern{};
+    std::unordered_map<std::string, DesignEntity> mappedSynonyms{};
+    int numOfDeclaredSynonyms = 0;
+
+    QueryObject testParsedQuery = QueryObject(select, suchThat, pattern, mappedSynonyms, numOfDeclaredSynonyms);
+
+
+    Validator validator = Validator(testParsedQuery);
+    QueryObject validatedQuery = validator.validate();
+
+    REQUIRE(validatedQuery.isSemanticallyValid() == true);
+};
+
 TEST_CASE("Query returns tuple") {
     Select select = Select(TokenType::TUPLE, { TokenObject(TokenType::NAME, std::string("r")), TokenObject(TokenType::ATTRIBUTE_SYNONYM, std::string("r")), TokenObject(TokenType::ATTRIBUTE_NAME, std::string("varName")) });
     std::vector<SuchThat> suchThat{ SuchThat(TokenType::CALLS, TokenObject(TokenType::NAME, "p"), TokenObject(TokenType::NAME, "q")) };
