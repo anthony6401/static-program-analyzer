@@ -45,10 +45,6 @@ void Extractor::extractAssign(SimpleToken assignToken) {
 	extractExpr(assignToken, exprToken);
 	extractAssignPattern(assignToken);
 
-	if (previousStmt.size() != 0) {
-		//std::cout << "current prev statement is " + std::to_string(previousStmt.at(0).statementNumber) + "\n";
-	}
-	//std::cout << "extracting assign " + std::to_string(assignToken.statementNumber) + "\n";
 	extractNext(assignToken);
 }
 
@@ -89,7 +85,6 @@ void Extractor::extractIf(SimpleToken ifToken) {
 	extractExpr(ifToken, ifToken);
 	extractIfPattern(ifToken);
 	
-	//std::cout << "extracting if " + std::to_string(ifToken.statementNumber) + "\n";
 	extractNext(ifToken);
 	if (first) {
 		ifTokens.push(ifToken);
@@ -153,7 +148,7 @@ void Extractor::extractCall(SimpleToken callToken, std::string currentProcedure)
 	CallsRelationship* relationship = new CallsRelationship(left, right);
 	this->client->storeRelationship(relationship);
 
-
+	extractNext(callToken);
 }
 
 void Extractor::extractProcedure(SimpleToken procedureToken) {
@@ -162,18 +157,10 @@ void Extractor::extractProcedure(SimpleToken procedureToken) {
 
 void Extractor::close(int statementNumber) {
 	if (currentStack->parent.type == SpTokenType::TWHILE) {
-		//std::cout << "Close While\n";
 		currentStack->close(statementNumber);
-		for (SimpleToken token : endPoints) {
-			//std::cout << "Closing While - " + std::to_string(token.statementNumber) + "\n";
-		}
 		extractNextWhile();
 	} else if (currentStack->parent.type == SpTokenType::TIF) {
-		//std::cout << "Close If\n";
 		currentStack->close(statementNumber);
-		for (SimpleToken token : endPoints) {
-			//std::cout << "Closing If - " + std::to_string(token.statementNumber) + "\n";
-		}
 		extractNextIf();
 	} else {
 		currentStack->close(statementNumber);
@@ -253,7 +240,7 @@ void Extractor::extractNext(SimpleToken stmtToken) {
 			Entity* next = generateEntity(stmtToken);
 			NextRelationship* nextRel = new NextRelationship(prev, next);
 			this->client->storeRelationship(nextRel);
-			std::cout << prev->getValue() + " " + next->getValue() + "\n";
+			//std::cout << prev->getValue() + " " + next->getValue() + "\n";
 		}
 		endPoints.clear();
 	}
@@ -263,7 +250,7 @@ void Extractor::extractNext(SimpleToken stmtToken) {
 				Entity* next = generateEntity(stmtToken);
 				NextRelationship* nextRel = new NextRelationship(prev, next);
 				this->client->storeRelationship(nextRel);
-				std::cout << prev->getValue() + " " + next->getValue() + "\n";
+				//std::cout << prev->getValue() + " " + next->getValue() + "\n";
 			}
 			endPoints.clear();
 		} else {
@@ -271,7 +258,7 @@ void Extractor::extractNext(SimpleToken stmtToken) {
 			Entity* next = generateEntity(stmtToken);
 			NextRelationship* nextRel = new NextRelationship(prev, next);
 			this->client->storeRelationship(nextRel);
-			std::cout << prev->getValue() + " " + next->getValue() + "\n";
+			//std::cout << prev->getValue() + " " + next->getValue() + "\n";
 		
 	}
 	previousStmt.clear();
@@ -280,12 +267,11 @@ void Extractor::extractNext(SimpleToken stmtToken) {
 
 void Extractor::extractNextWhile() {
 	for (SimpleToken stmt : endPoints) {
-		//std::cout << "extracting... " + std::to_string(stmt.statementNumber) + "\n";
 		Entity* prev = generateEntity(stmt);
 		Entity* next = generateEntity(whileTokens.top());
 		NextRelationship* nextRel = new NextRelationship(prev, next);
 		this->client->storeRelationship(nextRel);
-		std::cout << prev->getValue() + " " + next->getValue() + "\n";
+		//std::cout << prev->getValue() + " " + next->getValue() + "\n";
 	}
 	endPoints.clear();
 	previousStmt.clear();
