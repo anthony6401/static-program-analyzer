@@ -1,11 +1,5 @@
 #include "SpUtils.h"
 
-/// <summary>
-/// Splits a string based on provided regex expression
-/// </summary>
-/// <param name="code">string to be split</param>
-/// <param name="delimiters">Regex expression for characters to split at</param>
-/// <returns>Vector containing split substrings in order</returns>
 std::vector<std::string> SpUtils::split(std::string code, std::regex delimiters) {
     std::vector<std::string> tokens;
     std::regex_iterator<std::string::iterator> start(code.begin(), code.end(), delimiters);
@@ -19,18 +13,19 @@ std::vector<std::string> SpUtils::split(std::string code, std::regex delimiters)
     return tokens;
 }
 
-std::string SpUtils::join(std::vector<std::string> tokens) {
+std::string SpUtils::join(std::vector<std::string> tokens, std::string connector) {
     std::string output = "";
     for (std::vector<std::string>::const_iterator i = tokens.begin(); i != tokens.end(); ++i) {
         output += *i;
-        output += " ";
+        output += connector;
     }
-    if (!(output.empty())) {
+    if (!(output.empty()) && !(connector.empty())) {
         output.pop_back();
     }
     return output;
 }
 
+//Return indice of ( that pairs with last )
 int SpUtils::findOpenBracket(std::vector<std::string>& tokens, int end) {
     if (tokens.at(end) != ")") {
         return -1;
@@ -50,6 +45,7 @@ int SpUtils::findOpenBracket(std::vector<std::string>& tokens, int end) {
     return -1;
 }
 
+//Return indice of ) that pairs with first (
 int SpUtils::findCloseBracket(std::vector<std::string>& tokens, int start) {
     if (tokens.at(start) != "(") {
         return -1;

@@ -6,11 +6,12 @@
 class ElseState : public ValidatorState {
 public:
     ElseState(SimpleValidator* context);
-    void validLine(SpTokenType type, int statementNumber);
-    bool validCode();
+    void validateLine(SpTokenType type, int statementNumber);
+    bool isValidCode();
     void close();
 
 private:
     SimpleValidator* context;
+    bool hasStmt;
 
 };
