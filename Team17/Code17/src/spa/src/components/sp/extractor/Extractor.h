@@ -57,7 +57,6 @@ public:
 	void extractRead(SimpleToken readToken);
 	void extractPrint(SimpleToken printToken);
 	void extractAssign(SimpleToken assignToken);
-	std::string getExpressionAsString(SimpleToken exprToken);
 	void extractAssignPattern(SimpleToken assignToken);
 	void extractWhile(SimpleToken whileToken);
 	void extractIf(SimpleToken ifToken);

@@ -48,22 +48,12 @@ void Extractor::extractAssign(SimpleToken assignToken) {
 	extractNext(assignToken);
 }
 
-std::string Extractor::getExpressionAsString(SimpleToken expression) {
-	std::string expressionString;
-	std::vector<SimpleToken> expressionChildren = expression.getChildren();
-	for (int i = 0; i < expressionChildren.size(); i++) {
-		std::string nextString = expressionChildren.at(i).value;
-		expressionString = expressionString + nextString;
-	}
-	return expressionString;
-}
-
 void Extractor::extractAssignPattern(SimpleToken assignToken) {
 	SimpleToken varToken = assignToken.getChildren().at(0);
 	SimpleToken exprToken = assignToken.getChildren().at(1);
 	std::string lineNum = std::to_string(assignToken.statementNumber);
 	std::string firstVal = varToken.value;
-	std::string seconVal = getExpressionAsString(exprToken);
+	std::string seconVal = exprToken.value;
 	AssignPattern* assignPattern = new AssignPattern(lineNum, firstVal, seconVal);
 	this->client->storePattern(assignPattern);
 }

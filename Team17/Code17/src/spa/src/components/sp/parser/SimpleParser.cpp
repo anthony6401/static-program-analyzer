@@ -173,7 +173,10 @@ void SimpleParser::parseAssign(std::vector<std::string>& tokens) {
         std::vector<SimpleToken> children;
         children.push_back(SimpleToken(SpTokenType::TVARIABLE, tokens.front(), 0));
         tokens.erase(tokens.begin());
-        children.push_back(SimpleParser::parseExpr(tokens));
+        std::string exprString = SpUtils::join(tokens, "");
+        SimpleToken expr = SimpleParser::parseExpr(tokens);
+        expr.value = exprString;
+        children.push_back(expr);
         SimpleToken assignToken = SimpleToken(SpTokenType::TASSIGN, "", statementNumber);
         statementNumber++;
         assignToken.setChildren(children);
@@ -198,8 +201,7 @@ std::vector<SimpleToken> SimpleParser::parseCondition(std::vector<std::string> t
         tokens.erase(tokens.begin());
         tokens.pop_back();
     }
-
-    std::string condition = SpUtils::join(tokens);
+    std::string condition = SpUtils::join(tokens, " ");
     if (condition.find("&&") != std::string::npos || condition.find("||") != std::string::npos) {
         int indice = 0;
         for (std::string token : tokens) {
