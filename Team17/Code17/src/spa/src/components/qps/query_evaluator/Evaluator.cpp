@@ -32,9 +32,16 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
             evaluatedResults = Evaluator::evaluateHasSelectSynonymClauses(hasSelectSynonymPresent, selectClause);
         }
 
+//        std::cout << "BEFORE MERGING SELECT TABLE:" << std::endl;
+//        std::cout << evaluatedResults << std::endl;
+
         synonymsInTable = {evaluatedResults.synonymsList.begin(), evaluatedResults.synonymsList.end()};
         selectClause = ClauseCreator::createClause(select, synonymsInTable, synonymToDesignEntityMap, qpsClient);
         combineResultsWithSelect(selectClause, evaluatedResults);
+
+//        std::cout << "AFTER MERGING SELECT TABLE:" << std::endl;
+//        std::cout << evaluatedResults << std::endl;
+
         Evaluator::populateResultsList(evaluatedResults, select, results, qpsClient, synonymToDesignEntityMap);
     }
 }
@@ -69,9 +76,11 @@ void Evaluator::populateResultsList(ResultTable &evaluatedResults, Select select
     }
 
     if (returnType == TokenType::TUPLE) {
+        //std::cout << "IN TUPLE RESULTS POPULATOR" << std::endl;
         std::vector<TokenObject> tuple = select.getReturnValues();
         std::unordered_set<std::string> resultsToPopulate = evaluatedResults.getTupleResultsToBePopulated(tuple, synonymToDesignEntityMap, qpsClient);
         for (const std::string& result : resultsToPopulate) {
+            //std::cout << result << std::endl;
             results.emplace_back(result);
         }
     }

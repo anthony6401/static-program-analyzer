@@ -1,11 +1,11 @@
 1 - Tuple test 1 Follows
-assign a, a1; print pn;
-Select <pn> such that Follows(a, a1)
-1, 15, 19
+assign a, a1; print pn; read rd;
+Select <rd> such that Follows(a, pn)
+20, 6, 16
 5000
 2 - Tuple test 2 Follows
-assign a, a1; print pn; read rd;
-Select <pn, rd> such that Follows(a, a1)
+assign a, a1; print pn; read rd; call c, c1;
+Select <pn, rd> such that Follows(c, c1)
 1 6, 15 6, 19 6, 1 16, 15 16, 19 16, 1 20, 15 20, 19 20
 5000
 3 - Tuple test 3 Follows
@@ -49,17 +49,17 @@ Select <a> such that Follows(1, pn)
 none
 5000
 11 - Tuple test 11 Follows
-assign a; call c1, c2; print pn; variable v;
+assign a; call c1, c2; print pn; variable v; read rd;
 Select <v.varName, rd> such that Follows(rd, 7)
-var1 6, var2 6, var3 6, var4 6, var5 6, assign 6, Second 6, second 6, while 6, While 6, CS3203 6, A 6, F 6, pass 6
+var1 6, var2 6, var3 6, var4 6, var5 6, assign 6, Second 6, second 6, while 6, While 6, CS3203 6, A 6, F 6, pass 6, procedure 6
 5000
 12 - Tuple test 12 Follows
-assign a; call c1, c2; print pn; variable v;
+assign a; call c1, c2; print pn; variable v; read rd;
 Select <a.stmt#, rd.varName> such that Follows(1, 2)
 7 var2, 11 var2, 12 var2, 17 var2, 18 var2, 7 second, 11 second, 12 second, 17 second, 18 second, 7 var1, 11 var1, 12 var1, 17 var1, 18 var1
 5000
 13 - Tuple test 13 Follows
-assign a; call c1, c2; print pn; variable v;
+assign a; call c1, c2; print pn; variable v; read rd;
 Select <a.stmt#, rd.varName> such that Follows(1, 4)
 none
 5000
@@ -91,7 +91,7 @@ Select <c1.stmt#, c2.stmt#> such that Follows*(c1, c2)
 19 - Tuple test 5 Follows*
 call c1, c2;
 Select <c1.stmt#, c2.procName> such that Follows*(1, c2)
-2 second, 2 first, 3 second, 3 first
+2 second, 2 first, 3 second, 3 first, 10 first, 10 second, 8 first, 8 second
 5000
 20 - Tuple test 6 Follows*
 assign a; call c1, c2;
@@ -106,7 +106,7 @@ first, second, procedure, island
 22 - Tuple test 8 Follows*
 assign a; call c1, c2; procedure p;
 Select <p.procName, a> such that Follows*(a, 8)
-first 7, second 7, procedure 7, island 7, first 11, second 11, procedure 11, island 11, first 12, second 12, procedure 12, island 12, first 17, second 17, procedure 17, island 17, first 18, second 18, procedure 18, island 18
+first 7, second 7, procedure 7, island 7
 5000
 23 - Tuple test 9 Follows*
 assign a, a1; print pn; read rd; call c;
@@ -147,6 +147,7 @@ Select <w, w.stmt#> such that Modifies (w, v)
 assign a, a1; variable v; print pn; read rd; call c; while w;
 Select <w, w.stmt#, pn> such that Modifies (w, v)
 4 4 1, 9 9 1, 14 14 1, 4 4 15, 9 9 15, 14 14 15, 4 4 19, 9 9 19, 14 14 19
+5000
 31 - Tuple test 8 ModifiesS
 assign a, a1; variable v; print pn; read rd; call c; while w;
 Select <w, w.stmt#, pn> such that Modifies (2, "second")
@@ -170,11 +171,11 @@ procedure procedure procedure, first first procedure, second second procedure, p
 35 - Tuple test 1 UsesS
 assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p;
 Select <a, v> such that Uses (a, v)
-7 var1, 7 var2, 7 var3, 7 var4, 7 var5, 11 var1, 11 var2, 11 var3, 12 assign, 12 var1, 12 var2, 17 var1, 18 CS3203, 18 A, 18 F
+7 var2, 7 var3, 7 var4, 7 var5, 11 var2, 11 var3, 12 var1, 12 var2, 18 A, 18 F
 5000
 36 - Tuple test 2 UsesS
 assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p;
-Select <a, pn> such that Uses (a, "CS3203")
+Select <a, pn> such that Uses (a, "F")
 18 1, 18 15, 18 19
 5000
 37 - Tuple test 3 UsesS
@@ -254,8 +255,8 @@ second procedure, first procedure, second first, first first, second second, fir
 5000
 52 - Tuple test 1 Calls*
 assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
-Select <p, p1> such that Calls* (3, "first")
-procedure second, procedure first, first second
+Select <p, p1> such that Calls* ("procedure", "first")
+procedure procedure, first procedure, second procedure, island procedure, procedure first, first first, second first, island first, procedure second, first second, second second, island second, procedure island, first island, second island, island island
 5000
 53 - Tuple test 2 Calls*
 assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
@@ -267,24 +268,6 @@ assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure 
 Select <p, p1> such that Calls*(p, p)
 none
 5000
-55 - Tuple test 1 Next
-
-5000
-56 - Tuple test 2 Next
-
-5000
-57 - Tuple test 3 Next
-
-5000
-58 - Tuple test 1 Next*
-
-5000
-59 - Tuple test 2 Next*
-
-5000
-60 - Tuple test 3 Next*
-
-5000
 61 - Tuple test 1 Assign Pattern
 assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
 Select <a, rd> pattern a (_, _)
@@ -292,7 +275,7 @@ Select <a, rd> pattern a (_, _)
 5000
 62 - Tuple test 2 Assign Pattern
 assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
-Select <a, pn.varName> pattern a ("var1", _(var4 / var5)_)
+Select <a, pn.varName> pattern a ("var1", _"(var4 / var5)"_)
 7 procedure, 7 pass, 7 second
 5000
 63 - Tuple test 3 Assign Pattern
@@ -318,7 +301,7 @@ Select <ifs.stmt#, v.varName> pattern ifs (v, _, _)
 67 - Tuple test 2 If Pattern
 assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
 Select <ifs.stmt#, v.varName> pattern ifs ("var5", _, _)
-5 var1, 5 var5, 13 Second, 13 second
+5 var1, 5 var5, 5 A, 5 CS3203, 5 F, 5 Second, 5 While, 5 assign, 5 pass, 5 procedure, 5 second, 5 var2, 5 var3, 5 var4, 5 while
 5000
 68 - Tuple test 3 If Pattern
 assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
@@ -339,6 +322,126 @@ none
 assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
 Select <w.stmt#> pattern w (_, _)
 4, 14, 9
+5000
+72 - Tuple test 1 Multiclause
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <a, v> pattern a(v,_"var2"_) such that Modifies (a, v)
+7 var1, 11 var1, 12 assign
+5000
+73 - Tuple test 2 Multiclause
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <a, v> pattern a(v,_) such that Modifies (a, v)
+7 var1, 11 var1, 12 assign, 18 CS3203, 17 var1
+5000
+74 - Tuple test 3 Multiclause
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <a1, a, v> such that Uses(a, v) such that Modifies (a, v)
+none
+5000
+75 - Tuple test 4 Multiclause
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <a, v, c> such that Uses (a, v) and Follows(a, c)
+7 var2 8, 7 var3 8, 7 var4 8, 7 var5 8
+5000
+76 - Tuple test 5 Multiclause
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <a, v, c.stmt#> such that Uses (a, v) and Follows(1, 2)
+7 var2 2, 7 var3 2, 7 var4 2, 7 var5 2, 11 var2 2, 11 var3 2, 12 var1 2, 12 var2 2, 18 A 2, 18 F 2, 7 var2 3, 7 var3 3, 7 var4 3, 7 var5 3, 11 var2 3, 11 var3 3, 12 var1 3, 12 var2 3, 18 A 3, 18 F 3, 7 var2 8, 7 var3 8, 7 var4 8, 7 var5 8, 11 var2 8, 11 var3 8, 12 var1 8, 12 var2 8, 18 A 8, 18 F 8, 7 var2 10, 7 var3 10, 7 var4 10, 7 var5 10, 11 var2 10, 11 var3 10, 12 var1 10, 12 var2 10, 18 A 10, 18 F 10
+5000
+77 - Tuple test 6 Multiclause
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <a.stmt#, v.varName, c.procName> such that Uses (a, v) and Follows(a, c)
+7 var2 second, 7 var3 second, 7 var4 second, 7 var5 second
+5000
+78 - Tuple test 7 Multiclause
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <a> such that Uses (a, v) and Follows(1, 3)
+none
+5000
+79 - Tuple test 8 Multiclause pattern Assign
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <a, w.stmt#, v> such that Uses (w, v) pattern a(_, _"var2"_)
+7 4 var1, 7 4 var2, 7 4 var5, 7 4 var3, 7 4 var4, 7 4 var5, 7 9 var1, 7 9 var2, 7 14 While, 7 14 while, 7 14 second, 11 4 var1, 11 4 var2, 11 4 var5, 11 4 var3, 11 4 var4, 11 4 var5, 11 9 var1, 11 9 var2, 11 14 While, 11 14 while, 11 14 second, 12 4 var1, 12 4 var2, 12 4 var5, 12 4 var3, 12 4 var4, 12 4 var5, 12 9 var1, 12 9 var2, 12 14 While, 12 14 while, 12 14 second
+5000
+80 - Tuple test 9 Multiclause pattern Assign
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <a, w.stmt#, v> such that Uses(a, "nope") pattern a(_, _"var2"_)
+none
+5000
+81 - Tuple test 10 Multiclause pattern ifs
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <ifs, ifs.stmt#> such that Uses(ifs, "var1") pattern ifs(_, _, _)
+5 5
+5000
+82 - Tuple test 11 Multiclause pattern ifs
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <ifs, ifs.stmt#> such that Modifies(ifs, "second") pattern ifs("Second", _, _)
+13 13
+5000
+83 - Tuple test 12 Multiclause pattern while
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <w> such that Modifies(w, "var1") pattern w("var1", _)
+4
+5000
+84 - Tuple test 13 Multiclause pattern while
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <w, a1> such that Modifies(w, "var1") pattern w("oops", _)
+none
+5000
+85 - Tuple test 14 Multiclause With clause
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <a, v> such that Modifies(a, v) with a.stmt# = 7
+7 var1
+5000
+86 - Tuple test 15 Multiclause With clause
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <a, v.varName> such that Modifies(a, v) with a.stmt# = a.stmt#
+7 var1, 11 var1, 12 assign, 17 var1, 18 CS3203
+5000
+87 - Tuple test 16 Multiclause With clause
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <a, v.varName> such that Modifies(a, v) with v.varName = "var1"
+7 var1, 11 var1, 17 var1
+5000
+88 - Tuple test 17 Multiclause With clause
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <a, v.varName> such that Modifies(a, v) with a.stmt# = a.stmt#
+7 var1, 11 var1, 12 assign, 17 var1, 18 CS3203
+5000
+89 - Tuple test 18 Multiclause With clause
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <a, v.varName> such that Modifies(a, v) with v.varName = "A"
+none
+5000
+90 - Tuple test 19 Multiclause With clause
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <w, a, v.varName> such that Modifies(a, v) and Parent(w, a) with v.varName = "var1"
+4 11 var1
+5000
+91 - Tuple test 20 Multiclause With clause
+assign assign; variable varName; print pn; read rd; call c; if ifs; while while; procedure p, p1;
+Select <while, assign, varName.varName> such that Modifies(assign, varName) and Parent(while, assign) with varName.varName = "var1"
+4 11 var1
+5000
+92 - Tuple test 1 Invalid tuple
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <,w, a, v.varName> such that Modifies(a, v) and Parent(w, a) with v.varName = "var1"
+SyntaxError
+5000
+93 - Tuple test 2 Invalid tuple
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <1w, a, v.varName> such that Modifies(a, v) and Parent(w, a) with v.varName = "var1"
+SyntaxError
+5000
+94 - Tuple test 3 Invalid tuple
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <1, 2> such that Modifies(a, v) and Parent(w, a) with v.varName = "var1"
+SyntaxError
+5000
+95 - Tuple test 3 Invalid tuple
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <a,,,b> such that Modifies(a, v) and Parent(w, a) with v.varName = "var1"
+SyntaxError
 5000
 
 
