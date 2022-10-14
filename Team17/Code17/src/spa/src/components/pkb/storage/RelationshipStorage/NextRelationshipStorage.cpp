@@ -72,7 +72,7 @@ std::unordered_map<std::string, std::unordered_set<std::string>>* NextRelationsh
 	}
 
 	if (right == DesignEntity::WHILE) {
-		return &(this->assignToPrintForwardMap);
+		return &(this->assignToWhileForwardMap);
 	}
 	if (right == DesignEntity::IF) {
 		return &(this->assignToIfForwardMap);
