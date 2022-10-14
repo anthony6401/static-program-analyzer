@@ -20,6 +20,7 @@ class SimpleParser {
         void parseRead(std::vector<std::string>& tokens);
         void parseWhile(std::vector<std::string>& tokens);
         void parseIf(std::vector<std::string>& tokens);
+        void parseElse(std::vector<std::string>& tokens);
         void parseAssign(std::vector<std::string>& tokens);
         std::vector<SimpleToken> parseCondition(std::vector<std::string> tokens);
         std::vector<SimpleToken> parseRelExpr(std::vector<std::string>& tokens);

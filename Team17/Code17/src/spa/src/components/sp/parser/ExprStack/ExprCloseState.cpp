@@ -8,7 +8,7 @@ ExprCloseState::ExprCloseState(ExprStack* context) {
 }
 
 void ExprCloseState::put(std::vector<SimpleToken>& children, std::string value) {
-    if (SimpleValidator::validateExprOpr(value)) {
+    if (SimpleValidator::isValidExprOpr(value)) {
         SimpleToken token = SimpleToken(SpTokenType::TOPR, value, 0);
         children.push_back(token);
         this->context->setState(new OperandState(this->context));
