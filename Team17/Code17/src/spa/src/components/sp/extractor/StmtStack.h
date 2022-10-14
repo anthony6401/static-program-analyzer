@@ -17,6 +17,7 @@ public:
     std::vector<SimpleToken> stmts;
     std::vector<SimpleToken> stmtsNested;
     std::vector<SimpleToken> endPoints;
+    std::vector<SimpleToken> callStmts;
 
 protected:
     StmtStack(SimpleToken parent, Extractor* context) : parent(parent) {};
