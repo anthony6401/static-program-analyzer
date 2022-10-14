@@ -323,6 +323,126 @@ assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure 
 Select <w.stmt#> pattern w (_, _)
 4, 14, 9
 5000
+72 - Tuple test 1 Multiclause
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <a, v> pattern a(v,_"var2"_) such that Modifies (a, v)
+7 var1, 11 var1, 12 assign
+5000
+73 - Tuple test 2 Multiclause
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <a, v> pattern a(v,_) such that Modifies (a, v)
+7 var1, 11 var1, 12 assign, 18 CS3203, 17 var1
+5000
+74 - Tuple test 3 Multiclause
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <a1, a, v> such that Uses(a, v) such that Modifies (a, v)
+none
+5000
+75 - Tuple test 4 Multiclause
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <a, v, c> such that Uses (a, v) and Follows(a, c)
+7 var2 8, 7 var3 8, 7 var4 8, 7 var5 8
+5000
+76 - Tuple test 5 Multiclause
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <a, v, c.stmt#> such that Uses (a, v) and Follows(1, 2)
+7 var2 2, 7 var3 2, 7 var4 2, 7 var5 2, 11 var2 2, 11 var3 2, 12 var1 2, 12 var2 2, 18 A 2, 18 F 2, 7 var2 3, 7 var3 3, 7 var4 3, 7 var5 3, 11 var2 3, 11 var3 3, 12 var1 3, 12 var2 3, 18 A 3, 18 F 3, 7 var2 8, 7 var3 8, 7 var4 8, 7 var5 8, 11 var2 8, 11 var3 8, 12 var1 8, 12 var2 8, 18 A 8, 18 F 8, 7 var2 10, 7 var3 10, 7 var4 10, 7 var5 10, 11 var2 10, 11 var3 10, 12 var1 10, 12 var2 10, 18 A 10, 18 F 10
+5000
+77 - Tuple test 6 Multiclause
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <a.stmt#, v.varName, c.procName> such that Uses (a, v) and Follows(a, c)
+7 var2 second, 7 var3 second, 7 var4 second, 7 var5 second
+5000
+78 - Tuple test 7 Multiclause
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <a> such that Uses (a, v) and Follows(1, 3)
+none
+5000
+79 - Tuple test 8 Multiclause pattern Assign
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <a, w.stmt#, v> such that Uses (w, v) pattern a(_, _"var2"_)
+7 4 var1, 7 4 var2, 7 4 var5, 7 4 var3, 7 4 var4, 7 4 var5, 7 9 var1, 7 9 var2, 7 14 While, 7 14 while, 7 14 print, 11 4 var1, 11 4 var2, 11 4 var5, 11 4 var3, 11 4 var4, 11 4 var5, 11 9 var1, 11 9 var2, 11 14 While, 11 14 while, 11 14 print
+5000
+80 - Tuple test 9 Multiclause pattern Assign
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <a, w.stmt#, v> such that Uses(a, "nope") pattern a(_, _"var2"_)
+none
+5000
+81 - Tuple test 10 Multiclause pattern ifs
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <ifs, ifs.stmt#> such that Uses(ifs, "var1") pattern ifs(_, _, _)
+5 5
+5000
+82 - Tuple test 11 Multiclause pattern ifs
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <ifs, ifs.stmt#> such that Modifies(ifs, "second") pattern ifs("Second", _, _)
+13 13
+5000
+83 - Tuple test 12 Multiclause pattern while
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <w> such that Modifies(w, "var1") pattern w("var1", _)
+4
+5000
+84 - Tuple test 13 Multiclause pattern while
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <w, a1> such that Modifies(w, "var1") pattern w(1, _)
+none
+5000
+85 - Tuple test 14 Multiclause With clause
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <a, v> such that Modifies(a, v) with a.stmt# = 7
+7 var1
+5000
+86 - Tuple test 15 Multiclause With clause
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <a, v.varName> such that Modifies(a, v) with a.stmt# = a.stmt#
+7 var1, 11 var1, 12 assign, 17 var1, 18 CS3203
+5000
+87 - Tuple test 16 Multiclause With clause
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <a, v.varName> such that Modifies(a, v) with v.varName = "var1"
+7 var1, 11 var1, 17 var1
+5000
+88 - Tuple test 17 Multiclause With clause
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <a, v.varName> such that Modifies(a, v) with a.stmt# = a.stmt#
+7 var1, 11 var1, 12 assign, 17 var1, 18 CS3203
+5000
+89 - Tuple test 18 Multiclause With clause
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <a, v.varName> such that Modifies(a, v) with v.varName = "A"
+none
+5000
+90 - Tuple test 19 Multiclause With clause
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <w, a, v.varName> such that Modifies(a, v) and Parent(w, a) with v.varName = "var1"
+4 11 var1
+5000
+91 - Tuple test 20 Multiclause With clause
+assign assign; variable varName; print pn; read rd; call c; if ifs; while while; procedure p, p1;
+Select <while, assign, varName.varName> such that Modifies(assign, varName) and Parent(while, assign) with varName.varName = "var1"
+4 11 var1
+5000
+92 - Tuple test 1 Invalid tuple
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <,w, a, v.varName> such that Modifies(a, v) and Parent(w, a) with v.varName = "var1"
+SyntaxError
+5000
+93 - Tuple test 2 Invalid tuple
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <1w, a, v.varName> such that Modifies(a, v) and Parent(w, a) with v.varName = "var1"
+SyntaxError
+5000
+94 - Tuple test 3 Invalid tuple
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <1, 2> such that Modifies(a, v) and Parent(w, a) with v.varName = "var1"
+SyntaxError
+5000
+95 - Tuple test 3 Invalid tuple
+assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
+Select <a,,,b> such that Modifies(a, v) and Parent(w, a) with v.varName = "var1"
+SyntaxError
+5000
 
 
 
