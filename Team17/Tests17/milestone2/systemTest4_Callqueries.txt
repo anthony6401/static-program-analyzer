@@ -1,0 +1,75 @@
+1 - Calls Test 1
+procedure p;
+Select p such that Calls(p,"second")
+procedure, first
+5000
+2 - Calls Test 2
+procedure p;
+Select p such that Calls("procedure",p)
+first, second
+5000
+3 - Calls Test 3
+procedure p;
+Select p such that Calls(p,"third")
+first, second
+5000
+4 - Calls Test 4
+procedure p;
+Select p such that Calls("third",p)
+fourth
+5000
+5 - Calls Test 5
+procedure p;
+Select p such that Calls("fourth",p)
+fifth, sixth, seventh
+5000
+6 - Calls Test 6
+procedure p;
+Select p such that Calls(p,"sixth")
+fourth, fifth
+5000
+7 - Calls Test 7
+procedure p;
+Select p such that Calls(p,"seventh")
+fourth
+5000
+8 - Calls Test 8
+procedure p;
+Select p such that Calls("seventh",p)
+none
+5000
+9 - Calls Test 9
+procedure p;
+Select p such that Calls("loner",p)
+none
+5000
+10 - Calls Test 10
+procedure p;
+Select p such that Calls(p, "loner")
+none
+5000
+11 - Calls* Test 1
+procedure p;
+Select p such that Calls*("procedure", p)
+first, second, third, fourth, fifth, sixth, seventh
+5000
+12 - Calls* Test 2
+procedure p;
+Select p such that Calls*(p, "seventh")
+procedure,first, second, third, fourth
+5000
+13 - Calls* Test 3
+procedure p;
+Select p such that Calls*("fifth",p)
+sixth
+5000
+14 - Calls* Test 4
+procedure p;
+Select p such that Calls*("fourth",p)
+fifth, sixth, seventh
+5000
+15 - Calls* Test 5
+procedure p;
+Select p such that Calls*("seventh",p)
+none
+5000
