@@ -368,12 +368,6 @@ std::unordered_map<std::string, std::unordered_set<std::string>> NextRelationshi
 
 		storage = getStorageForward(returnType1, returnType2);
 
-		for (auto const& pair : *storage) {
-			for (auto const& ele : pair.second) {
-				std::cout << pair.first << " " << ele << std::endl;
-			}
-		}
-
 		if (storage == nullptr) {
 			return std::unordered_map<std::string, std::unordered_set<std::string>>();
 		}
