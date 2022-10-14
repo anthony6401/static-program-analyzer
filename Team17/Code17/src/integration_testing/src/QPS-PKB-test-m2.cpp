@@ -1082,6 +1082,16 @@ TEST_CASE("Tuple queries with attributes") {
         expectedResults.sort();
         REQUIRE(testResults == expectedResults);
     }
+
+    SECTION("Tuple Test 13") {
+        std::string testQuery = "call       c;   stmt s ; print  pn; "
+            "Select <s    c\n.    procName,       c.stmt#   ,pnpn        .varName          >   such   that Follows*    (6,   s)";
+
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "SemanticError" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
 }
 
 
