@@ -143,11 +143,6 @@ void Extractor::extractExpr(SimpleToken stmtToken, SimpleToken exprToken) {
 void Extractor::extractCall(SimpleToken callToken, std::string currentProcedure) {
 	this->currentStack->stmts.push_back(callToken);
 
-	Entity* left = generateEntity(SimpleToken(SpTokenType::TPROCEDURE, currentProcedure, 0));
-	Entity* right = new ProcedureEntity(callToken.value);
-	CallsRelationship* relationship = new CallsRelationship(left, right);
-	this->client->storeRelationship(relationship);
-
 	extractNext(callToken);
 }
 
@@ -173,6 +168,13 @@ void Extractor::endOfParser(std::multimap<std::string, std::string> callProcedur
 	std::vector<std::string> allProcedures;
 	for (auto itr = callProcedures.begin(); itr != callProcedures.end(); ++itr) {
 		std::string parent = itr->first;
+		std::string called = itr->second;
+
+		Entity* left = generateEntity(SimpleToken(SpTokenType::TPROCEDURE, parent, 0));
+		Entity* right = generateEntity(SimpleToken(SpTokenType::TPROCEDURE, called, 0));
+		CallsRelationship* relationship = new CallsRelationship(left, right);
+		this->client->storeRelationship(relationship);
+
 		auto itr2 = std::find(allProcedures.begin(), allProcedures.end(), parent);
 		if (itr2 == allProcedures.end()) {
 			allProcedures.push_back(parent);
