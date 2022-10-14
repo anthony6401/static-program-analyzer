@@ -32,12 +32,18 @@ void WhileStack::addEndPoints(std::vector<SimpleToken> stmts) {
 }
 
 void WhileStack::mergeStack() {
+    for (SimpleToken callStmt : this->callStmts) {
+        this->whileIfCallMap.insert(std::pair<std::string, SimpleToken>(callStmt.value, this->parent));
+    }
+
     StmtStack* parent = context->parentStack.top();
     parent->stmtsNested.insert(parent->stmtsNested.end(), this->stmts.begin(), this->stmts.end());
     parent->stmtsNested.insert(parent->stmtsNested.end(), this->stmtsNested.begin(), this->stmtsNested.end());
     parent->varUse.insert(parent->varUse.end(), this->varUse.begin(), this->varUse.end());
     parent->varMod.insert(parent->varMod.end(), this->varMod.begin(), this->varMod.end());
     parent->callStmts.insert(parent->callStmts.end(), this->callStmts.begin(), this->callStmts.end());
+
+    parent->whileIfCallMap = this->whileIfCallMap;
 }
 
 void WhileStack::extractFollows(std::vector<SimpleToken> stmts) {

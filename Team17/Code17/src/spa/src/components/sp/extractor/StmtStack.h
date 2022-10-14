@@ -18,6 +18,7 @@ public:
     std::vector<SimpleToken> stmtsNested;
     std::vector<SimpleToken> endPoints;
     std::vector<SimpleToken> callStmts;
+    std::multimap<std::string, SimpleToken> whileIfCallMap;
 
 protected:
     StmtStack(SimpleToken parent, Extractor* context) : parent(parent) {};

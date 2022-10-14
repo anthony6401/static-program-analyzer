@@ -54,6 +54,7 @@ public:
 
 	std::map<std::string, SimpleToken> usesForCalls;
 	std::map<std::string, SimpleToken> modsForCalls;
+	std::multimap<std::string, SimpleToken> whileIfCallMap;
 
 	Extractor(SPClient* client);
 

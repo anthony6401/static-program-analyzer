@@ -170,7 +170,26 @@ void Extractor::endOfParser(std::multimap<std::string, std::string> callProcedur
 		if (itr2 == allProcedures.end()) {
 			allProcedures.push_back(parent);
 		}
+		auto itr3 = std::find(allProcedures.begin(), allProcedures.end(), called);
+		if (itr3 == allProcedures.end()) {
+			allProcedures.push_back(called);
+		}
 	}
+
+	for (std::string proc : allProcedures) {
+		StmtStack* stack = procedures.find(proc)->second;
+		std::vector<SimpleToken> varUse = stack->varUse;
+		std::vector<SimpleToken> varMod = stack->varMod;
+		for (int i = 0; i < varUse.size(); i++) {
+			SimpleToken second = SimpleToken(SpTokenType::TVARIABLE, varUse.at(i).value, 0);
+			usesForCalls.insert(std::pair<std::string, SimpleToken>(proc, second));
+		}
+		for (int i = 0; i < varMod.size(); i++) {
+			SimpleToken second = SimpleToken(SpTokenType::TVARIABLE, varMod.at(i).value, 0);
+			modsForCalls.insert(std::pair<std::string, SimpleToken>(proc, second));
+		}
+	}
+
 	for (std::string proc : allProcedures) {
 		std::vector<std::string> alrCalled;
 		alrCalled.push_back(proc);
@@ -194,6 +213,27 @@ void Extractor::endOfParser(std::multimap<std::string, std::string> callProcedur
 					ModifyRelationship* rel = new ModifyRelationship(left, right);
 					this->client->storeRelationship(rel);
 				}
+			}
+		}
+	}
+	
+	for (auto itr = this->whileIfCallMap.begin(); itr != this->whileIfCallMap.end(); ++itr) {
+		std::string callStmt = itr->first;
+		SimpleToken whileIfToken = itr->second;
+		for (auto itr2 = usesForCalls.begin(); itr2 != usesForCalls.end(); ++itr2) {
+			if (itr2->first == callStmt) {
+				Entity* left = generateEntity(whileIfToken);
+				Entity* right = generateEntity(itr2->second);
+				UsesRelationship* rel = new UsesRelationship(left, right);
+				this->client->storeRelationship(rel);
+			}
+		}
+		for (auto itr2 = modsForCalls.begin(); itr2 != modsForCalls.end(); ++itr2) {
+			if (itr2->first == callStmt) {
+				Entity* left = generateEntity(whileIfToken);
+				Entity* right = generateEntity(itr2->second);
+				ModifyRelationship* rel = new ModifyRelationship(left, right);
+				this->client->storeRelationship(rel);
 			}
 		}
 	}

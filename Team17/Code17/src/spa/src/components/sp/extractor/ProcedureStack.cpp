@@ -15,6 +15,7 @@ void ProcedureStack::close(int statementNumber) {
     extractModify(context->currentStack->varMod);
 
     context->procedures.insert(std::pair<std::string, ProcedureStack*>(parent.value, this));
+    context->whileIfCallMap.insert(this->whileIfCallMap.begin(), this->whileIfCallMap.end());
 }
 
 void ProcedureStack::mergeStack() {}
