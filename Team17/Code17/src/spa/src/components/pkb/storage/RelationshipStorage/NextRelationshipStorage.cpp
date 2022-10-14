@@ -72,7 +72,7 @@ std::unordered_map<std::string, std::unordered_set<std::string>>* NextRelationsh
 	}
 
 	if (right == DesignEntity::WHILE) {
-		return &(this->assignToPrintForwardMap);
+		return &(this->assignToWhileForwardMap);
 	}
 	if (right == DesignEntity::IF) {
 		return &(this->assignToIfForwardMap);
@@ -367,6 +367,12 @@ std::unordered_map<std::string, std::unordered_set<std::string>> NextRelationshi
 		std::unordered_map<std::string, std::unordered_set<std::string>>* storage{};
 
 		storage = getStorageForward(returnType1, returnType2);
+
+		for (auto const& pair : *storage) {
+			for (auto const& ele : pair.second) {
+				std::cout << pair.first << " " << ele << std::endl;
+			}
+		}
 
 		if (storage == nullptr) {
 			return std::unordered_map<std::string, std::unordered_set<std::string>>();
