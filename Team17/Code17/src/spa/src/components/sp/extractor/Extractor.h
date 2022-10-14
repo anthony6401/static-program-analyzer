@@ -52,6 +52,9 @@ public:
 	std::stack<SimpleToken> ifTokens;
 	bool first;
 
+	std::map<std::string, SimpleToken> usesForCalls;
+	std::map<std::string, SimpleToken> modsForCalls;
+
 	Extractor(SPClient* client);
 
 	void extractRead(SimpleToken readToken);
@@ -69,7 +72,7 @@ public:
 	void endOfParser(std::multimap<std::string, std::string> callProcedures);
 	void endOfParserHelper(std::string current, std::string called,
 		std::multimap<std::string, std::string> callProcedures, std::vector<std::string> alrCalled);
-	void addNestedRelationships(StmtStack* parent, StmtStack* called, std::string name);
+	void addNestedRelationships(StmtStack* called, std::string parentName);
 	void extractNext(SimpleToken stmtToken);
 	void extractNextWhile();
 	void extractNextIf();
