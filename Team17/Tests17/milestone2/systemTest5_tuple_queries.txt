@@ -361,7 +361,7 @@ none
 79 - Tuple test 8 Multiclause pattern Assign
 assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
 Select <a, w.stmt#, v> such that Uses (w, v) pattern a(_, _"var2"_)
-7 4 var1, 7 4 var2, 7 4 var5, 7 4 var3, 7 4 var4, 7 4 var5, 7 9 var1, 7 9 var2, 7 14 While, 7 14 while, 7 14 print, 11 4 var1, 11 4 var2, 11 4 var5, 11 4 var3, 11 4 var4, 11 4 var5, 11 9 var1, 11 9 var2, 11 14 While, 11 14 while, 11 14 print
+7 4 var1, 7 4 var2, 7 4 var5, 7 4 var3, 7 4 var4, 7 4 var5, 7 9 var1, 7 9 var2, 7 14 While, 7 14 while, 7 14 second, 11 4 var1, 11 4 var2, 11 4 var5, 11 4 var3, 11 4 var4, 11 4 var5, 11 9 var1, 11 9 var2, 11 14 While, 11 14 while, 11 14 second, 12 4 var1, 12 4 var2, 12 4 var5, 12 4 var3, 12 4 var4, 12 4 var5, 12 9 var1, 12 9 var2, 12 14 While, 12 14 while, 12 14 second
 5000
 80 - Tuple test 9 Multiclause pattern Assign
 assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
@@ -385,7 +385,7 @@ Select <w> such that Modifies(w, "var1") pattern w("var1", _)
 5000
 84 - Tuple test 13 Multiclause pattern while
 assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
-Select <w, a1> such that Modifies(w, "var1") pattern w(1, _)
+Select <w, a1> such that Modifies(w, "var1") pattern w("oops", _)
 none
 5000
 85 - Tuple test 14 Multiclause With clause
