@@ -58,6 +58,7 @@ void IfStack::mergeStack() {
     parent->stmtsNested.insert(parent->stmtsNested.end(), this->stmtsNested.begin(), this->stmtsNested.end());
     parent->varUse.insert(parent->varUse.end(), this->varUse.begin(), this->varUse.end());
     parent->varMod.insert(parent->varMod.end(), this->varMod.begin(), this->varMod.end());
+    parent->callStmts.insert(parent->callStmts.end(), this->callStmts.begin(), this->callStmts.end());
 }
 
 void IfStack::extractFollows(std::vector<SimpleToken> stmts) {

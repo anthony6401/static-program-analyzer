@@ -132,6 +132,7 @@ void Extractor::extractExpr(SimpleToken stmtToken, SimpleToken exprToken) {
 
 void Extractor::extractCall(SimpleToken callToken, std::string currentProcedure) {
 	this->currentStack->stmts.push_back(callToken);
+	this->currentStack->callStmts.push_back(callToken);
 
 	extractNext(callToken);
 }
@@ -174,17 +175,37 @@ void Extractor::endOfParser(std::multimap<std::string, std::string> callProcedur
 		std::vector<std::string> alrCalled;
 		alrCalled.push_back(proc);
 		endOfParserHelper(proc, proc, callProcedures, alrCalled);
+		
+		StmtStack* procStack = procedures.find(proc)->second;
+		std::vector<SimpleToken> callStmts = procStack->callStmts;
+		for (SimpleToken callStmt : callStmts) {
+			for (auto itr = usesForCalls.begin(); itr != usesForCalls.end(); ++itr) {
+				if (itr->first == proc) {
+					Entity* left = generateEntity(callStmt);
+					Entity* right = generateEntity(itr->second);
+					UsesRelationship* rel = new UsesRelationship(left, right);
+					this->client->storeRelationship(rel);
+				}
+			}
+			for (auto itr = modsForCalls.begin(); itr != modsForCalls.end(); ++itr) {
+				if (itr->first == proc) {
+					Entity* left = generateEntity(callStmt);
+					Entity* right = generateEntity(itr->second);
+					ModifyRelationship* rel = new ModifyRelationship(left, right);
+					this->client->storeRelationship(rel);
+				}
+			}
+		}
 	}
 }
 
 void Extractor::endOfParserHelper(std::string current, std::string called,
 	std::multimap<std::string, std::string> callProcedures, std::vector<std::string> alrCalled) {
 	if (current != called) {
-		StmtStack* parentStack = procedures.find(current)->second;
 		StmtStack* calledStack = procedures.find(called)->second;
 		CallsTRelationship* callsTRel = new CallsTRelationship(new ProcedureEntity(current), new ProcedureEntity(called));
 		this->client->storeRelationship(callsTRel);
-		addNestedRelationships(parentStack, calledStack, current);
+		addNestedRelationships(calledStack, current);
 	}
 	for (auto itr = callProcedures.begin(); itr != callProcedures.end(); ++itr) {
 		std::string callProcParent = itr->first;
@@ -196,7 +217,7 @@ void Extractor::endOfParserHelper(std::string current, std::string called,
 	}
 }
 
-void Extractor::addNestedRelationships(StmtStack* parentStack, StmtStack* calledStack, std::string name) {
+void Extractor::addNestedRelationships(StmtStack* calledStack, std::string name) {
 	std::vector<SimpleToken> stmts = calledStack->stmts;
 	std::vector<SimpleToken> stmtsNested = calledStack->stmtsNested;
 	std::vector<SimpleToken> varUse = calledStack->varUse;
@@ -224,6 +245,7 @@ void Extractor::addNestedRelationships(StmtStack* parentStack, StmtStack* called
 		Entity* secondEntity = generateEntity(second);
 		UsesRelationship* usesRel = new UsesRelationship(firstEntity, secondEntity);
 		this->client->storeRelationship(usesRel);
+		usesForCalls.insert(std::pair<std::string, SimpleToken>(name, second));
 	}
 
 	for (int i = 0; i < varMod.size(); i++) {
@@ -232,6 +254,7 @@ void Extractor::addNestedRelationships(StmtStack* parentStack, StmtStack* called
 		Entity* secondEntity = generateEntity(second);
 		ModifyRelationship* modifyRel = new ModifyRelationship(firstEntity, secondEntity);
 		this->client->storeRelationship(modifyRel);
+		modsForCalls.insert(std::pair<std::string, SimpleToken>(name, second));
 	}
 }
 
