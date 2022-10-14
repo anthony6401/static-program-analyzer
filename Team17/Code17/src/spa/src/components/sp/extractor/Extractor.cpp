@@ -9,7 +9,7 @@ Extractor::Extractor(SPClient* client) : currentStack(nullptr) {
 
 void Extractor::extractRead(SimpleToken readToken) {
 	this->currentStack->stmts.push_back(readToken);
-	this->currentStack->varMod.push_back(readToken);
+	this->currentStack->varMod.push_back(SimpleToken(SpTokenType::TVARIABLE, readToken.value, 0));
 
 	Entity* left = generateEntity(readToken);
 	Entity* right = generateEntity(SimpleToken(SpTokenType::TVARIABLE, readToken.value, 0));
@@ -21,7 +21,7 @@ void Extractor::extractRead(SimpleToken readToken) {
 
 void Extractor::extractPrint(SimpleToken printToken) {
 	this->currentStack->stmts.push_back(printToken);
-	this->currentStack->varUse.push_back(printToken);
+	this->currentStack->varUse.push_back(SimpleToken(SpTokenType::TVARIABLE, printToken.value, 0));
 
 	Entity* left = generateEntity(printToken);
 	Entity* right = generateEntity(SimpleToken(SpTokenType::TVARIABLE, printToken.value, 0));
@@ -246,20 +246,19 @@ void Extractor::extractNext(SimpleToken stmtToken) {
 		}
 		endPoints.clear();
 	}
-		if (previousStmt.size() == 0) {
-			for (SimpleToken stmt : endPoints) {
-				Entity* prev = generateEntity(stmt);
-				Entity* next = generateEntity(stmtToken);
-				NextRelationship* nextRel = new NextRelationship(prev, next);
-				this->client->storeRelationship(nextRel);
-			}
-			endPoints.clear();
-		} else {
-			Entity* prev = generateEntity(previousStmt.at(0));
+	if (previousStmt.size() == 0) {
+		for (SimpleToken stmt : endPoints) {
+			Entity* prev = generateEntity(stmt);
 			Entity* next = generateEntity(stmtToken);
 			NextRelationship* nextRel = new NextRelationship(prev, next);
 			this->client->storeRelationship(nextRel);
-		
+		}
+		endPoints.clear();
+	} else {
+		Entity* prev = generateEntity(previousStmt.at(0));
+		Entity* next = generateEntity(stmtToken);
+		NextRelationship* nextRel = new NextRelationship(prev, next);
+		this->client->storeRelationship(nextRel);	
 	}
 	previousStmt.clear();
 	previousStmt.push_back(stmtToken);
