@@ -68,6 +68,8 @@ public:
 	void extractProcedure(SimpleToken procedureToken);
 	void close(int statementNumber);
 	void endOfParser(std::multimap<std::string, std::string> callProcedures);
+	void endOfParserHelper(std::string current, std::string called,
+		std::multimap<std::string, std::string> callProcedures, std::vector<std::string> alrCalled);
 	void addNestedRelationships(StmtStack* parent, StmtStack* called, std::string name);
 	void extractNext(SimpleToken stmtToken);
 	void extractNextWhile();

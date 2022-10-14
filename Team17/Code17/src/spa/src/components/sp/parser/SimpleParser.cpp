@@ -111,7 +111,7 @@ void SimpleParser::parseCall(std::vector<std::string>& tokens) {
         SimpleToken callToken = SimpleToken(SpTokenType::TCALL, procedure, statementNumber);
         statementNumber++;
         extractor->extractCall(callToken, procedure);
-        this->callProcedures.insert(std::pair<std::string, std::string>(procedure, this->currentProcedure));
+        this->callProcedures.insert(std::pair<std::string, std::string>(this->currentProcedure, procedure));
     }
     else {
         throw std::invalid_argument("Received invalid Call:Line " + std::to_string(statementNumber));
