@@ -1,0 +1,275 @@
+1 - Assign Pattern with operators - exact expressions 1
+assign a;
+Select a pattern a("var1", "var2 + var3 * (var4 / var5)")
+7
+5000
+2 - Assign Pattern with operators - exact expressions 2
+assign ifs;
+Select ifs pattern ifs("var1", "var2 / var3")
+11
+5000
+3 - Assign Pattern with operators - exact expressions 3
+assign c;
+Select c pattern c("assign", "var1 % var2")
+12
+5000
+4 - Assign Pattern with operators - exact expressions 4
+assign a;
+Select a pattern a("var1", "7 / 15 * 123")
+17
+5000
+5 - Assign Pattern with operators - exact expressions 5
+assign w;
+Select w pattern w("CS3203", "A + F")
+18
+5000
+6 - Assign Pattern with operators - exact expressions 6
+assign v; variable a;
+Select a pattern v(a, "var2 + var3 * (var4 / var5)")
+var1
+5000
+7 - Assign Pattern with operators - exact expressions 7
+assign a; variable v;
+Select a pattern a(v, "var2 / var3")
+11
+5000
+8 - Assign Pattern with operators - exact expressions 8
+assign a; stmt s;
+Select s pattern a(_, "var1 % var2")
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20
+5000
+9 - Assign Pattern with operators - exact expressions 9
+assign a; variable v;
+Select v pattern a(_, "7 / 15 * 123")
+procedure, var1, var2, var3, var4, var5, assign, Second, second, while, While, A, F, CS3203, pass
+5000
+10 - Assign Pattern with operators - exact expressions return False 1
+assign a; stmt s;
+Select s pattern a("var1", "var2 + var3 * var4 / var5")
+none
+5000
+11 - Assign Pattern with operators - exact expressions return False 2
+assign a; stmt s; variable v;
+Select s pattern a(v, "var2 + var3")
+none
+5000
+12 - Assign Pattern with operators - exact expressions return False 3
+assign a; stmt s;
+Select s pattern a(_, "7 / (15 * 123)")
+none
+5000
+13 - Assign Pattern with operators - subexpressions 1
+assign a;
+Select a pattern a("var1", _"var4 / var5"_)
+7
+5000
+14 - Assign Pattern with operators - subexpressions 2
+assign a;
+Select a pattern a("var1", _"var4 / var5"_)
+7
+5000
+15 - Assign Pattern with operators - subexpressions 3
+assign a;
+Select a pattern a("var1", _"7 / 15"_)
+17
+5000
+16 - Assign Pattern with operators - subexpressions 4
+assign a; variable v;
+Select v pattern a(v, _"var1 % var2"_)
+assign
+5000
+17 - Assign Pattern with operators - subexpressions 5
+assign a; variable v; call c;
+Select c pattern a(v, _"var3 * (var4 / var5)"_)
+2, 3, 8, 10
+5000
+18 - Assign Pattern with operators - subexpressions 6
+assign a; variable v;
+Select a pattern a(v, _"7 / 15 * 123"_)
+17
+5000
+19 - Assign Pattern with operators - subexpressions 7
+assign a;
+Select a pattern a(_, _"(var2 + var3 * (var4 / var5))"_)
+7
+5000
+20 - Assign Pattern with operators - subexpressions 8
+assign a; stmt assign;
+Select assign pattern a(_, _"var4 / var5"_)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20
+5000
+21 - Assign Pattern with operators - subexpressions 9
+assign a; print pr;
+Select pr pattern a(_, _"7 / 15"_)
+1, 15, 19
+5000
+22 - Assign Pattern with operators - subexpressions return False 1
+assign a; stmt s;
+Select s pattern a("var1", _"var2 + var3"_)
+none
+5000
+23 - Assign Pattern with operators - subexpressions return False 2
+assign a; stmt s; variable v;
+Select s pattern a(v, _"var3 * var4"_)
+none
+5000
+24 - Assign Pattern with operators - subexpressions return False 3
+assign a; stmt s;
+Select s pattern a(_, _"var2 + var3 * var4"_)
+none
+5000
+25 - Assign Pattern with operators - subexpressions return False 4
+assign a; stmt s;
+Select s pattern a("var1", _"15 * 123"_)
+none
+5000
+26 - While Pattern 1
+while w;
+Select w pattern w("var1", _)
+4, 9
+5000
+27 - While Pattern 2
+while a; variable v;
+Select v pattern a(v, _)
+var1, var2, while, While
+5000
+28 - While Pattern 3
+while ifs;
+Select ifs pattern ifs(_, _)
+4, 9, 14
+5000
+29 - While Pattern 4
+while v; variable a;
+Select a pattern v(_, _)
+procedure, var1, var2, var3, var4, var5, assign, Second, second, while, While, A, F, CS3203, pass
+5000
+30 - While Pattern return False 1
+while w;
+Select w pattern w("var3", _)
+none
+5000
+31 - If Pattern 1
+if a;
+Select a pattern a("var5", _, _)
+5
+5000
+32 - If Pattern 2
+if w; variable v;
+Select v pattern w(v, _, _)
+var1, var5, Second, second
+5000
+33 - If Pattern 3
+if ifs;
+Select ifs pattern ifs(_, _, _)
+5, 13
+5000
+34 - While Pattern 4
+if ifs; stmt s;
+Select s pattern ifs(_, _, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20
+5000
+35 - While Pattern return False 1
+if ifs;
+Select ifs pattern ifs("var3", _, _)
+none
+5000
+36 - Assign pattern with 3 arguments - second argument is wildcard - return SemanticError
+assign a;
+Select a pattern a("var1", _, _)
+SemanticError
+5000
+37 - Assign pattern with 3 arguments - second argument is not wildcard - return SyntaxError
+assign a; variable v;
+Select a pattern a(v, _"var4/var5"_, _)
+SyntaxError
+5000
+38 - While pattern with 3 arguments
+while w;
+Select w pattern w("var1", _, _)
+SemanticError
+5000
+39 - If pattern with 2 arguments
+if ifs;
+Select ifs pattern ifs("var5", _)
+SemanticError
+5000
+40 - While pattern - non wildcard second argument 1
+while w; variable v;
+Select w pattern w(v, "var1")
+SemanticError
+5000
+41 - While pattern - non wildcard second argument 2
+while w;
+Select w pattern w(_, _"var1"_)
+SemanticError
+5000
+42 - If pattern - non wildcard second argument 1
+if ifs; variable v;
+Select ifs pattern ifs(v, "var1", _)
+SyntaxError
+5000
+43 - If pattern - non wildcard second argument 2
+if ifs; variable v;
+Select ifs pattern ifs(v, _"var1"_, _)
+SyntaxError
+5000
+44 - If pattern - non wildcard third argument 1
+if ifs; variable v;
+Select ifs pattern ifs(v, _, "var1")
+SyntaxError
+5000
+45 - If pattern - non wildcard third argument 2
+if ifs; variable v;
+Select ifs pattern ifs(v, _, _"var1"_)
+SyntaxError
+5000
+46 - If pattern - non wildcard second and third argument 1
+if ifs; variable v;
+Select ifs pattern ifs(v, "var1", "var1")
+SyntaxError
+5000
+47 - If pattern - non wildcard second and third argument 2
+if ifs; variable v;
+Select ifs pattern ifs(v, _"var1"_, _"var1"_)
+SyntaxError
+5000
+48 - Assign pattern - with spaces
+assign a;
+Select a pattern a("var1                  ", "           var2      +              var3*  (var4          /              var5   )    ")
+7
+5000
+49 - Assign pattern - with brackets 1
+assign a;
+Select a pattern a("var1", "(var2 + ((var3 * (((var4 / (var5)))))))")
+7
+5000
+50 - Assign pattern - with brackets 2
+assign a; variable v;
+Select a pattern a(v, "(((((7 / 15)))) * 123)")
+17
+5000
+51 - Assign pattern - with spaces and brackets
+assign a;
+Select a pattern a(_, "(       (  (           ((7  /  15 )            )           )) *        123   )     ")
+17
+5000
+52 - If pattern - with spaces
+if ifs;
+Select ifs pattern ifs(  "  var5             ", _        ,   _  )
+5
+5000
+53 - While pattern - with spaces
+while w;
+Select w pattern w("  var1   " , _     )
+4, 9
+5000
+54 - If pattern - with quote on wildcard
+if ifs;
+Select ifs pattern ifs("var1", "_", "_")
+SyntaxError
+5000
+55 - While pattern - with quote on wildcard
+while w;
+Select w pattern w("var1", "_")
+SyntaxError
+5000
