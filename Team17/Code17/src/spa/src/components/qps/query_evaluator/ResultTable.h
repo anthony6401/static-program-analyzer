@@ -48,6 +48,7 @@ public:
     void updateHasCommonAttributeName(ResultTable &nextResult);
     [[nodiscard]] bool getHasAlternativeAttributeName() const;
     [[nodiscard]] bool isEmptyResult() const;
+    friend std::ostream &operator<<(std::ostream &os, const ResultTable &table);
 };
 
 #endif //SPA_RESULTTABLE_H
