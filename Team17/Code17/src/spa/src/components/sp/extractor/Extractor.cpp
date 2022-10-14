@@ -156,7 +156,6 @@ void Extractor::close(int statementNumber) {
 }
 
 void Extractor::endOfParser(std::multimap<std::string, std::string> callProcedures) {
-	std::vector<std::string> allProcedures;
 	for (auto itr = callProcedures.begin(); itr != callProcedures.end(); ++itr) {
 		std::string parent = itr->first;
 		std::string called = itr->second;
@@ -165,28 +164,22 @@ void Extractor::endOfParser(std::multimap<std::string, std::string> callProcedur
 		Entity* right = generateEntity(SimpleToken(SpTokenType::TPROCEDURE, called, 0));
 		CallsRelationship* relationship = new CallsRelationship(left, right);
 		this->client->storeRelationship(relationship);
+	}
 
-		auto itr2 = std::find(allProcedures.begin(), allProcedures.end(), parent);
-		if (itr2 == allProcedures.end()) {
-			allProcedures.push_back(parent);
-		}
-		auto itr3 = std::find(allProcedures.begin(), allProcedures.end(), called);
-		if (itr3 == allProcedures.end()) {
-			allProcedures.push_back(called);
-		}
+	std::vector<std::string> allProcedures;
+	for (auto itr = procedures.begin(); itr != procedures.end(); ++itr) {
+		allProcedures.push_back(itr->first);
 	}
 
 	for (std::string proc : allProcedures) {
 		StmtStack* stack = procedures.find(proc)->second;
 		std::vector<SimpleToken> varUse = stack->varUse;
 		std::vector<SimpleToken> varMod = stack->varMod;
-		for (int i = 0; i < varUse.size(); i++) {
-			SimpleToken second = SimpleToken(SpTokenType::TVARIABLE, varUse.at(i).value, 0);
-			usesForCalls.insert(std::pair<std::string, SimpleToken>(proc, second));
+		for (SimpleToken use : varUse) {
+			usesForCalls.insert(std::pair<std::string, SimpleToken>(proc, use));
 		}
-		for (int i = 0; i < varMod.size(); i++) {
-			SimpleToken second = SimpleToken(SpTokenType::TVARIABLE, varMod.at(i).value, 0);
-			modsForCalls.insert(std::pair<std::string, SimpleToken>(proc, second));
+		for (SimpleToken mod : varMod) {
+			modsForCalls.insert(std::pair<std::string, SimpleToken>(proc, mod));
 		}
 	}
 
@@ -194,24 +187,28 @@ void Extractor::endOfParser(std::multimap<std::string, std::string> callProcedur
 		std::vector<std::string> alrCalled;
 		alrCalled.push_back(proc);
 		endOfParserHelper(proc, proc, callProcedures, alrCalled);
-		
+	}
+
+	for (std::string proc : allProcedures) {
 		StmtStack* procStack = procedures.find(proc)->second;
 		std::vector<SimpleToken> callStmts = procStack->callStmts;
 		for (SimpleToken callStmt : callStmts) {
 			for (auto itr = usesForCalls.begin(); itr != usesForCalls.end(); ++itr) {
-				if (itr->first == proc) {
+				if (itr->first == callStmt.value) {
 					Entity* left = generateEntity(callStmt);
 					Entity* right = generateEntity(itr->second);
 					UsesRelationship* rel = new UsesRelationship(left, right);
 					this->client->storeRelationship(rel);
+					//std::cout << "Uses " + std::to_string(callStmt.statementNumber) + " " + callStmt.value + " " + itr->second.value + "\n";
 				}
 			}
 			for (auto itr = modsForCalls.begin(); itr != modsForCalls.end(); ++itr) {
-				if (itr->first == proc) {
+				if (itr->first == callStmt.value) {
 					Entity* left = generateEntity(callStmt);
 					Entity* right = generateEntity(itr->second);
 					ModifyRelationship* rel = new ModifyRelationship(left, right);
 					this->client->storeRelationship(rel);
+					//std::cout << "Modify " + std::to_string(callStmt.statementNumber) + " " + callStmt.value + " " + itr->second.value + "\n";
 				}
 			}
 		}
@@ -226,6 +223,7 @@ void Extractor::endOfParser(std::multimap<std::string, std::string> callProcedur
 				Entity* right = generateEntity(itr2->second);
 				UsesRelationship* rel = new UsesRelationship(left, right);
 				this->client->storeRelationship(rel);
+				//std::cout << "Uses " + std::to_string(whileIfToken.statementNumber) +" " + itr2->second.value + "\n";
 			}
 		}
 		for (auto itr2 = modsForCalls.begin(); itr2 != modsForCalls.end(); ++itr2) {
@@ -234,6 +232,7 @@ void Extractor::endOfParser(std::multimap<std::string, std::string> callProcedur
 				Entity* right = generateEntity(itr2->second);
 				ModifyRelationship* rel = new ModifyRelationship(left, right);
 				this->client->storeRelationship(rel);
+				//std::cout << "Modify " + std::to_string(whileIfToken.statementNumber) + " " + itr2->second.value + "\n";
 			}
 		}
 	}
