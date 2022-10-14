@@ -48,22 +48,12 @@ void Extractor::extractAssign(SimpleToken assignToken) {
 	extractNext(assignToken);
 }
 
-std::string Extractor::getExpressionAsString(SimpleToken expression) {
-	std::string expressionString;
-	std::vector<SimpleToken> expressionChildren = expression.getChildren();
-	for (int i = 0; i < expressionChildren.size(); i++) {
-		std::string nextString = expressionChildren.at(i).value;
-		expressionString = expressionString + nextString;
-	}
-	return expressionString;
-}
-
 void Extractor::extractAssignPattern(SimpleToken assignToken) {
 	SimpleToken varToken = assignToken.getChildren().at(0);
 	SimpleToken exprToken = assignToken.getChildren().at(1);
 	std::string lineNum = std::to_string(assignToken.statementNumber);
 	std::string firstVal = varToken.value;
-	std::string seconVal = getExpressionAsString(exprToken);
+	std::string seconVal = exprToken.value;
 	AssignPattern* assignPattern = new AssignPattern(lineNum, firstVal, seconVal);
 	this->client->storePattern(assignPattern);
 }
@@ -143,12 +133,7 @@ void Extractor::extractExpr(SimpleToken stmtToken, SimpleToken exprToken) {
 void Extractor::extractCall(SimpleToken callToken, std::string currentProcedure) {
 	this->currentStack->stmts.push_back(callToken);
 
-	Entity* left = generateEntity(SimpleToken(SpTokenType::TPROCEDURE, currentProcedure, 0));
-	Entity* right = new ProcedureEntity(callToken.value);
-	CallsRelationship* relationship = new CallsRelationship(left, right);
-	this->client->storeRelationship(relationship);
-
-
+	extractNext(callToken);
 }
 
 void Extractor::extractProcedure(SimpleToken procedureToken) {
@@ -157,36 +142,56 @@ void Extractor::extractProcedure(SimpleToken procedureToken) {
 
 void Extractor::close(int statementNumber) {
 	if (currentStack->parent.type == SpTokenType::TWHILE) {
+		currentStack->close(statementNumber);
 		extractNextWhile();
 	} else if (currentStack->parent.type == SpTokenType::TIF) {
+		currentStack->close(statementNumber);
 		extractNextIf();
-	} else if (currentStack->parent.type == SpTokenType::TPROCEDURE) {
-		lastStmtsOfIf.clear();
+	} else {
+		currentStack->close(statementNumber);
+		endPoints.clear();
 		previousStmt.clear();
 	}
-	currentStack->close(statementNumber);
 }
 
 void Extractor::endOfParser(std::multimap<std::string, std::string> callProcedures) {
+	std::vector<std::string> allProcedures;
 	for (auto itr = callProcedures.begin(); itr != callProcedures.end(); ++itr) {
 		std::string parent = itr->first;
 		std::string called = itr->second;
-		if (procedures.find(parent) != procedures.end() && procedures.find(called) != procedures.end()) {
-			StmtStack* parentStack = procedures.find(parent)->second;
-			StmtStack* calledStack = procedures.find(called)->second;
-			CallsTRelationship* callsTRel = new CallsTRelationship(new ProcedureEntity(parent), new ProcedureEntity(called));
-			this->client->storeRelationship(callsTRel);
-			addNestedRelationships(parentStack, calledStack, parent);
+
+		Entity* left = generateEntity(SimpleToken(SpTokenType::TPROCEDURE, parent, 0));
+		Entity* right = generateEntity(SimpleToken(SpTokenType::TPROCEDURE, called, 0));
+		CallsRelationship* relationship = new CallsRelationship(left, right);
+		this->client->storeRelationship(relationship);
+
+		auto itr2 = std::find(allProcedures.begin(), allProcedures.end(), parent);
+		if (itr2 == allProcedures.end()) {
+			allProcedures.push_back(parent);
 		}
-		for (auto itrRec = callProcedures.begin(); itrRec != callProcedures.end(); ++itrRec) {
-			std::string calledRecurse = itrRec->second;
-			if (calledRecurse != called && parent != calledRecurse) {
-				StmtStack* parentStack = procedures.find(parent)->second;
-				StmtStack* calledStackRecurse = procedures.find(calledRecurse)->second;
-				CallsTRelationship* callsTRel = new CallsTRelationship(new ProcedureEntity(parent), new ProcedureEntity(calledRecurse));
-				this->client->storeRelationship(callsTRel);
-				addNestedRelationships(parentStack, calledStackRecurse, parent);
-			}
+	}
+	for (std::string proc : allProcedures) {
+		std::vector<std::string> alrCalled;
+		alrCalled.push_back(proc);
+		endOfParserHelper(proc, proc, callProcedures, alrCalled);
+	}
+}
+
+void Extractor::endOfParserHelper(std::string current, std::string called,
+	std::multimap<std::string, std::string> callProcedures, std::vector<std::string> alrCalled) {
+	if (current != called) {
+		StmtStack* parentStack = procedures.find(current)->second;
+		StmtStack* calledStack = procedures.find(called)->second;
+		CallsTRelationship* callsTRel = new CallsTRelationship(new ProcedureEntity(current), new ProcedureEntity(called));
+		this->client->storeRelationship(callsTRel);
+		addNestedRelationships(parentStack, calledStack, current);
+	}
+	for (auto itr = callProcedures.begin(); itr != callProcedures.end(); ++itr) {
+		std::string callProcParent = itr->first;
+		std::string callProcCalled = itr->second;
+		if (callProcParent == called && std::find(alrCalled.begin(), alrCalled.end(), callProcCalled) == alrCalled.end()) {
+			alrCalled.push_back(callProcCalled);
+			endOfParserHelper(current, callProcCalled, callProcedures, alrCalled);
 		}
 	}
 }
@@ -233,72 +238,47 @@ void Extractor::addNestedRelationships(StmtStack* parentStack, StmtStack* called
 void Extractor::extractNext(SimpleToken stmtToken) {
 	if (currentStack->parent.type == SpTokenType::TPROCEDURE) {
 		first = true;
-		for (SimpleToken stmt : lastStmtsOfIf) {
+		for (SimpleToken stmt : endPoints) {
 			Entity* prev = generateEntity(stmt);
 			Entity* next = generateEntity(stmtToken);
 			NextRelationship* nextRel = new NextRelationship(prev, next);
 			this->client->storeRelationship(nextRel);
-			std::cout << prev->getValue() + " " + next->getValue() + "\n";
 		}
-		lastStmtsOfIf.clear();
-		if (previousStmt.size() != 0) {
-			Entity* prev = generateEntity(previousStmt.at(0));
-			Entity* next = generateEntity(stmtToken);
-			NextRelationship* nextRel = new NextRelationship(prev, next);
-			this->client->storeRelationship(nextRel);
-			std::cout << prev->getValue() + " " + next->getValue() + "\n";
-		}
-		previousStmt.clear();
-		previousStmt.push_back(stmtToken);
-	} else {
+		endPoints.clear();
+	}
 		if (previousStmt.size() == 0) {
-			for (SimpleToken stmt : lastStmtsOfIf) {
+			for (SimpleToken stmt : endPoints) {
 				Entity* prev = generateEntity(stmt);
 				Entity* next = generateEntity(stmtToken);
 				NextRelationship* nextRel = new NextRelationship(prev, next);
 				this->client->storeRelationship(nextRel);
-				std::cout << prev->getValue() + " " + next->getValue() + "\n";
 			}
-			lastStmtsOfIf.clear();
+			endPoints.clear();
 		} else {
 			Entity* prev = generateEntity(previousStmt.at(0));
 			Entity* next = generateEntity(stmtToken);
 			NextRelationship* nextRel = new NextRelationship(prev, next);
 			this->client->storeRelationship(nextRel);
-			std::cout << prev->getValue() + " " + next->getValue() + "\n";
-		}
-		previousStmt.clear();
-		previousStmt.push_back(stmtToken);
+		
 	}
+	previousStmt.clear();
+	previousStmt.push_back(stmtToken);
 }
 
 void Extractor::extractNextWhile() {
-	if (previousStmt.size() == 0) {
-		for (SimpleToken stmt : lastStmtsOfIf) {
-			Entity* prev = generateEntity(stmt);
-			Entity* next = generateEntity(whileTokens.top());
-			NextRelationship* nextRel = new NextRelationship(prev, next);
-			this->client->storeRelationship(nextRel);
-			std::cout << prev->getValue() + " " + next->getValue() + "\n";
-		}
-		lastStmtsOfIf.clear();
-	}
-	else {
-		Entity* prev = generateEntity(previousStmt.at(0));
+	for (SimpleToken stmt : endPoints) {
+		Entity* prev = generateEntity(stmt);
 		Entity* next = generateEntity(whileTokens.top());
 		NextRelationship* nextRel = new NextRelationship(prev, next);
 		this->client->storeRelationship(nextRel);
-		std::cout << prev->getValue() + " " + next->getValue() + "\n";
 	}
+	endPoints.clear();
 	previousStmt.clear();
 	previousStmt.push_back(whileTokens.top());
 	whileTokens.pop();
 }
 
 void Extractor::extractNextIf() {
-	if (previousStmt.size() != 0 && previousStmt.at(0).type != SpTokenType::TIF) {
-		lastStmtsOfIf.push_back(previousStmt.at(0));
-	}
 	if (ifTokens.empty()) {
 		previousStmt.clear();
 	} else {

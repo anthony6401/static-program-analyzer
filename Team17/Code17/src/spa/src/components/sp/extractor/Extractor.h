@@ -47,10 +47,9 @@ public:
 	StmtStack* currentStack;
 
 	std::vector<SimpleToken> previousStmt;
-	std::vector<SimpleToken> lastStmtsOfIf;
+	std::vector<SimpleToken> endPoints;
 	std::stack<SimpleToken> whileTokens;
 	std::stack<SimpleToken> ifTokens;
-
 	bool first;
 
 	Extractor(SPClient* client);
@@ -58,7 +57,6 @@ public:
 	void extractRead(SimpleToken readToken);
 	void extractPrint(SimpleToken printToken);
 	void extractAssign(SimpleToken assignToken);
-	std::string getExpressionAsString(SimpleToken exprToken);
 	void extractAssignPattern(SimpleToken assignToken);
 	void extractWhile(SimpleToken whileToken);
 	void extractIf(SimpleToken ifToken);
@@ -69,6 +67,8 @@ public:
 	void extractProcedure(SimpleToken procedureToken);
 	void close(int statementNumber);
 	void endOfParser(std::multimap<std::string, std::string> callProcedures);
+	void endOfParserHelper(std::string current, std::string called,
+		std::multimap<std::string, std::string> callProcedures, std::vector<std::string> alrCalled);
 	void addNestedRelationships(StmtStack* parent, StmtStack* called, std::string name);
 	void extractNext(SimpleToken stmtToken);
 	void extractNextWhile();

@@ -6,14 +6,11 @@
 
 ProcedureStack::ProcedureStack(SimpleToken parent, Extractor* context) : parent(parent), StmtStack(parent, context) {
     this->context = context;
-    this->expectElse = false;
 }
 
 void ProcedureStack::close(int statementNumber) {
     extractFollows(context->currentStack->stmts);
     extractFollowsT(context->currentStack->stmts);
-    extractParent(context->currentStack->stmts);
-    extractParentT(context->currentStack->stmtsNested);
     extractUses(context->currentStack->varUse);
     extractModify(context->currentStack->varMod);
 
@@ -43,28 +40,6 @@ void ProcedureStack::extractFollowsT(std::vector<SimpleToken> stmts) {
             FollowsTRelationship* followsTRel = new FollowsTRelationship(firstEntity, secondEntity);
             context->client->storeRelationship(followsTRel);
         }
-    }
-}
-
-void ProcedureStack::extractParent(std::vector<SimpleToken> stmts) {
-    for (int i = 0; i < stmts.size(); i++) {
-        SimpleToken second = stmts.at(i);
-        Entity* firstEntity = generateEntity(this->parent);
-        Entity* secondEntity = generateEntity(second);
-        ParentRelationship* parentRel = new ParentRelationship(firstEntity, secondEntity);
-        ParentTRelationship* parentTRel = new ParentTRelationship(firstEntity, secondEntity);
-        context->client->storeRelationship(parentRel);
-        context->client->storeRelationship(parentTRel);
-    }
-}
-
-void ProcedureStack::extractParentT(std::vector<SimpleToken> stmtsNested) {
-    for (int i = 0; i < stmtsNested.size(); i++) {
-        SimpleToken second = stmtsNested.at(i);
-        Entity* firstEntity = generateEntity(this->parent);
-        Entity* secondEntity = generateEntity(second);
-        ParentTRelationship* parentTRel = new ParentTRelationship(firstEntity, secondEntity);
-        context->client->storeRelationship(parentTRel);
     }
 }
 
