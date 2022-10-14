@@ -210,47 +210,52 @@ TRUE
 5000
 43 - Boolean test 1 multiclause
 variable v; assign a; procedure p, p1; while w; constant c;
-Select BOOLEAN such Modifies(a, v) and pattern a(v, _"var1"_)
+Select BOOLEAN such that Modifies(a, v) pattern a(v, _"var1"_)
 TRUE
 5000
 44 - Boolean test 2 multiclause
 variable v; assign a; procedure p, p1; while w; constant c;
-Select BOOLEAN such Modifies(a, v) and pattern a(v, _"var1"_) with v.varName = "assign"
+Select BOOLEAN such that Modifies(a, v) pattern a(v, _"var1"_) with v.varName = "assign"
 TRUE
 5000
 45 - Boolean test 3 multiclause
 variable v; assign a; procedure p, p1; while w; constant c;
-Select BOOLEAN such Modifies(a, v) and pattern a(v, _"var1"_) with v.varName = "var1"
+Select BOOLEAN such that Modifies(a, v) pattern a(v, _"var1"_) with v.varName = "var1"
 FALSE
 5000
 46 - Boolean test 4 multiclause
 variable v; assign a; procedure p, p1; while w; constant c;
-Select BOOLEAN such Modifies(a, v) and Uses(11, "var2")
+Select BOOLEAN such that Modifies(a, v) and Uses(11, "var2")
 TRUE
 5000
 47 - Boolean test 5 multiclause
 variable v; assign a; procedure p, p1; while w; constant c;
-Select BOOLEAN such Modifies("island", "CS3203") and Uses(11, "var2")
-FALSE
+Select BOOLEAN such that Modifies("island", "CS3203") and Uses(11, "var2")
+TRUE
 5000
 48 - Boolean test 6 multiclause
 variable v; assign a; procedure p, p1; while w; constant c;
-Select BOOLEAN such Modifies(a, v) and pattern a(v, _"var1"_) with v.varName = "var1"
+Select BOOLEAN such that Modifies(a, v) pattern a(v, _"var1"_) with v.varName = "var1"
 FALSE
 5000
 49 - Boolean test 7 multiclause
 variable v; assign a; procedure p, p1; while w; constant c;
-Select BOOLEAN such Modifies(a, v) and Uses(11, "var2")
+Select BOOLEAN such that Modifies(a, v) and Uses(11, "var2")
 TRUE
 5000
 50 - Boolean test 8 multiclause
 variable v; assign a; procedure p, p1; while w; constant c;
-Select BOOLEAN such Modifies("island", "CS3203") and Uses(11, "var2")
+Select BOOLEAN such that Modifies("island", "A") and Uses(11, "var2")
 FALSE
 5000
 51 - Boolean test 9 multiclause
 variable v; assign a; procedure p, p1; while w; constant c;
-Select BOOLEAN such Modifies(a, v) and Uses(a, v)
+Select BOOLEAN such that Modifies(a, v) and Uses(a, v)
+FALSE
+5000
+52 - Boolean test 10 multiclause
+variable v; assign a; procedure p, p1; while w; constant c;
+Select BOOLEAN such that Modifies(a, v) pattern a(v, _) with v.varName = "var2"
 FALSE
 5000
 
