@@ -4,10 +4,8 @@
 #include "iostream"
 #include "components/qps/query_preprocessor/query_tokenizer/TokenObject.h"
 #include "./factory/clauses/select/SelectAttributeClause.h"
-#include "Evaluator.h"
 #include <unordered_map>
 #include <initializer_list>
-#include "../../../models/Entity/DesignEntity.h"
 #include "components/qps/query_evaluator/factory/utils/HashFunction.h"
 
 ResultTable::ResultTable() : resultsList({}), isFalseResult(false), synonymsList({}) {}
@@ -79,7 +77,7 @@ std::unordered_set<std::string> ResultTable::getSynonymResultsToBePopulated(cons
     std::unordered_set<std::string> result({});
     auto iterator = std::find(synonymsList.begin(), synonymsList.end(), selectSynonym);
     if (iterator != synonymsList.cend()) {
-        int indexOfSynonym = std::distance(synonymsList.begin(), iterator);
+        size_t indexOfSynonym = std::distance(synonymsList.begin(), iterator);
         for (auto resultSublist : resultsList) {
             result.insert(resultSublist[indexOfSynonym]);
         }
@@ -87,12 +85,12 @@ std::unordered_set<std::string> ResultTable::getSynonymResultsToBePopulated(cons
     return result;
 }
 
-void ResultTable::tupleIteratorResultsHandler(std::vector<TokenObject> tuple, int index, std::vector<std::string> &resultSublist, std::vector<std::string> &newResultSublist, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) {
+void ResultTable::tupleIteratorResultsHandler(std::vector<TokenObject> tuple, size_t index, std::vector<std::string> &resultSublist, std::vector<std::string> &newResultSublist, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) {
     TokenType tupleObjectType = tuple[index].getTokenType();
     std::string tupleObjectValue = tuple[index].getValue();
     if (tupleObjectType == TokenType::NAME) {
         auto iterator = std::find(synonymsList.begin(), synonymsList.end(), tuple[index].getValue());
-        int indexOfSynonym = std::distance(synonymsList.begin(), iterator);
+        size_t indexOfSynonym = std::distance(synonymsList.begin(), iterator);
         newResultSublist.push_back(resultSublist[indexOfSynonym]);
     }
 
@@ -102,13 +100,13 @@ void ResultTable::tupleIteratorResultsHandler(std::vector<TokenObject> tuple, in
         if (SelectAttributeClause::checkIsAlternateAttributeName(returnType, attributeName)) {
             DesignEntity entityType = synonymToDesignEntityMap[tupleObjectValue];
             auto iterator = std::find(synonymsList.begin(), synonymsList.end(), tupleObjectValue);
-            int indexOfSynonym = std::distance(synonymsList.begin(), iterator);
+            size_t indexOfSynonym = std::distance(synonymsList.begin(), iterator);
             std::string statementNumber = resultSublist[indexOfSynonym];
             std::string alternative = qpsClient.getStatementMapping(statementNumber, entityType);
             newResultSublist.push_back(alternative);
         } else {
             auto iterator = std::find(synonymsList.begin(), synonymsList.end(), tupleObjectValue);
-            int indexOfSynonym = std::distance(synonymsList.begin(), iterator);
+            size_t indexOfSynonym = std::distance(synonymsList.begin(), iterator);
             newResultSublist.push_back(resultSublist[indexOfSynonym]);
         }
     }
@@ -118,7 +116,7 @@ std::unordered_set<std::string> ResultTable::getTupleResultsToBePopulated(std::v
     std::unordered_set<std::string> result({});
     for (auto &resultSublist : resultsList) {
         std::vector<std::string> newResultSublist;
-        for (int i = 0; i < tuple.size(); i++) {
+        for (size_t i = 0; i < tuple.size(); i++) {
             tupleIteratorResultsHandler(tuple, i, resultSublist, newResultSublist, synonymToDesignEntityMap, qpsClient);
         }
 
@@ -289,19 +287,3 @@ std::vector<std::pair<size_t, size_t>> ResultTable::findCommonSynonymsIndexPairs
     return indexPairs;
 }
 
-std::ostream &operator<<(std::ostream &os, const ResultTable &table) {
-    for (const auto &attribute : table.synonymsList) {
-        os << attribute << "\t";
-    }
-    os << std::endl;
-    os << "_______________________________________________________" << std::endl;
-
-    for (const auto &record : table.resultsList) {
-        for (const auto &value : record) {
-            os << value << "\t";
-        }
-        os << std::endl;
-    }
-
-    return os;
-}

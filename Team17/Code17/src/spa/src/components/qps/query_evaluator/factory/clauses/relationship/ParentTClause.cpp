@@ -1,5 +1,4 @@
 #include "ParentTClause.h"
-
 #include <utility>
 #include "components/qps/query_evaluator/factory/utils/ClauseUtils.h"
 

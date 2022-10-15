@@ -1,7 +1,5 @@
 #include "NextTClause.h"
-
 #include <utility>
-#include "iostream"
 #include "components/qps/query_evaluator/factory/utils/ClauseUtils.h"
 
 NextTClause::NextTClause(TokenObject left, TokenObject right,

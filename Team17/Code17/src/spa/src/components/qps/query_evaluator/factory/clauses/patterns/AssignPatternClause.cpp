@@ -1,7 +1,5 @@
 #include "AssignPatternClause.h"
-
 #include <utility>
-#include "iostream"
 
 AssignPatternClause::AssignPatternClause(std::string assignSynonym, TokenObject left, TokenObject right,
                                          QPSClient qpsClient)

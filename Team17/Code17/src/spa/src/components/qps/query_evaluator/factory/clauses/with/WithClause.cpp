@@ -1,9 +1,7 @@
 #include "WithClause.h"
-
 #include <utility>
 #include "../select/SelectAttributeClause.h"
 #include "components/qps/query_evaluator/factory/utils/HashFunction.h"
-#include "iostream"
 
 WithClause::WithClause(std::vector<TokenObject> left,
                        std::vector<TokenObject> right,
@@ -32,11 +30,7 @@ ResultTable WithClause::evaluateClause() {
 ResultTable WithClause::evaluateIntegerOrNameQuotes() {
     std::string leftValue = left.front().getValue();
     std::string rightValue = right.front().getValue();
-    if (leftValue == rightValue) {
-        return {true};
-    } else {
-        return {false};
-    }
+    return {leftValue == rightValue};
 }
 
 

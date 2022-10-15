@@ -1,7 +1,5 @@
 #include "CallsClause.h"
-
 #include <utility>
-#include "iostream"
 #include "components/qps/query_evaluator/factory/utils/ClauseUtils.h"
 
 CallsClause::CallsClause(TokenObject left, TokenObject right,

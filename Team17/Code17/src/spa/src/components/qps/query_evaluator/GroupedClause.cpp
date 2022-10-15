@@ -1,6 +1,5 @@
 #include "GroupedClause.h"
 #include "memory"
-#include "iostream"
 
 GroupedClause::GroupedClause() : synonyms({}), clauses({}) {}
 
@@ -11,8 +10,6 @@ std::vector<std::shared_ptr<Clause>> GroupedClause::getClauses() {
 std::set<std::string> GroupedClause::getAllSynonyms() {
     return synonyms;
 }
-
-
 
 bool GroupedClause::hasCommonSynonymWithClause(std::shared_ptr<Clause> &clause) {
     std::set<std::string> synonymsOfClause = clause -> getAllSynonyms();

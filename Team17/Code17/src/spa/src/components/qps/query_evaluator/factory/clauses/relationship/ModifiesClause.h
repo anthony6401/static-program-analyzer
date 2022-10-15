@@ -1,13 +1,11 @@
 #ifndef SPA_MODIFIESCLAUSE_H
 #define SPA_MODIFIESCLAUSE_H
 
-
 #include "components/qps/query_preprocessor/query_tokenizer/TokenObject.h"
 #include "components/qps/query_evaluator/factory/interface/Clause.h"
 #include "components/qps/abstract_query_object/Select.h"
 #include "components/pkb/clients/QPSClient.h"
 #include <unordered_map>
-#include <list>
 
 class ModifiesClause : public Clause {
 private:

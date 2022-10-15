@@ -2,7 +2,6 @@
 #include <utility>
 #include "components/pkb/pkb.h"
 #include "components/pkb/clients/QPSClient.h"
-#include "iostream"
 
 SelectSynonymClause::SelectSynonymClause(TokenObject selectSynonym, std::unordered_set<std::string> &synonymsInTable, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient)
         : selectSynonym(std::move(selectSynonym)), synonymsInTable(synonymsInTable), synonymToDesignEntityMap(std::move(synonymToDesignEntityMap)), qpsClient(qpsClient) {}

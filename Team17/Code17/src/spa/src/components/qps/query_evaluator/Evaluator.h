@@ -1,5 +1,6 @@
 #ifndef SPA_EVALUATOR_H
 #define SPA_EVALUATOR_H
+
 #include <memory>
 #include <list>
 #include <vector>

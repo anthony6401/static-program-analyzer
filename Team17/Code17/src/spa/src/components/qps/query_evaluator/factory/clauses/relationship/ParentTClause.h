@@ -6,7 +6,6 @@
 #include "components/qps/abstract_query_object/Select.h"
 #include "components/pkb/clients/QPSClient.h"
 #include <unordered_map>
-#include <list>
 
 class ParentTClause : public Clause {
 private:

@@ -1,19 +1,18 @@
 #include "SelectTupleClause.h"
-
 #include <utility>
 #include "components/pkb/pkb.h"
 #include "components/pkb/clients/QPSClient.h"
-#include "iostream"
+
 
 SelectTupleClause::SelectTupleClause(std::vector<TokenObject> tuple, std::unordered_set<std::string> &synonymsInTable, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient)
         : tuple(std::move(tuple)), synonymsInTable(synonymsInTable), synonymToDesignEntityMap(std::move(synonymToDesignEntityMap)), qpsClient(qpsClient) {}
 
 ResultTable SelectTupleClause::evaluateClause() {
     ResultTable resultTable;
-    for (auto & i : tuple) {
+    for (auto & tupleObject : tuple) {
         ResultTable intermediate;
-        TokenType tupleObjectType = i.getTokenType();
-        std::string tupleObjectValue = i.getValue();
+        TokenType tupleObjectType = tupleObject.getTokenType();
+        std::string tupleObjectValue = tupleObject.getValue();
         DesignEntity returnType = synonymToDesignEntityMap[tupleObjectValue];
 
         if (tupleObjectType == TokenType::NAME || tupleObjectType == TokenType::ATTRIBUTE_SYNONYM) {
