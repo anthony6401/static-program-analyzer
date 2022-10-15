@@ -1,12 +1,12 @@
 1 - Multiclause test 1
 stmt s; while w; read r;
-Select w such that Parent*(w, s) such that Next*(r, w) such that Uses(r, "second") such that Calls("procedure", "second")
-4, 14
+Select w such that Parent*(w, s) such that Next*(r, w) such that Modifies(r, "second") such that Calls("procedure", "second")
+14
 5000
 2 - Multiclause test 2
 read r; print pn; variable v;
 Select <r.varName, pn.varName> such that Modifies(r, v) and Uses(pn, v) and Follows(pn, r) and Calls*("procedure", "second")
-16 15
+second second
 5000
 3 - Multiclause test 3
 variable v; assign a; while w; if f;
@@ -16,21 +16,21 @@ var1 7 4 5, var1 11 4 5, var1 17 4 5, var1 7 9 5, var1 11 9 5, var1 17 9 5
 4 - Multiclause test 4
 variable v; assign pattern; while and; if while;
 Select <v, pattern,and,while> pattern pattern (v, _) and and    (v, _) and while("Second", _, _)
-
+var1 7 4 13, var1 11 4 13, var1 17 4 13, var1 7 9 13, var1 11 9 13, var1 17 9 13
 5000
 5 - Multiclause test 5
 assign assign; variable v;
 Select assign.stmt# with v.varName = "var2" pattern assign(_, _"var2"_) such that Modifies(assign, v)
-7, 11, 12
+none
 5000
 6 - Multiclause test 6
 stmt s, s1; if if; variable v;
 Select <v.varName, s, s1.stmt#> such that Parent*(s, s1) and Modifies(s1, "second") pattern if(v, _, _) with s.stmt# = if.stmt#
-Second 13 16
+var1 5 8, var1 5 10, var1 5 9, var5 5 8, var5 5 10, var5 5 9, second 13 14, Second 13 14, second 13 16, Second 13 16
 5000
 7 - Multiclause test 7
 constant Select; assign pattern; print with;
-Select Select pattern pattern  ("var1", _) with  Select.value = pattern.stmt# and with  .varName = "second"such that Uses(pattern, "var1")
+Select Select pattern pattern  ("var1", _) with  Select.value = pattern.stmt# and with  .varName = "second" such that Uses(pattern, "var2")
 7
 5000
 8 - Multiclause test 8
@@ -45,26 +45,26 @@ procedure, first, second, island
 5000
 10 - Multiclause test 10
 call c; assign a; assign a1; while w; if if;
-Select c.procName with c.procName = c.procName with c.procName = c.procName pattern a(_,_) and w(_,_) such that Next(_,_) and Modifies(_,_) pattern a1(_,_) and if(_,_,__)
+Select c.procName with c.procName = c.procName with c.procName = c.procName pattern a(_,_) and w(_,_) such that Next(_,_) and Modifies(a,_) pattern a1(_,_) and if(_,_,_)
 second, first
 5000
 11 - Multiclause test 11
 call c; assign a; assign a1; while w; if if;
-Select c.procName with c.procName = c.procName with c.procName = c.procName pattern a(_,_) and w(_,_) such that Next(_,_) and Modifies(_,_) and a1(_,_) and if(_,_,__)
+Select c.procName with c.procName = c.procName with c.procName = c.procName pattern a(_,_) and w(_,_) such that Next(_,_) and Modifies(a,_) and a1(_,_) and if(_,_,_)
 SyntaxError
 5000
 12 - Multiclause test 12
 call c; assign a; assign a1; while w; if if;
-Select c.procName with c.procName = c.procName with c.procName = c.procName and a(_,_) and w(_,_) such that Next(_,_) and Modifies(_,_) pattern a1(_,_) and if(_,_,__)
+Select c.procName with c.procName = c.procName with c.procName = c.procName and a(_,_) and w(_,_) such that Next(_,_) and Modifies(a,_) pattern a1(_,_) and if(_,_,_)
 SyntaxError
 5000
 13 - Multiclause test 13
 call c; assign a; assign a1; while Modifies; if if;
-Select c.procName with c.procName = c.procName with c.procName = c.procName pattern a(_,_) and Modifies(_,_) such that Next(_,_) and Modifies(_,_) pattern a1(_,_) and if(_,_,__)
+Select c.procName with c.procName = c.procName with c.procName = c.procName pattern a(_,_) and Modifies(_,_) such that Next(_,_) and Modifies(a,_) pattern a1(_,_) and if(_,_,_)
 second, first
 5000
 14 - Multiclause test 14 Semantic Error
 call c; assign a; assign a1; while Modifies; if if;
-Select c.procName with c.procName = c.procName and with c.procName = c.procName pattern a(_,_) and Modifies(_,_) such that Next(_,_) and Modifies(_,_) pattern a1(_,_) and if(_,_,__)
+Select c.procName with c.procName = c.procName and with c.procName = c.procName pattern a(_,_) and Modifies(_,_) such that Next(_,_) and Modifies(_,_) pattern a1(_,_) and if(_,_,_)
 SyntaxError
 5000
