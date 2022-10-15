@@ -26,7 +26,7 @@ void WhileStack::close(int statementNumber) {
 }
 
 void WhileStack::addEndPoints(std::vector<SimpleToken> stmts) {
-    if (stmts.back().type != SpTokenType::TIF) {\
+    if (stmts.back().type != SpTokenType::TIF) {
         endPoints.push_back(stmts.back());
     }
 }

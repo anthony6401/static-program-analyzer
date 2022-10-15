@@ -13,12 +13,6 @@ private:
     std::vector<TokenObject> right;
     std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap;
     QPSClient qpsClient;
-
-public:
-    WithClause(std::vector<TokenObject> left, std::vector<TokenObject> right, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
-    ResultTable evaluateClause() override;
-    size_t getNumberOfSynonyms() override;
-    std::set<std::string> getAllSynonyms() override;
     std::unordered_set<std::string> findCommonAttributeValues(std::unordered_set<std::string> leftNameResult, std::unordered_set<std::string> rightNameResult);
     std::unordered_set<std::pair<std::string, std::string>, hashFunction> findCommonAttributeStatements(const std::unordered_set<std::string>& leftResult, std::unordered_set<std::string> rightResult);
     ResultTable evaluateAttributeAttribute();
@@ -30,6 +24,12 @@ public:
     ResultTable evaluateIntegerAttribute();
     ResultTable evaluateIntegerOrNameQuotes();
     ResultTable evaluateNameQuotesAttribute();
+
+public:
+    WithClause(std::vector<TokenObject> left, std::vector<TokenObject> right, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
+    ResultTable evaluateClause() override;
+    size_t getNumberOfSynonyms() override;
+    std::set<std::string> getAllSynonyms() override;
 };
 
 #endif //SPA_WITHCLAUSE_H

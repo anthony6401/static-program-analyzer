@@ -13,6 +13,12 @@ private:
     QPSClient qpsClient;
     TokenObject left;
     TokenObject right;
+    ResultTable evaluateSynonymSynonym();
+    ResultTable evaluateSynonymWildcard();
+    ResultTable evaluateSynonymNameQuotes();
+    ResultTable evaluateSecondAsSynonym();
+    ResultTable evaluateSecondAsWildcard();
+    ResultTable evaluateWithoutSynonymOrWildCard();
 
 public:
     UsesClause(TokenObject left, TokenObject right,
@@ -20,12 +26,6 @@ public:
     ResultTable evaluateClause() override;
     size_t getNumberOfSynonyms() override;
     std::set<std::string> getAllSynonyms() override;
-    ResultTable evaluateSynonymSynonym();
-    ResultTable evaluateSynonymWildcard();
-    ResultTable evaluateSynonymNameQuotes();
-    ResultTable evaluateSecondAsSynonym();
-    ResultTable evaluateSecondAsWildcard();
-    ResultTable evaluateWithoutSynonymOrWildCard();
 };
 
 

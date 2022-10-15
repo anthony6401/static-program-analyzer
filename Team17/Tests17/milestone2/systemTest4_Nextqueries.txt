@@ -1,0 +1,175 @@
+1 - next is While test 1
+call c; while w;
+Select w such that Next(c, w)
+1, 14, 54
+5000
+2 - next is While test 2
+read rd; while w;
+Select w such that Next(rd, w)
+20, 34, 88
+5000
+3 - next is While test 3
+print pn; while w;
+Select w such that Next(pn, w)
+8, 51, 57, 77
+5000
+4 - next is While test 4
+assign a; while w;
+Select w such that Next(a, w)
+8, 50, 54, 77, 100
+5000
+5 - next is While test 5
+while w, w1;
+Select w such that Next(w, w1)
+50, 51, 86, 87, 88
+5000
+6 - next is While test 6
+if ifs; while w;
+Select w such that Next(ifs, w)
+14, 20, 100
+5000
+7 - next is If test 1
+call c; if ifs;
+Select ifs such that Next(c, ifs)
+42
+5000
+8 - next is If test 2
+read rd; if ifs;
+Select ifs such that Next(rd, ifs)
+74, 79
+5000
+9 - next is If test 3
+print pn; if ifs;
+Select ifs such that Next(pn, ifs)
+31
+5000
+10 - next is If test 4
+assign a; if ifs;
+Select ifs such that Next(a, ifs)
+64
+5000
+11 - next is If test 5
+while w; if ifs;
+Select w such that Next(w, ifs)
+8, 34, 77
+5000
+12 - next is If test 6
+if ifs, ifs1;
+Select ifs1 such that Next(ifs, ifs1)
+65, 91, 93, 96, 97
+5000
+13 - next is Call test 1
+call c, c1;
+Select c1 such that Next(c, c1)
+6, 53
+5000
+14 - next is Call test 2
+read rd; call c;
+Select c such that Next(rd, c)
+29, 36
+5000
+15 - next is Call test 3
+print pn; call c;
+Select c such that Next(pn, c)
+5, 13, 22, 27
+5000
+16 - next is Call test 4
+assign a; call c;
+Select c such that Next(a, c)
+18, 27
+5000
+17 - next is Call test 5
+while w; call c;
+Select w such that Next(w, c)
+14, 51, 57
+5000
+18 - next is Call test 6
+if ifs; call c;
+Select c such that Next(ifs, c)
+41, 67
+5000
+19 - next is Read test 1
+call c; read rd;
+Select rd such that Next(c, rd)
+23, 70, 73
+5000
+20 - next is Read test 2
+read rd, rd1;
+Select rd1 such that Next(rd, rd1)
+59, 70, 102
+5000
+21 - next is Read test 3
+print pn; read rd;
+Select rd such that Next(pn, rd)
+38, 70, 85, 102
+5000
+22 - next is Read test 4
+assign a; read rd;
+Select rd such that Next(a, rd)
+3, 33, 70, 102
+5000
+23 - next is Read test 5
+while w; read rd;
+Select w such that Next(w, rd)
+20, 34, 57, 88, 100
+5000
+24 - next is Read test 6
+if ifs; read rd;
+Select rd such that Next(ifs, rd)
+10, 69, 75, 82, 94, 99
+5000
+25 - next is Print test 1
+call c; print pn;
+Select pn such that Next(c, pn)
+30, 37
+5000
+26 - next is Print test 2
+read rd; print pn;
+Select pn such that Next(rd, pn)
+4, 25, 60, 103
+5000
+27 - next is Print test 3
+print pn, pn1;
+Select pn1 such that Next(pn, pn1)
+61
+5000
+28 - next is Print test 4
+assign a; print pn;
+Select pn such that Next(a, pn)
+12, 84
+5000
+29 - next is Print test 5
+while w; print pn;
+Select pn such that Next(w, pn)
+21, 56, 78
+5000
+30 - next is Print test 6
+if ifs; print pn;
+Select pn such that Next(ifs, pn)
+40, 45, 47, 80, 95, 98
+5000
+31 - next is Assign test 1
+call c; assign a;
+Select a such that Next(c, a)
+16, 63
+5000
+32 - next is Assign test 2
+read rd; assign a;
+Select a such that Next(rd, a)
+11, 71, 83
+5000
+33 - next is Assign test 3
+print pn; assign a;
+Select a such that Next(pn, a)
+48, 81
+5000
+34 - next is Assign test 5
+while w; assign a;
+Select a such that Next(w, a)
+2, 16, 17, 55, 101
+5000
+35 - next is Assign test 6
+if ifs; assign a;
+Select a such that Next(ifs, a)
+26, 32, 43, 46, 66, 76, 92
+5000

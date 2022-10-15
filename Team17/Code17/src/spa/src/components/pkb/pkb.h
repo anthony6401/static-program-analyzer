@@ -34,6 +34,8 @@ public:
 	RelationshipManager* getRelationshipManager();
 	PatternManager* getPatternManager();
 
+	~PKB();
+
 private:
 	EntityManager* entityManager;
 	RelationshipManager* relManager;

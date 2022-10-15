@@ -98,3 +98,9 @@ RelationshipManager* PKB::getRelationshipManager() {
 PatternManager* PKB::getPatternManager(){
 	return patternManager;
 }
+
+PKB::~PKB() {
+	delete relManager;
+	delete patternManager;
+	delete entityManager;
+}

@@ -13,17 +13,17 @@ private:
     std::vector<GroupedClause> connectedSynonymsGroups;
     std::vector<GroupedClause> selectSynonymPresentGroups;
     std::vector<GroupedClause> selectSynonymNotPresentGroups;
+    void updateConnectedSynonymGroups();
+    void checkPreviousGroupsHandler(int previousIndex);
+    void addHasSynonymsClauseToDivider(std::shared_ptr<Clause> &clause);
+
 public:
     ClauseDivider();
     void addClauseToDivider(std::shared_ptr<Clause> &clause);
     GroupedClause getNoSynonymsPresent();
     std::vector<GroupedClause> getSelectSynonymPresentGroups();
     std::vector<GroupedClause> getSelectSynonymNotPresentGroups();
-    void updateConnectedSynonymGroups();
-    void divideCommonSynonymGroupsBySelect(std::shared_ptr<Clause> &selectClause);
-    void addHasSynonymsClauseToDivider(std::shared_ptr<Clause> &clause);
-    void checkPreviousGroupsHandler(int previousIndex);
-
+    void divideConnectedSynonymGroupsBySelect(std::shared_ptr<Clause> &selectClause);
 };
 
 

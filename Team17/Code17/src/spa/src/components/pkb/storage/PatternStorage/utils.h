@@ -18,7 +18,6 @@ struct pair_hash {
 
 class PatternUtils {
 public:
-    // Helper function
     static bool isAlphanumeric(char c) {
         return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9');
     }
@@ -38,7 +37,6 @@ public:
     }
 
     static bool isSubArray(std::vector<std::string> A, std::vector<std::string> B) {
-        //Get the length of the two array
         int n = A.size();
         int m = B.size();
 
@@ -48,20 +46,15 @@ public:
 
         while (i < n && j < m) {
 
-            // If element matches
-            // increment both pointers
             if (A[i] == B[j]) {
 
                 i++;
                 j++;
-                // If array B is completely
-                // traversed
+
                 if (j == m)
                     return true;
             }
 
-            // If not,
-            // increment i and reset j
             else {
                 i = i - j + 1;
                 j = 0;
@@ -70,8 +63,6 @@ public:
 
         return false;
     }
-    // End of helper function
-
 
     // full_expression in postfix format
     static bool isSubExpression(const std::string sub_expression, const std::string full_expression) {
@@ -100,9 +91,6 @@ public:
         for (int i = 0; i < pattern.length(); i++) {
             char c = pattern[i];
 
-
-            // If the scanned character is
-            // an operand, add it to output string.
             if (isAlphanumeric(c)) {
                 std::string temp;
                 while (isAlphanumeric(pattern[i])) {
@@ -114,15 +102,10 @@ public:
                 i--;
             }
 
-            // If the scanned character is an
-            // ‘(‘, push it to the stack.
             else if (c == '(') {
                 st.push('(');
             }
 
-            // If the scanned character is an ‘)’,
-            // pop and to output string from the stack
-            // until an ‘(‘ is encountered.
             else if (c == ')') {
                 while (st.top() != '(') {
                     result += st.top();
@@ -132,7 +115,6 @@ public:
                 st.pop();
             }
 
-            // If an operator is scanned
             else {
                 while (!st.empty()
                     && prec(pattern[i]) <= prec(st.top())) {
@@ -144,7 +126,6 @@ public:
             }
         }
 
-        // Pop all the remaining elements from the stack
         while (!st.empty()) {
             result += st.top();
             result += " ";

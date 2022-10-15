@@ -10,15 +10,15 @@ private:
     std::string whileSynonym;
     QPSClient qpsClient;
     TokenObject firstArgument;
+    ResultTable evaluateFirstArgAsSynonym();
+    ResultTable evaluateFirstArgAsNameQuotes();
+    ResultTable evaluateFirstArgAsWildcard();
 
 public:
     WhilePatternClause(std::string whileSynonym, TokenObject firstArgument, QPSClient qpsClient);
     ResultTable evaluateClause() override;
     size_t getNumberOfSynonyms() override;
     std::set<std::string> getAllSynonyms() override;
-    ResultTable evaluateFirstArgAsSynonym();
-    ResultTable evaluateFirstArgAsNameQuotes();
-    ResultTable evaluateFirstArgAsWildcard();
 };
 
 #endif //SPA_WHILEPATTERNCLAUSE_H
