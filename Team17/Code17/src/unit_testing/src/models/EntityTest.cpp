@@ -7,7 +7,6 @@
 #include "models/Entity/ProcedureEntity.h"
 #include "models/Entity/ReadEntity.h"
 #include "models/Entity/StatementEntity.h"
-#include "models/Entity/StatementListEntity.h"
 #include "models/Entity/VariableEntity.h"
 #include "models/Entity/WhileEntity.h"
 
@@ -127,21 +126,5 @@ TEST_CASE("While Entity Test") {
 	REQUIRE(w.getValue() == "1");
 	REQUIRE(e == w);
 	REQUIRE(st == w);
-
-}
-
-//TODO:NEED TO TEST STATEMENTLISTENTITY
-//StatementList
-TEST_CASE("StatementList Entity Test") {
-	StatementEntity st1 = StatementEntity("1");
-	StatementEntity st2 = StatementEntity("2");
-
-	std::vector<StatementEntity> statements{ st1, st2 };
-
-	StatementListEntity stmtLst1 = StatementListEntity(statements);
-	StatementListEntity stmtLst2 = StatementListEntity(std::vector<StatementEntity> { st1, st2 });
-	
-
-	REQUIRE(stmtLst1 == stmtLst2);
 
 }

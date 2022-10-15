@@ -21,7 +21,6 @@
 
 #include <catch.hpp>
 
-// To be amended
 TEST_CASE("Relationship Test") {
     std::string leftValue = "leftValue";
     std::string rightValue = "rightValue";
