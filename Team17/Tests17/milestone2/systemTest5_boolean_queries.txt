@@ -196,7 +196,7 @@ TRUE
 40 - Boolean test 19 with clause
 variable v; assign a; procedure p, p1; while w; constant c;
 Select BOOLEAN with p.procName = a.stmt#
-FALSE
+SemanticError
 5000
 41 - Boolean test 20 with clause
 variable v; assign a; procedure p, p1; while w; call c;
@@ -258,4 +258,41 @@ variable v; assign a; procedure p, p1; while w; constant c;
 Select BOOLEAN such that Modifies(a, v) pattern a(v, _) with v.varName = "var2"
 FALSE
 5000
+53 - Boolean test 11 multiclause
+variable v; assign a; procedure p, p1; while w; constant c; if ifs;
+Select BOOLEAN such that Modifies(a, v) pattern ifs(v, _, _) with v.varName = "var1" and a.stmt# = 7
+TRUE
+5000
+54 - Boolean as synonym test 1
+assign a; variable BOOLEAN; constant c; procedure p; read rd;
+Select BOOLEAN with BOOLEAN.varName = "var5"
+var5
+5000
+55 - Boolean as synonym test 2
+assign a; variable BOOLEAN; constant c; procedure p; read rd;
+Select BOOLEAN such that Uses(a, BOOLEAN)
+var2, var3, var5, var4, A, F, var1
+5000
+56 - Boolean test 1 multiclause with clause
+variable v; assign a; procedure p, p1; while w; constant c;
+Select BOOLEAN such that Modifies(a, v) pattern a(v, _) with v.varName = "var1" such that Uses(a, "var3")
+TRUE
+5000
+57 - Boolean test 2 multiclause with clause
+variable v; assign a; procedure p, p1; while w; constant c; if ifs;
+Select BOOLEAN such that Uses(a, "var3") pattern a(v, _) with v.varName = "var1" and a.stmt# = 11
+TRUE
+5000
+58 - Boolean test 3 multiclause with clause
+variable v; assign a; procedure p, p1; while w; constant c; if ifs;
+Select BOOLEAN such that Uses(a, "var3") pattern a(v, _) with v.varName = "var1" and a.stmt# = 11 and a.stmt# = 7
+FALSE
+5000
+59 - Boolean test 3 multiclause with clause
+variable v; assign a; procedure p, p1; while w; constant c; if ifs;
+Select BOOLEAN such that Uses(a, "var3") pattern a(v, _) with v.varName = "var1" and a.stmt# = 11 and a.stmt# = 8
+FALSE
+5000
+
+
 
