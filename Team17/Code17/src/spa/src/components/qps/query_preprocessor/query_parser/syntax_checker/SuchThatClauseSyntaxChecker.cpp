@@ -1,5 +1,4 @@
 #include "SuchThatClauseSyntaxChecker.h"
-#include <iostream>
 
 using namespace qps;
 

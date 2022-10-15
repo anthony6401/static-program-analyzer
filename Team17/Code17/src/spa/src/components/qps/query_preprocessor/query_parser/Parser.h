@@ -1,4 +1,3 @@
-#include "string"
 #include "unordered_map"
 #include "syntax_checker/SyntaxChecker.h"
 #include "syntax_checker/DeclarationClauseSyntaxChecker.h"
