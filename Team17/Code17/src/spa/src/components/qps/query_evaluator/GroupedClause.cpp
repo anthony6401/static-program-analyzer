@@ -11,6 +11,26 @@ std::set<std::string> GroupedClause::getAllSynonyms() {
     return synonyms;
 }
 
+
+ResultTable GroupedClause::evaluateGroupedClause() {
+    ResultTable evaluatedGroupRawResult;
+    for (const auto& c : clauses) {
+        ResultTable evaluatedClause = c -> evaluateClause();
+        if (evaluatedClause.getIsFalseResult()) {
+            return evaluatedClause;
+        }
+        evaluatedGroupRawResult.combineResult(evaluatedClause);
+    }
+    return evaluatedGroupRawResult;
+}
+
+void GroupedClause::mergeGroupedClause(GroupedClause &group) {
+    auto synonymsOfMergingGroup = group.getAllSynonyms();
+    auto clausesOfMergingGroup = group.getClauses();
+    clauses.insert(clauses.end(), clausesOfMergingGroup.begin(), clausesOfMergingGroup.end());
+    synonyms.insert(synonymsOfMergingGroup.begin(), synonymsOfMergingGroup.end());
+}
+
 bool GroupedClause::hasCommonSynonymWithClause(std::shared_ptr<Clause> &clause) {
     std::set<std::string> synonymsOfClause = clause -> getAllSynonyms();
     auto synonymsIterator = synonyms.begin();
@@ -39,26 +59,6 @@ void GroupedClause::addClauseToGroup(std::shared_ptr<Clause> &clause) {
 bool GroupedClause::isEmpty() {
     return clauses.empty();
 }
-
-ResultTable GroupedClause::evaluateGroupedClause() {
-    ResultTable evaluatedGroupRawResult;
-    for (const auto& c : clauses) {
-        ResultTable evaluatedClause = c -> evaluateClause();
-        if (evaluatedClause.getIsFalseResult()) {
-            return evaluatedClause;
-        }
-        evaluatedGroupRawResult.combineResult(evaluatedClause);
-    }
-    return evaluatedGroupRawResult;
-}
-
-void GroupedClause::mergeGroupedClause(GroupedClause &group) {
-    auto synonymsOfMergingGroup = group.getAllSynonyms();
-    auto clausesOfMergingGroup = group.getClauses();
-    synonyms.insert(synonymsOfMergingGroup.begin(), synonymsOfMergingGroup.end());
-    clauses.insert(clauses.end(), clausesOfMergingGroup.begin(), clausesOfMergingGroup.end());
-}
-
 
 bool GroupedClause::isConnected(GroupedClause &group) {
     auto synonymsOfMergingGroup = group.getAllSynonyms();

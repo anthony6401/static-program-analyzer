@@ -33,7 +33,7 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
 
         synonymsInTable = {evaluatedResults.synonymsList.begin(), evaluatedResults.synonymsList.end()};
         selectClause = ClauseCreator::createClause(select, synonymsInTable, synonymToDesignEntityMap, qpsClient);
-        combineResultsWithSelect(selectClause, evaluatedResults);
+        Evaluator::combineResultsWithSelect(selectClause, evaluatedResults);
 
         Evaluator::populateResultsList(evaluatedResults, select, results, qpsClient, synonymToDesignEntityMap);
     }
@@ -70,6 +70,9 @@ void Evaluator::populateResultsList(ResultTable &evaluatedResults, Select select
     }
 
     if (returnType == TokenType::TUPLE) {
+        if (evaluatedResults.getIsFalseResult()) {
+            return;
+        }
         std::vector<TokenObject> tuple = select.getReturnValues();
         std::unordered_set<std::string> resultsToPopulate = evaluatedResults.getTupleResultsToBePopulated(tuple, synonymToDesignEntityMap, qpsClient);
         for (const std::string& result : resultsToPopulate) {
@@ -78,6 +81,9 @@ void Evaluator::populateResultsList(ResultTable &evaluatedResults, Select select
     }
 
     if (returnType == TokenType::ATTRIBUTE) {
+        if (evaluatedResults.getIsFalseResult()) {
+            return;
+        }
         populateAttributesResultsList(evaluatedResults, select, results, qpsClient, synonymToDesignEntityMap);
     }
 }
@@ -141,6 +147,7 @@ ResultTable Evaluator::evaluateHasSelectSynonymClauses(std::vector<GroupedClause
             combinedResultTable = std::move(intermediate);
             break;
         }
+
         intermediate.filterBySelectSynonym(selectClause -> getAllSynonyms());
         combinedResultTable.combineResult(intermediate);
     }

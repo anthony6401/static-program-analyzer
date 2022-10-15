@@ -1,7 +1,6 @@
 #include "ResultTable.h"
 #include "vector"
 #include "string"
-#include "iostream"
 #include "components/qps/query_preprocessor/query_tokenizer/TokenObject.h"
 #include "./factory/clauses/select/SelectAttributeClause.h"
 #include <unordered_map>
@@ -88,9 +87,9 @@ std::unordered_set<std::string> ResultTable::getSynonymResultsToBePopulated(cons
 void ResultTable::tupleIteratorResultsHandler(std::vector<TokenObject> tuple, size_t index, std::vector<std::string> &resultSublist, std::vector<std::string> &newResultSublist, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) {
     TokenType tupleObjectType = tuple[index].getTokenType();
     std::string tupleObjectValue = tuple[index].getValue();
+    auto iterator = std::find(synonymsList.begin(), synonymsList.end(), tupleObjectValue);
+    size_t indexOfSynonym = std::distance(synonymsList.begin(), iterator);
     if (tupleObjectType == TokenType::NAME) {
-        auto iterator = std::find(synonymsList.begin(), synonymsList.end(), tuple[index].getValue());
-        size_t indexOfSynonym = std::distance(synonymsList.begin(), iterator);
         newResultSublist.push_back(resultSublist[indexOfSynonym]);
     }
 
@@ -99,14 +98,10 @@ void ResultTable::tupleIteratorResultsHandler(std::vector<TokenObject> tuple, si
         DesignEntity returnType = synonymToDesignEntityMap[tuple[index].getValue()];
         if (SelectAttributeClause::checkIsAlternateAttributeName(returnType, attributeName)) {
             DesignEntity entityType = synonymToDesignEntityMap[tupleObjectValue];
-            auto iterator = std::find(synonymsList.begin(), synonymsList.end(), tupleObjectValue);
-            size_t indexOfSynonym = std::distance(synonymsList.begin(), iterator);
             std::string statementNumber = resultSublist[indexOfSynonym];
             std::string alternative = qpsClient.getStatementMapping(statementNumber, entityType);
             newResultSublist.push_back(alternative);
         } else {
-            auto iterator = std::find(synonymsList.begin(), synonymsList.end(), tupleObjectValue);
-            size_t indexOfSynonym = std::distance(synonymsList.begin(), iterator);
             newResultSublist.push_back(resultSublist[indexOfSynonym]);
         }
     }
@@ -129,8 +124,10 @@ std::unordered_set<std::string> ResultTable::getTupleResultsToBePopulated(std::v
 
 std::string ResultTable::formTupleResultString(std::vector<std::string> newResultsList) {
     std::string tupleResultString;
-    for (size_t i = 0; i < newResultsList.size(); ++i) {
-        tupleResultString += newResultsList[i] + (i != newResultsList.size() - 1 ? " " : "");
+    size_t newResultsListSize = newResultsList.size();
+    for (size_t i = 0; i < newResultsListSize; ++i) {
+        std::string delimiter = i != newResultsListSize - 1 ? " " : "";
+        tupleResultString += newResultsList[i] + delimiter;
     }
     return tupleResultString;
 }
@@ -172,6 +169,7 @@ void ResultTable::combineResult(ResultTable &nextResult) {
     } else {
         if (nextResult.isFalseResult) {
             setIsFalseResultToTrue();
+            return;
         }
 
         std::map<std::string, size_t> synonymToIndexMap = ResultTable::computeSynonymToIndexMap();
