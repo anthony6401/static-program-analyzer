@@ -381,7 +381,7 @@ Select <ifs, ifs.stmt#> such that Modifies(ifs, "second") pattern ifs("Second", 
 83 - Tuple test 12 Multiclause pattern while
 assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
 Select <w> such that Modifies(w, "var1") pattern w("var1", _)
-4
+4, 9
 5000
 84 - Tuple test 13 Multiclause pattern while
 assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
