@@ -1,9 +1,7 @@
 #include "WithClause.h"
-
 #include <utility>
 #include "../select/SelectAttributeClause.h"
 #include "components/qps/query_evaluator/factory/utils/HashFunction.h"
-#include "iostream"
 
 WithClause::WithClause(std::vector<TokenObject> left,
                        std::vector<TokenObject> right,
@@ -32,13 +30,29 @@ ResultTable WithClause::evaluateClause() {
 ResultTable WithClause::evaluateIntegerOrNameQuotes() {
     std::string leftValue = left.front().getValue();
     std::string rightValue = right.front().getValue();
-    if (leftValue == rightValue) {
-        return {true};
-    } else {
-        return {false};
-    }
+    return {leftValue == rightValue};
 }
 
+
+std::unordered_set<std::string> WithClause::findCommonAttributeValues(std::unordered_set<std::string> leftNameResult, std::unordered_set<std::string> rightNameResult) {
+    std::unordered_set<std::string> commonAttributeNames;
+    for (auto &name : leftNameResult) {
+        if (rightNameResult.find(name) != rightNameResult.end()) {
+            commonAttributeNames.insert(name);
+        }
+    }
+    return commonAttributeNames;
+}
+
+std::unordered_set<std::pair<std::string, std::string>, hashFunction> WithClause::findCommonAttributeStatements(const std::unordered_set<std::string>& leftResult, const std::unordered_set<std::string> rightResult) {
+    std::unordered_set<std::pair<std::string, std::string>, hashFunction> commonAttributeStatements;
+    for (const auto &statement : leftResult) {
+        if (rightResult.find(statement) != rightResult.end()) {
+            commonAttributeStatements.insert(std::make_pair(statement, statement));
+        }
+    }
+    return commonAttributeStatements;
+}
 
 ResultTable WithClause::evaluateNameQuotesAttribute() {
     ResultTable resultTable;
@@ -144,7 +158,6 @@ ResultTable WithClause::evaluateAttributeAttribute() {
 
     if (isLeftAlternativeAttribute && isRightAlternativeAttribute) {
         pairResult = WithClause::leftAndRightAlternativeAttributeResultsHandler(leftDesignEntityType, rightDesignEntityType);
-
     } else if (isLeftAlternativeAttribute) {
         pairResult = WithClause::leftAlternativeAttributeResultsHandler(leftDesignEntityType, rightDesignEntityType);
     } else if (isRightAlternativeAttribute) {
@@ -172,7 +185,8 @@ std::unordered_set<std::pair<std::string, std::string>, hashFunction> WithClause
     for (auto commonValue : commonAttributeValues) {
         std::unordered_set<std::string> statementFromNameRight = qpsClient.getStatementByName(commonValue, rightDesignEntityType);
         for (const auto& rightStmt : statementFromNameRight) {
-            pairResult.insert(std::make_pair(commonValue, rightStmt));
+            auto pair = std::make_pair(commonValue, rightStmt);
+            pairResult.insert(pair);
         }
     }
 
@@ -187,7 +201,8 @@ std::unordered_set<std::pair<std::string, std::string>, hashFunction> WithClause
     for (auto commonValue : commonAttributeValues) {
         std::unordered_set<std::string> statementFromNameLeft = qpsClient.getStatementByName(commonValue, leftDesignEntityType);
         for (const auto& leftStmt : statementFromNameLeft) {
-            pairResult.insert(std::make_pair(leftStmt, commonValue));
+            auto pair = std::make_pair(leftStmt, commonValue);
+            pairResult.insert(pair);
         }
     }
 
@@ -212,30 +227,11 @@ std::unordered_set<std::pair<std::string, std::string>, hashFunction> WithClause
     auto it1 = intersectionLeft.begin();
     auto it2 = intersectionRight.begin();
     for (; it1 != intersectionLeft.end() && it2 != intersectionRight.end(); it1++, it2++) {
-        pairResult.insert(std::make_pair(*it1, *it2));
+        auto pair = std::make_pair(*it1, *it2);
+        pairResult.insert(pair);
     }
 
     return pairResult;
-}
-
-std::unordered_set<std::string> WithClause::findCommonAttributeValues(std::unordered_set<std::string> leftNameResult, std::unordered_set<std::string> rightNameResult) {
-    std::unordered_set<std::string> commonAttributeNames;
-    for (auto &name : leftNameResult) {
-        if (rightNameResult.find(name) != rightNameResult.end()) {
-            commonAttributeNames.insert(name);
-        }
-    }
-    return commonAttributeNames;
-}
-
-std::unordered_set<std::pair<std::string, std::string>, hashFunction> WithClause::findCommonAttributeStatements(const std::unordered_set<std::string>& leftResult, const std::unordered_set<std::string> rightResult) {
-    std::unordered_set<std::pair<std::string, std::string>, hashFunction> commonAttributeStatements;
-    for (const auto &statement : leftResult) {
-        if (rightResult.find(statement) != rightResult.end()) {
-            commonAttributeStatements.insert(std::make_pair(statement, statement));
-        }
-    }
-    return commonAttributeStatements;
 }
 
 size_t WithClause::getNumberOfSynonyms() {

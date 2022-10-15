@@ -2,7 +2,6 @@
 #define SPA_SELECTTUPLECLAUSE_H
 
 #include <unordered_map>
-#include <list>
 #include "components/qps/query_evaluator/factory/interface/Clause.h"
 #include "components/qps/abstract_query_object/Select.h"
 #include "components/pkb/clients/QPSClient.h"
@@ -14,11 +13,11 @@ private:
     std::unordered_set<std::string> synonymsInTable;
     std::vector<TokenObject> tuple;
     QPSClient qpsClient;
+    ResultTable evaluateSynonymOrAttributeInTuple(std::string synonym, DesignEntity returnType);
 
 public:
     SelectTupleClause(std::vector<TokenObject> tuple, std::unordered_set<std::string> &synonymsInTable, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
     ResultTable evaluateClause() override;
-    ResultTable evaluateSynonymOrAttributeInTuple(std::string synonym, DesignEntity returnType);
     size_t getNumberOfSynonyms() override;
     std::set<std::string> getAllSynonyms() override;
 };

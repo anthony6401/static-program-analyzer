@@ -29,9 +29,9 @@ namespace qps {
         // Lexical tokens
         NAME,
         INTEGER,
-        NAME_WITH_QUOTATION, // eg. "x", "aa"
-        SUBEXPRESSION, // eg. _"x+1"_
-        EXPRESSION, // eg. "x+1", "x/y"
+        NAME_WITH_QUOTATION,
+        SUBEXPRESSION,
+        EXPRESSION,
         // Symbols
         WILDCARD,
         COMMA,

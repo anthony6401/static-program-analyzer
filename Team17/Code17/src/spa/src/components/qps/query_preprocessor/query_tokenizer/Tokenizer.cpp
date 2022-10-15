@@ -1,12 +1,10 @@
-# include "Tokenizer.h"
+#include "Tokenizer.h"
 #include <utility>
 #include "TokenType.h"
 #include <string>
 #include <sstream>
 #include <vector>
-#include <iterator>
 #include <stack>
-#include <iostream>
 #include <unordered_set>
 #include "../exceptions/TokenException.h"
 

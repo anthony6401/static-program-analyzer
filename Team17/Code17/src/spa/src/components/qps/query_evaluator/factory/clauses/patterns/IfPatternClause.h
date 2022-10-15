@@ -10,15 +10,15 @@ private:
     std::string ifSynonym;
     QPSClient qpsClient;
     TokenObject firstArgument;
+    ResultTable evaluateFirstArgAsSynonym();
+    ResultTable evaluateFirstArgAsNameQuotes();
+    ResultTable evaluateFirstArgAsWildcard();
 
 public:
     IfPatternClause(std::string ifSynonym, TokenObject firstArgument, QPSClient qpsClient);
     ResultTable evaluateClause() override;
     size_t getNumberOfSynonyms() override;
     std::set<std::string> getAllSynonyms() override;
-    ResultTable evaluateFirstArgAsSynonym();
-    ResultTable evaluateFirstArgAsNameQuotes();
-    ResultTable evaluateFirstArgAsWildcard();
 };
 
 #endif //SPA_IFPATTERNCLAUSE_H

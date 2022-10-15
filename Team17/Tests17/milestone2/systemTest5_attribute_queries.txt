@@ -1,0 +1,110 @@
+1 - Attributes test 1
+assign assign, a1; print print; read rd; variable v; call cl; constant c; procedure p; stmt s; if ifs; while w;
+Select assign.stmt#
+7, 11, 12, 18, 17
+5000
+2 - Attributes test 2
+assign a, a1; print pn; read rd; variable v; call cl; constant c; procedure p; stmt stmt; if ifs; while w;
+Select stmt.stmt#
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20
+5000
+3 - Attributes test 3
+assign a, a1; print pn; read rd; variable v; call cl; constant c; procedure p; stmt s; if ifs; while w;
+Select rd.stmt#
+20, 16, 6
+5000
+4 - Attributes test 4
+assign a, a1; print pn; read rd; variable v; call cl; constant c; procedure p; stmt s; if ifs; while w;
+Select pn.stmt#
+1, 15, 19
+5000
+5 - Attributes test 5
+assign a, a1; print pn; read rd; variable v; call cl; constant c; procedure p; stmt s; if ifs; while w;
+Select cl.stmt#
+2, 3, 8, 10
+5000
+6 - Attributes test 6
+assign a, a1; print pn; read rd; variable v; call cl; constant c; procedure p; stmt s; if ifs; while w;
+Select w.stmt#
+4, 9, 14
+5000
+7 - Attributes test 7
+assign a, a1; print pn; read rd; variable v; call cl; constant c; procedure p; stmt s; if ifs; while w;
+Select ifs.stmt#
+5, 13
+5000
+8 - Attributes test 8
+assign a, a1; print pn; read rd; variable v; call cl; constant value; procedure p; stmt s; if ifs; while w;
+Select value.value
+7, 15, 123
+5000
+9 - Attributes test 9
+assign a, a1; print pn; read rd; variable v; call cl; constant c; procedure procedure; stmt s; if ifs; while w;
+Select procedure.procName
+procedure, first, second, island
+5000
+10 - Attributes test 10
+assign a, a1; print pn; read rd; variable v; call call; constant c; procedure p; stmt s; if ifs; while w;
+Select call.procName
+second, first
+5000
+11 - Attributes test 11
+assign a, a1; print pn; read rd; variable variable; call cl; constant c; procedure p; stmt s; if ifs; while w;
+Select variable.varName
+var1, var2, var3, var4, var5, assign, while, While, Second, second, pass, CS3203, A, F, procedure
+5000
+12 - Attributes test 12
+assign a, a1; print pn; read read; variable v; call call; constant c; procedure p; stmt s; if ifs; while w;
+Select read.varName
+var2, second, var1
+5000
+13 - Attributes test 13
+assign a, a1; print varName; read rd; variable variable; call cl; constant c; procedure p; stmt s; if ifs; while w;
+Select varName.varName
+procedure, second, pass
+5000
+14 - Attributes test 14 Semantic Error
+assign a, a1; print varName; read varName; variable variable; call cl; constant c; procedure p; stmt s; if ifs; while w;
+Select varName.varName
+SemanticError
+5000
+15 - Attributes test 15
+assign a, a1; print pn; read read; variable v; call call; constant c; procedure p; stmt s; if ifs; while w;
+Select read.varName with read.varName = "oops"
+none
+5000
+16 - Attributes test 16
+assign a, a1; print varName; read rd; variable variable; call cl; constant c; procedure p; stmt s; if ifs; while w;
+Select varName.varName such that Uses(varName, "procedure")
+procedure
+5000
+17 - Attributes test 17
+assign a, a1; print pn; read read; variable v; call call; constant c; procedure p; stmt s; if ifs; while w;
+Select read.stmt# with w.stmt# = 4 such that Modifies(read, "second")
+16
+5000
+18 - Attributes test 18
+assign a, a1; print varName; read rd; variable variable; call cl; constant c; procedure p; stmt s; if ifs; while w;
+Select cl.stmt# with w.stmt# = 4 and c.value = c.value such that Uses(cl, "while") and Modifies(a, variable)
+8, 10, 2, 3
+5000
+19 - Attributes test 19
+assign a, a1; print varName; read rd; variable variable; call cl; constant c; procedure p; stmt s; if ifs; while w;
+Select cl.stmt# with w.stmt# = 4 and c.value = c.value such that Uses(cl, "while") and Modifies(a, "oops")
+none
+5000
+20 - Attributes test 20
+assign a, a1; print varName; read rd; variable variable; call cl; constant c; procedure p; stmt s; if ifs; while w;
+Select cl.procName with w.stmt# = 4 and c.value = c.value such that Uses(cl, "while") and Modifies(a, "var1")
+second, first
+5000
+21 - Attributes test 21
+assign a, a1; print varName; read rd; variable variable; call cl; constant c; procedure p; stmt s; if ifs; while w;
+Select a.stmt# with w.stmt# = 4 and c.value = c.value such that Uses(a, "var2") such that Modifies(a, "var1")
+7, 11
+5000
+22 - Attributes test 22
+assign a, a1; print varName; read rd; variable variable; call cl; constant c; procedure p; stmt s; if ifs; while w;
+Select w.stmt# with w.stmt# = 4 and c.value = c.value such that Uses(w, "var2") such that Modifies(w, "var1")
+4
+5000
