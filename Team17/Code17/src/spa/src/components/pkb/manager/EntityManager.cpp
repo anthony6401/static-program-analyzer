@@ -100,3 +100,10 @@ std::unordered_set<std::string> EntityManager::getAllName(DesignEntity entityTyp
 	}
 	return std::unordered_set<std::string>();
 }
+
+EntityManager::~EntityManager() {
+	for (auto store : entityStore) {
+		delete store;
+	}
+	entityStore.clear();
+}

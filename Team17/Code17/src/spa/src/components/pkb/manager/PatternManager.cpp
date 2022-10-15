@@ -50,3 +50,10 @@ std::vector<std::pair<std::string, std::string>> PatternManager::getPatternPair(
 	}
 	return std::vector<std::pair<std::string, std::string>>();
 }
+
+PatternManager::~PatternManager() {
+	for (auto store : patternStorage) {
+		delete store;
+	}
+	patternStorage.clear();
+}

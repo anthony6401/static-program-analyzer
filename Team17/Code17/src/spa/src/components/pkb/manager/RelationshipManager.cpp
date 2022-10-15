@@ -159,3 +159,15 @@ std::unordered_map<std::string, std::unordered_set<std::string>> RelationshipMan
 
 	return emptyMap;
 }
+
+RelationshipManager::~RelationshipManager() {
+	for (auto store : relStorages) {
+		delete store;
+	}
+
+	for (auto runtimeStore : runtimeRelStorages) {
+		delete runtimeStore;
+	}
+	relStorages.clear();
+	runtimeRelStorages.clear();
+}
