@@ -108,3 +108,13 @@ read r; constant const; procedure p; assign a;
 Select BOOLEAN with a.stmt# = const.value and r.varName = p.procName and with const.value = r.stmt#
 SyntaxError
 5000
+23 - With Test 23
+read r; constant const; procedure p; assign a;
+Select a with 7 = a.stmt#
+7
+5000
+24 - With Test 24
+read r; constant const; print p; assign a;
+Select p with "second" = p.varName
+15
+5000

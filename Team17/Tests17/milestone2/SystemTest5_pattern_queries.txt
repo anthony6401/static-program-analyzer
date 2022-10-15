@@ -273,3 +273,8 @@ while w;
 Select w pattern w("var1", "_")
 SyntaxError
 5000
+56 - While,assign,if pattern Test
+while w; if ifs; assign a; variable v;
+Select v pattern w(v,_) pattern ifs(v,_,_) pattern a(v,_)
+var1
+5000

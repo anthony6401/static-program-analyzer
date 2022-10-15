@@ -108,3 +108,23 @@ assign a, a1; print varName; read rd; variable variable; call cl; constant c; pr
 Select w.stmt# with w.stmt# = 4 and c.value = c.value such that Uses(w, "var2") such that Modifies(w, "var1")
 4
 5000
+23 - Attributes test 23
+assign a, a1; print varName; read rd; variable variable; call cl; constant c; procedure p; stmt s; if ifs; while w;
+Select w.stmt# with ifs.stmt# = 4
+none
+5000
+24 - Attributes test 24
+assign a, a1; print varName; read rd; variable variable; call cl; constant c; procedure p; stmt s; if ifs; while w;
+Select w.stmt# with rd.stmt# = 1
+none
+5000
+25 - Attributes test 25
+assign a, a1; print varName; read rd; variable variable; call cl; constant c; procedure p; stmt s; if ifs; while w;
+Select w.stmt# with cl.stmt# = 1
+none
+5000
+26 - Attributes test 26
+assign a, a1; print varName; read rd; variable variable; call cl; constant c; procedure p; stmt s; if ifs; while w, w1;
+Select w.stmt# with w.stmt# = 5
+none
+5000
