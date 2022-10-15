@@ -1,5 +1,4 @@
 #include "QueryObject.h"
-#include <unordered_map>
 
 /*
 * Initializes empty query

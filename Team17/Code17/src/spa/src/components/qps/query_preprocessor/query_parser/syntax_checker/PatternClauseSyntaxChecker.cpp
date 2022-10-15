@@ -1,5 +1,4 @@
 #include "PatternClauseSyntaxChecker.h"
-#include <iostream>
 
 using namespace qps;
 

@@ -30,7 +30,7 @@ TEST_CASE("Semantically Invalid queries") {
                                                   TokenObject(TokenType::WILDCARD, "_"))};
     std::vector<Pattern> patterns {Pattern(TokenType::ASSIGN, "a", TokenObject(TokenType::NAME_WITH_QUOTATION, "x"),
                                            TokenObject(TokenType::NAME_WITH_QUOTATION, "y"))};
-    Select select = Select( "v");
+    Select select = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, "v") });
     std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap = {{"a", DesignEntity::ASSIGN}};
 
     QueryObject testQuery = QueryObject(select, relationships, patterns, synonymToDesignEntityMap, 2);

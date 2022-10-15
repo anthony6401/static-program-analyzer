@@ -11,12 +11,9 @@ class Select {
 private:
     TokenType returnType;
     std::vector<TokenObject> returnValues;
-    //To remove
-    std::string synonym;
 
 public:
     Select();
-    Select(std::string synonym);
     Select(TokenType returnType);
     Select(TokenType returnType, std::vector<TokenObject> returnValues);
     std::string getSynonym();
@@ -24,8 +21,7 @@ public:
     std::vector<TokenObject> getReturnValues();
     void setReturnTypeToSynonym();
     bool operator==(const Select& other) const {
-        return synonym == other.synonym
-        && returnValues == other.returnValues &&
+        return returnValues == other.returnValues &&
         returnType == other.returnType;
     }
 };
