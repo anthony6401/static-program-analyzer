@@ -13,13 +13,6 @@ private:
     QPSClient qpsClient;
     TokenObject left;
     TokenObject right;
-
-public:
-    FollowsTClause(TokenObject left, TokenObject right,
-                  std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
-    ResultTable evaluateClause() override;
-    size_t getNumberOfSynonyms() override;
-    std::set<std::string> getAllSynonyms() override;
     ResultTable evaluateSynonymSynonym();
     ResultTable evaluateSynonymWildcard();
     ResultTable evaluateSynonymInteger();
@@ -29,6 +22,13 @@ public:
     ResultTable evaluateWildcardSynonym();
     ResultTable evaluateWildcardWildcard();
     ResultTable evaluateWildcardInteger();
+
+public:
+    FollowsTClause(TokenObject left, TokenObject right,
+                  std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
+    ResultTable evaluateClause() override;
+    size_t getNumberOfSynonyms() override;
+    std::set<std::string> getAllSynonyms() override;
 };
 
 #endif //SPA_FOLLOWSTCLAUSE_H

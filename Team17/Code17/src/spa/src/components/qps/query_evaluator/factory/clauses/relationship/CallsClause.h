@@ -13,13 +13,6 @@ private:
     QPSClient qpsClient;
     TokenObject left;
     TokenObject right;
-
-public:
-    CallsClause(TokenObject left, TokenObject right,
-                  std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
-    ResultTable evaluateClause() override;
-    size_t getNumberOfSynonyms() override;
-    std::set<std::string> getAllSynonyms() override;
     ResultTable evaluateSynonymSynonym();
     ResultTable evaluateSynonymWildcard();
     ResultTable evaluateSynonymNameQuotes();
@@ -29,6 +22,13 @@ public:
     ResultTable evaluateNameQuotesSynonym();
     ResultTable evaluateNameQuotesWildcard();
     ResultTable evaluateNameQuotesNameQuotes();
+
+public:
+    CallsClause(TokenObject left, TokenObject right,
+                  std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
+    ResultTable evaluateClause() override;
+    size_t getNumberOfSynonyms() override;
+    std::set<std::string> getAllSynonyms() override;
 };
 
 #endif //SPA_CALLSCLAUSE_H
