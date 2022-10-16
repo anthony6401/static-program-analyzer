@@ -12,7 +12,6 @@ class SimpleValidator {
         SimpleValidator();
         ValidatorState* state;
         std::stack<ValidatorState*> parentStates;
-        std::set<std::string> procedureNames;
         bool isValidCode();
         void close();
         void setState(ValidatorState* newState);
@@ -26,5 +25,7 @@ class SimpleValidator {
             std::set<std::string>& procedures);
         static bool isCyclic(std::multimap<std::string, std::string>& callProcedures,
             std::map<std::string, bool> visited, std::string procedure);
-
+    
+    private:
+        std::set<std::string> procedureNames;
 };

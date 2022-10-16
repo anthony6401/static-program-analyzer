@@ -37,6 +37,9 @@
 
 #include "../../pkb/clients/SPClient.h"
 
+#include <stack>
+#include <map>
+
 class Entity;
 
 class Extractor {
@@ -63,7 +66,7 @@ public:
 	void extractWhilePattern(SimpleToken whileToken);
 	void extractIfPattern(SimpleToken ifToken);
 	void extractExpr(SimpleToken stmtToken, SimpleToken exprToken);
-	void extractCall(SimpleToken callToken, std::string currentProcedure);
+	void extractCall(SimpleToken callToken);
 	void extractProcedure(SimpleToken procedureToken);
 	void close(int statementNumber);
 	void endOfParser(std::multimap<std::string, std::string> callProcedures);
