@@ -248,20 +248,6 @@ void Extractor::addNestedRelationships(StmtStack* calledStack, std::string name)
 	std::unordered_set<SimpleToken, SimpleHash> varMod = calledStack->varMod;
 	Entity* firstEntity = generateEntity(SimpleToken(SpTokenType::TPROCEDURE, name, 0));
 
-	for (int i = 0; i < stmts.size(); i++) {
-		SimpleToken second = stmts.at(i);
-		Entity* secondEntity = generateEntity(second);
-		ParentTRelationship* parentTRel = new ParentTRelationship(firstEntity, secondEntity);
-		this->client->storeRelationship(parentTRel);
-	}
-
-	for (SimpleToken stmt : stmtsNested) {
-		SimpleToken second = stmt;
-		Entity* secondEntity = generateEntity(second);
-		ParentTRelationship* parentTRel = new ParentTRelationship(firstEntity, secondEntity);
-		this->client->storeRelationship(parentTRel);
-	}
-
 	for (SimpleToken var : varUse) {
 		SimpleToken second = var;
 		Entity* secondEntity = generateEntity(second);
