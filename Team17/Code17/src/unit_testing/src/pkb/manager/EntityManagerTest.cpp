@@ -1,5 +1,3 @@
-#pragma once
-
 #include "models/Entity/AssignEntity.h"
 #include "models/Entity/CallEntity.h"
 #include "models/Entity/ConstantEntity.h"
