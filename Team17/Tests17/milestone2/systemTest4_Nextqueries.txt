@@ -91,7 +91,7 @@ Select c such that Next(ifs, c)
 19 - next is Read test 1
 call c; read rd;
 Select rd such that Next(c, rd)
-23, 70, 73
+23, 73
 5000
 20 - next is Read test 2
 read rd, rd1;
@@ -106,7 +106,7 @@ Select rd such that Next(pn, rd)
 22 - next is Read test 4
 assign a; read rd;
 Select rd such that Next(a, rd)
-3, 33, 70, 102
+3, 33, 102
 5000
 23 - next is Read test 5
 while w; read rd;
@@ -121,7 +121,7 @@ Select rd such that Next(ifs, rd)
 25 - next is Print test 1
 call c; print pn;
 Select pn such that Next(c, pn)
-30, 37
+30, 37, 68
 5000
 26 - next is Print test 2
 read rd; print pn;
@@ -136,7 +136,7 @@ Select pn1 such that Next(pn, pn1)
 28 - next is Print test 4
 assign a; print pn;
 Select pn such that Next(a, pn)
-12, 84
+12, 68, 84
 5000
 29 - next is Print test 5
 while w; print pn;
@@ -161,7 +161,7 @@ Select a such that Next(rd, a)
 33 - next is Assign test 3
 print pn; assign a;
 Select a such that Next(pn, a)
-48, 81
+46, 48, 81
 5000
 34 - next is Assign test 5
 while w; assign a;
@@ -171,5 +171,5 @@ Select a such that Next(w, a)
 35 - next is Assign test 6
 if ifs; assign a;
 Select a such that Next(ifs, a)
-26, 32, 43, 46, 66, 76, 92
+26, 32, 43, 66, 76, 92
 5000

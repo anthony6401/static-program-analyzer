@@ -20,6 +20,17 @@ void ProcedureStack::close(int statementNumber) {
 
 void ProcedureStack::mergeStack() {}
 
+void ProcedureStack::extractNext(SimpleToken stmtToken) {
+    for (SimpleToken stmt : this->context->previousStmt) {
+        Entity* prev = generateEntity(stmt);
+        Entity* next = generateEntity(stmtToken);
+        NextRelationship* nextRel = new NextRelationship(prev, next);
+        this->context->client->storeRelationship(nextRel);
+    }
+    this->context->previousStmt.clear();
+    this->context->previousStmt.push_back(stmtToken);
+}
+
 void ProcedureStack::extractFollows(std::vector<SimpleToken> stmts) {
     for (size_t i = 0; i < stmts.size() - 1; i++) {
         SimpleToken first = stmts.at(i);

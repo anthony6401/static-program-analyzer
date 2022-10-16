@@ -48,10 +48,6 @@ public:
 
 	std::vector<SimpleToken> previousStmt;
 	std::vector<SimpleToken> endPoints;
-	std::stack<SimpleToken> whileTokens;
-	std::stack<SimpleToken> ifTokens;
-	bool first;
-
 	std::multimap<std::string, SimpleToken> usesForCalls;
 	std::multimap<std::string, SimpleToken> modsForCalls;
 	std::multimap<std::string, SimpleToken> whileIfCallMap;
@@ -74,9 +70,6 @@ public:
 	void endOfParserHelper(std::string current, std::string called,
 		std::multimap<std::string, std::string> callProcedures, std::vector<std::string> alrCalled);
 	void addNestedRelationships(StmtStack* called, std::string parentName);
-	void extractNext(SimpleToken stmtToken);
-	void extractNextWhile();
-	void extractNextIf();
 	
 	Entity* generateEntity(SimpleToken token);
 };

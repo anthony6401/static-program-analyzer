@@ -16,9 +16,9 @@ public:
     std::vector<SimpleToken> varUse;
     std::vector<SimpleToken> stmts;
     std::vector<SimpleToken> stmtsNested;
-    std::vector<SimpleToken> endPoints;
     std::vector<SimpleToken> callStmts;
     std::multimap<std::string, SimpleToken> whileIfCallMap;
+    virtual void extractNext(SimpleToken stmtToken) = 0;
 
 protected:
     StmtStack(SimpleToken parent, Extractor* context) : parent(parent) {};

@@ -10,14 +10,20 @@ IfStack::IfStack(SimpleToken parent, Extractor* context) : parent(parent), StmtS
 
 void IfStack::close(int statementNumber) {
     if (expectElse) {
+        for (SimpleToken stmt : this->context->previousStmt) {
+            this->context->endPoints.push_back(stmt);
+        }
+        this->context->previousStmt.clear();
+        this->context->previousStmt.push_back(this->parent);
+
         ifStmts = stmts;
         stmts.clear();
         this->expectElse = false;
-
-        addEndPoints(ifStmts);
     } else {
-        addEndPoints(stmts);
-        mergeEndPoints();
+        for (SimpleToken stmt : this->context->endPoints) {
+            this->context->previousStmt.push_back(stmt);
+        }
+        this->context->endPoints.clear();
 
         extractFollows(ifStmts);
         extractFollows(stmts);
@@ -31,24 +37,20 @@ void IfStack::close(int statementNumber) {
 
         mergeStack();
 
-        context->endPoints = this->endPoints;
-
         context->currentStack = context->parentStack.top();
         context->parentStack.pop();
     }
 }
 
-void IfStack::addEndPoints(std::vector<SimpleToken> stmts) {
-    if (stmts.back().type != SpTokenType::TIF) {
-        endPoints.push_back(stmts.back());
+void IfStack::extractNext(SimpleToken stmtToken) {
+    for (SimpleToken stmt : this->context->previousStmt) {
+        Entity* prev = generateEntity(stmt);
+        Entity* next = generateEntity(stmtToken);
+        NextRelationship* nextRel = new NextRelationship(prev, next);
+        this->context->client->storeRelationship(nextRel);
     }
-}
-
-void IfStack::mergeEndPoints() {
-    StmtStack* parent = context->parentStack.top();
-    if (parent->parent.type == SpTokenType::TIF || parent->parent.type == SpTokenType::TWHILE) {
-        parent->endPoints.insert(parent->endPoints.end(), this->endPoints.begin(), this->endPoints.end());
-    }
+    this->context->previousStmt.clear();
+    this->context->previousStmt.push_back(stmtToken);
 }
 
 void IfStack::mergeStack() {

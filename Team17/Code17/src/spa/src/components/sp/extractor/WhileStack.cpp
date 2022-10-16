@@ -8,7 +8,14 @@ WhileStack::WhileStack(SimpleToken parent, Extractor* context) : parent(parent),
 }
 
 void WhileStack::close(int statementNumber) {
-    addEndPoints(stmts);
+    for (SimpleToken stmt : this->context->previousStmt) {
+        Entity* prev = generateEntity(stmt);
+        Entity* next = generateEntity(this->parent);
+        NextRelationship* nextRel = new NextRelationship(prev, next);
+        this->context->client->storeRelationship(nextRel);
+    }
+    this->context->previousStmt.clear();
+    this->context->previousStmt.push_back(this->parent);
 
     extractFollows(context->currentStack->stmts);
     extractFollowsT(context->currentStack->stmts);
@@ -19,16 +26,19 @@ void WhileStack::close(int statementNumber) {
 
     mergeStack();
 
-    context->endPoints = this->endPoints;
-
     context->currentStack = context->parentStack.top();
     context->parentStack.pop();
 }
 
-void WhileStack::addEndPoints(std::vector<SimpleToken> stmts) {
-    if (stmts.back().type != SpTokenType::TIF) {
-        endPoints.push_back(stmts.back());
+void WhileStack::extractNext(SimpleToken stmtToken) {
+    for (SimpleToken stmt : this->context->previousStmt) {
+        Entity* prev = generateEntity(stmt);
+        Entity* next = generateEntity(stmtToken);
+        NextRelationship* nextRel = new NextRelationship(prev, next);
+        this->context->client->storeRelationship(nextRel);
     }
+    this->context->previousStmt.clear();
+    this->context->previousStmt.push_back(stmtToken);
 }
 
 void WhileStack::mergeStack() {
