@@ -1,0 +1,35 @@
+1 - Multiclause query return boolean True 1
+procedure p2; while w;
+Select BOOLEAN such that Calls("first", p2) such that Next(15, 14) and Next*(15, 8) pattern w("var1", _) such that Uses("third", "A") such that Modifies("sixth", _) and Next*(_, _)
+TRUE
+5000
+2 - Multiclause query return boolean True 2
+assign a; if ifs;
+Select BOOLEAN such that Next*(19, _) and Modifies("first", "F") pattern a("var1", "7 / 15 * 123") and ifs(_, _, _) such that Uses("third", _)
+TRUE
+5000
+3 - Multiclause query return boolean False 1
+assign a; if ifs;
+Select BOOLEAN such that Calls("second", "third") such that Next(57, a) pattern ifs("v1", _, _) with ifs.stmt# = 19
+FALSE
+5000
+4 - Multiclause query return boolean False 2
+assign a; if ifs;
+Select BOOLEAN such that Next(18, _)
+FALSE
+5000
+5 - Multiclause query return tuple 1
+constant c; stmt s; variable v; procedure p;
+Select <c.value, s, p> with c.value = s.stmt# such that Modifies(s, v) and Calls*(p, "fourth")
+1 1 procedure, 50 50 procedure, 123 123 procedure, 2 2 procedure, 15 15 procedure, 1 1 first, 50 50 first, 123 123 first, 2 2 first, 15 15 first, 1 1 second, 50 50 second, 123 123 second, 2 2 second, 15 15 second, 1 1 third, 50 50 third, 123 123 third, 2 2 third, 15 15 third
+5000
+6 - Multiclause query return tuple 2
+assign a; while w; procedure p, p1;
+Select <p, p1, w, a> with p.procName = "third" such that Modifies(p1, "var1") and Calls*(p, "fourth") pattern w("var1", _) such that Next*(w, a)
+third first 8 11, third first 8 16, third first 8 17, third first 14 11, third first 14 16, third first 14 17, third procedure 8 11, third procedure 8 16, third procedure 8 17, third procedure 14 11, third procedure 14 16, third procedure 14 17, third second 8 11, third second 8 16, third second 8 17, third second 14 11, third second 14 16, third second 14 17
+5000
+7 - Multiclause query return tuple 3
+variable v1, v2; stmt s; while w; assign a;
+Select <v1, s, a> such that Modifies("fourth", v1) and Uses("fifth", v2) such that Next*(49, s) with v1.varName = v2.varName and s.stmt# = w.stmt# such that Next(54, a) pattern a("B", _"A * C"_)
+A 50 55, A 51 55, A 57 55, B 50 55, B 51 55, B 57 55, C 50 55, C 51 55, C 57 55, A 54 55, B 54 55, C 54 55
+5000
