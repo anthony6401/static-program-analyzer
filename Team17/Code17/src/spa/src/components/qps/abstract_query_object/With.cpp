@@ -1,5 +1,4 @@
 #include "With.h"
-#include "components/qps/query_preprocessor/query_tokenizer/TokenObject.h"
 #include <vector>
 
 With::With() : leftType(TokenType{}), rightType(TokenType{}), left(std::vector<TokenObject>()), right(std::vector<TokenObject>()) {}

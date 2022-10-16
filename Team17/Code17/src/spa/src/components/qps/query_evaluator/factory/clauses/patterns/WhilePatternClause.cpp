@@ -1,5 +1,4 @@
 #include "WhilePatternClause.h"
-
 #include <utility>
 
 WhilePatternClause::WhilePatternClause(std::string whileSynonym, TokenObject firstArgument, QPSClient qpsClient)

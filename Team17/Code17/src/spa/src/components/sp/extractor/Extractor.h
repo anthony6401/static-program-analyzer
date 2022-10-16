@@ -37,6 +37,9 @@
 
 #include "../../pkb/clients/SPClient.h"
 
+#include <stack>
+#include <map>
+
 class Entity;
 
 class Extractor {
@@ -47,10 +50,9 @@ public:
 	StmtStack* currentStack;
 
 	std::vector<SimpleToken> previousStmt;
-	std::vector<SimpleToken> endPoints;
-	std::stack<SimpleToken> whileTokens;
-	std::stack<SimpleToken> ifTokens;
-	bool first;
+	std::multimap<std::string, SimpleToken> usesForCalls;
+	std::multimap<std::string, SimpleToken> modsForCalls;
+	std::multimap<std::string, SimpleToken> whileIfCallMap;
 
 	Extractor(SPClient* client);
 
@@ -63,16 +65,13 @@ public:
 	void extractWhilePattern(SimpleToken whileToken);
 	void extractIfPattern(SimpleToken ifToken);
 	void extractExpr(SimpleToken stmtToken, SimpleToken exprToken);
-	void extractCall(SimpleToken callToken, std::string currentProcedure);
+	void extractCall(SimpleToken callToken);
 	void extractProcedure(SimpleToken procedureToken);
 	void close(int statementNumber);
 	void endOfParser(std::multimap<std::string, std::string> callProcedures);
 	void endOfParserHelper(std::string current, std::string called,
 		std::multimap<std::string, std::string> callProcedures, std::vector<std::string> alrCalled);
-	void addNestedRelationships(StmtStack* parent, StmtStack* called, std::string name);
-	void extractNext(SimpleToken stmtToken);
-	void extractNextWhile();
-	void extractNextIf();
+	void addNestedRelationships(StmtStack* called, std::string parentName);
 	
 	Entity* generateEntity(SimpleToken token);
 };

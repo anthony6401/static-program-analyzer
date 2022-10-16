@@ -1,0 +1,38 @@
+procedure procedure {
+    print procedure;
+    call second;
+    call first;
+}
+
+procedure first {
+    while (!(var1 > var2)) {
+        if (var1 <= var5) then {
+            read var2;
+            var1 = (var2 + var3 * (var4 / var5));
+            call second;
+        } else {
+            while (var1 != var2) {
+                call second;
+            }
+        }
+        var1 = var2 / var3;
+    }
+    assign = var1 % (var2);
+}
+
+procedure second {
+    if (Second < second) then {
+        while (while > While) {
+            print second;
+            read second;
+        }
+    } else {
+        var1 = ((7 / 15)* 123);
+    }
+}
+
+procedure island {
+    CS3203 = A + F;
+    print pass;
+    read var1;
+}

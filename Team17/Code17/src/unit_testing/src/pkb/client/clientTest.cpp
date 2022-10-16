@@ -12,10 +12,8 @@
 #include "../ReuseableTokenObject.h"
 #include "../RelationshipObject.h"
 
-
+#include <iostream>
 #include <catch.hpp>
-
-static Relationship* usesRel = new UsesRelationship(assignEntity, variableEntity); 
 
 PKB* pkb = new PKB();
 
@@ -23,7 +21,6 @@ PKB* pkb = new PKB();
 TEST_CASE("SP Client test") {
 	SPClient spClient = SPClient(pkb);
 
-	REQUIRE(spClient.storeRelationship(usesRel));
 	REQUIRE(spClient.storeConstant(constantEntity));
 
 	//Pattern

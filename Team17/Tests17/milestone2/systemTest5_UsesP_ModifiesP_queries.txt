@@ -1,0 +1,90 @@
+1 - UsesP Test 1 - Procedure
+variable v;
+Select v such that Uses("second",v)
+Second, while, While,second
+5000
+2 - UsesP Test 2 - Procedure
+procedure p;
+Select p such that Uses(p,"var3")
+procedure, first
+5000
+3 - UsesP Test 3 - Procedure
+procedure p; variable v;
+Select p such that Uses(p,v)
+procedure, first, second, island
+5000
+4 - UsesP Test 4 - Calls
+call c;
+Select c such that Uses(c,"second")
+2,3,8,10
+5000
+5 - UsesP Test 5 - Calls
+variable v;
+Select v such that Uses(3,v)
+var1,var2, var3, var4, var5, second, while, While, Second
+5000
+6 - UsesP Test 6 - Procedure
+procedure proc;
+Select proc such that Uses(proc, "procedure")
+procedure
+5000
+7- UsesP Test 7 - Procedure
+procedure p; variable v;
+Select v such that Uses("island",v)
+A, F, pass
+5000
+11 - Modifies Test 1
+variable v;
+Select v such that Modifies("second",v)
+second, var1
+5000
+12 - Modifies Test 2
+procedure p;
+Select p such that Modifies(p,"var1")
+procedure, first, second, island
+5000
+13 - Modifies Test 3
+procedure p; variable v;
+Select p such that Modifies(p,v)
+procedure, first, second, island
+5000
+14 - Modifies Test 4 - Calls
+call c; variable v;
+Select c such that Modifies(c,"var1")
+2,3,8,10
+5000
+15 - Modifies Test5 - Procedure
+variable v;
+Select v such that Modifies("island", v)
+CS3203, var1
+5000
+16 - UsesP and ModifiesP Test1 - Procedure
+procedure p;
+Select p such that Uses(p,"var1") and Modifies(p,"var1")
+procedure, first
+5000
+17 - UsesP and ModifiesP Test2 - Calls
+call c;
+Select c such that Uses(c,"var1") and Modifies(c,"var1")
+3
+5000
+18 - UsesP and UsesP Test1 - Procedure + Calls
+procedure p; call c; variable v;
+Select <p,c> such that Uses(p,v) and Uses(c,v)
+procedure 2, procedure 3, procedure 8, procedure 10, first 2, first 3, first 8, first 10, second 2, second 3, second 8, second 10
+5000
+19 - UsesP and UsesP Test2 - Procedure + Calls
+procedure p; call c; variable v;
+Select v such that Uses(p,v) and Uses(c,v)
+var1, var2, var3, var4, var5, second, Second, while, While
+5000
+20 - ModiefiesP and Uses Test3 - Procedure + Calls
+procedure p; call c; variable v;
+Select <p,c> such that Modifies(p,v) and Uses(c,v)
+procedure 2, procedure 3, procedure 8, procedure 10, first 2, first 3, first 8, first 10, second 2, second 3, second 8, second 10, island 3
+5000
+21 - ModiefiesP and Uses Test4 - Procedure + Calls
+procedure p; call c; variable v;
+Select v such that Modifies(p,v) and Uses(c,v)
+var1, var2, second
+5000

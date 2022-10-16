@@ -2,22 +2,34 @@
 #include <stdexcept>
 #include "Extractor.h"
 
-#include <iostream>
-
 ProcedureStack::ProcedureStack(SimpleToken parent, Extractor* context) : parent(parent), StmtStack(parent, context) {
     this->context = context;
 }
 
 void ProcedureStack::close(int statementNumber) {
+    this->context->previousStmt.clear();
+
     extractFollows(context->currentStack->stmts);
     extractFollowsT(context->currentStack->stmts);
     extractUses(context->currentStack->varUse);
     extractModify(context->currentStack->varMod);
 
     context->procedures.insert(std::pair<std::string, ProcedureStack*>(parent.value, this));
+    context->whileIfCallMap.insert(this->whileIfCallMap.begin(), this->whileIfCallMap.end());
 }
 
 void ProcedureStack::mergeStack() {}
+
+void ProcedureStack::extractNext(SimpleToken stmtToken) {
+    for (SimpleToken stmt : this->context->previousStmt) {
+        Entity* prev = generateEntity(stmt);
+        Entity* next = generateEntity(stmtToken);
+        NextRelationship* nextRel = new NextRelationship(prev, next);
+        this->context->client->storeRelationship(nextRel);
+    }
+    this->context->previousStmt.clear();
+    this->context->previousStmt.push_back(stmtToken);
+}
 
 void ProcedureStack::extractFollows(std::vector<SimpleToken> stmts) {
     for (size_t i = 0; i < stmts.size() - 1; i++) {
@@ -32,10 +44,10 @@ void ProcedureStack::extractFollows(std::vector<SimpleToken> stmts) {
 
 void ProcedureStack::extractFollowsT(std::vector<SimpleToken> stmts) {
     for (int i = 0; i < stmts.size(); i++) {
+        SimpleToken first = stmts.at(i);
+        Entity* firstEntity = generateEntity(first);
         for (int j = i + 1; j < stmts.size(); j++) {
-            SimpleToken first = stmts.at(i);
             SimpleToken second = stmts.at(j);
-            Entity* firstEntity = generateEntity(first);
             Entity* secondEntity = generateEntity(second);
             FollowsTRelationship* followsTRel = new FollowsTRelationship(firstEntity, secondEntity);
             context->client->storeRelationship(followsTRel);
@@ -43,20 +55,20 @@ void ProcedureStack::extractFollowsT(std::vector<SimpleToken> stmts) {
     }
 }
 
-void ProcedureStack::extractUses(std::vector<SimpleToken> varUse) {
-    for (int i = 0; i < varUse.size(); i++) {
-        SimpleToken second = varUse.at(i);
-        Entity* firstEntity = generateEntity(this->parent);
+void ProcedureStack::extractUses(std::unordered_set<SimpleToken, SimpleHash> varUse) {
+    Entity* firstEntity = generateEntity(this->parent);
+    for (SimpleToken var : varUse) {
+        SimpleToken second = var;
         Entity* secondEntity = generateEntity(SimpleToken(SpTokenType::TVARIABLE, second.value, 0));
         UsesRelationship* usesRel = new UsesRelationship(firstEntity, secondEntity);
         context->client->storeRelationship(usesRel);
     }
 }
 
-void ProcedureStack::extractModify(std::vector<SimpleToken> varMod) {
-    for (int i = 0; i < varMod.size(); i++) {
-        SimpleToken second = varMod.at(i);
-        Entity* firstEntity = generateEntity(this->parent);
+void ProcedureStack::extractModify(std::unordered_set<SimpleToken, SimpleHash> varMod) {
+    Entity* firstEntity = generateEntity(this->parent);
+    for (SimpleToken var : varMod) {
+        SimpleToken second = var;
         Entity* secondEntity = generateEntity(SimpleToken(SpTokenType::TVARIABLE, second.value, 0));
         ModifyRelationship* modifyRel = new ModifyRelationship(firstEntity, secondEntity);
         context->client->storeRelationship(modifyRel);

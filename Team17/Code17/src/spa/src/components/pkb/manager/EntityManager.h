@@ -16,6 +16,8 @@ public:
 	std::unordered_set<std::string> getAllName(DesignEntity entityType);
 	bool storeEntity(Entity* entity);
 
+	~EntityManager();
+
 private:
 	 std::vector<EntityStorage*> entityStore;
 	 std::vector<EntityMappingStorage*> stmtMappingStore;

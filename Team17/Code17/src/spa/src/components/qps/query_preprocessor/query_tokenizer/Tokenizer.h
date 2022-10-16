@@ -1,3 +1,6 @@
+#ifndef INC_22S1_CP_SPA_TEAM_17_TOKENIZER_H
+#define INC_22S1_CP_SPA_TEAM_17_TOKENIZER_H
+
 #include "string"
 #include "TokenType.h"
 #include "unordered_map"
@@ -5,11 +8,6 @@
 #include "vector"
 #include <unordered_set>
 #include <stack>
-
-#ifndef INC_22S1_CP_SPA_TEAM_17_TOKENIZER_H
-#define INC_22S1_CP_SPA_TEAM_17_TOKENIZER_H
-
-
 
 using namespace qps;
 

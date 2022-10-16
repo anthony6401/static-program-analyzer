@@ -6,7 +6,6 @@
 #include "components/qps/abstract_query_object/Select.h"
 #include "components/pkb/clients/QPSClient.h"
 #include <unordered_map>
-#include <list>
 
 class CallsTClause : public Clause {
 private:
@@ -14,17 +13,6 @@ private:
     QPSClient qpsClient;
     TokenObject left;
     TokenObject right;
-
-public:
-    CallsTClause(TokenObject left, TokenObject right,
-                std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
-    ResultTable evaluateClause() override;
-    size_t getNumberOfSynonyms() override;
-    std::set<std::string> getAllSynonyms() override;
-    std::vector<std::pair<std::string, std::string>> processMapToVectorPair(std::unordered_map<std::string, std::unordered_set<std::string>> results);
-    std::unordered_set<std::string> processMapToSetFromFirst(std::unordered_map<std::string, std::unordered_set<std::string>> results);
-    std::unordered_set<std::string> processMapToSetFromSecond(std::unordered_map<std::string, std::unordered_set<std::string>> results);
-    static RelationshipType getRelationshipType();
     ResultTable evaluateSynonymSynonym();
     ResultTable evaluateSynonymWildcard();
     ResultTable evaluateSynonymNameQuotes();
@@ -34,6 +22,13 @@ public:
     ResultTable evaluateNameQuotesSynonym();
     ResultTable evaluateNameQuotesWildcard();
     ResultTable evaluateNameQuotesNameQuotes();
+
+public:
+    CallsTClause(TokenObject left, TokenObject right,
+                std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
+    ResultTable evaluateClause() override;
+    size_t getNumberOfSynonyms() override;
+    std::set<std::string> getAllSynonyms() override;
 };
 
 #endif //SPA_CALLSTCLAUSE_H

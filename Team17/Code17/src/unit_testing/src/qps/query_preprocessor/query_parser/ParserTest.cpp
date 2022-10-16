@@ -368,8 +368,6 @@ TEST_CASE("Single clause query - new Calls relationship") {
     Parser parser = Parser(testTokenObject);
     QueryObject actualResult = parser.parse();
 
-    std::cout << actualResult.isSyntacticallyCorrect();
-
     REQUIRE(expectedResult == actualResult);
 };
 
@@ -400,7 +398,6 @@ TEST_CASE("Single clause query - new Next relationship") {
 
     Parser parser = Parser(testTokenObject);
     QueryObject actualResult = parser.parse();
-    std::cout << actualResult.isSyntacticallyCorrect();
 
     REQUIRE(expectedResult == actualResult);
 };
@@ -845,7 +842,6 @@ TEST_CASE("Muti-clause query - synonym name is same as new Calls and Next tokens
 
     Parser parser = Parser(testTokenObject);
     QueryObject actualResult = parser.parse();
-    std::cout << (actualResult.getRelationships().at(0).getRight().getTokenType() == TokenType::VARIABLE);
 
     REQUIRE(expectedResult == actualResult);
 };
@@ -2610,7 +2606,6 @@ TEST_CASE("Semantically incorect- Calls* where first param is not proedure") {
 
     Parser parser = Parser(testTokenObject);
     QueryObject actualResult = parser.parse();
-    std::cout << actualResult.isSyntacticallyCorrect();
 
     REQUIRE(expectedResult == actualResult);
 };
@@ -2642,7 +2637,6 @@ TEST_CASE("Semantically incorect- Calls where second param is not proedure") {
 
     Parser parser = Parser(testTokenObject);
     QueryObject actualResult = parser.parse();
-    std::cout << actualResult.isSyntacticallyCorrect();
 
     REQUIRE(expectedResult == actualResult);
 };
@@ -2674,7 +2668,6 @@ TEST_CASE("Semantically incorect- Next where second param is not statement") {
 
     Parser parser = Parser(testTokenObject);
     QueryObject actualResult = parser.parse();
-    std::cout << actualResult.isSyntacticallyCorrect();
 
     REQUIRE(expectedResult == actualResult);
 };
@@ -2706,7 +2699,6 @@ TEST_CASE("Semantically incorect- Next* where first param is not statement") {
 
     Parser parser = Parser(testTokenObject);
     QueryObject actualResult = parser.parse();
-    std::cout << actualResult.isSyntacticallyCorrect();
 
     REQUIRE(expectedResult == actualResult);
 };

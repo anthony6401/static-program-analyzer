@@ -1,0 +1,100 @@
+1 - Multiclause query return boolean True 1
+procedure p2; while w;
+Select BOOLEAN such that Calls("first", p2) such that Next(15, 14) and Next*(15, 8) pattern w("var1", _) such that Uses("third", "A") such that Modifies("sixth", _) and Next*(_, _) such that Calls(_, "second")
+TRUE
+5000
+2 - Multiclause query return boolean True 2
+assign a; if ifs; procedure p;
+Select BOOLEAN such that Next*(19, _) and Modifies("first", "F") pattern a("var1", "7 / 15 * 123") and ifs(_, _, _) such that Uses("third", _) and Calls*(_, _) such that Calls(_, p)
+TRUE
+5000
+3 - Multiclause query return boolean True 3
+assign a; if ifs;
+Select BOOLEAN such that Calls("first", _) such that Calls*("procedure", "seventh") and Next(_, 2)
+TRUE
+5000
+4 - Multiclause query return boolean False 1
+assign a; if ifs;
+Select BOOLEAN such that Calls("second", "third") such that Next(57, a) pattern ifs("v1", _, _) with ifs.stmt# = 19
+FALSE
+5000
+5 - Multiclause query return boolean False 2
+assign a; if ifs;
+Select BOOLEAN such that Next(18, _)
+FALSE
+5000
+6 - Multiclause query return booelan False 3
+variable v, v1; while w; assign a; if ifs;
+Select BOOLEAN pattern w(v, _) such that Next(w, 101)
+FALSE
+5000
+7 - Multiclause query return booelan False 4
+variable v; assign a;
+Select BOOLEAN pattern a(v, _"7 / 15"_) with v.varName = "var2"
+FALSE
+5000
+8 - Multiclause query return tuple 1
+constant c; stmt s; variable v; procedure p;
+Select <c.value, s, p> with c.value = s.stmt# such that Modifies(s, v) and Calls*(p, "fourth")
+1 1 procedure, 50 50 procedure, 123 123 procedure, 2 2 procedure, 15 15 procedure, 1 1 first, 50 50 first, 123 123 first, 2 2 first, 15 15 first, 1 1 second, 50 50 second, 123 123 second, 2 2 second, 15 15 second, 1 1 third, 50 50 third, 123 123 third, 2 2 third, 15 15 third
+5000
+9 - Multiclause query return tuple 2
+assign a; while w; procedure p, p1;
+Select <p, p1, w, a> with p.procName = "third" such that Modifies(p1, "var1") and Calls*(p, "fourth") pattern w("var1", _) such that Next*(w, a)
+third first 8 11, third first 8 16, third first 8 17, third first 14 11, third first 14 16, third first 14 17, third procedure 8 11, third procedure 8 16, third procedure 8 17, third procedure 14 11, third procedure 14 16, third procedure 14 17, third second 8 11, third second 8 16, third second 8 17, third second 14 11, third second 14 16, third second 14 17
+5000
+10 - Multiclause query return tuple 3
+variable v1, v2; stmt s; while w; assign a;
+Select <v1, s, a> such that Modifies("fourth", v1) and Uses("fifth", v2) such that Next*(49, s) with v1.varName = v2.varName and s.stmt# = w.stmt# such that Next(54, a) pattern a("B", _"A * C"_)
+A 50 55, A 51 55, A 57 55, B 50 55, B 51 55, B 57 55, C 50 55, C 51 55, C 57 55, A 54 55, B 54 55, C 54 55
+5000
+11 - Multiclause query return tuple 4
+variable v, v1; while w; assign a; if ifs; procedure p;
+Select <ifs, w, p> pattern ifs(v, _, _) pattern w(_, _) pattern a(v, "   var2 /        var3") such that Uses(p, v1) with v1.varName = "a" such that Next*(w, 71)
+9 50 procedure, 9 51 procedure, 9 54 procedure, 9 57 procedure, 9 50 loner, 9 51 loner, 9 54 loner, 9 57 loner
+5000
+12 - Multiclause query return tuple 5
+procedure p; while w; assign a;
+Select <a, p> pattern a(_, "((((var2 + (var3 * ((var4 / (var5))))))))") such that Next(24, _) and Next(a, _) such that Modifies(p, _) and Calls*(_, "fourth")
+11 procedure, 11 first, 11 second, 11 third, 11 fourth, 11 fifth, 11 sixth, 11 seventh, 11 loner
+5000
+13 - Multiclause query return tuple 6
+print pn; call c; procedure p;
+Select <c, pn.varName, p> such that Next*(pn, 48) and Next(c, pn) such that Uses(p, _) and Calls("procedure", p)
+29 v2 first, 29 v2 second
+5000
+14 - Multiclause query return tuple 7
+print pn; call c; procedure p; variable v;
+Select <p, c> such that Calls(p, _) and Calls*("first", p) and Uses(c, v) with v.varName = "var5" such that Next(_, c)
+second 6, third 6, fourth 6, fifth 6
+5000
+15 - Multiclause query return attribute 1
+procedure p1, p2, p3; assign a;
+Select p2.procName such that Calls(p1, p2) and Calls*(p2, p3) and Uses(p2, "v5") pattern a(_, _"B%C"_) such that Next(_, _) and Calls(_, _)
+first, second, third
+5000
+16 - Multiclause query return attribute 2
+procedure p; call c;
+Select p.procName such that Modifies(p, _) and Uses(c, "Second") with c.procName = p.procName such that Calls*("second", _)
+second, first
+5000
+17 - Multiclause query return attribute 3
+read re; procedure p; call c;
+Select re.varName such that Next*(re, _) such that Calls*(p, _) and Calls*(_, p) with re.stmt# = 28 such that Modifies(c, _)
+v1
+5000
+18 - Multiclause query return attribute 4
+call c; procedure p; variable v;
+Select c.procName such that Next*(_, c) and Modifies(p, v) with v.varName = "var1" such that Modifies(c, v)
+first, second
+5000
+19 - Multiclause query return attribute 5
+call c;
+Select c such that Uses(c, _) and Modifies(c, "second")
+5, 6, 13, 15
+5000
+20 - Multiclause query return attribute - false 1
+assign a;
+Select a.stmt# such that Next*(_, 7)
+none
+5000

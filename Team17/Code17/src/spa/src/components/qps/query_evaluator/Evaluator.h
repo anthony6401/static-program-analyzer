@@ -1,5 +1,6 @@
 #ifndef SPA_EVALUATOR_H
 #define SPA_EVALUATOR_H
+
 #include <memory>
 #include <list>
 #include <vector>
@@ -10,8 +11,7 @@
 #include "ClausesDivider.h"
 
 class Evaluator {
-public:
-    static void evaluateQuery(QueryObject queryObject, std::list<std::string> &results, QPSClient qpsClient);
+private:
     static ClauseDivider extractClausesToEvaluate(QueryObject queryObject, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
     static bool evaluateNoSynonymClauses(GroupedClause noSynonymsClauses);
     static bool evaluateNoSelectSynonymClauses(std::vector<GroupedClause> noSelectSynonymPresent);
@@ -19,6 +19,8 @@ public:
     static void combineResultsWithSelect(std::shared_ptr<Clause> &selectClause, ResultTable &evaluatedResults);
     static void populateResultsList(ResultTable &finalResult, Select select, std::list<std::string> &results, QPSClient qpsClient, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap);
     static void populateAttributesResultsList(ResultTable &evaluatedResults, Select select, std::list<std::string> &results, QPSClient qpsClient, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap);
+public:
+    static void evaluateQuery(QueryObject queryObject, std::list<std::string> &results, QPSClient qpsClient);
 };
 
 #endif //SPA_EVALUATOR_H

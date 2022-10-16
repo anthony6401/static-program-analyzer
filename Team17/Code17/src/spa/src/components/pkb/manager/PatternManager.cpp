@@ -22,7 +22,8 @@ std::vector<PatternStorage*> PatternManager::getPatternStorage() {
 bool PatternManager::storePattern(kb::Pattern* pattern) {
 	bool ret = false;
 	for (auto& pt : patternStorage) {
-		ret = ret || pt->storePattern(pattern);
+		bool result = pt->storePattern(pattern);
+		ret = ret || result;
 	}
 	return ret;
 }
@@ -49,4 +50,11 @@ std::vector<std::pair<std::string, std::string>> PatternManager::getPatternPair(
 		}
 	}
 	return std::vector<std::pair<std::string, std::string>>();
+}
+
+PatternManager::~PatternManager() {
+	for (auto store : patternStorage) {
+		delete store;
+	}
+	patternStorage.clear();
 }

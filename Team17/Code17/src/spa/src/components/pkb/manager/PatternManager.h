@@ -12,6 +12,7 @@ public:
 	std::unordered_set<std::string> getPattern(DesignEntity designEntity, TokenObject firstArgument, TokenObject secondArgument);
 	std::vector<std::pair<std::string, std::string>> getPatternPair(DesignEntity designEntity, TokenObject secondArgument);
 	bool storePattern(kb::Pattern* pattern);
+	~PatternManager();
 
 private:
 	std::vector<PatternStorage*> patternStorage;

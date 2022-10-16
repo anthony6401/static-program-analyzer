@@ -1,7 +1,6 @@
 #include "OperandState.h"
 #include "FactorState.h"
 #include "../../validator/SimpleValidator.h"
-#include <iostream>
 
 OperandState::OperandState(ExprStack* context) {
     this->context = context;

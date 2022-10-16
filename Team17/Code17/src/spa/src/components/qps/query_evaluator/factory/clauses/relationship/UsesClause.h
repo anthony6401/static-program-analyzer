@@ -6,7 +6,6 @@
 #include "components/qps/abstract_query_object/Select.h"
 #include "components/pkb/clients/QPSClient.h"
 #include <unordered_map>
-#include <list>
 
 class UsesClause : public Clause {
 private:
@@ -14,6 +13,12 @@ private:
     QPSClient qpsClient;
     TokenObject left;
     TokenObject right;
+    ResultTable evaluateSynonymSynonym();
+    ResultTable evaluateSynonymWildcard();
+    ResultTable evaluateSynonymNameQuotes();
+    ResultTable evaluateSecondAsSynonym();
+    ResultTable evaluateSecondAsWildcard();
+    ResultTable evaluateWithoutSynonymOrWildCard();
 
 public:
     UsesClause(TokenObject left, TokenObject right,
@@ -21,12 +26,6 @@ public:
     ResultTable evaluateClause() override;
     size_t getNumberOfSynonyms() override;
     std::set<std::string> getAllSynonyms() override;
-    ResultTable evaluateSynonymSynonym();
-    ResultTable evaluateSynonymWildcard();
-    ResultTable evaluateSynonymNameQuotes();
-    ResultTable evaluateSecondAsSynonym();
-    ResultTable evaluateSecondAsWildcard();
-    ResultTable evaluateWithoutSynonymOrWildCard();
 };
 
 

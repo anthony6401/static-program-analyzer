@@ -1,5 +1,4 @@
 #include "ClausesDivider.h"
-#include "iostream"
 
 ClauseDivider::ClauseDivider() : noSynonymsPresent({}), connectedSynonymsGroups({}), selectSynonymPresentGroups({}), selectSynonymNotPresentGroups({}) {}
 
@@ -15,7 +14,7 @@ std::vector<GroupedClause> ClauseDivider::getSelectSynonymNotPresentGroups() {
     return selectSynonymNotPresentGroups;
 }
 
-void ClauseDivider::divideCommonSynonymGroupsBySelect(std::shared_ptr<Clause> &selectClause) {
+void ClauseDivider::divideConnectedSynonymGroupsBySelect(std::shared_ptr<Clause> &selectClause) {
     if (!connectedSynonymsGroups.empty()) {
         updateConnectedSynonymGroups();
     }
@@ -28,24 +27,25 @@ void ClauseDivider::divideCommonSynonymGroupsBySelect(std::shared_ptr<Clause> &s
     }
 }
 
-void ClauseDivider::checkPreviousGroupsHandler(int previousIndex) {
+void ClauseDivider::checkPreviousGroupsHandler(int lastIndex) {
     bool isConnected;
-    for (int j = previousIndex - 1; j >= 0; --j) {
-        isConnected = connectedSynonymsGroups.at(j).isConnected(connectedSynonymsGroups.at(previousIndex));
+    auto lastGroup = connectedSynonymsGroups.at(lastIndex);
+    for (int previousIndex = lastIndex - 1; previousIndex >= 0; previousIndex--) {
+        isConnected = connectedSynonymsGroups.at(previousIndex).isConnected(lastGroup);
         if (isConnected) {
-            connectedSynonymsGroups.at(j).mergeGroupedClause(connectedSynonymsGroups.at(previousIndex));
-            connectedSynonymsGroups.erase(connectedSynonymsGroups.begin() + previousIndex);
+            connectedSynonymsGroups.at(previousIndex).mergeGroupedClause(lastGroup);
+            connectedSynonymsGroups.erase(connectedSynonymsGroups.begin() + lastIndex);
             break;
         }
     }
 }
 
-
 void ClauseDivider::updateConnectedSynonymGroups() {
-    for (int i = connectedSynonymsGroups.size() - 1; i > 0; --i) {
-        checkPreviousGroupsHandler(i);
+    for (int lastIndex = connectedSynonymsGroups.size() - 1; lastIndex > 0; lastIndex--) {
+        checkPreviousGroupsHandler(lastIndex);
     }
 }
+
 
 void ClauseDivider::addHasSynonymsClauseToDivider(std::shared_ptr<Clause> &clause) {
     for (auto &gc : connectedSynonymsGroups) {

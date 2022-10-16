@@ -1,8 +1,8 @@
 #ifndef SPA_CLAUSE_H
 #define SPA_CLAUSE_H
+
 #include <string>
 #include <set>
-#include <list>
 #include "components/qps/query_evaluator/ResultTable.h"
 
 class Clause {

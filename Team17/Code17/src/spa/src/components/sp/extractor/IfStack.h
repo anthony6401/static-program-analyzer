@@ -12,12 +12,12 @@ public:
     void extractFollows(std::vector<SimpleToken> stmts);
     void extractFollowsT(std::vector<SimpleToken> stmts);
     void extractParent(std::vector<SimpleToken> stmts);
-    void extractParentT(std::vector<SimpleToken> stmtsNested);
-    void extractUses(std::vector<SimpleToken> varUse);
-    void extractModify(std::vector<SimpleToken> varMod);
+    void extractParentT(std::unordered_set<SimpleToken, SimpleHash> stmtsNested);
+    void extractUses(std::unordered_set<SimpleToken, SimpleHash> varUse);
+    void extractModify(std::unordered_set<SimpleToken, SimpleHash> varMod);
     Entity* generateEntity(SimpleToken token);
-    void addEndPoints(std::vector<SimpleToken> stmts);
-    void mergeEndPoints();
+    void extractNext(SimpleToken stmtToken);
+    std::vector<SimpleToken> endPoints;
 
 private:
     bool expectElse;

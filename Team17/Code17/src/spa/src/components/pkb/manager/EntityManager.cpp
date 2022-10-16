@@ -48,7 +48,8 @@ std::vector<EntityStorage*> EntityManager::getEntityStorage() {
 bool EntityManager::storeEntity(Entity* entity) {
  	bool ret = false;
 	for (auto& et : entityStore) {
-		ret = ret || et->storeEntity(entity);
+		bool result = et->storeEntity(entity);
+		ret = ret || result;
 	}
 	return ret;
 }
@@ -99,4 +100,11 @@ std::unordered_set<std::string> EntityManager::getAllName(DesignEntity entityTyp
 		}
 	}
 	return std::unordered_set<std::string>();
+}
+
+EntityManager::~EntityManager() {
+	for (auto store : entityStore) {
+		delete store;
+	}
+	entityStore.clear();
 }

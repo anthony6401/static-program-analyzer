@@ -99,7 +99,8 @@ bool RelationshipManager::storeRelationship(Relationship* rel) {
 	bool ret = false;
 
 	for (auto& store : relStorages) {
-		ret = ret || store->storeRelationship(rel);
+		bool result = store->storeRelationship(rel);
+		ret = ret || result;
 	}
 
 	return ret;
@@ -158,4 +159,16 @@ std::unordered_map<std::string, std::unordered_set<std::string>> RelationshipMan
 	}
 
 	return emptyMap;
+}
+
+RelationshipManager::~RelationshipManager() {
+	for (auto store : relStorages) {
+		delete store;
+	}
+
+	for (auto runtimeStore : runtimeRelStorages) {
+		delete runtimeStore;
+	}
+	relStorages.clear();
+	runtimeRelStorages.clear();
 }

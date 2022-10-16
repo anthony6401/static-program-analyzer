@@ -1,7 +1,5 @@
 #include "NextTClause.h"
-
 #include <utility>
-#include "iostream"
 #include "components/qps/query_evaluator/factory/utils/ClauseUtils.h"
 
 NextTClause::NextTClause(TokenObject left, TokenObject right,
@@ -60,10 +58,13 @@ ResultTable NextTClause::evaluateSynonymSynonym() {
     std::string rightValue = right.getValue();
     DesignEntity leftType = synonymToDesignEntityMap[leftValue];
     DesignEntity rightType = synonymToDesignEntityMap[rightValue];
-    if (leftValue == rightValue) {
-        return {false};
-    }
     std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(RelationshipType::NEXT_T, leftType, rightType);
+
+    if (leftValue == rightValue) {
+        std::unordered_set<std::string> leftAndRightEqualResults = ClauseUtils::processMapToSetFromFirst(results);
+        return {leftValue, leftAndRightEqualResults};
+    }
+
     std::vector<std::pair<std::string, std::string>> processedMap = ClauseUtils::processMapToVectorPair(results);
     return {leftValue, rightValue, processedMap};
 }

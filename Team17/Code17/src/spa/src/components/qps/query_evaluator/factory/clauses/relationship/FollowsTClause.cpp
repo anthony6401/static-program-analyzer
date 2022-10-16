@@ -1,7 +1,5 @@
 #include "FollowsTClause.h"
-
 #include <utility>
-#include "iostream"
 #include "components/qps/query_evaluator/factory/utils/ClauseUtils.h"
 
 FollowsTClause::FollowsTClause(TokenObject left, TokenObject right,

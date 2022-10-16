@@ -12,9 +12,10 @@ public:
     void mergeStack();
     void extractFollows(std::vector<SimpleToken> stmts);
     void extractFollowsT(std::vector<SimpleToken> stmts);
-    void extractUses(std::vector<SimpleToken> varUse);
-    void extractModify(std::vector<SimpleToken> varMod);
+    void extractUses(std::unordered_set<SimpleToken, SimpleHash> varUse);
+    void extractModify(std::unordered_set<SimpleToken, SimpleHash> varMod);
     Entity* generateEntity(SimpleToken token);
+    void extractNext(SimpleToken stmtToken);
 
 private:
     SimpleToken parent;

@@ -1,6 +1,5 @@
 #include <catch.hpp>
 #include <list>
-#include "iostream"
 #include "components/qps/abstract_query_object/QueryObject.h"
 #include "components/qps/query_evaluator/Evaluator.h"
 
@@ -76,7 +75,6 @@ TEST_CASE("Merge results with common synonyms - single common synonyms in single
 }
 
 TEST_CASE("Merge results with common synonyms - single common synonyms in single/multiple synonym clauses") {
-    // Common synonym a
     ResultTable firstRawResult = ResultTable("a", {"1", "2", "3", "4"});
     std::vector<std::pair<std::string, std::string>> results = {{"1", "x"}, {"3", "y"}, {"5", "z"}};
     ResultTable secondRawResult = ResultTable("a", "v", results);
@@ -88,12 +86,10 @@ TEST_CASE("Merge results with common synonyms - single common synonyms in single
 }
 
 TEST_CASE("Merge results with common synonyms - single common synonym in multiple synonyms clauses") {
-    // Common synonym a in multiple synonyms
     std::vector<std::pair<std::string, std::string>> firstResults = {{"1", "x"}, {"1", "y"}, {"3", "z"}};
     std::vector<std::pair<std::string, std::string>> secondResults = {{"1", "x"}, {"2", "z"}};
     ResultTable firstRawResult = ResultTable("s", "v", firstResults);
     ResultTable secondRawResult = ResultTable("a", "v", secondResults);
-    // common values are x and z
     std::vector<std::string> expectedSynonymsList = {"s", "v", "a"};
     std::vector<std::vector<std::string>> expectedResultsList = {{"1", "x", "1"}, {"3", "z", "2"}};
     firstRawResult.combineResult(secondRawResult);
@@ -102,7 +98,6 @@ TEST_CASE("Merge results with common synonyms - single common synonym in multipl
 }
 
 TEST_CASE("Merge results with common synonyms - multiple common synonyms in multiple synonyms clauses") {
-    // Common synonym a, v
     std::vector<std::pair<std::string, std::string>> firstResults = {{"1", "x"}, {"1", "y"}, {"3", "z"}};
     std::vector<std::pair<std::string, std::string>> secondResults = {{"1", "x"}, {"2", "z"}};
     ResultTable firstRawResult = ResultTable("a", "v", firstResults);

@@ -1,5 +1,4 @@
 #include "SelectClauseSyntaxChecker.h"
-#include <iostream>
 
 using namespace qps;
 
