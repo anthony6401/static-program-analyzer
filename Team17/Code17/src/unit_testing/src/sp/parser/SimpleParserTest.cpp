@@ -1,29 +1,5 @@
 #include "components/sp/parser/SimpleParser.h"
-#include <iostream>
 #include <catch.hpp>
-
-bool equalToken(SimpleToken test, SimpleToken result) {
-    return test.type == result.type && test.statementNumber == result.statementNumber && test.value == result.value;
-}
-
-bool equalChildren(std::vector<SimpleToken> test, std::vector<SimpleToken> result) {
-    if (test.size() != result.size()) {
-        return false;
-    }
-    for (int i = 0; i < test.size(); i++) {
-        SimpleToken a = test.at(i);
-        SimpleToken b = result.at(i);
-        if (!(equalToken(a, b))) {
-            return false;
-        }
-        if (test.empty() == result.empty() && !(test.empty())) {
-            if(!(equalChildren(a.getChildren(), b.getChildren()))) {
-                return false;
-            }
-        }
-    }
-    return true;
-}
 
 PKB* stub = new PKB();
 auto client = new SPClient(stub);
@@ -286,7 +262,7 @@ TEST_CASE("parse condition") {
         resultTokens.push_back(SimpleToken(SpTokenType::TCONSTANT, "123", 0));
         resultTokens.push_back(SimpleToken(SpTokenType::TCONSTANT, "1", 0));
         resultTokens.push_back(SimpleToken(SpTokenType::TVARIABLE, "abc", 0));
-        REQUIRE(equalChildren(test_result, resultTokens));
+        REQUIRE(test_result ==resultTokens);
     }
 
     SECTION("invalid condition missing (") {
@@ -367,7 +343,7 @@ TEST_CASE("parse relexpr") {
         resultTokens.push_back(SimpleToken(SpTokenType::TOPR, "+", 0));
         resultTokens.push_back(SimpleToken(SpTokenType::TCONSTANT, "1", 0));
         resultTokens.push_back(SimpleToken(SpTokenType::TVARIABLE, "abc", 0));
-        REQUIRE(equalChildren(test_result, resultTokens));
+        REQUIRE(test_result == resultTokens);
     }
 
     SECTION("invalid relexpr missing comparator") {
@@ -396,7 +372,7 @@ TEST_CASE("parse expr") {
         resultTokens.push_back(SimpleToken(SpTokenType::TOPR, "+", 0));
         resultTokens.push_back(SimpleToken(SpTokenType::TCONSTANT, "1", 0));
         result.setChildren(resultTokens);
-        REQUIRE(equalChildren(test_result.getChildren(), result.getChildren()));
+        REQUIRE(test_result.getChildren() == result.getChildren());
     }
 
     SECTION("invalid expr missing )") {
