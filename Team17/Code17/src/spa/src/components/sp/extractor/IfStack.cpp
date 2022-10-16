@@ -9,7 +9,7 @@ IfStack::IfStack(SimpleToken parent, Extractor* context) : parent(parent), StmtS
 void IfStack::close(int statementNumber) {
     if (expectElse) {
         for (SimpleToken stmt : this->context->previousStmt) {
-            this->context->endPoints.push_back(stmt);
+            this->endPoints.push_back(stmt);
         }
         this->context->previousStmt.clear();
         this->context->previousStmt.push_back(this->parent);
@@ -18,10 +18,10 @@ void IfStack::close(int statementNumber) {
         stmts.clear();
         this->expectElse = false;
     } else {
-        for (SimpleToken stmt : this->context->endPoints) {
+        for (SimpleToken stmt : this->endPoints) {
             this->context->previousStmt.push_back(stmt);
         }
-        this->context->endPoints.clear();
+        this->endPoints.clear();
 
         extractFollows(ifStmts);
         extractFollows(stmts);
