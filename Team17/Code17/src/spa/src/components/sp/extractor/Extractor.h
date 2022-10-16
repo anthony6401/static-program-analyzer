@@ -50,7 +50,6 @@ public:
 	StmtStack* currentStack;
 
 	std::vector<SimpleToken> previousStmt;
-	std::vector<SimpleToken> endPoints;
 	std::multimap<std::string, SimpleToken> usesForCalls;
 	std::multimap<std::string, SimpleToken> modsForCalls;
 	std::multimap<std::string, SimpleToken> whileIfCallMap;

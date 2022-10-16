@@ -7,6 +7,8 @@ ProcedureStack::ProcedureStack(SimpleToken parent, Extractor* context) : parent(
 }
 
 void ProcedureStack::close(int statementNumber) {
+    this->context->previousStmt.clear();
+
     extractFollows(context->currentStack->stmts);
     extractFollowsT(context->currentStack->stmts);
     extractUses(context->currentStack->varUse);
