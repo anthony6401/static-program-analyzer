@@ -48,7 +48,8 @@ std::vector<EntityStorage*> EntityManager::getEntityStorage() {
 bool EntityManager::storeEntity(Entity* entity) {
  	bool ret = false;
 	for (auto& et : entityStore) {
-		ret = ret || et->storeEntity(entity);
+		bool result = et->storeEntity(entity);
+		ret = ret || result;
 	}
 	return ret;
 }

@@ -99,7 +99,8 @@ bool RelationshipManager::storeRelationship(Relationship* rel) {
 	bool ret = false;
 
 	for (auto& store : relStorages) {
-		ret = ret || store->storeRelationship(rel);
+		bool result = store->storeRelationship(rel);
+		ret = ret || result;
 	}
 
 	return ret;
