@@ -16,4 +16,5 @@ public:
 	virtual std::unordered_set<std::string> getRelationshipByFirst(RelationshipType relType, TokenObject firstArgument, DesignEntity returnType) = 0;
 	virtual std::unordered_set<std::string> getRelationshipBySecond(RelationshipType relType, DesignEntity returnType, TokenObject secondArgument) = 0;
 	virtual std::unordered_map<std::string, std::unordered_set<std::string>> getAllRelationship(RelationshipType relType, DesignEntity returnType1, DesignEntity returnType2) = 0;
+	~RelationshipStorage() = default;
 };
