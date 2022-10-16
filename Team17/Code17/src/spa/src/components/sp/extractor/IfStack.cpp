@@ -1,8 +1,6 @@
 #include "IfStack.h"
 #include <stdexcept>
 
-#include <iostream>
-
 IfStack::IfStack(SimpleToken parent, Extractor* context) : parent(parent), StmtStack(parent, context) {
     this->expectElse = true;
     this->context = context;
@@ -10,14 +8,20 @@ IfStack::IfStack(SimpleToken parent, Extractor* context) : parent(parent), StmtS
 
 void IfStack::close(int statementNumber) {
     if (expectElse) {
+        for (SimpleToken stmt : this->context->previousStmt) {
+            this->context->endPoints.push_back(stmt);
+        }
+        this->context->previousStmt.clear();
+        this->context->previousStmt.push_back(this->parent);
+
         ifStmts = stmts;
         stmts.clear();
         this->expectElse = false;
-
-        addEndPoints(ifStmts);
     } else {
-        addEndPoints(stmts);
-        mergeEndPoints();
+        for (SimpleToken stmt : this->context->endPoints) {
+            this->context->previousStmt.push_back(stmt);
+        }
+        this->context->endPoints.clear();
 
         extractFollows(ifStmts);
         extractFollows(stmts);
@@ -31,24 +35,20 @@ void IfStack::close(int statementNumber) {
 
         mergeStack();
 
-        context->endPoints = this->endPoints;
-
         context->currentStack = context->parentStack.top();
         context->parentStack.pop();
     }
 }
 
-void IfStack::addEndPoints(std::vector<SimpleToken> stmts) {
-    if (stmts.back().type != SpTokenType::TIF) {
-        endPoints.push_back(stmts.back());
+void IfStack::extractNext(SimpleToken stmtToken) {
+    for (SimpleToken stmt : this->context->previousStmt) {
+        Entity* prev = generateEntity(stmt);
+        Entity* next = generateEntity(stmtToken);
+        NextRelationship* nextRel = new NextRelationship(prev, next);
+        this->context->client->storeRelationship(nextRel);
     }
-}
-
-void IfStack::mergeEndPoints() {
-    StmtStack* parent = context->parentStack.top();
-    if (parent->parent.type == SpTokenType::TIF || parent->parent.type == SpTokenType::TWHILE) {
-        parent->endPoints.insert(parent->endPoints.end(), this->endPoints.begin(), this->endPoints.end());
-    }
+    this->context->previousStmt.clear();
+    this->context->previousStmt.push_back(stmtToken);
 }
 
 void IfStack::mergeStack() {
@@ -57,18 +57,24 @@ void IfStack::mergeStack() {
     }
 
     StmtStack* parent = context->parentStack.top();
-    parent->stmtsNested.insert(parent->stmtsNested.end(), this->ifStmts.begin(), this->ifStmts.end());
-    parent->stmtsNested.insert(parent->stmtsNested.end(), this->stmts.begin(), this->stmts.end());
-    parent->stmtsNested.insert(parent->stmtsNested.end(), this->stmtsNested.begin(), this->stmtsNested.end());
-    parent->varUse.insert(parent->varUse.end(), this->varUse.begin(), this->varUse.end());
-    parent->varMod.insert(parent->varMod.end(), this->varMod.begin(), this->varMod.end());
-    parent->callStmts.insert(parent->callStmts.end(), this->callStmts.begin(), this->callStmts.end());
+    for (SimpleToken stmt : this->ifStmts) {
+        parent->stmtsNested.insert(stmt);
+    }
+    for (SimpleToken stmt : this->stmts) {
+        parent->stmtsNested.insert(stmt);
+    }
 
+    parent->stmtsNested.merge(this->stmtsNested);
+    parent->varUse.merge(this->varUse);
+    parent->varMod.merge(this->varMod);
+    parent->callStmts.insert(parent->callStmts.end(), this->callStmts.begin(), this->callStmts.end());
     parent->whileIfCallMap = this->whileIfCallMap;
+
+
 }
 
 void IfStack::extractFollows(std::vector<SimpleToken> stmts) {
-    for (int i = 0; i < stmts.size() - 1; i++) {
+    for (size_t i = 0; i < stmts.size() - 1; i++) {
         SimpleToken first = stmts.at(i);
         SimpleToken second = stmts.at(i + 1);
         Entity* firstEntity = generateEntity(first);
@@ -80,10 +86,10 @@ void IfStack::extractFollows(std::vector<SimpleToken> stmts) {
 
 void IfStack::extractFollowsT(std::vector<SimpleToken> stmts) {
     for (int i = 0; i < stmts.size(); i++) {
+        SimpleToken first = stmts.at(i);
+        Entity* firstEntity = generateEntity(first);
         for (int j = i + 1; j < stmts.size(); j++) {
-            SimpleToken first = stmts.at(i);
             SimpleToken second = stmts.at(j);
-            Entity* firstEntity = generateEntity(first);
             Entity* secondEntity = generateEntity(second);
             FollowsTRelationship* followsTRel = new FollowsTRelationship(firstEntity, secondEntity);
             context->client->storeRelationship(followsTRel);
@@ -92,9 +98,9 @@ void IfStack::extractFollowsT(std::vector<SimpleToken> stmts) {
 }
 
 void IfStack::extractParent(std::vector<SimpleToken> stmts) {
+    Entity* firstEntity = generateEntity(this->parent);
     for (int i = 0; i < stmts.size(); i++) {
         SimpleToken second = stmts.at(i);
-        Entity* firstEntity = generateEntity(this->parent);
         Entity* secondEntity = generateEntity(second);
         ParentRelationship* parentRel = new ParentRelationship(firstEntity, secondEntity);
         ParentTRelationship* parentTRel = new ParentTRelationship(firstEntity, secondEntity);
@@ -103,30 +109,30 @@ void IfStack::extractParent(std::vector<SimpleToken> stmts) {
     }
 }
 
-void IfStack::extractParentT(std::vector<SimpleToken> stmtsNested) {
-    for (int i = 0; i < stmtsNested.size(); i++) {
-        SimpleToken second = stmtsNested.at(i);
-        Entity* firstEntity = generateEntity(this->parent);
+void IfStack::extractParentT(std::unordered_set<SimpleToken, SimpleHash> stmtsNested) {
+    Entity* firstEntity = generateEntity(this->parent);
+    for (SimpleToken stmt : stmtsNested) {
+        SimpleToken second = stmt;
         Entity* secondEntity = generateEntity(second);
         ParentTRelationship* parentTRel = new ParentTRelationship(firstEntity, secondEntity);
         context->client->storeRelationship(parentTRel);
     }
 }
 
-void IfStack::extractUses(std::vector<SimpleToken> varUse) {
-    for (int i = 0; i < varUse.size(); i++) {
-        SimpleToken second = varUse.at(i);
-        Entity* firstEntity = generateEntity(this->parent);
+void IfStack::extractUses(std::unordered_set<SimpleToken, SimpleHash> varUse) {
+    Entity* firstEntity = generateEntity(this->parent);
+    for (SimpleToken var : varUse) {
+        SimpleToken second = var;
         Entity* secondEntity = generateEntity(SimpleToken(SpTokenType::TVARIABLE, second.value, 0));
         UsesRelationship* usesRel = new UsesRelationship(firstEntity, secondEntity);
         context->client->storeRelationship(usesRel);
     }
 }
 
-void IfStack::extractModify(std::vector<SimpleToken> varMod) {
-    for (int i = 0; i < varMod.size(); i++) {
-        SimpleToken second = varMod.at(i);
-        Entity* firstEntity = generateEntity(this->parent);
+void IfStack::extractModify(std::unordered_set<SimpleToken, SimpleHash> varMod) {
+    Entity* firstEntity = generateEntity(this->parent);
+    for (SimpleToken var : varMod) {
+        SimpleToken second = var;
         Entity* secondEntity = generateEntity(SimpleToken(SpTokenType::TVARIABLE, second.value, 0));
         ModifyRelationship* modifyRel = new ModifyRelationship(firstEntity, secondEntity);
         context->client->storeRelationship(modifyRel);
@@ -163,3 +169,4 @@ Entity* IfStack::generateEntity(SimpleToken token) {
     }
     return new Entity(std::to_string(token.statementNumber)); // Should not happen
 }
+
