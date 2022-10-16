@@ -199,7 +199,6 @@ void Extractor::endOfParser(std::multimap<std::string, std::string> callProcedur
 					Entity* right = generateEntity(itr->second);
 					UsesRelationship* rel = new UsesRelationship(left, right);
 					this->client->storeRelationship(rel);
-					//std::cout << "Uses " + std::to_string(callStmt.statementNumber) + " " + callStmt.value + " " + itr->second.value + "\n";
 				}
 			}
 			for (auto itr = modsForCalls.begin(); itr != modsForCalls.end(); ++itr) {
@@ -208,7 +207,6 @@ void Extractor::endOfParser(std::multimap<std::string, std::string> callProcedur
 					Entity* right = generateEntity(itr->second);
 					ModifyRelationship* rel = new ModifyRelationship(left, right);
 					this->client->storeRelationship(rel);
-					//std::cout << "Modify " + std::to_string(callStmt.statementNumber) + " " + callStmt.value + " " + itr->second.value + "\n";
 				}
 			}
 		}
@@ -223,7 +221,6 @@ void Extractor::endOfParser(std::multimap<std::string, std::string> callProcedur
 				Entity* right = generateEntity(itr2->second);
 				UsesRelationship* rel = new UsesRelationship(left, right);
 				this->client->storeRelationship(rel);
-				//std::cout << "Uses " + std::to_string(whileIfToken.statementNumber) +" " + itr2->second.value + "\n";
 			}
 		}
 		for (auto itr2 = modsForCalls.begin(); itr2 != modsForCalls.end(); ++itr2) {
@@ -232,7 +229,6 @@ void Extractor::endOfParser(std::multimap<std::string, std::string> callProcedur
 				Entity* right = generateEntity(itr2->second);
 				ModifyRelationship* rel = new ModifyRelationship(left, right);
 				this->client->storeRelationship(rel);
-				//std::cout << "Modify " + std::to_string(whileIfToken.statementNumber) + " " + itr2->second.value + "\n";
 			}
 		}
 	}
