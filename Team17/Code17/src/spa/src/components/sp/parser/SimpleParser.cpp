@@ -26,8 +26,12 @@ void SimpleParser::parseCode(std::string code) {
     for (std::string line : codeLines) {
         SimpleParser::parseLine(line);
     }
-    validator.isValidCode();
-    validator.isValidCalls(callProcedures, procedures);
+    if (!validator.isValidCode()) {
+        throw std::invalid_argument("Incomplete SIMPLE code");
+    }
+    if (!validator.isValidCalls(callProcedures, procedures)) {
+        throw std::invalid_argument("cyclic calls detected");
+    }
     extractor->endOfParser(callProcedures);
 }
 
