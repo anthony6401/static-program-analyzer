@@ -1,9 +1,8 @@
 #include "components/qps/query_preprocessor/query_tokenizer/Tokenizer.h"
 #include "components/qps/query_preprocessor/query_tokenizer/TokenObject.h"
 #include "ReusableTokens.h"
-
 #include <catch.hpp>
-#include <iostream>
+
 
 TEST_CASE("Declarations - Single") {
     std::string testQuery = "variable v;";
