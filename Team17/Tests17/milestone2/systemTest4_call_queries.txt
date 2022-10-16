@@ -48,28 +48,43 @@ procedure p;
 Select p such that Calls(p, "loner")
 none
 5000
-11 - Calls* Test 1
+11 - Calls wildcard Test 1
+procedure p;
+Select p such that Calls(p, _)
+procedure, first, second, third, fourth, fifth
+5000
+12 - Calls Test 10
+procedure p;
+Select p such that Calls(_, _)
+procedure, first, second, third, fourth, fifth, sixth, seventh, loner
+5000
+13 - Calls* Test 1
 procedure p;
 Select p such that Calls*("procedure", p)
 first, second, third, fourth, fifth, sixth, seventh
 5000
-12 - Calls* Test 2
+14 - Calls* Test 2
 procedure p;
 Select p such that Calls*(p, "seventh")
 procedure,first, second, third, fourth
 5000
-13 - Calls* Test 3
+15 - Calls* Test 3
 procedure p;
 Select p such that Calls*("fifth",p)
 sixth
 5000
-14 - Calls* Test 4
+16 - Calls* Test 4
 procedure p;
 Select p such that Calls*("fourth",p)
 fifth, sixth, seventh
 5000
-15 - Calls* Test 5
+17 - Calls* Test 5
 procedure p;
 Select p such that Calls*("seventh",p)
 none
+5000
+18 - Calls* wildcard Test 1
+procedure p;
+Select p such that Calls*("fourth",_)
+procedure, first, second, third, fourth, fifth, sixth, seventh, loner
 5000
