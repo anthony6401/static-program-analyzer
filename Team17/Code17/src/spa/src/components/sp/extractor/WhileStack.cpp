@@ -49,7 +49,9 @@ void WhileStack::mergeStack() {
     parent->varUse.merge(this->varUse);
     parent->varMod.merge(this->varMod);
     parent->callStmts.insert(parent->callStmts.end(), this->callStmts.begin(), this->callStmts.end());
-    parent->whileIfCallMap = this->whileIfCallMap;
+    for (std::pair<std::string, SimpleToken> pair : whileIfCallMap) {
+        parent->whileIfCallMap.insert(pair);
+    }
 
     for (SimpleToken stmt : this->stmts) {
         parent->stmtsNested.insert(stmt);
