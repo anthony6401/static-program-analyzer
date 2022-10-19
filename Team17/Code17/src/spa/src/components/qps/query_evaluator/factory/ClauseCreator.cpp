@@ -19,6 +19,8 @@
 #include "components/qps/query_evaluator/factory/clauses/patterns/WhilePatternClause.h"
 #include "components/qps/query_evaluator/factory/clauses/relationship/UsesClause.h"
 #include "components/qps/query_evaluator/factory/clauses/relationship/ModifiesClause.h"
+#include "components/qps/query_evaluator/factory/clauses/relationship/AffectsClause.h"
+#include "components/qps/query_evaluator/factory/clauses/relationship/AffectsTClause.h"
 
 
 std::shared_ptr<Clause> ClauseCreator::createClause(With with,
@@ -83,7 +85,11 @@ std::shared_ptr<Clause> ClauseCreator::createClause(SuchThat relationship, std::
         return std::make_shared<CallsTClause>(left, right, synonymToDesignEntityMap, qpsClient);
     } else if (relationshipType == TokenType::NEXT) {
         return std::make_shared<NextClause>(left, right, synonymToDesignEntityMap, qpsClient);
-    } else {
+    } else if (relationshipType == TokenType::NEXT_T) {
         return std::make_shared<NextTClause>(left, right, synonymToDesignEntityMap, qpsClient);
+    } else if (relationshipType == TokenType::AFFECTS) {
+        return std::make_shared<AffectsClause>(left, right, synonymToDesignEntityMap, qpsClient);
+    } else {
+        return std::make_shared<AffectsTClause>(left, right, synonymToDesignEntityMap, qpsClient);
     }
 }
