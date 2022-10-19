@@ -548,7 +548,8 @@ bool Parser::isRelationshipToken(TokenType token) {
 	std::vector<TokenType> relationshipTokens{
 		TokenType::FOLLOWS, TokenType::FOLLOWS_T, TokenType::PARENT,
 		TokenType::PARENT_T, TokenType::USES, TokenType::MODIFIES,
-		TokenType::CALLS, TokenType::CALLS_T, TokenType::NEXT, TokenType::NEXT_T 
+		TokenType::CALLS, TokenType::CALLS_T, TokenType::NEXT, 
+		TokenType::NEXT_T, TokenType::AFFECTS, TokenType::AFFECTS_T
 	};
 
 	if (std::find(relationshipTokens.begin(), relationshipTokens.end(), token) == relationshipTokens.end()) {
