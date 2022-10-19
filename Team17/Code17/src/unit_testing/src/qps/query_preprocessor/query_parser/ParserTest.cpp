@@ -402,6 +402,71 @@ TEST_CASE("Single clause query - new Next relationship") {
     REQUIRE(expectedResult == actualResult);
 };
 
+TEST_CASE("Single clause query - new Affects relationship") {
+    std::vector<TokenObject> testTokenObject{
+        TokenObject(TokenType::STMT, std::string("stmt")),
+        TokenObject(TokenType::SUCH, std::string("such")),
+        TokenObject(TokenType::SEMI_COLON, std::string(";")),
+        TokenObject(TokenType::SELECT, std::string("Select")),
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::THAT, "that"),
+        TokenObject(TokenType::AFFECTS, "Affects"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::INTEGER, "6"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+
+    };
+    Select expectedSelect = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, "such") });
+    std::vector<SuchThat> expectedSuchThat{ SuchThat(TokenType::AFFECTS, TokenObject(TokenType::INTEGER, "6"), TokenObject(TokenType::NAME, "such")) };
+    std::vector<Pattern> expectedPattern{};
+    std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"such", DesignEntity::STMT} };
+    int expectedNumOfDeclaredSynonyms = 1;
+
+    QueryObject expectedResult = QueryObject(expectedSelect, expectedSuchThat, expectedPattern, expectedMappedSynonyms, expectedNumOfDeclaredSynonyms);
+
+    Parser parser = Parser(testTokenObject);
+    QueryObject actualResult = parser.parse();
+
+    REQUIRE(expectedResult == actualResult);
+};
+
+TEST_CASE("Single clause query - new Affects* relationship") {
+    std::vector<TokenObject> testTokenObject{
+        TokenObject(TokenType::STMT, std::string("stmt")),
+        TokenObject(TokenType::SUCH, std::string("such")),
+        TokenObject(TokenType::SEMI_COLON, std::string(";")),
+        TokenObject(TokenType::ASSIGN, std::string("assign")),
+        TokenObject(TokenType::AFFECTS, std::string("Affects")),
+        TokenObject(TokenType::SEMI_COLON, std::string(";")),
+        TokenObject(TokenType::SELECT, std::string("Select")),
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::THAT, "that"),
+        TokenObject(TokenType::AFFECTS_T, "Affects*"),
+        TokenObject(TokenType::OPEN_BRACKET, "("),
+        TokenObject(TokenType::SUCH, "such"),
+        TokenObject(TokenType::COMMA, ","),
+        TokenObject(TokenType::AFFECTS, "Affects"),
+        TokenObject(TokenType::CLOSED_BRACKET, ")")
+
+    };
+    Select expectedSelect = Select(TokenType::SYNONYM, { TokenObject(TokenType::NAME, "such") });
+    std::vector<SuchThat> expectedSuchThat{ SuchThat(TokenType::AFFECTS_T, TokenObject(TokenType::NAME, "such"), TokenObject(TokenType::NAME, "Affects")) };
+    std::vector<Pattern> expectedPattern{};
+    std::unordered_map<std::string, DesignEntity> expectedMappedSynonyms{ {"such", DesignEntity::STMT}, {"Affects", DesignEntity::ASSIGN} };
+    int expectedNumOfDeclaredSynonyms = 2;
+
+    QueryObject expectedResult = QueryObject(expectedSelect, expectedSuchThat, expectedPattern, expectedMappedSynonyms, expectedNumOfDeclaredSynonyms);
+
+    Parser parser = Parser(testTokenObject);
+    QueryObject actualResult = parser.parse();
+
+    REQUIRE(expectedResult == actualResult);
+};
+
 TEST_CASE("Single clause query - pattern") {
     std::vector<TokenObject> testTokenObject{
         TokenObject(TokenType::VARIABLE, std::string("variable")),
