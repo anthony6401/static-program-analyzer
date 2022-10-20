@@ -1,7 +1,6 @@
 #include "FollowsRelationshipStorageInterface.h"
 #include "FollowsRelationshipStorage.h"
 #include "models/Relationship/FollowsRelationship.h"
-#include "models/Relationship/RelationshipType.h"
 #include "utils.h"
 
 FollowsRelationshipStorage::FollowsRelationshipStorage() : FollowsRelationshipStorageInterface(RelationshipType::FOLLOWS) {}

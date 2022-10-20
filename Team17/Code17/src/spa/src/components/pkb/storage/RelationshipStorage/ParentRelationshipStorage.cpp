@@ -1,6 +1,5 @@
 #include "ParentRelationshipStorageInterface.h"
 #include "ParentRelationshipStorage.h"
-#include "models/Relationship/RelationshipType.h"
 #include "models/Relationship/ParentRelationship.h"
 #include "components/pkb/storage/RelationshipStorage/utils.h"
 
