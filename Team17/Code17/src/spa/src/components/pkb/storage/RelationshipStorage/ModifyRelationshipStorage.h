@@ -11,6 +11,7 @@ public:
 	std::unordered_set<std::string> getRelationshipBySecond(RelationshipType relType, DesignEntity returnType, TokenObject secondArgument);
 	std::unordered_map<std::string, std::unordered_set<std::string>> getAllRelationship(RelationshipType relType, DesignEntity returnType1, DesignEntity returnType2);
 	std::unordered_set<std::string> getModifiesForAssign(TokenObject stmtArgument);
+	std::unordered_set<std::string> getModifiesForAffects(std::string stmt);
 
 private:
 	std::unordered_map<std::string, std::unordered_set<std::string>>* getStorageForward(DesignEntity designEntity);

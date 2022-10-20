@@ -10,6 +10,7 @@
 #include "components/pkb/storage/RelationshipStorage/CallsTRelationshipStorage.h"
 #include "components/pkb/storage/RelationshipStorage/NextRelationshipStorage.h"
 #include "components/pkb/runtimeEvaluator/NextTRelationshipEvaluator.h"
+#include "components/pkb/runtimeEvaluator/AffectsRelationshipEvaluator.h"
 
 RelationshipManager::RelationshipManager() {
 	ModifyRelationshipStorage* modifyRelStorage = new ModifyRelationshipStorage();
@@ -23,6 +24,7 @@ RelationshipManager::RelationshipManager() {
 	NextRelationshipStorage* nextRelStorage = new NextRelationshipStorage();
 
 	NextTRelationshipEvaluator* nextTRelEvaluator = new NextTRelationshipEvaluator(nextRelStorage);
+	AffectsRelationshipEvaluator* affectsRelEvaluator = new AffectsRelationshipEvaluator(nextRelStorage, modifyRelStorage, usesRelStorage);
 
 	relStorages.push_back(modifyRelStorage);
 	relStorages.push_back(usesRelStorage);
@@ -35,6 +37,7 @@ RelationshipManager::RelationshipManager() {
 	relStorages.push_back(nextRelStorage);
 
 	runtimeRelStorages.push_back(nextTRelEvaluator);
+	runtimeRelStorages.push_back(affectsRelEvaluator);
 }
 
 std::vector<RelationshipStorage*> RelationshipManager::getRelationshipStorage() {
