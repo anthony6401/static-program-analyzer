@@ -1,5 +1,6 @@
 #include "GroupedClause.h"
 #include "memory"
+#include "optimizer/ClauseSorter.h"
 
 GroupedClause::GroupedClause() : synonyms({}), clauses({}) {}
 
@@ -13,6 +14,9 @@ std::set<std::string> GroupedClause::getAllSynonyms() {
 
 
 ResultTable GroupedClause::evaluateGroupedClause() {
+
+    std::sort(clauses.begin(), clauses.end(), ClauseSorter());
+
     ResultTable evaluatedGroupRawResult;
     for (const auto& c : clauses) {
         ResultTable evaluatedClause = c -> evaluateClause();
