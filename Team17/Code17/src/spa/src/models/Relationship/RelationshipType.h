@@ -10,5 +10,7 @@ enum class RelationshipType {
     NEXT,
     NEXT_T,
     CALLS,
-    CALLS_T
+    CALLS_T,
+    AFFECTS,
+    AFFECTS_T
 };

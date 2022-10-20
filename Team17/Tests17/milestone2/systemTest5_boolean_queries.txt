@@ -293,6 +293,11 @@ variable v; assign a; procedure p, p1; while w; constant c; if ifs;
 Select BOOLEAN such that Uses(a, "var3") pattern a(v, _) with v.varName = "var1" and a.stmt# = 11 and a.stmt# = 8
 FALSE
 5000
+60 - Boolean test no common results
+variable v; assign a; procedure p, p1; while w; constant c; if ifs;
+Select BOOLEAN such that Uses(a, v) and Modifies(a,v)
+FALSE
+5000
 
 
 

@@ -325,8 +325,6 @@ TEST_CASE("WITH clause") {
     }
 }
 
-
-
 TEST_CASE("Returns BOOLEAN") {
     std::string testQuery = "Select BOOLEAN such that Affects*(s1, s)";
     std::vector<TokenObject> expectedResult {selectTokenObject, booleanTokenObject, suchTokenObject, thatTokenObject,
