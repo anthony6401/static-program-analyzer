@@ -89,17 +89,20 @@ void AffectsRelationshipEvaluator::DFSAffectsBackwardWithSynonym(std::string cur
 		std::unordered_set<std::string>::const_iterator exist = visited.find(neighbour);
 		std::string modifiesVar = getModifiesForBackward(neighbour);
 		bool isModifiesForBackward = usesSet.find(modifiesVar) != usesSet.end();
-		bool isAdded = false;
-		if ((filter.find(neighbour) != filter.end()) && isModifiesForBackward) {
-			isAdded = true;
-			result.insert(neighbour);
+
+		if (isModifiesForBackward) {
 			usesSet.erase(modifiesVar);
+
+			if ((filter.find(neighbour) != filter.end())) {
+				result.insert(neighbour);
+			}
 		}
+
 		if (exist == visited.end()) {
 			DFSAffectsBackwardWithSynonym(neighbour, usesSet, visited, result, filter);
 		}
 
-		if (isAdded) {
+		if (isModifiesForBackward) {
 			usesSet.insert(modifiesVar);
 		}
 	}

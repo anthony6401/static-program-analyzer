@@ -122,4 +122,36 @@ TEST_CASE("Affects Relationship Evaluator Test") {
 	REQUIRE(affectsRelationshipEvaluator->getRuntimeRelationship(RelationshipType::AFFECTS, stmtTokenObject1, stmtTokenObject7));
 
 	REQUIRE(!affectsRelationshipEvaluator->getRuntimeRelationship(RelationshipType::AFFECTS, stmtTokenObject1, stmtTokenObject4));
+
+	std::unordered_set<std::string> a_filter = { stmt1, stmt3, stmt4, stmt5, stmt7 };
+	std::unordered_set<std::string> empty = {};
+
+	// Test for Affects(1, a)
+	std::unordered_set<std::string> expectedResultByFirst = { stmt5, stmt7 };
+
+	REQUIRE(affectsRelationshipEvaluator->getRuntimeRelationshipByFirst(RelationshipType::AFFECTS, stmtTokenObject1, a_filter) == expectedResultByFirst);
+	REQUIRE(affectsRelationshipEvaluator->getRuntimeRelationshipByFirst(RelationshipType::AFFECTS, stmtTokenObject2, a_filter) == empty);
+	REQUIRE(affectsRelationshipEvaluator->getRuntimeRelationshipByFirst(RelationshipType::AFFECTS, stmtTokenObject3, a_filter) == expectedResultByFirst);
+	REQUIRE(affectsRelationshipEvaluator->getRuntimeRelationshipByFirst(RelationshipType::AFFECTS, stmtTokenObject4, a_filter) == empty);
+	REQUIRE(affectsRelationshipEvaluator->getRuntimeRelationshipByFirst(RelationshipType::AFFECTS, stmtTokenObject5, a_filter) == empty);
+	REQUIRE(affectsRelationshipEvaluator->getRuntimeRelationshipByFirst(RelationshipType::AFFECTS, stmtTokenObject6, a_filter) == empty);
+	REQUIRE(affectsRelationshipEvaluator->getRuntimeRelationshipByFirst(RelationshipType::AFFECTS, stmtTokenObject7, a_filter) == empty);
+	
+	// Test for Affects(a, 2)
+	std::unordered_set<std::string> expectedResultBySecond = { stmt1, stmt3 };
+
+	REQUIRE(affectsRelationshipEvaluator->getRuntimeRelationshipBySecond(RelationshipType::AFFECTS, stmtTokenObject1, a_filter) == empty);
+	REQUIRE(affectsRelationshipEvaluator->getRuntimeRelationshipBySecond(RelationshipType::AFFECTS, stmtTokenObject2, a_filter) == empty);
+	REQUIRE(affectsRelationshipEvaluator->getRuntimeRelationshipBySecond(RelationshipType::AFFECTS, stmtTokenObject3, a_filter) == empty);
+	REQUIRE(affectsRelationshipEvaluator->getRuntimeRelationshipBySecond(RelationshipType::AFFECTS, stmtTokenObject4, a_filter) == empty);
+	REQUIRE(affectsRelationshipEvaluator->getRuntimeRelationshipBySecond(RelationshipType::AFFECTS, stmtTokenObject5, a_filter) == expectedResultBySecond);
+	REQUIRE(affectsRelationshipEvaluator->getRuntimeRelationshipBySecond(RelationshipType::AFFECTS, stmtTokenObject6, a_filter) == empty);
+	REQUIRE(affectsRelationshipEvaluator->getRuntimeRelationshipBySecond(RelationshipType::AFFECTS, stmtTokenObject7, a_filter) == expectedResultBySecond);
+
+	// Test for Affects(a1, a2)
+	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultAll{
+									{ stmt1, std::unordered_set<std::string>({stmt5, stmt7})},
+									{ stmt3, std::unordered_set<std::string>({stmt5, stmt7})} };
+
+	REQUIRE(affectsRelationshipEvaluator->getAllRuntimeRelationship(RelationshipType::AFFECTS, a_filter, a_filter) == expectedResultAll);
 }
