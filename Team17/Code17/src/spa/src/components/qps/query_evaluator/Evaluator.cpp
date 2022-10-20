@@ -29,11 +29,10 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
             evaluatedResults.setIsFalseResultToTrue();
         } else {
             evaluatedResults = Evaluator::evaluateHasSelectSynonymClauses(hasSelectSynonymPresent, selectClause);
+            synonymsInTable = {evaluatedResults.synonymsList.begin(), evaluatedResults.synonymsList.end()};
+            selectClause = ClauseCreator::createClause(select, synonymsInTable, synonymToDesignEntityMap, qpsClient);
+            Evaluator::combineResultsWithSelect(selectClause, evaluatedResults);
         }
-
-        synonymsInTable = {evaluatedResults.synonymsList.begin(), evaluatedResults.synonymsList.end()};
-        selectClause = ClauseCreator::createClause(select, synonymsInTable, synonymToDesignEntityMap, qpsClient);
-        Evaluator::combineResultsWithSelect(selectClause, evaluatedResults);
 
         Evaluator::populateResultsList(evaluatedResults, select, results, qpsClient, synonymToDesignEntityMap);
     }
