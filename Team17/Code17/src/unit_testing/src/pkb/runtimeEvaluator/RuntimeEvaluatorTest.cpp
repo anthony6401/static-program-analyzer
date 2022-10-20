@@ -1,7 +1,10 @@
 #include <catch.hpp>
 
 #include "components/pkb/storage/RelationshipStorage/NextRelationshipStorage.h"
+#include "components/pkb/storage/RelationshipStorage/ModifyRelationshipStorage.h"
+#include "components/pkb/storage/RelationshipStorage/UsesRelationshipStorage.h"
 #include "components/pkb/runtimeEvaluator/NextTRelationshipEvaluator.h"
+#include "components/pkb/runtimeEvaluator/AffectsRelationshipEvaluator.h"
 
 #include "../RelationshipObject.h"
 #include "../ReuseableTokenObject.h"
@@ -81,4 +84,42 @@ TEST_CASE("NextT Relationship Evaluator Test") {
 	REQUIRE(nextTRelationshipEvaluator->getAllRuntimeRelationship(RelationshipType::NEXT_T, stmt_filter, stmt_filter) == expectedStmtStmtAll);
 	REQUIRE(nextTRelationshipEvaluator->getAllRuntimeRelationship(RelationshipType::NEXT_T, stmt_filter, w_filter) == expectedStmtWhileAll);
 	REQUIRE(nextTRelationshipEvaluator->getAllRuntimeRelationship(RelationshipType::NEXT_T, w_filter, stmt_filter) == emptyMap);
+}
+
+TEST_CASE("Affects Relationship Evaluator Test") {
+	NextRelationshipStorage* nextRelationshipStorage = new NextRelationshipStorage();
+	ModifyRelationshipStorage* modifyRelationshipStorage = new ModifyRelationshipStorage();
+	UsesRelationshipStorage* usesRelationshipStorage = new UsesRelationshipStorage();
+	AffectsRelationshipEvaluator* affectsRelationshipEvaluator = new AffectsRelationshipEvaluator(nextRelationshipStorage, modifyRelationshipStorage, usesRelationshipStorage);
+
+	// Populate PKB for Next
+	REQUIRE(nextRelationshipStorage->storeRelationship(nextRelationshipAffectsOne));
+	REQUIRE(nextRelationshipStorage->storeRelationship(nextRelationshipAffectsTwo));
+	REQUIRE(nextRelationshipStorage->storeRelationship(nextRelationshipAffectsThree));
+	REQUIRE(nextRelationshipStorage->storeRelationship(nextRelationshipAffectsFour));
+	REQUIRE(nextRelationshipStorage->storeRelationship(nextRelationshipAffectsFive));
+	REQUIRE(nextRelationshipStorage->storeRelationship(nextRelationshipAffectsSix));
+	REQUIRE(nextRelationshipStorage->storeRelationship(nextRelationshipAffectsSeven));
+
+	// Populate PKB for Modifies
+	REQUIRE(modifyRelationshipStorage->storeRelationship(modifyRelationshipAffectsOne));
+	REQUIRE(modifyRelationshipStorage->storeRelationship(modifyRelationshipAffectsTwo));
+	REQUIRE(modifyRelationshipStorage->storeRelationship(modifyRelationshipAffectsThree));
+	REQUIRE(modifyRelationshipStorage->storeRelationship(modifyRelationshipAffectsFour));
+	REQUIRE(modifyRelationshipStorage->storeRelationship(modifyRelationshipAffectsFive));
+	REQUIRE(modifyRelationshipStorage->storeRelationship(modifyRelationshipAffectsSix));
+
+	// Populate PKB for Uses
+	REQUIRE(usesRelationshipStorage->storeRelationship(usesRelationshipAffectsOne));
+	REQUIRE(usesRelationshipStorage->storeRelationship(usesRelationshipAffectsTwo));
+	REQUIRE(usesRelationshipStorage->storeRelationship(usesRelationshipAffectsThree));
+	REQUIRE(usesRelationshipStorage->storeRelationship(usesRelationshipAffectsFour));
+	REQUIRE(usesRelationshipStorage->storeRelationship(usesRelationshipAffectsFive));
+
+	// Test for affects(1, 2)
+	REQUIRE(affectsRelationshipEvaluator->getRuntimeRelationship(RelationshipType::AFFECTS, stmtTokenObject1, stmtTokenObject5));
+	REQUIRE(affectsRelationshipEvaluator->getRuntimeRelationship(RelationshipType::AFFECTS, stmtTokenObject3, stmtTokenObject5));
+	REQUIRE(affectsRelationshipEvaluator->getRuntimeRelationship(RelationshipType::AFFECTS, stmtTokenObject1, stmtTokenObject7));
+
+	REQUIRE(!affectsRelationshipEvaluator->getRuntimeRelationship(RelationshipType::AFFECTS, stmtTokenObject1, stmtTokenObject4));
 }
