@@ -148,10 +148,14 @@ TEST_CASE("Affects Relationship Evaluator Test") {
 	REQUIRE(affectsRelationshipEvaluator->getRuntimeRelationshipBySecond(RelationshipType::AFFECTS, stmtTokenObject6, a_filter) == empty);
 	REQUIRE(affectsRelationshipEvaluator->getRuntimeRelationshipBySecond(RelationshipType::AFFECTS, stmtTokenObject7, a_filter) == expectedResultBySecond);
 
+	std::unordered_map<std::string, std::unordered_set<std::string>> emptyMap = {};
 	// Test for Affects(a1, a2)
 	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultAll{
 									{ stmt1, std::unordered_set<std::string>({stmt5, stmt7})},
 									{ stmt3, std::unordered_set<std::string>({stmt5, stmt7})} };
 
+	std::unordered_set<std::string> if_filter = { stmt2 };
+
 	REQUIRE(affectsRelationshipEvaluator->getAllRuntimeRelationship(RelationshipType::AFFECTS, a_filter, a_filter) == expectedResultAll);
+	REQUIRE(affectsRelationshipEvaluator->getAllRuntimeRelationship(RelationshipType::AFFECTS, if_filter, a_filter) == emptyMap);
 }
