@@ -29,9 +29,9 @@ private:
 		std::unordered_set<std::string>& filter2,
 		std::unordered_map<std::string, std::unordered_set<std::string>>& result_map);
 	bool isModifies(std::string target, std::string var);
-	std::string getModifiesForBackward(std::string target);
 	bool isUses(std::string target, std::string var);
-	std::string getIntersectionVar(std::unordered_set<std::string>& modifiesSet, std::unordered_set<std::string>& usesSet);
+	std::unordered_set<std::string> getModifiesForBackward(std::string target);
+	std::unordered_set<std::string> getIntersectionVar(std::unordered_set<std::string>& modifiesSet, std::unordered_set<std::string>& usesSet);
 
 	NextRelationshipStorage* nextStorage;
 	ModifyRelationshipStorage* modifiesStorage;
