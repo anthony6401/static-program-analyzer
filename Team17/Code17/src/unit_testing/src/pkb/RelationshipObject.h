@@ -578,3 +578,29 @@ static Relationship* callsTRelationshipTwoDup = new CallsTRelationship(procedure
 
 static Relationship* callsTRelationshipThree = new CallsTRelationship(procedureEntityTwo, procedureEntityThree);
 static Relationship* callsTRelationshipThreeDup = new CallsTRelationship(procedureEntityTwo, procedureEntityThree);
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Next Relationship for Affects Test
+static Relationship* nextRelationshipAffectsOne = new NextRelationship(assignEntityAffects, ifEntityAffects);
+static Relationship* nextRelationshipAffectsTwo = new NextRelationship(ifEntityAffects, assignEntityAffectsTwo);
+static Relationship* nextRelationshipAffectsThree = new NextRelationship(ifEntityAffects, assignEntityAffectsThree);
+static Relationship* nextRelationshipAffectsFour = new NextRelationship(assignEntityAffectsTwo, assignEntityAffectsFour);
+static Relationship* nextRelationshipAffectsFive = new NextRelationship(assignEntityAffectsThree, assignEntityAffectsFour);
+static Relationship* nextRelationshipAffectsSix = new NextRelationship(assignEntityAffectsFour, readEntityAffects);
+static Relationship* nextRelationshipAffectsSeven = new NextRelationship(readEntityAffects, assignEntityAffectsFive);
+
+// Modifies Relationship for Affects Test
+static Relationship* modifyRelationshipAffectsOne = new ModifyRelationship(assignEntityAffects, variableAffectsX);
+static Relationship* modifyRelationshipAffectsTwo = new ModifyRelationship(assignEntityAffectsTwo, variableAffectsX);
+static Relationship* modifyRelationshipAffectsThree = new ModifyRelationship(assignEntityAffectsThree, variableAffectsA);
+static Relationship* modifyRelationshipAffectsFour = new ModifyRelationship(assignEntityAffectsFour, variableAffectsA);
+static Relationship* modifyRelationshipAffectsFive = new ModifyRelationship(readEntityAffects, variableAffectsA);
+static Relationship* modifyRelationshipAffectsSix = new ModifyRelationship(assignEntityAffectsFive, variableAffectsZ);
+
+// Uses Relationship for Affects Test
+static Relationship* usesRelationshipAffectsOne = new UsesRelationship(assignEntityAffectsTwo, variableAffectsA);
+static Relationship* usesRelationshipAffectsTwo = new UsesRelationship(assignEntityAffectsThree, variableAffectsB);
+static Relationship* usesRelationshipAffectsThree = new UsesRelationship(assignEntityAffectsFour, variableAffectsX);
+static Relationship* usesRelationshipAffectsFour = new UsesRelationship(assignEntityAffectsFive, variableAffectsA);
+static Relationship* usesRelationshipAffectsFive = new UsesRelationship(assignEntityAffectsFive, variableAffectsX);
