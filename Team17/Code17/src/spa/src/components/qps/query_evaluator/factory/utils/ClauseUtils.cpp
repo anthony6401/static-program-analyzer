@@ -38,7 +38,7 @@ std::unordered_set<std::string> ClauseUtils::processMapToSetFromSecond(std::unor
     return processedResult;
 }
 
-std::unordered_set<std::string> processMapToSetByMapIntersection(std::unordered_map<std::string, std::unordered_set<std::string>> results) {
+std::unordered_set<std::string> ClauseUtils::processMapToSetByMapIntersection(std::unordered_map<std::string, std::unordered_set<std::string>> results) {
     std::unordered_set<std::string> intersection;
     std::unordered_set<std::string> keys;
     std::unordered_set<std::string> values;
