@@ -48,7 +48,11 @@ std::unordered_set<std::string> ClauseUtils::processMapToSetByMapIntersection(st
         std::unordered_set<std::string> valuesInEntry = it -> second;
         values.insert(valuesInEntry.begin(), valuesInEntry.end());
     }
-    std::insert_iterator<std::unordered_set<std::string>> IntersectIterate(intersection, intersection.begin());
-    std::set_intersection(keys.begin(), keys.end(),values.begin(), values.end(),IntersectIterate);
+
+    for (const auto& k : keys) {
+        if (values.count(k) != 0) {
+            intersection.insert(k);
+        }
+    }
     return intersection;
 }
