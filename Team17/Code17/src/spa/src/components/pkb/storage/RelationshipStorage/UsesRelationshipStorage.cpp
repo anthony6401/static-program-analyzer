@@ -223,3 +223,11 @@ std::unordered_map<std::string, std::unordered_set<std::string>> UsesRelationshi
 
 	return std::unordered_map<std::string, std::unordered_set<std::string>>();
 }
+
+std::unordered_set<std::string> UsesRelationshipStorage::getUsesForAssign(std::string stmtNum) {
+	if (this->assignForwardStorage.find(stmtNum) != this->assignForwardStorage.end()) {
+		return this->assignForwardStorage.find(stmtNum)->second;
+	}
+
+	return std::unordered_set<std::string>();
+}
