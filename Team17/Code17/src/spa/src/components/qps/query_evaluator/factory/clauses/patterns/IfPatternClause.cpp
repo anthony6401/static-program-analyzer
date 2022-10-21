@@ -15,6 +15,10 @@ ResultTable IfPatternClause::evaluateClause() {
     }
 }
 
+size_t IfPatternClause::getPriority() {
+    return priority;
+}
+
 size_t IfPatternClause::getNumberOfSynonyms() {
     size_t numberOfSynonyms = 0;
     if (firstArgument.getTokenType() == TokenType::NAME) {

@@ -31,6 +31,10 @@ ResultTable AffectsClause::evaluateClause() {
     }
 }
 
+size_t AffectsClause::getPriority() {
+    return priority;
+}
+
 std::set<std::string> AffectsClause::getAllSynonyms() {
     std::set<std::string> synonyms = {};
     if (left.getTokenType() == TokenType::NAME) {

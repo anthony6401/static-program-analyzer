@@ -17,7 +17,7 @@ public:
         }
 
         // If number of synonyms are the same, prioritise clause with lesser results
-        return true;
+        return clause1->getPriority() < clause2->getPriority();
     }
 };
 

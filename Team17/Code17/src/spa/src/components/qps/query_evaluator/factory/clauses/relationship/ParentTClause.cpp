@@ -31,6 +31,10 @@ ResultTable ParentTClause::evaluateClause() {
     }
 }
 
+size_t ParentTClause::getPriority() {
+    return priority;
+}
+
 std::set<std::string> ParentTClause::getAllSynonyms() {
     std::set<std::string> synonyms = {};
     if (left.getTokenType() == TokenType::NAME) {

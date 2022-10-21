@@ -13,6 +13,13 @@ std::set<std::string> GroupedClause::getAllSynonyms() {
     return synonyms;
 }
 
+size_t GroupedClause::getNumberOfSynonyms() const {
+     return synonyms.size();
+}
+
+size_t GroupedClause::getPriority() const {
+    return priority;
+}
 
 ResultTable GroupedClause::evaluateGroupedClause() {
 
@@ -34,6 +41,7 @@ void GroupedClause::mergeGroupedClause(GroupedClause &group) {
     auto clausesOfMergingGroup = group.getClauses();
     clauses.insert(clauses.end(), clausesOfMergingGroup.begin(), clausesOfMergingGroup.end());
     synonyms.insert(synonymsOfMergingGroup.begin(), synonymsOfMergingGroup.end());
+    priority += group.getPriority();
 }
 
 bool GroupedClause::hasCommonSynonymWithClause(std::shared_ptr<Clause> &clause) {
@@ -59,6 +67,7 @@ void GroupedClause::addClauseToGroup(std::shared_ptr<Clause> &clause) {
     }
 
     clauses.emplace_back(clause);
+    priority += clause->getPriority();
 }
 
 bool GroupedClause::isEmpty() {

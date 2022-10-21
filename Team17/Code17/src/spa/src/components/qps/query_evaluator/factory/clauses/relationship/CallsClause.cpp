@@ -31,6 +31,10 @@ ResultTable CallsClause::evaluateClause() {
     }
 }
 
+size_t CallsClause::getPriority() {
+    return priority;
+}
+
 size_t CallsClause::getNumberOfSynonyms() {
     size_t numberOfSynonyms = 0;
     if (left.getTokenType() == TokenType::NAME) {

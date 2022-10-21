@@ -31,6 +31,10 @@ ResultTable FollowsClause::evaluateClause() {
     }
 }
 
+size_t FollowsClause::getPriority() {
+    return priority;
+}
+
 std::set<std::string> FollowsClause::getAllSynonyms() {
     std::set<std::string> synonyms = {};
     if (left.getTokenType() == TokenType::NAME) {

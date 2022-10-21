@@ -1,5 +1,6 @@
 #include "ClausesDivider.h"
 
+
 ClauseDivider::ClauseDivider() : noSynonymsPresent({}), connectedSynonymsGroups({}), selectSynonymPresentGroups({}), selectSynonymNotPresentGroups({}) {}
 
 GroupedClause ClauseDivider::getNoSynonymsPresent() {

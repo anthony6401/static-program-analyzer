@@ -12,6 +12,7 @@ private:
     QPSClient qpsClient;
     TokenObject left;
     TokenObject right;
+    size_t priority = 0;
     ResultTable evaluateSynonymSynonym();
     ResultTable evaluateSynonymWildcard();
     ResultTable evaluateSynonymNameQuotes();
@@ -28,6 +29,7 @@ public:
     ResultTable evaluateClause() override;
     size_t getNumberOfSynonyms() override;
     std::set<std::string> getAllSynonyms() override;
+    size_t getPriority() override;
 };
 
 #endif //SPA_CALLSCLAUSE_H

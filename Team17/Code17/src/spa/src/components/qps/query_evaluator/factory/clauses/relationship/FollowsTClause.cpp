@@ -53,6 +53,10 @@ size_t FollowsTClause::getNumberOfSynonyms() {
     return numberOfSynonyms;
 }
 
+size_t FollowsTClause::getPriority() {
+    return priority;
+}
+
 ResultTable FollowsTClause::evaluateSynonymSynonym() {
     std::string leftValue = left.getValue();
     std::string rightValue = right.getValue();

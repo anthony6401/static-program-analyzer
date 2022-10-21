@@ -26,6 +26,10 @@ ResultTable UsesClause::evaluateClause() {
     }
 }
 
+size_t UsesClause::getPriority() {
+    return priority;
+}
+
 size_t UsesClause::getNumberOfSynonyms() {
     size_t numberOfSynonyms = 0;
     if (left.getTokenType() == TokenType::NAME) {
