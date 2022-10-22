@@ -3,6 +3,7 @@
 
 #include "components/qps/query_evaluator/factory/interface/Clause.h"
 #include <memory>
+#include <algorithm>
 
 
 class ClauseSorter {

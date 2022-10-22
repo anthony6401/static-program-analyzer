@@ -5,6 +5,7 @@
 #include "components/pkb/clients/QPSClient.h"
 #include "ClausesDivider.h"
 #include "optimizer//ClauseGroupSorter.h"
+#include <algorithm>
 
 void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &results, QPSClient qpsClient) {
     if (!queryObject.isSyntacticallyCorrect()) {

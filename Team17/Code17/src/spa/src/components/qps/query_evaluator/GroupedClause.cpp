@@ -2,6 +2,7 @@
 #include "memory"
 #include <algorithm>
 #include "optimizer/ClauseSorter.h"
+#include <algorithm>
 
 GroupedClause::GroupedClause() : synonyms({}), clauses({}) {}
 

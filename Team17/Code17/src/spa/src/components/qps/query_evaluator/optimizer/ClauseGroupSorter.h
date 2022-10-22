@@ -4,6 +4,7 @@
 #include "components/qps/query_evaluator/factory/interface/Clause.h"
 #include "components/qps/query_evaluator/GroupedClause.h"
 #include <memory>
+#include <algorithm>
 
 
 class ClauseGroupSorter {
