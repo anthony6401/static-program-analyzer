@@ -1,6 +1,7 @@
 #include <string>
 #include <list>
 #include <vector>
+#include <chrono>
 #include "iostream"
 #include <components/qps/query_preprocessor/query_tokenizer/Tokenizer.h>
 #include <components/qps/query_preprocessor/query_tokenizer/TokenObject.h>
@@ -21,14 +22,20 @@ QueryObject QPS::tokenizeAndParseQuery(std::string query) {
 }
 
 void QPS::processQueryResult(std::string query, std::list<std::string> &results, QPSClient qpsClient) {
+    clock_t start, end;
+    std::cout << query << std::endl;
+    start = clock();
     try {
         QueryObject parsedQuery = tokenizeAndParseQuery(query);
         Validator validator = Validator(parsedQuery);
         QueryObject parsedAndValidatedQuery = validator.validate();
         Evaluator::evaluateQuery(parsedAndValidatedQuery, results, qpsClient);
-    } catch (std::exception &e) {
+    }
+    catch (std::exception& e) {
         std::cout << e.what() << std::endl;
         results.emplace_back("SyntaxError");
     }
+    end = clock();
+    std::cout << ("parsing time: %0.8f sec: ", ((float)end - start) / CLOCKS_PER_SEC) << std::endl;
 }
 
