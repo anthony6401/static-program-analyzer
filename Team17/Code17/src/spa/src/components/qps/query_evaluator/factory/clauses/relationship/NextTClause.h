@@ -12,7 +12,7 @@ private:
     QPSClient qpsClient;
     TokenObject left;
     TokenObject right;
-    size_t priority = 0;
+    size_t priority = 22;
     ResultTable evaluateSynonymSynonym();
     ResultTable evaluateSynonymWildcard();
     ResultTable evaluateSynonymInteger();

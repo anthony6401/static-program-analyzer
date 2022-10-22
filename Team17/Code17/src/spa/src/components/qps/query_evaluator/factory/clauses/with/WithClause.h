@@ -12,7 +12,7 @@ private:
     std::vector<TokenObject> right;
     std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap;
     QPSClient qpsClient;
-    size_t priority = 0;
+    size_t priority = 1;
     std::unordered_set<std::string> findCommonAttributeValues(std::unordered_set<std::string> leftNameResult, std::unordered_set<std::string> rightNameResult);
     std::unordered_set<std::pair<std::string, std::string>, hashFunction> findCommonAttributeStatements(const std::unordered_set<std::string>& leftResult, std::unordered_set<std::string> rightResult);
     ResultTable evaluateAttributeAttribute();
