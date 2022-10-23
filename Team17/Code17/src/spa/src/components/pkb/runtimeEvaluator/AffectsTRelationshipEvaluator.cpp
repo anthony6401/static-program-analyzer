@@ -1,40 +1,18 @@
 #include "AffectsTRelationshipEvaluator.h"
 #include <iostream>
+#include "utils.h"
 
 AffectsTRelationshipEvaluator::AffectsTRelationshipEvaluator(NextRelationshipStorage* nextStorage, ModifyRelationshipStorage* modifiesStorage, UsesRelationshipStorage* usesStorage)
 	: nextStorage(nextStorage),
 	modifiesStorage(modifiesStorage),
 	usesStorage(usesStorage) {}
 
-bool AffectsTRelationshipEvaluator::isModifies(std::string target, std::string var) {
-	std::unordered_set<std::string> modifiesSet = modifiesStorage->getModifiesForAffects(target);
-	return modifiesSet.find(var) != modifiesSet.end();
-}
 
 bool AffectsTRelationshipEvaluator::isModifiesAssign(std::string target) {
 	std::unordered_set<std::string> modifiesSet = modifiesStorage->getModifiesForAssign(target);
 	return modifiesSet.size() != 0;
 }
 
-std::unordered_set<std::string> AffectsTRelationshipEvaluator::getModifiesForBackward(std::string target) {
-	return modifiesStorage->getModifiesForAffects(target);
-}
-
-bool AffectsTRelationshipEvaluator::isUses(std::string target, std::string var) {
-	std::unordered_set<std::string> usesSet = usesStorage->getUsesForAssign(target);
-	return usesSet.find(var) != usesSet.end();
-}
-
-std::unordered_set<std::string> AffectsTRelationshipEvaluator::getIntersectionVar(std::unordered_set<std::string>& modifiesSet, std::unordered_set<std::string>& usesSet) {
-	std::unordered_set<std::string> result;
-	for (auto const& modifiesVar : modifiesSet) {
-		if (usesSet.find(modifiesVar) != usesSet.end()) {
-			result.insert(modifiesVar);
-		}
-	}
-
-	return result;
-}
 
 // DFS search to answer Next* queries with 2 integer values
 bool AffectsTRelationshipEvaluator::DFSAffectsTForward(std::string curr, std::string target, std::string var, std::unordered_set<std::string>& visited) {
@@ -44,16 +22,16 @@ bool AffectsTRelationshipEvaluator::DFSAffectsTForward(std::string curr, std::st
 
 	for (std::string neighbour : neighbours) {
 		if (target == neighbour) {
-			if (isUses(neighbour, var)) {
+			if (RuntimeRelationshipUtils::isUses(usesStorage,neighbour, var)) {
 				return true;
 			}
 		} else {
-			if ((visited.find(neighbour) == visited.end() && (!isModifies(neighbour, var)) && DFSAffectsTForward(neighbour, target, var, visited))) {
+			if ((visited.find(neighbour) == visited.end() && (!RuntimeRelationshipUtils::isModifies(modifiesStorage,neighbour, var)) && DFSAffectsTForward(neighbour, target, var, visited))) {
 				return true;
 			}
 
 			if (visited.find(neighbour) == visited.end()) {
-				if (isUses(neighbour, var)) {
+				if (RuntimeRelationshipUtils::isUses(usesStorage,neighbour, var)) {
 					std::unordered_set<std::string> modifiesSet = modifiesStorage->getModifiesForAssign(neighbour);
 
 					std::string newVar = *modifiesSet.begin();
@@ -84,7 +62,7 @@ void AffectsTRelationshipEvaluator::DFSAffectsTForwardWithSynonym(std::string cu
 	std::unordered_set<std::string> neighbours = this->nextStorage->getNextForward(curr);
 
 	for (std::string neighbour : neighbours) {
-		if ((filter.find(neighbour) != filter.end()) && isUses(neighbour, var)) {
+		if ((filter.find(neighbour) != filter.end()) && RuntimeRelationshipUtils::isUses(usesStorage, neighbour, var)) {
 			result.insert(neighbour);
 
 			if (visited.find(neighbour) == visited.end()) {
@@ -97,7 +75,7 @@ void AffectsTRelationshipEvaluator::DFSAffectsTForwardWithSynonym(std::string cu
 			}
 		}
 
-		if (visited.find(neighbour) == visited.end() && !isModifies(neighbour, var)) {
+		if (visited.find(neighbour) == visited.end() && !RuntimeRelationshipUtils::isModifies(modifiesStorage,neighbour, var)) {
 			DFSAffectsTForwardWithSynonym(neighbour, var, visited, result, filter);
 		}
 	}
@@ -121,8 +99,8 @@ void AffectsTRelationshipEvaluator::DFSAffectsTBackwardWithSynonym(std::string c
 
 	for (std::string neighbour : neighbours) {
 		std::unordered_set<std::string>::const_iterator exist = visited.find(neighbour);
-		std::unordered_set<std::string> modifiesSet = getModifiesForBackward(neighbour);
-		std::unordered_set<std::string> intersectionSet = getIntersectionVar(modifiesSet, usesSet);
+		std::unordered_set<std::string> modifiesSet = RuntimeRelationshipUtils::getModifiesForBackward(modifiesStorage,neighbour);
+		std::unordered_set<std::string> intersectionSet = RuntimeRelationshipUtils::getIntersectionVar(modifiesSet, usesSet);
 		bool isModifiesForBackward = intersectionSet.size() != 0;
 
 		if (isModifiesForBackward) {
