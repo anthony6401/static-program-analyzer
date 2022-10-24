@@ -378,3 +378,125 @@ TEST_CASE("QPS Client test") {
 	REQUIRE(qpsClient.getAllRelationship(RelationshipType::CALLS, DesignEntity::PROCEDURE, DesignEntity::PROCEDURE) == expectedResultCallsAll);
 	REQUIRE(qpsClient.getAllRelationship(RelationshipType::CALLS_T, DesignEntity::PROCEDURE, DesignEntity::PROCEDURE) == expectedResultCallsTAll);
 }
+
+PKB* pkb2 = new PKB();
+
+TEST_CASE("SP Client Runtime Evaluator Relationship test") {
+	SPClient spClient = SPClient(pkb2);
+
+	REQUIRE(spClient.storeRelationship(nextRelationshipAffectsOne));
+	REQUIRE(spClient.storeRelationship(nextRelationshipAffectsTwo));
+	REQUIRE(spClient.storeRelationship(nextRelationshipAffectsThree));
+	REQUIRE(spClient.storeRelationship(nextRelationshipAffectsFour));
+	REQUIRE(spClient.storeRelationship(nextRelationshipAffectsFive));
+	REQUIRE(spClient.storeRelationship(nextRelationshipAffectsSix));
+	REQUIRE(spClient.storeRelationship(nextRelationshipAffectsSeven));
+
+	// Populate PKB for Modifies
+	REQUIRE(spClient.storeRelationship(modifyRelationshipAffectsOne));
+	REQUIRE(spClient.storeRelationship(modifyRelationshipAffectsTwo));
+	REQUIRE(spClient.storeRelationship(modifyRelationshipAffectsThree));
+	REQUIRE(spClient.storeRelationship(modifyRelationshipAffectsFour));
+	REQUIRE(spClient.storeRelationship(modifyRelationshipAffectsFive));
+	REQUIRE(spClient.storeRelationship(modifyRelationshipAffectsSix));
+
+	// Populate PKB for Uses
+	REQUIRE(spClient.storeRelationship(usesRelationshipAffectsOne));
+	REQUIRE(spClient.storeRelationship(usesRelationshipAffectsTwo));
+	REQUIRE(spClient.storeRelationship(usesRelationshipAffectsThree));
+	REQUIRE(spClient.storeRelationship(usesRelationshipAffectsFour));
+}
+
+TEST_CASE("QPS Client Runtime Evaluator Relationship test") {
+	QPSClient qpsClient = QPSClient(pkb2)
+		;
+	// Test for affects(1, 2)
+	REQUIRE(qpsClient.getRelationship(RelationshipType::AFFECTS, stmtTokenObject1, stmtTokenObject5));
+	REQUIRE(qpsClient.getRelationship(RelationshipType::AFFECTS, stmtTokenObject3, stmtTokenObject5));
+	REQUIRE(!qpsClient.getRelationship(RelationshipType::AFFECTS, stmtTokenObject1, stmtTokenObject7));
+	REQUIRE(!qpsClient.getRelationship(RelationshipType::AFFECTS, stmtTokenObject1, stmtTokenObject4));
+
+	std::unordered_set<std::string> a_filter = { stmt1, stmt3, stmt4, stmt5, stmt7 };
+	std::unordered_set<std::string> empty = {};
+
+	// Test for Affects(1, a)
+	std::unordered_set<std::string> expectedResultByFirst = { stmt5 };
+	std::unordered_set<std::string> expectedResultByFirst2 = { stmt7 };
+
+
+	REQUIRE(qpsClient.getRelationshipByFirst(RelationshipType::AFFECTS, stmtTokenObject1, DesignEntity::ASSIGN) == expectedResultByFirst);
+	REQUIRE(qpsClient.getRelationshipByFirst(RelationshipType::AFFECTS, stmtTokenObject2, DesignEntity::ASSIGN) == empty);
+	REQUIRE(qpsClient.getRelationshipByFirst(RelationshipType::AFFECTS, stmtTokenObject3, DesignEntity::ASSIGN) == expectedResultByFirst);
+	REQUIRE(qpsClient.getRelationshipByFirst(RelationshipType::AFFECTS, stmtTokenObject4, DesignEntity::ASSIGN) == empty);
+	REQUIRE(qpsClient.getRelationshipByFirst(RelationshipType::AFFECTS, stmtTokenObject5, DesignEntity::ASSIGN) == expectedResultByFirst2);
+	REQUIRE(qpsClient.getRelationshipByFirst(RelationshipType::AFFECTS, stmtTokenObject6, DesignEntity::ASSIGN) == empty);
+	REQUIRE(qpsClient.getRelationshipByFirst(RelationshipType::AFFECTS, stmtTokenObject7, DesignEntity::ASSIGN) == empty);
+
+	// Test for Affects(a, 2)
+	std::unordered_set<std::string> expectedResultBySecond = { stmt1, stmt3 };
+	std::unordered_set<std::string> expectedResultBySecond2 = { stmt5 };
+
+	REQUIRE(qpsClient.getRelationshipBySecond(RelationshipType::AFFECTS, DesignEntity::ASSIGN, stmtTokenObject1) == empty);
+	REQUIRE(qpsClient.getRelationshipBySecond(RelationshipType::AFFECTS, DesignEntity::ASSIGN, stmtTokenObject2) == empty);
+	REQUIRE(qpsClient.getRelationshipBySecond(RelationshipType::AFFECTS, DesignEntity::ASSIGN, stmtTokenObject3) == empty);
+	REQUIRE(qpsClient.getRelationshipBySecond(RelationshipType::AFFECTS, DesignEntity::ASSIGN, stmtTokenObject4) == empty);
+	REQUIRE(qpsClient.getRelationshipBySecond(RelationshipType::AFFECTS, DesignEntity::ASSIGN, stmtTokenObject5) == expectedResultBySecond);
+	REQUIRE(qpsClient.getRelationshipBySecond(RelationshipType::AFFECTS, DesignEntity::ASSIGN, stmtTokenObject6) == empty);
+	REQUIRE(qpsClient.getRelationshipBySecond(RelationshipType::AFFECTS, DesignEntity::ASSIGN, stmtTokenObject7) == expectedResultBySecond2);
+
+	// Test for Affects(a1, a2)
+	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultAll{
+									{ stmt1, std::unordered_set<std::string>({stmt5})},
+									{ stmt3, std::unordered_set<std::string>({stmt5})},
+									{ stmt5, std::unordered_set<std::string>({ stmt7 })} };
+
+	std::unordered_set<std::string> if_filter = { stmt2 };
+
+	REQUIRE(qpsClient.getAllRelationship(RelationshipType::AFFECTS, DesignEntity::ASSIGN, DesignEntity::ASSIGN) == expectedResultAll);
+
+	///// Test For Affects* Relationship
+
+	// Test for affectsT(1, 2)
+	REQUIRE(qpsClient.getRelationship(RelationshipType::AFFECTS_T, stmtTokenObject1, stmtTokenObject5));
+	REQUIRE(qpsClient.getRelationship(RelationshipType::AFFECTS_T, stmtTokenObject3, stmtTokenObject5));
+	REQUIRE(qpsClient.getRelationship(RelationshipType::AFFECTS_T, stmtTokenObject1, stmtTokenObject7));
+
+	REQUIRE(!qpsClient.getRelationship(RelationshipType::AFFECTS_T, stmtTokenObject1, stmtTokenObject4));
+
+	std::unordered_set<std::string> a_filterT = { stmt1, stmt3, stmt4, stmt5, stmt7 };
+	std::unordered_set<std::string> emptyT = {};
+
+	// Test for AffectsT(1, a)
+	std::unordered_set<std::string> expectedResultByFirstT = { stmt5, stmt7 };
+	std::unordered_set<std::string> expectedResultByFirstT2 = { stmt7 };
+
+	REQUIRE(qpsClient.getRelationshipByFirst(RelationshipType::AFFECTS_T, stmtTokenObject1, DesignEntity::ASSIGN) == expectedResultByFirstT);
+	REQUIRE(qpsClient.getRelationshipByFirst(RelationshipType::AFFECTS_T, stmtTokenObject2, DesignEntity::ASSIGN) == emptyT);
+	REQUIRE(qpsClient.getRelationshipByFirst(RelationshipType::AFFECTS_T, stmtTokenObject3, DesignEntity::ASSIGN) == expectedResultByFirstT);
+	REQUIRE(qpsClient.getRelationshipByFirst(RelationshipType::AFFECTS_T, stmtTokenObject4, DesignEntity::ASSIGN) == emptyT);
+	REQUIRE(qpsClient.getRelationshipByFirst(RelationshipType::AFFECTS_T, stmtTokenObject5, DesignEntity::ASSIGN) == expectedResultByFirstT2);
+	REQUIRE(qpsClient.getRelationshipByFirst(RelationshipType::AFFECTS_T, stmtTokenObject6, DesignEntity::ASSIGN) == emptyT);
+	REQUIRE(qpsClient.getRelationshipByFirst(RelationshipType::AFFECTS_T, stmtTokenObject7, DesignEntity::ASSIGN) == emptyT);
+
+	// Test for Affects(a, 2)
+	std::unordered_set<std::string> expectedResultBySecondT = { stmt1, stmt3 };
+	std::unordered_set<std::string> expectedResultBySecondT2 = { stmt1,stmt3, stmt5 };
+
+	REQUIRE(qpsClient.getRelationshipBySecond(RelationshipType::AFFECTS_T, DesignEntity::ASSIGN, stmtTokenObject1) == emptyT);
+	REQUIRE(qpsClient.getRelationshipBySecond(RelationshipType::AFFECTS_T, DesignEntity::ASSIGN, stmtTokenObject2) == emptyT);
+	REQUIRE(qpsClient.getRelationshipBySecond(RelationshipType::AFFECTS_T, DesignEntity::ASSIGN, stmtTokenObject3) == emptyT);
+	REQUIRE(qpsClient.getRelationshipBySecond(RelationshipType::AFFECTS_T, DesignEntity::ASSIGN, stmtTokenObject4) == emptyT);
+	REQUIRE(qpsClient.getRelationshipBySecond(RelationshipType::AFFECTS_T, DesignEntity::ASSIGN, stmtTokenObject5) == expectedResultBySecondT);
+	REQUIRE(qpsClient.getRelationshipBySecond(RelationshipType::AFFECTS_T, DesignEntity::ASSIGN, stmtTokenObject6) == emptyT);
+	REQUIRE(qpsClient.getRelationshipBySecond(RelationshipType::AFFECTS_T, DesignEntity::ASSIGN, stmtTokenObject7) == expectedResultBySecondT2);
+
+	// Test for AffectsT(a1, a2)
+	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultAllT{
+									{ stmt1, std::unordered_set<std::string>({stmt5, stmt7})},
+									{ stmt3, std::unordered_set<std::string>({stmt5, stmt7})},
+									{ stmt5, std::unordered_set<std::string>({ stmt7 })} };
+
+	std::unordered_set<std::string> if_filterT = { stmt2 };
+
+	REQUIRE(qpsClient.getAllRelationship(RelationshipType::AFFECTS_T, DesignEntity::ASSIGN, DesignEntity::ASSIGN) == expectedResultAllT);
+}

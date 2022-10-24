@@ -169,3 +169,124 @@ TEST_CASE("Relationship Manager Test") {
 	std::unordered_set<std::string> r_filter = { read_value_one };
 	REQUIRE(relManager.getAllRuntimeRelationship(RelationshipType::NEXT_T, p_filter, r_filter) == expectedResultNextTAll);
 }
+
+TEST_CASE("Runtime Evaluator Manager test") {
+	RelationshipManager relManager = RelationshipManager();
+
+	// Populate PKB for Next
+	REQUIRE(relManager.storeRelationship(nextRelationshipAffectsOne));
+	REQUIRE(relManager.storeRelationship(nextRelationshipAffectsTwo));
+	REQUIRE(relManager.storeRelationship(nextRelationshipAffectsThree));
+	REQUIRE(relManager.storeRelationship(nextRelationshipAffectsFour));
+	REQUIRE(relManager.storeRelationship(nextRelationshipAffectsFive));
+	REQUIRE(relManager.storeRelationship(nextRelationshipAffectsSix));
+	REQUIRE(relManager.storeRelationship(nextRelationshipAffectsSeven));
+
+	// Populate PKB for Modifies
+	REQUIRE(relManager.storeRelationship(modifyRelationshipAffectsOne));
+	REQUIRE(relManager.storeRelationship(modifyRelationshipAffectsTwo));
+	REQUIRE(relManager.storeRelationship(modifyRelationshipAffectsThree));
+	REQUIRE(relManager.storeRelationship(modifyRelationshipAffectsFour));
+	REQUIRE(relManager.storeRelationship(modifyRelationshipAffectsFive));
+	REQUIRE(relManager.storeRelationship(modifyRelationshipAffectsSix));
+
+	// Populate PKB for Uses
+	REQUIRE(relManager.storeRelationship(usesRelationshipAffectsOne));
+	REQUIRE(relManager.storeRelationship(usesRelationshipAffectsTwo));
+	REQUIRE(relManager.storeRelationship(usesRelationshipAffectsThree));
+	REQUIRE(relManager.storeRelationship(usesRelationshipAffectsFour));
+
+	// Test for affects(1, 2)
+	REQUIRE(relManager.getRuntimeRelationship(RelationshipType::AFFECTS, stmtTokenObject1, stmtTokenObject5));
+	REQUIRE(relManager.getRuntimeRelationship(RelationshipType::AFFECTS, stmtTokenObject3, stmtTokenObject5));
+	REQUIRE(!relManager.getRuntimeRelationship(RelationshipType::AFFECTS, stmtTokenObject1, stmtTokenObject7));
+	REQUIRE(!relManager.getRuntimeRelationship(RelationshipType::AFFECTS, stmtTokenObject1, stmtTokenObject4));
+
+	std::unordered_set<std::string> a_filter = { stmt1, stmt3, stmt4, stmt5, stmt7 };
+	std::unordered_set<std::string> empty = {};
+
+	// Test for Affects(1, a)
+	std::unordered_set<std::string> expectedResultByFirst = { stmt5 };
+	std::unordered_set<std::string> expectedResultByFirst2 = { stmt7 };
+
+
+	REQUIRE(relManager.getRuntimeRelationshipByFirst(RelationshipType::AFFECTS, stmtTokenObject1, a_filter) == expectedResultByFirst);
+	REQUIRE(relManager.getRuntimeRelationshipByFirst(RelationshipType::AFFECTS, stmtTokenObject2, a_filter) == empty);
+	REQUIRE(relManager.getRuntimeRelationshipByFirst(RelationshipType::AFFECTS, stmtTokenObject3, a_filter) == expectedResultByFirst);
+	REQUIRE(relManager.getRuntimeRelationshipByFirst(RelationshipType::AFFECTS, stmtTokenObject4, a_filter) == empty);
+	REQUIRE(relManager.getRuntimeRelationshipByFirst(RelationshipType::AFFECTS, stmtTokenObject5, a_filter) == expectedResultByFirst2);
+	REQUIRE(relManager.getRuntimeRelationshipByFirst(RelationshipType::AFFECTS, stmtTokenObject6, a_filter) == empty);
+	REQUIRE(relManager.getRuntimeRelationshipByFirst(RelationshipType::AFFECTS, stmtTokenObject7, a_filter) == empty);
+
+	// Test for Affects(a, 2)
+	std::unordered_set<std::string> expectedResultBySecond = { stmt1, stmt3 };
+	std::unordered_set<std::string> expectedResultBySecond2 = { stmt5 };
+
+	REQUIRE(relManager.getRuntimeRelationshipBySecond(RelationshipType::AFFECTS, stmtTokenObject1, a_filter) == empty);
+	REQUIRE(relManager.getRuntimeRelationshipBySecond(RelationshipType::AFFECTS, stmtTokenObject2, a_filter) == empty);
+	REQUIRE(relManager.getRuntimeRelationshipBySecond(RelationshipType::AFFECTS, stmtTokenObject3, a_filter) == empty);
+	REQUIRE(relManager.getRuntimeRelationshipBySecond(RelationshipType::AFFECTS, stmtTokenObject4, a_filter) == empty);
+	REQUIRE(relManager.getRuntimeRelationshipBySecond(RelationshipType::AFFECTS, stmtTokenObject5, a_filter) == expectedResultBySecond);
+	REQUIRE(relManager.getRuntimeRelationshipBySecond(RelationshipType::AFFECTS, stmtTokenObject6, a_filter) == empty);
+	REQUIRE(relManager.getRuntimeRelationshipBySecond(RelationshipType::AFFECTS, stmtTokenObject7, a_filter) == expectedResultBySecond2);
+
+	std::unordered_map<std::string, std::unordered_set<std::string>> emptyMap = {};
+	// Test for Affects(a1, a2)
+	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultAll{
+									{ stmt1, std::unordered_set<std::string>({stmt5})},
+									{ stmt3, std::unordered_set<std::string>({stmt5})},
+									{ stmt5, std::unordered_set<std::string>({ stmt7 })} };
+
+	std::unordered_set<std::string> if_filter = { stmt2 };
+
+	REQUIRE(relManager.getAllRuntimeRelationship(RelationshipType::AFFECTS, a_filter, a_filter) == expectedResultAll);
+	REQUIRE(relManager.getAllRuntimeRelationship(RelationshipType::AFFECTS, if_filter, a_filter) == emptyMap);
+
+	///// Test For Affects* Relationship
+
+	// Test for affectsT(1, 2)
+	REQUIRE(relManager.getRuntimeRelationship(RelationshipType::AFFECTS_T, stmtTokenObject1, stmtTokenObject5));
+	REQUIRE(relManager.getRuntimeRelationship(RelationshipType::AFFECTS_T, stmtTokenObject3, stmtTokenObject5));
+	REQUIRE(relManager.getRuntimeRelationship(RelationshipType::AFFECTS_T, stmtTokenObject1, stmtTokenObject7));
+
+	REQUIRE(!relManager.getRuntimeRelationship(RelationshipType::AFFECTS_T, stmtTokenObject1, stmtTokenObject4));
+
+	std::unordered_set<std::string> a_filterT = { stmt1, stmt3, stmt4, stmt5, stmt7 };
+	std::unordered_set<std::string> emptyT = {};
+
+	// Test for AffectsT(1, a)
+	std::unordered_set<std::string> expectedResultByFirstT = { stmt5, stmt7 };
+	std::unordered_set<std::string> expectedResultByFirstT2 = { stmt7 };
+
+	REQUIRE(relManager.getRuntimeRelationshipByFirst(RelationshipType::AFFECTS_T, stmtTokenObject1, a_filter) == expectedResultByFirstT);
+	REQUIRE(relManager.getRuntimeRelationshipByFirst(RelationshipType::AFFECTS_T, stmtTokenObject2, a_filter) == emptyT);
+	REQUIRE(relManager.getRuntimeRelationshipByFirst(RelationshipType::AFFECTS_T, stmtTokenObject3, a_filter) == expectedResultByFirstT);
+	REQUIRE(relManager.getRuntimeRelationshipByFirst(RelationshipType::AFFECTS_T, stmtTokenObject4, a_filter) == emptyT);
+	REQUIRE(relManager.getRuntimeRelationshipByFirst(RelationshipType::AFFECTS_T, stmtTokenObject5, a_filter) == expectedResultByFirstT2);
+	REQUIRE(relManager.getRuntimeRelationshipByFirst(RelationshipType::AFFECTS_T, stmtTokenObject6, a_filter) == emptyT);
+	REQUIRE(relManager.getRuntimeRelationshipByFirst(RelationshipType::AFFECTS_T, stmtTokenObject7, a_filter) == emptyT);
+
+	// Test for Affects(a, 2)
+	std::unordered_set<std::string> expectedResultBySecondT = { stmt1, stmt3 };
+	std::unordered_set<std::string> expectedResultBySecondT2 = { stmt1,stmt3, stmt5 };
+
+	REQUIRE(relManager.getRuntimeRelationshipBySecond(RelationshipType::AFFECTS_T, stmtTokenObject1, a_filter) == emptyT);
+	REQUIRE(relManager.getRuntimeRelationshipBySecond(RelationshipType::AFFECTS_T, stmtTokenObject2, a_filter) == emptyT);
+	REQUIRE(relManager.getRuntimeRelationshipBySecond(RelationshipType::AFFECTS_T, stmtTokenObject3, a_filter) == emptyT);
+	REQUIRE(relManager.getRuntimeRelationshipBySecond(RelationshipType::AFFECTS_T, stmtTokenObject4, a_filter) == emptyT);
+	REQUIRE(relManager.getRuntimeRelationshipBySecond(RelationshipType::AFFECTS_T, stmtTokenObject5, a_filter) == expectedResultBySecondT);
+	REQUIRE(relManager.getRuntimeRelationshipBySecond(RelationshipType::AFFECTS_T, stmtTokenObject6, a_filter) == emptyT);
+	REQUIRE(relManager.getRuntimeRelationshipBySecond(RelationshipType::AFFECTS_T, stmtTokenObject7, a_filter) == expectedResultBySecondT2);
+
+	std::unordered_map<std::string, std::unordered_set<std::string>> emptyMapT = {};
+	// Test for AffectsT(a1, a2)
+	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultAllT{
+									{ stmt1, std::unordered_set<std::string>({stmt5, stmt7})},
+									{ stmt3, std::unordered_set<std::string>({stmt5, stmt7})},
+									{ stmt5, std::unordered_set<std::string>({ stmt7 })} };
+
+	std::unordered_set<std::string> if_filterT = { stmt2 };
+
+	REQUIRE(relManager.getAllRuntimeRelationship(RelationshipType::AFFECTS_T, a_filterT, a_filterT) == expectedResultAllT);
+	REQUIRE(relManager.getAllRuntimeRelationship(RelationshipType::AFFECTS_T, if_filterT, a_filterT) == emptyMapT);
+}
