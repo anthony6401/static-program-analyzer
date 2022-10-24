@@ -29,6 +29,11 @@ private:
 		std::unordered_set<std::string>& filter2,
 		std::unordered_map<std::string, std::unordered_set<std::string>>& result_map);
 	bool isModifiesAssign(std::string target);
+	void startNewDFSPath(std::unordered_set<std::string>& visited, std::string neighbour, std::unordered_set<std::string>& result, std::unordered_set<std::string>& filter);
+	void removeUsesSet( std::unordered_set<std::string>& usesSet, std::unordered_set<std::string>& intersectionSet);
+	void insertUsesSet(std::unordered_set<std::string>& usesSet, std::unordered_set<std::string>& intersectionSet);
+	void AffectsTRelationshipEvaluator::startNewDFSPathForBackward(std::unordered_set<std::string>& result, std::unordered_set<std::string>& filter, std::string neighbour,
+		std::unordered_set<std::string>::const_iterator& exist, std::unordered_set<std::string>& visited);
 
 	NextRelationshipStorage* nextStorage;
 	ModifyRelationshipStorage* modifiesStorage;

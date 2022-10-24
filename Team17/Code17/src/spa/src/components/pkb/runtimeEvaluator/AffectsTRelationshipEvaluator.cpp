@@ -21,27 +21,25 @@ bool AffectsTRelationshipEvaluator::DFSAffectsTForward(std::string curr, std::st
 	std::unordered_set<std::string> neighbours = this->nextStorage->getNextForward(curr);
 
 	for (std::string neighbour : neighbours) {
-		if (target == neighbour) {
+		if (target == neighbour && RuntimeRelationshipUtils::isUses(usesStorage, neighbour, var)) {
+			return true;
+		}
+		
+		if ((visited.find(neighbour) == visited.end() && (!RuntimeRelationshipUtils::isModifies(modifiesStorage,neighbour, var)) && DFSAffectsTForward(neighbour, target, var, visited))) {
+			return true;
+		}
+
+		if (visited.find(neighbour) == visited.end()) {
 			if (RuntimeRelationshipUtils::isUses(usesStorage,neighbour, var)) {
-				return true;
-			}
-		} else {
-			if ((visited.find(neighbour) == visited.end() && (!RuntimeRelationshipUtils::isModifies(modifiesStorage,neighbour, var)) && DFSAffectsTForward(neighbour, target, var, visited))) {
-				return true;
-			}
+				std::unordered_set<std::string> modifiesSet = modifiesStorage->getModifiesForAssign(neighbour);
 
-			if (visited.find(neighbour) == visited.end()) {
-				if (RuntimeRelationshipUtils::isUses(usesStorage,neighbour, var)) {
-					std::unordered_set<std::string> modifiesSet = modifiesStorage->getModifiesForAssign(neighbour);
+				std::string newVar = *modifiesSet.begin();
+				std::unordered_set<std::string> newVisited;
 
-					std::string newVar = *modifiesSet.begin();
-					std::unordered_set<std::string> newVisited;
+				bool result = DFSAffectsTForward(neighbour, target, newVar, newVisited);
 
-					bool result = DFSAffectsTForward(neighbour, target, newVar, newVisited);
-
-					if (result) {
-						return true;
-					}
+				if (result) {
+					return true;
 				}
 			}
 		}
@@ -51,6 +49,7 @@ bool AffectsTRelationshipEvaluator::DFSAffectsTForward(std::string curr, std::st
 
 	return false;
 }
+
 
 // DFS search forward to answer Next* queries with synonym
 void AffectsTRelationshipEvaluator::DFSAffectsTForwardWithSynonym(std::string curr, std::string var,
@@ -64,15 +63,7 @@ void AffectsTRelationshipEvaluator::DFSAffectsTForwardWithSynonym(std::string cu
 	for (std::string neighbour : neighbours) {
 		if ((filter.find(neighbour) != filter.end()) && RuntimeRelationshipUtils::isUses(usesStorage, neighbour, var)) {
 			result.insert(neighbour);
-
-			if (visited.find(neighbour) == visited.end()) {
-				std::unordered_set<std::string> modifiesSet = modifiesStorage->getModifiesForAssign(neighbour);
-
-				std::string newVar = *modifiesSet.begin();
-				std::unordered_set<std::string> newVisited;
-
-				DFSAffectsTForwardWithSynonym(neighbour, newVar, newVisited, result, filter);
-			}
+			startNewDFSPath(visited, neighbour, result, filter);
 		}
 
 		if (visited.find(neighbour) == visited.end() && !RuntimeRelationshipUtils::isModifies(modifiesStorage,neighbour, var)) {
@@ -81,6 +72,32 @@ void AffectsTRelationshipEvaluator::DFSAffectsTForwardWithSynonym(std::string cu
 	}
 
 	visited.erase(curr);
+}
+
+void AffectsTRelationshipEvaluator::removeUsesSet(std::unordered_set<std::string>& usesSet, std::unordered_set<std::string>& intersectionSet) {
+	for (auto const& var : intersectionSet) {
+		usesSet.erase(var);
+	}
+}
+
+void AffectsTRelationshipEvaluator::insertUsesSet(std::unordered_set<std::string>& usesSet, std::unordered_set<std::string>& intersectionSet) {
+	for (auto const& var : intersectionSet) {
+		usesSet.insert(var);
+	}
+}
+
+void AffectsTRelationshipEvaluator::startNewDFSPathForBackward(std::unordered_set<std::string>& result, std::unordered_set<std::string>& filter, std::string neighbour, 
+																std::unordered_set<std::string>::const_iterator& exist, std::unordered_set<std::string>& visited) {
+	if ((filter.find(neighbour) != filter.end()) && isModifiesAssign(neighbour)) {
+		std::cout << neighbour << " inserted" << std::endl;
+		result.insert(neighbour);
+
+		if (exist == visited.end()) {
+			std::unordered_set<std::string> newUsesSet = usesStorage->getUsesForAssign(neighbour);
+			std::unordered_set<std::string> newVisited;
+			DFSAffectsTBackwardWithSynonym(neighbour, newUsesSet, newVisited, result, filter);
+		}
+	}
 }
 
 // DFS search backward to answer Next* queries with synonym
@@ -104,20 +121,10 @@ void AffectsTRelationshipEvaluator::DFSAffectsTBackwardWithSynonym(std::string c
 		bool isModifiesForBackward = intersectionSet.size() != 0;
 
 		if (isModifiesForBackward) {
-			for (auto const& var : intersectionSet) {
-				usesSet.erase(var);
-			}
+			
+			removeUsesSet(usesSet, intersectionSet);
 
-			if ((filter.find(neighbour) != filter.end()) && isModifiesAssign(neighbour)) {
-				std::cout << neighbour << " inserted" << std::endl;
-				result.insert(neighbour);
-
-				if (exist == visited.end()) {
-					std::unordered_set<std::string> newUsesSet = usesStorage->getUsesForAssign(neighbour);
-					std::unordered_set<std::string> newVisited;
-					DFSAffectsTBackwardWithSynonym(neighbour, newUsesSet, newVisited, result, filter);
-				}
-			}
+			startNewDFSPathForBackward(result, filter, neighbour, exist, visited);
 		}
 
 		if (exist == visited.end()) {
@@ -125,9 +132,7 @@ void AffectsTRelationshipEvaluator::DFSAffectsTBackwardWithSynonym(std::string c
 		}
 
 		if (isModifiesForBackward) {
-			for (auto const& var : intersectionSet) {
-				usesSet.insert(var);
-			}
+			insertUsesSet(usesSet, intersectionSet);
 		}
 	}
 
@@ -206,4 +211,15 @@ std::unordered_map<std::string, std::unordered_set<std::string>> AffectsTRelatio
 		return result_map;
 	}
 	return std::unordered_map<std::string, std::unordered_set<std::string>>();
+}
+
+void AffectsTRelationshipEvaluator::startNewDFSPath(std::unordered_set<std::string>& visited, std::string neighbour, std::unordered_set<std::string>& result, std::unordered_set<std::string>& filter) {
+	if (visited.find(neighbour) == visited.end()) {
+		std::unordered_set<std::string> modifiesSet = modifiesStorage->getModifiesForAssign(neighbour);
+
+		std::string newVar = *modifiesSet.begin();
+		std::unordered_set<std::string> newVisited;
+
+		DFSAffectsTForwardWithSynonym(neighbour, newVar, newVisited, result, filter);
+	}
 }
