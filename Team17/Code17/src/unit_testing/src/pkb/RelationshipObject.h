@@ -595,7 +595,7 @@ static Relationship* modifyRelationshipAffectsOne = new ModifyRelationship(assig
 static Relationship* modifyRelationshipAffectsTwo = new ModifyRelationship(assignEntityAffectsTwo, variableAffectsX);
 static Relationship* modifyRelationshipAffectsThree = new ModifyRelationship(assignEntityAffectsThree, variableAffectsA);
 static Relationship* modifyRelationshipAffectsFour = new ModifyRelationship(assignEntityAffectsFour, variableAffectsA);
-static Relationship* modifyRelationshipAffectsFive = new ModifyRelationship(readEntityAffects, variableAffectsA);
+static Relationship* modifyRelationshipAffectsFive = new ModifyRelationship(readEntityAffects, variableAffectsX);
 static Relationship* modifyRelationshipAffectsSix = new ModifyRelationship(assignEntityAffectsFive, variableAffectsZ);
 
 // Uses Relationship for Affects Test
@@ -603,30 +603,29 @@ static Relationship* usesRelationshipAffectsOne = new UsesRelationship(assignEnt
 static Relationship* usesRelationshipAffectsTwo = new UsesRelationship(assignEntityAffectsThree, variableAffectsB);
 static Relationship* usesRelationshipAffectsThree = new UsesRelationship(assignEntityAffectsFour, variableAffectsX);
 static Relationship* usesRelationshipAffectsFour = new UsesRelationship(assignEntityAffectsFive, variableAffectsA);
-static Relationship* usesRelationshipAffectsFive = new UsesRelationship(assignEntityAffectsFive, variableAffectsX);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// Next Relationship for AffectsT Test
-static Relationship* nextRelationshipAffectsTOne = new NextRelationship(assignEntityAffectsT, ifEntityAffectsT);
-static Relationship* nextRelationshipAffectsTTwo = new NextRelationship(ifEntityAffectsT, assignEntityAffectsTTwo);
-static Relationship* nextRelationshipAffectsTThree = new NextRelationship(ifEntityAffectsT, assignEntityAffectsTThree);
-static Relationship* nextRelationshipAffectsTFour = new NextRelationship(assignEntityAffectsTTwo, assignEntityAffectsTFour);
-static Relationship* nextRelationshipAffectsTFive = new NextRelationship(assignEntityAffectsTThree, assignEntityAffectsTFour);
-static Relationship* nextRelationshipAffectsTSix = new NextRelationship(assignEntityAffectsTFour, readEntityAffectsT);
-static Relationship* nextRelationshipAffectsTSeven = new NextRelationship(readEntityAffectsT, assignEntityAffectsTFive);
-
-// Modifies Relationship for AffectsT Test
-static Relationship* modifyRelationshipAffectsTOne = new ModifyRelationship(assignEntityAffectsT, variableAffectsTX);
-static Relationship* modifyRelationshipAffectsTTwo = new ModifyRelationship(assignEntityAffectsTTwo, variableAffectsTX);
-static Relationship* modifyRelationshipAffectsTThree = new ModifyRelationship(assignEntityAffectsTThree, variableAffectsTA);
-static Relationship* modifyRelationshipAffectsTFour = new ModifyRelationship(assignEntityAffectsTFour, variableAffectsTA);
-static Relationship* modifyRelationshipAffectsTFive = new ModifyRelationship(readEntityAffectsT, variableAffectsTA);
-static Relationship* modifyRelationshipAffectsTSix = new ModifyRelationship(assignEntityAffectsTFive, variableAffectsTZ);
-
-// Uses Relationship for AffectsT Test
-static Relationship* usesRelationshipAffectsTOne = new UsesRelationship(assignEntityAffectsTwo, variableAffectsA);
-static Relationship* usesRelationshipAffectsTTwo = new UsesRelationship(assignEntityAffectsThree, variableAffectsB);
-static Relationship* usesRelationshipAffectsTThree = new UsesRelationship(assignEntityAffectsFour, variableAffectsX);
-static Relationship* usesRelationshipAffectsTFour = new UsesRelationship(assignEntityAffectsFive, variableAffectsA);
-static Relationship* usesRelationshipAffectsTFive = new UsesRelationship(assignEntityAffectsFive, variableAffectsX);
+//// Next Relationship for AffectsT Test
+//static Relationship* nextRelationshipAffectsTOne = new NextRelationship(assignEntityAffectsT, ifEntityAffectsT);
+//static Relationship* nextRelationshipAffectsTTwo = new NextRelationship(ifEntityAffectsT, assignEntityAffectsTTwo);
+//static Relationship* nextRelationshipAffectsTThree = new NextRelationship(ifEntityAffectsT, assignEntityAffectsTThree);
+//static Relationship* nextRelationshipAffectsTFour = new NextRelationship(assignEntityAffectsTTwo, assignEntityAffectsTFour);
+//static Relationship* nextRelationshipAffectsTFive = new NextRelationship(assignEntityAffectsTThree, assignEntityAffectsTFour);
+//static Relationship* nextRelationshipAffectsTSix = new NextRelationship(assignEntityAffectsTFour, readEntityAffectsT);
+//static Relationship* nextRelationshipAffectsTSeven = new NextRelationship(readEntityAffectsT, assignEntityAffectsTFive);
+//
+//// Modifies Relationship for AffectsT Test
+//static Relationship* modifyRelationshipAffectsTOne = new ModifyRelationship(assignEntityAffectsT, variableAffectsTX);
+//static Relationship* modifyRelationshipAffectsTTwo = new ModifyRelationship(assignEntityAffectsTTwo, variableAffectsTX);
+//static Relationship* modifyRelationshipAffectsTThree = new ModifyRelationship(assignEntityAffectsTThree, variableAffectsTA);
+//static Relationship* modifyRelationshipAffectsTFour = new ModifyRelationship(assignEntityAffectsTFour, variableAffectsTA);
+//static Relationship* modifyRelationshipAffectsTFive = new ModifyRelationship(readEntityAffectsT, variableAffectsTA);
+//static Relationship* modifyRelationshipAffectsTSix = new ModifyRelationship(assignEntityAffectsTFive, variableAffectsTZ);
+//
+//// Uses Relationship for AffectsT Test
+//static Relationship* usesRelationshipAffectsTOne = new UsesRelationship(assignEntityAffectsTwo, variableAffectsA);
+//static Relationship* usesRelationshipAffectsTTwo = new UsesRelationship(assignEntityAffectsThree, variableAffectsB);
+//static Relationship* usesRelationshipAffectsTThree = new UsesRelationship(assignEntityAffectsFour, variableAffectsX);
+//static Relationship* usesRelationshipAffectsTFour = new UsesRelationship(assignEntityAffectsFive, variableAffectsA);
+//static Relationship* usesRelationshipAffectsTFive = new UsesRelationship(assignEntityAffectsFive, variableAffectsX);
