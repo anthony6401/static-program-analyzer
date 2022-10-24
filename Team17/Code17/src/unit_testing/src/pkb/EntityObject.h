@@ -138,3 +138,17 @@ static Entity* variableAffectsX = new VariableEntity(variableX);
 static Entity* variableAffectsA = new VariableEntity(variableA);
 static Entity* variableAffectsB = new VariableEntity(variableB);
 static Entity* variableAffectsZ = new VariableEntity(variableZ);
+
+static Entity* assignEntityAffectsT = new AssignEntity(stmt1);
+static Entity* assignEntityAffectsTTwo = new AssignEntity(stmt3);
+static Entity* assignEntityAffectsTThree = new AssignEntity(stmt4);
+static Entity* assignEntityAffectsTFour = new AssignEntity(stmt5);
+static Entity* assignEntityAffectsTFive = new AssignEntity(stmt7);
+
+static Entity* ifEntityAffectsT = new IfEntity(stmt2);
+static Entity* readEntityAffectsT = new ReadEntity(stmt6, variableA);
+
+static Entity* variableAffectsTX = new VariableEntity(variableX);
+static Entity* variableAffectsTA = new VariableEntity(variableA);
+static Entity* variableAffectsTB = new VariableEntity(variableB);
+static Entity* variableAffectsTZ = new VariableEntity(variableZ);
