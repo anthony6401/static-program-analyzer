@@ -1,5 +1,4 @@
 #include "AffectsTRelationshipEvaluator.h"
-#include <iostream>
 #include "utils.h"
 
 AffectsTRelationshipEvaluator::AffectsTRelationshipEvaluator(NextRelationshipStorage* nextStorage, ModifyRelationshipStorage* modifiesStorage, UsesRelationshipStorage* usesStorage)
@@ -89,7 +88,6 @@ void AffectsTRelationshipEvaluator::insertUsesSet(std::unordered_set<std::string
 void AffectsTRelationshipEvaluator::startNewDFSPathForBackward(std::unordered_set<std::string>& result, std::unordered_set<std::string>& filter, std::string neighbour, 
 																std::unordered_set<std::string>::const_iterator& exist, std::unordered_set<std::string>& visited) {
 	if ((filter.find(neighbour) != filter.end()) && isModifiesAssign(neighbour)) {
-		std::cout << neighbour << " inserted" << std::endl;
 		result.insert(neighbour);
 
 		if (exist == visited.end()) {
