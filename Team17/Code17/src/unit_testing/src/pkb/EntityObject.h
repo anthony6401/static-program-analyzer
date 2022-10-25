@@ -111,3 +111,30 @@ static Entity* procedureEntityThreeDuplicate = new ProcedureEntity(procedure_val
 static Entity* readEntityThreeDuplicate = new ReadEntity(read_value_three, variable_value_three);
 static Entity* variableEntityThreeDuplicate = new VariableEntity(variable_value_three);
 static Entity* whileEntityThreeDuplicate = new WhileEntity(while_value_three);
+
+// For Affects
+static std::string stmt1 = "1";
+static std::string stmt2 = "2";
+static std::string stmt3 = "3";
+static std::string stmt4 = "4";
+static std::string stmt5 = "5";
+static std::string stmt6 = "6";
+static std::string stmt7 = "7";
+static std::string variableX = "x";
+static std::string variableA = "a";
+static std::string variableB = "b";
+static std::string variableZ = "z";
+
+static Entity* assignEntityAffects = new AssignEntity(stmt1);
+static Entity* assignEntityAffectsTwo = new AssignEntity(stmt3);
+static Entity* assignEntityAffectsThree = new AssignEntity(stmt4);
+static Entity* assignEntityAffectsFour = new AssignEntity(stmt5);
+static Entity* assignEntityAffectsFive = new AssignEntity(stmt7);
+
+static Entity* ifEntityAffects = new IfEntity(stmt2);
+static Entity* readEntityAffects = new ReadEntity(stmt6, variableA);
+
+static Entity* variableAffectsX = new VariableEntity(variableX);
+static Entity* variableAffectsA = new VariableEntity(variableA);
+static Entity* variableAffectsB = new VariableEntity(variableB);
+static Entity* variableAffectsZ = new VariableEntity(variableZ);

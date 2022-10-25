@@ -65,7 +65,7 @@ ResultTable AffectsClause::evaluateSynonymSynonym() {
     std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(RelationshipType::AFFECTS, leftType, rightType);
 
     if (leftValue == rightValue) {
-        std::unordered_set<std::string> leftAndRightEqualResults = ClauseUtils::processMapToSetFromFirst(results);
+        std::unordered_set<std::string> leftAndRightEqualResults = ClauseUtils::processMapToSetByMapIntersection(results);
         return {leftValue, leftAndRightEqualResults};
     }
 

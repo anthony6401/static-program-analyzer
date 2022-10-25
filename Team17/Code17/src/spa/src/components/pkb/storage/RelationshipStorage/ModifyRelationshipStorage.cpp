@@ -225,3 +225,27 @@ std::unordered_map<std::string, std::unordered_set<std::string>> ModifyRelations
 
 	return std::unordered_map<std::string, std::unordered_set<std::string>>();
 }
+
+std::unordered_set<std::string> ModifyRelationshipStorage::getModifiesForAssign(std::string stmtNum) {
+	if (this->assignForwardStorage.find(stmtNum) != this->assignForwardStorage.end()) {
+		return this->assignForwardStorage.find(stmtNum)->second;
+	}
+
+	return std::unordered_set<std::string>();
+}
+
+std::unordered_set<std::string> ModifyRelationshipStorage::getModifiesForAffects(std::string stmt) {
+	if (this->assignForwardStorage.find(stmt) != this->assignForwardStorage.end()) {
+		return this->assignForwardStorage.find(stmt)->second;
+	}
+
+	if (this->readForwardStorage.find(stmt) != this->readForwardStorage.end()) {
+		return this->readForwardStorage.find(stmt)->second;
+	}
+
+	if (this->callsForwardStorage.find(stmt) != this->callsForwardStorage.end()) {
+		return this->callsForwardStorage.find(stmt)->second;
+	}
+
+	return std::unordered_set<std::string>();
+}
