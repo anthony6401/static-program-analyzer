@@ -4,6 +4,7 @@
 #include "components/qps/query_preprocessor/query_tokenizer/TokenObject.h"
 #include "components/qps/query_evaluator/factory/interface/Clause.h"
 #include "components/pkb/clients/QPSClient.h"
+#include "Parent.h"
 #include <unordered_map>
 
 class ParentClause : public Clause {
