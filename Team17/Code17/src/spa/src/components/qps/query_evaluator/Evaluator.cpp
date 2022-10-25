@@ -171,7 +171,6 @@ ClauseDivider Evaluator::extractClausesToEvaluate(QueryObject queryObject, std::
 
     for (const auto& r : relationships) {
         std::shared_ptr<Clause> relationshipClauseToEvaluate = ClauseCreator::createClause(r, synonymToDesignEntityMap, qpsClient);
-        std::cout << relationshipClauseToEvaluate->getPriority() << std::endl;
         clauseDivider.addClauseToDivider(relationshipClauseToEvaluate);
     }
 

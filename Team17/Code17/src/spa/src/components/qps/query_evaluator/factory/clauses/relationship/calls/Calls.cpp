@@ -1,41 +1,41 @@
-#include "CallsTClause.h"
+#include "Calls.h"
 #include <utility>
 #include "components/qps/query_evaluator/factory/utils/ClauseUtils.h"
 
-CallsTClause::CallsTClause(TokenObject left, TokenObject right,
+Calls::Calls(TokenObject left, TokenObject right, RelationshipType relationshipType, size_t priority,
                          std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap,
-                         QPSClient qpsClient) : left(std::move(left)), right(std::move(right)),
+                         QPSClient qpsClient) : left(std::move(left)), right(std::move(right)), relationshipType(relationshipType), priority(priority),
                                                 synonymToDesignEntityMap(std::move(synonymToDesignEntityMap)), qpsClient(qpsClient) {};
 
-ResultTable CallsTClause::evaluateClause() {
+ResultTable Calls::evaluateClause() {
     TokenType leftType = left.getTokenType();
     TokenType rightType = right.getTokenType();
     if (leftType == TokenType::NAME && rightType == TokenType::NAME) {
-        return CallsTClause::evaluateSynonymSynonym();
+        return Calls::evaluateSynonymSynonym(relationshipType);
     } else if (leftType == TokenType::NAME && rightType == TokenType::WILDCARD) {
-        return CallsTClause::evaluateSynonymWildcard();
+        return Calls::evaluateSynonymWildcard(relationshipType);
     } else if (leftType == TokenType::NAME && rightType == TokenType::NAME_WITH_QUOTATION) {
-        return CallsTClause::evaluateSynonymNameQuotes();
+        return Calls::evaluateSynonymNameQuotes(relationshipType);
     } else if (leftType == TokenType::WILDCARD && rightType == TokenType::NAME) {
-        return CallsTClause::evaluateWildcardSynonym();
+        return Calls::evaluateWildcardSynonym(relationshipType);
     } else if (leftType == TokenType::WILDCARD && rightType == TokenType::WILDCARD) {
-        return CallsTClause::evaluateWildcardWildcard();
+        return Calls::evaluateWildcardWildcard(relationshipType);
     } else if (leftType == TokenType::WILDCARD && rightType == TokenType::NAME_WITH_QUOTATION) {
-        return CallsTClause::evaluateWildcardNameQuotes();
+        return Calls::evaluateWildcardNameQuotes(relationshipType);
     } else if (leftType == TokenType::NAME_WITH_QUOTATION && rightType == TokenType::NAME) {
-        return CallsTClause::evaluateNameQuotesSynonym();
+        return Calls::evaluateNameQuotesSynonym(relationshipType);
     } else if (leftType == TokenType::NAME_WITH_QUOTATION && rightType == TokenType::WILDCARD) {
-        return CallsTClause::evaluateNameQuotesWildcard();
+        return Calls::evaluateNameQuotesWildcard(relationshipType);
     } else {
-        return CallsTClause::evaluateNameQuotesNameQuotes();
+        return Calls::evaluateNameQuotesNameQuotes(relationshipType);
     }
 }
 
-size_t CallsTClause::getPriority() {
+size_t Calls::getPriority() {
     return priority;
 }
 
-size_t CallsTClause::getNumberOfSynonyms() {
+size_t Calls::getNumberOfSynonyms() {
     size_t numberOfSynonyms = 0;
     if (left.getTokenType() == TokenType::NAME) {
         numberOfSynonyms++;
@@ -46,7 +46,7 @@ size_t CallsTClause::getNumberOfSynonyms() {
     return numberOfSynonyms;
 }
 
-std::set<std::string> CallsTClause::getAllSynonyms() {
+std::set<std::string> Calls::getAllSynonyms() {
     std::set<std::string> synonyms = {};
     if (left.getTokenType() == TokenType::NAME) {
         synonyms.emplace(left.getValue());
@@ -58,73 +58,74 @@ std::set<std::string> CallsTClause::getAllSynonyms() {
 }
 
 
-ResultTable CallsTClause::evaluateSynonymSynonym() {
+ResultTable Calls::evaluateSynonymSynonym(RelationshipType relationshipType) {
     DesignEntity procType = DesignEntity::PROCEDURE;
     std::string leftValue = left.getValue();
     std::string rightValue = right.getValue();
     if (leftValue == rightValue) {
         return {false};
     }
-    std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(RelationshipType::CALLS_T, procType, procType);
+    std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(relationshipType, procType, procType);
     std::vector<std::pair<std::string, std::string>> processedMap = ClauseUtils::processMapToVectorPair(results);
     return {leftValue, rightValue, processedMap};
 }
 
-ResultTable CallsTClause::evaluateSynonymWildcard() {
+ResultTable Calls::evaluateSynonymWildcard(RelationshipType relationshipType) {
     DesignEntity procType = DesignEntity::PROCEDURE;
     std::string leftValue = left.getValue();
-    std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(RelationshipType::CALLS_T, procType, procType);
+    std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(relationshipType, procType, procType);
     std::unordered_set<std::string> processedMap = ClauseUtils::processMapToSetFromFirst(results);
     return {leftValue, processedMap};
 }
 
-ResultTable CallsTClause::evaluateSynonymNameQuotes() {
+ResultTable Calls::evaluateSynonymNameQuotes(RelationshipType relationshipType) {
     DesignEntity procType = DesignEntity::PROCEDURE;
     std::string leftValue = left.getValue();
-    std::unordered_set<std::string> results = qpsClient.getRelationshipBySecond(RelationshipType::CALLS_T, procType, right);
+    std::unordered_set<std::string> results = qpsClient.getRelationshipBySecond(relationshipType, procType, right);
     return {leftValue, results};
 }
 
-ResultTable CallsTClause::evaluateWildcardSynonym() {
+ResultTable Calls::evaluateWildcardSynonym(RelationshipType relationshipType) {
     DesignEntity procType = DesignEntity::PROCEDURE;
     std::string rightValue = right.getValue();
-    std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(RelationshipType::CALLS_T, procType, procType);
+    std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(relationshipType, procType, procType);
     std::unordered_set<std::string> processedMap = ClauseUtils::processMapToSetFromSecond(results);
     return {rightValue, processedMap};
 }
 
-ResultTable CallsTClause::evaluateWildcardWildcard() {
+ResultTable Calls::evaluateWildcardWildcard(RelationshipType relationshipType) {
     DesignEntity procType = DesignEntity::PROCEDURE;
-    std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(RelationshipType::CALLS_T, procType, procType);
+    std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(relationshipType, procType, procType);
     bool result = !results.empty();
     return {result};
 }
 
-ResultTable CallsTClause::evaluateWildcardNameQuotes() {
+ResultTable Calls::evaluateWildcardNameQuotes(RelationshipType relationshipType) {
     DesignEntity procType = DesignEntity::PROCEDURE;
     std::string leftValue = left.getValue();
-    std::unordered_set<std::string> results = qpsClient.getRelationshipBySecond(RelationshipType::CALLS_T, procType, right);
+    std::unordered_set<std::string> results = qpsClient.getRelationshipBySecond(relationshipType, procType, right);
     bool booleanResult = !results.empty();
     return {booleanResult};
 }
 
-ResultTable CallsTClause::evaluateNameQuotesSynonym() {
+ResultTable Calls::evaluateNameQuotesSynonym(RelationshipType relationshipType) {
     DesignEntity procType = DesignEntity::PROCEDURE;
     std::string rightValue = right.getValue();
-    std::unordered_set<std::string> results = qpsClient.getRelationshipByFirst(RelationshipType::CALLS_T, left, procType);
+    std::unordered_set<std::string> results = qpsClient.getRelationshipByFirst(relationshipType, left, procType);
     return {rightValue, results};
 }
 
-ResultTable CallsTClause::evaluateNameQuotesWildcard() {
+ResultTable Calls::evaluateNameQuotesWildcard(RelationshipType relationshipType) {
     DesignEntity procType = DesignEntity::PROCEDURE;
-    std::unordered_set<std::string> results = qpsClient.getRelationshipByFirst(RelationshipType::CALLS_T, left, procType);
+    std::unordered_set<std::string> results = qpsClient.getRelationshipByFirst(relationshipType, left, procType);
     bool result = !results.empty();
     return {result};
 }
 
-ResultTable CallsTClause::evaluateNameQuotesNameQuotes() {
-    bool result = qpsClient.getRelationship(RelationshipType::CALLS_T, left, right);
+ResultTable Calls::evaluateNameQuotesNameQuotes(RelationshipType relationshipType) {
+    bool result = qpsClient.getRelationship(relationshipType, left, right);
     return {result};
 }
+
 
 

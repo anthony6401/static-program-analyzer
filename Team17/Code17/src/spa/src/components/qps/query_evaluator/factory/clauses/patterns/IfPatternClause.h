@@ -9,7 +9,7 @@ private:
     std::string ifSynonym;
     QPSClient qpsClient;
     TokenObject firstArgument;
-    size_t priority = 2;
+    static const size_t priority = 2;
     ResultTable evaluateFirstArgAsSynonym();
     ResultTable evaluateFirstArgAsNameQuotes();
     ResultTable evaluateFirstArgAsWildcard();

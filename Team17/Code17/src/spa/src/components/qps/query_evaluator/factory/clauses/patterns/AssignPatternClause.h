@@ -10,7 +10,7 @@ private:
     QPSClient qpsClient;
     TokenObject left;
     TokenObject right;
-    size_t priority = 2;
+    static const size_t priority = 2;
     ResultTable evaluateFirstAsSynonym();
     ResultTable evaluateFirstAsWildcard();
     ResultTable evaluateFirstAsNameQuotes();
