@@ -7,12 +7,12 @@
 #include <unordered_map>
 
 class Parent : public Clause {
-private:
+protected:
     std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap;
-    RelationshipType relationshipType;
     QPSClient qpsClient;
     TokenObject left;
     TokenObject right;
+    RelationshipType relationshipType;
     size_t priority;
     ResultTable evaluateSynonymSynonym(RelationshipType relationshipType);
     ResultTable evaluateSynonymWildcard(RelationshipType relationshipType);
@@ -25,7 +25,7 @@ private:
     ResultTable evaluateWildcardInteger(RelationshipType relationshipType);
 
 public:
-    Parent(TokenObject left, TokenObject right, RelationshipType relationshipType,
+    Parent(TokenObject left, TokenObject right, RelationshipType relationshipType, size_t priority,
                  std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
     ResultTable evaluateClause() override;
     size_t getNumberOfSynonyms() override;

@@ -2,9 +2,9 @@
 #include <utility>
 #include "components/qps/query_evaluator/factory/utils/ClauseUtils.h"
 
-Parent::Parent(TokenObject left, TokenObject right, RelationshipType relationshipType,
+Parent::Parent(TokenObject left, TokenObject right, RelationshipType relationshipType, size_t priority,
                            std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap,
-                           QPSClient qpsClient) : left(std::move(left)), right(std::move(right)), relationshipType(relationshipType),
+                           QPSClient qpsClient) : left(std::move(left)), right(std::move(right)), relationshipType(relationshipType), priority(priority),
                                                   synonymToDesignEntityMap(std::move(synonymToDesignEntityMap)), qpsClient(qpsClient) {}
 
 ResultTable Parent::evaluateClause() {

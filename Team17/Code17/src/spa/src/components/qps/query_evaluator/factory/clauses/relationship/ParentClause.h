@@ -7,30 +7,13 @@
 #include "Parent.h"
 #include <unordered_map>
 
-class ParentClause : public Clause {
+class ParentClause : public Parent {
 private:
-    std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap;
-    QPSClient qpsClient;
-    TokenObject left;
-    TokenObject right;
-    size_t priority = 7;
-    ResultTable evaluateSynonymSynonym();
-    ResultTable evaluateSynonymWildcard();
-    ResultTable evaluateSynonymInteger();
-    ResultTable evaluateIntegerSynonym();
-    ResultTable evaluateIntegerWildcard();
-    ResultTable evaluateIntegerInteger();
-    ResultTable evaluateWildcardSynonym();
-    ResultTable evaluateWildcardWildcard();
-    ResultTable evaluateWildcardInteger();
-
+    static const size_t priority = 7;
 public:
     ParentClause(TokenObject left, TokenObject right,
-    std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
-    ResultTable evaluateClause() override;
-    size_t getNumberOfSynonyms() override;
-    std::set<std::string> getAllSynonyms() override;
-    size_t getPriority() override;
+                 std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap,
+                 QPSClient qpsClient);
 };
 
 #endif //SPA_PARENTCLAUSE_H
