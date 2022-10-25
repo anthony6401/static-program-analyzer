@@ -602,14 +602,6 @@ TEST_CASE("Syntax and Semantics Checks") {
     }
 }
 
-TEST_CASE("Testing") {
-    std::string testQuery = "stmt s; Select s such that Parent (_, s)";
-    std::list<std::string> testResults;
-    std::list<std::string> expectedResults = { "SemanticError" };
-    QPS::processQueryResult(testQuery, testResults, qpsClient);
-    REQUIRE(testResults == expectedResults);
-}
-
 
 TEST_CASE("Milestone 1 Integration Test 1") {
 
