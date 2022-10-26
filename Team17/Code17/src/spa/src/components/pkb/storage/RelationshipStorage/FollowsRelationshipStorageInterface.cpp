@@ -357,7 +357,7 @@ std::unordered_set<std::string> FollowsRelationshipStorageInterface::getRelation
 	if (relType == relationshipType) {
 		std::unordered_map<std::string, std::unordered_set<std::string>>* storage{};
 
-		storage = getStorageForward(DesignEntity::STMT, returnType);
+		storage = getStorageForward(returnType, DesignEntity::STMT);
 
 		if (storage == nullptr) {
 			return std::unordered_set<std::string>();

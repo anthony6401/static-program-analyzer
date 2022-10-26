@@ -8,11 +8,17 @@ public:
 	bool getRelationship(RelationshipType relType, TokenObject firstArgument, TokenObject secondArgument);
 	std::unordered_set<std::string> getRelationshipByFirst(RelationshipType relType, TokenObject firstArgument, DesignEntity returnType);
 	std::unordered_set<std::string> getRelationshipBySecond(RelationshipType relType, DesignEntity returnType, TokenObject secondArgument);
+	std::unordered_set<std::string> getRelationshipWithFirstWilcard(RelationshipType relType, DesignEntity returnType);
+	std::unordered_set<std::string> getRelationshipWithSecondWildcard(RelationshipType relType, DesignEntity returnType);
 	std::unordered_map<std::string, std::unordered_set<std::string>> getAllRelationship(RelationshipType relType, DesignEntity returnType1, DesignEntity returntype2);
 	std::unordered_set<std::string> getNextForward(std::string c);
 	std::unordered_set<std::string> getNextBackward(std::string c);
 
 private:
+	bool handleConstantConstant(TokenObject firstArgument, TokenObject secondArgument);
+	bool handleConstantWildcard(TokenObject firstArgument);
+	bool handleWildcardConstant(TokenObject secondArgument);
+	bool handleWilcardWildcard();
 	std::unordered_map<std::string, std::unordered_set<std::string>>* getReadSpecificEntityStorage(DesignEntity right);
 	std::unordered_map<std::string, std::unordered_set<std::string>>* getPrintSpecificEntityStorage(DesignEntity right);
 	std::unordered_map<std::string, std::unordered_set<std::string>>* getAssignSpecificEntityStorage(DesignEntity right);

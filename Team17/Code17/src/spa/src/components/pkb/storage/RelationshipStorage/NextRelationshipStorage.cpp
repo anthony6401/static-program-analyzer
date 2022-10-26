@@ -292,20 +292,50 @@ bool NextRelationshipStorage::storeRelationship(Relationship* rel) {
 	return false;
 }
 
+bool NextRelationshipStorage::handleConstantConstant(TokenObject firstArgument, TokenObject secondArgument) {
+	std::unordered_map<std::string, std::unordered_set<std::string>>* storage{};
+	storage = getStorageForward(DesignEntity::STMT, DesignEntity::STMT);
+	if (storage->find(firstArgument.getValue()) != storage->end()) {
+		std::unordered_set<std::string>* set = &storage->find(firstArgument.getValue())->second;
+		return set->find(secondArgument.getValue()) != set->end();
+	}
+
+	return false;
+}
+
+bool NextRelationshipStorage::handleConstantWildcard(TokenObject firstArgument) {
+	std::unordered_map<std::string, std::unordered_set<std::string>>* storage{};
+	storage = getStorageForward(DesignEntity::STMT, DesignEntity::STMT);
+	return storage->find(firstArgument.getValue()) != storage->end();
+}
+
+bool NextRelationshipStorage::handleWildcardConstant(TokenObject secondArgument) {
+	std::unordered_map<std::string, std::unordered_set<std::string>>* storage{};
+	storage = getStorageBackward(DesignEntity::STMT);
+	return storage->find(secondArgument.getValue()) != storage->end();
+}
+
+bool NextRelationshipStorage::handleWilcardWildcard() {
+	std::unordered_map<std::string, std::unordered_set<std::string>>* storage{};
+	storage = getStorageForward(DesignEntity::STMT, DesignEntity::STMT);
+	return storage->size() != 0;
+}
+
 // Answer Next(1, 2)
 bool NextRelationshipStorage::getRelationship(RelationshipType relType, TokenObject firstArgument, TokenObject secondArgument) {
 	if (relType == RelationshipType::NEXT) {
-		std::unordered_map<std::string, std::unordered_set<std::string>>* storage{};
-
-		storage = getStorageForward(DesignEntity::STMT, DesignEntity::STMT);
-
-		if (storage->find(firstArgument.getValue()) == storage->end()) {
-			return false;
+		if (firstArgument.getTokenType() == TokenType::NAME_WITH_QUOTATION && secondArgument.getTokenType() == TokenType::NAME_WITH_QUOTATION) {
+			return handleConstantConstant(firstArgument, secondArgument);
 		}
-
-		std::unordered_set<std::string>* set = &storage->find(firstArgument.getValue())->second;
-
-		return set->find(secondArgument.getValue()) != set->end();
+		else if (firstArgument.getTokenType() == TokenType::WILDCARD && secondArgument.getTokenType() == TokenType::NAME_WITH_QUOTATION) {
+			return handleWildcardConstant(secondArgument);
+		}
+		else if (firstArgument.getTokenType() == TokenType::NAME_WITH_QUOTATION && secondArgument.getTokenType() == TokenType::WILDCARD) {
+			return handleConstantWildcard(firstArgument);
+		}
+		else if (firstArgument.getTokenType() == TokenType::WILDCARD && secondArgument.getTokenType() == TokenType::WILDCARD) {
+			return handleWilcardWildcard();
+		}
 	}
 
 	return false;
@@ -356,6 +386,50 @@ std::unordered_set<std::string> NextRelationshipStorage::getRelationshipBySecond
 		}
 
 		return storage->find(findValue)->second;
+	}
+	return std::unordered_set<std::string>();
+}
+
+std::unordered_set<std::string> NextRelationshipStorage::getRelationshipWithFirstWilcard(RelationshipType relType, DesignEntity returnType) {
+	if (relType == RelationshipType::NEXT) {
+		std::unordered_map<std::string, std::unordered_set<std::string>>* storage{};
+
+		storage = getStorageBackward(returnType);
+
+		if (storage == nullptr) {
+			return std::unordered_set<std::string>();
+		}
+
+		std::unordered_set<std::string> result;
+
+		for (auto const& pair : *storage) {
+			result.insert(pair.first);
+		}
+
+		return result;
+
+	}
+	return std::unordered_set<std::string>();
+}
+
+std::unordered_set<std::string> NextRelationshipStorage::getRelationshipWithSecondWildcard(RelationshipType relType, DesignEntity returnType) {
+	if (relType == RelationshipType::NEXT) {
+		std::unordered_map<std::string, std::unordered_set<std::string>>* storage{};
+
+		storage = getStorageForward(returnType, DesignEntity::STMT);
+
+		if (storage == nullptr) {
+			return std::unordered_set<std::string>();
+		}
+
+		std::unordered_set<std::string> result;
+
+		for (auto const& pair : *storage) {
+			result.insert(pair.first);
+		}
+
+		return result;
+
 	}
 	return std::unordered_set<std::string>();
 }
