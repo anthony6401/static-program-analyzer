@@ -182,11 +182,11 @@ std::unordered_set<std::string> ParentRelationshipStorageInterface::getRelations
 	return std::unordered_set<std::string>();
 }
 
-std::unordered_set<std::string> ParentRelationshipStorageInterface::getRelationshipWithFirstWilcard(RelationshipType relType, DesignEntity returnType) {
+std::unordered_set<std::string> ParentRelationshipStorageInterface::getRelationshipWithFirstWildcard(RelationshipType relType, DesignEntity returnType) {
 	if (relType == relationshipType) {
 		std::unordered_map<std::string, std::unordered_set<std::string>>* storage{};
 
-		storage = getStorageBackward(returnType);
+		storage = getStorageForward(DesignEntity::STMT, returnType);
 
 		if (storage == nullptr) {
 			return std::unordered_set<std::string>();
@@ -195,7 +195,7 @@ std::unordered_set<std::string> ParentRelationshipStorageInterface::getRelations
 		std::unordered_set<std::string> result;
 
 		for (auto const& pair : *storage) {
-			result.insert(pair.first);
+			result.insert(pair.second.begin(), pair.second.end());
 		}
 
 		return result;

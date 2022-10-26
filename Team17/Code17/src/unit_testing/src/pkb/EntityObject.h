@@ -138,29 +138,3 @@ static Entity* variableAffectsX = new VariableEntity(variableX);
 static Entity* variableAffectsA = new VariableEntity(variableA);
 static Entity* variableAffectsB = new VariableEntity(variableB);
 static Entity* variableAffectsZ = new VariableEntity(variableZ);
-
-//static std::string stmt100 = "100";
-//static std::string stmt200 = "200";
-//static std::string stmt300 = "300";
-//static std::string stmt400 = "400";
-//static std::string stmt500 = "500";
-//static std::string stmt600 = "600";
-//static std::string stmt700 = "700";
-//static std::string variableXX = "xx";
-//static std::string variableAA = "aa";
-//static std::string variableBB= "bb";
-//static std::string variableZZ = "zz";
-//
-//static Entity* assignEntityAffectsT = new AssignEntity(stmt100);
-//static Entity* assignEntityAffectsTTwo = new AssignEntity(stmt300);
-//static Entity* assignEntityAffectsTThree = new AssignEntity(stmt400);
-//static Entity* assignEntityAffectsTFour = new AssignEntity(stmt500);
-//static Entity* assignEntityAffectsTFive = new AssignEntity(stmt700);
-//
-//static Entity* ifEntityAffectsT = new IfEntity(stmt200);
-//static Entity* readEntityAffectsT = new ReadEntity(stmt600, variableAA);
-//
-//static Entity* variableAffectsTX = new VariableEntity(variableXX);
-//static Entity* variableAffectsTA = new VariableEntity(variableAA);
-//static Entity* variableAffectsTB = new VariableEntity(variableBB);
-//static Entity* variableAffectsTZ = new VariableEntity(variableZZ);

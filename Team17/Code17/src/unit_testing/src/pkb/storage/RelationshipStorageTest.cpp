@@ -546,7 +546,7 @@ TEST_CASE("Modify Relationship Storage Test") {
 
 
 TEST_CASE("Parent Relationship Storage Test") {
-	RelationshipStorage* parentRelationshipStorage = new ParentRelationshipStorage();
+	ParentRelationshipStorage* parentRelationshipStorage = new ParentRelationshipStorage();
 
 	// TESTING FOR STORING
 
@@ -617,7 +617,7 @@ TEST_CASE("Parent Relationship Storage Test") {
 	REQUIRE(!parentRelationshipStorage->storeRelationship(modifyRelationshipAssignOne));
 
 	//Testing for Parent(1,2) query
-	//Testing for Whie entity
+	//Testing for While entity
 	REQUIRE(parentRelationshipStorage->getRelationship(RelationshipType::PARENT, stmtTokenObject6, stmtTokenObject5));
 	REQUIRE(parentRelationshipStorage->getRelationship(RelationshipType::PARENT, stmtTokenObject6, stmtTokenObject4));
 	REQUIRE(parentRelationshipStorage->getRelationship(RelationshipType::PARENT, stmtTokenObject6, stmtTokenObject1));
@@ -632,6 +632,19 @@ TEST_CASE("Parent Relationship Storage Test") {
 	REQUIRE(parentRelationshipStorage->getRelationship(RelationshipType::PARENT, stmtTokenObject3, stmtTokenObject2));
 	REQUIRE(parentRelationshipStorage->getRelationship(RelationshipType::PARENT, stmtTokenObject3, stmtTokenObject6));
 	REQUIRE(parentRelationshipStorage->getRelationship(RelationshipType::PARENT, stmtTokenObject3, stmtTokenObject9));
+
+	// Test Parent(1, _)
+	REQUIRE(parentRelationshipStorage->getRelationship(RelationshipType::PARENT, stmtTokenObject6, wildcardTokenObject));
+	REQUIRE(parentRelationshipStorage->getRelationship(RelationshipType::PARENT, stmtTokenObject3, wildcardTokenObject));
+	REQUIRE(!parentRelationshipStorage->getRelationship(RelationshipType::PARENT, stmtTokenObject18, wildcardTokenObject));
+
+	// Test Parent(_, 1)
+	REQUIRE(parentRelationshipStorage->getRelationship(RelationshipType::PARENT, wildcardTokenObject, stmtTokenObject12));
+	REQUIRE(parentRelationshipStorage->getRelationship(RelationshipType::PARENT, wildcardTokenObject, stmtTokenObject6));
+	REQUIRE(!parentRelationshipStorage->getRelationship(RelationshipType::PARENT, wildcardTokenObject, stmtTokenObject14));
+
+	// Test Parent(_, _)
+	REQUIRE(parentRelationshipStorage->getRelationship(RelationshipType::PARENT, wildcardTokenObject, wildcardTokenObject));
 
 	//Testing for Parent(1,a), Parent(1,pr), etc
 	//Test for While Entity
@@ -700,11 +713,35 @@ TEST_CASE("Parent Relationship Storage Test") {
 	REQUIRE(parentRelationshipStorage->getRelationshipBySecond(RelationshipType::PARENT, DesignEntity::STMT, stmtTokenObject1) == statementResult);
 	REQUIRE(parentRelationshipStorage->getRelationshipBySecond(RelationshipType::PARENT, DesignEntity::STMT, stmtTokenObject2) == statementResult);
 
+	// Test for Parent(s, _)
+	std::unordered_set<std::string> stmtSecondWildcardTest{ if_value_one, if_value_two, while_value_one, while_value_two };
+	std::unordered_set<std::string> ifSecondWildcardTest{ if_value_one, if_value_two};
+	std::unordered_set<std::string> whileSecondWildcardTest{ while_value_one, while_value_two };
+
+	REQUIRE(parentRelationshipStorage->getRelationshipWithSecondWildcard(RelationshipType::PARENT, DesignEntity::STMT) == stmtSecondWildcardTest);
+	REQUIRE(parentRelationshipStorage->getRelationshipWithSecondWildcard(RelationshipType::PARENT, DesignEntity::IF) == ifSecondWildcardTest);
+	REQUIRE(parentRelationshipStorage->getRelationshipWithSecondWildcard(RelationshipType::PARENT, DesignEntity::WHILE) == whileSecondWildcardTest);
+
+	// Test for Parent(_, s)
+	std::unordered_set<std::string> stmtFirstWildcardTest{ read_value_one, print_value_one, assign_value_one, call_value_one, while_value_one, if_value_one, while_value_two, read_value_two, print_value_two, assign_value_two, call_value_two, if_value_two, if_value_three, while_value_three };
+	std::unordered_set<std::string> ifFirstWildcardTest{ if_value_one, if_value_two, if_value_three };
+	std::unordered_set<std::string> whileFirstWildcardTest{ while_value_one, while_value_two, while_value_three };
+	std::unordered_set<std::string> assignFirstWildcardTest{ assign_value_one, assign_value_two };
+	std::unordered_set<std::string> printFirstWildcardTest{ print_value_one, print_value_two };
+	std::unordered_set<std::string> readFirstWildcardTest{ read_value_one, read_value_two };
+	std::unordered_set<std::string> callFirstWildcardTest{ call_value_one, call_value_two };
+
+	REQUIRE(parentRelationshipStorage->getRelationshipWithFirstWildcard(RelationshipType::PARENT, DesignEntity::STMT) == stmtFirstWildcardTest);
+	REQUIRE(parentRelationshipStorage->getRelationshipWithFirstWildcard(RelationshipType::PARENT, DesignEntity::IF) == ifFirstWildcardTest);
+	REQUIRE(parentRelationshipStorage->getRelationshipWithFirstWildcard(RelationshipType::PARENT, DesignEntity::WHILE) == whileFirstWildcardTest);
+	REQUIRE(parentRelationshipStorage->getRelationshipWithFirstWildcard(RelationshipType::PARENT, DesignEntity::ASSIGN) == assignFirstWildcardTest);
+	REQUIRE(parentRelationshipStorage->getRelationshipWithFirstWildcard(RelationshipType::PARENT, DesignEntity::PRINT) == printFirstWildcardTest);
+	REQUIRE(parentRelationshipStorage->getRelationshipWithFirstWildcard(RelationshipType::PARENT, DesignEntity::READ) == readFirstWildcardTest);
+	REQUIRE(parentRelationshipStorage->getRelationshipWithFirstWildcard(RelationshipType::PARENT, DesignEntity::CALL) == callFirstWildcardTest);
 
 	//Testing for Parent(s,a),...,Parent(w,a),...,Parent(if,a),..., etc
 
 	//Test While Entity
-
 
 	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultWhileReadAll{ {while_value_one, std::unordered_set<std::string>({read_value_one}) },
 																								 {while_value_two, std::unordered_set<std::string>({read_value_two}) } };
@@ -867,7 +904,7 @@ TEST_CASE("Parent Relationship Storage Test") {
 }	
 
 TEST_CASE("ParentT Relationship Storage Test") {
-	RelationshipStorage* parentTRelationshipStorage = new ParentTRelationshipStorage();
+	ParentTRelationshipStorage* parentTRelationshipStorage = new ParentTRelationshipStorage();
 
 	// TESTING FOR STORING
 
@@ -954,6 +991,19 @@ TEST_CASE("ParentT Relationship Storage Test") {
 	REQUIRE(parentTRelationshipStorage->getRelationship(RelationshipType::PARENT_T, stmtTokenObject3, stmtTokenObject6));
 	REQUIRE(parentTRelationshipStorage->getRelationship(RelationshipType::PARENT_T, stmtTokenObject3, stmtTokenObject9));
 
+	// Test ParentT(1, _)
+	REQUIRE(parentTRelationshipStorage->getRelationship(RelationshipType::PARENT_T, stmtTokenObject6, wildcardTokenObject));
+	REQUIRE(parentTRelationshipStorage->getRelationship(RelationshipType::PARENT_T, stmtTokenObject3, wildcardTokenObject));
+	REQUIRE(!parentTRelationshipStorage->getRelationship(RelationshipType::PARENT_T, stmtTokenObject18, wildcardTokenObject));
+
+	// Test ParentT(_, 1)
+	REQUIRE(parentTRelationshipStorage->getRelationship(RelationshipType::PARENT_T, wildcardTokenObject, stmtTokenObject12));
+	REQUIRE(parentTRelationshipStorage->getRelationship(RelationshipType::PARENT_T, wildcardTokenObject, stmtTokenObject6));
+	REQUIRE(!parentTRelationshipStorage->getRelationship(RelationshipType::PARENT_T, wildcardTokenObject, stmtTokenObject14));
+
+	// Test ParentT(_, _)
+	REQUIRE(parentTRelationshipStorage->getRelationship(RelationshipType::PARENT_T, wildcardTokenObject, wildcardTokenObject));
+
 	//Testing for ParentT(1,a), ParentT(1,pr), etc
 	//Test for While Entity
 	std::unordered_set<std::string> whileReadTest{ read_value_one };
@@ -1020,6 +1070,32 @@ TEST_CASE("ParentT Relationship Storage Test") {
 	REQUIRE(parentTRelationshipStorage->getRelationshipBySecond(RelationshipType::PARENT_T, DesignEntity::STMT, stmtTokenObject4) == statementResult);
 	REQUIRE(parentTRelationshipStorage->getRelationshipBySecond(RelationshipType::PARENT_T, DesignEntity::STMT, stmtTokenObject1) == statementResult);
 	REQUIRE(parentTRelationshipStorage->getRelationshipBySecond(RelationshipType::PARENT_T, DesignEntity::STMT, stmtTokenObject2) == statementResult);
+
+	// Test for Parent(s, _)
+	std::unordered_set<std::string> stmtSecondWildcardTest{ if_value_one, if_value_two, while_value_one, while_value_two };
+	std::unordered_set<std::string> ifSecondWildcardTest{ if_value_one, if_value_two };
+	std::unordered_set<std::string> whileSecondWildcardTest{ while_value_one, while_value_two };
+
+	REQUIRE(parentTRelationshipStorage->getRelationshipWithSecondWildcard(RelationshipType::PARENT_T, DesignEntity::STMT) == stmtSecondWildcardTest);
+	REQUIRE(parentTRelationshipStorage->getRelationshipWithSecondWildcard(RelationshipType::PARENT_T, DesignEntity::IF) == ifSecondWildcardTest);
+	REQUIRE(parentTRelationshipStorage->getRelationshipWithSecondWildcard(RelationshipType::PARENT_T, DesignEntity::WHILE) == whileSecondWildcardTest);
+
+	// Test for Parent(_, s)
+	std::unordered_set<std::string> stmtFirstWildcardTest{ read_value_one, print_value_one, assign_value_one, call_value_one, while_value_one, if_value_one, while_value_two, read_value_two, print_value_two, assign_value_two, call_value_two, if_value_two, if_value_three, while_value_three };
+	std::unordered_set<std::string> ifFirstWildcardTest{ if_value_one, if_value_two, if_value_three };
+	std::unordered_set<std::string> whileFirstWildcardTest{ while_value_one, while_value_two, while_value_three };
+	std::unordered_set<std::string> assignFirstWildcardTest{ assign_value_one, assign_value_two };
+	std::unordered_set<std::string> printFirstWildcardTest{ print_value_one, print_value_two };
+	std::unordered_set<std::string> readFirstWildcardTest{ read_value_one, read_value_two };
+	std::unordered_set<std::string> callFirstWildcardTest{ call_value_one, call_value_two };
+
+	REQUIRE(parentTRelationshipStorage->getRelationshipWithFirstWildcard(RelationshipType::PARENT_T, DesignEntity::STMT) == stmtFirstWildcardTest);
+	REQUIRE(parentTRelationshipStorage->getRelationshipWithFirstWildcard(RelationshipType::PARENT_T, DesignEntity::IF) == ifFirstWildcardTest);
+	REQUIRE(parentTRelationshipStorage->getRelationshipWithFirstWildcard(RelationshipType::PARENT_T, DesignEntity::WHILE) == whileFirstWildcardTest);
+	REQUIRE(parentTRelationshipStorage->getRelationshipWithFirstWildcard(RelationshipType::PARENT_T, DesignEntity::ASSIGN) == assignFirstWildcardTest);
+	REQUIRE(parentTRelationshipStorage->getRelationshipWithFirstWildcard(RelationshipType::PARENT_T, DesignEntity::PRINT) == printFirstWildcardTest);
+	REQUIRE(parentTRelationshipStorage->getRelationshipWithFirstWildcard(RelationshipType::PARENT_T, DesignEntity::READ) == readFirstWildcardTest);
+	REQUIRE(parentTRelationshipStorage->getRelationshipWithFirstWildcard(RelationshipType::PARENT_T, DesignEntity::CALL) == callFirstWildcardTest);
 
 
 	//Testing for ParentT(s,a),...,ParentT(w,a),...,ParentT(if,a),..., etc

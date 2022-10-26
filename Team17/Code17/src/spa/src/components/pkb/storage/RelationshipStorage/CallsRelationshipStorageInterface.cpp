@@ -43,7 +43,7 @@ std::unordered_set<std::string> CallsRelationshipStorageInterface::getRelationsh
 }
 
 // To answer Calls(_, p)
-std::unordered_set<std::string> CallsRelationshipStorageInterface::getRelationshipWithFirstWilcard(RelationshipType relType, DesignEntity returnType) {
+std::unordered_set<std::string> CallsRelationshipStorageInterface::getRelationshipWithFirstWildcard(RelationshipType relType, DesignEntity returnType) {
 	if (relType == relationshipType) {
 		std::unordered_set<std::string> result;
 		for (auto const& pair : this->procBackwardStorage) {
