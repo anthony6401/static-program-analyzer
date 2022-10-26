@@ -4,7 +4,7 @@
 #include "utils.h"
 
 // Note that every DesignEntity passed in here is assume as Procedure
-CallsRelationshipStorageInterface::CallsRelationshipStorageInterface(RelationshipType relationshipType) : RelationshipStorage(), relationshipType(relationshipType) {}
+CallsRelationshipStorageInterface::CallsRelationshipStorageInterface(RelationshipType relationshipType) : RelationshipStorageFirstWildcard(), relationshipType(relationshipType) {}
 
 // To answer Calls("proc1", "proc2"), Calls("proc1", _), Calls(_, "proc1"), Calls(_, _)
 bool CallsRelationshipStorageInterface::getRelationship(RelationshipType relType, TokenObject firstArgument, TokenObject secondArgument) {
@@ -81,6 +81,8 @@ bool CallsRelationshipStorageInterface::handleConstantConstant(TokenObject first
 		std::unordered_set<std::string> set = this->procForwardStorage.find(firstArgument.getValue())->second;
 		return set.find(secondArgument.getValue()) != set.end();
 	}
+
+	return false;
 }
 
 bool CallsRelationshipStorageInterface::handleConstantWildcard(TokenObject firstArgument) {

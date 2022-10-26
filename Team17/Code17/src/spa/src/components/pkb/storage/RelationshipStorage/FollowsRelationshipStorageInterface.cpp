@@ -2,7 +2,7 @@
 #include "models/Relationship/FollowsRelationship.h"
 #include "utils.h"
 
-FollowsRelationshipStorageInterface::FollowsRelationshipStorageInterface(RelationshipType relationshipType) : RelationshipStorage(), relationshipType(relationshipType) {}
+FollowsRelationshipStorageInterface::FollowsRelationshipStorageInterface(RelationshipType relationshipType) : RelationshipStorageFirstWildcard(), relationshipType(relationshipType) {}
 
 std::unordered_map<std::string, std::unordered_set<std::string>>* FollowsRelationshipStorageInterface::getReadSpecificEntityStorage(DesignEntity right) {
 	if (right == DesignEntity::READ) {

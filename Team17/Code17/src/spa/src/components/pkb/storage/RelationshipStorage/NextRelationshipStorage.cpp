@@ -2,7 +2,7 @@
 #include "models/Relationship/NextRelationship.h"
 #include "utils.h"
 
-NextRelationshipStorage::NextRelationshipStorage() : RelationshipStorage() {}
+NextRelationshipStorage::NextRelationshipStorage() : RelationshipStorageFirstWildcard() {}
 
 std::unordered_map<std::string, std::unordered_set<std::string>>* NextRelationshipStorage::getReadSpecificEntityStorage(DesignEntity right) {
 	if (right == DesignEntity::READ) {
