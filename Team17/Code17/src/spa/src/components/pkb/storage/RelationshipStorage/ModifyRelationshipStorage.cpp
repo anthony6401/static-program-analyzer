@@ -1,6 +1,7 @@
 #include "ModifyRelationshipStorage.h"
 #include "models/Relationship/ModifyRelationship.h"
 #include "utils.h"
+#include <iostream>
 
 ModifyRelationshipStorage::ModifyRelationshipStorage() : RelationshipStorage() {}
 
@@ -196,7 +197,7 @@ bool ModifyRelationshipStorage::getRelationship(RelationshipType relType, TokenO
 			&& secondArgument.getTokenType() == TokenType::NAME_WITH_QUOTATION) {
 			return handleConstantConstant(firstArgument, secondArgument);
 		} else if ((firstArgument.getTokenType() == TokenType::NAME_WITH_QUOTATION || firstArgument.getTokenType() == TokenType::INTEGER)
-				&& secondArgument.getTokenType() == TokenType::NAME_WITH_QUOTATION) {
+			&& secondArgument.getTokenType() == TokenType::WILDCARD) {
 			return handleConstantWildcard(firstArgument);
 		}
 	}

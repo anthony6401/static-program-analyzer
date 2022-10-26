@@ -51,7 +51,7 @@ TEST_CASE("Uses Relationship Storage Test") {
 
 	REQUIRE(!usesRelationshipStorage->storeRelationship(modifyRelationshipAssignOne));
 
-	// Test Uses(1, 2)
+	// Test Uses(1, "x")
 	REQUIRE(usesRelationshipStorage->getRelationship(RelationshipType::USES, stmtTokenObject1, variableTokenObject));
 	REQUIRE(usesRelationshipStorage->getRelationship(RelationshipType::USES, stmtTokenObject7, variableTokenObjectTwo));
 	REQUIRE(usesRelationshipStorage->getRelationship(RelationshipType::USES, procedureTokenObject, variableTokenObject));
@@ -315,35 +315,24 @@ TEST_CASE("Modify Relationship Storage Test") {
 
 	REQUIRE(!modifyRelationshipStorage->storeRelationship(modifyRelationshipAssignOne));
 
+	// Test Modifies(1, "x")
 	REQUIRE(modifyRelationshipStorage->getRelationship(RelationshipType::MODIFIES, stmtTokenObject1, variableTokenObject));
-	REQUIRE(modifyRelationshipStorage->getRelationship(RelationshipType::MODIFIES, stmtTokenObject1, variableTokenObjectThree));
-	REQUIRE(modifyRelationshipStorage->getRelationship(RelationshipType::MODIFIES, stmtTokenObject7, variableTokenObject));
 	REQUIRE(modifyRelationshipStorage->getRelationship(RelationshipType::MODIFIES, stmtTokenObject7, variableTokenObjectTwo));
-
 	REQUIRE(modifyRelationshipStorage->getRelationship(RelationshipType::MODIFIES, stmtTokenObject2, variableTokenObject));
-	REQUIRE(modifyRelationshipStorage->getRelationship(RelationshipType::MODIFIES, stmtTokenObject2, variableTokenObjectThree));
-	REQUIRE(modifyRelationshipStorage->getRelationship(RelationshipType::MODIFIES, stmtTokenObject8, variableTokenObject));
 	REQUIRE(modifyRelationshipStorage->getRelationship(RelationshipType::MODIFIES, stmtTokenObject8, variableTokenObjectTwo));
-
 	REQUIRE(modifyRelationshipStorage->getRelationship(RelationshipType::MODIFIES, procedureTokenObject, variableTokenObject));
-	REQUIRE(modifyRelationshipStorage->getRelationship(RelationshipType::MODIFIES, procedureTokenObject, variableTokenObjectThree));
-	REQUIRE(modifyRelationshipStorage->getRelationship(RelationshipType::MODIFIES, procedureTokenObjectTwo, variableTokenObject));
 	REQUIRE(modifyRelationshipStorage->getRelationship(RelationshipType::MODIFIES, procedureTokenObjectTwo, variableTokenObjectTwo));
-
 	REQUIRE(modifyRelationshipStorage->getRelationship(RelationshipType::MODIFIES, stmtTokenObject3, variableTokenObject));
-	REQUIRE(modifyRelationshipStorage->getRelationship(RelationshipType::MODIFIES, stmtTokenObject3, variableTokenObjectThree));
-	REQUIRE(modifyRelationshipStorage->getRelationship(RelationshipType::MODIFIES, stmtTokenObject9, variableTokenObject));
 	REQUIRE(modifyRelationshipStorage->getRelationship(RelationshipType::MODIFIES, stmtTokenObject9, variableTokenObjectTwo));
-
 	REQUIRE(modifyRelationshipStorage->getRelationship(RelationshipType::MODIFIES, stmtTokenObject5, variableTokenObject));
-	REQUIRE(modifyRelationshipStorage->getRelationship(RelationshipType::MODIFIES, stmtTokenObject5, variableTokenObjectThree));
-	REQUIRE(modifyRelationshipStorage->getRelationship(RelationshipType::MODIFIES, stmtTokenObject11, variableTokenObject));
 	REQUIRE(modifyRelationshipStorage->getRelationship(RelationshipType::MODIFIES, stmtTokenObject11, variableTokenObjectTwo));
-
 	REQUIRE(modifyRelationshipStorage->getRelationship(RelationshipType::MODIFIES, stmtTokenObject6, variableTokenObject));
-	REQUIRE(modifyRelationshipStorage->getRelationship(RelationshipType::MODIFIES, stmtTokenObject6, variableTokenObjectThree));
-	REQUIRE(modifyRelationshipStorage->getRelationship(RelationshipType::MODIFIES, stmtTokenObject12, variableTokenObject));
 	REQUIRE(modifyRelationshipStorage->getRelationship(RelationshipType::MODIFIES, stmtTokenObject12, variableTokenObjectTwo));
+
+	// Test Modifies(1, _)
+	REQUIRE(modifyRelationshipStorage->getRelationship(RelationshipType::MODIFIES, stmtTokenObject1, wildcardTokenObject));
+	REQUIRE(modifyRelationshipStorage->getRelationship(RelationshipType::MODIFIES, procedureTokenObject, wildcardTokenObject));
+	REQUIRE(!modifyRelationshipStorage->getRelationship(RelationshipType::MODIFIES, stmtTokenObject4, wildcardTokenObject));
 
 	REQUIRE(!modifyRelationshipStorage->getRelationship(RelationshipType::USES, stmtTokenObject1, variableTokenObject));
 	REQUIRE(!modifyRelationshipStorage->getRelationship(RelationshipType::FOLLOWS, stmtTokenObject1, variableTokenObject));
@@ -357,6 +346,7 @@ TEST_CASE("Modify Relationship Storage Test") {
 	std::unordered_set<std::string> expectedResult2({ variable_value_one, variable_value_two });
 	std::unordered_set<std::string> expectedResult3({});
 
+	// Test Modifies(1, v)
 	std::unordered_set<std::string> getModifyRelationshipByStmt1 = modifyRelationshipStorage->getRelationshipByFirst(RelationshipType::MODIFIES, stmtTokenObject1, DesignEntity::VARIABLE);
 	std::unordered_set<std::string> getModifyRelationshipByStmt2 = modifyRelationshipStorage->getRelationshipByFirst(RelationshipType::MODIFIES, stmtTokenObject2, DesignEntity::VARIABLE);
 	std::unordered_set<std::string> getModifyRelationshipByStmt3 = modifyRelationshipStorage->getRelationshipByFirst(RelationshipType::MODIFIES, stmtTokenObject3, DesignEntity::VARIABLE);
@@ -407,6 +397,7 @@ TEST_CASE("Modify Relationship Storage Test") {
 	REQUIRE(getModifyRelationshipByProcTwo == expectedResult2);
 	REQUIRE(getModifyRelationshipByProcThree == expectedResult3);
 
+	// Test Modifies(s, "x")
 	std::unordered_set<std::string> getModifyAssignRelationshipByVarOne = modifyRelationshipStorage->getRelationshipBySecond(RelationshipType::MODIFIES, DesignEntity::ASSIGN, variableTokenObject);
 	std::unordered_set<std::string> getModifyAssignRelationshipByVarTwo = modifyRelationshipStorage->getRelationshipBySecond(RelationshipType::MODIFIES, DesignEntity::ASSIGN, variableTokenObjectTwo);
 	std::unordered_set<std::string> getModifyAssignRelationshipByVarThree = modifyRelationshipStorage->getRelationshipBySecond(RelationshipType::MODIFIES, DesignEntity::ASSIGN, variableTokenObjectThree);
@@ -479,6 +470,37 @@ TEST_CASE("Modify Relationship Storage Test") {
 	REQUIRE(getModifyStmtRelationshipByVarTwo == expectedResultStmtByVarTwo);
 	REQUIRE(getModifyStmtRelationshipByVarThree == expectedResultStmtByVarThree);
 
+	// Test Modifies(s, _)
+	std::unordered_set<std::string> getAllAssignModifiesRelationshipWithWildcard = modifyRelationshipStorage->getRelationshipWithSecondWildcard(RelationshipType::MODIFIES, DesignEntity::ASSIGN);
+	std::unordered_set<std::string> getAllProcModifiesRelationshipWithWildcard = modifyRelationshipStorage->getRelationshipWithSecondWildcard(RelationshipType::MODIFIES, DesignEntity::PROCEDURE);
+	std::unordered_set<std::string> getAllPrintModifiesRelationshipWithWildcard = modifyRelationshipStorage->getRelationshipWithSecondWildcard(RelationshipType::MODIFIES, DesignEntity::READ);
+	std::unordered_set<std::string> getAllWhileModifiesRelationshipWithWildcard = modifyRelationshipStorage->getRelationshipWithSecondWildcard(RelationshipType::MODIFIES, DesignEntity::WHILE);
+	std::unordered_set<std::string> getAllIfModifiesRelationshipWithWildcard = modifyRelationshipStorage->getRelationshipWithSecondWildcard(RelationshipType::MODIFIES, DesignEntity::IF);
+	std::unordered_set<std::string> getAllCallModifiesRelationshipWithWildcard = modifyRelationshipStorage->getRelationshipWithSecondWildcard(RelationshipType::MODIFIES, DesignEntity::CALL);
+	std::unordered_set<std::string> getAllStmtModifiesRelationshipWithWildcard = modifyRelationshipStorage->getRelationshipWithSecondWildcard(RelationshipType::MODIFIES, DesignEntity::STMT);
+
+	std::unordered_set<std::string> expectedResultWithWildcardAssign{ {assign_value_one, assign_value_two} };
+	std::unordered_set<std::string> expectedResultWithWildcardProc{ {procedure_value_one, procedure_value_two} };
+	std::unordered_set<std::string> expectedResultWithWildcardRead{ {read_value_one, read_value_two} };
+	std::unordered_set<std::string> expectedResultWithWildcardWhile{ {while_value_one, while_value_two} };
+	std::unordered_set<std::string> expectedResultWithWildcardIf{ {if_value_one, if_value_two} };
+	std::unordered_set<std::string> expectedResultWithWildcardCall{ {call_value_one, call_value_two} };
+	std::unordered_set<std::string> expectedResultWithWildcardStmt;
+	expectedResultWithWildcardStmt.insert(expectedResultWithWildcardAssign.begin(), expectedResultWithWildcardAssign.end());
+	expectedResultWithWildcardStmt.insert(expectedResultWithWildcardRead.begin(), expectedResultWithWildcardRead.end());
+	expectedResultWithWildcardStmt.insert(expectedResultWithWildcardWhile.begin(), expectedResultWithWildcardWhile.end());
+	expectedResultWithWildcardStmt.insert(expectedResultWithWildcardIf.begin(), expectedResultWithWildcardIf.end());
+	expectedResultWithWildcardStmt.insert(expectedResultWithWildcardCall.begin(), expectedResultWithWildcardCall.end());
+
+	REQUIRE(getAllAssignModifiesRelationshipWithWildcard == expectedResultWithWildcardAssign);
+	REQUIRE(getAllProcModifiesRelationshipWithWildcard == expectedResultWithWildcardProc);
+	REQUIRE(getAllPrintModifiesRelationshipWithWildcard == expectedResultWithWildcardRead);
+	REQUIRE(getAllWhileModifiesRelationshipWithWildcard == expectedResultWithWildcardWhile);
+	REQUIRE(getAllIfModifiesRelationshipWithWildcard == expectedResultWithWildcardIf);
+	REQUIRE(getAllCallModifiesRelationshipWithWildcard == expectedResultWithWildcardCall);
+	REQUIRE(getAllStmtModifiesRelationshipWithWildcard == expectedResultWithWildcardStmt);
+
+	// Test Modifies(s, v)
 	std::unordered_map<std::string, std::unordered_set<std::string>> getAllAssignModifyRelationship = modifyRelationshipStorage->getAllRelationship(RelationshipType::MODIFIES, DesignEntity::ASSIGN, DesignEntity::VARIABLE);
 	std::unordered_map<std::string, std::unordered_set<std::string>> getAllProcModifyRelationship = modifyRelationshipStorage->getAllRelationship(RelationshipType::MODIFIES, DesignEntity::PROCEDURE, DesignEntity::VARIABLE);
 	std::unordered_map<std::string, std::unordered_set<std::string>> getAllReadModifyRelationship = modifyRelationshipStorage->getAllRelationship(RelationshipType::MODIFIES, DesignEntity::READ, DesignEntity::VARIABLE);

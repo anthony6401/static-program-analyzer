@@ -194,8 +194,7 @@ bool UsesRelationshipStorage::getRelationship(RelationshipType relType, TokenObj
 		if ((firstArgument.getTokenType() == TokenType::NAME_WITH_QUOTATION || firstArgument.getTokenType() == TokenType::INTEGER) 
 			&& secondArgument.getTokenType() == TokenType::NAME_WITH_QUOTATION) {
 			return handleConstantConstant(firstArgument, secondArgument);
-		}
-		else if ((firstArgument.getTokenType() == TokenType::NAME_WITH_QUOTATION || firstArgument.getTokenType() == TokenType::INTEGER) 
+		} else if ((firstArgument.getTokenType() == TokenType::NAME_WITH_QUOTATION || firstArgument.getTokenType() == TokenType::INTEGER) 
 			&& secondArgument.getTokenType() == TokenType::WILDCARD) {
 			return handleConstantWildcard(firstArgument);
 		}
