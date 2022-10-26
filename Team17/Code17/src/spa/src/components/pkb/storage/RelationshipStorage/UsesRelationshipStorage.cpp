@@ -166,10 +166,12 @@ bool UsesRelationshipStorage::handleConstantWildcard(TokenObject firstArgument) 
 // To answer Uses(1, "x")
 bool UsesRelationshipStorage::getRelationship(RelationshipType relType, TokenObject firstArgument, TokenObject secondArgument) {
 	if (relType == RelationshipType::USES) {
-		if (firstArgument.getTokenType() == TokenType::NAME_WITH_QUOTATION && secondArgument.getTokenType() == TokenType::NAME_WITH_QUOTATION) {
+		if ((firstArgument.getTokenType() == TokenType::NAME_WITH_QUOTATION || firstArgument.getTokenType() == TokenType::INTEGER) 
+			&& secondArgument.getTokenType() == TokenType::NAME_WITH_QUOTATION) {
 			return handleConstantConstant(firstArgument, secondArgument);
 		}
-		else if (firstArgument.getTokenType() == TokenType::NAME_WITH_QUOTATION && secondArgument.getTokenType() == TokenType::WILDCARD) {
+		else if ((firstArgument.getTokenType() == TokenType::NAME_WITH_QUOTATION || firstArgument.getTokenType() == TokenType::INTEGER) 
+			&& secondArgument.getTokenType() == TokenType::WILDCARD) {
 			return handleConstantWildcard(firstArgument);
 		}
 	}

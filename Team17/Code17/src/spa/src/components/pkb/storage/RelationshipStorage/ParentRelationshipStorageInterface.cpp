@@ -144,13 +144,13 @@ bool ParentRelationshipStorageInterface::handleWilcardWildcard() {
 // Answer Parent(1,2)
 bool ParentRelationshipStorageInterface::getRelationship(RelationshipType relType, TokenObject firstArgument, TokenObject secondArgument) {
 	if (relType ==relationshipType) {
-		if (firstArgument.getTokenType() == TokenType::NAME_WITH_QUOTATION && secondArgument.getTokenType() == TokenType::NAME_WITH_QUOTATION) {
+		if (firstArgument.getTokenType() == TokenType::INTEGER && secondArgument.getTokenType() == TokenType::INTEGER) {
 			return handleConstantConstant(firstArgument, secondArgument);
 		}
-		else if (firstArgument.getTokenType() == TokenType::WILDCARD && secondArgument.getTokenType() == TokenType::NAME_WITH_QUOTATION) {
+		else if (firstArgument.getTokenType() == TokenType::WILDCARD && secondArgument.getTokenType() == TokenType::INTEGER) {
 			return handleWildcardConstant(secondArgument);
 		}
-		else if (firstArgument.getTokenType() == TokenType::NAME_WITH_QUOTATION && secondArgument.getTokenType() == TokenType::WILDCARD) {
+		else if (firstArgument.getTokenType() == TokenType::INTEGER && secondArgument.getTokenType() == TokenType::WILDCARD) {
 			return handleConstantWildcard(firstArgument);
 		}
 		else if (firstArgument.getTokenType() == TokenType::WILDCARD && secondArgument.getTokenType() == TokenType::WILDCARD) {

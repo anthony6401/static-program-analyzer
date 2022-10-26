@@ -167,9 +167,11 @@ bool ModifyRelationshipStorage::handleConstantWildcard(TokenObject firstArgument
 // To answer Modify(1, "x")
 bool ModifyRelationshipStorage::getRelationship(RelationshipType relType, TokenObject firstArgument, TokenObject secondArgument) {
 	if (relType == RelationshipType::MODIFIES) {
-		if (firstArgument.getTokenType() == TokenType::NAME_WITH_QUOTATION && secondArgument.getTokenType() == TokenType::NAME_WITH_QUOTATION) {
+		if ((firstArgument.getTokenType() == TokenType::NAME_WITH_QUOTATION || firstArgument.getTokenType() == TokenType::INTEGER)
+			&& secondArgument.getTokenType() == TokenType::NAME_WITH_QUOTATION) {
 			return handleConstantConstant(firstArgument, secondArgument);
-		} else if (firstArgument.getTokenType() == TokenType::NAME_WITH_QUOTATION && secondArgument.getTokenType() == TokenType::WILDCARD) {
+		} else if ((firstArgument.getTokenType() == TokenType::NAME_WITH_QUOTATION || firstArgument.getTokenType() == TokenType::INTEGER)
+				&& secondArgument.getTokenType() == TokenType::NAME_WITH_QUOTATION) {
 			return handleConstantWildcard(firstArgument);
 		}
 	}
