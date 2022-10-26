@@ -394,7 +394,7 @@ std::unordered_set<std::string> NextRelationshipStorage::getRelationshipWithFirs
 	if (relType == RelationshipType::NEXT) {
 		std::unordered_map<std::string, std::unordered_set<std::string>>* storage{};
 
-		storage = getStorageBackward(returnType);
+		storage = getStorageForward(DesignEntity::STMT, returnType);
 
 		if (storage == nullptr) {
 			return std::unordered_set<std::string>();
@@ -403,7 +403,7 @@ std::unordered_set<std::string> NextRelationshipStorage::getRelationshipWithFirs
 		std::unordered_set<std::string> result;
 
 		for (auto const& pair : *storage) {
-			result.insert(pair.first);
+			result.insert(pair.second.begin(), pair.second.end());
 		}
 
 		return result;
