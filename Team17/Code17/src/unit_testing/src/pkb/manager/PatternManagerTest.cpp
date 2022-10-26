@@ -34,8 +34,8 @@ TEST_CASE("Pattern Manager test") {
 	std::unordered_set<std::string> assignGetPatternNameSubexprOne = patternManager.getPattern(DesignEntity::ASSIGN, assignPatternTokenObjectFirstOne, assignPatternTokenObjectSubexprOne);
 	std::unordered_set<std::string> assignGetPatternNameSubexprTwo = patternManager.getPattern(DesignEntity::ASSIGN, assignPatternTokenObjectFirstTwo, assignPatternTokenObjectSubexprTwo);
 	std::unordered_set<std::string> assignGetPatternNameSubexprThree = patternManager.getPattern(DesignEntity::ASSIGN, assignPatternTokenObjectFirstOne, assignPatternTokenObjectSubexprThree);
-	std::unordered_set<std::string> assignGetPatternNameWildcardOne = patternManager.getPattern(DesignEntity::ASSIGN, assignPatternTokenObjectFirstOne, wildCardTokenObject);
-	std::unordered_set<std::string> assignGetPatternNameWildcardTwo = patternManager.getPattern(DesignEntity::ASSIGN, assignPatternTokenObjectFirstTwo, wildCardTokenObject);
+	std::unordered_set<std::string> assignGetPatternNameWildcardOne = patternManager.getPattern(DesignEntity::ASSIGN, assignPatternTokenObjectFirstOne, wildcardTokenObject);
+	std::unordered_set<std::string> assignGetPatternNameWildcardTwo = patternManager.getPattern(DesignEntity::ASSIGN, assignPatternTokenObjectFirstTwo, wildcardTokenObject);
 
 	//IF
 	std::unordered_set<std::string> ifGetPatternNameNameOne = patternManager.getPattern(DesignEntity::IF, ifPatternTokenObjectFirstOne, TokenObject());
@@ -85,7 +85,7 @@ TEST_CASE("Pattern Manager test") {
 	std::vector<std::pair<std::string, std::string>> assignGetPatternPairNameSubexprOne = patternManager.getPatternPair(DesignEntity::ASSIGN, assignPatternTokenObjectSubexprOne);
 	std::vector<std::pair<std::string, std::string>> assignGetPatternPairNameSubexprTwo = patternManager.getPatternPair(DesignEntity::ASSIGN, assignPatternTokenObjectSubexprTwo);
 	std::vector<std::pair<std::string, std::string>> assignGetPatternPairNameSubexprThree = patternManager.getPatternPair(DesignEntity::ASSIGN, assignPatternTokenObjectSubexprThree);
-	std::vector<std::pair<std::string, std::string>> assignGetPatternPairNameWildcard = patternManager.getPatternPair(DesignEntity::ASSIGN, wildCardTokenObject);
+	std::vector<std::pair<std::string, std::string>> assignGetPatternPairNameWildcard = patternManager.getPatternPair(DesignEntity::ASSIGN, wildcardTokenObject);
 
 	//IF
 	std::vector<std::pair<std::string, std::string>> ifGetPatternPairNameNameOne = patternManager.getPatternPair(DesignEntity::IF, ifPatternTokenObjectFirstOne);

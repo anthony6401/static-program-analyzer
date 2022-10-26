@@ -96,8 +96,8 @@ TEST_CASE("PKB Pattern Manager test") {
 	std::unordered_set<std::string> assignGetPatternNameSubexprOne = pkb.getPattern(DesignEntity::ASSIGN, assignPatternTokenObjectFirstOne, assignPatternTokenObjectSubexprOne);
 	std::unordered_set<std::string> assignGetPatternNameSubexprTwo = pkb.getPattern(DesignEntity::ASSIGN, assignPatternTokenObjectFirstTwo, assignPatternTokenObjectSubexprTwo);
 	std::unordered_set<std::string> assignGetPatternNameSubexprThree = pkb.getPattern(DesignEntity::ASSIGN, assignPatternTokenObjectFirstOne, assignPatternTokenObjectSubexprThree);
-	std::unordered_set<std::string> assignGetPatternNameWildcardOne = pkb.getPattern(DesignEntity::ASSIGN, assignPatternTokenObjectFirstOne, wildCardTokenObject);
-	std::unordered_set<std::string> assignGetPatternNameWildcardTwo = pkb.getPattern(DesignEntity::ASSIGN, assignPatternTokenObjectFirstTwo, wildCardTokenObject);
+	std::unordered_set<std::string> assignGetPatternNameWildcardOne = pkb.getPattern(DesignEntity::ASSIGN, assignPatternTokenObjectFirstOne, wildcardTokenObject);
+	std::unordered_set<std::string> assignGetPatternNameWildcardTwo = pkb.getPattern(DesignEntity::ASSIGN, assignPatternTokenObjectFirstTwo, wildcardTokenObject);
 
 	//IF
 	std::unordered_set<std::string> ifGetPatternNameNameOne = pkb.getPattern(DesignEntity::IF, ifPatternTokenObjectFirstOne, TokenObject());
@@ -147,7 +147,7 @@ TEST_CASE("PKB Pattern Manager test") {
 	std::vector<std::pair<std::string, std::string>> assignGetPatternPairNameSubexprOne = pkb.getPatternPair(DesignEntity::ASSIGN, assignPatternTokenObjectSubexprOne);
 	std::vector<std::pair<std::string, std::string>> assignGetPatternPairNameSubexprTwo = pkb.getPatternPair(DesignEntity::ASSIGN, assignPatternTokenObjectSubexprTwo);
 	std::vector<std::pair<std::string, std::string>> assignGetPatternPairNameSubexprThree = pkb.getPatternPair(DesignEntity::ASSIGN, assignPatternTokenObjectSubexprThree);
-	std::vector<std::pair<std::string, std::string>> assignGetPatternPairNameWildcard = pkb.getPatternPair(DesignEntity::ASSIGN, wildCardTokenObject);
+	std::vector<std::pair<std::string, std::string>> assignGetPatternPairNameWildcard = pkb.getPatternPair(DesignEntity::ASSIGN, wildcardTokenObject);
 
 	//IF
 	std::vector<std::pair<std::string, std::string>> ifGetPatternPairNameNameOne = pkb.getPatternPair(DesignEntity::IF, ifPatternTokenObjectFirstOne);
@@ -666,8 +666,8 @@ TEST_CASE("All Manager Test") {
 	std::unordered_set<std::string> assignGetPatternNameSubexprOne = pkb.getPattern(DesignEntity::ASSIGN, assignPatternTokenObjectFirstOne, assignPatternTokenObjectSubexprOne);
 	std::unordered_set<std::string> assignGetPatternNameSubexprTwo = pkb.getPattern(DesignEntity::ASSIGN, assignPatternTokenObjectFirstTwo, assignPatternTokenObjectSubexprTwo);
 	std::unordered_set<std::string> assignGetPatternNameSubexprThree = pkb.getPattern(DesignEntity::ASSIGN, assignPatternTokenObjectFirstOne, assignPatternTokenObjectSubexprThree);
-	std::unordered_set<std::string> assignGetPatternNameWildcardOne = pkb.getPattern(DesignEntity::ASSIGN, assignPatternTokenObjectFirstOne, wildCardTokenObject);
-	std::unordered_set<std::string> assignGetPatternNameWildcardTwo = pkb.getPattern(DesignEntity::ASSIGN, assignPatternTokenObjectFirstTwo, wildCardTokenObject);
+	std::unordered_set<std::string> assignGetPatternNameWildcardOne = pkb.getPattern(DesignEntity::ASSIGN, assignPatternTokenObjectFirstOne, wildcardTokenObject);
+	std::unordered_set<std::string> assignGetPatternNameWildcardTwo = pkb.getPattern(DesignEntity::ASSIGN, assignPatternTokenObjectFirstTwo, wildcardTokenObject);
 
 	//IF
 	std::unordered_set<std::string> ifGetPatternNameNameOne = pkb.getPattern(DesignEntity::IF, ifPatternTokenObjectFirstOne, TokenObject());
@@ -718,7 +718,7 @@ TEST_CASE("All Manager Test") {
 	std::vector<std::pair<std::string, std::string>> assignGetPatternPairNameSubexprOne = pkb.getPatternPair(DesignEntity::ASSIGN, assignPatternTokenObjectSubexprOne);
 	std::vector<std::pair<std::string, std::string>> assignGetPatternPairNameSubexprTwo = pkb.getPatternPair(DesignEntity::ASSIGN, assignPatternTokenObjectSubexprTwo);
 	std::vector<std::pair<std::string, std::string>> assignGetPatternPairNameSubexprThree = pkb.getPatternPair(DesignEntity::ASSIGN, assignPatternTokenObjectSubexprThree);
-	std::vector<std::pair<std::string, std::string>> assignGetPatternPairNameWildcard = pkb.getPatternPair(DesignEntity::ASSIGN, wildCardTokenObject);
+	std::vector<std::pair<std::string, std::string>> assignGetPatternPairNameWildcard = pkb.getPatternPair(DesignEntity::ASSIGN, wildcardTokenObject);
 
 	//IF
 	std::vector<std::pair<std::string, std::string>> ifGetPatternPairNameNameOne = pkb.getPatternPair(DesignEntity::IF, ifPatternTokenObjectFirstOne);

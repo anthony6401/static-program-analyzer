@@ -51,35 +51,24 @@ TEST_CASE("Uses Relationship Storage Test") {
 
 	REQUIRE(!usesRelationshipStorage->storeRelationship(modifyRelationshipAssignOne));
 
+	// Test Uses(1, 2)
 	REQUIRE(usesRelationshipStorage->getRelationship(RelationshipType::USES, stmtTokenObject1, variableTokenObject));
-	REQUIRE(usesRelationshipStorage->getRelationship(RelationshipType::USES, stmtTokenObject1, variableTokenObjectThree));
-	REQUIRE(usesRelationshipStorage->getRelationship(RelationshipType::USES, stmtTokenObject7, variableTokenObject));
 	REQUIRE(usesRelationshipStorage->getRelationship(RelationshipType::USES, stmtTokenObject7, variableTokenObjectTwo));
-
 	REQUIRE(usesRelationshipStorage->getRelationship(RelationshipType::USES, procedureTokenObject, variableTokenObject));
-	REQUIRE(usesRelationshipStorage->getRelationship(RelationshipType::USES, procedureTokenObject, variableTokenObjectThree));
-	REQUIRE(usesRelationshipStorage->getRelationship(RelationshipType::USES, procedureTokenObjectTwo, variableTokenObject));
 	REQUIRE(usesRelationshipStorage->getRelationship(RelationshipType::USES, procedureTokenObjectTwo, variableTokenObjectTwo));
-
 	REQUIRE(usesRelationshipStorage->getRelationship(RelationshipType::USES, stmtTokenObject2, variableTokenObject));
-	REQUIRE(usesRelationshipStorage->getRelationship(RelationshipType::USES, stmtTokenObject2, variableTokenObjectThree));
-	REQUIRE(usesRelationshipStorage->getRelationship(RelationshipType::USES, stmtTokenObject8, variableTokenObject));
 	REQUIRE(usesRelationshipStorage->getRelationship(RelationshipType::USES, stmtTokenObject8, variableTokenObjectTwo));
-
 	REQUIRE(usesRelationshipStorage->getRelationship(RelationshipType::USES, stmtTokenObject3, variableTokenObject));
-	REQUIRE(usesRelationshipStorage->getRelationship(RelationshipType::USES, stmtTokenObject3, variableTokenObjectThree));
-	REQUIRE(usesRelationshipStorage->getRelationship(RelationshipType::USES, stmtTokenObject9, variableTokenObject));
 	REQUIRE(usesRelationshipStorage->getRelationship(RelationshipType::USES, stmtTokenObject9, variableTokenObjectTwo));
-
 	REQUIRE(usesRelationshipStorage->getRelationship(RelationshipType::USES, stmtTokenObject4, variableTokenObject));
-	REQUIRE(usesRelationshipStorage->getRelationship(RelationshipType::USES, stmtTokenObject4, variableTokenObjectThree));
-	REQUIRE(usesRelationshipStorage->getRelationship(RelationshipType::USES, stmtTokenObject10, variableTokenObject));
 	REQUIRE(usesRelationshipStorage->getRelationship(RelationshipType::USES, stmtTokenObject10, variableTokenObjectTwo));
-
 	REQUIRE(usesRelationshipStorage->getRelationship(RelationshipType::USES, stmtTokenObject6, variableTokenObject));
-	REQUIRE(usesRelationshipStorage->getRelationship(RelationshipType::USES, stmtTokenObject6, variableTokenObjectThree));
-	REQUIRE(usesRelationshipStorage->getRelationship(RelationshipType::USES, stmtTokenObject12, variableTokenObject));
 	REQUIRE(usesRelationshipStorage->getRelationship(RelationshipType::USES, stmtTokenObject12, variableTokenObjectTwo));
+
+	// Test Uses(1, _)
+	REQUIRE(usesRelationshipStorage->getRelationship(RelationshipType::USES, stmtTokenObject1, wildcardTokenObject));
+	REQUIRE(usesRelationshipStorage->getRelationship(RelationshipType::USES, procedureTokenObject, wildcardTokenObject));
+	REQUIRE(!usesRelationshipStorage->getRelationship(RelationshipType::USES, stmtTokenObject5, wildcardTokenObject));
 
 	REQUIRE(!usesRelationshipStorage->getRelationship(RelationshipType::MODIFIES, stmtTokenObject1, variableTokenObject));
 	REQUIRE(!usesRelationshipStorage->getRelationship(RelationshipType::FOLLOWS, stmtTokenObject1, variableTokenObject));
@@ -93,6 +82,7 @@ TEST_CASE("Uses Relationship Storage Test") {
 	std::unordered_set<std::string> expectedResult2({ variable_value_one, variable_value_two });
 	std::unordered_set<std::string> expectedResult3({});
 
+	// Test Uses(1, v)
 	std::unordered_set<std::string> getUsesRelationshipByStmt1 = usesRelationshipStorage->getRelationshipByFirst(RelationshipType::USES, stmtTokenObject1, DesignEntity::VARIABLE);
 	std::unordered_set<std::string> getUsesRelationshipByStmt2 = usesRelationshipStorage->getRelationshipByFirst(RelationshipType::USES, stmtTokenObject2, DesignEntity::VARIABLE);
 	std::unordered_set<std::string> getUsesRelationshipByStmt3 = usesRelationshipStorage->getRelationshipByFirst(RelationshipType::USES, stmtTokenObject3, DesignEntity::VARIABLE);
@@ -143,6 +133,7 @@ TEST_CASE("Uses Relationship Storage Test") {
 	REQUIRE(getUsesRelationshipByProcTwo == expectedResult2);
 	REQUIRE(getUsesRelationshipByProcThree == expectedResult3);
 
+	// Test Uses(s, "x")
 	std::unordered_set<std::string> getUsesAssignRelationshipByVarOne = usesRelationshipStorage->getRelationshipBySecond(RelationshipType::USES, DesignEntity::ASSIGN, variableTokenObject);
 	std::unordered_set<std::string> getUsesAssignRelationshipByVarTwo = usesRelationshipStorage->getRelationshipBySecond(RelationshipType::USES, DesignEntity::ASSIGN, variableTokenObjectTwo);
 	std::unordered_set<std::string> getUsesAssignRelationshipByVarThree = usesRelationshipStorage->getRelationshipBySecond(RelationshipType::USES, DesignEntity::ASSIGN, variableTokenObjectThree);
@@ -215,6 +206,37 @@ TEST_CASE("Uses Relationship Storage Test") {
 	REQUIRE(getUsesStmtRelationshipByVarTwo == expectedResultStmtByVarTwo);
 	REQUIRE(getUsesStmtRelationshipByVarThree == expectedResultStmtByVarThree);
 
+	// Test Uses(s, _)
+	std::unordered_set<std::string> getAllAssignUsesRelationshipWithWildcard = usesRelationshipStorage->getRelationshipWithSecondWildcard(RelationshipType::USES, DesignEntity::ASSIGN);
+	std::unordered_set<std::string> getAllProcUsesRelationshipWithWildcard = usesRelationshipStorage->getRelationshipWithSecondWildcard(RelationshipType::USES, DesignEntity::PROCEDURE);
+	std::unordered_set<std::string> getAllPrintUsesRelationshipWithWildcard = usesRelationshipStorage->getRelationshipWithSecondWildcard(RelationshipType::USES, DesignEntity::PRINT);
+	std::unordered_set<std::string> getAllWhileUsesRelationshipWithWildcard = usesRelationshipStorage->getRelationshipWithSecondWildcard(RelationshipType::USES, DesignEntity::WHILE);
+	std::unordered_set<std::string> getAllIfUsesRelationshipWithWildcard = usesRelationshipStorage->getRelationshipWithSecondWildcard(RelationshipType::USES, DesignEntity::IF);
+	std::unordered_set<std::string> getAllCallUsesRelationshipWithWildcard = usesRelationshipStorage->getRelationshipWithSecondWildcard(RelationshipType::USES, DesignEntity::CALL);
+	std::unordered_set<std::string> getAllStmtUsesRelationshipWithWildcard = usesRelationshipStorage->getRelationshipWithSecondWildcard(RelationshipType::USES, DesignEntity::STMT);
+
+	std::unordered_set<std::string> expectedResultWithWildcardAssign{ {assign_value_one, assign_value_two} };
+	std::unordered_set<std::string> expectedResultWithWildcardProc{ {procedure_value_one, procedure_value_two} };
+	std::unordered_set<std::string> expectedResultWithWildcardPrint{ {print_value_one, print_value_two} };
+	std::unordered_set<std::string> expectedResultWithWildcardWhile{ {while_value_one, while_value_two} };
+	std::unordered_set<std::string> expectedResultWithWildcardIf{ {if_value_one, if_value_two} };
+	std::unordered_set<std::string> expectedResultWithWildcardCall{ {call_value_one, call_value_two} };
+	std::unordered_set<std::string> expectedResultWithWildcardStmt;
+	expectedResultWithWildcardStmt.insert(expectedResultWithWildcardAssign.begin(), expectedResultWithWildcardAssign.end());
+	expectedResultWithWildcardStmt.insert(expectedResultWithWildcardPrint.begin(), expectedResultWithWildcardPrint.end());
+	expectedResultWithWildcardStmt.insert(expectedResultWithWildcardWhile.begin(), expectedResultWithWildcardWhile.end());
+	expectedResultWithWildcardStmt.insert(expectedResultWithWildcardIf.begin(), expectedResultWithWildcardIf.end());
+	expectedResultWithWildcardStmt.insert(expectedResultWithWildcardCall.begin(), expectedResultWithWildcardCall.end());
+
+	REQUIRE(getAllAssignUsesRelationshipWithWildcard == expectedResultWithWildcardAssign);
+	REQUIRE(getAllProcUsesRelationshipWithWildcard == expectedResultWithWildcardProc);
+	REQUIRE(getAllPrintUsesRelationshipWithWildcard == expectedResultWithWildcardPrint);
+	REQUIRE(getAllWhileUsesRelationshipWithWildcard == expectedResultWithWildcardWhile);
+	REQUIRE(getAllIfUsesRelationshipWithWildcard == expectedResultWithWildcardIf);
+	REQUIRE(getAllCallUsesRelationshipWithWildcard == expectedResultWithWildcardCall);
+	REQUIRE(getAllStmtUsesRelationshipWithWildcard == expectedResultWithWildcardStmt);
+
+	// Test Uses(s, v)
 	std::unordered_map<std::string, std::unordered_set<std::string>> getAllAssignUsesRelationship = usesRelationshipStorage->getAllRelationship(RelationshipType::USES, DesignEntity::ASSIGN, DesignEntity::VARIABLE);
 	std::unordered_map<std::string, std::unordered_set<std::string>> getAllProcUsesRelationship = usesRelationshipStorage->getAllRelationship(RelationshipType::USES, DesignEntity::PROCEDURE, DesignEntity::VARIABLE);
 	std::unordered_map<std::string, std::unordered_set<std::string>> getAllPrintUsesRelationship = usesRelationshipStorage->getAllRelationship(RelationshipType::USES, DesignEntity::PRINT, DesignEntity::VARIABLE);

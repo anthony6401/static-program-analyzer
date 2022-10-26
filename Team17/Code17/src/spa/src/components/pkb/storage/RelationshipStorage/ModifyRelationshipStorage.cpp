@@ -119,6 +119,31 @@ std::unordered_set<std::string>* ModifyRelationshipStorage::getSetBySecond(Token
 	return set;
 }
 
+std::unordered_set<std::string> ModifyRelationshipStorage::getAllStmt() {
+	std::unordered_set<std::string> result;
+	for (auto const& assignPair : this->assignForwardStorage) {
+		result.insert(assignPair.first);
+	}
+
+	for (auto const& readPair : this->readForwardStorage) {
+		result.insert(readPair.first);
+	}
+
+	for (auto const& whilePair : this->whileForwardStorage) {
+		result.insert(whilePair.first);
+	}
+
+	for (auto const& ifPair : this->ifForwardStorage) {
+		result.insert(ifPair.first);
+	}
+
+	for (auto const& callPair : this->callsForwardStorage) {
+		result.insert(callPair.first);
+	}
+
+	return result;
+}
+
 bool ModifyRelationshipStorage::storeRelationship(Relationship* rel) {
 	ModifyRelationship* modifyRelationship = dynamic_cast<ModifyRelationship*>(rel);
 	if (modifyRelationship) {
@@ -218,14 +243,20 @@ std::unordered_set<std::string> ModifyRelationshipStorage::getRelationshipBySeco
 }
 
 std::unordered_set<std::string> ModifyRelationshipStorage::getRelationshipWithSecondWildcard(RelationshipType relType, DesignEntity returnType) {
-	std::unordered_map<std::string, std::unordered_set<std::string>>* storage = getStorageForward(returnType);
-	if (storage != nullptr) {
-		std::unordered_set<std::string> result;
-		for (auto const& pair : *storage) {
-			result.insert(pair.first);
+	if (relType == RelationshipType::MODIFIES) {
+		if (returnType == DesignEntity::STMT) {
+			return getAllStmt();
 		}
 
-		return result;
+		std::unordered_map<std::string, std::unordered_set<std::string>>* storage = getStorageForward(returnType);
+		if (storage != nullptr) {
+			std::unordered_set<std::string> result;
+			for (auto const& pair : *storage) {
+				result.insert(pair.first);
+			}
+
+			return result;
+		}
 	}
 	return std::unordered_set<std::string>();
 }

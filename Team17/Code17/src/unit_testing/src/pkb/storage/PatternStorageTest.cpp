@@ -24,8 +24,8 @@ TEST_CASE("Assign Pattern Storage Test") {
 	std::unordered_set<std::string> assignGetPatternNameSubexprOne = assignPatternStorage->getPattern(DesignEntity::ASSIGN, assignPatternTokenObjectFirstOne, assignPatternTokenObjectSubexprOne);
 	std::unordered_set<std::string> assignGetPatternNameSubexprTwo = assignPatternStorage->getPattern(DesignEntity::ASSIGN, assignPatternTokenObjectFirstTwo, assignPatternTokenObjectSubexprTwo);
 	std::unordered_set<std::string> assignGetPatternNameSubexprThree = assignPatternStorage->getPattern(DesignEntity::ASSIGN, assignPatternTokenObjectFirstOne, assignPatternTokenObjectSubexprThree);
-	std::unordered_set<std::string> assignGetPatternNameWildcardOne = assignPatternStorage->getPattern(DesignEntity::ASSIGN, assignPatternTokenObjectFirstOne, wildCardTokenObject);
-	std::unordered_set<std::string> assignGetPatternNameWildcardTwo = assignPatternStorage->getPattern(DesignEntity::ASSIGN, assignPatternTokenObjectFirstTwo, wildCardTokenObject);
+	std::unordered_set<std::string> assignGetPatternNameWildcardOne = assignPatternStorage->getPattern(DesignEntity::ASSIGN, assignPatternTokenObjectFirstOne, wildcardTokenObject);
+	std::unordered_set<std::string> assignGetPatternNameWildcardTwo = assignPatternStorage->getPattern(DesignEntity::ASSIGN, assignPatternTokenObjectFirstTwo, wildcardTokenObject);
 
 	std::unordered_set<std::string> expectedGetPatternNameNameOne({ assignLineNumOne, assignLineNumEight });
 	std::unordered_set<std::string> expectedGetPatternNameNameTwo({ assignLineNumSix });
@@ -48,7 +48,7 @@ TEST_CASE("Assign Pattern Storage Test") {
 	std::vector<std::pair<std::string, std::string>> assignGetPatternPairNameSubexprOne = assignPatternStorage->getPatternPair(DesignEntity::ASSIGN, assignPatternTokenObjectSubexprOne);
 	std::vector<std::pair<std::string, std::string>> assignGetPatternPairNameSubexprTwo = assignPatternStorage->getPatternPair(DesignEntity::ASSIGN, assignPatternTokenObjectSubexprTwo);
 	std::vector<std::pair<std::string, std::string>> assignGetPatternPairNameSubexprThree = assignPatternStorage->getPatternPair(DesignEntity::ASSIGN, assignPatternTokenObjectSubexprThree);
-	std::vector<std::pair<std::string, std::string>> assignGetPatternPairNameWildcard = assignPatternStorage->getPatternPair(DesignEntity::ASSIGN, wildCardTokenObject);
+	std::vector<std::pair<std::string, std::string>> assignGetPatternPairNameWildcard = assignPatternStorage->getPatternPair(DesignEntity::ASSIGN, wildcardTokenObject);
 
 	std::vector<std::pair<std::string, std::string>> expectedGetPatternPairNameNameOne{ {assignLineNumOne, assignFirstValueOne}, 
 																						{assignLineNumEight, assignFirstValueEight} };

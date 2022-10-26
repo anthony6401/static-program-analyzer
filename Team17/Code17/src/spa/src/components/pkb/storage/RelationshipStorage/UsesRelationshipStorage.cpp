@@ -118,6 +118,31 @@ std::unordered_set<std::string>* UsesRelationshipStorage::getSetBySecond(TokenOb
 	return set;
 }
 
+std::unordered_set<std::string> UsesRelationshipStorage::getAllStmt() {
+	std::unordered_set<std::string> result;
+	for (auto const& assignPair : this->assignForwardStorage) {
+		result.insert(assignPair.first);
+	}
+
+	for (auto const& printPair : this->printForwardStorage) {
+		result.insert(printPair.first);
+	}
+
+	for (auto const& whilePair : this->whileForwardStorage) {
+		result.insert(whilePair.first);
+	}
+
+	for (auto const& ifPair : this->ifForwardStorage) {
+		result.insert(ifPair.first);
+	}
+
+	for (auto const& callPair : this->callsForwardStorage) {
+		result.insert(callPair.first);
+	}
+
+	return result;
+}
+
 bool UsesRelationshipStorage::storeRelationship(Relationship* rel) {
 	UsesRelationship* usesRelationship = dynamic_cast<UsesRelationship*>(rel);
 	if (usesRelationship) {
@@ -218,14 +243,20 @@ std::unordered_set<std::string> UsesRelationshipStorage::getRelationshipBySecond
 }
 
 std::unordered_set<std::string> UsesRelationshipStorage::getRelationshipWithSecondWildcard(RelationshipType relType, DesignEntity returnType) {
-	std::unordered_map<std::string, std::unordered_set<std::string>>* storage = getStorageForward(returnType);
-	if (storage != nullptr) {
-		std::unordered_set<std::string> result;
-		for (auto const& pair : *storage) {
-			result.insert(pair.first);
+	if (relType == RelationshipType::USES) {
+		if (returnType == DesignEntity::STMT) {
+			return getAllStmt();
 		}
 
-		return result;
+		std::unordered_map<std::string, std::unordered_set<std::string>>* storage = getStorageForward(returnType);
+		if (storage != nullptr) {
+			std::unordered_set<std::string> result;
+			for (auto const& pair : *storage) {
+				result.insert(pair.first);
+			}
+
+			return result;
+		}
 	}
 	return std::unordered_set<std::string>();
 }

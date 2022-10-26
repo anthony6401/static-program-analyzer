@@ -21,6 +21,7 @@ private:
 	std::unordered_map<std::string, std::unordered_set<std::string>>* getStorageBackward(DesignEntity designEntity);
 	std::unordered_set<std::string>* getSetByFirst(TokenObject firstArgument);
 	std::unordered_set<std::string>* getSetBySecond(TokenObject secondArgument);
+	std::unordered_set<std::string> getAllStmt();
 	// To answer Uses(1, "x"), Uses(1, v)
 	std::unordered_map<std::string, std::unordered_set<std::string>> assignForwardStorage;
 	std::unordered_map<std::string, std::unordered_set<std::string>> printForwardStorage;

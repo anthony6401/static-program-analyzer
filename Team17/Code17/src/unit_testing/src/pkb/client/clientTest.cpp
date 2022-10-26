@@ -157,8 +157,8 @@ TEST_CASE("QPS Client test") {
 	std::unordered_set<std::string> assignGetPatternNameSubexprOne = qpsClient.getPattern(DesignEntity::ASSIGN, assignPatternTokenObjectFirstOne, assignPatternTokenObjectSubexprOne);
 	std::unordered_set<std::string> assignGetPatternNameSubexprTwo = qpsClient.getPattern(DesignEntity::ASSIGN, assignPatternTokenObjectFirstTwo, assignPatternTokenObjectSubexprTwo);
 	std::unordered_set<std::string> assignGetPatternNameSubexprThree = qpsClient.getPattern(DesignEntity::ASSIGN, assignPatternTokenObjectFirstOne, assignPatternTokenObjectSubexprThree);
-	std::unordered_set<std::string> assignGetPatternNameWildcardOne = qpsClient.getPattern(DesignEntity::ASSIGN, assignPatternTokenObjectFirstOne, wildCardTokenObject);
-	std::unordered_set<std::string> assignGetPatternNameWildcardTwo = qpsClient.getPattern(DesignEntity::ASSIGN, assignPatternTokenObjectFirstTwo, wildCardTokenObject);
+	std::unordered_set<std::string> assignGetPatternNameWildcardOne = qpsClient.getPattern(DesignEntity::ASSIGN, assignPatternTokenObjectFirstOne, wildcardTokenObject);
+	std::unordered_set<std::string> assignGetPatternNameWildcardTwo = qpsClient.getPattern(DesignEntity::ASSIGN, assignPatternTokenObjectFirstTwo, wildcardTokenObject);
 
 	//IF
 	std::unordered_set<std::string> ifGetPatternNameNameOne = qpsClient.getContainerPattern(DesignEntity::IF, ifPatternTokenObjectFirstOne);
@@ -208,7 +208,7 @@ TEST_CASE("QPS Client test") {
 	std::vector<std::pair<std::string, std::string>> assignGetPatternPairNameSubexprOne = qpsClient.getPatternPair(DesignEntity::ASSIGN, assignPatternTokenObjectSubexprOne);
 	std::vector<std::pair<std::string, std::string>> assignGetPatternPairNameSubexprTwo = qpsClient.getPatternPair(DesignEntity::ASSIGN, assignPatternTokenObjectSubexprTwo);
 	std::vector<std::pair<std::string, std::string>> assignGetPatternPairNameSubexprThree = qpsClient.getPatternPair(DesignEntity::ASSIGN, assignPatternTokenObjectSubexprThree);
-	std::vector<std::pair<std::string, std::string>> assignGetPatternPairNameWildcard = qpsClient.getPatternPair(DesignEntity::ASSIGN, wildCardTokenObject);
+	std::vector<std::pair<std::string, std::string>> assignGetPatternPairNameWildcard = qpsClient.getPatternPair(DesignEntity::ASSIGN, wildcardTokenObject);
 
 	//IF
 	std::vector<std::pair<std::string, std::string>> ifGetPatternPairNameNameOne = qpsClient.getContainerPatternPair(DesignEntity::IF);
