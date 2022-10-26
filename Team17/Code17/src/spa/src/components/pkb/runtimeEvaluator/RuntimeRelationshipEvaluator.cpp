@@ -19,6 +19,14 @@ bool RuntimeRelationshipEvaluator::getForwardCacheKV(std::string key, std::strin
 	return false;
 }
 
+bool RuntimeRelationshipEvaluator::isExistKeyForwardCache(std::string key) {
+	return forwardCache.find(key) != forwardCache.end();
+}
+
+bool RuntimeRelationshipEvaluator::isExistKeyBackwardCache(std::string key) {
+	return backwardCache.find(key) != backwardCache.end();
+}
+
 std::unordered_set<std::string> RuntimeRelationshipEvaluator::getForwardCache(std::string key) {
 	if (forwardCache.find(key) != forwardCache.end()) {
 		return forwardCache.find(key)->second;
@@ -35,20 +43,14 @@ std::unordered_set<std::string> RuntimeRelationshipEvaluator::getBackwardCache(s
 	return std::unordered_set<std::string>();
 }
 
-void RuntimeRelationshipEvaluator::storeForwardCache(std::string key, std::string value) {
+void RuntimeRelationshipEvaluator::storeForwardCache(std::string key, std::unordered_set<std::string> set) {
 	if (forwardCache.find(key) == forwardCache.end()) {
-		forwardCache.insert({ key, std::unordered_set<std::string>() });
+		forwardCache.insert({ key, set });
 	}
-	std::unordered_map<std::string, std::unordered_set<std::string>>::iterator it = forwardCache.find(key);
-
-	it->second.insert(value);
 }
 
-void RuntimeRelationshipEvaluator::storeBackwardCache(std::string key, std::string value) {
+void RuntimeRelationshipEvaluator::storeBackwardCache(std::string key, std::unordered_set<std::string> set) {
 	if (backwardCache.find(key) == backwardCache.end()) {
-		backwardCache.insert({ key, std::unordered_set<std::string>() });
+		backwardCache.insert({ key, set });
 	}
-	std::unordered_map<std::string, std::unordered_set<std::string>>::iterator it = backwardCache.find(key);
-
-	it->second.insert(value);
 }

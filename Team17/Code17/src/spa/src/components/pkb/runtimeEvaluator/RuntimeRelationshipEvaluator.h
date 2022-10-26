@@ -20,10 +20,12 @@ public:
 
 protected:
 	bool getForwardCacheKV(std::string key, std::string value);
+	bool isExistKeyForwardCache(std::string key);
+	bool isExistKeyBackwardCache(std::string key);
 	std::unordered_set<std::string> getForwardCache(std::string key);
 	std::unordered_set<std::string> getBackwardCache(std::string key);
-	void storeForwardCache(std::string key, std::string value);
-	void storeBackwardCache(std::string key, std::string value);
+	void storeForwardCache(std::string key, std::unordered_set<std::string> set);
+	void storeBackwardCache(std::string key, std::unordered_set<std::string> set);
 	std::unordered_map<std::string, std::unordered_set<std::string>> forwardCache;
 	std::unordered_map<std::string, std::unordered_set<std::string>> backwardCache;
 };
