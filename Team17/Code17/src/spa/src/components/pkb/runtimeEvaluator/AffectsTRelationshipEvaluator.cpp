@@ -115,7 +115,7 @@ void AffectsTRelationshipEvaluator::DFSAffectsTBackwardWithSynonym(std::string c
 	for (std::string neighbour : neighbours) {
 		std::unordered_set<std::string>::const_iterator exist = visited.find(neighbour);
 		std::unordered_set<std::string> modifiesSet = RuntimeRelationshipUtils::getModifiesForBackward(modifiesStorage,neighbour);
-		std::unordered_set<std::string> intersectionSet = RuntimeRelationshipUtils::getIntersectionVar(modifiesSet, usesSet);
+		std::unordered_set<std::string> intersectionSet = RuntimeRelationshipUtils::getSetIntersection(modifiesSet, usesSet);
 		bool isModifiesForBackward = intersectionSet.size() != 0;
 
 		if (isModifiesForBackward) {

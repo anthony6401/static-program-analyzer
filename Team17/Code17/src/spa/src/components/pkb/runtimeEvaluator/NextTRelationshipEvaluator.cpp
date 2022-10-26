@@ -31,7 +31,7 @@ void NextTRelationshipEvaluator::DFSNextTForwardWithSynonym(std::string curr, st
 															std::unordered_set<std::string>& filter) {
 	std::unordered_set<std::string> cache = getForwardCache(curr);
 	if (cache.size() != 0) {
-		std::unordered_set<std::string> intersectionRes = RuntimeRelationshipUtils::getIntersectionVar(cache, filter);
+		std::unordered_set<std::string> intersectionRes = RuntimeRelationshipUtils::getSetIntersection(cache, filter);
 		for (auto const& el : intersectionRes) {
 			result.insert(el);
 		}
@@ -62,7 +62,7 @@ void NextTRelationshipEvaluator::DFSNextTBackwardWithSynonym(std::string curr, s
 														std::unordered_set<std::string>& filter) {
 	std::unordered_set<std::string> cache = getBackwardCache(curr);
 	if (cache.size() != 0) {
-		std::unordered_set<std::string> intersectionRes = RuntimeRelationshipUtils::getIntersectionVar(cache, filter);
+		std::unordered_set<std::string> intersectionRes = RuntimeRelationshipUtils::getSetIntersection(cache, filter);
 		for (auto const& el : intersectionRes) {
 			result.insert(el);
 		}
@@ -96,7 +96,7 @@ void NextTRelationshipEvaluator::DFSNextTWithTwoSynonyms(std::unordered_set<std:
 		if (!isExistKeyForwardCache(start)) {
 			storeForwardCache(start, result);
 		}
-		result = RuntimeRelationshipUtils::getIntersectionVar(result, filter2);
+		result = RuntimeRelationshipUtils::getSetIntersection(result, filter2);
 		if (result.size() != 0) {
 			result_map[start] = result;
 		}
@@ -120,11 +120,12 @@ std::unordered_set<std::string> NextTRelationshipEvaluator::getRuntimeRelationsh
 	if (relType == RelationshipType::NEXT_T) {
 		std::unordered_set<std::string> visited;
 		std::unordered_set<std::string> result;
-		DFSNextTForwardWithSynonym(firstArgument.getValue(), visited, result, filter);
-		if (!isExistKeyForwardCache(firstArgument.getValue())) {
-			storeForwardCache(firstArgument.getValue(), result);
+		std::string start = firstArgument.getValue();
+		DFSNextTForwardWithSynonym(start, visited, result, filter);
+		if (!isExistKeyForwardCache(start)) {
+			storeForwardCache(start, result);
 		}
-		result = RuntimeRelationshipUtils::getIntersectionVar(result, filter);
+		result = RuntimeRelationshipUtils::getSetIntersection(result, filter);
 		return result;
 	}
 	return std::unordered_set<std::string>();
@@ -134,11 +135,12 @@ std::unordered_set<std::string> NextTRelationshipEvaluator::getRuntimeRelationsh
 	if (relType == RelationshipType::NEXT_T) {
 		std::unordered_set<std::string> visited;
 		std::unordered_set<std::string> result;
-		DFSNextTBackwardWithSynonym(secondArgument.getValue(), visited, result, filter);
-		if (!isExistKeyBackwardCache(secondArgument.getValue())) {
-			storeBackwardCache(secondArgument.getValue(), result);
+		std::string start = secondArgument.getValue();
+		DFSNextTBackwardWithSynonym(start, visited, result, filter);
+		if (!isExistKeyBackwardCache(start)) {
+			storeBackwardCache(start, result);
 		}
-		result = RuntimeRelationshipUtils::getIntersectionVar(result, filter);
+		result = RuntimeRelationshipUtils::getSetIntersection(result, filter);
 		return result;
 	}
 	return std::unordered_set<std::string>();
