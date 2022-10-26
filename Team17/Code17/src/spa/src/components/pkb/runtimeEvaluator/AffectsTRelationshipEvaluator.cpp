@@ -60,12 +60,12 @@ void AffectsTRelationshipEvaluator::DFSAffectsTForwardWithSynonym(std::string cu
 	std::unordered_set<std::string> neighbours = this->nextStorage->getNextForward(curr);
 
 	for (std::string neighbour : neighbours) {
-		if ((filter.find(neighbour) != filter.end()) && RuntimeRelationshipUtils::isUses(usesStorage, neighbour, var)) {
+		if ((filter.find(neighbour) != filter.end()) && RuntimeRelationshipUtils::isUses(usesStorage, neighbour, var) && result.find(neighbour) == result.end()) {
 			result.insert(neighbour);
 			startNewDFSPath(visited, neighbour, result, filter);
 		}
 
-		if (visited.find(neighbour) == visited.end() && !RuntimeRelationshipUtils::isModifies(modifiesStorage,neighbour, var)) {
+		if (visited.find(neighbour) == visited.end() && !RuntimeRelationshipUtils::isModifies(modifiesStorage, neighbour, var)) {
 			DFSAffectsTForwardWithSynonym(neighbour, var, visited, result, filter);
 		}
 	}
@@ -87,7 +87,7 @@ void AffectsTRelationshipEvaluator::insertUsesSet(std::unordered_set<std::string
 
 void AffectsTRelationshipEvaluator::startNewDFSPathForBackward(std::unordered_set<std::string>& result, std::unordered_set<std::string>& filter, std::string neighbour, 
 																std::unordered_set<std::string>::const_iterator& exist, std::unordered_set<std::string>& visited) {
-	if ((filter.find(neighbour) != filter.end()) && isModifiesAssign(neighbour)) {
+	if ((filter.find(neighbour) != filter.end()) && RuntimeRelationshipUtils::isModifiesAssign(modifiesStorage, neighbour)) {
 		result.insert(neighbour);
 
 		if (exist == visited.end()) {
@@ -103,7 +103,6 @@ void AffectsTRelationshipEvaluator::DFSAffectsTBackwardWithSynonym(std::string c
 																	std::unordered_set<std::string>& visited,
 																	std::unordered_set<std::string>& result,
 																	std::unordered_set<std::string>& filter) {
-
 	if (usesSet.size() == 0) {
 		return;
 	}
@@ -122,7 +121,9 @@ void AffectsTRelationshipEvaluator::DFSAffectsTBackwardWithSynonym(std::string c
 			
 			removeUsesSet(usesSet, intersectionSet);
 
-			startNewDFSPathForBackward(result, filter, neighbour, exist, visited);
+			if (result.find(neighbour) == result.end()) {
+				startNewDFSPathForBackward(result, filter, neighbour, exist, visited);
+			}
 		}
 
 		if (exist == visited.end()) {

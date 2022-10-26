@@ -67,7 +67,7 @@ void AffectsRelationshipEvaluator::DFSAffectsBackwardWithSynonym(std::string cur
 				usesSet.erase(var);
 			}
 
-			if ((filter.find(neighbour) != filter.end())) {
+			if (filter.find(neighbour) != filter.end() && RuntimeRelationshipUtils::isModifiesAssign(modifiesStorage, neighbour)) {
 				result.insert(neighbour);
 			}
 		}
