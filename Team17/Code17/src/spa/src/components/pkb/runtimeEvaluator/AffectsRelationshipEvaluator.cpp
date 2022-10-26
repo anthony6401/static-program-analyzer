@@ -1,6 +1,5 @@
 #include "AffectsRelationshipEvaluator.h"
 #include "utils.h"
-#include <iostream>
 
 AffectsRelationshipEvaluator::AffectsRelationshipEvaluator(NextRelationshipStorage* nextStorage, ModifyRelationshipStorage* modifiesStorage, UsesRelationshipStorage* usesStorage) 
 														: nextStorage(nextStorage),
