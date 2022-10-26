@@ -1,5 +1,6 @@
 #include "AffectsRelationshipEvaluator.h"
 #include "utils.h"
+#include <iostream>
 
 AffectsRelationshipEvaluator::AffectsRelationshipEvaluator(NextRelationshipStorage* nextStorage, ModifyRelationshipStorage* modifiesStorage, UsesRelationshipStorage* usesStorage) 
 														: nextStorage(nextStorage),
@@ -67,7 +68,7 @@ void AffectsRelationshipEvaluator::DFSAffectsBackwardWithSynonym(std::string cur
 				usesSet.erase(var);
 			}
 
-			if ((filter.find(neighbour) != filter.end())) {
+			if (filter.find(neighbour) != filter.end() && RuntimeRelationshipUtils::isModifiesAssign(modifiesStorage, neighbour)) {
 				result.insert(neighbour);
 			}
 		}

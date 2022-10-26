@@ -31,4 +31,9 @@ public:
 
 		return result;
 	}
+
+	static bool isModifiesAssign(ModifyRelationshipStorage* modifiesStorage, std::string target) {
+		std::unordered_set<std::string> modifiesSet = modifiesStorage->getModifiesForAssign(target);
+		return modifiesSet.size() != 0;
+	}
 };
