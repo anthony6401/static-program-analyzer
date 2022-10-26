@@ -42,11 +42,11 @@ std::unordered_set<std::string> CallsRelationshipStorageInterface::getRelationsh
 	return std::unordered_set<std::string>();
 }
 
-// To answer Calls(p, _)
+// To answer Calls(_, p)
 std::unordered_set<std::string> CallsRelationshipStorageInterface::getRelationshipWithFirstWilcard(RelationshipType relType, DesignEntity returnType) {
 	if (relType == relationshipType) {
 		std::unordered_set<std::string> result;
-		for (auto const& pair : this->procForwardStorage) {
+		for (auto const& pair : this->procBackwardStorage) {
 			result.insert(pair.first);
 		}
 
@@ -55,11 +55,11 @@ std::unordered_set<std::string> CallsRelationshipStorageInterface::getRelationsh
 	return std::unordered_set<std::string>();
 }
 
-// To answer Calls(_, p)
+// To answer Calls(p, _)
 std::unordered_set<std::string> CallsRelationshipStorageInterface::getRelationshipWithSecondWildcard(RelationshipType relType, DesignEntity returnType) {
 	if (relType == relationshipType) {
 		std::unordered_set<std::string> result;
-		for (auto const& pair : this->procBackwardStorage) {
+		for (auto const& pair : this->procForwardStorage) {
 			result.insert(pair.first);
 		}
 

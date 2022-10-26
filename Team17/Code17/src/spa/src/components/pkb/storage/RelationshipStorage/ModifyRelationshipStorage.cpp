@@ -4,7 +4,6 @@
 
 ModifyRelationshipStorage::ModifyRelationshipStorage() : RelationshipStorage() {}
 
-
 std::unordered_map<std::string, std::unordered_set<std::string>>* ModifyRelationshipStorage::getStorageForward(DesignEntity designEntity) {
 	if (designEntity == DesignEntity::PROCEDURE) {
 		return &this->procForwardStorage;
@@ -145,17 +144,34 @@ bool ModifyRelationshipStorage::storeRelationship(Relationship* rel) {
 	return false;
 }
 
+bool ModifyRelationshipStorage::handleConstantConstant(TokenObject firstArgument, TokenObject secondArgument) {
+	std::unordered_set<std::string>* set = getSetByFirst(firstArgument);
+
+	if (set == nullptr) {
+		return false;
+	}
+
+	return set->find(secondArgument.getValue()) != set->end();
+}
+
+bool ModifyRelationshipStorage::handleConstantWildcard(TokenObject firstArgument) {
+	std::unordered_set<std::string>* set = getSetByFirst(firstArgument);
+
+	if (set == nullptr) {
+		return false;
+	}
+
+	return set->size() != 0;
+}
+
 // To answer Modify(1, "x")
 bool ModifyRelationshipStorage::getRelationship(RelationshipType relType, TokenObject firstArgument, TokenObject secondArgument) {
 	if (relType == RelationshipType::MODIFIES) {
-		std::unordered_set<std::string>* set = getSetByFirst(firstArgument);
-
-		if (set == nullptr) {
-			return false;
+		if (firstArgument.getTokenType() == TokenType::NAME_WITH_QUOTATION && secondArgument.getTokenType() == TokenType::NAME_WITH_QUOTATION) {
+			return handleConstantConstant(firstArgument, secondArgument);
+		} else if (firstArgument.getTokenType() == TokenType::NAME_WITH_QUOTATION && secondArgument.getTokenType() == TokenType::WILDCARD) {
+			return handleConstantWildcard(firstArgument);
 		}
-
-		return set->find(secondArgument.getValue()) != set->end();
-
 	}
 	return false;
 }
@@ -196,6 +212,19 @@ std::unordered_set<std::string> ModifyRelationshipStorage::getRelationshipBySeco
 		}
 	}
 
+	return std::unordered_set<std::string>();
+}
+
+std::unordered_set<std::string> ModifyRelationshipStorage::getRelationshipWithSecondWildcard(RelationshipType relType, DesignEntity returnType) {
+	std::unordered_map<std::string, std::unordered_set<std::string>>* storage = getStorageForward(returnType);
+	if (storage != nullptr) {
+		std::unordered_set<std::string> result;
+		for (auto const& pair : *storage) {
+			result.insert(pair.first);
+		}
+
+		return result;
+	}
 	return std::unordered_set<std::string>();
 }
 

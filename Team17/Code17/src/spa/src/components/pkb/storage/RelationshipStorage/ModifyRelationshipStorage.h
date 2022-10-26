@@ -17,8 +17,6 @@ public:
 private:
 	bool handleConstantConstant(TokenObject firstArgument, TokenObject secondArgument);
 	bool handleConstantWildcard(TokenObject firstArgument);
-	bool handleWildcardConstant(TokenObject secondArgument);
-	bool handleWilcardWildcard();
 	std::unordered_map<std::string, std::unordered_set<std::string>>* getStorageForward(DesignEntity designEntity);
 	std::unordered_map<std::string, std::unordered_set<std::string>>* getStorageBackward(DesignEntity designEntity);
 	std::unordered_set<std::string>* getSetByFirst(TokenObject firstArgument);

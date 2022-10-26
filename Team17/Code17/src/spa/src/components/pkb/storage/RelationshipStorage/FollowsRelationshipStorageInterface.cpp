@@ -276,14 +276,11 @@ bool FollowsRelationshipStorageInterface::getRelationship(RelationshipType relTy
 	if (relType == relationshipType) {
 		if (firstArgument.getTokenType() == TokenType::NAME_WITH_QUOTATION && secondArgument.getTokenType() == TokenType::NAME_WITH_QUOTATION) {
 			return handleConstantConstant(firstArgument, secondArgument);
-		}
-		else if (firstArgument.getTokenType() == TokenType::WILDCARD && secondArgument.getTokenType() == TokenType::NAME_WITH_QUOTATION) {
+		} else if (firstArgument.getTokenType() == TokenType::WILDCARD && secondArgument.getTokenType() == TokenType::NAME_WITH_QUOTATION) {
 			return handleWildcardConstant(secondArgument);
-		}
-		else if (firstArgument.getTokenType() == TokenType::NAME_WITH_QUOTATION && secondArgument.getTokenType() == TokenType::WILDCARD) {
+		} else if (firstArgument.getTokenType() == TokenType::NAME_WITH_QUOTATION && secondArgument.getTokenType() == TokenType::WILDCARD) {
 			return handleConstantWildcard(firstArgument);
-		}
-		else if (firstArgument.getTokenType() == TokenType::WILDCARD && secondArgument.getTokenType() == TokenType::WILDCARD) {
+		} else if (firstArgument.getTokenType() == TokenType::WILDCARD && secondArgument.getTokenType() == TokenType::WILDCARD) {
 			return handleWilcardWildcard();
 		}
 	}
@@ -338,7 +335,7 @@ std::unordered_set<std::string> FollowsRelationshipStorageInterface::getRelation
 	if (relType == relationshipType) {
 		std::unordered_map<std::string, std::unordered_set<std::string>>* storage{};
 
-		storage = getStorageForward(DesignEntity::STMT, returnType);
+		storage = getStorageBackward(returnType);
 
 		if (storage == nullptr) {
 			return std::unordered_set<std::string>();
@@ -360,7 +357,7 @@ std::unordered_set<std::string> FollowsRelationshipStorageInterface::getRelation
 	if (relType == relationshipType) {
 		std::unordered_map<std::string, std::unordered_set<std::string>>* storage{};
 
-		storage = getStorageBackward(returnType);
+		storage = getStorageForward(DesignEntity::STMT, returnType);
 
 		if (storage == nullptr) {
 			return std::unordered_set<std::string>();
