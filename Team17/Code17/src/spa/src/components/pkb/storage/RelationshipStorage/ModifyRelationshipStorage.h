@@ -9,11 +9,16 @@ public:
 	bool getRelationship(RelationshipType relType, TokenObject firstArgument, TokenObject secondArgument);
 	std::unordered_set<std::string> getRelationshipByFirst(RelationshipType relType, TokenObject firstArgument, DesignEntity returnType);
 	std::unordered_set<std::string> getRelationshipBySecond(RelationshipType relType, DesignEntity returnType, TokenObject secondArgument);
+	std::unordered_set<std::string> getRelationshipWithSecondWildcard(RelationshipType relType, DesignEntity returnType);
 	std::unordered_map<std::string, std::unordered_set<std::string>> getAllRelationship(RelationshipType relType, DesignEntity returnType1, DesignEntity returnType2);
 	std::unordered_set<std::string> getModifiesForAssign(std::string stmtNum);
 	std::unordered_set<std::string> getModifiesForAffects(std::string stmt);
 
 private:
+	bool handleConstantConstant(TokenObject firstArgument, TokenObject secondArgument);
+	bool handleConstantWildcard(TokenObject firstArgument);
+	bool handleWildcardConstant(TokenObject secondArgument);
+	bool handleWilcardWildcard();
 	std::unordered_map<std::string, std::unordered_set<std::string>>* getStorageForward(DesignEntity designEntity);
 	std::unordered_map<std::string, std::unordered_set<std::string>>* getStorageBackward(DesignEntity designEntity);
 	std::unordered_set<std::string>* getSetByFirst(TokenObject firstArgument);

@@ -1,7 +1,7 @@
 #pragma once
-#include "RelationshipStorage.h"
+#include "RelationshipStorageFirstWildcard.h"
 
-class ParentRelationshipStorageInterface : public RelationshipStorage {
+class ParentRelationshipStorageInterface : public RelationshipStorageFirstWildcard {
 public:
 	ParentRelationshipStorageInterface(RelationshipType relationshipType);
 	virtual bool storeRelationship(Relationship* rel) = 0;

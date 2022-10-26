@@ -1,7 +1,7 @@
 #pragma once
-#include "RelationshipStorage.h"
+#include "RelationshipStorageFirstWildcard.h"
 
-class CallsRelationshipStorageInterface : public RelationshipStorage {
+class CallsRelationshipStorageInterface : public RelationshipStorageFirstWildcard {
 
 public:
 	CallsRelationshipStorageInterface(RelationshipType relationshipType);
