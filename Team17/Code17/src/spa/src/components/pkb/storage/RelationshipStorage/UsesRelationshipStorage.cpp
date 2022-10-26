@@ -143,16 +143,35 @@ bool UsesRelationshipStorage::storeRelationship(Relationship* rel) {
 	return false;
 }
 
+bool UsesRelationshipStorage::handleConstantConstant(TokenObject firstArgument, TokenObject secondArgument) {
+	std::unordered_set<std::string>* set = getSetByFirst(firstArgument);
+
+	if (set == nullptr) {
+		return false;
+	}
+
+	return set->find(secondArgument.getValue()) != set->end();
+}
+
+bool UsesRelationshipStorage::handleConstantWildcard(TokenObject firstArgument) {
+	std::unordered_set<std::string>* set = getSetByFirst(firstArgument);
+
+	if (set == nullptr) {
+		return false;
+	}
+
+	return set->size() != 0;
+}
+
 // To answer Uses(1, "x")
 bool UsesRelationshipStorage::getRelationship(RelationshipType relType, TokenObject firstArgument, TokenObject secondArgument) {
 	if (relType == RelationshipType::USES) {
-		std::unordered_set<std::string>* set = getSetByFirst(firstArgument);
-
-		if (set == nullptr) {
-			return false;
+		if (firstArgument.getTokenType() == TokenType::NAME_WITH_QUOTATION && secondArgument.getTokenType() == TokenType::NAME_WITH_QUOTATION) {
+			return handleConstantConstant(firstArgument, secondArgument);
 		}
-
-		return set->find(secondArgument.getValue()) != set->end();
+		else if (firstArgument.getTokenType() == TokenType::NAME_WITH_QUOTATION && secondArgument.getTokenType() == TokenType::WILDCARD) {
+			return handleConstantWildcard(firstArgument);
+		}
 	}
 	return false;
 }
@@ -193,6 +212,19 @@ std::unordered_set<std::string> UsesRelationshipStorage::getRelationshipBySecond
 		}
 	}
 
+	return std::unordered_set<std::string>();
+}
+
+std::unordered_set<std::string> UsesRelationshipStorage::getRelationshipWithSecondWildcard(RelationshipType relType, DesignEntity returnType) {
+	std::unordered_map<std::string, std::unordered_set<std::string>>* storage = getStorageForward(returnType);
+	if (storage != nullptr) {
+		std::unordered_set<std::string> result;
+		for (auto const& pair : *storage) {
+			result.insert(pair.first);
+		}
+
+		return result;
+	}
 	return std::unordered_set<std::string>();
 }
 
