@@ -2196,6 +2196,17 @@ TEST_CASE("Calls Relationship Storage Test") {
 	REQUIRE(callsRelationshipStorage->getRelationship(RelationshipType::CALLS, procedureTokenObjectTwo, procedureTokenObjectThree));
 	REQUIRE(!callsRelationshipStorage->getRelationship(RelationshipType::CALLS, procedureTokenObject, procedureTokenObjectFour));
 
+	// Test Calls("proc1", _)
+	REQUIRE(callsRelationshipStorage->getRelationship(RelationshipType::CALLS, procedureTokenObject, wildcardTokenObject));
+	REQUIRE(!callsRelationshipStorage->getRelationship(RelationshipType::CALLS, procedureTokenObjectFour, wildcardTokenObject));
+
+	// Test Calls(_, "proc2")
+	REQUIRE(callsRelationshipStorage->getRelationship(RelationshipType::CALLS, wildcardTokenObject, procedureTokenObjectTwo));
+	REQUIRE(!callsRelationshipStorage->getRelationship(RelationshipType::CALLS, wildcardTokenObject, procedureTokenObject));
+
+	// Test Calls(_, _)
+	REQUIRE(callsRelationshipStorage->getRelationship(RelationshipType::CALLS, wildcardTokenObject, wildcardTokenObject));
+
 	REQUIRE(!callsRelationshipStorage->getRelationship(RelationshipType::FOLLOWS, procedureTokenObject, procedureTokenObjectTwo));
 
 	//Testing for Calls("proc1", p)
@@ -2220,6 +2231,16 @@ TEST_CASE("Calls Relationship Storage Test") {
 
 	REQUIRE(callsRelationshipStorage->getRelationshipBySecond(RelationshipType::FOLLOWS, DesignEntity::PROCEDURE, procedureTokenObjectThree) == emptySet);
 
+	// Test for Calls(p, _)
+	std::unordered_set<std::string> procedureSecondWildcardTest{ procedure_value_one, procedure_value_two };
+
+	REQUIRE(callsRelationshipStorage->getRelationshipWithSecondWildcard(RelationshipType::CALLS, DesignEntity::PROCEDURE) == procedureSecondWildcardTest);
+
+	// Test for Calls(_, p)
+	std::unordered_set<std::string> procedureFirstWildcardTest{ procedure_value_two, procedure_value_three };
+
+	REQUIRE(callsRelationshipStorage->getRelationshipWithFirstWildcard(RelationshipType::CALLS, DesignEntity::PROCEDURE) == procedureFirstWildcardTest);
+
 	//Testing for Calls(p1, p2)
 	std::unordered_map<std::string, std::unordered_set<std::string>> emptyMap{};
 	std::unordered_map<std::string, std::unordered_set<std::string>> getAllRelationshipTestAll{
@@ -2239,7 +2260,7 @@ TEST_CASE("Calls Relationship Storage Test") {
 }
 
 TEST_CASE("Calls* Relationship Storage Test") {
-	RelationshipStorage* callsTRelationshipStorage = new CallsTRelationshipStorage();
+	CallsTRelationshipStorage* callsTRelationshipStorage = new CallsTRelationshipStorage();
 
 	// TESTING FOR STORING
 
@@ -2257,6 +2278,17 @@ TEST_CASE("Calls* Relationship Storage Test") {
 	REQUIRE(callsTRelationshipStorage->getRelationship(RelationshipType::CALLS_T, procedureTokenObject, procedureTokenObjectThree));
 	REQUIRE(callsTRelationshipStorage->getRelationship(RelationshipType::CALLS_T, procedureTokenObjectTwo, procedureTokenObjectThree));
 	REQUIRE(!callsTRelationshipStorage->getRelationship(RelationshipType::CALLS_T, procedureTokenObject, procedureTokenObjectFour));
+
+	// Test Calls("proc1", _)
+	REQUIRE(callsTRelationshipStorage->getRelationship(RelationshipType::CALLS_T, procedureTokenObject, wildcardTokenObject));
+	REQUIRE(!callsTRelationshipStorage->getRelationship(RelationshipType::CALLS_T, procedureTokenObjectFour, wildcardTokenObject));
+
+	// Test Calls(_, "proc2")
+	REQUIRE(callsTRelationshipStorage->getRelationship(RelationshipType::CALLS_T, wildcardTokenObject, procedureTokenObjectTwo));
+	REQUIRE(!callsTRelationshipStorage->getRelationship(RelationshipType::CALLS_T, wildcardTokenObject, procedureTokenObject));
+
+	// Test Calls(_, _)
+	REQUIRE(callsTRelationshipStorage->getRelationship(RelationshipType::CALLS_T, wildcardTokenObject, wildcardTokenObject));
 
 	REQUIRE(!callsTRelationshipStorage->getRelationship(RelationshipType::FOLLOWS, procedureTokenObject, procedureTokenObjectTwo));
 
@@ -2281,6 +2313,16 @@ TEST_CASE("Calls* Relationship Storage Test") {
 	REQUIRE(callsTRelationshipStorage->getRelationshipBySecond(RelationshipType::CALLS_T, DesignEntity::PROCEDURE, procedureTokenObjectThree) == getRelationshipBySecondTest1);
 
 	REQUIRE(callsTRelationshipStorage->getRelationshipBySecond(RelationshipType::FOLLOWS, DesignEntity::PROCEDURE, procedureTokenObjectThree) == emptySet);
+
+	// Test for Calls(p, _)
+	std::unordered_set<std::string> procedureSecondWildcardTest{ procedure_value_one, procedure_value_two };
+
+	REQUIRE(callsTRelationshipStorage->getRelationshipWithSecondWildcard(RelationshipType::CALLS_T, DesignEntity::PROCEDURE) == procedureSecondWildcardTest);
+
+	// Test for Calls(_, p)
+	std::unordered_set<std::string> procedureFirstWildcardTest{ procedure_value_two, procedure_value_three };
+
+	REQUIRE(callsTRelationshipStorage->getRelationshipWithFirstWildcard(RelationshipType::CALLS_T, DesignEntity::PROCEDURE) == procedureFirstWildcardTest);
 
 	//Testing for Calls(p1, p2)
 	std::unordered_map<std::string, std::unordered_set<std::string>> emptyMap{};
