@@ -37,6 +37,8 @@ public:
 	~PKB();
 
 private:
+	bool isRuntimeRelationship(RelationshipType relType);
+	std::unordered_set<std::string> getFilter(RelationshipType relType, DesignEntity designEntity);
 	EntityManager* entityManager;
 	RelationshipManager* relManager;
 	PatternManager* patternManager;
