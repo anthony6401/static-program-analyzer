@@ -35,25 +35,23 @@ void NextTRelationshipEvaluator::DFSNextTForwardWithSynonym(std::string curr, st
 		for (auto const& el : intersectionRes) {
 			result.insert(el);
 		}
-		return;
-	}
+	} else {
+		visited.insert(curr);
 
-	visited.insert(curr);
-
-	std::unordered_set<std::string> neighbours = this->nextStorage->getNextForward(curr);
+		std::unordered_set<std::string> neighbours = this->nextStorage->getNextForward(curr);
 
 
-	for (std::string neighbour : neighbours) {
-		std::unordered_set<std::string>::const_iterator exist = visited.find(neighbour);
-		result.insert(neighbour);
-		if (exist == visited.end()) {
-			DFSNextTForwardWithSynonym(neighbour, visited, result, filter);
+		for (std::string neighbour : neighbours) {
+			std::unordered_set<std::string>::const_iterator exist = visited.find(neighbour);
+			result.insert(neighbour);
+			if (exist == visited.end()) {
+				DFSNextTForwardWithSynonym(neighbour, visited, result, filter);
 
+			}
 		}
-	}
 
-	visited.erase(curr);
-	return;
+		visited.erase(curr);
+	}
 
 }
 
@@ -67,23 +65,21 @@ void NextTRelationshipEvaluator::DFSNextTBackwardWithSynonym(std::string curr, s
 		for (auto const& el : intersectionRes) {
 			result.insert(el);
 		}
-		return;
-	}
+	} else {
+		visited.insert(curr);
 
-	visited.insert(curr);
+		std::unordered_set<std::string> neighbours = this->nextStorage->getNextBackward(curr);
 
-	std::unordered_set<std::string> neighbours = this->nextStorage->getNextBackward(curr);
-
-	for (std::string neighbour : neighbours) {
-		std::unordered_set<std::string>::const_iterator exist = visited.find(neighbour);
-		result.insert(neighbour);
-		if (exist == visited.end()) {
-			DFSNextTBackwardWithSynonym(neighbour, visited, result, filter);
+		for (std::string neighbour : neighbours) {
+			std::unordered_set<std::string>::const_iterator exist = visited.find(neighbour);
+			result.insert(neighbour);
+			if (exist == visited.end()) {
+				DFSNextTBackwardWithSynonym(neighbour, visited, result, filter);
+			}
 		}
-	}
+		visited.erase(curr);
 
-	visited.erase(curr);
-	return;
+	}
 }
 
 // DFS search to answer Next* queries with 2 synonyms
