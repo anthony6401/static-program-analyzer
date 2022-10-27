@@ -11,6 +11,10 @@ bool PKB::isRuntimeRelationship(RelationshipType relType) {
 	return relType == RelationshipType::NEXT_T || relType == RelationshipType::AFFECTS || relType == RelationshipType::AFFECTS_T;
 }
 
+void PKB::clearCache() {
+	relManager->clearCache();
+}
+
 std::unordered_set<std::string> PKB::getFilter(RelationshipType relType, DesignEntity designEntity) {
 	if (relType == RelationshipType::AFFECTS || relType == RelationshipType::AFFECTS_T) {
 		if (designEntity == DesignEntity::STMT || designEntity == DesignEntity::ASSIGN) {
