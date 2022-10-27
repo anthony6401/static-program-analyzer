@@ -38,12 +38,12 @@ jobs:
           cd ../..
 
       - name: Run Unit Tests
-        run: ./Team17/Code17/build/src/unit_testing/unit_testing.exe
+        run: ./Team17/Code17/build/src/unit_testing/Release/unit_testing.exe
 
       - name: Run Integration Tests
-        run: ./Team17/Code17/build/src/integration_testing/integration_testing.exe
+        run: ./Team17/Code17/build/src/integration_testing/Release/integration_testing.exe
 
       - name: Run Autotester Tests
         run: |
           cd Team17/Tests17
-          python3 regression_tester.py ../Code17/build/src/autotester/autotester.exe
+          python3 regression_tester.py ../Code17/build/src/autotester/Release/autotester.exe
