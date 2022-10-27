@@ -167,6 +167,12 @@ std::unordered_map<std::string, std::unordered_set<std::string>> RelationshipMan
 	return emptyMap;
 }
 
+void RelationshipManager::clearCache() {
+	for (auto runtimeStore: runtimeRelStorages) {
+		runtimeStore->clearCache();
+	}
+}
+
 RelationshipManager::~RelationshipManager() {
 	for (auto store : relStorages) {
 		delete store;
