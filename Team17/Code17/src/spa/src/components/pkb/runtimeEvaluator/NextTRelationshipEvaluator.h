@@ -16,6 +16,8 @@ public:
 	bool getRuntimeRelationship(RelationshipType relType, TokenObject firstArgument, TokenObject secondArgument);
 	std::unordered_set<std::string> getRuntimeRelationshipByFirst(RelationshipType relType, TokenObject firstArgument, std::unordered_set<std::string>& filter);
 	std::unordered_set<std::string> getRuntimeRelationshipBySecond(RelationshipType relType, TokenObject secondArgument, std::unordered_set<std::string>& filter);
+	std::unordered_set<std::string> getRuntimeRelationshipWithFirstWildcard(RelationshipType relType, std::unordered_set<std::string>& filter1, std::unordered_set<std::string>& filter2);
+	std::unordered_set<std::string> getRuntimeRelationshipWithSecondWildcard(RelationshipType relType, std::unordered_set<std::string>& filter1, std::unordered_set<std::string>& filter2);
 	std::unordered_map<std::string, std::unordered_set<std::string>> getAllRuntimeRelationship(RelationshipType relType, std::unordered_set<std::string>& filter1, std::unordered_set<std::string>& filter2);
 private:
 	bool DFSNextTForward(std::string curr, std::string target, std::unordered_set<std::string>& visited);
@@ -26,6 +28,17 @@ private:
 	void DFSNextTWithTwoSynonyms(std::unordered_set<std::string>& filter1, 
 						std::unordered_set<std::string>& filter2, 
 						std::unordered_map<std::string, std::unordered_set<std::string>>& result_map);
+	void DFSNextTWildcardForward(std::unordered_set<std::string>& filter1,
+						std::unordered_set<std::string>& filter2,
+						std::unordered_set<std::string>& result);
+	void DFSNextTWildcardBackward(std::unordered_set<std::string>& filter1,
+		std::unordered_set<std::string>& filter2,
+		std::unordered_set<std::string>& result);
+	bool handleConstantConstant(TokenObject firstArgument, TokenObject secondArgument);
+	bool handleConstantWildcard(TokenObject firstArgument);
+	bool handleWildcardConstant(TokenObject secondArgument);
+	bool handleWildcardWildcard();
+
 
 	NextRelationshipStorage* nextStorage;
 };
