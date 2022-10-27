@@ -451,3 +451,7 @@ std::unordered_map<std::string, std::unordered_set<std::string>> NextRelationshi
 	}
 	return std::unordered_map<std::string, std::unordered_set<std::string>>();
 }
+
+bool NextRelationshipStorage::isEmpty() {
+	return stmtToStmtForwardMap.size() == 0;
+}

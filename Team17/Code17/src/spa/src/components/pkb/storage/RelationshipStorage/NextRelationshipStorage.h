@@ -13,6 +13,7 @@ public:
 	std::unordered_map<std::string, std::unordered_set<std::string>> getAllRelationship(RelationshipType relType, DesignEntity returnType1, DesignEntity returntype2);
 	std::unordered_set<std::string> getNextForward(std::string c);
 	std::unordered_set<std::string> getNextBackward(std::string c);
+	bool isEmpty();
 
 private:
 	bool handleConstantConstant(TokenObject firstArgument, TokenObject secondArgument);
