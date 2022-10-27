@@ -54,6 +54,14 @@ std::unordered_set<std::string> PKB::getRelationshipBySecond(RelationshipType re
 	return relManager->getRelationshipBySecond(relType, returnType, secondArgument);
 }
 
+std::unordered_set<std::string> PKB::getRelationshipWithFirstWildcard(RelationshipType relType, DesignEntity returnType) {
+	return relManager->getRelationshipWithFirstWildcard(relType, returnType);
+}
+
+std::unordered_set<std::string> PKB::getRelationshipWithSecondWildcard(RelationshipType relType, DesignEntity returnType) {
+	return relManager->getRelationshipWithSecondWildcard(relType, returnType);
+}
+
 std::unordered_map<std::string, std::unordered_set<std::string>> PKB::getAllRelationship(RelationshipType relType, DesignEntity returnType1, DesignEntity returnType2) {
 	if (relType == RelationshipType::NEXT_T || relType == RelationshipType::AFFECTS || relType == RelationshipType::AFFECTS_T) {
 		std::unordered_set<std::string> filter1 = entityManager->getAllEntity(returnType1);

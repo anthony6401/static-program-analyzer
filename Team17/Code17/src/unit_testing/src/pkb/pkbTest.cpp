@@ -333,16 +333,47 @@ TEST_CASE("PKB Relationship Manager test") {
 	REQUIRE(pkb.storeRelationship(callsTRelationshipThree));
 
 	REQUIRE(pkb.getRelationship(RelationshipType::USES, stmtTokenObject1, variableTokenObject));
-	REQUIRE(pkb.getRelationship(RelationshipType::MODIFIES, stmtTokenObject1, variableTokenObject));
-	REQUIRE(pkb.getRelationship(RelationshipType::PARENT, stmtTokenObject6, stmtTokenObject5));
-	REQUIRE(pkb.getRelationship(RelationshipType::PARENT_T, stmtTokenObject6, stmtTokenObject5));
-	REQUIRE(pkb.getRelationship(RelationshipType::FOLLOWS, stmtTokenObject5, stmtTokenObject4));
-	REQUIRE(pkb.getRelationship(RelationshipType::FOLLOWS_T, stmtTokenObject5, stmtTokenObject4));
-	REQUIRE(pkb.getRelationship(RelationshipType::NEXT, stmtTokenObject1, stmtTokenObject2));
-	REQUIRE(pkb.getRelationship(RelationshipType::NEXT_T, stmtTokenObject1, stmtTokenObject2));
-	REQUIRE(pkb.getRelationship(RelationshipType::CALLS, procedureTokenObject, procedureTokenObjectTwo));
-	REQUIRE(pkb.getRelationship(RelationshipType::CALLS_T, procedureTokenObject, procedureTokenObjectTwo));
+	REQUIRE(pkb.getRelationship(RelationshipType::USES, stmtTokenObject1, wildcardTokenObject));
 
+	REQUIRE(pkb.getRelationship(RelationshipType::MODIFIES, stmtTokenObject1, variableTokenObject));
+	REQUIRE(pkb.getRelationship(RelationshipType::MODIFIES, stmtTokenObject1, wildcardTokenObject));
+
+	REQUIRE(pkb.getRelationship(RelationshipType::PARENT, stmtTokenObject6, stmtTokenObject5));
+	REQUIRE(pkb.getRelationship(RelationshipType::PARENT, wildcardTokenObject, stmtTokenObject5));
+	REQUIRE(pkb.getRelationship(RelationshipType::PARENT, stmtTokenObject6, wildcardTokenObject));
+	REQUIRE(pkb.getRelationship(RelationshipType::PARENT, wildcardTokenObject, wildcardTokenObject));
+
+	REQUIRE(pkb.getRelationship(RelationshipType::PARENT_T, stmtTokenObject6, stmtTokenObject5));
+	REQUIRE(pkb.getRelationship(RelationshipType::PARENT_T, wildcardTokenObject, stmtTokenObject5));
+	REQUIRE(pkb.getRelationship(RelationshipType::PARENT_T, stmtTokenObject6, wildcardTokenObject));
+	REQUIRE(pkb.getRelationship(RelationshipType::PARENT_T, wildcardTokenObject, wildcardTokenObject));
+
+	REQUIRE(pkb.getRelationship(RelationshipType::FOLLOWS, stmtTokenObject5, stmtTokenObject4));
+	REQUIRE(pkb.getRelationship(RelationshipType::FOLLOWS, wildcardTokenObject, stmtTokenObject4));
+	REQUIRE(pkb.getRelationship(RelationshipType::FOLLOWS, stmtTokenObject5, wildcardTokenObject));
+	REQUIRE(pkb.getRelationship(RelationshipType::FOLLOWS, wildcardTokenObject, wildcardTokenObject));
+
+	REQUIRE(pkb.getRelationship(RelationshipType::FOLLOWS_T, stmtTokenObject5, stmtTokenObject4));
+	REQUIRE(pkb.getRelationship(RelationshipType::FOLLOWS_T, wildcardTokenObject, stmtTokenObject4));
+	REQUIRE(pkb.getRelationship(RelationshipType::FOLLOWS_T, stmtTokenObject5, wildcardTokenObject));
+	REQUIRE(pkb.getRelationship(RelationshipType::FOLLOWS_T, wildcardTokenObject, wildcardTokenObject));
+
+	REQUIRE(pkb.getRelationship(RelationshipType::NEXT, stmtTokenObject1, stmtTokenObject2));
+	REQUIRE(pkb.getRelationship(RelationshipType::NEXT, wildcardTokenObject, stmtTokenObject2));
+	REQUIRE(pkb.getRelationship(RelationshipType::NEXT, stmtTokenObject1, wildcardTokenObject));
+	REQUIRE(pkb.getRelationship(RelationshipType::NEXT, wildcardTokenObject, wildcardTokenObject));
+
+	REQUIRE(pkb.getRelationship(RelationshipType::NEXT_T, stmtTokenObject1, stmtTokenObject2));
+
+	REQUIRE(pkb.getRelationship(RelationshipType::CALLS, procedureTokenObject, procedureTokenObjectTwo));
+	REQUIRE(pkb.getRelationship(RelationshipType::CALLS, wildcardTokenObject, procedureTokenObjectTwo));
+	REQUIRE(pkb.getRelationship(RelationshipType::CALLS, procedureTokenObject, wildcardTokenObject));
+	REQUIRE(pkb.getRelationship(RelationshipType::CALLS, wildcardTokenObject, wildcardTokenObject));
+
+	REQUIRE(pkb.getRelationship(RelationshipType::CALLS_T, procedureTokenObject, procedureTokenObjectTwo));
+	REQUIRE(pkb.getRelationship(RelationshipType::CALLS_T, wildcardTokenObject, procedureTokenObjectTwo));
+	REQUIRE(pkb.getRelationship(RelationshipType::CALLS_T, procedureTokenObject, wildcardTokenObject));
+	REQUIRE(pkb.getRelationship(RelationshipType::CALLS_T, wildcardTokenObject, wildcardTokenObject));
 
 	std::unordered_set<std::string> usesExpectedResult({ variable_value_one });
 	std::unordered_set<std::string> modifiesExpectedResult({ variable_value_one });
@@ -355,7 +386,6 @@ TEST_CASE("PKB Relationship Manager test") {
 	std::unordered_set<std::string> callsExpectedResult{ procedure_value_two, procedure_value_three };
 	std::unordered_set<std::string> callsTExpectedResult{ procedure_value_two, procedure_value_three };
 
-
 	REQUIRE(pkb.getRelationshipByFirst(RelationshipType::USES, stmtTokenObject1, DesignEntity::VARIABLE) == usesExpectedResult);
 	REQUIRE(pkb.getRelationshipByFirst(RelationshipType::MODIFIES, stmtTokenObject1, DesignEntity::VARIABLE) == modifiesExpectedResult);
 	REQUIRE(pkb.getRelationshipByFirst(RelationshipType::PARENT, stmtTokenObject6, DesignEntity::READ) == parentExpectedResult);
@@ -366,8 +396,6 @@ TEST_CASE("PKB Relationship Manager test") {
 	REQUIRE(pkb.getRelationshipByFirst(RelationshipType::NEXT_T, stmtTokenObject5, DesignEntity::WHILE) == nextTExpectedResult);
 	REQUIRE(pkb.getRelationshipByFirst(RelationshipType::CALLS, procedureTokenObject, DesignEntity::PROCEDURE) == callsExpectedResult);
 	REQUIRE(pkb.getRelationshipByFirst(RelationshipType::CALLS_T, procedureTokenObject, DesignEntity::PROCEDURE) == callsTExpectedResult);
-
-
 
 	std::unordered_set<std::string> usesExpectedResultTwo({ assign_value_one });
 	std::unordered_set<std::string> modifiesExpectedResultTwo({ assign_value_one });
@@ -391,6 +419,41 @@ TEST_CASE("PKB Relationship Manager test") {
 	REQUIRE(pkb.getRelationshipBySecond(RelationshipType::CALLS, DesignEntity::PROCEDURE, procedureTokenObjectThree) == callsExpectedResultTwo);
 	REQUIRE(pkb.getRelationshipBySecond(RelationshipType::CALLS_T, DesignEntity::PROCEDURE, procedureTokenObjectThree) == callsTExpectedResultTwo);
 
+	std::unordered_set<std::string> parentFirstWildcardExpectedResult({ read_value_one });
+	std::unordered_set<std::string> parentTFirstWildcardExpectedResult({ read_value_one });
+	std::unordered_set<std::string> followsFirstWildcardExpectedResult({ print_value_one });
+	std::unordered_set<std::string> followsTFirstWildcardExpectedResult({ print_value_one });
+	std::unordered_set<std::string> nextFirstWildcardExpectedResult({ while_value_one });
+	std::unordered_set<std::string> callsFirstWildcardExpectedResult{ procedure_value_two, procedure_value_three };
+	std::unordered_set<std::string> callsTFirstWildcardExpectedResult{ procedure_value_two, procedure_value_three };
+
+	REQUIRE(pkb.getRelationshipWithFirstWildcard(RelationshipType::PARENT, DesignEntity::READ) == parentFirstWildcardExpectedResult);
+	REQUIRE(pkb.getRelationshipWithFirstWildcard(RelationshipType::PARENT_T, DesignEntity::READ) == parentTFirstWildcardExpectedResult);
+	REQUIRE(pkb.getRelationshipWithFirstWildcard(RelationshipType::FOLLOWS, DesignEntity::PRINT) == followsFirstWildcardExpectedResult);
+	REQUIRE(pkb.getRelationshipWithFirstWildcard(RelationshipType::FOLLOWS_T, DesignEntity::PRINT) == followsTFirstWildcardExpectedResult);
+	REQUIRE(pkb.getRelationshipWithFirstWildcard(RelationshipType::NEXT, DesignEntity::WHILE) == nextFirstWildcardExpectedResult);
+	REQUIRE(pkb.getRelationshipWithFirstWildcard(RelationshipType::CALLS, DesignEntity::PROCEDURE) == callsFirstWildcardExpectedResult);
+	REQUIRE(pkb.getRelationshipWithFirstWildcard(RelationshipType::CALLS_T, DesignEntity::PROCEDURE) == callsTFirstWildcardExpectedResult);
+
+	std::unordered_set<std::string> usesSecondWildcardExpectedResult({ assign_value_one });
+	std::unordered_set<std::string> modifiesSecondWildcardExpectedResult({ assign_value_one });
+	std::unordered_set<std::string> parentSecondWildcardExpectedResult({ while_value_one });
+	std::unordered_set<std::string> parentTSecondWildcardExpectedResult({ while_value_one });
+	std::unordered_set<std::string> followsSecondWildcardExpectedResult({ read_value_one });
+	std::unordered_set<std::string> followsTSecondWildcardExpectedResult({ read_value_one });
+	std::unordered_set<std::string> nextSecondWildcardExpectedResult({ if_value_one });
+	std::unordered_set<std::string> callsSecondWildcardExpectedResult{ procedure_value_one, procedure_value_two };
+	std::unordered_set<std::string> callsTSecondWildcardExpectedResult{ procedure_value_one, procedure_value_two };
+
+	REQUIRE(pkb.getRelationshipWithSecondWildcard(RelationshipType::USES, DesignEntity::ASSIGN) == usesSecondWildcardExpectedResult);
+	REQUIRE(pkb.getRelationshipWithSecondWildcard(RelationshipType::MODIFIES, DesignEntity::ASSIGN) == modifiesSecondWildcardExpectedResult);
+	REQUIRE(pkb.getRelationshipWithSecondWildcard(RelationshipType::PARENT, DesignEntity::WHILE) == parentSecondWildcardExpectedResult);
+	REQUIRE(pkb.getRelationshipWithSecondWildcard(RelationshipType::PARENT_T, DesignEntity::WHILE) == parentTSecondWildcardExpectedResult);
+	REQUIRE(pkb.getRelationshipWithSecondWildcard(RelationshipType::FOLLOWS, DesignEntity::READ) == followsSecondWildcardExpectedResult);
+	REQUIRE(pkb.getRelationshipWithSecondWildcard(RelationshipType::FOLLOWS_T, DesignEntity::READ) == followsTSecondWildcardExpectedResult);
+	REQUIRE(pkb.getRelationshipWithSecondWildcard(RelationshipType::NEXT, DesignEntity::IF) == nextSecondWildcardExpectedResult);
+	REQUIRE(pkb.getRelationshipWithSecondWildcard(RelationshipType::CALLS, DesignEntity::PROCEDURE) == callsSecondWildcardExpectedResult);
+	REQUIRE(pkb.getRelationshipWithSecondWildcard(RelationshipType::CALLS_T, DesignEntity::PROCEDURE) == callsTSecondWildcardExpectedResult);
 
 	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultUsesAll{ { assign_value_one, std::unordered_set<std::string>({variable_value_one}) } };
 	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultModifiesAll{ { assign_value_one, std::unordered_set<std::string>({variable_value_one}) } };
@@ -650,11 +713,30 @@ TEST_CASE("All Manager Test") {
 
 	//Relationship
 	REQUIRE(pkb.getRelationship(RelationshipType::USES, stmtTokenObject1, variableTokenObject));
+	REQUIRE(pkb.getRelationship(RelationshipType::USES, stmtTokenObject1, wildcardTokenObject));
+
 	REQUIRE(pkb.getRelationship(RelationshipType::MODIFIES, stmtTokenObject1, variableTokenObject));
+	REQUIRE(pkb.getRelationship(RelationshipType::MODIFIES, stmtTokenObject1, wildcardTokenObject));
+
 	REQUIRE(pkb.getRelationship(RelationshipType::PARENT, stmtTokenObject6, stmtTokenObject5));
+	REQUIRE(pkb.getRelationship(RelationshipType::PARENT, wildcardTokenObject, stmtTokenObject5));
+	REQUIRE(pkb.getRelationship(RelationshipType::PARENT, stmtTokenObject6, wildcardTokenObject));
+	REQUIRE(pkb.getRelationship(RelationshipType::PARENT, wildcardTokenObject, wildcardTokenObject));
+
 	REQUIRE(pkb.getRelationship(RelationshipType::PARENT_T, stmtTokenObject6, stmtTokenObject5));
+	REQUIRE(pkb.getRelationship(RelationshipType::PARENT_T, wildcardTokenObject, stmtTokenObject5));
+	REQUIRE(pkb.getRelationship(RelationshipType::PARENT_T, stmtTokenObject6, wildcardTokenObject));
+	REQUIRE(pkb.getRelationship(RelationshipType::PARENT_T, wildcardTokenObject, wildcardTokenObject));
+
 	REQUIRE(pkb.getRelationship(RelationshipType::FOLLOWS, stmtTokenObject5, stmtTokenObject4));
+	REQUIRE(pkb.getRelationship(RelationshipType::FOLLOWS, wildcardTokenObject, stmtTokenObject4));
+	REQUIRE(pkb.getRelationship(RelationshipType::FOLLOWS, stmtTokenObject5, wildcardTokenObject));
+	REQUIRE(pkb.getRelationship(RelationshipType::FOLLOWS, wildcardTokenObject, wildcardTokenObject));
+
 	REQUIRE(pkb.getRelationship(RelationshipType::FOLLOWS_T, stmtTokenObject5, stmtTokenObject4));
+	REQUIRE(pkb.getRelationship(RelationshipType::FOLLOWS_T, wildcardTokenObject, stmtTokenObject4));
+	REQUIRE(pkb.getRelationship(RelationshipType::FOLLOWS_T, stmtTokenObject5, wildcardTokenObject));
+	REQUIRE(pkb.getRelationship(RelationshipType::FOLLOWS_T, wildcardTokenObject, wildcardTokenObject));
 
 
 	std::unordered_set<std::string> usesExpectedResult({ variable_value_one });
@@ -686,6 +768,35 @@ TEST_CASE("All Manager Test") {
 	REQUIRE(pkb.getRelationshipBySecond(RelationshipType::FOLLOWS, DesignEntity::READ, stmtTokenObject4) == followsExpectedResultTwo);
 	REQUIRE(pkb.getRelationshipBySecond(RelationshipType::FOLLOWS_T, DesignEntity::READ, stmtTokenObject4) == followsTExpectedResultTwo);
 
+	std::unordered_set<std::string> parentFirstWildcardExpectedResult({ read_value_one });
+	std::unordered_set<std::string> parentTFirstWildcardExpectedResult({ read_value_one });
+	std::unordered_set<std::string> followsFirstWildcardExpectedResult({ print_value_one });
+	std::unordered_set<std::string> followsTFirstWildcardExpectedResult({ print_value_one });
+	std::unordered_set<std::string> nextFirstWildcardExpectedResult({ while_value_one });
+	std::unordered_set<std::string> callsFirstWildcardExpectedResult{ procedure_value_two, procedure_value_three };
+	std::unordered_set<std::string> callsTFirstWildcardExpectedResult{ procedure_value_two, procedure_value_three };
+
+	REQUIRE(pkb.getRelationshipWithFirstWildcard(RelationshipType::PARENT, DesignEntity::READ) == parentFirstWildcardExpectedResult);
+	REQUIRE(pkb.getRelationshipWithFirstWildcard(RelationshipType::PARENT_T, DesignEntity::READ) == parentTFirstWildcardExpectedResult);
+	REQUIRE(pkb.getRelationshipWithFirstWildcard(RelationshipType::FOLLOWS, DesignEntity::PRINT) == followsFirstWildcardExpectedResult);
+	REQUIRE(pkb.getRelationshipWithFirstWildcard(RelationshipType::FOLLOWS_T, DesignEntity::PRINT) == followsTFirstWildcardExpectedResult);
+
+	std::unordered_set<std::string> usesSecondWildcardExpectedResult({ assign_value_one });
+	std::unordered_set<std::string> modifiesSecondWildcardExpectedResult({ assign_value_one });
+	std::unordered_set<std::string> parentSecondWildcardExpectedResult({ while_value_one });
+	std::unordered_set<std::string> parentTSecondWildcardExpectedResult({ while_value_one });
+	std::unordered_set<std::string> followsSecondWildcardExpectedResult({ read_value_one });
+	std::unordered_set<std::string> followsTSecondWildcardExpectedResult({ read_value_one });
+	std::unordered_set<std::string> nextSecondWildcardExpectedResult({ if_value_one });
+	std::unordered_set<std::string> callsSecondWildcardExpectedResult{ procedure_value_one, procedure_value_two };
+	std::unordered_set<std::string> callsTSecondWildcardExpectedResult{ procedure_value_one, procedure_value_two };
+
+	REQUIRE(pkb.getRelationshipWithSecondWildcard(RelationshipType::USES, DesignEntity::ASSIGN) == usesSecondWildcardExpectedResult);
+	REQUIRE(pkb.getRelationshipWithSecondWildcard(RelationshipType::MODIFIES, DesignEntity::ASSIGN) == modifiesSecondWildcardExpectedResult);
+	REQUIRE(pkb.getRelationshipWithSecondWildcard(RelationshipType::PARENT, DesignEntity::WHILE) == parentSecondWildcardExpectedResult);
+	REQUIRE(pkb.getRelationshipWithSecondWildcard(RelationshipType::PARENT_T, DesignEntity::WHILE) == parentTSecondWildcardExpectedResult);
+	REQUIRE(pkb.getRelationshipWithSecondWildcard(RelationshipType::FOLLOWS, DesignEntity::READ) == followsSecondWildcardExpectedResult);
+	REQUIRE(pkb.getRelationshipWithSecondWildcard(RelationshipType::FOLLOWS_T, DesignEntity::READ) == followsTSecondWildcardExpectedResult);
 
 	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultUsesAll{ { assign_value_one, std::unordered_set<std::string>({variable_value_one}) } };
 	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultModifiesAll{ { assign_value_one, std::unordered_set<std::string>({variable_value_one}) } };
