@@ -38,6 +38,14 @@ RelationshipManager::RelationshipManager() {
 	relStorages.push_back(callsTRelStorage);
 	relStorages.push_back(nextRelStorage);
 
+	relFirstWildcardStorages.push_back(followsRelStorage);
+	relFirstWildcardStorages.push_back(followsTRelStorage);
+	relFirstWildcardStorages.push_back(parentRelStorage);
+	relFirstWildcardStorages.push_back(parentTRelStorage);
+	relFirstWildcardStorages.push_back(callsRelStorage);
+	relFirstWildcardStorages.push_back(callsTRelStorage);
+	relFirstWildcardStorages.push_back(nextRelStorage);
+
 	runtimeRelStorages.push_back(nextTRelEvaluator);
 	runtimeRelStorages.push_back(affectsRelEvaluator);
 	runtimeRelStorages.push_back(affectsTRelEvaluator);
@@ -78,6 +86,32 @@ std::unordered_set<std::string> RelationshipManager::getRelationshipBySecond(Rel
 
 	for (auto& store : relStorages) {
 		set = store->getRelationshipBySecond(relType, returnType, secondArgument);
+		if (set != emptySet) {
+			return set;
+		}
+	}
+	return emptySet;
+}
+
+std::unordered_set<std::string> RelationshipManager::getRelationshipWithFirstWildcard(RelationshipType relType, DesignEntity returnType) {
+	std::unordered_set<std::string> set = std::unordered_set<std::string>();
+	std::unordered_set<std::string> emptySet = std::unordered_set<std::string>();
+
+	for (auto& store : relFirstWildcardStorages) {
+		set = store->getRelationshipWithFirstWildcard(relType, returnType);
+		if (set != emptySet) {
+			return set;
+		}
+	}
+	return emptySet;
+}
+
+std::unordered_set<std::string> RelationshipManager::getRelationshipWithSecondWildcard(RelationshipType relType, DesignEntity returnType) {
+	std::unordered_set<std::string> set = std::unordered_set<std::string>();
+	std::unordered_set<std::string> emptySet = std::unordered_set<std::string>();
+
+	for (auto& store : relStorages) {
+		set = store->getRelationshipWithSecondWildcard(relType, returnType);
 		if (set != emptySet) {
 			return set;
 		}

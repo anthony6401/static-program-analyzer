@@ -70,16 +70,46 @@ TEST_CASE("Relationship Manager Test") {
 	REQUIRE(relManager.storeRelationship(callsTRelationshipTwo));
 	REQUIRE(relManager.storeRelationship(callsTRelationshipThree));
 
-
 	REQUIRE(relManager.getRelationship(RelationshipType::USES, stmtTokenObject1, variableTokenObject));
+	REQUIRE(relManager.getRelationship(RelationshipType::USES, stmtTokenObject1, wildcardTokenObject));
+
 	REQUIRE(relManager.getRelationship(RelationshipType::MODIFIES, stmtTokenObject1, variableTokenObject));
+	REQUIRE(relManager.getRelationship(RelationshipType::MODIFIES, stmtTokenObject1, wildcardTokenObject));
+
 	REQUIRE(relManager.getRelationship(RelationshipType::PARENT, stmtTokenObject6, stmtTokenObject5));
+	REQUIRE(relManager.getRelationship(RelationshipType::PARENT, wildcardTokenObject, stmtTokenObject5));
+	REQUIRE(relManager.getRelationship(RelationshipType::PARENT, stmtTokenObject6, wildcardTokenObject));
+	REQUIRE(relManager.getRelationship(RelationshipType::PARENT, wildcardTokenObject, wildcardTokenObject));
+
 	REQUIRE(relManager.getRelationship(RelationshipType::PARENT_T, stmtTokenObject6, stmtTokenObject5));
+	REQUIRE(relManager.getRelationship(RelationshipType::PARENT_T, wildcardTokenObject, stmtTokenObject5));
+	REQUIRE(relManager.getRelationship(RelationshipType::PARENT_T, stmtTokenObject6, wildcardTokenObject));
+	REQUIRE(relManager.getRelationship(RelationshipType::PARENT_T, wildcardTokenObject, wildcardTokenObject));
+
 	REQUIRE(relManager.getRelationship(RelationshipType::FOLLOWS, stmtTokenObject5, stmtTokenObject4));
+	REQUIRE(relManager.getRelationship(RelationshipType::FOLLOWS, wildcardTokenObject, stmtTokenObject4));
+	REQUIRE(relManager.getRelationship(RelationshipType::FOLLOWS, stmtTokenObject5, wildcardTokenObject));
+	REQUIRE(relManager.getRelationship(RelationshipType::FOLLOWS, wildcardTokenObject, wildcardTokenObject));
+
 	REQUIRE(relManager.getRelationship(RelationshipType::FOLLOWS_T, stmtTokenObject5, stmtTokenObject4));
+	REQUIRE(relManager.getRelationship(RelationshipType::FOLLOWS_T, wildcardTokenObject, stmtTokenObject4));
+	REQUIRE(relManager.getRelationship(RelationshipType::FOLLOWS_T, stmtTokenObject5, wildcardTokenObject));
+	REQUIRE(relManager.getRelationship(RelationshipType::FOLLOWS_T, wildcardTokenObject, wildcardTokenObject));
+
 	REQUIRE(relManager.getRelationship(RelationshipType::NEXT, stmtTokenObject1, stmtTokenObject2));
+	REQUIRE(relManager.getRelationship(RelationshipType::NEXT, wildcardTokenObject, stmtTokenObject2));
+	REQUIRE(relManager.getRelationship(RelationshipType::NEXT, stmtTokenObject1, wildcardTokenObject));
+	REQUIRE(relManager.getRelationship(RelationshipType::NEXT, wildcardTokenObject, wildcardTokenObject));
+
 	REQUIRE(relManager.getRelationship(RelationshipType::CALLS, procedureTokenObject, procedureTokenObjectTwo));
+	REQUIRE(relManager.getRelationship(RelationshipType::CALLS, wildcardTokenObject, procedureTokenObjectTwo));
+	REQUIRE(relManager.getRelationship(RelationshipType::CALLS, procedureTokenObject, wildcardTokenObject));
+	REQUIRE(relManager.getRelationship(RelationshipType::CALLS, wildcardTokenObject, wildcardTokenObject));
+
 	REQUIRE(relManager.getRelationship(RelationshipType::CALLS_T, procedureTokenObject, procedureTokenObjectTwo));
+	REQUIRE(relManager.getRelationship(RelationshipType::CALLS_T, wildcardTokenObject, procedureTokenObjectTwo));
+	REQUIRE(relManager.getRelationship(RelationshipType::CALLS_T, procedureTokenObject, wildcardTokenObject));
+	REQUIRE(relManager.getRelationship(RelationshipType::CALLS_T, wildcardTokenObject, wildcardTokenObject));
 
 	REQUIRE(relManager.getRuntimeRelationship(RelationshipType::NEXT_T, stmtTokenObject1, stmtTokenObject2));
 
@@ -136,7 +166,42 @@ TEST_CASE("Relationship Manager Test") {
 	std::unordered_set<std::string> nextTExpectedResultTwo({ call_value_one });
 	std::unordered_set<std::string> c_filter = { call_value_one };
 	REQUIRE(relManager.getRuntimeRelationshipBySecond(RelationshipType::NEXT_T, stmtTokenObject4, c_filter) == nextTExpectedResultTwo);
-	
+
+	std::unordered_set<std::string> parentFirstWildcardExpectedResult({ read_value_one });
+	std::unordered_set<std::string> parentTFirstWildcardExpectedResult({ read_value_one });
+	std::unordered_set<std::string> followsFirstWildcardExpectedResult({ print_value_one });
+	std::unordered_set<std::string> followsTFirstWildcardExpectedResult({ print_value_one });
+	std::unordered_set<std::string> nextFirstWildcardExpectedResult({ while_value_one });
+	std::unordered_set<std::string> callsFirstWildcardExpectedResult{ procedure_value_two, procedure_value_three };
+	std::unordered_set<std::string> callsTFirstWildcardExpectedResult{ procedure_value_two, procedure_value_three };
+
+	REQUIRE(relManager.getRelationshipWithFirstWildcard(RelationshipType::PARENT, DesignEntity::READ) == parentFirstWildcardExpectedResult);
+	REQUIRE(relManager.getRelationshipWithFirstWildcard(RelationshipType::PARENT_T, DesignEntity::READ) == parentTFirstWildcardExpectedResult);
+	REQUIRE(relManager.getRelationshipWithFirstWildcard(RelationshipType::FOLLOWS, DesignEntity::PRINT) == followsFirstWildcardExpectedResult);
+	REQUIRE(relManager.getRelationshipWithFirstWildcard(RelationshipType::FOLLOWS_T, DesignEntity::PRINT) == followsTFirstWildcardExpectedResult);
+	REQUIRE(relManager.getRelationshipWithFirstWildcard(RelationshipType::NEXT, DesignEntity::WHILE) == nextFirstWildcardExpectedResult);
+	REQUIRE(relManager.getRelationshipWithFirstWildcard(RelationshipType::CALLS, DesignEntity::PROCEDURE) == callsFirstWildcardExpectedResult);
+	REQUIRE(relManager.getRelationshipWithFirstWildcard(RelationshipType::CALLS_T, DesignEntity::PROCEDURE) == callsTFirstWildcardExpectedResult);
+
+	std::unordered_set<std::string> usesSecondWildcardExpectedResult({ assign_value_one });
+	std::unordered_set<std::string> modifiesSecondWildcardExpectedResult({ assign_value_one });
+	std::unordered_set<std::string> parentSecondWildcardExpectedResult({ while_value_one });
+	std::unordered_set<std::string> parentTSecondWildcardExpectedResult({ while_value_one });
+	std::unordered_set<std::string> followsSecondWildcardExpectedResult({ read_value_one });
+	std::unordered_set<std::string> followsTSecondWildcardExpectedResult({ read_value_one });
+	std::unordered_set<std::string> nextSecondWildcardExpectedResult({ if_value_one });
+	std::unordered_set<std::string> callsSecondWildcardExpectedResult{ procedure_value_one, procedure_value_two };
+	std::unordered_set<std::string> callsTSecondWildcardExpectedResult{ procedure_value_one, procedure_value_two };
+
+	REQUIRE(relManager.getRelationshipWithSecondWildcard(RelationshipType::USES, DesignEntity::ASSIGN) == usesSecondWildcardExpectedResult);
+	REQUIRE(relManager.getRelationshipWithSecondWildcard(RelationshipType::MODIFIES, DesignEntity::ASSIGN) == modifiesSecondWildcardExpectedResult);
+	REQUIRE(relManager.getRelationshipWithSecondWildcard(RelationshipType::PARENT, DesignEntity::WHILE) == parentSecondWildcardExpectedResult);
+	REQUIRE(relManager.getRelationshipWithSecondWildcard(RelationshipType::PARENT_T, DesignEntity::WHILE) == parentTSecondWildcardExpectedResult);
+	REQUIRE(relManager.getRelationshipWithSecondWildcard(RelationshipType::FOLLOWS, DesignEntity::READ) == followsSecondWildcardExpectedResult);
+	REQUIRE(relManager.getRelationshipWithSecondWildcard(RelationshipType::FOLLOWS_T, DesignEntity::READ) == followsTSecondWildcardExpectedResult);
+	REQUIRE(relManager.getRelationshipWithSecondWildcard(RelationshipType::NEXT, DesignEntity::IF) == nextSecondWildcardExpectedResult);
+	REQUIRE(relManager.getRelationshipWithSecondWildcard(RelationshipType::CALLS, DesignEntity::PROCEDURE) == callsSecondWildcardExpectedResult);
+	REQUIRE(relManager.getRelationshipWithSecondWildcard(RelationshipType::CALLS_T, DesignEntity::PROCEDURE) == callsTSecondWildcardExpectedResult);
 
 	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultUsesAll{ { assign_value_one, std::unordered_set<std::string>({variable_value_one}) } };
 	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultModifiesAll{ { assign_value_one, std::unordered_set<std::string>({variable_value_one}) } };
