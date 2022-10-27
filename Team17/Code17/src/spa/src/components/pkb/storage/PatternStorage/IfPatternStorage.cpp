@@ -34,7 +34,7 @@ std::unordered_set<std::string> IfPatternStorage::getPattern(DesignEntity design
 	return result;
 }
 
-std::unordered_set<std::string> IfPatternStorage::getPatternWilcard(DesignEntity designEntity, TokenObject secondArgument) {
+std::unordered_set<std::string> IfPatternStorage::getPatternWildcard(DesignEntity designEntity, TokenObject secondArgument) {
 	std::unordered_set<std::string> result;
 
 	if (designEntity == DesignEntity::IF) {

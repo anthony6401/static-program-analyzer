@@ -184,7 +184,7 @@ std::unordered_set<std::string> AssignPatternStorage::getPattern(DesignEntity de
 	return std::unordered_set<std::string>();
 }
 
-std::unordered_set<std::string> AssignPatternStorage::getPatternWilcard(DesignEntity designEntity, TokenObject secondArgument) {
+std::unordered_set<std::string> AssignPatternStorage::getPatternWildcard(DesignEntity designEntity, TokenObject secondArgument) {
 	if (designEntity == DesignEntity::ASSIGN) {
 		return getPatternWildcardController(secondArgument);
 	}

@@ -13,7 +13,7 @@ public:
 	PatternStorage();
 	virtual bool storePattern(kb::Pattern* pattern) = 0;
 	virtual std::unordered_set<std::string> getPattern(DesignEntity designEntity, TokenObject firstArgument, TokenObject secondArgument) = 0;
-	virtual std::unordered_set<std::string> getPatternWilcard(DesignEntity designEntity, TokenObject secondArgument) = 0;
+	virtual std::unordered_set<std::string> getPatternWildcard(DesignEntity designEntity, TokenObject secondArgument) = 0;
 	virtual std::vector<std::pair<std::string, std::string>> getPatternPair(DesignEntity designEntity, TokenObject secondArgument) = 0;
 	~PatternStorage() = default;
 };

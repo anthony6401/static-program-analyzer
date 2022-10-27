@@ -33,7 +33,7 @@ std::unordered_set<std::string> WhilePatternStorage::getPattern(DesignEntity des
 	return result;
 }
 
-std::unordered_set<std::string> WhilePatternStorage::getPatternWilcard(DesignEntity designEntity, TokenObject secondArgument) {
+std::unordered_set<std::string> WhilePatternStorage::getPatternWildcard(DesignEntity designEntity, TokenObject secondArgument) {
 	std::unordered_set<std::string> result;
 
 	if (designEntity == DesignEntity::WHILE) {

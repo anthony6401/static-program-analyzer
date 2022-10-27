@@ -43,12 +43,12 @@ TEST_CASE("Assign Pattern Storage Test") {
 	REQUIRE(assignGetPatternNameWildcardOne == expectedGetPatternNameWildcardOne);
 	REQUIRE(assignGetPatternNameWildcardTwo == expectedGetPatternNameWilcardTwo);
 
-	std::unordered_set<std::string> assignGetPatternWildcardNameNameOne = assignPatternStorage->getPatternWilcard(DesignEntity::ASSIGN, assignPatternTokenObjectSecondOne);
-	std::unordered_set<std::string> assignGetPatternWildcardNameNameTwo = assignPatternStorage->getPatternWilcard(DesignEntity::ASSIGN, assignPatternTokenObjectSecondTwo);
-	std::unordered_set<std::string> assignGetPatternWildcardNameSubexprOne = assignPatternStorage->getPatternWilcard(DesignEntity::ASSIGN, assignPatternTokenObjectSubexprOne);
-	std::unordered_set<std::string> assignGetPatternWildcardNameSubexprTwo = assignPatternStorage->getPatternWilcard(DesignEntity::ASSIGN, assignPatternTokenObjectSubexprTwo);
-	std::unordered_set<std::string> assignGetPatternWildcardNameSubexprThree = assignPatternStorage->getPatternWilcard(DesignEntity::ASSIGN, assignPatternTokenObjectSubexprThree);
-	std::unordered_set<std::string> assignGetPatternWildcardNameWildcard = assignPatternStorage->getPatternWilcard(DesignEntity::ASSIGN, wildcardTokenObject);
+	std::unordered_set<std::string> assignGetPatternWildcardNameNameOne = assignPatternStorage->getPatternWildcard(DesignEntity::ASSIGN, assignPatternTokenObjectSecondOne);
+	std::unordered_set<std::string> assignGetPatternWildcardNameNameTwo = assignPatternStorage->getPatternWildcard(DesignEntity::ASSIGN, assignPatternTokenObjectSecondTwo);
+	std::unordered_set<std::string> assignGetPatternWildcardNameSubexprOne = assignPatternStorage->getPatternWildcard(DesignEntity::ASSIGN, assignPatternTokenObjectSubexprOne);
+	std::unordered_set<std::string> assignGetPatternWildcardNameSubexprTwo = assignPatternStorage->getPatternWildcard(DesignEntity::ASSIGN, assignPatternTokenObjectSubexprTwo);
+	std::unordered_set<std::string> assignGetPatternWildcardNameSubexprThree = assignPatternStorage->getPatternWildcard(DesignEntity::ASSIGN, assignPatternTokenObjectSubexprThree);
+	std::unordered_set<std::string> assignGetPatternWildcardNameWildcard = assignPatternStorage->getPatternWildcard(DesignEntity::ASSIGN, wildcardTokenObject);
 
 	std::unordered_set<std::string> expectedGetPatternWildcardNameNameOne = { assignLineNumOne, assignLineNumEight };
 	std::unordered_set<std::string> expectedGetPatternWildcardNameNameTwo = { assignLineNumSix, assignLineNumSeven };
@@ -130,8 +130,8 @@ TEST_CASE("If Pattern Storage Test") {
 	REQUIRE(ifGetPatternNameNameOne == expectedResultIfGetPatternOne);
 	REQUIRE(ifGetPatternNameNameTwo == expectedResultIfGetPatternTwo);
 
-	std::unordered_set<std::string> ifGetPatternWildcardOne = ifPatternStorage->getPatternWilcard(DesignEntity::IF, ifPatternTokenObjectFirstOne);
-	std::unordered_set<std::string> ifGetPatternWildcardTwo = ifPatternStorage->getPatternWilcard(DesignEntity::IF, ifPatternTokenObjectFirstTwo);
+	std::unordered_set<std::string> ifGetPatternWildcardOne = ifPatternStorage->getPatternWildcard(DesignEntity::IF, ifPatternTokenObjectFirstOne);
+	std::unordered_set<std::string> ifGetPatternWildcardTwo = ifPatternStorage->getPatternWildcard(DesignEntity::IF, ifPatternTokenObjectFirstTwo);
 
 	std::unordered_set<std::string> expectedGetPatternWildcard = { ifLineNumOne, ifLineNumTwo };
 
@@ -176,8 +176,8 @@ TEST_CASE("While Pattern Storage Test") {
 	REQUIRE(whileGetPatternNameNameOne == expectedResultWhileGetPatternOne);
 	REQUIRE(whileGetPatternNameNameTwo == expectedResultWhileGetPatternTwo);
 
-	std::unordered_set<std::string> whileGetPatternWildcardOne = whilePatternStorage->getPatternWilcard(DesignEntity::WHILE, whilePatternTokenObjectFirstOne);
-	std::unordered_set<std::string> whileGetPatternWildcardTwo = whilePatternStorage->getPatternWilcard(DesignEntity::WHILE, whilePatternTokenObjectFirstTwo);
+	std::unordered_set<std::string> whileGetPatternWildcardOne = whilePatternStorage->getPatternWildcard(DesignEntity::WHILE, whilePatternTokenObjectFirstOne);
+	std::unordered_set<std::string> whileGetPatternWildcardTwo = whilePatternStorage->getPatternWildcard(DesignEntity::WHILE, whilePatternTokenObjectFirstTwo);
 
 	std::unordered_set<std::string> expectedGetPatternWildcard = { whileLineNumOne, whileLineNumTwo };
 
