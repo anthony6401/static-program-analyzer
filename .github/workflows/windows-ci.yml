@@ -18,21 +18,40 @@ env:
   BUILD_TYPE: Release
 
 jobs:
-  build:
+  run-tests-on-windows:
     runs-on: windows-latest
-    timeout-minutes: 8
+    timeout-minutes: 10
     strategy:
       fail-fast: true
+      matrix:
+        build-type: [Release, Debug]
 
     steps:
       - uses: actions/checkout@v2
+
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8 #install the python needed
+
       - name: Build Project
-        shell: bash
         run: |
           cd Team17/Code17
           mkdir build
           cd build
           cmake -A Win32 ..
-          cmake --build . --target unit_testing --config Release
-          cmake --build . --target integration_testing --config Release
+          cmake --build . --target unit_testing --config ${{ matrix.build-type }}
+          cmake --build . --target integration_testing --config ${{ matrix.build-type }}
+          cmake --build . --target autotester --config ${{ matrix.build-type }}
           cd ../..
+
+      - name: Run Unit Tests
+        run: ./Team17/Code17/build/src/unit_testing/${{ matrix.build-type }}/unit_testing.exe
+
+      - name: Run Integration Tests
+        run: ./Team17/Code17/build/src/integration_testing/${{ matrix.build-type }}/integration_testing.exe
+
+      - name: Run Autotester Tests
+        run: |
+          cd Team17/Tests17
+          python3 regression_tester.py ../Code17/build/src/autotester/${{ matrix.build-type }}/autotester.exe
