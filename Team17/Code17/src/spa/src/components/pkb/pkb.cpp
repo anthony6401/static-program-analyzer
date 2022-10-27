@@ -71,6 +71,10 @@ std::unordered_set<std::string> PKB::getPattern(DesignEntity designEntity, Token
 	return patternManager->getPattern(designEntity, firstArgument, secondArgument);
 }
 
+std::unordered_set<std::string> PKB::getPatternWildcard(DesignEntity designEntity, TokenObject secondArgument) {
+	return patternManager->getPatternWildcard(designEntity, secondArgument);
+}
+
 std::vector<std::pair<std::string, std::string>> PKB::getPatternPair(DesignEntity designEntity, TokenObject secondArgument) {
 	return patternManager->getPatternPair(designEntity, secondArgument);
 }

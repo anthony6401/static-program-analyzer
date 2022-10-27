@@ -25,6 +25,8 @@ public:
 	//For Pattern
 	std::unordered_set<std::string> getPattern(DesignEntity designEntity, TokenObject firstArgument, TokenObject secondArgument);
 	std::unordered_set<std::string> getContainerPattern(DesignEntity designEntity, TokenObject firstArgument);
+	std::unordered_set<std::string> getPatternWildcard(DesignEntity designEntity, TokenObject secondArgument);
+	std::unordered_set<std::string> getPatternContainerWildcard(DesignEntity designEntity);
 	std::vector<std::pair<std::string, std::string>> getPatternPair(DesignEntity designEntity, TokenObject secondArgument);
 	std::vector<std::pair<std::string, std::string>> getContainerPatternPair(DesignEntity designEntity);
 

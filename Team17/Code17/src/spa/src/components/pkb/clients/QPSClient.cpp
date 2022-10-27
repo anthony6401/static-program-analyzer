@@ -30,6 +30,12 @@ std::unordered_set<std::string> QPSClient::getPattern(DesignEntity designEntity,
 std::unordered_set<std::string> QPSClient::getContainerPattern(DesignEntity designEntity, TokenObject firstArgument) {
 	return pkb->getPattern(designEntity, firstArgument, TokenObject());
 }
+std::unordered_set<std::string> QPSClient::getPatternWildcard(DesignEntity designEntity, TokenObject secondArgument) {
+	return pkb->getPatternWildcard(designEntity, secondArgument);
+}
+std::unordered_set<std::string> QPSClient::getPatternContainerWildcard(DesignEntity designEntity) {
+	return pkb->getPatternWildcard(designEntity, TokenObject());
+}
 std::vector<std::pair<std::string, std::string>> QPSClient::getPatternPair(DesignEntity designEntity, TokenObject secondArgument) {
 	return pkb->getPatternPair(designEntity, secondArgument);
 }
