@@ -338,15 +338,47 @@ TEST_CASE("QPS Client test") {
 
 	//Relationship
 	REQUIRE(qpsClient.getRelationship(RelationshipType::USES, stmtTokenObject1, variableTokenObject));
+	REQUIRE(qpsClient.getRelationship(RelationshipType::USES, stmtTokenObject1, wildcardTokenObject));
+
 	REQUIRE(qpsClient.getRelationship(RelationshipType::MODIFIES, stmtTokenObject1, variableTokenObject));
+	REQUIRE(qpsClient.getRelationship(RelationshipType::MODIFIES, stmtTokenObject1, wildcardTokenObject));
+
 	REQUIRE(qpsClient.getRelationship(RelationshipType::PARENT, stmtTokenObject6, stmtTokenObject5));
+	REQUIRE(qpsClient.getRelationship(RelationshipType::PARENT, wildcardTokenObject, stmtTokenObject5));
+	REQUIRE(qpsClient.getRelationship(RelationshipType::PARENT, stmtTokenObject6, wildcardTokenObject));
+	REQUIRE(qpsClient.getRelationship(RelationshipType::PARENT, wildcardTokenObject, wildcardTokenObject));
+
 	REQUIRE(qpsClient.getRelationship(RelationshipType::PARENT_T, stmtTokenObject6, stmtTokenObject5));
+	REQUIRE(qpsClient.getRelationship(RelationshipType::PARENT_T, wildcardTokenObject, stmtTokenObject5));
+	REQUIRE(qpsClient.getRelationship(RelationshipType::PARENT_T, stmtTokenObject6, wildcardTokenObject));
+	REQUIRE(qpsClient.getRelationship(RelationshipType::PARENT_T, wildcardTokenObject, wildcardTokenObject));
+
 	REQUIRE(qpsClient.getRelationship(RelationshipType::FOLLOWS, stmtTokenObject5, stmtTokenObject4));
+	REQUIRE(qpsClient.getRelationship(RelationshipType::FOLLOWS, wildcardTokenObject, stmtTokenObject4));
+	REQUIRE(qpsClient.getRelationship(RelationshipType::FOLLOWS, stmtTokenObject5, wildcardTokenObject));
+	REQUIRE(qpsClient.getRelationship(RelationshipType::FOLLOWS, wildcardTokenObject, wildcardTokenObject));
+
 	REQUIRE(qpsClient.getRelationship(RelationshipType::FOLLOWS_T, stmtTokenObject5, stmtTokenObject4));
+	REQUIRE(qpsClient.getRelationship(RelationshipType::FOLLOWS_T, wildcardTokenObject, stmtTokenObject4));
+	REQUIRE(qpsClient.getRelationship(RelationshipType::FOLLOWS_T, stmtTokenObject5, wildcardTokenObject));
+	REQUIRE(qpsClient.getRelationship(RelationshipType::FOLLOWS_T, wildcardTokenObject, wildcardTokenObject));
+
 	REQUIRE(qpsClient.getRelationship(RelationshipType::NEXT, stmtTokenObject1, stmtTokenObject2));
+	REQUIRE(qpsClient.getRelationship(RelationshipType::NEXT, wildcardTokenObject, stmtTokenObject2));
+	REQUIRE(qpsClient.getRelationship(RelationshipType::NEXT, stmtTokenObject1, wildcardTokenObject));
+	REQUIRE(qpsClient.getRelationship(RelationshipType::NEXT, wildcardTokenObject, wildcardTokenObject));
+
 	REQUIRE(qpsClient.getRelationship(RelationshipType::NEXT_T, stmtTokenObject1, stmtTokenObject2));
+
 	REQUIRE(qpsClient.getRelationship(RelationshipType::CALLS, procedureTokenObject, procedureTokenObjectTwo));
+	REQUIRE(qpsClient.getRelationship(RelationshipType::CALLS, wildcardTokenObject, procedureTokenObjectTwo));
+	REQUIRE(qpsClient.getRelationship(RelationshipType::CALLS, procedureTokenObject, wildcardTokenObject));
+	REQUIRE(qpsClient.getRelationship(RelationshipType::CALLS, wildcardTokenObject, wildcardTokenObject));
+
 	REQUIRE(qpsClient.getRelationship(RelationshipType::CALLS_T, procedureTokenObject, procedureTokenObjectTwo));
+	REQUIRE(qpsClient.getRelationship(RelationshipType::CALLS_T, wildcardTokenObject, procedureTokenObjectTwo));
+	REQUIRE(qpsClient.getRelationship(RelationshipType::CALLS_T, procedureTokenObject, wildcardTokenObject));
+	REQUIRE(qpsClient.getRelationship(RelationshipType::CALLS_T, wildcardTokenObject, wildcardTokenObject));
 
 	std::unordered_set<std::string> usesExpectedResult({ variable_value_one });
 	std::unordered_set<std::string> modifiesExpectedResult({ variable_value_one });
@@ -392,6 +424,42 @@ TEST_CASE("QPS Client test") {
 	REQUIRE(qpsClient.getRelationshipBySecond(RelationshipType::NEXT_T, DesignEntity::CALL, stmtTokenObject4) == nextTExpectedResultTwo);
 	REQUIRE(qpsClient.getRelationshipBySecond(RelationshipType::CALLS, DesignEntity::PROCEDURE, procedureTokenObjectThree) == callsExpectedResultTwo);
 	REQUIRE(qpsClient.getRelationshipBySecond(RelationshipType::CALLS_T, DesignEntity::PROCEDURE, procedureTokenObjectThree) == callsTExpectedResultTwo);
+
+	std::unordered_set<std::string> parentFirstWildcardExpectedResult({ read_value_one });
+	std::unordered_set<std::string> parentTFirstWildcardExpectedResult({ read_value_one });
+	std::unordered_set<std::string> followsFirstWildcardExpectedResult({ print_value_one });
+	std::unordered_set<std::string> followsTFirstWildcardExpectedResult({ print_value_one });
+	std::unordered_set<std::string> nextFirstWildcardExpectedResult({ while_value_one });
+	std::unordered_set<std::string> callsFirstWildcardExpectedResult{ procedure_value_two, procedure_value_three };
+	std::unordered_set<std::string> callsTFirstWildcardExpectedResult{ procedure_value_two, procedure_value_three };
+
+	REQUIRE(qpsClient.getRelationshipWithFirstWildcard(RelationshipType::PARENT, DesignEntity::READ) == parentFirstWildcardExpectedResult);
+	REQUIRE(qpsClient.getRelationshipWithFirstWildcard(RelationshipType::PARENT_T, DesignEntity::READ) == parentTFirstWildcardExpectedResult);
+	REQUIRE(qpsClient.getRelationshipWithFirstWildcard(RelationshipType::FOLLOWS, DesignEntity::PRINT) == followsFirstWildcardExpectedResult);
+	REQUIRE(qpsClient.getRelationshipWithFirstWildcard(RelationshipType::FOLLOWS_T, DesignEntity::PRINT) == followsTFirstWildcardExpectedResult);
+	REQUIRE(qpsClient.getRelationshipWithFirstWildcard(RelationshipType::NEXT, DesignEntity::WHILE) == nextFirstWildcardExpectedResult);
+	REQUIRE(qpsClient.getRelationshipWithFirstWildcard(RelationshipType::CALLS, DesignEntity::PROCEDURE) == callsFirstWildcardExpectedResult);
+	REQUIRE(qpsClient.getRelationshipWithFirstWildcard(RelationshipType::CALLS_T, DesignEntity::PROCEDURE) == callsTFirstWildcardExpectedResult);
+
+	std::unordered_set<std::string> usesSecondWildcardExpectedResult({ assign_value_one });
+	std::unordered_set<std::string> modifiesSecondWildcardExpectedResult({ assign_value_one });
+	std::unordered_set<std::string> parentSecondWildcardExpectedResult({ while_value_one });
+	std::unordered_set<std::string> parentTSecondWildcardExpectedResult({ while_value_one });
+	std::unordered_set<std::string> followsSecondWildcardExpectedResult({ read_value_one });
+	std::unordered_set<std::string> followsTSecondWildcardExpectedResult({ read_value_one });
+	std::unordered_set<std::string> nextSecondWildcardExpectedResult({ if_value_one });
+	std::unordered_set<std::string> callsSecondWildcardExpectedResult{ procedure_value_one, procedure_value_two };
+	std::unordered_set<std::string> callsTSecondWildcardExpectedResult{ procedure_value_one, procedure_value_two };
+
+	REQUIRE(qpsClient.getRelationshipWithSecondWildcard(RelationshipType::USES, DesignEntity::ASSIGN) == usesSecondWildcardExpectedResult);
+	REQUIRE(qpsClient.getRelationshipWithSecondWildcard(RelationshipType::MODIFIES, DesignEntity::ASSIGN) == modifiesSecondWildcardExpectedResult);
+	REQUIRE(qpsClient.getRelationshipWithSecondWildcard(RelationshipType::PARENT, DesignEntity::WHILE) == parentSecondWildcardExpectedResult);
+	REQUIRE(qpsClient.getRelationshipWithSecondWildcard(RelationshipType::PARENT_T, DesignEntity::WHILE) == parentTSecondWildcardExpectedResult);
+	REQUIRE(qpsClient.getRelationshipWithSecondWildcard(RelationshipType::FOLLOWS, DesignEntity::READ) == followsSecondWildcardExpectedResult);
+	REQUIRE(qpsClient.getRelationshipWithSecondWildcard(RelationshipType::FOLLOWS_T, DesignEntity::READ) == followsTSecondWildcardExpectedResult);
+	REQUIRE(qpsClient.getRelationshipWithSecondWildcard(RelationshipType::NEXT, DesignEntity::IF) == nextSecondWildcardExpectedResult);
+	REQUIRE(qpsClient.getRelationshipWithSecondWildcard(RelationshipType::CALLS, DesignEntity::PROCEDURE) == callsSecondWildcardExpectedResult);
+	REQUIRE(qpsClient.getRelationshipWithSecondWildcard(RelationshipType::CALLS_T, DesignEntity::PROCEDURE) == callsTSecondWildcardExpectedResult);
 
 
 	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultUsesAll{ { assign_value_one, std::unordered_set<std::string>({variable_value_one}) } };

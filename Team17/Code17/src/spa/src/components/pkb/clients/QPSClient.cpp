@@ -20,6 +20,12 @@ std::unordered_set<std::string>QPSClient::getRelationshipByFirst(RelationshipTyp
 std::unordered_set<std::string> QPSClient::getRelationshipBySecond(RelationshipType relType, DesignEntity returnType, TokenObject secondArgument) {
 	return pkb->getRelationshipBySecond(relType, returnType, secondArgument);
 }
+std::unordered_set<std::string> QPSClient::getRelationshipWithFirstWildcard(RelationshipType relType, DesignEntity returnType) {
+	return pkb->getRelationshipWithFirstWildcard(relType, returnType);
+}
+std::unordered_set<std::string> QPSClient::getRelationshipWithSecondWildcard(RelationshipType relType, DesignEntity returnType) {
+	return pkb->getRelationshipWithSecondWildcard(relType, returnType);
+}
 std::unordered_map<std::string, std::unordered_set<std::string>> QPSClient::getAllRelationship(RelationshipType relType, DesignEntity returnType1, DesignEntity returntype2) {
 	return pkb->getAllRelationship(relType, returnType1, returntype2);
 }
