@@ -34,6 +34,19 @@ std::unordered_set<std::string> IfPatternStorage::getPattern(DesignEntity design
 	return result;
 }
 
+std::unordered_set<std::string> IfPatternStorage::getPatternWilcard(DesignEntity designEntity, TokenObject secondArgument) {
+	std::unordered_set<std::string> result;
+
+	if (designEntity == DesignEntity::IF) {
+		for (auto it = this->ifPatternStorage.begin(); it != this->ifPatternStorage.end(); it++) {
+			std::string variable = it->first;
+			std::unordered_set<std::string>* set = &it->second;
+			result.insert(set->begin(), set->end());
+		}
+	}
+	return result;
+}
+
 // This method is used to answer pattern query with SYNONYM and WILDCARD TokenType for the firstArgument i.e. if(v,_,_), if(_,_,_)
 std::vector<std::pair<std::string, std::string>> IfPatternStorage::getPatternPair(DesignEntity designEntity, TokenObject secondArgument) {
 	std::vector<std::pair<std::string, std::string>> result;
@@ -41,7 +54,7 @@ std::vector<std::pair<std::string, std::string>> IfPatternStorage::getPatternPai
 	if (designEntity == DesignEntity::IF) {
 		for (auto it = this->ifPatternStorage.begin(); it != this->ifPatternStorage.end(); it++) {
 			std::string variable = it->first;
-			std::unordered_set<std::string>* set = &this->ifPatternStorage.find(variable)->second;
+			std::unordered_set<std::string>* set = &it->second;
 			PatternUtils::populatePairFromSet(set, variable, &result);
 		}
 	}
