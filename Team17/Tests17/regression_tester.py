@@ -3,6 +3,8 @@ import sys
 import xml.etree.ElementTree as ET
 import subprocess
 
+local_out_dir = "../Code17/tests/out.xml"
+
 
 def get_source_tests():
     source_test_paths = []
@@ -31,7 +33,7 @@ def get_tests_paths_pairs():
 
 
 def get_results():
-    tree = ET.parse("../Code17/tests/out.xml")
+    tree = ET.parse("out.xml")
     queries = tree.getroot()[1]
     queries_count = 0
     correct_id = []
@@ -66,7 +68,7 @@ def run_autotester(autotester_path, test_path_pairs):
     run_count = 0
     for source_path, query_path in test_path_pairs:
         run_count += 1
-        subprocess.run([autotester_path, source_path, query_path, "../Code17/tests/out.xml"], stdout=subprocess.DEVNULL)
+        subprocess.run([autotester_path, source_path, query_path, "out.xml"], stdout=subprocess.DEVNULL)
         print("---------- AUTOTESTER RUNNING COMPLETED ------------")
         try:
             queries_count, correct_id, wrong_id, timeout_id = get_results()
