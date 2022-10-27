@@ -184,45 +184,87 @@ TEST_CASE("Next* queries SP") {
 }
 
 TEST_CASE("Pattern queries SP") {
-    SECTION("Pattern with first argument as name in quotes and second argument as expression with operators") {
+    SECTION("Assign Pattern with first argument as name in quotes and second argument as expression with operators") {
         // a("x", "x+1")
         std::unordered_set<std::string> testResults = pkbSP_m2->getPattern(DesignEntity::ASSIGN, TokenObject(TokenType::NAME_WITH_QUOTATION, "x"), TokenObject(TokenType::EXPRESSION, "x+1"));
         std::unordered_set<std::string> expectedResults = {"11"};
         REQUIRE(testResults == expectedResults);
     }
 
-    SECTION("Pattern with first argument as name in quotes and second argument as subexpression with operators") {
+    SECTION("Assign Pattern with first argument as name in quotes and second argument as subexpression with operators") {
         // a("x", _"x*y"_)
         std::unordered_set<std::string> testResults = pkbSP_m2->getPattern(DesignEntity::ASSIGN, TokenObject(TokenType::NAME_WITH_QUOTATION, "x"), TokenObject(TokenType::SUBEXPRESSION, "x*y"));
         std::unordered_set<std::string> expectedResults = { "15" };
         REQUIRE(testResults == expectedResults);
     }
 
-    SECTION("Pattern with first argument as synonym and second argument as expression with operators") {
+    SECTION("Assign Pattern with first argument as synonym and second argument as expression with operators") {
         // a(v, "x+1")
         std::vector<std::pair<std::string, std::string>> testResults = pkbSP_m2->getPatternPair(DesignEntity::ASSIGN, TokenObject(TokenType::EXPRESSION, "x+1"));
         std::vector<std::pair<std::string, std::string>> expectedResults = { {"11", "x"}};
         REQUIRE(testResults == expectedResults);
     }
 
-    SECTION("Pattern with first argument as synonym and second argument as subexpression with operators") {
+    SECTION("Assign Pattern with first argument as synonym and second argument as subexpression with operators") {
         // a(v, _"x*y"_)
         std::vector<std::pair<std::string, std::string>> testResults = pkbSP_m2->getPatternPair(DesignEntity::ASSIGN, TokenObject(TokenType::SUBEXPRESSION, "x*y"));
         std::vector<std::pair<std::string, std::string>> expectedResults = { {"15", "x"}};
         REQUIRE(testResults == expectedResults);
     }
 
-    SECTION("Pattern with synonym and exact expression") {
+    SECTION("Assign Pattern with synonym and exact expression") {
         // a(_, "x+1")
         std::unordered_set<std::string> testResults = pkbSP_m2->getPatternWildcard(DesignEntity::ASSIGN, TokenObject(TokenType::EXPRESSION, "x+1"));
         std::unordered_set<std::string> expectedResults = { "11" };
         REQUIRE(testResults == expectedResults);
     }
 
-    SECTION("Pattern with synonym and exact expression") {
+    SECTION("Assign Pattern with synonym and exact expression") {
         // a(_, _"x*y"_)
         std::unordered_set<std::string> testResults = pkbSP_m2->getPatternWildcard(DesignEntity::ASSIGN, TokenObject(TokenType::SUBEXPRESSION, "x*y"));
         std::unordered_set<std::string> expectedResults = { "15" };
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("While Pattern with exact expression") {
+        // w("i", _)
+        std::unordered_set<std::string> testResults = pkbSP_m2->getPattern(DesignEntity::WHILE, TokenObject(TokenType::EXPRESSION, "i"), TokenObject());
+        std::unordered_set<std::string> expectedResults = { "6" };
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("While Pattern with wildcard") {
+        // w(_, _)
+        std::unordered_set<std::string> testResults = pkbSP_m2->getPatternWildcard(DesignEntity::WHILE, TokenObject());
+        std::unordered_set<std::string> expectedResults = { "6" };
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("While Pattern with exact expression") {
+        // w(v, _)
+        std::vector<std::pair<std::string, std::string>> testResults = pkbSP_m2->getPatternPair(DesignEntity::WHILE, TokenObject());
+        std::vector<std::pair<std::string, std::string>> expectedResults = { {"6", "i"} };
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("If Pattern with exact expression") {
+        // ifs("i", _)
+        std::unordered_set<std::string> testResults = pkbSP_m2->getPattern(DesignEntity::IF, TokenObject(TokenType::EXPRESSION, "x"), TokenObject());
+        std::unordered_set<std::string> expectedResults = { "10" };
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("If Pattern with wildcard") {
+        // ifs(_, _)
+        std::unordered_set<std::string> testResults = pkbSP_m2->getPatternWildcard(DesignEntity::IF, TokenObject());
+        std::unordered_set<std::string> expectedResults = { "10" };
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("If Pattern with exact expression") {
+        // ifs(v, _)
+        std::vector<std::pair<std::string, std::string>> testResults = pkbSP_m2->getPatternPair(DesignEntity::IF, TokenObject());
+        std::vector<std::pair<std::string, std::string>> expectedResults = { {"10", "x"} };
         REQUIRE(testResults == expectedResults);
     }
 }
