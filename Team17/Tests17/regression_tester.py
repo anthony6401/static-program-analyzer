@@ -34,7 +34,7 @@ def get_tests_paths_pairs():
 
 def run_autotester(autotester_path, test_path_pairs):
     for source_path, query_path in test_path_pairs:
-        subprocess.run([autotester_path, source_path, query_path, "out.xml"], stdout=subprocess.DEVNULL)
+        subprocess.run([autotester_path, source_path, query_path, "../Code17/tests/out.xml"], stdout=subprocess.DEVNULL)
 
 
 if __name__ == "__main__":
