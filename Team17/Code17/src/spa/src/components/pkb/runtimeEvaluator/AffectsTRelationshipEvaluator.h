@@ -19,6 +19,8 @@ public:
 	std::unordered_set<std::string> getRuntimeRelationshipByFirst(RelationshipType relType, TokenObject firstArgument, std::unordered_set<std::string>& filter);
 	std::unordered_set<std::string> getRuntimeRelationshipBySecond(RelationshipType relType, TokenObject secondArgument, std::unordered_set<std::string>& filter);
 	std::unordered_map<std::string, std::unordered_set<std::string>> getAllRuntimeRelationship(RelationshipType relType, std::unordered_set<std::string>& filter1, std::unordered_set<std::string>& filter2);
+	std::unordered_set<std::string> getRuntimeRelationshipWithFirstWildcard(RelationshipType relType, std::unordered_set<std::string>& filter1, std::unordered_set<std::string>& filter2);
+	std::unordered_set<std::string> getRuntimeRelationshipWithSecondWildcard(RelationshipType relType, std::unordered_set<std::string>& filter1, std::unordered_set<std::string>& filter2);
 private:
 	bool DFSAffectsTForward(std::string curr, std::string target, std::string var, std::unordered_set<std::string>& visited);
 	void DFSAffectsTForwardWithSynonym(std::string curr, std::string var, std::unordered_set<std::string>& visited,
