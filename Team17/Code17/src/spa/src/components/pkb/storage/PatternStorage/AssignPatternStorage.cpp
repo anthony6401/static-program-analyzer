@@ -69,6 +69,57 @@ std::unordered_set<std::string> AssignPatternStorage::handleWildcardForSet(std::
 	return result;
 }
 
+std::unordered_set<std::string> AssignPatternStorage::getPatternWildcardController(TokenObject token) {
+	std::string targetString = PatternUtils::convertInfixToPostfix(token.getValue());
+	std::unordered_set<std::string> result;
+	for (auto it = this->assignPatternStorage.begin(); it != this->assignPatternStorage.end(); it++) {
+		if ((token.getTokenType() == qps::TokenType::EXPRESSION) || (token.getTokenType() == qps::TokenType::NAME_WITH_QUOTATION)) {
+			handleExpressionAndNameForWildcard(targetString, it, result);
+		}
+		else if (token.getTokenType() == qps::TokenType::SUBEXPRESSION) {
+			handleSubexpressionForWildcard(targetString, it, result);
+		}
+		else if (token.getTokenType() == qps::TokenType::WILDCARD) {
+			handleWildcardForWildcard(it, result);
+		}
+	}
+
+	return result;
+}
+
+void AssignPatternStorage::handleExpressionAndNameForWildcard(std::string targetString, 
+												std::unordered_map<std::string, std::unordered_set<std::pair<std::string, std::string>, pair_hash>>::iterator& it, 
+												std::unordered_set<std::string>& result) {
+	std::string variable = it->first;
+	std::unordered_set<std::pair<std::string, std::string>, pair_hash>* set = &it->second;
+	for (const auto& ele : *set) {
+		if (ele.second == targetString) {
+			result.insert(ele.first);
+		}
+	}
+}
+
+void AssignPatternStorage::handleSubexpressionForWildcard(std::string targetString, 
+												std::unordered_map<std::string, std::unordered_set<std::pair<std::string, std::string>, pair_hash>>::iterator& it, 
+												std::unordered_set<std::string>& result) {
+	std::string variable = it->first;
+	std::unordered_set<std::pair<std::string, std::string>, pair_hash>* set = &it->second;
+	for (const auto& ele : *set) {
+		if (PatternUtils::isSubExpression(targetString, ele.second)) {
+			result.insert(ele.first);
+		}
+	}
+}
+
+void AssignPatternStorage::handleWildcardForWildcard(std::unordered_map<std::string, std::unordered_set<std::pair<std::string, std::string>, pair_hash>>::iterator& it, 
+											std::unordered_set<std::string>& result) {
+	std::string variable = it->first;
+	std::unordered_set<std::pair<std::string, std::string>, pair_hash>* set = &it->second;
+	for (const auto& ele : *set) {
+		result.insert(ele.first);
+	}
+}
+
 std::vector<std::pair<std::string, std::string>> AssignPatternStorage::getPatternPairsController(TokenObject token) {
 	std::string targetString = PatternUtils::convertInfixToPostfix(token.getValue());
 	std::vector<std::pair<std::string, std::string>> result;
@@ -130,6 +181,13 @@ std::unordered_set<std::string> AssignPatternStorage::getPattern(DesignEntity de
 		}
 	}
 
+	return std::unordered_set<std::string>();
+}
+
+std::unordered_set<std::string> AssignPatternStorage::getPatternWilcard(DesignEntity designEntity, TokenObject secondArgument) {
+	if (designEntity == DesignEntity::ASSIGN) {
+		return getPatternWildcardController(secondArgument);
+	}
 	return std::unordered_set<std::string>();
 }
 

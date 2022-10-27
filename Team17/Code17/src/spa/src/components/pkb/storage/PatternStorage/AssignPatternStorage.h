@@ -8,6 +8,7 @@ public:
 	AssignPatternStorage();
 	bool storePattern(kb::Pattern* pattern);
 	std::unordered_set<std::string> getPattern(DesignEntity designEntity, TokenObject firstArgument, TokenObject secondArgument);
+	std::unordered_set<std::string> getPatternWilcard(DesignEntity designEntity, TokenObject secondArgument);
 	std::vector<std::pair<std::string, std::string>> getPatternPair(DesignEntity designEntity, TokenObject secondArgument);
 
 private:
@@ -15,6 +16,15 @@ private:
 	std::unordered_set<std::string> handleExpressionAndNameForSet(std::string targetString, std::unordered_set<std::pair<std::string, std::string>, pair_hash>* set);
 	std::unordered_set<std::string> handleSubexpressionForSet(std::string targetString, std::unordered_set<std::pair<std::string, std::string>, pair_hash>* set);
 	std::unordered_set<std::string> handleWildcardForSet(std::unordered_set<std::pair<std::string, std::string>, pair_hash>* set);
+	std::unordered_set<std::string> getPatternWildcardController(TokenObject token);
+	void handleExpressionAndNameForWildcard(std::string targetString,
+										std::unordered_map<std::string, std::unordered_set<std::pair<std::string, std::string>, pair_hash>>::iterator& it,
+										std::unordered_set<std::string>& result);
+	void handleSubexpressionForWildcard(std::string targetString,
+									std::unordered_map<std::string, std::unordered_set<std::pair<std::string, std::string>, pair_hash>>::iterator& it,
+									std::unordered_set<std::string>& result);
+	void handleWildcardForWildcard(std::unordered_map<std::string, std::unordered_set<std::pair<std::string, std::string>, pair_hash>>::iterator& it,
+									std::unordered_set<std::string>& result);
 	std::vector<std::pair<std::string, std::string>> getPatternPairsController(TokenObject token);
 	void handleExpressionAndNameForVector(std::string targetString,
 										std::unordered_map<std::string, std::unordered_set<std::pair<std::string, std::string>, pair_hash>>::iterator& it,
