@@ -211,6 +211,20 @@ TEST_CASE("Pattern queries SP") {
         std::vector<std::pair<std::string, std::string>> expectedResults = { {"15", "x"}};
         REQUIRE(testResults == expectedResults);
     }
+
+    SECTION("Pattern with synonym and exact expression") {
+        // a(_, "x+1")
+        std::unordered_set<std::string> testResults = pkbSP_m2->getPatternWildcard(DesignEntity::ASSIGN, TokenObject(TokenType::EXPRESSION, "x+1"));
+        std::unordered_set<std::string> expectedResults = { "11" };
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Pattern with synonym and exact expression") {
+        // a(_, _"x*y"_)
+        std::unordered_set<std::string> testResults = pkbSP_m2->getPatternWildcard(DesignEntity::ASSIGN, TokenObject(TokenType::SUBEXPRESSION, "x*y"));
+        std::unordered_set<std::string> expectedResults = { "15" };
+        REQUIRE(testResults == expectedResults);
+    }
 }
 
 TEST_CASE("Statement to value name mapping queries SP") {

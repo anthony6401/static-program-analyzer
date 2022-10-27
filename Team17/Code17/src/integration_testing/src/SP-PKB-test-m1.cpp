@@ -289,17 +289,49 @@ TEST_CASE("Relationships and patterns for SP") {
     }
 
 
-    SECTION("Single synonym Clause - Pattern") {
-        // a("count, "0")
+    SECTION("Pattern with exact expression and exact expression") {
+        // a("count", "0")
         std::unordered_set<std::string> testResults = pkbSP->getPattern(DesignEntity::ASSIGN, TokenObject(TokenType::NAME_WITH_QUOTATION, "count"), TokenObject(TokenType::EXPRESSION, "0"));
         std::unordered_set<std::string> expectedResults = { "1" };
         REQUIRE(testResults == expectedResults);
     }
 
-    SECTION("Multi Clause - One clause related to Select") {
+    SECTION("Pattern with synonym and exact expression") {
         // a(v, "1")
         std::vector<std::pair<std::string, std::string>> testResults = pkbSP->getPatternPair(DesignEntity::ASSIGN, TokenObject(TokenType::EXPRESSION, "1"));
         std::vector<std::pair<std::string, std::string>> expectedResults = { {"9", "flag" } };
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Pattern with synonym and exact expression") {
+        // a(v, _)
+        std::vector<std::pair<std::string, std::string>> testResults = pkbSP->getPatternPair(DesignEntity::ASSIGN, TokenObject(TokenType::WILDCARD, ""));
+        std::vector<std::pair<std::string, std::string>> expectedResults = { {"1", "count"}, {"2", "cenX"}, {"3", "cenY"}, {"5", "count"}, 
+                                                                            {"6", "cenX"}, {"7", "cenY"}, {"9", "flag"}, {"10", "cenX"}, 
+                                                                            {"11", "cenY"}, {"12", "normSq"}};
+        std::sort(testResults.begin(), testResults.end());
+        std::sort(expectedResults.begin(), expectedResults.end());
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Pattern with wildcard and exact expression") {
+        // a(_, "1")
+        std::unordered_set<std::string> testResults = pkbSP->getPatternWildcard(DesignEntity::ASSIGN, TokenObject(TokenType::EXPRESSION, "1"));
+        std::unordered_set<std::string> expectedResults = { "9" };
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Pattern with wildcard and subexpression") {
+        // a(_, _"cenX"_)
+        std::unordered_set<std::string> testResults = pkbSP->getPatternWildcard(DesignEntity::ASSIGN, TokenObject(TokenType::SUBEXPRESSION, "cenX"));
+        std::unordered_set<std::string> expectedResults = {"6", "10", "12"};
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Pattern with wildcard and wildcard") {
+        // a(_, _)
+        std::unordered_set<std::string> testResults = pkbSP->getPatternWildcard(DesignEntity::ASSIGN, TokenObject(TokenType::WILDCARD, ""));
+        std::unordered_set<std::string> expectedResults = { "1", "2", "3", "5", "6", "7", "9", "10", "11", "12" };
         REQUIRE(testResults == expectedResults);
     }
 }
