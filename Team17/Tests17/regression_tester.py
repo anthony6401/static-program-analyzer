@@ -7,8 +7,6 @@ import subprocess
 def get_source_tests():
     source_test_paths = []
     for subdir_path, subdir_names, files in os.walk('.'):
-        if subdir_path.startswith("./ignore"):
-            continue
         for file in files:
             if file.endswith('source.txt'):
                 source_name = file[:-10]
@@ -72,6 +70,9 @@ def run_autotester(autotester_path, test_path_pairs):
         print("---------- AUTOTESTER RUNNING COMPLETED ------------")
         try:
             queries_count, correct_id, wrong_id, timeout_id = get_results()
+            if len(wrong_id) > 0 or len(timeout_id) > 0:
+                print("Wrong cases detected. Exiting...")
+                sys.exit(1)
         except ET.ParseError:
             raise RuntimeError("Unable to parse out.xml")
 
@@ -97,9 +98,10 @@ if __name__ == "__main__":
 
         print(f"Correct test cases: {total_correct_count}/{total_count}.")
         print(f"Wrong test cases: {total_wrong_count + total_timeout_count}/{total_count}.")
+
     except Exception as e:
         print(e)
-
+        sys.exit(1)
 
 
 
