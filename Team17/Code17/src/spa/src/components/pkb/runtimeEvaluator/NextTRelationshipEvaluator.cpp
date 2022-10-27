@@ -53,6 +53,7 @@ void NextTRelationshipEvaluator::DFSNextTForwardWithSynonym(std::string curr, st
 	}
 
 	visited.erase(curr);
+	return;
 
 }
 
@@ -82,6 +83,7 @@ void NextTRelationshipEvaluator::DFSNextTBackwardWithSynonym(std::string curr, s
 	}
 
 	visited.erase(curr);
+	return;
 }
 
 // DFS search to answer Next* queries with 2 synonyms
