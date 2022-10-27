@@ -2,11 +2,11 @@
 #include <vector>
 #include <string>
 #include <regex>
-#include "../SimpleToken.h"
+#include "../../../models/Entity/Entity.h"
 
 struct SimpleHash {
-    std::size_t operator()(const Entity _entity) const {
-        std::size_t h1 = std::hash<std::string>()(_entity.getValue());
+    std::size_t operator()(const Entity* _entity) const {
+        std::size_t h1 = std::hash<std::string>()(_entity->getValue());
         return h1;
     }
 };

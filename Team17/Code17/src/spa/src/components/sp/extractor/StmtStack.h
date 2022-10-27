@@ -3,7 +3,8 @@
 #include <unordered_set>
 #include <vector>
 #include <map>
-#include "../SimpleToken.h"
+#include "../../../models/Entity/Entity.h"
+#include "Extractor.h"
 #include "../utils/SpUtils.h"
 
 class StmtStack {
