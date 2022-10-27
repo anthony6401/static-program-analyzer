@@ -24,7 +24,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        build-type: [Release, Debug]
+        build-type: Release
 
     steps:
       - uses: actions/checkout@v2
@@ -40,18 +40,18 @@ jobs:
           mkdir build
           cd build
           cmake -A Win32 ..
-          cmake --build . --target unit_testing --config ${{ matrix.build-type }}
-          cmake --build . --target integration_testing --config ${{ matrix.build-type }}
-          cmake --build . --target autotester --config ${{ matrix.build-type }}
+          cmake --build . --target unit_testing --config Release
+          cmake --build . --target integration_testing --config Release
+          cmake --build . --target autotester --config Release
           cd ../..
 
       - name: Run Unit Tests
-        run: ./Team17/Code17/build/src/unit_testing/${{ matrix.build-type }}/unit_testing.exe
+        run: ./Team17/Code17/build/src/unit_testing/unit_testing.exe
 
       - name: Run Integration Tests
-        run: ./Team17/Code17/build/src/integration_testing/${{ matrix.build-type }}/integration_testing.exe
+        run: ./Team17/Code17/build/src/integration_testing/integration_testing.exe
 
       - name: Run Autotester Tests
         run: |
           cd Team17/Tests17
-          python3 regression_tester.py ../Code17/build/src/autotester/${{ matrix.build-type }}/autotester.exe
+          python3 regression_tester.py ../Code17/build/src/autotester/autotester.exe
