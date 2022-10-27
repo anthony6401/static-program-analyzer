@@ -1,4 +1,7 @@
 import os
+import sys
+import xml.etree.ElementTree as ET
+import subprocess
 
 
 def get_source_tests():
@@ -29,6 +32,17 @@ def get_tests_paths_pairs():
     return test_pairs
 
 
+def run_autotester(autotester_path, test_path_pairs):
+    for source_path, query_path in test_path_pairs:
+        subprocess.run([autotester_path, source_path, query_path, "out.xml"], stdout=subprocess.DEVNULL)
+
+
 if __name__ == "__main__":
-    for pairs in get_tests_paths_pairs():
-        print(pairs)
+    try:
+        test_path_pairs = get_tests_paths_pairs()
+        run_autotester(sys.argv[1], test_path_pairs)
+        print("---------- AUTOTESTER RUNNING COMPLETED ------------")
+    except Exception as e:
+        print(e)
+        sys.exit(1)
+
