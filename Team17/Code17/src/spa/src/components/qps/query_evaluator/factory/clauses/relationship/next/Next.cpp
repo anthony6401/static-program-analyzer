@@ -70,7 +70,7 @@ ResultTable Next::evaluateSynonymSynonym(RelationshipType relationshipType) {
     std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(relationshipType, leftType, rightType);
 
     if (leftValue == rightValue && relationshipType == RelationshipType::NEXT_T) {
-        std::unordered_set<std::string> leftAndRightEqualResults = ClauseUtils::processMapToSetFromFirst(results);
+        std::unordered_set<std::string> leftAndRightEqualResults = ClauseUtils::processMapToSetByMapIntersection(results);
         return {leftValue, leftAndRightEqualResults};
     }
 
