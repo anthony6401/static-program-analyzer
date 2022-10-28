@@ -160,6 +160,45 @@ void AffectsTRelationshipEvaluator::DFSAffectsTWithTwoSynonyms(std::unordered_se
 	}
 }
 
+std::unordered_set<std::string> AffectsTRelationshipEvaluator::DFSAffectsTWildcardForward(std::unordered_set<std::string>& filter1,
+	std::unordered_set<std::string>& filter2, std::unordered_set<std::string>& result) {
+	std::unordered_set<std::string> ans;
+	for (const auto& ele : filter1) {
+		std::unordered_set<std::string> visited;
+		std::unordered_set<std::string> result;
+		std::string start = ele;
+		std::unordered_set<std::string> modifiesSet = modifiesStorage->getModifiesForAssign(start);
+
+		if (modifiesSet.size() == 0) {
+			continue;
+		}
+
+		std::string var = *(modifiesSet.begin());
+		DFSAffectsTForwardWithSynonym(start, var, visited, result, filter2);
+		if (result.size() != 0) {
+			ans.insert(start);
+		}
+	}
+	return ans;
+}
+
+std::unordered_set<std::string> AffectsTRelationshipEvaluator::DFSAffectsTWildcardBackward(std::unordered_set<std::string>& filter1,
+	std::unordered_set<std::string>& filter2, std::unordered_set<std::string>& result) {
+	std::unordered_set<std::string> ans;
+	for (const auto& ele : filter2) {
+		std::unordered_set<std::string> visited;
+		std::unordered_set<std::string> result;
+		std::string start = ele;
+		std::unordered_set<std::string> usesSet = usesStorage->getUsesForAssign(start);
+
+		DFSAffectsTBackwardWithSynonym(start, usesSet, visited, result, filter2);
+		if (result.size() != 0) {
+			ans.insert(start);
+		}
+	}
+	return ans;
+}
+
 bool AffectsTRelationshipEvaluator::getRuntimeRelationship(RelationshipType relType, TokenObject firstArgument, TokenObject secondArgument) {
 	if (relType == RelationshipType::AFFECTS_T) {
 		std::unordered_set<std::string> visited;
@@ -210,6 +249,21 @@ std::unordered_map<std::string, std::unordered_set<std::string>> AffectsTRelatio
 		return result_map;
 	}
 	return std::unordered_map<std::string, std::unordered_set<std::string>>();
+}
+
+std::unordered_set<std::string> AffectsTRelationshipEvaluator::getRuntimeRelationshipWithFirstWildcard(RelationshipType relType, std::unordered_set<std::string>& filter1, std::unordered_set<std::string>& filter2) {
+	if (relType == RelationshipType::AFFECTS_T) {
+		std::unordered_set<std::string> result;
+		return DFSAffectsTWildcardBackward(filter1, filter2, result);
+	}
+	return std::unordered_set<std::string>();
+}
+std::unordered_set<std::string> AffectsTRelationshipEvaluator::getRuntimeRelationshipWithSecondWildcard(RelationshipType relType, std::unordered_set<std::string>& filter1, std::unordered_set<std::string>& filter2) {
+	if (relType == RelationshipType::AFFECTS_T) {
+		std::unordered_set<std::string> result;
+		return DFSAffectsTWildcardForward(filter1, filter2, result);
+	}
+	return std::unordered_set<std::string>();
 }
 
 void AffectsTRelationshipEvaluator::startNewDFSPath(std::unordered_set<std::string>& visited, std::string neighbour, std::unordered_set<std::string>& result, std::unordered_set<std::string>& filter) {
