@@ -8,7 +8,6 @@ public:
     IfStack(Entity* parent, Extractor* context);
     void close(int statemetNumber);
     void mergeStack();
-    std::vector<Entity*> ifStmts; // statementNumber
     void extractFollows(std::vector<Entity*> stmts);
     void extractFollowsT(std::vector<Entity*> stmts);
     void extractParent(std::vector<Entity*> stmts);
@@ -18,6 +17,7 @@ public:
     virtual void extractModify(Entity* left, Entity* right);
     virtual void extractUses(Entity* left, Entity* right);
     void extractNext(Entity* entity);
+    std::vector<Entity*> ifStmts;
     std::vector<Entity*> endPoints;
 
 private:
