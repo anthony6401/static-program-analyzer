@@ -312,3 +312,11 @@ std::unordered_set<std::string> ModifyRelationshipStorage::getModifiesForAffects
 
 	return std::unordered_set<std::string>();
 }
+
+std::unordered_set<std::string> ModifyRelationshipStorage::getAllModifiesAssign() {
+	std::unordered_set<std::string> result;
+	for (auto const& pair: assignForwardStorage) {
+		result.insert(pair.first);
+	}
+	return result;
+}

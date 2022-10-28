@@ -13,6 +13,7 @@ public:
 	std::unordered_map<std::string, std::unordered_set<std::string>> getAllRelationship(RelationshipType relType, DesignEntity returnType1, DesignEntity returnType2);
 	std::unordered_set<std::string> getModifiesForAssign(std::string stmtNum);
 	std::unordered_set<std::string> getModifiesForAffects(std::string stmt);
+	std::unordered_set<std::string> getAllModifiesAssign();
 
 private:
 	bool handleConstantConstant(TokenObject firstArgument, TokenObject secondArgument);
