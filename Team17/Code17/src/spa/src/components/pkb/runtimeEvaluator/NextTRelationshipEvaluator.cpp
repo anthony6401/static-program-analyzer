@@ -1,7 +1,7 @@
 #include "NextTRelationshipEvaluator.h"
 #include "utils.h"
 
-NextTRelationshipEvaluator::NextTRelationshipEvaluator(NextRelationshipStorage* nextStorage) : nextStorage(nextStorage) {}
+NextTRelationshipEvaluator::NextTRelationshipEvaluator(NextRelationshipStorage* nextStorage) : RuntimeRelationshipEvaluator(), nextStorage(nextStorage) {}
 
 // DFS search to answer Next* queries with 2 integer values
 bool NextTRelationshipEvaluator::DFSNextTForward(std::string curr, std::string target, std::unordered_set<std::string>& visited) {
