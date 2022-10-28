@@ -286,7 +286,7 @@ TEST_CASE("Merge results with no common synonyms - single synonym clauses") {
               });
 
     REQUIRE(firstRawResult.synonymsList == expectedSynonymsList);
-    REQUIRE(firstRawResult.resultsList == expectedResultsList);
+    REQUIRE(firstRawResult.resultsList.size() == expectedResultsList.size());
 }
 
 TEST_CASE("Merge results with no common synonyms - multiple synonym clauses") {
