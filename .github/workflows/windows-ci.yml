@@ -47,4 +47,4 @@ jobs:
       - name: Run Autotester Tests
         run: |
           cd Team17/Tests17
-          python3 regression_tester.py ../Code17/build/src/autotester/Release/autotester.exe
+          python3 regression_tester.py ../src/autotester/autotester.exe
