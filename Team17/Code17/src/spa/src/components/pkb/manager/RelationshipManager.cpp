@@ -24,9 +24,9 @@ RelationshipManager::RelationshipManager() {
 	CallsTRelationshipStorage* callsTRelStorage = new CallsTRelationshipStorage();
 	NextRelationshipStorage* nextRelStorage = new NextRelationshipStorage();
 
-	NextTRelationshipEvaluator* nextTRelEvaluator = new NextTRelationshipEvaluator(nextRelStorage);
-	AffectsRelationshipEvaluator* affectsRelEvaluator = new AffectsRelationshipEvaluator(nextRelStorage, modifyRelStorage, usesRelStorage);
-	AffectsTRelationshipEvaluator* affectsTRelEvaluator = new AffectsTRelationshipEvaluator(nextRelStorage, modifyRelStorage, usesRelStorage);
+	//NextTRelationshipEvaluator* nextTRelEvaluator = new NextTRelationshipEvaluator(nextRelStorage);
+	//AffectsRelationshipEvaluator* affectsRelEvaluator = new AffectsRelationshipEvaluator(nextRelStorage, modifyRelStorage, usesRelStorage);
+	//AffectsTRelationshipEvaluator* affectsTRelEvaluator = new AffectsTRelationshipEvaluator(nextRelStorage, modifyRelStorage, usesRelStorage);
 
 	relStorages.push_back(modifyRelStorage);
 	relStorages.push_back(usesRelStorage);
@@ -38,9 +38,9 @@ RelationshipManager::RelationshipManager() {
 	relStorages.push_back(callsTRelStorage);
 	relStorages.push_back(nextRelStorage);
 
-	runtimeRelStorages.push_back(nextTRelEvaluator);
-	runtimeRelStorages.push_back(affectsRelEvaluator);
-	runtimeRelStorages.push_back(affectsTRelEvaluator);
+	//runtimeRelStorages.push_back(nextTRelEvaluator);
+	//runtimeRelStorages.push_back(affectsRelEvaluator);
+	//runtimeRelStorages.push_back(affectsTRelEvaluator);
 }
 
 std::vector<RelationshipStorage*> RelationshipManager::getRelationshipStorage() {
@@ -174,13 +174,13 @@ void RelationshipManager::clearCache() {
 }
 
 RelationshipManager::~RelationshipManager() {
-	for (auto store : relStorages) {
-		delete store;
-	}
+	//for (auto store : relStorages) {
+	//	delete store;
+	//}
 
-	for (auto runtimeStore : runtimeRelStorages) {
-		delete runtimeStore;
-	}
-	relStorages.clear();
-	runtimeRelStorages.clear();
+	//for (auto runtimeStore : runtimeRelStorages) {
+	//	delete runtimeStore;
+	//}
+	//relStorages.clear();
+	//runtimeRelStorages.clear();
 }
