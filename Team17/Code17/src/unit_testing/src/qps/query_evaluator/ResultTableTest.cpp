@@ -58,6 +58,16 @@ TEST_CASE("Instantiate constructor with two synonyms") {
         sort(row.begin(), row.end());
     }
 
+    std::sort(expectedResultsList.begin(), expectedResultsList.end(),
+              [](const std::vector<std::string>& a, const std::vector<std::string>& b) {
+                  return a[0] < b[0];
+              });
+
+    std::sort(doubleSynonymResult.resultsList.begin(), doubleSynonymResult.resultsList.end(),
+              [](const std::vector<std::string>& a, const std::vector<std::string>& b) {
+                  return a[0] < b[0];
+              });
+
     REQUIRE(doubleSynonymResult.synonymsList == expectedSynonymsList);
     REQUIRE(doubleSynonymResult.resultsList == expectedResultsList);
     REQUIRE(doubleSynonymResult.isEmptyResult() == false);
@@ -149,6 +159,15 @@ TEST_CASE("Merge results with common synonyms - single common synonyms in single
         sort(row.begin(), row.end());
     }
 
+    std::sort(expectedResultsList.begin(), expectedResultsList.end(),
+              [](const std::vector<std::string>& a, const std::vector<std::string>& b) {
+                  return a[0] < b[0];
+              });
+
+    std::sort(firstRawResult.resultsList.begin(), firstRawResult.resultsList.end(),
+              [](const std::vector<std::string>& a, const std::vector<std::string>& b) {
+                  return a[0] < b[0];
+              });
 
     REQUIRE(firstRawResult.synonymsList == expectedSynonymsList);
     REQUIRE(firstRawResult.resultsList == expectedResultsList);
@@ -174,6 +193,16 @@ TEST_CASE("Merge results with common synonyms - single common synonym in multipl
         sort(row.begin(), row.end());
     }
 
+    std::sort(expectedResultsList.begin(), expectedResultsList.end(),
+              [](const std::vector<std::string>& a, const std::vector<std::string>& b) {
+                  return a[0] < b[0];
+              });
+
+    std::sort(firstRawResult.resultsList.begin(), firstRawResult.resultsList.end(),
+              [](const std::vector<std::string>& a, const std::vector<std::string>& b) {
+                  return a[0] < b[0];
+              });
+
     REQUIRE(firstRawResult.synonymsList == expectedSynonymsList);
     REQUIRE(firstRawResult.resultsList == expectedResultsList);
 }
@@ -197,6 +226,16 @@ TEST_CASE("Merge results with common synonyms - multiple common synonyms in mult
     for (auto & row : firstRawResult.resultsList) {
         sort(row.begin(), row.end());
     }
+
+    std::sort(expectedResultsList.begin(), expectedResultsList.end(),
+              [](const std::vector<std::string>& a, const std::vector<std::string>& b) {
+                  return a[0] < b[0];
+              });
+
+    std::sort(firstRawResult.resultsList.begin(), firstRawResult.resultsList.end(),
+              [](const std::vector<std::string>& a, const std::vector<std::string>& b) {
+                  return a[0] < b[0];
+              });
 
     REQUIRE(firstRawResult.synonymsList == expectedSynonymsList);
     REQUIRE(firstRawResult.resultsList == expectedResultsList);
@@ -236,6 +275,16 @@ TEST_CASE("Merge results with no common synonyms - single synonym clauses") {
         sort(row.begin(), row.end());
     }
 
+    std::sort(expectedResultsList.begin(), expectedResultsList.end(),
+              [](const std::vector<std::string>& a, const std::vector<std::string>& b) {
+                  return a[0] < b[0];
+              });
+
+    std::sort(firstRawResult.resultsList.begin(), firstRawResult.resultsList.end(),
+              [](const std::vector<std::string>& a, const std::vector<std::string>& b) {
+                  return a[0] < b[0];
+              });
+
     REQUIRE(firstRawResult.synonymsList == expectedSynonymsList);
     REQUIRE(firstRawResult.resultsList == expectedResultsList);
 }
@@ -267,6 +316,16 @@ TEST_CASE("Merge results with no common synonyms - multiple synonym clauses") {
     for (auto & row : firstRawResult.resultsList) {
         sort(row.begin(), row.end());
     }
+
+    std::sort(expectedResultsList.begin(), expectedResultsList.end(),
+              [](const std::vector<std::string>& a, const std::vector<std::string>& b) {
+                  return a[0] < b[0];
+              });
+
+    std::sort(firstRawResult.resultsList.begin(), firstRawResult.resultsList.end(),
+              [](const std::vector<std::string>& a, const std::vector<std::string>& b) {
+                  return a[0] < b[0];
+              });
 
     REQUIRE(firstRawResult.synonymsList == expectedSynonymsList);
     REQUIRE(firstRawResult.resultsList == expectedResultsList);
