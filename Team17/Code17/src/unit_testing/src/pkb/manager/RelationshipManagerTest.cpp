@@ -16,7 +16,7 @@
 
 TEST_CASE("Relationship Manager Test") {
 	RelationshipManager relManager = RelationshipManager();
-
+	/*
 	REQUIRE(relManager.storeRelationship(usesRelationshipAssignOne));
 	REQUIRE(relManager.storeRelationship(usesRelationshipProcOne));
 	REQUIRE(relManager.storeRelationship(usesRelationshipPrintOne));
@@ -69,6 +69,7 @@ TEST_CASE("Relationship Manager Test") {
 	REQUIRE(relManager.storeRelationship(callsTRelationshipOne));
 	REQUIRE(relManager.storeRelationship(callsTRelationshipTwo));
 	REQUIRE(relManager.storeRelationship(callsTRelationshipThree));
+	*/
 
 	/*
 	REQUIRE(relManager.getRelationship(RelationshipType::USES, stmtTokenObject1, variableTokenObject));
