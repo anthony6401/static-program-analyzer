@@ -13,8 +13,10 @@
 #include "../ReuseableTokenObject.h"
 
 #include <catch.hpp>
+#include <iostream>
 
 TEST_CASE("Relationship Manager Test") {
+	std::cout << "In Relationship Manager" << std::endl;
 	RelationshipManager relManager = RelationshipManager();
 
 	REQUIRE(relManager.storeRelationship(usesRelationshipAssignOne));

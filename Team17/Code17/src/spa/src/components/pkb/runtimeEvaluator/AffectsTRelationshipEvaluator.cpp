@@ -4,7 +4,7 @@
 AffectsTRelationshipEvaluator::AffectsTRelationshipEvaluator(NextRelationshipStorage* nextStorage, ModifyRelationshipStorage* modifiesStorage, UsesRelationshipStorage* usesStorage)
 	: nextStorage(nextStorage),
 	modifiesStorage(modifiesStorage),
-	usesStorage(usesStorage) {};
+	usesStorage(usesStorage) {}
 
  //DFS search to answer Affects* queries with 2 integer values
 bool AffectsTRelationshipEvaluator::DFSAffectsTForward(std::string curr, std::string target, std::string var, std::unordered_set<std::string>& visited) {
