@@ -1,34 +1,11 @@
 #include "AffectsRelationshipEvaluator.h"
+#include "utils.h"
 
 AffectsRelationshipEvaluator::AffectsRelationshipEvaluator(NextRelationshipStorage* nextStorage, ModifyRelationshipStorage* modifiesStorage, UsesRelationshipStorage* usesStorage) 
 														: nextStorage(nextStorage),
 														  modifiesStorage(modifiesStorage),
 														  usesStorage(usesStorage) {}
 
-bool AffectsRelationshipEvaluator::isModifies(std::string target, std::string var) {
-	std::unordered_set<std::string> modifiesSet = modifiesStorage->getModifiesForAffects(target);
-	return modifiesSet.find(var) != modifiesSet.end();
-}
-
-std::unordered_set<std::string> AffectsRelationshipEvaluator::getModifiesForBackward(std::string target) {
-	return modifiesStorage->getModifiesForAffects(target);
-}
-
-bool AffectsRelationshipEvaluator::isUses(std::string target, std::string var) {
-	std::unordered_set<std::string> usesSet = usesStorage->getUsesForAssign(target);
-	return usesSet.find(var) != usesSet.end();
-}
-
-std::unordered_set<std::string> AffectsRelationshipEvaluator::getIntersectionVar(std::unordered_set<std::string>& modifiesSet, std::unordered_set<std::string>& usesSet) {
-	std::unordered_set<std::string> result;
-	for (auto const& modifiesVar : modifiesSet) {
-		if (usesSet.find(modifiesVar) != usesSet.end()) {
-			result.insert(modifiesVar);
-		}
-	}
-
-	return result;
-}
 
 // DFS search to answer Next* queries with 2 integer values
 bool AffectsRelationshipEvaluator::DFSAffectsForward(std::string curr, std::string target, std::string var, std::unordered_set<std::string>& visited) {
@@ -37,7 +14,7 @@ bool AffectsRelationshipEvaluator::DFSAffectsForward(std::string curr, std::stri
 	std::unordered_set<std::string> neighbours = this->nextStorage->getNextForward(curr);
 
 	for (std::string neighbour : neighbours) {
-		if (target == neighbour || (visited.find(neighbour) == visited.end() && !isModifies(neighbour, var) && DFSAffectsForward(neighbour, target, var, visited))) {
+		if (target == neighbour || (visited.find(neighbour) == visited.end() && !RuntimeRelationshipUtils::isModifies(modifiesStorage ,neighbour, var) && DFSAffectsForward(neighbour, target, var, visited))) {
 			return true;
 		}
 	}
@@ -56,10 +33,10 @@ void AffectsRelationshipEvaluator::DFSAffectsForwardWithSynonym(std::string curr
 
 	for (std::string neighbour : neighbours) {
 		std::unordered_set<std::string>::const_iterator exist = visited.find(neighbour);
-		if ((filter.find(neighbour) != filter.end()) && isUses(neighbour, var)) {
+		if ((filter.find(neighbour) != filter.end()) && RuntimeRelationshipUtils::isUses(usesStorage,neighbour, var)) {
 			result.insert(neighbour);
 		}
-		if (exist == visited.end() && !isModifies(neighbour, var)) {
+		if (exist == visited.end() && !RuntimeRelationshipUtils::isModifies(modifiesStorage,neighbour, var)) {
 			DFSAffectsForwardWithSynonym(neighbour, var, visited, result, filter);
 		}
 	}
@@ -81,8 +58,8 @@ void AffectsRelationshipEvaluator::DFSAffectsBackwardWithSynonym(std::string cur
 
 	for (std::string neighbour : neighbours) {
 		std::unordered_set<std::string>::const_iterator exist = visited.find(neighbour);
-		std::unordered_set<std::string> modifiesSet = getModifiesForBackward(neighbour);
-		std::unordered_set<std::string> intersectionSet = getIntersectionVar(modifiesSet, usesSet);
+		std::unordered_set<std::string> modifiesSet = RuntimeRelationshipUtils::getModifiesForBackward(modifiesStorage,neighbour);
+		std::unordered_set<std::string> intersectionSet = RuntimeRelationshipUtils::getIntersectionVar(modifiesSet, usesSet);
 		bool isModifiesForBackward = intersectionSet.size() != 0;
 
 		if (isModifiesForBackward) {
@@ -90,7 +67,7 @@ void AffectsRelationshipEvaluator::DFSAffectsBackwardWithSynonym(std::string cur
 				usesSet.erase(var);
 			}
 
-			if ((filter.find(neighbour) != filter.end())) {
+			if (filter.find(neighbour) != filter.end() && RuntimeRelationshipUtils::isModifiesAssign(modifiesStorage, neighbour)) {
 				result.insert(neighbour);
 			}
 		}
@@ -136,7 +113,7 @@ bool AffectsRelationshipEvaluator::getRuntimeRelationship(RelationshipType relTy
 		std::unordered_set<std::string> visited;
 		std::unordered_set<std::string> modifiesSet = modifiesStorage->getModifiesForAssign(firstArgument.getValue());
 		std::unordered_set<std::string> usesSet = usesStorage->getUsesForAssign(secondArgument.getValue());
-		std::unordered_set<std::string> varSet = getIntersectionVar(modifiesSet, usesSet);
+		std::unordered_set<std::string> varSet = RuntimeRelationshipUtils::getIntersectionVar(modifiesSet, usesSet);
 
 		if (varSet.size() != 0) {
 			std::string var = *varSet.begin();

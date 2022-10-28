@@ -30,14 +30,14 @@ bool PKB::storeConstant(Entity* entity) {
 }
 
 bool PKB::getRelationship(RelationshipType relType, TokenObject firstArgument, TokenObject secondArgument) {
-	if (relType == RelationshipType::NEXT_T || relType == RelationshipType::AFFECTS) {
+	if (relType == RelationshipType::NEXT_T || relType == RelationshipType::AFFECTS || relType == RelationshipType::AFFECTS_T) {
 		return relManager->getRuntimeRelationship(relType, firstArgument, secondArgument);
 	}
 	return relManager->getRelationship(relType, firstArgument, secondArgument);
 }
 
 std::unordered_set<std::string> PKB::getRelationshipByFirst(RelationshipType relType, TokenObject firstArgument, DesignEntity returnType) {
-	if (relType == RelationshipType::NEXT_T || relType == RelationshipType::AFFECTS) {
+	if (relType == RelationshipType::NEXT_T || relType == RelationshipType::AFFECTS || relType == RelationshipType::AFFECTS_T) {
 		std::unordered_set<std::string> filter = entityManager->getAllEntity(returnType);
 		return relManager->getRuntimeRelationshipByFirst(relType, firstArgument, filter);
 	}
@@ -46,7 +46,7 @@ std::unordered_set<std::string> PKB::getRelationshipByFirst(RelationshipType rel
 }
 
 std::unordered_set<std::string> PKB::getRelationshipBySecond(RelationshipType relType, DesignEntity returnType, TokenObject secondArgument) {
-	if (relType == RelationshipType::NEXT_T || relType == RelationshipType::AFFECTS) {
+	if (relType == RelationshipType::NEXT_T || relType == RelationshipType::AFFECTS || relType == RelationshipType::AFFECTS_T) {
 		std::unordered_set<std::string> filter = entityManager->getAllEntity(returnType);
 		return relManager->getRuntimeRelationshipBySecond(relType, secondArgument, filter);
 	}
@@ -55,7 +55,7 @@ std::unordered_set<std::string> PKB::getRelationshipBySecond(RelationshipType re
 }
 
 std::unordered_map<std::string, std::unordered_set<std::string>> PKB::getAllRelationship(RelationshipType relType, DesignEntity returnType1, DesignEntity returnType2) {
-	if (relType == RelationshipType::NEXT_T || relType == RelationshipType::AFFECTS) {
+	if (relType == RelationshipType::NEXT_T || relType == RelationshipType::AFFECTS || relType == RelationshipType::AFFECTS_T) {
 		std::unordered_set<std::string> filter1 = entityManager->getAllEntity(returnType1);
 		std::unordered_set<std::string> filter2 = entityManager->getAllEntity(returnType2);
 		return relManager->getAllRuntimeRelationship(relType, filter1, filter2);
