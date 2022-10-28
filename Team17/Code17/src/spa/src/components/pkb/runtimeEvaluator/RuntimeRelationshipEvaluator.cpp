@@ -54,3 +54,8 @@ void RuntimeRelationshipEvaluator::storeBackwardCache(std::string key, std::unor
 		backwardCache.insert({ key, set });
 	}
 }
+
+RuntimeRelationshipEvaluator::~RuntimeRelationshipEvaluator() {
+	forwardCache.clear();
+	backwardCache.clear();
+}
