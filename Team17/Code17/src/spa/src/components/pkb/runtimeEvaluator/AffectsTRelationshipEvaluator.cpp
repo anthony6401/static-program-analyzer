@@ -1,16 +1,10 @@
 #include "AffectsTRelationshipEvaluator.h"
+#include "AffectsRelationshipInterface.h"
 #include "utils.h"
 
 AffectsTRelationshipEvaluator::AffectsTRelationshipEvaluator(NextRelationshipStorage* nextStorage, ModifyRelationshipStorage* modifiesStorage, UsesRelationshipStorage* usesStorage)
-	: nextStorage(nextStorage),
-	modifiesStorage(modifiesStorage),
-	usesStorage(usesStorage) {}
+	: AffectsRelationshipInterface(modifiesStorage, usesStorage, nextStorage) {};
 
-
-bool AffectsTRelationshipEvaluator::isModifiesAssign(std::string target) {
-	std::unordered_set<std::string> modifiesSet = modifiesStorage->getModifiesForAssign(target);
-	return modifiesSet.size() != 0;
-}
 
 
 // DFS search to answer Next* queries with 2 integer values
@@ -160,54 +154,19 @@ void AffectsTRelationshipEvaluator::DFSAffectsTWithTwoSynonyms(std::unordered_se
 	}
 }
 
-std::unordered_set<std::string> AffectsTRelationshipEvaluator::DFSAffectsTWildcardForward(std::unordered_set<std::string>& filter1,
-	std::unordered_set<std::string>& filter2, std::unordered_set<std::string>& result) {
-	std::unordered_set<std::string> ans;
-	for (const auto& ele : filter1) {
-		std::unordered_set<std::string> visited;
-		std::unordered_set<std::string> result;
-		std::string start = ele;
-		std::unordered_set<std::string> modifiesSet = modifiesStorage->getModifiesForAssign(start);
-
-		if (modifiesSet.size() == 0) {
-			continue;
-		}
-
-		std::string var = *(modifiesSet.begin());
-		DFSAffectsTForwardWithSynonym(start, var, visited, result, filter2);
-		if (result.size() != 0) {
-			ans.insert(start);
-		}
-	}
-	return ans;
-}
-
-std::unordered_set<std::string> AffectsTRelationshipEvaluator::DFSAffectsTWildcardBackward(std::unordered_set<std::string>& filter1,
-	std::unordered_set<std::string>& filter2, std::unordered_set<std::string>& result) {
-	std::unordered_set<std::string> ans;
-	for (const auto& ele : filter2) {
-		std::unordered_set<std::string> visited;
-		std::unordered_set<std::string> result;
-		std::string start = ele;
-		std::unordered_set<std::string> usesSet = usesStorage->getUsesForAssign(start);
-
-		DFSAffectsTBackwardWithSynonym(start, usesSet, visited, result, filter2);
-		if (result.size() != 0) {
-			ans.insert(start);
-		}
-	}
-	return ans;
-}
-
 bool AffectsTRelationshipEvaluator::getRuntimeRelationship(RelationshipType relType, TokenObject firstArgument, TokenObject secondArgument) {
 	if (relType == RelationshipType::AFFECTS_T) {
-		std::unordered_set<std::string> visited;
-		std::unordered_set<std::string> modifiesSet = modifiesStorage->getModifiesForAssign(firstArgument.getValue());
-
-
-		if (modifiesSet.size() != 0) {
-			std::string var = *modifiesSet.begin();
-			return DFSAffectsTForward(firstArgument.getValue(), secondArgument.getValue(), var, visited);
+		if (firstArgument.getTokenType() == TokenType::INTEGER && secondArgument.getTokenType() == TokenType::INTEGER) {
+			return handleConstantConstant(firstArgument, secondArgument);
+		}
+		else if (firstArgument.getTokenType() == TokenType::WILDCARD && secondArgument.getTokenType() == TokenType::INTEGER) {
+			return handleWildcardConstant(secondArgument);
+		}
+		else if (firstArgument.getTokenType() == TokenType::CONSTANT && secondArgument.getTokenType() == TokenType::WILDCARD) {
+			return handleConstantWildcard(firstArgument);
+		}
+		else if (firstArgument.getTokenType() == TokenType::WILDCARD && secondArgument.getTokenType() == TokenType::WILDCARD) {
+			return handleWildcardWildcard();
 		}
 	}
 
@@ -254,14 +213,15 @@ std::unordered_map<std::string, std::unordered_set<std::string>> AffectsTRelatio
 std::unordered_set<std::string> AffectsTRelationshipEvaluator::getRuntimeRelationshipWithFirstWildcard(RelationshipType relType, std::unordered_set<std::string>& filter1, std::unordered_set<std::string>& filter2) {
 	if (relType == RelationshipType::AFFECTS_T) {
 		std::unordered_set<std::string> result;
-		return DFSAffectsTWildcardBackward(filter1, filter2, result);
+		return DFSAffectsWildcardBackward(filter1, filter2, result);
 	}
 	return std::unordered_set<std::string>();
 }
+
 std::unordered_set<std::string> AffectsTRelationshipEvaluator::getRuntimeRelationshipWithSecondWildcard(RelationshipType relType, std::unordered_set<std::string>& filter1, std::unordered_set<std::string>& filter2) {
 	if (relType == RelationshipType::AFFECTS_T) {
 		std::unordered_set<std::string> result;
-		return DFSAffectsTWildcardForward(filter1, filter2, result);
+		return DFSAffectsWildcardForward(filter1, filter2, result);
 	}
 	return std::unordered_set<std::string>();
 }
@@ -275,4 +235,16 @@ void AffectsTRelationshipEvaluator::startNewDFSPath(std::unordered_set<std::stri
 
 		DFSAffectsTForwardWithSynonym(neighbour, newVar, newVisited, result, filter);
 	}
+}
+
+bool AffectsTRelationshipEvaluator::handleConstantConstant(TokenObject firstArgument, TokenObject secondArgument) {
+	std::unordered_set<std::string> visited;
+	std::unordered_set<std::string> modifiesSet = modifiesStorage->getModifiesForAssign(firstArgument.getValue());
+
+
+	if (modifiesSet.size() != 0) {
+		std::string var = *modifiesSet.begin();
+		return DFSAffectsTForward(firstArgument.getValue(), secondArgument.getValue(), var, visited);
+	}
+	return false;
 }

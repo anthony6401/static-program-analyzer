@@ -5,13 +5,13 @@
 #include "models/Relationship/Relationship.h"
 #include "models/Relationship/RelationshipType.h"
 #include "models/Entity/DesignEntity.h"
-#include "RuntimeRelationshipEvaluator.h"
+#include "AffectsRelationshipInterface.h"
 #include "components/pkb/storage/RelationshipStorage/NextRelationshipStorage.h"
 #include "components/pkb/storage/RelationshipStorage/ModifyRelationshipStorage.h"
 #include "components/pkb/storage/RelationshipStorage/UsesRelationshipStorage.h"
 #include "components/qps/query_preprocessor/query_tokenizer/TokenObject.h"
 
-class AffectsRelationshipEvaluator : public RuntimeRelationshipEvaluator {
+class AffectsRelationshipEvaluator : public AffectsRelationshipInterface {
 
 public:
 	AffectsRelationshipEvaluator(NextRelationshipStorage* nextStorage, ModifyRelationshipStorage* modifiesStorage, UsesRelationshipStorage* usesStorage);
@@ -23,19 +23,8 @@ public:
 	std::unordered_set<std::string> getRuntimeRelationshipWithSecondWildcard(RelationshipType relType, std::unordered_set<std::string>& filter1, std::unordered_set<std::string>& filter2);
 private:
 	bool DFSAffectsForward(std::string curr, std::string target, std::string var, std::unordered_set<std::string>& visited);
-	void DFSAffectsForwardWithSynonym(std::string curr, std::string var, std::unordered_set<std::string>& visited,
-		std::unordered_set<std::string>& result, std::unordered_set<std::string>& filter);
-	void DFSAffectsBackwardWithSynonym(std::string curr, std::unordered_set<std::string>& usesSet, std::unordered_set<std::string>& visited,
-		std::unordered_set<std::string>& result, std::unordered_set<std::string>& filter);
 	void DFSAffectsWithTwoSynonyms(std::unordered_set<std::string>& filter1,
 		std::unordered_set<std::string>& filter2,
 		std::unordered_map<std::string, std::unordered_set<std::string>>& result_map);
-	std::unordered_set<std::string> DFSAffectsWildcardForward(std::unordered_set<std::string>& filter1,
-		std::unordered_set<std::string>& filter2, std::unordered_set<std::string>& result);
-	std::unordered_set<std::string> DFSAffectsWildcardBackward(std::unordered_set<std::string>& filter1,
-		std::unordered_set<std::string>& filter2, std::unordered_set<std::string>& result);
-
-	NextRelationshipStorage* nextStorage;
-	ModifyRelationshipStorage* modifiesStorage;
-	UsesRelationshipStorage* usesStorage;
+	bool handleConstantConstant(TokenObject firstArgument, TokenObject secondArgument);
 };
