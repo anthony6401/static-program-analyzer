@@ -3,12 +3,13 @@
 #include <unordered_set>
 #include <vector>
 #include <map>
-#include "../../../models/Entity/Entity.h"
-#include "Extractor.h"
+
 #include "../utils/SpUtils.h"
 
-class StmtStack {
+class Extractor;
+class Entity;
 
+class StmtStack {
 public:
     Entity* parent;
     virtual void close(int statementNumber) = 0;
