@@ -31,6 +31,7 @@ TEST_CASE("Instantiate constructor with one synonym") {
               [](const std::vector<std::string>& a, const std::vector<std::string>& b) {
                   return a[0] < b[0];
               });
+
     REQUIRE(singleSynonymResult.synonymsList == expectedSynonymsList);
     REQUIRE(singleSynonymResult.resultsList == expectedResultsList);
     REQUIRE(singleSynonymResult.isEmptyResult() == false);
@@ -45,6 +46,18 @@ TEST_CASE("Instantiate constructor with two synonyms") {
     ResultTable doubleSynonymResult = ResultTable("a", "v", results);
     std::vector<std::string> expectedSynonymsList = {"a", "v"};
     std::vector<std::vector<std::string>> expectedResultsList = {{p1.first, p1.second}, {p2.first, p2.second}};
+
+    std::sort(expectedSynonymsList.begin(), expectedSynonymsList.end());
+    std::sort(doubleSynonymResult.synonymsList.begin(), doubleSynonymResult.synonymsList.end());
+
+    for (auto & row : expectedResultsList) {
+        sort(row.begin(), row.end());
+    }
+
+    for (auto & row : doubleSynonymResult.resultsList) {
+        sort(row.begin(), row.end());
+    }
+
     REQUIRE(doubleSynonymResult.synonymsList == expectedSynonymsList);
     REQUIRE(doubleSynonymResult.resultsList == expectedResultsList);
     REQUIRE(doubleSynonymResult.isEmptyResult() == false);
@@ -59,6 +72,17 @@ TEST_CASE("Merge empty result with non-empty result") {
     ResultTable expectedResult = ResultTable();
     std::vector<std::string> expectedSynonymsList = {"a"};
     std::vector<std::vector<std::string>> expectedResultsList = {{"4"}, {"3"}, {"2"}, {"1"}};
+
+    std::sort(expectedResultsList.begin(), expectedResultsList.end(),
+              [](const std::vector<std::string>& a, const std::vector<std::string>& b) {
+                  return a[0] < b[0];
+              });
+
+    std::sort(emptyRawResult.resultsList.begin(), emptyRawResult.resultsList.end(),
+              [](const std::vector<std::string>& a, const std::vector<std::string>& b) {
+                  return a[0] < b[0];
+              });
+
     REQUIRE(emptyRawResult.synonymsList == expectedSynonymsList);
     REQUIRE(emptyRawResult.resultsList == expectedResultsList);
 }
@@ -69,6 +93,17 @@ TEST_CASE("Merge non-empty result with empty result") {
     singleSynonymResult.combineResult(emptyRawResult);
     std::vector<std::string> expectedSynonymsList = {"a"};
     std::vector<std::vector<std::string>> expectedResultsList = {{"4"}, {"3"}, {"2"}, {"1"}};
+
+    std::sort(expectedResultsList.begin(), expectedResultsList.end(),
+              [](const std::vector<std::string>& a, const std::vector<std::string>& b) {
+                  return a[0] < b[0];
+              });
+
+    std::sort(singleSynonymResult.resultsList.begin(), singleSynonymResult.resultsList.end(),
+              [](const std::vector<std::string>& a, const std::vector<std::string>& b) {
+                  return a[0] < b[0];
+              });
+
     REQUIRE(singleSynonymResult.synonymsList == expectedSynonymsList);
     REQUIRE(singleSynonymResult.resultsList == expectedResultsList);
 }
@@ -80,6 +115,17 @@ TEST_CASE("Merge results with common synonyms - single common synonyms in single
     std::vector<std::string> expectedSynonymsList = {"a"};
     std::vector<std::vector<std::string>> expectedResultsList = {{"3"}, {"1"}};
     firstRawResult.combineResult(secondRawResult);
+
+    std::sort(expectedResultsList.begin(), expectedResultsList.end(),
+              [](const std::vector<std::string>& a, const std::vector<std::string>& b) {
+                  return a[0] < b[0];
+              });
+
+    std::sort(firstRawResult.resultsList.begin(), firstRawResult.resultsList.end(),
+              [](const std::vector<std::string>& a, const std::vector<std::string>& b) {
+                  return a[0] < b[0];
+              });
+
     REQUIRE(firstRawResult.synonymsList == expectedSynonymsList);
     REQUIRE(firstRawResult.resultsList == expectedResultsList);
 }
@@ -91,6 +137,19 @@ TEST_CASE("Merge results with common synonyms - single common synonyms in single
     std::vector<std::string> expectedSynonymsList = {"a", "v"};
     std::vector<std::vector<std::string>> expectedResultsList = {{"3", "y"}, {"1", "x"}};
     firstRawResult.combineResult(secondRawResult);
+
+    std::sort(expectedSynonymsList.begin(), expectedSynonymsList.end());
+    std::sort(firstRawResult.synonymsList.begin(), firstRawResult.synonymsList.end());
+
+    for (auto & row : expectedResultsList) {
+        sort(row.begin(), row.end());
+    }
+
+    for (auto & row : firstRawResult.resultsList) {
+        sort(row.begin(), row.end());
+    }
+
+
     REQUIRE(firstRawResult.synonymsList == expectedSynonymsList);
     REQUIRE(firstRawResult.resultsList == expectedResultsList);
 }
@@ -103,6 +162,18 @@ TEST_CASE("Merge results with common synonyms - single common synonym in multipl
     std::vector<std::string> expectedSynonymsList = {"s", "v", "a"};
     std::vector<std::vector<std::string>> expectedResultsList = {{"1", "x", "1"}, {"3", "z", "2"}};
     firstRawResult.combineResult(secondRawResult);
+
+    std::sort(expectedSynonymsList.begin(), expectedSynonymsList.end());
+    std::sort(firstRawResult.synonymsList.begin(), firstRawResult.synonymsList.end());
+
+    for (auto & row : expectedResultsList) {
+        sort(row.begin(), row.end());
+    }
+
+    for (auto & row : firstRawResult.resultsList) {
+        sort(row.begin(), row.end());
+    }
+
     REQUIRE(firstRawResult.synonymsList == expectedSynonymsList);
     REQUIRE(firstRawResult.resultsList == expectedResultsList);
 }
@@ -115,6 +186,18 @@ TEST_CASE("Merge results with common synonyms - multiple common synonyms in mult
     std::vector<std::string> expectedSynonymsList = {"a", "v"};
     std::vector<std::vector<std::string>> expectedResultsList = {{"1", "x"}};
     firstRawResult.combineResult(secondRawResult);
+
+    std::sort(expectedSynonymsList.begin(), expectedSynonymsList.end());
+    std::sort(firstRawResult.synonymsList.begin(), firstRawResult.synonymsList.end());
+
+    for (auto & row : expectedResultsList) {
+        sort(row.begin(), row.end());
+    }
+
+    for (auto & row : firstRawResult.resultsList) {
+        sort(row.begin(), row.end());
+    }
+
     REQUIRE(firstRawResult.synonymsList == expectedSynonymsList);
     REQUIRE(firstRawResult.resultsList == expectedResultsList);
 }
@@ -141,6 +224,18 @@ TEST_CASE("Merge results with no common synonyms - single synonym clauses") {
                                                                   { "1", "y" },
                                                                   { "1", "x" } };
     firstRawResult.combineResult(secondRawResult);
+
+    std::sort(expectedSynonymsList.begin(), expectedSynonymsList.end());
+    std::sort(firstRawResult.synonymsList.begin(), firstRawResult.synonymsList.end());
+
+    for (auto & row : expectedResultsList) {
+        sort(row.begin(), row.end());
+    }
+
+    for (auto & row : firstRawResult.resultsList) {
+        sort(row.begin(), row.end());
+    }
+
     REQUIRE(firstRawResult.synonymsList == expectedSynonymsList);
     REQUIRE(firstRawResult.resultsList == expectedResultsList);
 }
@@ -161,6 +256,18 @@ TEST_CASE("Merge results with no common synonyms - multiple synonym clauses") {
                                                                   { "5", "z", "4", "j" },
                                                                   { "5", "z", "6", "k" }};
     firstRawResult.combineResult(secondRawResult);
+
+    std::sort(expectedSynonymsList.begin(), expectedSynonymsList.end());
+    std::sort(firstRawResult.synonymsList.begin(), firstRawResult.synonymsList.end());
+
+    for (auto & row : expectedResultsList) {
+        sort(row.begin(), row.end());
+    }
+
+    for (auto & row : firstRawResult.resultsList) {
+        sort(row.begin(), row.end());
+    }
+
     REQUIRE(firstRawResult.synonymsList == expectedSynonymsList);
     REQUIRE(firstRawResult.resultsList == expectedResultsList);
 }
