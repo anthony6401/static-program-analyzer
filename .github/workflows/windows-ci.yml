@@ -32,6 +32,7 @@ jobs:
           mkdir build
           cd build
           cmake -A Win32 ..
+          cmake --build . --config Release
           cmake --build . --target unit_testing --config Release
           cmake --build . --target integration_testing --config Release
           cmake --build . --target autotester --config Release
@@ -46,4 +47,4 @@ jobs:
       - name: Run Autotester Tests
         run: |
           cd Team17/Tests17
-          python3 regression_tester.py ../Code17/build/src/autotester/autotester.exe
+          python3 regression_tester.py ../Code17/build/src/autotester/Release/autotester.exe
