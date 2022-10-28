@@ -24,7 +24,7 @@ RelationshipManager::RelationshipManager() {
 	CallsTRelationshipStorage* callsTRelStorage = new CallsTRelationshipStorage();
 	NextRelationshipStorage* nextRelStorage = new NextRelationshipStorage();
 
-	//NextTRelationshipEvaluator* nextTRelEvaluator = new NextTRelationshipEvaluator(nextRelStorage);
+	NextTRelationshipEvaluator* nextTRelEvaluator = new NextTRelationshipEvaluator(nextRelStorage);
 	//AffectsRelationshipEvaluator* affectsRelEvaluator = new AffectsRelationshipEvaluator(nextRelStorage, modifyRelStorage, usesRelStorage);
 	//AffectsTRelationshipEvaluator* affectsTRelEvaluator = new AffectsTRelationshipEvaluator(nextRelStorage, modifyRelStorage, usesRelStorage);
 
@@ -38,7 +38,7 @@ RelationshipManager::RelationshipManager() {
 	relStorages.push_back(callsTRelStorage);
 	relStorages.push_back(nextRelStorage);
 
-	//runtimeRelStorages.push_back(nextTRelEvaluator);
+	runtimeRelStorages.push_back(nextTRelEvaluator);
 	//runtimeRelStorages.push_back(affectsRelEvaluator);
 	//runtimeRelStorages.push_back(affectsTRelEvaluator);
 }
@@ -174,13 +174,13 @@ void RelationshipManager::clearCache() {
 }
 
 RelationshipManager::~RelationshipManager() {
-	//for (auto store : relStorages) {
-	//	delete store;
-	//}
+	for (auto store : relStorages) {
+		delete store;
+	}
 
-	//for (auto runtimeStore : runtimeRelStorages) {
-	//	delete runtimeStore;
-	//}
-	//relStorages.clear();
-	//runtimeRelStorages.clear();
+	for (auto runtimeStore : runtimeRelStorages) {
+		delete runtimeStore;
+	}
+	relStorages.clear();
+	runtimeRelStorages.clear();
 }
