@@ -21,6 +21,16 @@ TEST_CASE("Instantiate constructor with one synonym") {
     ResultTable singleSynonymResult = ResultTable("a", {"1", "2", "3", "4"});
     std::vector<std::string> expectedSynonymsList = {"a"};
     std::vector<std::vector<std::string>> expectedResultsList = {{"4"}, {"3"}, {"2"}, {"1"}};
+
+    std::sort(expectedResultsList.begin(), expectedResultsList.end(),
+              [](const std::vector<std::string>& a, const std::vector<std::string>& b) {
+                  return a[0] < b[0];
+              });
+
+    std::sort(singleSynonymResult.resultsList.begin(), singleSynonymResult.resultsList.end(),
+              [](const std::vector<std::string>& a, const std::vector<std::string>& b) {
+                  return a[0] < b[0];
+              });
     REQUIRE(singleSynonymResult.synonymsList == expectedSynonymsList);
     REQUIRE(singleSynonymResult.resultsList == expectedResultsList);
     REQUIRE(singleSynonymResult.isEmptyResult() == false);
