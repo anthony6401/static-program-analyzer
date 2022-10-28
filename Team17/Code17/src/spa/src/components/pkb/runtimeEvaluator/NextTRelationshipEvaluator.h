@@ -28,10 +28,10 @@ private:
 	void DFSNextTWithTwoSynonyms(std::unordered_set<std::string>& filter1, 
 						std::unordered_set<std::string>& filter2, 
 						std::unordered_map<std::string, std::unordered_set<std::string>>& result_map);
-	void DFSNextTWildcardForward(std::unordered_set<std::string>& filter1,
+	std::unordered_set<std::string> DFSNextTWildcardForward(std::unordered_set<std::string>& filter1,
 						std::unordered_set<std::string>& filter2,
 						std::unordered_set<std::string>& result);
-	void DFSNextTWildcardBackward(std::unordered_set<std::string>& filter1,
+	std::unordered_set<std::string> DFSNextTWildcardBackward(std::unordered_set<std::string>& filter1,
 		std::unordered_set<std::string>& filter2,
 		std::unordered_set<std::string>& result);
 	bool handleConstantConstant(TokenObject firstArgument, TokenObject secondArgument);

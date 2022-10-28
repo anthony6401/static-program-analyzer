@@ -30,6 +30,10 @@ private:
 	void DFSAffectsWithTwoSynonyms(std::unordered_set<std::string>& filter1,
 		std::unordered_set<std::string>& filter2,
 		std::unordered_map<std::string, std::unordered_set<std::string>>& result_map);
+	std::unordered_set<std::string> DFSAffectsWildcardForward(std::unordered_set<std::string>& filter1,
+		std::unordered_set<std::string>& filter2, std::unordered_set<std::string>& result);
+	std::unordered_set<std::string> DFSAffectsWildcardBackward(std::unordered_set<std::string>& filter1,
+		std::unordered_set<std::string>& filter2, std::unordered_set<std::string>& result);
 
 	NextRelationshipStorage* nextStorage;
 	ModifyRelationshipStorage* modifiesStorage;

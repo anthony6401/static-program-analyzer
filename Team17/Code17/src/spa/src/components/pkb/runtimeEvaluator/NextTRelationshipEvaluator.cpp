@@ -70,30 +70,34 @@ void NextTRelationshipEvaluator::DFSNextTWithTwoSynonyms(std::unordered_set<std:
 	}
 }
 
-void NextTRelationshipEvaluator::DFSNextTWildcardForward(std::unordered_set<std::string>& filter1,
+std::unordered_set<std::string> NextTRelationshipEvaluator::DFSNextTWildcardForward(std::unordered_set<std::string>& filter1,
 	std::unordered_set<std::string>& filter2, std::unordered_set<std::string>& result) {
+	std::unordered_set<std::string> ans;
 	for (const auto& ele : filter1) {
 		std::unordered_set<std::string> visited;
 		std::unordered_set<std::string> result;
 		std::string start = ele;
 		DFSNextTForwardWithSynonym(start, visited, result, filter2);
 		if (result.size() != 0) {
-			result.insert(start);
+			ans.insert(start);
 		}
 	}
+	return ans;
 }
 
-void NextTRelationshipEvaluator::DFSNextTWildcardBackward(std::unordered_set<std::string>& filter1,
+std::unordered_set<std::string> NextTRelationshipEvaluator::DFSNextTWildcardBackward(std::unordered_set<std::string>& filter1,
 	std::unordered_set<std::string>& filter2, std::unordered_set<std::string>& result) {
+	std::unordered_set<std::string> ans;
 	for (const auto& ele : filter2) {
 		std::unordered_set<std::string> visited;
 		std::unordered_set<std::string> result;
 		std::string start = ele;
 		DFSNextTBackwardWithSynonym(start, visited, result, filter1);
 		if (result.size() != 0) {
-			result.insert(start);
+			ans.insert(start);
 		}
 	}
+	return ans;
 }
 
 bool NextTRelationshipEvaluator::getRuntimeRelationship(RelationshipType relType, TokenObject firstArgument, TokenObject secondArgument) {
@@ -147,16 +151,14 @@ std::unordered_map<std::string, std::unordered_set<std::string>> NextTRelationsh
 std::unordered_set<std::string> NextTRelationshipEvaluator::getRuntimeRelationshipWithFirstWildcard(RelationshipType relType, std::unordered_set<std::string>& filter1, std::unordered_set<std::string>& filter2) {
 	if (relType == RelationshipType::NEXT_T) {
 		std::unordered_set<std::string> result;
-		DFSNextTWildcardForward(filter1, filter2, result);
-		return result;
+		return DFSNextTWildcardBackward(filter1, filter2, result);
 	}
 	return std::unordered_set<std::string>();
 }
 std::unordered_set<std::string> NextTRelationshipEvaluator::getRuntimeRelationshipWithSecondWildcard(RelationshipType relType, std::unordered_set<std::string>& filter1, std::unordered_set<std::string>& filter2) {
 	if (relType == RelationshipType::NEXT_T) {
 		std::unordered_set<std::string> result;
-		DFSNextTWildcardBackward(filter1, filter2, result);
-		return result;
+		return DFSNextTWildcardForward(filter1, filter2, result);
 	}
 	return std::unordered_set<std::string>();
 }
