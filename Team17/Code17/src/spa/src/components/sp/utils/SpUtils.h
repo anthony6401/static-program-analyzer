@@ -6,9 +6,8 @@
 
 struct SimpleHash {
     std::size_t operator()(const Entity* _entity) const {
-        std::size_t h1 = std::hash<std::string>()(_entity->getValue());
-        std::size_t h2 = std::hash<std::string>()(typeid(_entity).name());
-        return h1 ^ (h2 << 1);
+        std::size_t h1 = std::hash<Entity>()(*_entity);
+        return h1;
     }
 };
 
