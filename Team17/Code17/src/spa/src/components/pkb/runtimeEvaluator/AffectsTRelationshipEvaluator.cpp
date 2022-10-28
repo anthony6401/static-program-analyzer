@@ -6,6 +6,24 @@ AffectsTRelationshipEvaluator::AffectsTRelationshipEvaluator(NextRelationshipSto
 	modifiesStorage(modifiesStorage),
 	usesStorage(usesStorage) {}
 
+
+void AffectsTRelationshipEvaluator::removeUsesSet(std::unordered_set<std::string>& usesSet, std::unordered_set<std::string>& intersectionSet) {
+	for (auto const& var : intersectionSet) {
+		usesSet.erase(var);
+	}
+}
+
+void AffectsTRelationshipEvaluator::insertUsesSet(std::unordered_set<std::string>& usesSet, std::unordered_set<std::string>& intersectionSet) {
+	for (auto const& var : intersectionSet) {
+		usesSet.insert(var);
+	}
+}
+
+bool AffectsTRelationshipEvaluator::isModifiesAssign(std::string target) {
+	std::unordered_set<std::string> modifiesSet = modifiesStorage->getModifiesForAssign(target);
+	return modifiesSet.size() != 0;
+}
+
  //DFS search to answer Affects* queries with 2 integer values
 bool AffectsTRelationshipEvaluator::DFSAffectsTForward(std::string curr, std::string target, std::string var, std::unordered_set<std::string>& visited) {
 	if (getForwardCacheKV(curr, target)) {
@@ -224,21 +242,4 @@ void AffectsTRelationshipEvaluator::startNewDFSPath(std::unordered_set<std::stri
 
 		DFSAffectsTForwardWithSynonym(neighbour, newVar, newVisited, result, filter);
 	}
-}
-
-void AffectsTRelationshipEvaluator::removeUsesSet(std::unordered_set<std::string>& usesSet, std::unordered_set<std::string>& intersectionSet) {
-	for (auto const& var : intersectionSet) {
-		usesSet.erase(var);
-	}
-}
-
-void AffectsTRelationshipEvaluator::insertUsesSet(std::unordered_set<std::string>& usesSet, std::unordered_set<std::string>& intersectionSet) {
-	for (auto const& var : intersectionSet) {
-		usesSet.insert(var);
-	}
-}
-
-bool AffectsTRelationshipEvaluator::isModifiesAssign(std::string target) {
-	std::unordered_set<std::string> modifiesSet = modifiesStorage->getModifiesForAssign(target);
-	return modifiesSet.size() != 0;
 }

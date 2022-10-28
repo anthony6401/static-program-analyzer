@@ -1,7 +1,5 @@
 #include "NextTRelationshipEvaluator.h"
 #include "utils.h"
-#include <iostream>
-#include <vector>
 
 NextTRelationshipEvaluator::NextTRelationshipEvaluator(NextRelationshipStorage* nextStorage) : nextStorage(nextStorage) {}
 
