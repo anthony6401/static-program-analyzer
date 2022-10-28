@@ -174,13 +174,13 @@ void RelationshipManager::clearCache() {
 }
 
 RelationshipManager::~RelationshipManager() {
-	for (auto store : relStorages) {
-		delete store;
-	}
+	//for (auto store : relStorages) {
+	//	delete store;
+	//}
 
-	for (auto runtimeStore : runtimeRelStorages) {
-		delete runtimeStore;
-	}
-	relStorages.clear();
-	runtimeRelStorages.clear();
+	//for (auto runtimeStore : runtimeRelStorages) {
+	//	delete runtimeStore;
+	//}
+	//relStorages.clear();
+	//runtimeRelStorages.clear();
 }
