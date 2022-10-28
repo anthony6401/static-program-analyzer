@@ -106,7 +106,7 @@ bool NextTRelationshipEvaluator::getRuntimeRelationship(RelationshipType relType
 			return handleConstantConstant(firstArgument, secondArgument);
 		} else if (firstArgument.getTokenType() == TokenType::WILDCARD && secondArgument.getTokenType() == TokenType::INTEGER) {
 			return handleWildcardConstant(secondArgument);
-		} else if (firstArgument.getTokenType() == TokenType::CONSTANT && secondArgument.getTokenType() == TokenType::WILDCARD) {
+		} else if (firstArgument.getTokenType() == TokenType::INTEGER && secondArgument.getTokenType() == TokenType::WILDCARD) {
 			return handleConstantWildcard(firstArgument);
 		}
 		else if (firstArgument.getTokenType() == TokenType::WILDCARD && secondArgument.getTokenType() == TokenType::WILDCARD) {
