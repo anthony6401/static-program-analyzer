@@ -30,6 +30,10 @@ ResultTable SelectAttributeClause::evaluateClause() {
     }
 }
 
+size_t SelectAttributeClause::getPriority() {
+    return 0;
+}
+
 
 bool SelectAttributeClause::checkIsAlternateAttributeName(DesignEntity returnType, std::string attributeName) {
     if (returnType == DesignEntity::CALL || returnType == DesignEntity::READ || returnType == DesignEntity::PRINT) {

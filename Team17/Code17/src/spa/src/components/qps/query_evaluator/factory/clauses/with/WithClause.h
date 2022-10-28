@@ -12,6 +12,7 @@ private:
     std::vector<TokenObject> right;
     std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap;
     QPSClient qpsClient;
+    static const size_t priority = 1;
     std::unordered_set<std::string> findCommonAttributeValues(std::unordered_set<std::string> leftNameResult, std::unordered_set<std::string> rightNameResult);
     std::unordered_set<std::pair<std::string, std::string>, hashFunction> findCommonAttributeStatements(const std::unordered_set<std::string>& leftResult, std::unordered_set<std::string> rightResult);
     ResultTable evaluateAttributeAttribute();
@@ -29,6 +30,7 @@ public:
     ResultTable evaluateClause() override;
     size_t getNumberOfSynonyms() override;
     std::set<std::string> getAllSynonyms() override;
+    size_t getPriority() override;
 };
 
 #endif //SPA_WITHCLAUSE_H

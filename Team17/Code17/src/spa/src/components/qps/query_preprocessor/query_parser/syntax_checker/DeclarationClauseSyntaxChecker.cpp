@@ -60,15 +60,7 @@ bool DeclarationClauseSyntaxChecker::isSyntacticallyCorrect(std::vector<TokenObj
 
 		// Token is either DESIGN_ENTITY or SYNONYM
 		std::vector<TokenType> possibleTokenTypes = this->generalSyntax.at(syntax);
-		bool foundToken = false;
-		for (int j = 0; j < possibleTokenTypes.size(); j++) {
-			TokenType possibleTokenType = possibleTokenTypes.at(j);
-
-			if (tokenType == possibleTokenType) {
-				foundToken = true;
-				break;
-			}
-		}
+		bool foundToken = std::binary_search(possibleTokenTypes.begin(), possibleTokenTypes.end(), tokenType);
 
 		if (!foundToken) {
 			return false;
