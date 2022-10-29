@@ -24,6 +24,7 @@ public:
 	std::unordered_set<std::string> getRuntimeRelationshipWithFirstWildcard(RelationshipType relType, std::unordered_set<std::string>& filter1, std::unordered_set<std::string>& filter2);
 	std::unordered_set<std::string> getRuntimeRelationshipWithSecondWildcard(RelationshipType relType, std::unordered_set<std::string>& filter1, std::unordered_set<std::string>& filter2);
 	bool storeRelationship(Relationship* rel);
+	void clearCache();
 	~RelationshipManager();
 	
 private:

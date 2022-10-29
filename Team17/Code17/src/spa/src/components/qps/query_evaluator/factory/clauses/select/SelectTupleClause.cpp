@@ -30,6 +30,10 @@ ResultTable SelectTupleClause::evaluateClause() {
     return resultTable;
 }
 
+size_t SelectTupleClause::getPriority() {
+    return 0;
+}
+
 
 ResultTable SelectTupleClause::evaluateSynonymOrAttributeInTuple(std::string synonym, DesignEntity returnType) {
     std::unordered_set<std::string> results = qpsClient.getAllEntity(returnType);

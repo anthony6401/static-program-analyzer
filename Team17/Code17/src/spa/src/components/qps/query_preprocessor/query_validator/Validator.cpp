@@ -5,6 +5,7 @@
 #include "components/qps/abstract_query_object/Pattern.h"
 #include "components/qps/abstract_query_object/With.h"
 #include <unordered_map>
+#include <algorithm>
 #include <stdexcept>
 #include <memory>
 #include <iostream>
@@ -311,7 +312,8 @@ bool Validator::isStatement(std::string synonym) {
 	std::vector<DesignEntity> validDesignEntities = this->statementDesignEntities;
 	DesignEntity designEntityOfSynonym = this->parsedQuery.getSynonymToDesignEntityMap().at(synonym);
 
-	if (std::find(validDesignEntities.begin(), validDesignEntities.end(), designEntityOfSynonym) == validDesignEntities.end()) {
+
+	if (!std::binary_search(validDesignEntities.begin(), validDesignEntities.end(), designEntityOfSynonym)) {
 		return false;
 	}
 
@@ -331,10 +333,10 @@ bool Validator::isValidDesignEntity(std::string synonym, DesignEntity designEnti
 bool Validator::isValidUsesAndModifiesLeftParameter(std::string synonym) {
 	// Removed READ since according to the slides, READ is not a valid parameter for Uses and Modifies
 	std::vector<DesignEntity> validDesignEntities = this->validDesignEntitiesForUsesAndModifies;
-
 	DesignEntity designEntityOfSynonym = this->parsedQuery.getSynonymToDesignEntityMap().at(synonym);
 
-	if (std::find(validDesignEntities.begin(), validDesignEntities.end(), designEntityOfSynonym) == validDesignEntities.end()) {
+
+	if (!std::binary_search(validDesignEntities.begin(), validDesignEntities.end(), designEntityOfSynonym)) {
 		return false;
 	}
 
@@ -344,7 +346,7 @@ bool Validator::isValidUsesAndModifiesLeftParameter(std::string synonym) {
 bool Validator::isValidAttrNameToAttrSynonym(std::string attrName, DesignEntity attrSynonymDesignEntity) {
 	std::vector<DesignEntity> validDesignEntities = this->attrNameToValidDesignEntity.at(attrName);
 
-	if (std::find(validDesignEntities.begin(), validDesignEntities.end(), attrSynonymDesignEntity) == validDesignEntities.end()) {
+	if (!std::binary_search(validDesignEntities.begin(), validDesignEntities.end(), attrSynonymDesignEntity)) {
 		return false;
 	}
 

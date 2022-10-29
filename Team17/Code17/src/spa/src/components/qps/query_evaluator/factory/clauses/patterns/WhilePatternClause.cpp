@@ -15,6 +15,10 @@ ResultTable WhilePatternClause::evaluateClause() {
     }
 }
 
+size_t WhilePatternClause::getPriority() {
+    return priority;
+}
+
 size_t WhilePatternClause::getNumberOfSynonyms() {
     size_t numberOfSynonyms = 0;
     if (firstArgument.getTokenType() == TokenType::NAME) {

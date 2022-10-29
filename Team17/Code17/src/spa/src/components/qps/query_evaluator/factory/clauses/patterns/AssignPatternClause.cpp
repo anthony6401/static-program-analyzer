@@ -16,6 +16,10 @@ ResultTable AssignPatternClause::evaluateClause() {
     }
 }
 
+size_t AssignPatternClause::getPriority() {
+    return priority;
+}
+
 size_t AssignPatternClause::getNumberOfSynonyms() {
     size_t numberOfSynonyms = 0;
     if (left.getTokenType() == TokenType::NAME) {

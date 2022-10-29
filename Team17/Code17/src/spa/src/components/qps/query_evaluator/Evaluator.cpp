@@ -4,6 +4,9 @@
 #include "components/qps/query_evaluator/factory/ClauseCreator.h"
 #include "components/pkb/clients/QPSClient.h"
 #include "ClausesDivider.h"
+#include "optimizer//ClauseGroupSorter.h"
+#include <algorithm>
+#include "iostream"
 
 void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &results, QPSClient qpsClient) {
     if (!queryObject.isSyntacticallyCorrect()) {
@@ -19,6 +22,7 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
         ClauseDivider clausesToEvaluate = extractClausesToEvaluate(queryObject, synonymToDesignEntityMap, qpsClient);
         clausesToEvaluate.divideConnectedSynonymGroupsBySelect(selectClause);
         GroupedClause noSynonymsClauses = clausesToEvaluate.getNoSynonymsPresent();
+
         std::vector<GroupedClause> hasSelectSynonymPresent = clausesToEvaluate.getSelectSynonymPresentGroups();
         std::vector<GroupedClause> noSelectSynonymPresent = clausesToEvaluate.getSelectSynonymNotPresentGroups();
 
@@ -29,11 +33,10 @@ void Evaluator::evaluateQuery(QueryObject queryObject, std::list<std::string> &r
             evaluatedResults.setIsFalseResultToTrue();
         } else {
             evaluatedResults = Evaluator::evaluateHasSelectSynonymClauses(hasSelectSynonymPresent, selectClause);
+            synonymsInTable = {evaluatedResults.synonymsList.begin(), evaluatedResults.synonymsList.end()};
+            selectClause = ClauseCreator::createClause(select, synonymsInTable, synonymToDesignEntityMap, qpsClient);
+            Evaluator::combineResultsWithSelect(selectClause, evaluatedResults);
         }
-
-        synonymsInTable = {evaluatedResults.synonymsList.begin(), evaluatedResults.synonymsList.end()};
-        selectClause = ClauseCreator::createClause(select, synonymsInTable, synonymToDesignEntityMap, qpsClient);
-        Evaluator::combineResultsWithSelect(selectClause, evaluatedResults);
 
         Evaluator::populateResultsList(evaluatedResults, select, results, qpsClient, synonymToDesignEntityMap);
     }
@@ -130,6 +133,9 @@ bool Evaluator::evaluateNoSynonymClauses(GroupedClause noSynonymsClauses) {
 }
 
 bool Evaluator::evaluateNoSelectSynonymClauses(std::vector<GroupedClause> noSelectSynonymPresent) {
+
+    std::sort(noSelectSynonymPresent.begin(), noSelectSynonymPresent.end(), ClauseGroupSorter());
+
     for (GroupedClause gc : noSelectSynonymPresent) {
         ResultTable result = gc.evaluateGroupedClause();
         if (result.getIsFalseResult()) {
@@ -140,6 +146,9 @@ bool Evaluator::evaluateNoSelectSynonymClauses(std::vector<GroupedClause> noSele
 }
 
 ResultTable Evaluator::evaluateHasSelectSynonymClauses(std::vector<GroupedClause> hasSelectSynonymPresent, std::shared_ptr<Clause> &selectClause) {
+
+    std::sort(hasSelectSynonymPresent.begin(), hasSelectSynonymPresent.end(), ClauseGroupSorter());
+
     ResultTable combinedResultTable;
     for (GroupedClause &gc : hasSelectSynonymPresent) {
         ResultTable intermediate = gc.evaluateGroupedClause();
