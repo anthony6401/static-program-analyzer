@@ -364,6 +364,10 @@ TEST_CASE("PKB Relationship Manager test") {
 	REQUIRE(pkb.getRelationship(RelationshipType::NEXT, wildcardTokenObject, wildcardTokenObject));
 
 	REQUIRE(pkb.getRelationship(RelationshipType::NEXT_T, stmtTokenObject1, stmtTokenObject2));
+	REQUIRE(pkb.getRelationship(RelationshipType::NEXT_T, wildcardTokenObject, stmtTokenObject2));
+	REQUIRE(pkb.getRelationship(RelationshipType::NEXT_T, stmtTokenObject1, wildcardTokenObject));
+	REQUIRE(pkb.getRelationship(RelationshipType::NEXT_T, wildcardTokenObject, wildcardTokenObject));
+
 
 	REQUIRE(pkb.getRelationship(RelationshipType::CALLS, procedureTokenObject, procedureTokenObjectTwo));
 	REQUIRE(pkb.getRelationship(RelationshipType::CALLS, wildcardTokenObject, procedureTokenObjectTwo));
@@ -424,6 +428,7 @@ TEST_CASE("PKB Relationship Manager test") {
 	std::unordered_set<std::string> followsFirstWildcardExpectedResult({ print_value_one });
 	std::unordered_set<std::string> followsTFirstWildcardExpectedResult({ print_value_one });
 	std::unordered_set<std::string> nextFirstWildcardExpectedResult({ while_value_one });
+	std::unordered_set<std::string> nextTFirstWildcardExpectedResult({ });
 	std::unordered_set<std::string> callsFirstWildcardExpectedResult{ procedure_value_two, procedure_value_three };
 	std::unordered_set<std::string> callsTFirstWildcardExpectedResult{ procedure_value_two, procedure_value_three };
 
@@ -432,8 +437,10 @@ TEST_CASE("PKB Relationship Manager test") {
 	REQUIRE(pkb.getRelationshipWithFirstWildcard(RelationshipType::FOLLOWS, DesignEntity::PRINT) == followsFirstWildcardExpectedResult);
 	REQUIRE(pkb.getRelationshipWithFirstWildcard(RelationshipType::FOLLOWS_T, DesignEntity::PRINT) == followsTFirstWildcardExpectedResult);
 	REQUIRE(pkb.getRelationshipWithFirstWildcard(RelationshipType::NEXT, DesignEntity::WHILE) == nextFirstWildcardExpectedResult);
+	REQUIRE(pkb.getRelationshipWithFirstWildcard(RelationshipType::NEXT_T, DesignEntity::WHILE) == nextTFirstWildcardExpectedResult);
 	REQUIRE(pkb.getRelationshipWithFirstWildcard(RelationshipType::CALLS, DesignEntity::PROCEDURE) == callsFirstWildcardExpectedResult);
 	REQUIRE(pkb.getRelationshipWithFirstWildcard(RelationshipType::CALLS_T, DesignEntity::PROCEDURE) == callsTFirstWildcardExpectedResult);
+
 
 	std::unordered_set<std::string> usesSecondWildcardExpectedResult({ assign_value_one });
 	std::unordered_set<std::string> modifiesSecondWildcardExpectedResult({ assign_value_one });
@@ -442,6 +449,7 @@ TEST_CASE("PKB Relationship Manager test") {
 	std::unordered_set<std::string> followsSecondWildcardExpectedResult({ read_value_one });
 	std::unordered_set<std::string> followsTSecondWildcardExpectedResult({ read_value_one });
 	std::unordered_set<std::string> nextSecondWildcardExpectedResult({ if_value_one });
+	std::unordered_set<std::string> nextTSecondWildcardExpectedResult({ });
 	std::unordered_set<std::string> callsSecondWildcardExpectedResult{ procedure_value_one, procedure_value_two };
 	std::unordered_set<std::string> callsTSecondWildcardExpectedResult{ procedure_value_one, procedure_value_two };
 
@@ -452,6 +460,7 @@ TEST_CASE("PKB Relationship Manager test") {
 	REQUIRE(pkb.getRelationshipWithSecondWildcard(RelationshipType::FOLLOWS, DesignEntity::READ) == followsSecondWildcardExpectedResult);
 	REQUIRE(pkb.getRelationshipWithSecondWildcard(RelationshipType::FOLLOWS_T, DesignEntity::READ) == followsTSecondWildcardExpectedResult);
 	REQUIRE(pkb.getRelationshipWithSecondWildcard(RelationshipType::NEXT, DesignEntity::IF) == nextSecondWildcardExpectedResult);
+	REQUIRE(pkb.getRelationshipWithSecondWildcard(RelationshipType::NEXT_T, DesignEntity::IF) == nextTSecondWildcardExpectedResult);
 	REQUIRE(pkb.getRelationshipWithSecondWildcard(RelationshipType::CALLS, DesignEntity::PROCEDURE) == callsSecondWildcardExpectedResult);
 	REQUIRE(pkb.getRelationshipWithSecondWildcard(RelationshipType::CALLS_T, DesignEntity::PROCEDURE) == callsTSecondWildcardExpectedResult);
 
@@ -517,12 +526,17 @@ TEST_CASE("Runtime Evaluator Relationship Manager Test") {
 	REQUIRE(!pkb.getRelationship(RelationshipType::AFFECTS, stmtTokenObject1, stmtTokenObject7));
 	REQUIRE(!pkb.getRelationship(RelationshipType::AFFECTS, stmtTokenObject1, stmtTokenObject4));
 
+	REQUIRE(pkb.getRelationship(RelationshipType::AFFECTS, wildcardTokenObject, stmtTokenObject5));
+	REQUIRE(pkb.getRelationship(RelationshipType::AFFECTS, stmtTokenObject3, wildcardTokenObject));
+	REQUIRE(pkb.getRelationship(RelationshipType::AFFECTS, wildcardTokenObject, wildcardTokenObject));
+
 	std::unordered_set<std::string> a_filter = { stmt1, stmt3, stmt4, stmt5, stmt7 };
 	std::unordered_set<std::string> empty = {};
 
 	// Test for Affects(1, a)
 	std::unordered_set<std::string> expectedResultByFirst = { stmt5 };
 	std::unordered_set<std::string> expectedResultByFirst2 = { stmt7 };
+	std::unordered_set<std::string> expectedResultByFirst3 = { stmt5,stmt7 };
 
 
 	REQUIRE(pkb.getRelationshipByFirst(RelationshipType::AFFECTS, stmtTokenObject1, DesignEntity::ASSIGN) == expectedResultByFirst);
@@ -533,9 +547,12 @@ TEST_CASE("Runtime Evaluator Relationship Manager Test") {
 	REQUIRE(pkb.getRelationshipByFirst(RelationshipType::AFFECTS, stmtTokenObject6, DesignEntity::ASSIGN) == empty);
 	REQUIRE(pkb.getRelationshipByFirst(RelationshipType::AFFECTS, stmtTokenObject7, DesignEntity::ASSIGN) == empty);
 
+	REQUIRE(pkb.getRelationshipWithFirstWildcard(RelationshipType::AFFECTS, DesignEntity::ASSIGN) == expectedResultByFirst3);
+
 	// Test for Affects(a, 2)
 	std::unordered_set<std::string> expectedResultBySecond = { stmt1, stmt3 };
 	std::unordered_set<std::string> expectedResultBySecond2 = { stmt5 };
+	std::unordered_set<std::string> expectedResultBySecond3 = { stmt1, stmt3, stmt5 };
 
 	REQUIRE(pkb.getRelationshipBySecond(RelationshipType::AFFECTS, DesignEntity::ASSIGN, stmtTokenObject1) == empty);
 	REQUIRE(pkb.getRelationshipBySecond(RelationshipType::AFFECTS, DesignEntity::ASSIGN, stmtTokenObject2) == empty);
@@ -544,6 +561,8 @@ TEST_CASE("Runtime Evaluator Relationship Manager Test") {
 	REQUIRE(pkb.getRelationshipBySecond(RelationshipType::AFFECTS, DesignEntity::ASSIGN, stmtTokenObject5) == expectedResultBySecond);
 	REQUIRE(pkb.getRelationshipBySecond(RelationshipType::AFFECTS, DesignEntity::ASSIGN, stmtTokenObject6) == empty);
 	REQUIRE(pkb.getRelationshipBySecond(RelationshipType::AFFECTS, DesignEntity::ASSIGN, stmtTokenObject7) == expectedResultBySecond2);
+
+	REQUIRE(pkb.getRelationshipWithSecondWildcard(RelationshipType::AFFECTS, DesignEntity::ASSIGN) == expectedResultBySecond3);
 
 	// Test for Affects(a1, a2)
 	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultAll{
@@ -564,6 +583,10 @@ TEST_CASE("Runtime Evaluator Relationship Manager Test") {
 
 	REQUIRE(!pkb.getRelationship(RelationshipType::AFFECTS_T, stmtTokenObject1, stmtTokenObject4));
 
+	REQUIRE(pkb.getRelationship(RelationshipType::AFFECTS_T, wildcardTokenObject, stmtTokenObject7));
+	REQUIRE(pkb.getRelationship(RelationshipType::AFFECTS_T, stmtTokenObject1, wildcardTokenObject));
+	REQUIRE(pkb.getRelationship(RelationshipType::AFFECTS_T, wildcardTokenObject, wildcardTokenObject));
+
 	std::unordered_set<std::string> a_filterT = { stmt1, stmt3, stmt4, stmt5, stmt7 };
 	std::unordered_set<std::string> emptyT = {};
 
@@ -579,6 +602,8 @@ TEST_CASE("Runtime Evaluator Relationship Manager Test") {
 	REQUIRE(pkb.getRelationshipByFirst(RelationshipType::AFFECTS_T, stmtTokenObject6, DesignEntity::ASSIGN) == emptyT);
 	REQUIRE(pkb.getRelationshipByFirst(RelationshipType::AFFECTS_T, stmtTokenObject7, DesignEntity::ASSIGN) == emptyT);
 
+	REQUIRE(pkb.getRelationshipWithFirstWildcard(RelationshipType::AFFECTS_T, DesignEntity::ASSIGN) == expectedResultByFirstT);
+
 	// Test for Affects(a, 2)
 	std::unordered_set<std::string> expectedResultBySecondT = { stmt1, stmt3 };
 	std::unordered_set<std::string> expectedResultBySecondT2 = { stmt1,stmt3, stmt5 };
@@ -590,6 +615,8 @@ TEST_CASE("Runtime Evaluator Relationship Manager Test") {
 	REQUIRE(pkb.getRelationshipBySecond(RelationshipType::AFFECTS_T, DesignEntity::ASSIGN, stmtTokenObject5) == expectedResultBySecondT);
 	REQUIRE(pkb.getRelationshipBySecond(RelationshipType::AFFECTS_T, DesignEntity::ASSIGN, stmtTokenObject6) == emptyT);
 	REQUIRE(pkb.getRelationshipBySecond(RelationshipType::AFFECTS_T, DesignEntity::ASSIGN, stmtTokenObject7) == expectedResultBySecondT2);
+
+	REQUIRE(pkb.getRelationshipWithSecondWildcard(RelationshipType::AFFECTS_T, DesignEntity::ASSIGN) == expectedResultBySecondT2);	
 
 	// Test for AffectsT(a1, a2)
 	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultAllT{
