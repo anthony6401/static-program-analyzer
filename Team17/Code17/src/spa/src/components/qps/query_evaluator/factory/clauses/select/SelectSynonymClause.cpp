@@ -24,6 +24,10 @@ size_t SelectSynonymClause::getNumberOfSynonyms() {
     return 1;
 }
 
+size_t SelectSynonymClause::getPriority() {
+    return 0;
+}
+
 std::set<std::string> SelectSynonymClause::getAllSynonyms() {
     std::set<std::string> synonyms = {};
     synonyms.emplace(selectSynonym.getValue());

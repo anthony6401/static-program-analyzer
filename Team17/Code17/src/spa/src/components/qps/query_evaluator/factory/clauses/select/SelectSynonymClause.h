@@ -18,6 +18,7 @@ public:
     ResultTable evaluateClause() override;
     size_t getNumberOfSynonyms() override;
     std::set<std::string> getAllSynonyms() override;
+    size_t getPriority() override;
 };
 
 #endif //SPA_SELECTSYNONYMCLAUSE_H

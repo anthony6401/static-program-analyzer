@@ -21,11 +21,11 @@ public:
 		return usesSet.find(var) != usesSet.end();
 	}
 
-	static std::unordered_set<std::string> getIntersectionVar(std::unordered_set<std::string>& modifiesSet, std::unordered_set<std::string>& usesSet) {
+	static std::unordered_set<std::string> getSetIntersection(std::unordered_set<std::string>& set1, std::unordered_set<std::string>& set2) {
 		std::unordered_set<std::string> result;
-		for (auto const& modifiesVar : modifiesSet) {
-			if (usesSet.find(modifiesVar) != usesSet.end()) {
-				result.insert(modifiesVar);
+		for (auto const& el : set1) {
+			if (set2.find(el) != set2.end()) {
+				result.insert(el);
 			}
 		}
 

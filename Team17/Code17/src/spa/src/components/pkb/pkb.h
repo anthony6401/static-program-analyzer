@@ -25,6 +25,7 @@ public:
 	std::unordered_set<std::string> getRelationshipWithFirstWildcard(RelationshipType relType, DesignEntity returnType);
 	std::unordered_set<std::string> getRelationshipWithSecondWildcard(RelationshipType relType, DesignEntity returnType);
 	std::unordered_map<std::string, std::unordered_set<std::string>> getAllRelationship(RelationshipType relType, DesignEntity returnType1, DesignEntity returntype2);
+	void clearCache();
 	
 	//For pattern
 	bool storePattern(kb::Pattern* pattern);
@@ -40,6 +41,8 @@ public:
 	~PKB();
 
 private:
+	bool isRuntimeRelationship(RelationshipType relType);
+	std::unordered_set<std::string> getFilter(RelationshipType relType, DesignEntity designEntity);
 	EntityManager* entityManager;
 	RelationshipManager* relManager;
 	PatternManager* patternManager;

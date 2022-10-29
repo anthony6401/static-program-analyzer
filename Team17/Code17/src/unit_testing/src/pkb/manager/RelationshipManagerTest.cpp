@@ -16,7 +16,7 @@
 
 TEST_CASE("Relationship Manager Test") {
 	RelationshipManager relManager = RelationshipManager();
-
+	
 	REQUIRE(relManager.storeRelationship(usesRelationshipAssignOne));
 	REQUIRE(relManager.storeRelationship(usesRelationshipProcOne));
 	REQUIRE(relManager.storeRelationship(usesRelationshipPrintOne));
@@ -139,7 +139,7 @@ TEST_CASE("Relationship Manager Test") {
 	REQUIRE(relManager.getRelationshipByFirst(RelationshipType::CALLS, procedureTokenObject, DesignEntity::PROCEDURE) == callsExpectedResult);
 	REQUIRE(relManager.getRelationshipByFirst(RelationshipType::CALLS_T, procedureTokenObject, DesignEntity::PROCEDURE) == callsTExpectedResult);
 
-	// For runtime evaluation relationship
+	//// For runtime evaluation relationship 
 	std::unordered_set<std::string> nextTExpectedResult({ while_value_one });
 	std::unordered_set<std::string> nextTExpectedResult2({ read_value_one });
 	std::unordered_set<std::string> w_filter = { while_value_one };
@@ -245,6 +245,7 @@ TEST_CASE("Relationship Manager Test") {
 	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultNextTAll{ { print_value_one, std::unordered_set<std::string>({read_value_one}) } };
 
 	REQUIRE(relManager.getAllRuntimeRelationship(RelationshipType::NEXT_T, p_filter, r_filter) == expectedResultNextTAll);
+	
 }
 
 TEST_CASE("Runtime Evaluator Manager test") {

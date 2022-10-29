@@ -5,6 +5,7 @@
 #include "components/qps/abstract_query_object/Pattern.h"
 #include "components/qps/abstract_query_object/With.h"
 #include <unordered_map>
+#include <algorithm>
 #include <stdexcept>
 #include <memory>
 #include <sstream>
@@ -546,13 +547,13 @@ std::vector<With> Parser::parseTokensIntoWithObjects(std::vector<TokenObject> wi
 
 bool Parser::isRelationshipToken(TokenType token) {
 	std::vector<TokenType> relationshipTokens{
-		TokenType::FOLLOWS, TokenType::FOLLOWS_T, TokenType::PARENT,
-		TokenType::PARENT_T, TokenType::USES, TokenType::MODIFIES,
+		TokenType::MODIFIES, TokenType::USES, TokenType::FOLLOWS,
+		TokenType::FOLLOWS_T, TokenType::PARENT, TokenType::PARENT_T,
 		TokenType::CALLS, TokenType::CALLS_T, TokenType::NEXT, 
 		TokenType::NEXT_T, TokenType::AFFECTS, TokenType::AFFECTS_T
 	};
 
-	if (std::find(relationshipTokens.begin(), relationshipTokens.end(), token) == relationshipTokens.end()) {
+	if (!std::binary_search(relationshipTokens.begin(), relationshipTokens.end(), token)) {
 		return false;
 	}
 
@@ -563,9 +564,9 @@ bool Parser::isDesignEntityToken(TokenType token) {
 	std::vector<TokenType> designEntityTokens{
 		TokenType::STMT, TokenType::READ, TokenType::PRINT, TokenType::CALL, TokenType::WHILE, 
 		TokenType::IF, TokenType::ASSIGN, TokenType::VARIABLE, TokenType::CONSTANT, TokenType::PROCEDURE 
-};
+	};
 
-	if (std::find(designEntityTokens.begin(), designEntityTokens.end(), token) == designEntityTokens.end()) {
+	if (!std::binary_search(designEntityTokens.begin(), designEntityTokens.end(), token)) {
 		return false;
 	}
 

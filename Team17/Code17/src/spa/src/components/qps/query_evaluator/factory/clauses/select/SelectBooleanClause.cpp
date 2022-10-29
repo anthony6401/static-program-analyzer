@@ -14,3 +14,7 @@ size_t SelectBooleanClause::getNumberOfSynonyms() {
 std::set<std::string> SelectBooleanClause::getAllSynonyms() {
     return {};
 }
+
+size_t SelectBooleanClause::getPriority() {
+    return 0;
+}

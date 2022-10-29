@@ -428,7 +428,7 @@ TEST_CASE("PKB Relationship Manager test") {
 	std::unordered_set<std::string> followsFirstWildcardExpectedResult({ print_value_one });
 	std::unordered_set<std::string> followsTFirstWildcardExpectedResult({ print_value_one });
 	std::unordered_set<std::string> nextFirstWildcardExpectedResult({ while_value_one });
-	std::unordered_set<std::string> nextTFirstWildcardExpectedResult({ });
+	std::unordered_set<std::string> nextTFirstWildcardExpectedResult({ while_value_one });
 	std::unordered_set<std::string> callsFirstWildcardExpectedResult{ procedure_value_two, procedure_value_three };
 	std::unordered_set<std::string> callsTFirstWildcardExpectedResult{ procedure_value_two, procedure_value_three };
 
@@ -449,7 +449,7 @@ TEST_CASE("PKB Relationship Manager test") {
 	std::unordered_set<std::string> followsSecondWildcardExpectedResult({ read_value_one });
 	std::unordered_set<std::string> followsTSecondWildcardExpectedResult({ read_value_one });
 	std::unordered_set<std::string> nextSecondWildcardExpectedResult({ if_value_one });
-	std::unordered_set<std::string> nextTSecondWildcardExpectedResult({ });
+	std::unordered_set<std::string> nextTSecondWildcardExpectedResult({ if_value_one });
 	std::unordered_set<std::string> callsSecondWildcardExpectedResult{ procedure_value_one, procedure_value_two };
 	std::unordered_set<std::string> callsTSecondWildcardExpectedResult{ procedure_value_one, procedure_value_two };
 

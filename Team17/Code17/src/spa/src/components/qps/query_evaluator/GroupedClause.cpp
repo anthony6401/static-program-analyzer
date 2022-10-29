@@ -1,5 +1,7 @@
 #include "GroupedClause.h"
 #include "memory"
+#include <algorithm>
+#include "optimizer/ClauseSorter.h"
 
 GroupedClause::GroupedClause() : synonyms({}), clauses({}) {}
 
@@ -11,8 +13,18 @@ std::set<std::string> GroupedClause::getAllSynonyms() {
     return synonyms;
 }
 
+size_t GroupedClause::getNumberOfSynonyms() const {
+     return synonyms.size();
+}
+
+size_t GroupedClause::getPriority() const {
+    return priority;
+}
 
 ResultTable GroupedClause::evaluateGroupedClause() {
+
+    std::sort(clauses.begin(), clauses.end(), ClauseSorter());
+
     ResultTable evaluatedGroupRawResult;
     for (const auto& c : clauses) {
         ResultTable evaluatedClause = c -> evaluateClause();
@@ -29,6 +41,7 @@ void GroupedClause::mergeGroupedClause(GroupedClause &group) {
     auto clausesOfMergingGroup = group.getClauses();
     clauses.insert(clauses.end(), clausesOfMergingGroup.begin(), clausesOfMergingGroup.end());
     synonyms.insert(synonymsOfMergingGroup.begin(), synonymsOfMergingGroup.end());
+    priority += group.getPriority();
 }
 
 bool GroupedClause::hasCommonSynonymWithClause(std::shared_ptr<Clause> &clause) {
@@ -54,6 +67,7 @@ void GroupedClause::addClauseToGroup(std::shared_ptr<Clause> &clause) {
     }
 
     clauses.emplace_back(clause);
+    priority += clause->getPriority();
 }
 
 bool GroupedClause::isEmpty() {
