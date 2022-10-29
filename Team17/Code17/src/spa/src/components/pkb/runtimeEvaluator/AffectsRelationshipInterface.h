@@ -22,15 +22,6 @@ public:
 	virtual std::unordered_set<std::string> getRuntimeRelationshipWithSecondWildcard(RelationshipType relType, std::unordered_set<std::string>& filter1, std::unordered_set<std::string>& filter2) = 0;
 
 protected:
-	void DFSAffectsForwardWithSynonym(std::string curr, std::string var, std::unordered_set<std::string>& visited,
-		std::unordered_set<std::string>& result, std::unordered_set<std::string>& filter);
-	void DFSAffectsBackwardWithSynonym(std::string curr, std::unordered_set<std::string>& usesSet, std::unordered_set<std::string>& visited,
-		std::unordered_set<std::string>& result, std::unordered_set<std::string>& filter);
-
-	std::unordered_set<std::string> DFSAffectsWildcardForward(std::unordered_set<std::string>& filter1,
-		std::unordered_set<std::string>& filter2, std::unordered_set<std::string>& result);
-	std::unordered_set<std::string> DFSAffectsWildcardBackward(std::unordered_set<std::string>& filter1,
-		std::unordered_set<std::string>& filter2, std::unordered_set<std::string>& result);
 	bool handleConstantWildcard(TokenObject firstArgument);
 	bool handleWildcardConstant(TokenObject secondArgument);
 	bool handleWildcardWildcard();

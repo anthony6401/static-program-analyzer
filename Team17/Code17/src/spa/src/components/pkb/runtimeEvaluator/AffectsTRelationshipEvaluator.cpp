@@ -162,6 +162,49 @@ void AffectsTRelationshipEvaluator::DFSAffectsTWithTwoSynonyms(std::unordered_se
 	}
 }
 
+std::unordered_set<std::string> AffectsTRelationshipEvaluator::DFSAffectsTWildcardForward(std::unordered_set<std::string>& filter1, std::unordered_set<std::string>& filter2, std::unordered_set<std::string>& result) {
+	std::unordered_set<std::string> ans;
+	for (auto const& start : filter1) {
+		if (isExistKeyForwardCache(start)) {
+			ans.insert(start);
+		} else {
+			std::unordered_set<std::string> visited;
+			std::unordered_set<std::string> result;
+			std::unordered_set<std::string> modifiesSet = modifiesStorage->getModifiesForAssign(start);
+			if (modifiesSet.size() != 0) {
+				std::string var = *(modifiesSet.begin());
+				DFSAffectsTForwardWithSynonym(start, var, visited, result, filter2);
+				storeForwardCache(start, result);
+				if (result.size() != 0) {
+					ans.insert(start);
+				}
+			}
+		}
+	}
+	return ans;
+}
+
+std::unordered_set<std::string> AffectsTRelationshipEvaluator::DFSAffectsTWildcardBackward(std::unordered_set<std::string>& filter1, std::unordered_set<std::string>& filter2, std::unordered_set<std::string>& result) {
+	std::unordered_set<std::string> ans;
+	for (auto const& start : filter2) {
+		if (isExistKeyForwardCache(start)) {
+			ans.insert(start);
+		}
+		else {
+			std::unordered_set<std::string> visited;
+			std::unordered_set<std::string> result;
+			std::unordered_set<std::string> usesSet = usesStorage->getUsesForAssign(start);
+			
+			DFSAffectsTBackwardWithSynonym(start, usesSet, visited, result, filter1);
+			storeBackwardCache(start, result);
+			if (result.size() != 0) {
+				ans.insert(start);
+			}
+		}
+	}
+	return ans;
+}
+
 bool AffectsTRelationshipEvaluator::getRuntimeRelationship(RelationshipType relType, TokenObject firstArgument, TokenObject secondArgument) {
 	if (relType == RelationshipType::AFFECTS_T) {
 		if (firstArgument.getTokenType() == TokenType::INTEGER && secondArgument.getTokenType() == TokenType::INTEGER) {
@@ -235,7 +278,7 @@ std::unordered_map<std::string, std::unordered_set<std::string>> AffectsTRelatio
 std::unordered_set<std::string> AffectsTRelationshipEvaluator::getRuntimeRelationshipWithFirstWildcard(RelationshipType relType, std::unordered_set<std::string>& filter1, std::unordered_set<std::string>& filter2) {
 	if (relType == RelationshipType::AFFECTS_T) {
 		std::unordered_set<std::string> result;
-		return DFSAffectsWildcardBackward(filter1, filter2, result);
+		return DFSAffectsTWildcardBackward(filter1, filter2, result);
 	}
 	return std::unordered_set<std::string>();
 }
@@ -243,7 +286,7 @@ std::unordered_set<std::string> AffectsTRelationshipEvaluator::getRuntimeRelatio
 std::unordered_set<std::string> AffectsTRelationshipEvaluator::getRuntimeRelationshipWithSecondWildcard(RelationshipType relType, std::unordered_set<std::string>& filter1, std::unordered_set<std::string>& filter2) {
 	if (relType == RelationshipType::AFFECTS_T) {
 		std::unordered_set<std::string> result;
-		return DFSAffectsWildcardForward(filter1, filter2, result);
+		return DFSAffectsTWildcardForward(filter1, filter2, result);
 	}
 	return std::unordered_set<std::string>();
 }

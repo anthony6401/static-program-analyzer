@@ -25,6 +25,67 @@ bool AffectsRelationshipEvaluator::DFSAffectsForward(std::string curr, std::stri
 	return false;
 }
 
+void AffectsRelationshipEvaluator::DFSAffectsForwardWithSynonym(std::string curr, std::string var,
+	std::unordered_set<std::string>& visited, std::unordered_set<std::string>& result,
+	std::unordered_set<std::string>& filter) {
+	visited.insert(curr);
+
+	std::unordered_set<std::string> neighbours = this->nextStorage->getNextForward(curr);
+
+	for (std::string neighbour : neighbours) {
+		std::unordered_set<std::string>::const_iterator exist = visited.find(neighbour);
+		if ((filter.find(neighbour) != filter.end()) && RuntimeRelationshipUtils::isUses(usesStorage, neighbour, var)) {
+			result.insert(neighbour);
+		}
+		if (exist == visited.end() && !RuntimeRelationshipUtils::isModifies(modifiesStorage, neighbour, var)) {
+			DFSAffectsForwardWithSynonym(neighbour, var, visited, result, filter);
+		}
+	}
+}
+
+// DFS search backward to answer Next* queries with synonym
+void AffectsRelationshipEvaluator::DFSAffectsBackwardWithSynonym(std::string curr, std::unordered_set<std::string>& usesSet,
+	std::unordered_set<std::string>& visited,
+	std::unordered_set<std::string>& result,
+	std::unordered_set<std::string>& filter) {
+
+	if (usesSet.size() == 0) {
+		return;
+	}
+
+	visited.insert(curr);
+
+	std::unordered_set<std::string> neighbours = this->nextStorage->getNextBackward(curr);
+
+	for (std::string neighbour : neighbours) {
+		std::unordered_set<std::string>::const_iterator exist = visited.find(neighbour);
+		std::unordered_set<std::string> modifiesSet = RuntimeRelationshipUtils::getModifiesForBackward(modifiesStorage, neighbour);
+		std::unordered_set<std::string> intersectionSet = RuntimeRelationshipUtils::getSetIntersection(modifiesSet, usesSet);
+		bool isModifiesForBackward = intersectionSet.size() != 0;
+
+		if (isModifiesForBackward) {
+			for (auto const& var : intersectionSet) {
+				usesSet.erase(var);
+			}
+
+			if (filter.find(neighbour) != filter.end() && RuntimeRelationshipUtils::isModifiesAssign(modifiesStorage, neighbour)) {
+				result.insert(neighbour);
+			}
+		}
+
+		if (exist == visited.end()) {
+			DFSAffectsBackwardWithSynonym(neighbour, usesSet, visited, result, filter);
+		}
+
+		if (isModifiesForBackward) {
+			for (auto const& var : intersectionSet) {
+				usesSet.insert(var);
+			}
+		}
+	}
+
+	visited.erase(curr);
+}
 
 // DFS search to answer Next* queries with 2 synonyms
 void AffectsRelationshipEvaluator::DFSAffectsWithTwoSynonyms(std::unordered_set<std::string>& filter1,
@@ -54,6 +115,33 @@ void AffectsRelationshipEvaluator::DFSAffectsWithTwoSynonyms(std::unordered_set<
 	}
 }
 
+std::unordered_set<std::string> AffectsRelationshipEvaluator::DFSAffectsWildcardForward(std::unordered_set<std::string>& filter1,
+	std::unordered_set<std::string>& filter2, std::unordered_set<std::string>& result) {
+	std::unordered_set<std::string> ans;
+	for (const auto& ele : filter1) {
+		std::string start = ele;
+
+
+		if (isExistKeyForwardCache(start)) {
+			ans.insert(start);
+		}
+		else {
+			std::unordered_set<std::string> modifiesSet = modifiesStorage->getModifiesForAssign(start);
+			if (modifiesSet.size() == 0) {
+				continue;
+			}
+			std::unordered_set<std::string> visited;
+			std::unordered_set<std::string> result;
+			std::string var = *(modifiesSet.begin());
+			DFSAffectsForwardWithSynonym(start, var, visited, result, filter2);
+			storeForwardCache(start, result);
+			if (result.size() != 0) {
+				ans.insert(start);
+			}
+		}
+	}
+	return ans;
+}
 
 bool AffectsRelationshipEvaluator::getRuntimeRelationship(RelationshipType relType, TokenObject firstArgument, TokenObject secondArgument) {
 	if (relType == RelationshipType::AFFECTS) {
@@ -73,6 +161,31 @@ bool AffectsRelationshipEvaluator::getRuntimeRelationship(RelationshipType relTy
 	}
 
 	return false;
+}
+
+std::unordered_set<std::string> AffectsRelationshipEvaluator::DFSAffectsWildcardBackward(std::unordered_set<std::string>& filter1,
+	std::unordered_set<std::string>& filter2, std::unordered_set<std::string>& result) {
+	std::unordered_set<std::string> ans;
+
+	for (const auto& ele : filter2) {
+		std::string start = ele;
+
+		if (isExistKeyBackwardCache(start)) {
+			ans.insert(start);
+		}
+		else {
+			std::unordered_set<std::string> visited;
+			std::unordered_set<std::string> result;
+			std::unordered_set<std::string> usesSet = usesStorage->getUsesForAssign(ele);
+
+			DFSAffectsBackwardWithSynonym(start, usesSet, visited, result, filter1);
+			storeBackwardCache(start, result);
+			if (result.size() != 0) {
+				ans.insert(start);
+			}
+		}
+	}
+	return ans;
 }
 
 std::unordered_set<std::string> AffectsRelationshipEvaluator::getRuntimeRelationshipByFirst(RelationshipType relType, TokenObject firstArgument, std::unordered_set<std::string>& filter) {

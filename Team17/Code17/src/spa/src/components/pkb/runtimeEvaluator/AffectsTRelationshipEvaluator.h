@@ -30,6 +30,8 @@ private:
 	void DFSAffectsTWithTwoSynonyms(std::unordered_set<std::string>& filter1,
 		std::unordered_set<std::string>& filter2,
 		std::unordered_map<std::string, std::unordered_set<std::string>>& result_map);
+	std::unordered_set<std::string> DFSAffectsTWildcardForward(std::unordered_set<std::string>& filter1, std::unordered_set<std::string>&  filter2, std::unordered_set<std::string>& result);
+	std::unordered_set<std::string> DFSAffectsTWildcardBackward(std::unordered_set<std::string>& filter1, std::unordered_set<std::string>& filter2, std::unordered_set<std::string>& result);
 	void startNewDFSPath(std::unordered_set<std::string>& visited, std::string neighbour, std::unordered_set<std::string>& result, std::unordered_set<std::string>& filter);
 	void removeUsesSet( std::unordered_set<std::string>& usesSet, std::unordered_set<std::string>& intersectionSet);
 	void insertUsesSet(std::unordered_set<std::string>& usesSet, std::unordered_set<std::string>& intersectionSet);
