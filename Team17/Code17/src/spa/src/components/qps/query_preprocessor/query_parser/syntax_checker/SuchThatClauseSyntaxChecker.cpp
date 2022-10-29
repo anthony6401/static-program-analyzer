@@ -53,16 +53,7 @@ bool SuchThatClauseSyntaxChecker::isSyntacticallyCorrect(std::vector<TokenObject
 
 		// Checking for RELREF syntax
 		std::vector<TokenType> possibleTokenTypes = this->generalSyntax.at(syntax);
-		bool foundToken = false;
-		for (int j = 0; j < possibleTokenTypes.size(); j++) {
-			TokenType possibleTokenType = possibleTokenTypes.at(j);
-
-			if (tokenType == possibleTokenType) {
-				foundToken = true;
-				break;
-			}
-		}
-
+		bool foundToken = std::binary_search(possibleTokenTypes.begin(), possibleTokenTypes.end(), tokenType);
 
 		if (!foundToken) {
 			return false;
@@ -145,21 +136,9 @@ bool SuchThatClauseSyntaxChecker::hasValidRelationshipSyntax(std::vector<TokenOb
 
 		// STMTREF or ENTREF
 		std::vector<TokenType> possibleTokenTypes = this->generalSyntax.at(syntax);
-		bool foundToken = false;
-		for (int j = 0; j < possibleTokenTypes.size(); j++) {
-			TokenType possibleTokenType = possibleTokenTypes.at(j);
+		bool foundToken = std::binary_search(possibleTokenTypes.begin(), possibleTokenTypes.end(), tokenType);
 
-			if (tokenType == possibleTokenType) {
-				foundToken = true;
-				break;
-			}
-
-			if (possibleTokenType == TokenType::SYNONYM) {
-				foundToken = isSynonymToken(tokenType);
-			}
-		}
-
-		if (!foundToken) {
+		if (!foundToken && !isSynonymToken(tokenType)) {
 			return false;
 		}
 		this->suchThatSyntax.pop();
@@ -200,18 +179,11 @@ bool SuchThatClauseSyntaxChecker::hasValidUsesModifiesSyntax(std::vector<TokenOb
 
 		// ENTREF
 		std::vector<TokenType> possibleTokenTypes = this->generalSyntax.at(syntax);
-		bool foundToken = false;
-		for (int j = 0; j < possibleTokenTypes.size(); j++) {
-			TokenType possibleTokenType = possibleTokenTypes.at(j);
+		bool foundToken = std::binary_search(possibleTokenTypes.begin(), possibleTokenTypes.end(), tokenType);
 
-			if (tokenType == possibleTokenType) {
-				foundToken = true;
-				break;
-			}
-
-			if (possibleTokenType == TokenType::SYNONYM) {
-				foundToken = isSynonymToken(tokenType);
-			}
+		// Check if token is SYNONYM
+		if (!foundToken) {
+			foundToken = isSynonymToken(tokenType);
 		}
 
 		// If token is not ENTREF, check if token is STMTREF only if it is the first parameter token
@@ -237,15 +209,9 @@ bool SuchThatClauseSyntaxChecker::hasValidUsesModifiesSyntax(std::vector<TokenOb
 
 bool SuchThatClauseSyntaxChecker::isSynonymToken(TokenType tokenType) {
 	std::vector<TokenType> synonymTokens = this->generalSyntax.at(TokenType::SYNONYM);
-	for (int k = 0; k < synonymTokens.size(); k++) {
-		TokenType synonymToken = synonymTokens.at(k);
+	bool foundToken = std::binary_search(synonymTokens.begin(), synonymTokens.end(), tokenType);
 
-		if (tokenType == synonymToken) {
-			return true;
-		}
-	}
-
-	return false;
+	return foundToken;
 }
 
 void SuchThatClauseSyntaxChecker::hasEntrefEntrefSyntax() {

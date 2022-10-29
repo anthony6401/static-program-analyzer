@@ -9,6 +9,7 @@ private:
     std::string ifSynonym;
     QPSClient qpsClient;
     TokenObject firstArgument;
+    static const size_t priority = 2;
     ResultTable evaluateFirstArgAsSynonym();
     ResultTable evaluateFirstArgAsNameQuotes();
     ResultTable evaluateFirstArgAsWildcard();
@@ -18,6 +19,7 @@ public:
     ResultTable evaluateClause() override;
     size_t getNumberOfSynonyms() override;
     std::set<std::string> getAllSynonyms() override;
+    size_t getPriority() override;
 };
 
 #endif //SPA_IFPATTERNCLAUSE_H

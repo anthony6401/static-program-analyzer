@@ -10,7 +10,7 @@
 
 TEST_CASE("Relationship Manager Test") {
 	RelationshipManager relManager = RelationshipManager();
-
+	
 	REQUIRE(relManager.storeRelationship(usesRelationshipAssignOne));
 	REQUIRE(relManager.storeRelationship(usesRelationshipProcOne));
 	REQUIRE(relManager.storeRelationship(usesRelationshipPrintOne));
@@ -63,8 +63,9 @@ TEST_CASE("Relationship Manager Test") {
 	REQUIRE(relManager.storeRelationship(callsTRelationshipOne));
 	REQUIRE(relManager.storeRelationship(callsTRelationshipTwo));
 	REQUIRE(relManager.storeRelationship(callsTRelationshipThree));
+	
 
-
+	
 	REQUIRE(relManager.getRelationship(RelationshipType::USES, stmtTokenObject1, variableTokenObject));
 	REQUIRE(relManager.getRelationship(RelationshipType::MODIFIES, stmtTokenObject1, variableTokenObject));
 	REQUIRE(relManager.getRelationship(RelationshipType::PARENT, stmtTokenObject6, stmtTokenObject5));
@@ -99,11 +100,10 @@ TEST_CASE("Relationship Manager Test") {
 	REQUIRE(relManager.getRelationshipByFirst(RelationshipType::CALLS, procedureTokenObject, DesignEntity::PROCEDURE) == callsExpectedResult);
 	REQUIRE(relManager.getRelationshipByFirst(RelationshipType::CALLS_T, procedureTokenObject, DesignEntity::PROCEDURE) == callsTExpectedResult);
 
-	// For runtime evaluation relationship
+	//// For runtime evaluation relationship 
 	std::unordered_set<std::string> nextTExpectedResult({ while_value_one });
 	std::unordered_set<std::string> w_filter = { while_value_one };
 	REQUIRE(relManager.getRuntimeRelationshipByFirst(RelationshipType::NEXT_T, stmtTokenObject5, w_filter) == nextTExpectedResult);
-
 
 	std::unordered_set<std::string> usesExpectedResultTwo({ assign_value_one });
 	std::unordered_set<std::string> modifiesExpectedResultTwo({ assign_value_one });
@@ -162,6 +162,7 @@ TEST_CASE("Relationship Manager Test") {
 	std::unordered_set<std::string> p_filter = { print_value_one };
 	std::unordered_set<std::string> r_filter = { read_value_one };
 	REQUIRE(relManager.getAllRuntimeRelationship(RelationshipType::NEXT_T, p_filter, r_filter) == expectedResultNextTAll);
+	
 }
 
 TEST_CASE("Runtime Evaluator Manager test") {

@@ -602,7 +602,6 @@ TEST_CASE("Syntax and Semantics Checks") {
     }
 }
 
-
 TEST_CASE("Milestone 1 Integration Test 1") {
 
     SECTION("Refactor multiclause test") {
