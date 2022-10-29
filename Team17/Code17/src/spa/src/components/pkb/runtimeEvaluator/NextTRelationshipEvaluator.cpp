@@ -107,6 +107,7 @@ std::unordered_set<std::string> NextTRelationshipEvaluator::DFSNextTWildcardForw
 		std::unordered_set<std::string> result;
 		std::string start = ele;
 		DFSNextTForwardWithSynonym(start, visited, result, filter2);
+		storeForwardCache(start, result);
 		if (result.size() != 0) {
 			ans.insert(start);
 		}
@@ -122,6 +123,7 @@ std::unordered_set<std::string> NextTRelationshipEvaluator::DFSNextTWildcardBack
 		std::unordered_set<std::string> result;
 		std::string start = ele;
 		DFSNextTBackwardWithSynonym(start, visited, result, filter1);
+		storeBackwardCache(start, result);
 		if (result.size() != 0) {
 			ans.insert(start);
 		}
