@@ -59,15 +59,17 @@ bool WithClauseSyntaxChecker::isSyntacticallyCorrect(std::vector<TokenObject> to
 
 		// REF token
 		std::vector<TokenType> possibleTokenTypes = this->generalSyntax.at(syntax);
-		bool foundToken = false;
-		for (int j = 0; j < possibleTokenTypes.size(); j++) {
-			TokenType possibleTokenType = possibleTokenTypes.at(j);
+		bool foundToken = std::binary_search(possibleTokenTypes.begin(), possibleTokenTypes.end(), tokenType);
 
-			if (tokenType == possibleTokenType) {
-				foundToken = true;
-				break;
-			}
-		}
+		//bool foundToken = false;
+		//for (int j = 0; j < possibleTokenTypes.size(); j++) {
+		//	TokenType possibleTokenType = possibleTokenTypes.at(j);
+
+		//	if (tokenType == possibleTokenType) {
+		//		foundToken = true;
+		//		break;
+		//	}
+		//}
 
 		if (!foundToken) {
 			return false;

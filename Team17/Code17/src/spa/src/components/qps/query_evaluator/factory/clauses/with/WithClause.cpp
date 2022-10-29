@@ -27,6 +27,10 @@ ResultTable WithClause::evaluateClause() {
     }
 }
 
+size_t WithClause::getPriority() {
+    return priority;
+}
+
 ResultTable WithClause::evaluateIntegerOrNameQuotes() {
     std::string leftValue = left.front().getValue();
     std::string rightValue = right.front().getValue();

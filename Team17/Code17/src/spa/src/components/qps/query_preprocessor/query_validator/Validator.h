@@ -16,6 +16,43 @@ using namespace qps;
 class Validator {
 private:
 	QueryObject parsedQuery;
+
+	//std::unordered_map<DesignEntity, int> validDesignEntitiesForUsesAndModifies = {
+	//	{DesignEntity::STMT, 1},
+	//	{DesignEntity::READ, 1},
+	//	{DesignEntity::PRINT, 1},
+	//	{DesignEntity::CALL, 1},
+	//	{DesignEntity::WHILE, 1},
+	//	{DesignEntity::IF, 1},
+	//	{DesignEntity::ASSIGN, 1},
+	//	{DesignEntity::PROCEDURE, 1}
+	//};
+
+	//std::unordered_map<DesignEntity, int> statementDesignEntities = {
+	//	{DesignEntity::STMT, 1},
+	//	{DesignEntity::READ, 1},
+	//	{DesignEntity::PRINT, 1},
+	//	{DesignEntity::CALL, 1},
+	//	{DesignEntity::WHILE, 1},
+	//	{DesignEntity::IF, 1},
+	//	{DesignEntity::ASSIGN, 1}
+	//};
+
+	//std::unordered_map<std::string, std::unordered_map<DesignEntity, int>>  attrNameToValidDesignEntity = {
+	//{std::string("procName"), std::unordered_map<DesignEntity, int>{ 
+	//	{DesignEntity::PROCEDURE, 1}, 
+	//	{DesignEntity::CALL, 1}
+	//}},
+	//{std::string("varName"), std::unordered_map<DesignEntity, int>{ 
+	//	{DesignEntity::VARIABLE, 1}, 
+	//	{DesignEntity::READ, 1}, 
+	//	{DesignEntity::PRINT, 1}
+	//}},
+	//{std::string("value"), std::unordered_map<DesignEntity, int>{ {DesignEntity::CONSTANT, 1}}},
+	//{std::string("stmt#"), statementDesignEntities},
+
+	//};
+
 	std::vector<DesignEntity> validDesignEntitiesForUsesAndModifies = {
 		DesignEntity::STMT, DesignEntity::READ, DesignEntity::PRINT, DesignEntity::CALL,
 		DesignEntity::WHILE, DesignEntity::IF, DesignEntity::ASSIGN, DesignEntity::PROCEDURE
@@ -27,12 +64,12 @@ private:
 	};
 
 	std::unordered_map<std::string, std::vector<DesignEntity>>  attrNameToValidDesignEntity = {
-		{std::string("procName"), std::vector<DesignEntity>{DesignEntity::PROCEDURE, DesignEntity::CALL}},
-		{std::string("varName"), std::vector<DesignEntity>{DesignEntity::VARIABLE, DesignEntity::READ, DesignEntity::PRINT}},
+		{std::string("procName"), std::vector<DesignEntity>{DesignEntity::CALL, DesignEntity::PROCEDURE }},
+		{std::string("varName"), std::vector<DesignEntity>{DesignEntity::READ, DesignEntity::PRINT, DesignEntity::VARIABLE}},
 		{std::string("value"), std::vector<DesignEntity>{DesignEntity::CONSTANT}},
-		{std::string("stmt#"), statementDesignEntities},
-
+		{std::string("stmt#"), statementDesignEntities}
 	};
+
 	bool isSemanticallyValid();
 	bool selectClauseIsSemanticallyCorrect();
 	bool suchThatClauseIsSemanticallyCorrect();
