@@ -119,6 +119,31 @@ std::unordered_set<std::string> RelationshipManager::getRelationshipWithSecondWi
 	return emptySet;
 }
 
+std::unordered_set<std::string> RelationshipManager::getRuntimeRelationshipWithFirstWildcard(RelationshipType relType, std::unordered_set<std::string>& filter1, std::unordered_set<std::string>& filter2) {
+	std::unordered_set<std::string> set = std::unordered_set<std::string>();
+	std::unordered_set<std::string> emptySet = std::unordered_set<std::string>();
+
+	for (auto& store : runtimeRelStorages) {
+		set = store->getRuntimeRelationshipWithFirstWildcard(relType, filter1, filter2);
+		if (set != emptySet) {
+			return set;
+		}
+	}
+	return emptySet;
+}
+std::unordered_set<std::string>RelationshipManager::getRuntimeRelationshipWithSecondWildcard(RelationshipType relType, std::unordered_set<std::string>& filter1, std::unordered_set<std::string>& filter2) {
+	std::unordered_set<std::string> set = std::unordered_set<std::string>();
+	std::unordered_set<std::string> emptySet = std::unordered_set<std::string>();
+
+	for (auto& store : runtimeRelStorages) {
+		set = store->getRuntimeRelationshipWithSecondWildcard(relType, filter1, filter2);
+		if (set != emptySet) {
+			return set;
+		}
+	}
+	return emptySet;
+}
+
 std::unordered_map<std::string, std::unordered_set<std::string>> RelationshipManager::getAllRelationship(RelationshipType relType, DesignEntity returnType1, DesignEntity returnType2) {
 
 	std::unordered_map<std::string, std::unordered_set<std::string>> map = std::unordered_map<std::string, std::unordered_set<std::string>>();
