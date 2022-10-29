@@ -2,7 +2,7 @@
 #include "utils.h"
 
 AffectsRelationshipInterface::AffectsRelationshipInterface(ModifyRelationshipStorage* modifiesStorage, UsesRelationshipStorage* usesStorage,
-	NextRelationshipStorage* nextS0torage) : modifiesStorage(modifiesStorage), usesStorage(usesStorage), nextStorage(nextStorage) {};
+	NextRelationshipStorage* nextStorage) : RuntimeRelationshipEvaluator(), modifiesStorage(modifiesStorage), usesStorage(usesStorage), nextStorage(nextStorage) {};
 
 void AffectsRelationshipInterface::DFSAffectsForwardWithSynonym(std::string curr, std::string var,
 		std::unordered_set<std::string>& visited, std::unordered_set<std::string>& result,
