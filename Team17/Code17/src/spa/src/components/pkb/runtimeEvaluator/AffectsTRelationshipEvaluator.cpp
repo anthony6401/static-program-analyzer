@@ -166,7 +166,9 @@ std::unordered_set<std::string> AffectsTRelationshipEvaluator::DFSAffectsTWildca
 	std::unordered_set<std::string> ans;
 	for (auto const& start : filter1) {
 		if (isExistKeyForwardCache(start)) {
-			ans.insert(start);
+			if (forwardCache[start].size() != 0) {
+				ans.insert(start);
+			}
 		} else {
 			std::unordered_set<std::string> visited;
 			std::unordered_set<std::string> result;
@@ -187,8 +189,10 @@ std::unordered_set<std::string> AffectsTRelationshipEvaluator::DFSAffectsTWildca
 std::unordered_set<std::string> AffectsTRelationshipEvaluator::DFSAffectsTWildcardBackward(std::unordered_set<std::string>& filter1, std::unordered_set<std::string>& filter2, std::unordered_set<std::string>& result) {
 	std::unordered_set<std::string> ans;
 	for (auto const& start : filter2) {
-		if (isExistKeyForwardCache(start)) {
-			ans.insert(start);
+		if (isExistKeyBackwardCache(start)) {
+			if (backwardCache[start].size() != 0) {
+				ans.insert(start);
+			}
 		}
 		else {
 			std::unordered_set<std::string> visited;
