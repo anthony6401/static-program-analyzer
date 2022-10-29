@@ -69,17 +69,6 @@ void AffectsTRelationshipEvaluator::DFSAffectsTForwardWithSynonym(std::string cu
 	visited.erase(curr);
 }
 
-void AffectsTRelationshipEvaluator::removeUsesSet(std::unordered_set<std::string>& usesSet, std::unordered_set<std::string>& intersectionSet) {
-	for (auto const& var : intersectionSet) {
-		usesSet.erase(var);
-	}
-}
-
-void AffectsTRelationshipEvaluator::insertUsesSet(std::unordered_set<std::string>& usesSet, std::unordered_set<std::string>& intersectionSet) {
-	for (auto const& var : intersectionSet) {
-		usesSet.insert(var);
-	}
-}
 
 
 void AffectsTRelationshipEvaluator::startNewDFSPathForBackward(std::unordered_set<std::string>& result, std::unordered_set<std::string>& filter, std::string neighbour, 
