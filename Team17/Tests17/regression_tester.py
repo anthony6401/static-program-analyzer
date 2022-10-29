@@ -83,7 +83,7 @@ def run_autotester(autotester_path, test_path_pairs):
         total_wrong_count += len(wrong_id)
         total_timeout_count += len(timeout_id)
 
-        print(f"[{query_path}] {len(correct_id)}/{queries_count} passing test cases for run {run_count}.")
+        print(f"Run {run_count}: {len(correct_id)}/{queries_count} passing test cases for ({query_path})")
 
         if len(wrong_id) > 0:
             print(f"\tWrong cases: {wrong_id}")
@@ -98,6 +98,7 @@ if __name__ == "__main__":
         test_path_pairs = get_tests_paths_pairs()
         total_count, total_correct_count, total_wrong_count, total_timeout_count = run_autotester(sys.argv[1], test_path_pairs)
 
+        print("---------- OVERALL ANALYSIS ------------")
         print(f"Correct test cases: {total_correct_count}/{total_count}.")
         print(f"Wrong test cases: {total_wrong_count + total_timeout_count}/{total_count}.")
 
