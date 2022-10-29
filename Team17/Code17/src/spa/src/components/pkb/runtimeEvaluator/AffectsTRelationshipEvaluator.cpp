@@ -6,6 +6,17 @@ AffectsTRelationshipEvaluator::AffectsTRelationshipEvaluator(NextRelationshipSto
 	: AffectsRelationshipInterface(modifiesStorage, usesStorage, nextStorage) {};
 
 
+void AffectsTRelationshipEvaluator::removeUsesSet(std::unordered_set<std::string>& usesSet, std::unordered_set<std::string>& intersectionSet) {
+	for (auto const& var : intersectionSet) {
+		usesSet.erase(var);
+	}
+}
+
+void AffectsTRelationshipEvaluator::insertUsesSet(std::unordered_set<std::string>& usesSet, std::unordered_set<std::string>& intersectionSet) {
+	for (auto const& var : intersectionSet) {
+		usesSet.insert(var);
+	}
+}
 
 // DFS search to answer Next* queries with 2 integer values
 bool AffectsTRelationshipEvaluator::DFSAffectsTForward(std::string curr, std::string target, std::string var, std::unordered_set<std::string>& visited) {
