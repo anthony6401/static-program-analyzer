@@ -225,6 +225,7 @@ TEST_CASE("AffectsT Relationship Evaluator Test") {
 	 //Test for AffectsT(1, a)
 	std::unordered_set<std::string> expectedResultByFirst = { stmt5, stmt7 };
 	std::unordered_set<std::string> expectedResultByFirst2 = { stmt7 };
+	std::unordered_set<std::string> expectedResultByFirst3 = { stmt5, stmt7 };
 
 	REQUIRE(affectsTRelationshipEvaluator->getRuntimeRelationshipByFirst(RelationshipType::AFFECTS_T, stmtTokenObject1, a_filter) == expectedResultByFirst);
 	REQUIRE(affectsTRelationshipEvaluator->getRuntimeRelationshipByFirst(RelationshipType::AFFECTS_T, stmtTokenObject2, a_filter) == empty);
@@ -234,11 +235,12 @@ TEST_CASE("AffectsT Relationship Evaluator Test") {
 	REQUIRE(affectsTRelationshipEvaluator->getRuntimeRelationshipByFirst(RelationshipType::AFFECTS_T, stmtTokenObject6, a_filter) == empty);
 	REQUIRE(affectsTRelationshipEvaluator->getRuntimeRelationshipByFirst(RelationshipType::AFFECTS_T, stmtTokenObject7, a_filter) == empty);
 
-	REQUIRE(affectsTRelationshipEvaluator->getRuntimeRelationshipWithFirstWildcard(RelationshipType::AFFECTS_T, a_filter, a_filter) == expectedResultByFirst);
+	REQUIRE(affectsTRelationshipEvaluator->getRuntimeRelationshipWithFirstWildcard(RelationshipType::AFFECTS_T, a_filter, a_filter) == expectedResultByFirst3);
 
 	// Test for Affects(a, 2)
 	std::unordered_set<std::string> expectedResultBySecond = { stmt1, stmt3 };
 	std::unordered_set<std::string> expectedResultBySecond2 = { stmt1,stmt3, stmt5 };
+
 
 	REQUIRE(affectsTRelationshipEvaluator->getRuntimeRelationshipBySecond(RelationshipType::AFFECTS_T, stmtTokenObject1, a_filter) == empty);
 	REQUIRE(affectsTRelationshipEvaluator->getRuntimeRelationshipBySecond(RelationshipType::AFFECTS_T, stmtTokenObject2, a_filter) == empty);
