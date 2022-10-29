@@ -443,7 +443,7 @@ assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure 
 Select <a,,,b> such that Modifies(a, v) and Parent(w, a) with v.varName = "var1"
 SyntaxError
 5000
-95 - No constraints
+96 - No constraints
 assign a, a1; variable v; print pn; read rd; call c; if ifs; while w; procedure p, p1;
 Select <p, ifs>
 procedure 5, first 5, second 5, island 5, procedure 13, first 13, second 13, island 13
