@@ -19,6 +19,7 @@ public:
 	std::unordered_set<std::string> getRuntimeRelationshipBySecond(RelationshipType relType, TokenObject secondArgument, std::unordered_set<std::string>& filter);
 	std::unordered_map<std::string, std::unordered_set<std::string>> getAllRuntimeRelationship(RelationshipType relType, std::unordered_set<std::string>& filter1, std::unordered_set<std::string>& filter2);
 	bool storeRelationship(Relationship* rel);
+	void clearCache();
 	~RelationshipManager();
 	
 private:

@@ -47,3 +47,7 @@ std::unordered_set<std::string> QPSClient::getStatementByName(std::string& name,
 std::unordered_set<std::string> QPSClient::getAllName(DesignEntity entityType) {
 	return pkb->getAllName(entityType);
 }
+
+void QPSClient::clearCache() {
+	pkb->clearCache();
+}
