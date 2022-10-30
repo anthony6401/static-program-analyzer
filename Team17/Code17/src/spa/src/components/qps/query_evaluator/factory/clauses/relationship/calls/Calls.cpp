@@ -73,9 +73,8 @@ ResultTable Calls::evaluateSynonymSynonym(RelationshipType relationshipType) {
 ResultTable Calls::evaluateSynonymWildcard(RelationshipType relationshipType) {
     DesignEntity procType = DesignEntity::PROCEDURE;
     std::string leftValue = left.getValue();
-    std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(relationshipType, procType, procType);
-    std::unordered_set<std::string> processedMap = ClauseUtils::processMapToSetFromFirst(results);
-    return {leftValue, processedMap};
+    std::unordered_set<std::string> results = qpsClient.getRelationshipWithSecondWildcard(relationshipType, procType);
+    return {leftValue, results};
 }
 
 ResultTable Calls::evaluateSynonymNameQuotes(RelationshipType relationshipType) {
@@ -88,24 +87,18 @@ ResultTable Calls::evaluateSynonymNameQuotes(RelationshipType relationshipType) 
 ResultTable Calls::evaluateWildcardSynonym(RelationshipType relationshipType) {
     DesignEntity procType = DesignEntity::PROCEDURE;
     std::string rightValue = right.getValue();
-    std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(relationshipType, procType, procType);
-    std::unordered_set<std::string> processedMap = ClauseUtils::processMapToSetFromSecond(results);
-    return {rightValue, processedMap};
+    std::unordered_set<std::string> results = qpsClient.getRelationshipWithFirstWildcard(relationshipType, procType);
+    return {rightValue, results};
 }
 
 ResultTable Calls::evaluateWildcardWildcard(RelationshipType relationshipType) {
-    DesignEntity procType = DesignEntity::PROCEDURE;
-    std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(relationshipType, procType, procType);
-    bool result = !results.empty();
+    bool result = qpsClient.getRelationship(relationshipType, left, right);
     return {result};
 }
 
 ResultTable Calls::evaluateWildcardNameQuotes(RelationshipType relationshipType) {
-    DesignEntity procType = DesignEntity::PROCEDURE;
-    std::string leftValue = left.getValue();
-    std::unordered_set<std::string> results = qpsClient.getRelationshipBySecond(relationshipType, procType, right);
-    bool booleanResult = !results.empty();
-    return {booleanResult};
+    bool result = qpsClient.getRelationship(relationshipType, left, right);
+    return {result};
 }
 
 ResultTable Calls::evaluateNameQuotesSynonym(RelationshipType relationshipType) {
@@ -116,9 +109,7 @@ ResultTable Calls::evaluateNameQuotesSynonym(RelationshipType relationshipType) 
 }
 
 ResultTable Calls::evaluateNameQuotesWildcard(RelationshipType relationshipType) {
-    DesignEntity procType = DesignEntity::PROCEDURE;
-    std::unordered_set<std::string> results = qpsClient.getRelationshipByFirst(relationshipType, left, procType);
-    bool result = !results.empty();
+    bool result = qpsClient.getRelationship(relationshipType, left, right);
     return {result};
 }
 

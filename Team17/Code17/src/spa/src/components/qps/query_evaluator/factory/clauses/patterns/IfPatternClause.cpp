@@ -47,11 +47,7 @@ ResultTable IfPatternClause::evaluateFirstArgAsNameQuotes() {
 
 
 ResultTable IfPatternClause::evaluateFirstArgAsWildcard() {
-    std::vector<std::pair<std::string, std::string>> results = qpsClient.getContainerPatternPair(DesignEntity::IF);
-    std::unordered_set<std::string> extractedIfs;
-    for (const auto& pair : results) {
-        extractedIfs.insert(pair.first);
-    }
-    return {ifSynonym, extractedIfs};
+    std::unordered_set<std::string> results = qpsClient.getPatternContainerWildcard(DesignEntity::IF);
+    return {ifSynonym, results};
 }
 
