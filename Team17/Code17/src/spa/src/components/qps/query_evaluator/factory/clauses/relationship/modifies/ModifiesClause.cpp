@@ -1,5 +1,6 @@
 #include "ModifiesClause.h"
 #include "components/qps/query_evaluator/factory/utils/ClauseUtils.h"
+#include "iostream"
 
 ModifiesClause::ModifiesClause(TokenObject left, TokenObject right,
                        std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient)
@@ -65,10 +66,8 @@ ResultTable ModifiesClause::evaluateSynonymSynonym() {
 ResultTable ModifiesClause::evaluateSynonymWildcard() {
     std::string leftValue = left.getValue();
     DesignEntity leftType = synonymToDesignEntityMap[leftValue];
-    DesignEntity rightType = DesignEntity::VARIABLE;
-    std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(RelationshipType::MODIFIES, leftType, rightType);
-    std::unordered_set<std::string> processedMap = ClauseUtils::processMapToSetFromFirst(results);
-    return {leftValue, processedMap};
+    std::unordered_set<std::string> results = qpsClient.getRelationshipWithSecondWildcard(RelationshipType::MODIFIES, leftType);
+    return {leftValue, results};
 }
 
 ResultTable ModifiesClause::evaluateSynonymNameQuotes() {
@@ -86,9 +85,7 @@ ResultTable ModifiesClause::evaluateSecondAsSynonym() {
 }
 
 ResultTable ModifiesClause::evaluateSecondAsWildcard() {
-    DesignEntity rightType = DesignEntity::VARIABLE;
-    std::unordered_set<std::string> results = qpsClient.getRelationshipByFirst(RelationshipType::MODIFIES, left, rightType);
-    bool result = !results.empty();
+    bool result = qpsClient.getRelationship(RelationshipType::MODIFIES, left, right);
     return {result};
 }
 

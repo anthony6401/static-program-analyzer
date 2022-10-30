@@ -40,6 +40,19 @@ std::unordered_set<std::string> PatternManager::getPattern(DesignEntity designEn
 	return std::unordered_set<std::string>();
 }
 
+std::unordered_set<std::string> PatternManager::getPatternWildcard(DesignEntity designEntity, TokenObject secondArgument) {
+	std::unordered_set<std::string> ret;
+
+	for (auto& pt : patternStorage) {
+		ret = pt->getPatternWildcard(designEntity, secondArgument);
+		if (ret.size() != 0) {
+			return ret;
+		}
+	}
+
+	return std::unordered_set<std::string>();
+}
+
 std::vector<std::pair<std::string, std::string>> PatternManager::getPatternPair(DesignEntity designEntity, TokenObject secondArgument) {
 	std::vector<std::pair<std::string, std::string>> ret;
 

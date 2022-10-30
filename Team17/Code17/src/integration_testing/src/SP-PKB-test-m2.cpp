@@ -57,6 +57,24 @@ TEST_CASE("Calls queries SP") {
         REQUIRE(testResults);
     }
 
+    SECTION("Calls with wildcard and value") {
+        // Calls(_, "Third")
+        bool testResults = pkbSP_m2->getRelationship(RelationshipType::CALLS, TokenObject(TokenType::WILDCARD, ""), TokenObject(TokenType::NAME_WITH_QUOTATION, "Third"));
+        REQUIRE(testResults);
+    }
+
+    SECTION("Calls with value and wildcard") {
+        // Calls("First", _)
+        bool testResults = pkbSP_m2->getRelationship(RelationshipType::CALLS, TokenObject(TokenType::NAME_WITH_QUOTATION, "First"), TokenObject(TokenType::WILDCARD, ""));
+        REQUIRE(testResults);
+    }
+
+    SECTION("Calls with wildcard and wildcard") {
+        // Calls(_, _)
+        bool testResults = pkbSP_m2->getRelationship(RelationshipType::CALLS, TokenObject(TokenType::WILDCARD, ""), TokenObject(TokenType::WILDCARD, ""));
+        REQUIRE(testResults);
+    }
+
     SECTION("Calls with synonym first argument") {
         // Calls(p, "Third")
         std::unordered_set<std::string> testResults = pkbSP_m2->getRelationshipBySecond(RelationshipType::CALLS, DesignEntity::PROCEDURE, TokenObject(TokenType::NAME_WITH_QUOTATION, "Third"));
@@ -71,6 +89,20 @@ TEST_CASE("Calls queries SP") {
         REQUIRE(testResults == expectedResults);
     }
 
+    SECTION("Calls with wildcard and synonym") {
+        // Calls(_, p)
+        std::unordered_set<std::string> testResults = pkbSP_m2->getRelationshipWithFirstWildcard(RelationshipType::CALLS, DesignEntity::PROCEDURE);
+        std::unordered_set<std::string> expectedResults = { "Second", "Third" };
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Calls with synonym and wildcard") {
+        // Calls(p, _)
+        std::unordered_set<std::string> testResults = pkbSP_m2->getRelationshipWithSecondWildcard(RelationshipType::CALLS, DesignEntity::PROCEDURE);
+        std::unordered_set<std::string> expectedResults = { "First", "Second" };
+        REQUIRE(testResults == expectedResults);
+    }
+
     SECTION("Calls with 2 synonyms") {
         // Calls(p1, p2)
         std::unordered_map<std::string, std::unordered_set<std::string>> testResults = pkbSP_m2->getAllRelationship(RelationshipType::CALLS, DesignEntity::PROCEDURE, DesignEntity::PROCEDURE);
@@ -82,8 +114,26 @@ TEST_CASE("Calls queries SP") {
 
 TEST_CASE("Calls* queries SP") {
     SECTION("Calls* with no synonym") {
-        // Calls*("First", "Second")
-        bool testResults = pkbSP_m2->getRelationship(RelationshipType::CALLS_T, TokenObject(TokenType::NAME_WITH_QUOTATION, "First"), TokenObject(TokenType::NAME_WITH_QUOTATION, "Second"));
+        // Calls*("First", "Third")
+        bool testResults = pkbSP_m2->getRelationship(RelationshipType::CALLS_T, TokenObject(TokenType::NAME_WITH_QUOTATION, "First"), TokenObject(TokenType::NAME_WITH_QUOTATION, "Third"));
+        REQUIRE(testResults);
+    }
+    
+    SECTION("Calls* with wildcard and value") {
+        // Calls*(_, "Second")
+        bool testResults = pkbSP_m2->getRelationship(RelationshipType::CALLS_T, TokenObject(TokenType::WILDCARD, ""), TokenObject(TokenType::NAME_WITH_QUOTATION, "Second"));
+        REQUIRE(testResults);
+    }
+
+    SECTION("Calls with value and wildcard") {
+        // Calls*("Second", _)
+        bool testResults = pkbSP_m2->getRelationship(RelationshipType::CALLS_T, TokenObject(TokenType::NAME_WITH_QUOTATION, "Second"), TokenObject(TokenType::WILDCARD, ""));
+        REQUIRE(testResults);
+    }
+
+    SECTION("Calls* with wildcard and wildcard") {
+        // Calls(_, _)
+        bool testResults = pkbSP_m2->getRelationship(RelationshipType::CALLS_T, TokenObject(TokenType::WILDCARD, ""), TokenObject(TokenType::WILDCARD, ""));
         REQUIRE(testResults);
     }
 
@@ -98,6 +148,20 @@ TEST_CASE("Calls* queries SP") {
         // Calls*("First", p)
         std::unordered_set<std::string> testResults = pkbSP_m2->getRelationshipByFirst(RelationshipType::CALLS_T, TokenObject(TokenType::NAME_WITH_QUOTATION, "First"), DesignEntity::PROCEDURE);
         std::unordered_set<std::string> expectedResults = { "Second", "Third" };
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Calls with wildcard and synonym") {
+        // Calls(_, p)
+        std::unordered_set<std::string> testResults = pkbSP_m2->getRelationshipWithFirstWildcard(RelationshipType::CALLS_T, DesignEntity::PROCEDURE);
+        std::unordered_set<std::string> expectedResults = { "Second", "Third" };
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Calls with synonym and wildcard") {
+        // Calls(p, _)
+        std::unordered_set<std::string> testResults = pkbSP_m2->getRelationshipWithSecondWildcard(RelationshipType::CALLS_T, DesignEntity::PROCEDURE);
+        std::unordered_set<std::string> expectedResults = { "First", "Second" };
         REQUIRE(testResults == expectedResults);
     }
 
@@ -117,6 +181,24 @@ TEST_CASE("Next queries SP") {
         REQUIRE(testResults);
     }
 
+    SECTION("Next with wildcard and value") {
+        // Next(_, 5)
+        bool testResults = pkbSP_m2->getRelationship(RelationshipType::NEXT, TokenObject(TokenType::WILDCARD, ""), TokenObject(TokenType::INTEGER, "5"));
+        REQUIRE(testResults);
+    }
+
+    SECTION("Next with value and wildcard") {
+        // Next(12, _)
+        bool testResults = pkbSP_m2->getRelationship(RelationshipType::NEXT, TokenObject(TokenType::INTEGER, "12"), TokenObject(TokenType::WILDCARD, ""));
+        REQUIRE(testResults);
+    }
+
+    SECTION("Next with wildcard and wildcard") {
+        // Next(_, _)
+        bool testResults = pkbSP_m2->getRelationship(RelationshipType::NEXT, TokenObject(TokenType::WILDCARD, ""), TokenObject(TokenType::WILDCARD, ""));
+        REQUIRE(testResults);
+    }
+
     SECTION("Next with synonym first argument") {
         // Next(a, 13)
         std::unordered_set<std::string> testResults = pkbSP_m2->getRelationshipBySecond(RelationshipType::NEXT, DesignEntity::ASSIGN, TokenObject(TokenType::INTEGER, "13"));
@@ -128,6 +210,20 @@ TEST_CASE("Next queries SP") {
         // Next(17, pr)
         std::unordered_set<std::string> testResults = pkbSP_m2->getRelationshipByFirst(RelationshipType::NEXT, TokenObject(TokenType::INTEGER, "17"), DesignEntity::PRINT);
         std::unordered_set<std::string> expectedResults = { "18" };
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Next with wildcard and synonym") {
+        // Next(_, pr)
+        std::unordered_set<std::string> testResults = pkbSP_m2->getRelationshipWithFirstWildcard(RelationshipType::NEXT, DesignEntity::PRINT);
+        std::unordered_set<std::string> expectedResults = { "18" };
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Next with synonym and wildcard") {
+        // Next(read, _)
+        std::unordered_set<std::string> testResults = pkbSP_m2->getRelationshipWithSecondWildcard(RelationshipType::NEXT, DesignEntity::READ);
+        std::unordered_set<std::string> expectedResults = { "1", "2" };
         REQUIRE(testResults == expectedResults);
     }
 
@@ -147,6 +243,24 @@ TEST_CASE("Next* queries SP") {
         REQUIRE(testResults);
     }
 
+    SECTION("Next* with wildcard and value") {
+        // Next*(_, 8)
+        bool testResults = pkbSP_m2->getRelationship(RelationshipType::NEXT_T, TokenObject(TokenType::WILDCARD, ""), TokenObject(TokenType::INTEGER, "8"));
+        REQUIRE(testResults);
+    }
+
+    SECTION("Next* with value and wildcard") {
+        // Next*(14, _)
+        bool testResults = pkbSP_m2->getRelationship(RelationshipType::NEXT_T, TokenObject(TokenType::INTEGER, "14"), TokenObject(TokenType::WILDCARD, ""));
+        REQUIRE(testResults);
+    }
+
+    SECTION("Next* with wildcard and wildcard") {
+        // Next*(_, _)
+        bool testResults = pkbSP_m2->getRelationship(RelationshipType::NEXT_T, TokenObject(TokenType::WILDCARD, ""), TokenObject(TokenType::WILDCARD, ""));
+        REQUIRE(testResults);
+    }
+
     SECTION("Next* with synonym first argument") {
         // Next*(s, 6)
         std::unordered_set<std::string> testResults = pkbSP_m2->getRelationshipBySecond(RelationshipType::NEXT_T, DesignEntity::STMT, TokenObject(TokenType::INTEGER, "6"));
@@ -161,9 +275,24 @@ TEST_CASE("Next* queries SP") {
         REQUIRE(testResults == expectedResults);
     }
 
+    SECTION("Next* with wildcard and synonym") {
+        // Next*(_, w) 
+        std::unordered_set<std::string> testResults = pkbSP_m2->getRelationshipWithFirstWildcard(RelationshipType::NEXT_T, DesignEntity::WHILE);
+        std::unordered_set<std::string> expectedResults = { "6" };
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Next* with synonym and wildcard") {
+        // Next*(a, _)
+        std::unordered_set<std::string> testResults = pkbSP_m2->getRelationshipWithSecondWildcard(RelationshipType::NEXT_T, DesignEntity::ASSIGN);
+        std::unordered_set<std::string> expectedResults = { "4", "5", "7", "9", "11", "12", "13", "14", "16", "17"};
+        REQUIRE(testResults == expectedResults);
+    }
+
     SECTION("Next* with 2 synonyms") {
         // Next*(s1, s2)
         std::unordered_map<std::string, std::unordered_set<std::string>> testResults = pkbSP_m2->getAllRelationship(RelationshipType::NEXT_T, DesignEntity::STMT, DesignEntity::STMT);
+
         std::unordered_map<std::string, std::unordered_set<std::string>> expectedResults = {{ "1", std::unordered_set<std::string>({ "2", "3"}) },
                                                                                 { "2", std::unordered_set<std::string>({ "3" }) },
                                                                                 { "4", std::unordered_set<std::string>({ "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15" }) },
@@ -183,32 +312,228 @@ TEST_CASE("Next* queries SP") {
     }
 }
 
+TEST_CASE("Affects queries SP") {
+    SECTION("Affects with no synonym") {
+        // Affects(4, 7)
+        bool testResults = pkbSP_m2->getRelationship(RelationshipType::AFFECTS, TokenObject(TokenType::INTEGER, "4"), TokenObject(TokenType::INTEGER, "7"));
+        REQUIRE(testResults);
+    }
+
+    SECTION("Affects with wildcard and value") {
+        // Affects(_, 9)
+        bool testResults = pkbSP_m2->getRelationship(RelationshipType::AFFECTS, TokenObject(TokenType::WILDCARD, ""), TokenObject(TokenType::INTEGER, "9"));
+        REQUIRE(testResults);
+    }
+
+    SECTION("Affects with value and wildcard") {
+        // Affects(13, _)
+        bool testResults = pkbSP_m2->getRelationship(RelationshipType::AFFECTS, TokenObject(TokenType::INTEGER, "13"), TokenObject(TokenType::WILDCARD, ""));
+        REQUIRE(testResults);
+    }
+
+    SECTION("Affects with wildcard and wildcard") {
+        // Affects(_, _)
+        bool testResults = pkbSP_m2->getRelationship(RelationshipType::AFFECTS, TokenObject(TokenType::WILDCARD, ""), TokenObject(TokenType::WILDCARD, ""));
+        REQUIRE(testResults);
+    }
+
+    SECTION("Affects with synonym first argument") {
+        // Affects(a, 9)
+        std::unordered_set<std::string> testResults = pkbSP_m2->getRelationshipBySecond(RelationshipType::AFFECTS, DesignEntity::ASSIGN, TokenObject(TokenType::INTEGER, "9"));
+        std::unordered_set<std::string> expectedResults = { "5", "9"};
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Affects with synonym second argument") {
+        // Affects(13, a)
+        std::unordered_set<std::string> testResults = pkbSP_m2->getRelationshipByFirst(RelationshipType::AFFECTS, TokenObject(TokenType::INTEGER, "13"), DesignEntity::ASSIGN);
+        std::unordered_set<std::string> expectedResults = { "14", "15"};
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Affects with wildcard and synonym") {
+        // Affects(_, a) 
+        std::unordered_set<std::string> testResults = pkbSP_m2->getRelationshipWithFirstWildcard(RelationshipType::AFFECTS, DesignEntity::ASSIGN);
+        std::unordered_set<std::string> expectedResults = { "7", "9", "11", "13", "14", "15", "17" };
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Affects with synonym and wildcard") {
+        // Affects(a, _)
+        std::unordered_set<std::string> testResults = pkbSP_m2->getRelationshipWithSecondWildcard(RelationshipType::AFFECTS, DesignEntity::ASSIGN);
+        std::unordered_set<std::string> expectedResults = { "4", "5", "7", "9", "11", "12", "13", "14", "16" };
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Affects with 2 synonyms") {
+        // Affects(a1, a2)
+        std::unordered_map<std::string, std::unordered_set<std::string>> testResults = pkbSP_m2->getAllRelationship(RelationshipType::AFFECTS, DesignEntity::ASSIGN, DesignEntity::ASSIGN);
+
+        std::unordered_map<std::string, std::unordered_set<std::string>> expectedResults = { { "4", std::unordered_set<std::string>({ "7", "11", "13", "15" })},
+                                                                                { "5", std::unordered_set<std::string>({ "9", "13" })},
+                                                                                { "7", std::unordered_set<std::string>({ "7", "11", "13", "15" })},
+                                                                                { "9", std::unordered_set<std::string>({ "9", "13" })},
+                                                                                { "11", std::unordered_set<std::string>({ "13", "15" })},
+                                                                                { "12", std::unordered_set<std::string>({ "13" })},
+                                                                                { "13", std::unordered_set<std::string>({ "14", "15" })},
+                                                                                { "14", std::unordered_set<std::string>({ "15" }) },
+                                                                                { "16", std::unordered_set<std::string>({ "17" })} };
+        REQUIRE(testResults == expectedResults);
+    }
+}
+
+TEST_CASE("Affects* queries SP") {
+    SECTION("Affects* with no synonym") {
+        // Affects*(5, 15)
+        bool testResults = pkbSP_m2->getRelationship(RelationshipType::AFFECTS_T, TokenObject(TokenType::INTEGER, "4"), TokenObject(TokenType::INTEGER, "7"));
+        REQUIRE(testResults);
+    }
+
+    SECTION("Affects* with wildcard and value") {
+        // Affects*(_, 17)
+        bool testResults = pkbSP_m2->getRelationship(RelationshipType::AFFECTS_T, TokenObject(TokenType::WILDCARD, ""), TokenObject(TokenType::INTEGER, "17"));
+        REQUIRE(testResults);
+    }
+
+    SECTION("Affects* with value and wildcard") {
+        // Affects*(4, _)
+        bool testResults = pkbSP_m2->getRelationship(RelationshipType::AFFECTS_T, TokenObject(TokenType::INTEGER, "4"), TokenObject(TokenType::WILDCARD, ""));
+        REQUIRE(testResults);
+    }
+
+    SECTION("Affects* with wildcard and wildcard") {
+        // Affects*(_, _)
+        bool testResults = pkbSP_m2->getRelationship(RelationshipType::AFFECTS_T, TokenObject(TokenType::WILDCARD, ""), TokenObject(TokenType::WILDCARD, ""));
+        REQUIRE(testResults);
+    }
+
+    SECTION("Affects* with synonym first argument") {
+        // Affects*(a, 15)
+        std::unordered_set<std::string> testResults = pkbSP_m2->getRelationshipBySecond(RelationshipType::AFFECTS_T, DesignEntity::ASSIGN, TokenObject(TokenType::INTEGER, "15"));
+        std::unordered_set<std::string> expectedResults = { "4", "5", "7", "9", "11", "12", "13", "14" };
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Affects* with synonym second argument") {
+        // Affects*(4, a)
+        std::unordered_set<std::string> testResults = pkbSP_m2->getRelationshipByFirst(RelationshipType::AFFECTS_T, TokenObject(TokenType::INTEGER, "4"), DesignEntity::ASSIGN);
+        std::unordered_set<std::string> expectedResults = { "7", "11", "13", "14", "15" };
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Affects* with wildcard and synonym") {
+        // Affects*(_, a) 
+        std::unordered_set<std::string> testResults = pkbSP_m2->getRelationshipWithFirstWildcard(RelationshipType::AFFECTS_T, DesignEntity::ASSIGN);
+        std::unordered_set<std::string> expectedResults = { "7", "9", "11", "13", "14", "15", "17" };
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Affects* with synonym and wildcard") {
+        // Affects*(a, _)
+        std::unordered_set<std::string> testResults = pkbSP_m2->getRelationshipWithSecondWildcard(RelationshipType::AFFECTS_T, DesignEntity::ASSIGN);
+        std::unordered_set<std::string> expectedResults = { "4", "5", "7", "9", "11", "12", "13", "14", "16" };
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Affects* with 2 synonyms") {
+        // Affects*(a1, a2)
+        std::unordered_map<std::string, std::unordered_set<std::string>> testResults = pkbSP_m2->getAllRelationship(RelationshipType::AFFECTS_T, DesignEntity::ASSIGN, DesignEntity::ASSIGN);
+
+        std::unordered_map<std::string, std::unordered_set<std::string>> expectedResults = { { "4", std::unordered_set<std::string>({ "7", "11", "13", "14", "15" })},
+                                                                                { "5", std::unordered_set<std::string>({ "9", "13", "14", "15" })},
+                                                                                { "7", std::unordered_set<std::string>({ "7", "11", "13", "14", "15" })},
+                                                                                { "9", std::unordered_set<std::string>({ "9", "13", "14", "15" })},
+                                                                                { "11", std::unordered_set<std::string>({ "13", "14", "15" })},
+                                                                                { "12", std::unordered_set<std::string>({ "13", "14", "15" })},
+                                                                                { "13", std::unordered_set<std::string>({ "14", "15" })},
+                                                                                { "14", std::unordered_set<std::string>({ "15" }) },
+                                                                                { "16", std::unordered_set<std::string>({ "17" })} };
+        REQUIRE(testResults == expectedResults);
+    }
+}
+
 TEST_CASE("Pattern queries SP") {
-    SECTION("Pattern with first argument as name in quotes and second argument as expression with operators") {
+    SECTION("Assign Pattern with first argument as name in quotes and second argument as expression with operators") {
         // a("x", "x+1")
         std::unordered_set<std::string> testResults = pkbSP_m2->getPattern(DesignEntity::ASSIGN, TokenObject(TokenType::NAME_WITH_QUOTATION, "x"), TokenObject(TokenType::EXPRESSION, "x+1"));
         std::unordered_set<std::string> expectedResults = {"11"};
         REQUIRE(testResults == expectedResults);
     }
 
-    SECTION("Pattern with first argument as name in quotes and second argument as subexpression with operators") {
+    SECTION("Assign Pattern with first argument as name in quotes and second argument as subexpression with operators") {
         // a("x", _"x*y"_)
         std::unordered_set<std::string> testResults = pkbSP_m2->getPattern(DesignEntity::ASSIGN, TokenObject(TokenType::NAME_WITH_QUOTATION, "x"), TokenObject(TokenType::SUBEXPRESSION, "x*y"));
         std::unordered_set<std::string> expectedResults = { "15" };
         REQUIRE(testResults == expectedResults);
     }
 
-    SECTION("Pattern with first argument as synonym and second argument as expression with operators") {
+    SECTION("Assign Pattern with first argument as synonym and second argument as expression with operators") {
         // a(v, "x+1")
         std::vector<std::pair<std::string, std::string>> testResults = pkbSP_m2->getPatternPair(DesignEntity::ASSIGN, TokenObject(TokenType::EXPRESSION, "x+1"));
         std::vector<std::pair<std::string, std::string>> expectedResults = { {"11", "x"}};
         REQUIRE(testResults == expectedResults);
     }
 
-    SECTION("Pattern with first argument as synonym and second argument as subexpression with operators") {
+    SECTION("Assign Pattern with first argument as synonym and second argument as subexpression with operators") {
         // a(v, _"x*y"_)
         std::vector<std::pair<std::string, std::string>> testResults = pkbSP_m2->getPatternPair(DesignEntity::ASSIGN, TokenObject(TokenType::SUBEXPRESSION, "x*y"));
         std::vector<std::pair<std::string, std::string>> expectedResults = { {"15", "x"}};
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Assign Pattern with synonym and exact expression") {
+        // a(_, "x+1")
+        std::unordered_set<std::string> testResults = pkbSP_m2->getPatternWildcard(DesignEntity::ASSIGN, TokenObject(TokenType::EXPRESSION, "x+1"));
+        std::unordered_set<std::string> expectedResults = { "11" };
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Assign Pattern with synonym and exact expression") {
+        // a(_, _"x*y"_)
+        std::unordered_set<std::string> testResults = pkbSP_m2->getPatternWildcard(DesignEntity::ASSIGN, TokenObject(TokenType::SUBEXPRESSION, "x*y"));
+        std::unordered_set<std::string> expectedResults = { "15" };
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("While Pattern with exact expression") {
+        // w("i", _)
+        std::unordered_set<std::string> testResults = pkbSP_m2->getPattern(DesignEntity::WHILE, TokenObject(TokenType::EXPRESSION, "i"), TokenObject());
+        std::unordered_set<std::string> expectedResults = { "6" };
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("While Pattern with wildcard") {
+        // w(_, _)
+        std::unordered_set<std::string> testResults = pkbSP_m2->getPatternWildcard(DesignEntity::WHILE, TokenObject());
+        std::unordered_set<std::string> expectedResults = { "6" };
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("While Pattern with exact expression") {
+        // w(v, _)
+        std::vector<std::pair<std::string, std::string>> testResults = pkbSP_m2->getPatternPair(DesignEntity::WHILE, TokenObject());
+        std::vector<std::pair<std::string, std::string>> expectedResults = { {"6", "i"} };
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("If Pattern with exact expression") {
+        // ifs("i", _)
+        std::unordered_set<std::string> testResults = pkbSP_m2->getPattern(DesignEntity::IF, TokenObject(TokenType::EXPRESSION, "x"), TokenObject());
+        std::unordered_set<std::string> expectedResults = { "10" };
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("If Pattern with wildcard") {
+        // ifs(_, _)
+        std::unordered_set<std::string> testResults = pkbSP_m2->getPatternWildcard(DesignEntity::IF, TokenObject());
+        std::unordered_set<std::string> expectedResults = { "10" };
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("If Pattern with exact expression") {
+        // ifs(v, _)
+        std::vector<std::pair<std::string, std::string>> testResults = pkbSP_m2->getPatternPair(DesignEntity::IF, TokenObject());
+        std::vector<std::pair<std::string, std::string>> expectedResults = { {"10", "x"} };
         REQUIRE(testResults == expectedResults);
     }
 }

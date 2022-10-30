@@ -85,6 +85,33 @@ std::unordered_set<std::string> PKB::getRelationshipBySecond(RelationshipType re
 	return relManager->getRelationshipBySecond(relType, returnType, secondArgument);
 }
 
+std::unordered_set<std::string> PKB::getRelationshipWithFirstWildcard(RelationshipType relType, DesignEntity returnType) {
+	if (isRuntimeRelationship(relType)) {
+		std::unordered_set<std::string> filter1 = getFilter(relType, DesignEntity::STMT);
+		std::unordered_set<std::string> filter2 = getFilter(relType, returnType);
+
+		if (filter1.size() == 0 || filter2.size() == 0) {
+			return std::unordered_set<std::string>();
+		}
+		return relManager->getRuntimeRelationshipWithFirstWildcard(relType, filter1, filter2);
+	}
+	return relManager->getRelationshipWithFirstWildcard(relType, returnType);
+}
+
+std::unordered_set<std::string> PKB::getRelationshipWithSecondWildcard(RelationshipType relType, DesignEntity returnType) {
+	if (isRuntimeRelationship(relType)) {
+		std::unordered_set<std::string> filter1 = getFilter(relType, returnType);
+		std::unordered_set<std::string> filter2 = getFilter(relType, DesignEntity::STMT);
+
+		if (filter1.size() == 0 || filter2.size() == 0) {
+			return std::unordered_set<std::string>();
+		}
+
+		return relManager->getRuntimeRelationshipWithSecondWildcard(relType, filter1, filter2);
+	}
+	return relManager->getRelationshipWithSecondWildcard(relType, returnType);
+}
+
 std::unordered_map<std::string, std::unordered_set<std::string>> PKB::getAllRelationship(RelationshipType relType, DesignEntity returnType1, DesignEntity returnType2) {
 	if (isRuntimeRelationship(relType)) {
 		std::unordered_set<std::string> filter1 = getFilter(relType, returnType1);
@@ -105,6 +132,10 @@ bool PKB::storePattern(kb::Pattern* pattern) {
 
 std::unordered_set<std::string> PKB::getPattern(DesignEntity designEntity, TokenObject firstArgument, TokenObject secondArgument) {
 	return patternManager->getPattern(designEntity, firstArgument, secondArgument);
+}
+
+std::unordered_set<std::string> PKB::getPatternWildcard(DesignEntity designEntity, TokenObject secondArgument) {
+	return patternManager->getPatternWildcard(designEntity, secondArgument);
 }
 
 std::vector<std::pair<std::string, std::string>> PKB::getPatternPair(DesignEntity designEntity, TokenObject secondArgument) {

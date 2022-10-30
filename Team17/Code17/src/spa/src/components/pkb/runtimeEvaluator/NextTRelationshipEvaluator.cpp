@@ -25,12 +25,10 @@ bool NextTRelationshipEvaluator::DFSNextTForward(std::string curr, std::string t
 
 // DFS search forward to answer Next* queries with synonym
 void NextTRelationshipEvaluator::DFSNextTForwardWithSynonym(std::string curr, std::unordered_set<std::string>& visited,
-															std::unordered_set<std::string>& result,
-															std::unordered_set<std::string>& filter) {
+															std::unordered_set<std::string>& result) {
 	std::unordered_set<std::string> cache = getForwardCache(curr);
 	if (cache.size() != 0) {
-		std::unordered_set<std::string> intersectionRes = RuntimeRelationshipUtils::getSetIntersection(cache, filter);
-		for (auto const& el : intersectionRes) {
+		for (auto const& el : cache) {
 			result.insert(el);
 		}
 	} else {
@@ -43,7 +41,7 @@ void NextTRelationshipEvaluator::DFSNextTForwardWithSynonym(std::string curr, st
 			std::unordered_set<std::string>::const_iterator exist = visited.find(neighbour);
 			result.insert(neighbour);
 			if (exist == visited.end()) {
-				DFSNextTForwardWithSynonym(neighbour, visited, result, filter);
+				DFSNextTForwardWithSynonym(neighbour, visited, result);
 
 			}
 		}
@@ -55,12 +53,10 @@ void NextTRelationshipEvaluator::DFSNextTForwardWithSynonym(std::string curr, st
 
 // DFS search backward to answer Next* queries with synonym
 void NextTRelationshipEvaluator::DFSNextTBackwardWithSynonym(std::string curr, std::unordered_set<std::string>& visited,
-														std::unordered_set<std::string>& result,
-														std::unordered_set<std::string>& filter) {
+														std::unordered_set<std::string>& result) {
 	std::unordered_set<std::string> cache = getBackwardCache(curr);
 	if (cache.size() != 0) {
-		std::unordered_set<std::string> intersectionRes = RuntimeRelationshipUtils::getSetIntersection(cache, filter);
-		for (auto const& el : intersectionRes) {
+		for (auto const& el : cache) {
 			result.insert(el);
 		}
 	} else {
@@ -72,7 +68,7 @@ void NextTRelationshipEvaluator::DFSNextTBackwardWithSynonym(std::string curr, s
 			std::unordered_set<std::string>::const_iterator exist = visited.find(neighbour);
 			result.insert(neighbour);
 			if (exist == visited.end()) {
-				DFSNextTBackwardWithSynonym(neighbour, visited, result, filter);
+				DFSNextTBackwardWithSynonym(neighbour, visited, result);
 			}
 		}
 		visited.erase(curr);
@@ -88,7 +84,7 @@ void NextTRelationshipEvaluator::DFSNextTWithTwoSynonyms(std::unordered_set<std:
 		std::unordered_set<std::string> visited;
 		std::unordered_set<std::string> result;
 		std::string start = ele;
-		DFSNextTForwardWithSynonym(start, visited, result, filter2);
+		DFSNextTForwardWithSynonym(start, visited, result);
 		if (!isExistKeyForwardCache(start)) {
 			storeForwardCache(start, result);
 		}
@@ -99,14 +95,58 @@ void NextTRelationshipEvaluator::DFSNextTWithTwoSynonyms(std::unordered_set<std:
 	}
 }
 
-bool NextTRelationshipEvaluator::getRuntimeRelationship(RelationshipType relType, TokenObject firstArgument, TokenObject secondArgument) {
-	if (relType == RelationshipType::NEXT_T) {
-		if (getForwardCacheKV(firstArgument.getValue(), secondArgument.getValue())) {
-			return true;
+std::unordered_set<std::string> NextTRelationshipEvaluator::DFSNextTWildcardForward(std::unordered_set<std::string>& filter1,
+	std::unordered_set<std::string>& filter2, std::unordered_set<std::string>& result) {
+	std::unordered_set<std::string> ans;
+	for (const auto& ele : filter1) {
+		std::unordered_set<std::string> visited;
+		std::unordered_set<std::string> result;
+		std::string start = ele;
+		DFSNextTForwardWithSynonym(start, visited, result);
+		if (!isExistKeyForwardCache(start)) {
+			storeForwardCache(start, result);
 		}
 
+		result = RuntimeRelationshipUtils::getSetIntersection(result, filter2);
+
+		if (result.size() != 0) {
+			ans.insert(start);
+		}
+	}
+	return ans;
+}
+
+std::unordered_set<std::string> NextTRelationshipEvaluator::DFSNextTWildcardBackward(std::unordered_set<std::string>& filter1,
+	std::unordered_set<std::string>& filter2, std::unordered_set<std::string>& result) {
+	std::unordered_set<std::string> ans;
+	for (const auto& ele : filter2) {
 		std::unordered_set<std::string> visited;
-		return DFSNextTForward(firstArgument.getValue(), secondArgument.getValue(), visited);
+		std::unordered_set<std::string> result;
+		std::string start = ele;
+		DFSNextTBackwardWithSynonym(start, visited, result);
+		storeBackwardCache(start, result);
+		if (!isExistKeyBackwardCache(start)) {
+			storeBackwardCache(start, result);
+		}
+		result = RuntimeRelationshipUtils::getSetIntersection(result, filter1);
+		if (result.size() != 0) {
+			ans.insert(start);
+		}
+	}
+	return ans;
+}
+
+bool NextTRelationshipEvaluator::getRuntimeRelationship(RelationshipType relType, TokenObject firstArgument, TokenObject secondArgument) {
+	if (relType == RelationshipType::NEXT_T) {
+		if (firstArgument.getTokenType() == TokenType::INTEGER && secondArgument.getTokenType() == TokenType::INTEGER) {
+			return handleConstantConstant(firstArgument, secondArgument);
+		} else if (firstArgument.getTokenType() == TokenType::WILDCARD && secondArgument.getTokenType() == TokenType::INTEGER) {
+			return handleWildcardConstant(secondArgument);
+		} else if (firstArgument.getTokenType() == TokenType::INTEGER && secondArgument.getTokenType() == TokenType::WILDCARD) {
+			return handleConstantWildcard(firstArgument);
+		} else if (firstArgument.getTokenType() == TokenType::WILDCARD && secondArgument.getTokenType() == TokenType::WILDCARD) {
+			return handleWildcardWildcard();
+		}
 	}
 
 	return false;
@@ -117,7 +157,7 @@ std::unordered_set<std::string> NextTRelationshipEvaluator::getRuntimeRelationsh
 		std::unordered_set<std::string> visited;
 		std::unordered_set<std::string> result;
 		std::string start = firstArgument.getValue();
-		DFSNextTForwardWithSynonym(start, visited, result, filter);
+		DFSNextTForwardWithSynonym(start, visited, result);
 		if (!isExistKeyForwardCache(start)) {
 			storeForwardCache(start, result);
 		}
@@ -132,7 +172,7 @@ std::unordered_set<std::string> NextTRelationshipEvaluator::getRuntimeRelationsh
 		std::unordered_set<std::string> visited;
 		std::unordered_set<std::string> result;
 		std::string start = secondArgument.getValue();
-		DFSNextTBackwardWithSynonym(start, visited, result, filter);
+		DFSNextTBackwardWithSynonym(start, visited, result);
 		if (!isExistKeyBackwardCache(start)) {
 			storeBackwardCache(start, result);
 		}
@@ -151,4 +191,38 @@ std::unordered_map<std::string, std::unordered_set<std::string>> NextTRelationsh
 		return result_map;
 	}
 	return std::unordered_map<std::string, std::unordered_set<std::string>>();
+}
+
+std::unordered_set<std::string> NextTRelationshipEvaluator::getRuntimeRelationshipWithFirstWildcard(RelationshipType relType, std::unordered_set<std::string>& filter1, std::unordered_set<std::string>& filter2) {
+	if (relType == RelationshipType::NEXT_T) {
+		std::unordered_set<std::string> result;
+		return DFSNextTWildcardBackward(filter1, filter2, result);
+	}
+	return std::unordered_set<std::string>();
+}
+std::unordered_set<std::string> NextTRelationshipEvaluator::getRuntimeRelationshipWithSecondWildcard(RelationshipType relType, std::unordered_set<std::string>& filter1, std::unordered_set<std::string>& filter2) {
+	if (relType == RelationshipType::NEXT_T) {
+		std::unordered_set<std::string> result;
+		return DFSNextTWildcardForward(filter1, filter2, result);
+	}
+	return std::unordered_set<std::string>();
+}
+
+bool NextTRelationshipEvaluator::handleConstantConstant(TokenObject firstArgument, TokenObject secondArgument) {
+	std::unordered_set<std::string> visited;
+	return DFSNextTForward(firstArgument.getValue(), secondArgument.getValue(), visited);
+}
+
+bool NextTRelationshipEvaluator::handleConstantWildcard(TokenObject firstArgument) {
+	std::unordered_set<std::string> nextStore = nextStorage->getNextForward(firstArgument.getValue());
+	return nextStore.size() != 0;
+}
+
+bool NextTRelationshipEvaluator::handleWildcardConstant(TokenObject secondArgument) {
+	std::unordered_set<std::string> nextStore = nextStorage->getNextBackward(secondArgument.getValue());
+	return nextStore.size() != 0;
+}
+
+bool NextTRelationshipEvaluator::handleWildcardWildcard() {
+	return !nextStorage->isEmpty();
 }
