@@ -84,7 +84,7 @@ void AffectsTRelationshipEvaluator::DFSAffectsTForwardWithSynonym(std::string cu
 
 void AffectsTRelationshipEvaluator::startNewDFSPathForBackward(std::unordered_set<std::string>& result, std::unordered_set<std::string>& filter, std::string neighbour, 
 																std::unordered_set<std::string>::const_iterator& exist, std::unordered_set<std::string>& visited) {
-	if ((filter.find(neighbour) != filter.end()) && RuntimeRelationshipUtils::isModifiesAssign(modifiesStorage, neighbour)) {
+	if ((filter.find(neighbour) != filter.end())) {
 		result.insert(neighbour);
 
 		if (exist == visited.end()) {
