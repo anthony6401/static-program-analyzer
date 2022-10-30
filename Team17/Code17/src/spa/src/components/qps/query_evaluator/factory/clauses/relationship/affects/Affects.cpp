@@ -95,9 +95,7 @@ ResultTable Affects::evaluateIntegerSynonym(RelationshipType relationshipType) {
 }
 
 ResultTable Affects::evaluateIntegerWildcard(RelationshipType relationshipType) {
-    DesignEntity rightType = DesignEntity::STMT;
-    std::unordered_set<std::string> results = qpsClient.getRelationshipByFirst(relationshipType, left, rightType);
-    bool result = !results.empty();
+    bool result = qpsClient.getRelationship(relationshipType, left, right);
     return {result};
 }
 
@@ -114,16 +112,12 @@ ResultTable Affects::evaluateWildcardSynonym(RelationshipType relationshipType) 
 }
 
 ResultTable Affects::evaluateWildcardWildcard(RelationshipType relationshipType) {
-    DesignEntity stmtType = DesignEntity::STMT;
-    std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(relationshipType, stmtType, stmtType);
-    bool result = !results.empty();
+    bool result = qpsClient.getRelationship(relationshipType, left, right);
     return {result};
 }
 
 ResultTable Affects::evaluateWildcardInteger(RelationshipType relationshipType) {
-    DesignEntity leftType = DesignEntity::STMT;
-    std::unordered_set<std::string> results = qpsClient.getRelationshipBySecond(relationshipType, leftType, right);
-    bool result = !results.empty();
+    bool result = qpsClient.getRelationship(relationshipType, left, right);
     return {result};
 }
 

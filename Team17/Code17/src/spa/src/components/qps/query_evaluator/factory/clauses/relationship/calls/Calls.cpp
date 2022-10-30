@@ -92,9 +92,7 @@ ResultTable Calls::evaluateWildcardSynonym(RelationshipType relationshipType) {
 }
 
 ResultTable Calls::evaluateWildcardWildcard(RelationshipType relationshipType) {
-    DesignEntity procType = DesignEntity::PROCEDURE;
-    std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(relationshipType, procType, procType);
-    bool result = !results.empty();
+    bool result = qpsClient.getRelationship(relationshipType, left, right);
     return {result};
 }
 
