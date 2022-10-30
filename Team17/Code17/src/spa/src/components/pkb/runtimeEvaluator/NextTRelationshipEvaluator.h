@@ -22,9 +22,9 @@ public:
 private:
 	bool DFSNextTForward(std::string curr, std::string target, std::unordered_set<std::string>& visited);
 	void DFSNextTForwardWithSynonym(std::string curr, std::unordered_set<std::string>& visited,
-						std::unordered_set<std::string>& result, std::unordered_set<std::string>& filter);
+						std::unordered_set<std::string>& result);
 	void DFSNextTBackwardWithSynonym(std::string curr, std::unordered_set<std::string>& visited,
-						std::unordered_set<std::string>& result, std::unordered_set<std::string>& filter);
+						std::unordered_set<std::string>& result);
 	void DFSNextTWithTwoSynonyms(std::unordered_set<std::string>& filter1, 
 						std::unordered_set<std::string>& filter2, 
 						std::unordered_map<std::string, std::unordered_set<std::string>>& result_map);

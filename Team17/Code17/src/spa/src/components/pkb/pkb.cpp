@@ -87,25 +87,27 @@ std::unordered_set<std::string> PKB::getRelationshipBySecond(RelationshipType re
 
 std::unordered_set<std::string> PKB::getRelationshipWithFirstWildcard(RelationshipType relType, DesignEntity returnType) {
 	if (isRuntimeRelationship(relType)) {
-		std::unordered_set<std::string> filter = getFilter(relType, returnType);
+		std::unordered_set<std::string> filter1 = getFilter(relType, DesignEntity::STMT);
+		std::unordered_set<std::string> filter2 = getFilter(relType, returnType);
 
-		if (filter.size() == 0) {
+		if (filter1.size() == 0 || filter2.size() == 0) {
 			return std::unordered_set<std::string>();
 		}
-		return relManager->getRuntimeRelationshipWithFirstWildcard(relType, filter, filter);
+		return relManager->getRuntimeRelationshipWithFirstWildcard(relType, filter1, filter2);
 	}
 	return relManager->getRelationshipWithFirstWildcard(relType, returnType);
 }
 
 std::unordered_set<std::string> PKB::getRelationshipWithSecondWildcard(RelationshipType relType, DesignEntity returnType) {
 	if (isRuntimeRelationship(relType)) {
-		std::unordered_set<std::string> filter = getFilter(relType, returnType);
+		std::unordered_set<std::string> filter1 = getFilter(relType, returnType);
+		std::unordered_set<std::string> filter2 = getFilter(relType, DesignEntity::STMT);
 
-		if (filter.size() == 0) {
+		if (filter1.size() == 0 || filter2.size() == 0) {
 			return std::unordered_set<std::string>();
 		}
 
-		return relManager->getRuntimeRelationshipWithSecondWildcard(relType, filter, filter);
+		return relManager->getRuntimeRelationshipWithSecondWildcard(relType, filter1, filter2);
 	}
 	return relManager->getRelationshipWithSecondWildcard(relType, returnType);
 }

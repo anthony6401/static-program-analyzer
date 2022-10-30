@@ -194,7 +194,7 @@ TEST_CASE("Next queries SP") {
     }
 
     SECTION("Next with wildcard and wildcard") {
-        // Calls(_, _)
+        // Next(_, _)
         bool testResults = pkbSP_m2->getRelationship(RelationshipType::NEXT, TokenObject(TokenType::WILDCARD, ""), TokenObject(TokenType::WILDCARD, ""));
         REQUIRE(testResults);
     }
@@ -243,6 +243,24 @@ TEST_CASE("Next* queries SP") {
         REQUIRE(testResults);
     }
 
+    SECTION("Next* with wildcard and value") {
+        // Next*(_, 8)
+        bool testResults = pkbSP_m2->getRelationship(RelationshipType::NEXT_T, TokenObject(TokenType::WILDCARD, ""), TokenObject(TokenType::INTEGER, "8"));
+        REQUIRE(testResults);
+    }
+
+    SECTION("Next* with value and wildcard") {
+        // Next*(14, _)
+        bool testResults = pkbSP_m2->getRelationship(RelationshipType::NEXT_T, TokenObject(TokenType::INTEGER, "14"), TokenObject(TokenType::WILDCARD, ""));
+        REQUIRE(testResults);
+    }
+
+    SECTION("Next with wildcard and wildcard") {
+        // Next*(_, _)
+        bool testResults = pkbSP_m2->getRelationship(RelationshipType::NEXT_T, TokenObject(TokenType::WILDCARD, ""), TokenObject(TokenType::WILDCARD, ""));
+        REQUIRE(testResults);
+    }
+
     SECTION("Next* with synonym first argument") {
         // Next*(s, 6)
         std::unordered_set<std::string> testResults = pkbSP_m2->getRelationshipBySecond(RelationshipType::NEXT_T, DesignEntity::STMT, TokenObject(TokenType::INTEGER, "6"));
@@ -257,9 +275,24 @@ TEST_CASE("Next* queries SP") {
         REQUIRE(testResults == expectedResults);
     }
 
+    SECTION("Next* with wildcard and synonym") {
+        // Next*(_, w) 
+        std::unordered_set<std::string> testResults = pkbSP_m2->getRelationshipWithFirstWildcard(RelationshipType::NEXT_T, DesignEntity::WHILE);
+        std::unordered_set<std::string> expectedResults = { "6" };
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Next* with synonym and wildcard") {
+        // Next*(a, _)
+        std::unordered_set<std::string> testResults = pkbSP_m2->getRelationshipWithSecondWildcard(RelationshipType::NEXT_T, DesignEntity::ASSIGN);
+        std::unordered_set<std::string> expectedResults = { "4", "5", "7", "9", "11", "12", "13", "14", "16", "17"};
+        REQUIRE(testResults == expectedResults);
+    }
+
     SECTION("Next* with 2 synonyms") {
         // Next*(s1, s2)
         std::unordered_map<std::string, std::unordered_set<std::string>> testResults = pkbSP_m2->getAllRelationship(RelationshipType::NEXT_T, DesignEntity::STMT, DesignEntity::STMT);
+
         std::unordered_map<std::string, std::unordered_set<std::string>> expectedResults = {{ "1", std::unordered_set<std::string>({ "2", "3"}) },
                                                                                 { "2", std::unordered_set<std::string>({ "3" }) },
                                                                                 { "4", std::unordered_set<std::string>({ "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15" }) },

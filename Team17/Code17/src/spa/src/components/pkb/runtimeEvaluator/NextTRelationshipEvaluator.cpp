@@ -25,12 +25,10 @@ bool NextTRelationshipEvaluator::DFSNextTForward(std::string curr, std::string t
 
 // DFS search forward to answer Next* queries with synonym
 void NextTRelationshipEvaluator::DFSNextTForwardWithSynonym(std::string curr, std::unordered_set<std::string>& visited,
-															std::unordered_set<std::string>& result,
-															std::unordered_set<std::string>& filter) {
+															std::unordered_set<std::string>& result) {
 	std::unordered_set<std::string> cache = getForwardCache(curr);
 	if (cache.size() != 0) {
-		std::unordered_set<std::string> intersectionRes = RuntimeRelationshipUtils::getSetIntersection(cache, filter);
-		for (auto const& el : intersectionRes) {
+		for (auto const& el : cache) {
 			result.insert(el);
 		}
 	} else {
@@ -43,7 +41,7 @@ void NextTRelationshipEvaluator::DFSNextTForwardWithSynonym(std::string curr, st
 			std::unordered_set<std::string>::const_iterator exist = visited.find(neighbour);
 			result.insert(neighbour);
 			if (exist == visited.end()) {
-				DFSNextTForwardWithSynonym(neighbour, visited, result, filter);
+				DFSNextTForwardWithSynonym(neighbour, visited, result);
 
 			}
 		}
@@ -55,12 +53,10 @@ void NextTRelationshipEvaluator::DFSNextTForwardWithSynonym(std::string curr, st
 
 // DFS search backward to answer Next* queries with synonym
 void NextTRelationshipEvaluator::DFSNextTBackwardWithSynonym(std::string curr, std::unordered_set<std::string>& visited,
-														std::unordered_set<std::string>& result,
-														std::unordered_set<std::string>& filter) {
+														std::unordered_set<std::string>& result) {
 	std::unordered_set<std::string> cache = getBackwardCache(curr);
 	if (cache.size() != 0) {
-		std::unordered_set<std::string> intersectionRes = RuntimeRelationshipUtils::getSetIntersection(cache, filter);
-		for (auto const& el : intersectionRes) {
+		for (auto const& el : cache) {
 			result.insert(el);
 		}
 	} else {
@@ -72,7 +68,7 @@ void NextTRelationshipEvaluator::DFSNextTBackwardWithSynonym(std::string curr, s
 			std::unordered_set<std::string>::const_iterator exist = visited.find(neighbour);
 			result.insert(neighbour);
 			if (exist == visited.end()) {
-				DFSNextTBackwardWithSynonym(neighbour, visited, result, filter);
+				DFSNextTBackwardWithSynonym(neighbour, visited, result);
 			}
 		}
 		visited.erase(curr);
@@ -88,7 +84,7 @@ void NextTRelationshipEvaluator::DFSNextTWithTwoSynonyms(std::unordered_set<std:
 		std::unordered_set<std::string> visited;
 		std::unordered_set<std::string> result;
 		std::string start = ele;
-		DFSNextTForwardWithSynonym(start, visited, result, filter2);
+		DFSNextTForwardWithSynonym(start, visited, result);
 		if (!isExistKeyForwardCache(start)) {
 			storeForwardCache(start, result);
 		}
@@ -106,8 +102,13 @@ std::unordered_set<std::string> NextTRelationshipEvaluator::DFSNextTWildcardForw
 		std::unordered_set<std::string> visited;
 		std::unordered_set<std::string> result;
 		std::string start = ele;
-		DFSNextTForwardWithSynonym(start, visited, result, filter2);
-		storeForwardCache(start, result);
+		DFSNextTForwardWithSynonym(start, visited, result);
+		if (!isExistKeyForwardCache(start)) {
+			storeForwardCache(start, result);
+		}
+
+		result = RuntimeRelationshipUtils::getSetIntersection(result, filter2);
+
 		if (result.size() != 0) {
 			ans.insert(start);
 		}
@@ -122,8 +123,12 @@ std::unordered_set<std::string> NextTRelationshipEvaluator::DFSNextTWildcardBack
 		std::unordered_set<std::string> visited;
 		std::unordered_set<std::string> result;
 		std::string start = ele;
-		DFSNextTBackwardWithSynonym(start, visited, result, filter1);
+		DFSNextTBackwardWithSynonym(start, visited, result);
 		storeBackwardCache(start, result);
+		if (!isExistKeyBackwardCache(start)) {
+			storeBackwardCache(start, result);
+		}
+		result = RuntimeRelationshipUtils::getSetIntersection(result, filter1);
 		if (result.size() != 0) {
 			ans.insert(start);
 		}
@@ -152,7 +157,7 @@ std::unordered_set<std::string> NextTRelationshipEvaluator::getRuntimeRelationsh
 		std::unordered_set<std::string> visited;
 		std::unordered_set<std::string> result;
 		std::string start = firstArgument.getValue();
-		DFSNextTForwardWithSynonym(start, visited, result, filter);
+		DFSNextTForwardWithSynonym(start, visited, result);
 		if (!isExistKeyForwardCache(start)) {
 			storeForwardCache(start, result);
 		}
@@ -167,7 +172,7 @@ std::unordered_set<std::string> NextTRelationshipEvaluator::getRuntimeRelationsh
 		std::unordered_set<std::string> visited;
 		std::unordered_set<std::string> result;
 		std::string start = secondArgument.getValue();
-		DFSNextTBackwardWithSynonym(start, visited, result, filter);
+		DFSNextTBackwardWithSynonym(start, visited, result);
 		if (!isExistKeyBackwardCache(start)) {
 			storeBackwardCache(start, result);
 		}
