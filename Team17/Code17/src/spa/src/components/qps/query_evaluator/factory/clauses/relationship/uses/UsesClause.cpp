@@ -66,10 +66,8 @@ ResultTable UsesClause::evaluateSynonymSynonym() {
 ResultTable UsesClause::evaluateSynonymWildcard() {
     std::string leftValue = left.getValue();
     DesignEntity leftType = synonymToDesignEntityMap[leftValue];
-    DesignEntity rightType = DesignEntity::VARIABLE;
-    std::unordered_map<std::string, std::unordered_set<std::string>> results = qpsClient.getAllRelationship(RelationshipType::USES, leftType, rightType);
-    std::unordered_set<std::string> processedMap = ClauseUtils::processMapToSetFromFirst(results);
-    return {leftValue, processedMap};
+    std::unordered_set<std::string> results = qpsClient.getRelationshipWithSecondWildcard(RelationshipType::USES, leftType);
+    return {leftValue, results};
 }
 
 ResultTable UsesClause::evaluateSynonymNameQuotes() {
