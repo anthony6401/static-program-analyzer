@@ -171,7 +171,6 @@ TEST_CASE("Relationship Manager Test") {
 	std::unordered_set<std::string> c_filter = { call_value_one };
 	
 	REQUIRE(relManager.getRuntimeRelationshipBySecond(RelationshipType::NEXT_T, stmtTokenObject4, c_filter) == nextTExpectedResultTwo);
-<<<<<<< HEAD
 	
 	REQUIRE(relManager.getRuntimeRelationshipWithSecondWildcard(RelationshipType::NEXT_T, p_filter, r_filter) == nextTExpectedResultTwo2);
 
@@ -210,9 +209,6 @@ TEST_CASE("Relationship Manager Test") {
 	REQUIRE(relManager.getRelationshipWithSecondWildcard(RelationshipType::NEXT, DesignEntity::IF) == nextSecondWildcardExpectedResult);
 	REQUIRE(relManager.getRelationshipWithSecondWildcard(RelationshipType::CALLS, DesignEntity::PROCEDURE) == callsSecondWildcardExpectedResult);
 	REQUIRE(relManager.getRelationshipWithSecondWildcard(RelationshipType::CALLS_T, DesignEntity::PROCEDURE) == callsTSecondWildcardExpectedResult);
-=======
-
->>>>>>> master
 
 	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultUsesAll{ { assign_value_one, std::unordered_set<std::string>({variable_value_one}) } };
 	std::unordered_map<std::string, std::unordered_set<std::string>> expectedResultModifiesAll{ { assign_value_one, std::unordered_set<std::string>({variable_value_one}) } };
