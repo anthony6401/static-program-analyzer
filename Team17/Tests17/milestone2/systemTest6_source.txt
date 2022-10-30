@@ -1,0 +1,82 @@
+procedure system6 {
+    a = b + c;
+    a = a + b + c;
+    a = b / c;
+    while (a == b) {
+        d = e * f;
+    }
+    d = d / f;
+    while (a == b) {
+        e = d * f;
+    }
+    h = e;
+    e = h;
+    if (g > g) then {
+        a = b / c;
+    } else {
+        c = b * a;
+    }
+    e = a;
+    if (a <= b) then {
+        a = e % f;
+    } else {
+        a = a * b;
+    }
+    a = a;
+    if (g <= g) then {
+        while (g < a) {
+            g = a / b % g;
+        }
+    } else {
+        g = g;
+    }
+    a = g * c;
+    if (a > b) then {
+        c = a * b;
+    } else {
+        while (b == b) {
+            a = d;
+        }
+    }
+    f = a;
+    while (d == b) {
+        if (h > a) then {
+            a = b * d;
+        } else {
+            c = c-b;
+        }
+        h = a;
+    }
+    j = a;
+    l = h;
+    d = c;
+}
+
+procedure single {
+    while (var1 < var2) {
+        var1 = var1 + var2;
+    }
+}
+
+procedure call {
+    A = A - B; 
+    call called;
+    Z = A - B / (D * C);
+    Y = D * A;
+}
+
+procedure called {
+    if (A == B) then {
+        A = B + C;
+    } else {
+        D = B * A;
+    }
+    read A;
+    print D;
+    while (A !=B) {
+        while (B != C) {
+	    read C;
+            C = A * B / C;
+        }
+    }
+}

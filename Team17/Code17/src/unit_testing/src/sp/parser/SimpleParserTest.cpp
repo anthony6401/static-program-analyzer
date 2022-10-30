@@ -16,6 +16,17 @@ TEST_CASE("parse code") {
             REQUIRE(e.what() == std::string("Received invalid SIMPLE code"));
         }
     }
+
+    SECTION("parse invalid code") {
+        SimpleParser parser = SimpleParser(&xtractor);
+        parser.statementNumber = 1;
+        try {
+            parser.parseCode("procedure invalid {");
+        }
+        catch (std::invalid_argument e) {
+            REQUIRE(e.what() == std::string("Incomplete SIMPLE code"));
+        }
+    }
 }
 
 TEST_CASE("parse line") {
