@@ -174,6 +174,7 @@ TEST_CASE("Relationship Manager Test") {
 	
 	REQUIRE(relManager.getRuntimeRelationshipWithSecondWildcard(RelationshipType::NEXT_T, p_filter, r_filter) == nextTExpectedResultTwo2);
 
+
 	std::unordered_set<std::string> parentFirstWildcardExpectedResult({ read_value_one });
 	std::unordered_set<std::string> parentTFirstWildcardExpectedResult({ read_value_one });
 	std::unordered_set<std::string> followsFirstWildcardExpectedResult({ print_value_one });
