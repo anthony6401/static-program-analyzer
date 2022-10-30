@@ -213,14 +213,11 @@ bool AffectsTRelationshipEvaluator::getRuntimeRelationship(RelationshipType relT
 	if (relType == RelationshipType::AFFECTS_T) {
 		if (firstArgument.getTokenType() == TokenType::INTEGER && secondArgument.getTokenType() == TokenType::INTEGER) {
 			return handleConstantConstant(firstArgument, secondArgument);
-		}
-		else if (firstArgument.getTokenType() == TokenType::WILDCARD && secondArgument.getTokenType() == TokenType::INTEGER) {
+		} else if (firstArgument.getTokenType() == TokenType::WILDCARD && secondArgument.getTokenType() == TokenType::INTEGER) {
 			return handleWildcardConstant(secondArgument);
-		}
-		else if (firstArgument.getTokenType() == TokenType::INTEGER && secondArgument.getTokenType() == TokenType::WILDCARD) {
+		} else if (firstArgument.getTokenType() == TokenType::INTEGER && secondArgument.getTokenType() == TokenType::WILDCARD) {
 			return handleConstantWildcard(firstArgument);
-		}
-		else if (firstArgument.getTokenType() == TokenType::WILDCARD && secondArgument.getTokenType() == TokenType::WILDCARD) {
+		} else if (firstArgument.getTokenType() == TokenType::WILDCARD && secondArgument.getTokenType() == TokenType::WILDCARD) {
 			return handleWildcardWildcard();
 		}
 	}
@@ -258,7 +255,7 @@ std::unordered_set<std::string> AffectsTRelationshipEvaluator::getRuntimeRelatio
 		
 		if (isExistKeyBackwardCache(start)) {
 			result = getBackwardCache(start);
-		}else {
+		} else {
 			DFSAffectsTBackwardWithSynonym(start, usesSet, visited, result, filter);
 			storeBackwardCache(start, result);
 
