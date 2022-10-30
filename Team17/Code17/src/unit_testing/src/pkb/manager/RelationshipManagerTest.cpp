@@ -1,10 +1,4 @@
 #include "models/Relationship/Relationship.h"
-#include "models/Relationship/ModifyRelationship.h"
-#include "models/Relationship/UsesRelationship.h"
-#include "models/Relationship/ParentRelationship.h"
-#include "models/Relationship/ParentTRelationship.h"
-#include "models/Relationship/FollowsRelationship.h"
-#include "models/Relationship/FollowsTRelationship.h"
 #include "models/Relationship/RelationshipType.h"
 
 #include "components/pkb/manager/RelationshipManager.h"
@@ -22,14 +16,14 @@ TEST_CASE("Relationship Manager Test") {
 	REQUIRE(relManager.storeRelationship(usesRelationshipPrintOne));
 	REQUIRE(relManager.storeRelationship(usesRelationshipWhileOne));
 	REQUIRE(relManager.storeRelationship(usesRelationshipIfOne));
-	
+
 	REQUIRE(!relManager.storeRelationship(usesRelationshipReadOne));
 
 	REQUIRE(relManager.storeRelationship(modifyRelationshipAssignOne));
 	REQUIRE(relManager.storeRelationship(modifyRelationshipProcOne));
 	REQUIRE(relManager.storeRelationship(modifyRelationshipReadOne));
 	REQUIRE(relManager.storeRelationship(modifyRelationshipWhileOne));
-	
+
 	REQUIRE(!relManager.storeRelationship(modifyRelationshipPrintOne));
 
 	REQUIRE(relManager.storeRelationship(parentRelationshipWhileReadOne));
@@ -159,7 +153,7 @@ TEST_CASE("Relationship Manager Test") {
 	std::unordered_set<std::string> nextExpectedResultTwo({ if_value_one });
 	std::unordered_set<std::string> callsExpectedResultTwo{ procedure_value_one, procedure_value_two };
 	std::unordered_set<std::string> callsTExpectedResultTwo{ procedure_value_one, procedure_value_two };
-	
+
 
 	REQUIRE(relManager.getRelationshipBySecond(RelationshipType::USES, DesignEntity::ASSIGN, variableTokenObject) == usesExpectedResultTwo);
 	REQUIRE(relManager.getRelationshipBySecond(RelationshipType::MODIFIES, DesignEntity::ASSIGN, variableTokenObject) == modifiesExpectedResultTwo);
@@ -179,6 +173,7 @@ TEST_CASE("Relationship Manager Test") {
 	REQUIRE(relManager.getRuntimeRelationshipBySecond(RelationshipType::NEXT_T, stmtTokenObject4, c_filter) == nextTExpectedResultTwo);
 	
 	REQUIRE(relManager.getRuntimeRelationshipWithSecondWildcard(RelationshipType::NEXT_T, p_filter, r_filter) == nextTExpectedResultTwo2);
+
 
 	std::unordered_set<std::string> parentFirstWildcardExpectedResult({ read_value_one });
 	std::unordered_set<std::string> parentTFirstWildcardExpectedResult({ read_value_one });

@@ -29,7 +29,6 @@ void QPS::processQueryResult(std::string query, std::list<std::string> &results,
         Evaluator::evaluateQuery(parsedAndValidatedQuery, results, qpsClient);
     }
     catch (std::exception& e) {
-        std::cout << e.what() << std::endl;
         results.emplace_back("SyntaxError");
     }
 }
