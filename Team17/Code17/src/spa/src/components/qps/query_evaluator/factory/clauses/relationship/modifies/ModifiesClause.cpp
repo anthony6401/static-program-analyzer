@@ -85,9 +85,7 @@ ResultTable ModifiesClause::evaluateSecondAsSynonym() {
 }
 
 ResultTable ModifiesClause::evaluateSecondAsWildcard() {
-    DesignEntity rightType = DesignEntity::VARIABLE;
-    std::unordered_set<std::string> results = qpsClient.getRelationshipByFirst(RelationshipType::MODIFIES, left, rightType);
-    bool result = !results.empty();
+    bool result = qpsClient.getRelationship(RelationshipType::MODIFIES, left, right);
     return {result};
 }
 
