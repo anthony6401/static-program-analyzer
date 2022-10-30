@@ -43,7 +43,7 @@ void AffectsRelationshipEvaluator::DFSAffectsForwardWithSynonym(std::string curr
 	}
 }
 
-// DFS search backward to answer Next* queries with synonym
+// DFS search backward to answer Affects queries with synonym
 void AffectsRelationshipEvaluator::DFSAffectsBackwardWithSynonym(std::string curr, std::unordered_set<std::string>& usesSet,
 	std::unordered_set<std::string>& visited,
 	std::unordered_set<std::string>& result,
@@ -87,7 +87,7 @@ void AffectsRelationshipEvaluator::DFSAffectsBackwardWithSynonym(std::string cur
 	visited.erase(curr);
 }
 
-// DFS search to answer Next* queries with 2 synonyms
+// DFS search to answer Affects queries with 2 synonyms
 void AffectsRelationshipEvaluator::DFSAffectsWithTwoSynonyms(std::unordered_set<std::string>& filter1,
 														std::unordered_set<std::string>& filter2,
 														std::unordered_map<std::string, std::unordered_set<std::string>>& result_map) {
