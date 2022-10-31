@@ -1418,17 +1418,6 @@ TEST_CASE("If Pattern queries") {
     }
 }
 
-TEST_CASE("djfhdjfhd") {
-            std::string testQuery = "if ifs; variable v; constant c;\n "
-                                "Select <ifs, v, c> pattern ifs(v,_,_)";
-        std::list<std::string> testResults;
-        std::list<std::string> expectedResults = {"10 x 1", "10 x 5", "10 x 2", "10 x 0"};
-        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
-        testResults.sort();
-        expectedResults.sort();
-        REQUIRE(testResults == expectedResults);
-}
-
 TEST_CASE("While Pattern queries") {
     SECTION("While Pattern test 1") {
         std::string testQuery = "while w;\n "

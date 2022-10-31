@@ -210,12 +210,12 @@ void ResultTable::joinResultsListWithNoCommonSynonym(ResultTable nextResult) {
     std::vector<std::vector<std::string>> nextResultsList = nextResult.resultsList;
     synonymsList.insert(synonymsList.end(), nextResult.synonymsList.begin(), nextResult.synonymsList.end());
 
-    if (nextResult.isEmptyResult()) {
+    if (isEmptyResult()) {
+        resultsList = std::move(nextResult.resultsList);
         return;
     }
 
-    if (isEmptyResult()) {
-        resultsList = std::move(nextResult.resultsList);
+    if (nextResult.isEmptyResult()) {
         return;
     }
 
