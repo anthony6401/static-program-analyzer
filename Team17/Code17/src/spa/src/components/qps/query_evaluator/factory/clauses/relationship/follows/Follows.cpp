@@ -18,16 +18,10 @@ ResultTable Follows::evaluateClause() {
         return Follows::evaluateSynonymInteger(relationshipType);
     } else if (leftType == TokenType::INTEGER && rightType == TokenType::NAME) {
         return Follows::evaluateIntegerSynonym(relationshipType);
-    } else if (leftType == TokenType::INTEGER && rightType == TokenType::WILDCARD) {
-        return Follows::evaluateIntegerWildcard(relationshipType);
-    } else if (leftType == TokenType::INTEGER && rightType == TokenType::INTEGER) {
-        return Follows::evaluateIntegerInteger(relationshipType);
     } else if (leftType == TokenType::WILDCARD && rightType == TokenType::NAME) {
         return Follows::evaluateWildcardSynonym(relationshipType);
-    } else if (leftType == TokenType::WILDCARD && rightType == TokenType::WILDCARD) {
-        return Follows::evaluateWildcardWildcard(relationshipType);
     } else {
-        return Follows::evaluateWildcardInteger(relationshipType);
+        return Follows::evaluateWithoutSynonym(relationshipType);
     }
 }
 
@@ -91,16 +85,6 @@ ResultTable Follows::evaluateIntegerSynonym(RelationshipType relationshipType) {
     return {rightValue, results};
 }
 
-ResultTable Follows::evaluateIntegerWildcard(RelationshipType relationshipType) {
-    bool result = qpsClient.getRelationship(relationshipType, left, right);
-    return {result};
-}
-
-ResultTable Follows::evaluateIntegerInteger(RelationshipType relationshipType) {
-    bool result = qpsClient.getRelationship(relationshipType, left, right);
-    return {result};
-}
-
 ResultTable Follows::evaluateWildcardSynonym(RelationshipType relationshipType) {
     std::string rightValue = right.getValue();
     DesignEntity rightType = synonymToDesignEntityMap[rightValue];
@@ -108,15 +92,9 @@ ResultTable Follows::evaluateWildcardSynonym(RelationshipType relationshipType) 
     return {rightValue, results};
 }
 
-ResultTable Follows::evaluateWildcardWildcard(RelationshipType relationshipType) {
+ResultTable Follows::evaluateWithoutSynonym(RelationshipType relationshipType) {
     bool result = qpsClient.getRelationship(relationshipType, left, right);
     return {result};
 }
-
-ResultTable Follows::evaluateWildcardInteger(RelationshipType relationshipType) {
-    bool result = qpsClient.getRelationship(relationshipType, left, right);
-    return {result};
-}
-
 
 

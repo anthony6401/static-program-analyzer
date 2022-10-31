@@ -15,12 +15,11 @@
 #include "components/qps/query_evaluator/factory/clauses/select/SelectAttributeClause.h"
 #include "components/qps/abstract_query_object/With.h"
 #include "components/qps/query_evaluator/factory/clauses/with/WithClause.h"
-#include "components/qps/query_evaluator/factory/clauses/patterns/IfPatternClause.h"
-#include "components/qps/query_evaluator/factory/clauses/patterns/WhilePatternClause.h"
 #include "components/qps/query_evaluator/factory/clauses/relationship/uses/UsesClause.h"
 #include "components/qps/query_evaluator/factory/clauses/relationship/modifies/ModifiesClause.h"
 #include "components/qps/query_evaluator/factory/clauses/relationship/affects/AffectsClause.h"
 #include "components/qps/query_evaluator/factory/clauses/relationship/affects/AffectsTClause.h"
+#include "components/qps/query_evaluator/factory/clauses/patterns/ContainerPatternClause.h"
 
 
 std::shared_ptr<Clause> ClauseCreator::createClause(With with,
@@ -54,12 +53,12 @@ std::shared_ptr<Clause> ClauseCreator::createClause(qps::Pattern pattern, const 
     std::string patternSynonym = pattern.getSynonym();
     TokenType patternType = pattern.getPatternType();
 
-    if (patternType == TokenType::IF) {
-        return std::make_shared<IfPatternClause>(patternSynonym, firstArgument, qpsClient);
-    } else if (patternType == TokenType::WHILE) {
-        return std::make_shared<WhilePatternClause>(patternSynonym, firstArgument, qpsClient);
-    } else {
+    if (patternType == TokenType::ASSIGN) {
         return std::make_shared<AssignPatternClause>(patternSynonym, firstArgument, secondArgument, qpsClient);
+    } else if (patternType == TokenType::IF) {
+        return std::make_shared<ContainerPatternClause>(patternSynonym, DesignEntity::IF, firstArgument,  qpsClient);
+    } else {
+        return std::make_shared<ContainerPatternClause>(patternSynonym, DesignEntity::WHILE, firstArgument,  qpsClient);
     }
 }
 

@@ -44,12 +44,8 @@ ResultTable AssignPatternClause::evaluateFirstAsSynonym() {
 
 
 ResultTable AssignPatternClause::evaluateFirstAsWildcard() {
-    std::vector<std::pair<std::string, std::string>> results = qpsClient.getPatternPair(DesignEntity::ASSIGN, right);
-    std::unordered_set<std::string> extractedAssignments;
-    for (const auto& pair : results) {
-        extractedAssignments.insert(pair.first);
-    }
-    return {assignSynonym,  extractedAssignments};
+    std::unordered_set<std::string> results = qpsClient.getPatternWildcard(DesignEntity::ASSIGN, right);
+    return {assignSynonym,  results};
 }
 
 ResultTable AssignPatternClause::evaluateFirstAsNameQuotes() {

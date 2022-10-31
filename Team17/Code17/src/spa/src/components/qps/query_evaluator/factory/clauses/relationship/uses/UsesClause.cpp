@@ -19,10 +19,8 @@ ResultTable UsesClause::evaluateClause() {
         return UsesClause::evaluateSynonymNameQuotes();
     } else if ((leftType == TokenType::INTEGER || leftType == TokenType::NAME_WITH_QUOTATION) && rightType == TokenType::NAME) {
         return UsesClause::evaluateSecondAsSynonym();
-    } else if ((leftType == TokenType::INTEGER || leftType == TokenType::NAME_WITH_QUOTATION) && rightType == TokenType::WILDCARD) {
-        return UsesClause::evaluateSecondAsWildcard();
     } else {
-        return UsesClause::evaluateWithoutSynonymOrWildCard();
+        return UsesClause::evaluateWithoutSynonym();
     }
 }
 
@@ -84,12 +82,7 @@ ResultTable UsesClause::evaluateSecondAsSynonym() {
     return {rightValue, results};
 }
 
-ResultTable UsesClause::evaluateSecondAsWildcard() {
-    bool result = qpsClient.getRelationship(RelationshipType::USES, left, right);
-    return {result};
-}
-
-ResultTable UsesClause::evaluateWithoutSynonymOrWildCard() {
+ResultTable UsesClause::evaluateWithoutSynonym() {
     bool result = qpsClient.getRelationship(RelationshipType::USES, left, right);
     return {result};
 }
