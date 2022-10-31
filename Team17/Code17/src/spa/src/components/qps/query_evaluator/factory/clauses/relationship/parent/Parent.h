@@ -18,11 +18,8 @@ protected:
     ResultTable evaluateSynonymWildcard(RelationshipType relationshipType);
     ResultTable evaluateSynonymInteger(RelationshipType relationshipType);
     ResultTable evaluateIntegerSynonym(RelationshipType relationshipType);
-    ResultTable evaluateIntegerWildcard(RelationshipType relationshipType);
-    ResultTable evaluateIntegerInteger(RelationshipType relationshipType);
     ResultTable evaluateWildcardSynonym(RelationshipType relationshipType);
-    ResultTable evaluateWildcardWildcard(RelationshipType relationshipType);
-    ResultTable evaluateWildcardInteger(RelationshipType relationshipType);
+    ResultTable evaluateWithoutSynonym(RelationshipType relationshipType);
 
 public:
     Parent(TokenObject left, TokenObject right, RelationshipType relationshipType, size_t priority,

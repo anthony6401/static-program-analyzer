@@ -18,16 +18,10 @@ ResultTable Next::evaluateClause() {
         return Next::evaluateSynonymInteger(relationshipType);
     } else if (leftType == TokenType::INTEGER && rightType == TokenType::NAME) {
         return Next::evaluateIntegerSynonym(relationshipType);
-    } else if (leftType == TokenType::INTEGER && rightType == TokenType::WILDCARD) {
-        return Next::evaluateIntegerWildcard(relationshipType);
-    } else if (leftType == TokenType::INTEGER && rightType == TokenType::INTEGER) {
-        return Next::evaluateIntegerInteger(relationshipType);
     } else if (leftType == TokenType::WILDCARD && rightType == TokenType::NAME) {
         return Next::evaluateWildcardSynonym(relationshipType);
-    } else if (leftType == TokenType::WILDCARD && rightType == TokenType::WILDCARD) {
-        return Next::evaluateWildcardWildcard(relationshipType);
     } else {
-        return Next::evaluateWildcardInteger(relationshipType);
+        return Next::evaluateWithoutSynonym(relationshipType);
     }
 }
 
@@ -99,16 +93,6 @@ ResultTable Next::evaluateIntegerSynonym(RelationshipType relationshipType) {
     return {rightValue, results};
 }
 
-ResultTable Next::evaluateIntegerWildcard(RelationshipType relationshipType) {
-    bool result = qpsClient.getRelationship(relationshipType, left, right);
-    return {result};
-}
-
-ResultTable Next::evaluateIntegerInteger(RelationshipType relationshipType) {
-    bool result = qpsClient.getRelationship(relationshipType, left, right);
-    return {result};
-}
-
 ResultTable Next::evaluateWildcardSynonym(RelationshipType relationshipType) {
     std::string rightValue = right.getValue();
     DesignEntity rightType = synonymToDesignEntityMap[rightValue];
@@ -116,12 +100,7 @@ ResultTable Next::evaluateWildcardSynonym(RelationshipType relationshipType) {
     return {rightValue, results};
 }
 
-ResultTable Next::evaluateWildcardWildcard(RelationshipType relationshipType) {
-    bool result = qpsClient.getRelationship(relationshipType, left, right);
-    return {result};
-}
-
-ResultTable Next::evaluateWildcardInteger(RelationshipType relationshipType) {
+ResultTable Next::evaluateWithoutSynonym(RelationshipType relationshipType) {
     bool result = qpsClient.getRelationship(relationshipType, left, right);
     return {result};
 }

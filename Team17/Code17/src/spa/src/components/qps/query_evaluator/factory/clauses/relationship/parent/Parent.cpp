@@ -18,16 +18,10 @@ ResultTable Parent::evaluateClause() {
         return Parent::evaluateSynonymInteger(relationshipType);
     } else if (leftType == TokenType::INTEGER && rightType == TokenType::NAME) {
         return Parent::evaluateIntegerSynonym(relationshipType);
-    } else if (leftType == TokenType::INTEGER && rightType == TokenType::WILDCARD) {
-        return Parent::evaluateIntegerWildcard(relationshipType);
-    } else if (leftType == TokenType::INTEGER && rightType == TokenType::INTEGER) {
-        return Parent::evaluateIntegerInteger(relationshipType);
     } else if (leftType == TokenType::WILDCARD && rightType == TokenType::NAME) {
         return Parent::evaluateWildcardSynonym(relationshipType);
-    } else if (leftType == TokenType::WILDCARD && rightType == TokenType::WILDCARD) {
-        return Parent::evaluateWildcardWildcard(relationshipType);
     } else {
-        return Parent::evaluateWildcardInteger(relationshipType);
+        return Parent::evaluateWithoutSynonym(relationshipType);
     }
 }
 
@@ -91,12 +85,7 @@ ResultTable Parent::evaluateIntegerSynonym(RelationshipType relationshipType) {
     return {rightValue, results};
 }
 
-ResultTable Parent::evaluateIntegerWildcard(RelationshipType relationshipType) {
-    bool result = qpsClient.getRelationship(relationshipType, left, right);
-    return {result};
-}
-
-ResultTable Parent::evaluateIntegerInteger(RelationshipType relationshipType) {
+ResultTable Parent::evaluateWithoutSynonym(RelationshipType relationshipType) {
     bool result = qpsClient.getRelationship(relationshipType, left, right);
     return {result};
 }
@@ -107,15 +96,3 @@ ResultTable Parent::evaluateWildcardSynonym(RelationshipType relationshipType) {
     std::unordered_set<std::string> results = qpsClient.getRelationshipWithFirstWildcard(relationshipType, rightType);
     return {rightValue, results};
 }
-
-ResultTable Parent::evaluateWildcardWildcard(RelationshipType relationshipType) {
-    bool result = qpsClient.getRelationship(relationshipType, left, right);
-    return {result};
-}
-
-ResultTable Parent::evaluateWildcardInteger(RelationshipType relationshipType) {
-    bool result = qpsClient.getRelationship(relationshipType, left, right);
-    return {result};
-}
-
-

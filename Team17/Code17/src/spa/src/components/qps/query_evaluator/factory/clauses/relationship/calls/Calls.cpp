@@ -18,16 +18,10 @@ ResultTable Calls::evaluateClause() {
         return Calls::evaluateSynonymNameQuotes(relationshipType);
     } else if (leftType == TokenType::WILDCARD && rightType == TokenType::NAME) {
         return Calls::evaluateWildcardSynonym(relationshipType);
-    } else if (leftType == TokenType::WILDCARD && rightType == TokenType::WILDCARD) {
-        return Calls::evaluateWildcardWildcard(relationshipType);
-    } else if (leftType == TokenType::WILDCARD && rightType == TokenType::NAME_WITH_QUOTATION) {
-        return Calls::evaluateWildcardNameQuotes(relationshipType);
     } else if (leftType == TokenType::NAME_WITH_QUOTATION && rightType == TokenType::NAME) {
         return Calls::evaluateNameQuotesSynonym(relationshipType);
-    } else if (leftType == TokenType::NAME_WITH_QUOTATION && rightType == TokenType::WILDCARD) {
-        return Calls::evaluateNameQuotesWildcard(relationshipType);
     } else {
-        return Calls::evaluateNameQuotesNameQuotes(relationshipType);
+        return Calls::evaluateWithoutSynonym(relationshipType);
     }
 }
 
@@ -91,16 +85,6 @@ ResultTable Calls::evaluateWildcardSynonym(RelationshipType relationshipType) {
     return {rightValue, results};
 }
 
-ResultTable Calls::evaluateWildcardWildcard(RelationshipType relationshipType) {
-    bool result = qpsClient.getRelationship(relationshipType, left, right);
-    return {result};
-}
-
-ResultTable Calls::evaluateWildcardNameQuotes(RelationshipType relationshipType) {
-    bool result = qpsClient.getRelationship(relationshipType, left, right);
-    return {result};
-}
-
 ResultTable Calls::evaluateNameQuotesSynonym(RelationshipType relationshipType) {
     DesignEntity procType = DesignEntity::PROCEDURE;
     std::string rightValue = right.getValue();
@@ -108,15 +92,8 @@ ResultTable Calls::evaluateNameQuotesSynonym(RelationshipType relationshipType) 
     return {rightValue, results};
 }
 
-ResultTable Calls::evaluateNameQuotesWildcard(RelationshipType relationshipType) {
+ResultTable Calls::evaluateWithoutSynonym(RelationshipType relationshipType) {
     bool result = qpsClient.getRelationship(relationshipType, left, right);
     return {result};
 }
-
-ResultTable Calls::evaluateNameQuotesNameQuotes(RelationshipType relationshipType) {
-    bool result = qpsClient.getRelationship(relationshipType, left, right);
-    return {result};
-}
-
-
 
