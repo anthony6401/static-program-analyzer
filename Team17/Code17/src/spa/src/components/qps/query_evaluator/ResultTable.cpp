@@ -17,7 +17,9 @@ ResultTable::ResultTable(const std::string& synonym, const std::unordered_set<st
     if (results.empty()) {
         setIsFalseResultToTrue();
     }
+
     synonymsList.emplace_back(synonym);
+
     for (const auto& singleResult : results) {
         std::vector<std::string> resultSublist = {singleResult};
         resultsList.emplace_back(resultSublist);
@@ -28,8 +30,10 @@ ResultTable::ResultTable(const std::string& leftSynonym, const std::string& righ
     if (results.empty()) {
         setIsFalseResultToTrue();
     }
+
     synonymsList.emplace_back(leftSynonym);
     synonymsList.emplace_back(rightSynonym);
+
     for (const auto& pairResult : results) {
         std::vector<std::string> resultSublist = {pairResult.first, pairResult.second};
         resultsList.emplace_back(resultSublist);
@@ -42,6 +46,7 @@ ResultTable::ResultTable(const std::string& leftSynonym, const std::string& righ
     }
     synonymsList.emplace_back(leftSynonym);
     synonymsList.emplace_back(rightSynonym);
+
     for (const auto& pairResult : results) {
         std::vector<std::string> resultSublist = {pairResult.first, pairResult.second};
         resultsList.emplace_back(resultSublist);
@@ -207,7 +212,9 @@ void ResultTable::joinResultsListWithNoCommonSynonym(ResultTable nextResult) {
 
     if (nextResult.isEmptyResult()) {
         return;
-    } else if (isEmptyResult()) {
+    }
+
+    if (isEmptyResult()) {
         resultsList = std::move(nextResult.resultsList);
         return;
     }

@@ -25,27 +25,29 @@ ResultTable GroupedClause::evaluateGroupedClause() {
 
     std::sort(clauses.begin(), clauses.end(), ClauseSorter());
 
-    ResultTable evaluatedGroupRawResult;
+    ResultTable evaluatedGroupResult;
     for (const auto& c : clauses) {
         ResultTable evaluatedClause = c -> evaluateClause();
         if (evaluatedClause.getIsFalseResult()) {
             return evaluatedClause;
+        } else {
+            evaluatedGroupResult.combineResult(evaluatedClause);
         }
-        evaluatedGroupRawResult.combineResult(evaluatedClause);
     }
-    return evaluatedGroupRawResult;
+    return evaluatedGroupResult;
 }
 
 void GroupedClause::mergeGroupedClause(GroupedClause &group) {
     auto synonymsOfMergingGroup = group.getAllSynonyms();
+    synonyms.insert(synonymsOfMergingGroup.begin(), synonymsOfMergingGroup.end());
+
     auto clausesOfMergingGroup = group.getClauses();
     clauses.insert(clauses.end(), clausesOfMergingGroup.begin(), clausesOfMergingGroup.end());
-    synonyms.insert(synonymsOfMergingGroup.begin(), synonymsOfMergingGroup.end());
+
     priority += group.getPriority();
 }
 
-bool GroupedClause::hasCommonSynonymWithClause(std::shared_ptr<Clause> &clause) {
-    std::set<std::string> synonymsOfClause = clause -> getAllSynonyms();
+bool GroupedClause::hasCommonSynonym(std::set<std::string> synonymsOfClause) {
     auto synonymsIterator = synonyms.begin();
     auto clauseSynonymsIterator = synonymsOfClause.begin();
     while (synonymsIterator != synonyms.end() && clauseSynonymsIterator != synonymsOfClause.end()) {
