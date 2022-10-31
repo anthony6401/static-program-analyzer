@@ -12,10 +12,10 @@
 
 class ClauseCreator {
 public:
-    static std::shared_ptr<Clause> createClause(SuchThat relationship, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
-    static std::shared_ptr<Clause> createClause(qps::Pattern pattern, const std::unordered_map<std::string, DesignEntity>& synonymToDesignEntityMap, QPSClient qpsClient);
-    static std::shared_ptr<Clause> createClause(With with, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
-    static std::shared_ptr<Clause> createClause(Select select, std::unordered_set<std::string> &tableSynonyms, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
+    static std::shared_ptr<Clause> createClause(SuchThat relationship, std::unordered_map<std::string, DesignEntity> &synonymToDesignEntityMap, QPSClient &qpsClient);
+    static std::shared_ptr<Clause> createClause(qps::Pattern pattern, const std::unordered_map<std::string, DesignEntity> &synonymToDesignEntityMap, QPSClient &qpsClient);
+    static std::shared_ptr<Clause> createClause(With with, std::unordered_map<std::string, DesignEntity> &synonymToDesignEntityMap, QPSClient &qpsClient);
+    static std::shared_ptr<Clause> createClause(Select select, std::unordered_set<std::string> &tableSynonyms, std::unordered_map<std::string, DesignEntity> &synonymToDesignEntityMap, QPSClient &qpsClient);
 };
 
 #endif //SPA_CLAUSECREATOR_H

@@ -47,7 +47,7 @@ void GroupedClause::mergeGroupedClause(GroupedClause &group) {
     priority += group.getPriority();
 }
 
-bool GroupedClause::hasCommonSynonym(std::set<std::string> synonymsOfClause) {
+bool GroupedClause::hasCommonSynonym(std::set<std::string> &synonymsOfClause) {
     auto synonymsIterator = synonyms.begin();
     auto clauseSynonymsIterator = synonymsOfClause.begin();
     while (synonymsIterator != synonyms.end() && clauseSynonymsIterator != synonymsOfClause.end()) {

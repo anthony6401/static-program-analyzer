@@ -23,8 +23,8 @@
 
 
 std::shared_ptr<Clause> ClauseCreator::createClause(With with,
-                                                    std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap,
-                                                    QPSClient qpsClient) {
+                                                    std::unordered_map<std::string, DesignEntity> &synonymToDesignEntityMap,
+                                                    QPSClient &qpsClient) {
 
     std::vector<TokenObject> left = with.getLeft();
     std::vector<TokenObject> right = with.getRight();
@@ -32,7 +32,7 @@ std::shared_ptr<Clause> ClauseCreator::createClause(With with,
     return std::make_shared<WithClause>(left, right, synonymToDesignEntityMap, qpsClient);
 }
 
-std::shared_ptr<Clause> ClauseCreator::createClause(Select select, std::unordered_set<std::string> &synonymsInTable, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) {
+std::shared_ptr<Clause> ClauseCreator::createClause(Select select, std::unordered_set<std::string> &synonymsInTable, std::unordered_map<std::string, DesignEntity> &synonymToDesignEntityMap, QPSClient &qpsClient) {
     TokenType selectReturnType = select.getReturnType();
     std::vector<TokenObject> selectReturnValues = select.getReturnValues();
     if (selectReturnType == TokenType::SYNONYM) {
@@ -47,7 +47,7 @@ std::shared_ptr<Clause> ClauseCreator::createClause(Select select, std::unordere
     }
 }
 
-std::shared_ptr<Clause> ClauseCreator::createClause(qps::Pattern pattern, const std::unordered_map<std::string, DesignEntity>& synonymToDesignEntityMap, QPSClient qpsClient) {
+std::shared_ptr<Clause> ClauseCreator::createClause(qps::Pattern pattern, const std::unordered_map<std::string, DesignEntity>& synonymToDesignEntityMap, QPSClient &qpsClient) {
     TokenObject firstArgument = pattern.getLeft();
     TokenObject secondArgument = pattern.getRight();
     std::string patternSynonym = pattern.getSynonym();
@@ -62,7 +62,7 @@ std::shared_ptr<Clause> ClauseCreator::createClause(qps::Pattern pattern, const 
     }
 }
 
-std::shared_ptr<Clause> ClauseCreator::createClause(SuchThat relationship, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) {
+std::shared_ptr<Clause> ClauseCreator::createClause(SuchThat relationship, std::unordered_map<std::string, DesignEntity> &synonymToDesignEntityMap, QPSClient &qpsClient) {
     TokenType relationshipType = relationship.getRelationshipType();
     TokenObject left = relationship.getLeft();
     TokenObject right = relationship.getRight();

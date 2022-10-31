@@ -19,9 +19,9 @@ public:
     std::vector<std::shared_ptr<Clause>> getClauses();
     std::set<std::string> getAllSynonyms();
     size_t getNumberOfSynonyms() const;
-    bool hasCommonSynonym(std::set<std::string> synonymsOfClause);
-    bool isConnected(GroupedClause &clause_group);
-    void mergeGroupedClause(GroupedClause &clause_group);
+    bool hasCommonSynonym(std::set<std::string> &synonymsOfClause);
+    bool isConnected(GroupedClause &group);
+    void mergeGroupedClause(GroupedClause &group);
     size_t getPriority() const;
 };
 
