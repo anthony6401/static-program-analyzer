@@ -48,7 +48,7 @@ void Evaluator::combineResultsWithSelect(std::shared_ptr<Clause> &selectClause, 
 
 
 
-void Evaluator::populateResultsList(ResultTable &evaluatedResults, Select select, std::list<std::string> &results, QPSClient qpsClient, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap) {
+void Evaluator::populateResultsList(ResultTable &evaluatedResults, Select select, std::list<std::string> &results, QPSClient &qpsClient, std::unordered_map<std::string, DesignEntity> &synonymToDesignEntityMap) {
     std::string selectSynonym = select.getReturnValues().front().getValue();
     TokenType returnType = select.getReturnType();
 
@@ -90,7 +90,7 @@ void Evaluator::populateResultsList(ResultTable &evaluatedResults, Select select
     }
 }
 
-void Evaluator::populateAttributesResultsList(ResultTable &evaluatedResults, Select select, std::list<std::string> &results, QPSClient qpsClient, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap) {
+void Evaluator::populateAttributesResultsList(ResultTable &evaluatedResults, Select select, std::list<std::string> &results, QPSClient &qpsClient, std::unordered_map<std::string, DesignEntity> &synonymToDesignEntityMap) {
     std::string selectSynonym = select.getReturnValues().front().getValue();
     std::unordered_set<std::string> resultsToPopulate = evaluatedResults.getSynonymResultsToBePopulated(selectSynonym);
     bool hasAlternativeAttributeName = evaluatedResults.getHasAlternativeAttributeName();
@@ -115,7 +115,7 @@ void Evaluator::populateAttributesResultsList(ResultTable &evaluatedResults, Sel
 }
 
 
-bool Evaluator::evaluateNoSynonymClauses(GroupedClause noSynonymsClauses) {
+bool Evaluator::evaluateNoSynonymClauses(GroupedClause &noSynonymsClauses) {
     if (noSynonymsClauses.isEmpty()) {
         return false;
     }
@@ -131,7 +131,7 @@ bool Evaluator::evaluateNoSynonymClauses(GroupedClause noSynonymsClauses) {
 
 }
 
-bool Evaluator::evaluateNoSelectSynonymClauses(std::vector<GroupedClause> noSelectSynonymPresent) {
+bool Evaluator::evaluateNoSelectSynonymClauses(std::vector<GroupedClause> &noSelectSynonymPresent) {
 
     std::sort(noSelectSynonymPresent.begin(), noSelectSynonymPresent.end(), ClauseGroupSorter());
 
@@ -144,7 +144,7 @@ bool Evaluator::evaluateNoSelectSynonymClauses(std::vector<GroupedClause> noSele
     return false;
 }
 
-ResultTable Evaluator::evaluateHasSelectSynonymClauses(std::vector<GroupedClause> hasSelectSynonymPresent, std::shared_ptr<Clause> &selectClause) {
+ResultTable Evaluator::evaluateHasSelectSynonymClauses(std::vector<GroupedClause> &hasSelectSynonymPresent, std::shared_ptr<Clause> &selectClause) {
 
     std::sort(hasSelectSynonymPresent.begin(), hasSelectSynonymPresent.end(), ClauseGroupSorter());
 
@@ -162,7 +162,7 @@ ResultTable Evaluator::evaluateHasSelectSynonymClauses(std::vector<GroupedClause
     return combinedResultTable;
 }
 
-ClauseDivider Evaluator::extractClausesToEvaluate(QueryObject queryObject, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient) {
+ClauseDivider Evaluator::extractClausesToEvaluate(QueryObject queryObject, std::unordered_map<std::string, DesignEntity> &synonymToDesignEntityMap, QPSClient &qpsClient) {
     ClauseDivider clauseDivider;
     std::vector<SuchThat> relationships = queryObject.getRelationships();
     std::vector<Pattern> patterns = queryObject.getPattern();
