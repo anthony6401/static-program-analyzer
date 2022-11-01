@@ -18,11 +18,8 @@ private:
     ResultTable evaluateSynonymWildcard(RelationshipType relationshipType);
     ResultTable evaluateSynonymNameQuotes(RelationshipType relationshipType);
     ResultTable evaluateWildcardSynonym(RelationshipType relationshipType);
-    ResultTable evaluateWildcardWildcard(RelationshipType relationshipType);
-    ResultTable evaluateWildcardNameQuotes(RelationshipType relationshipType);
     ResultTable evaluateNameQuotesSynonym(RelationshipType relationshipType);
-    ResultTable evaluateNameQuotesWildcard(RelationshipType relationshipType);
-    ResultTable evaluateNameQuotesNameQuotes(RelationshipType relationshipType);
+    ResultTable evaluateWithoutSynonym(RelationshipType relationshipType);
 
 public:
     Calls(TokenObject left, TokenObject right, RelationshipType relationshipType, size_t priority,

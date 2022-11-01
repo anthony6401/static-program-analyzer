@@ -17,8 +17,7 @@ private:
     ResultTable evaluateSynonymWildcard();
     ResultTable evaluateSynonymNameQuotes();
     ResultTable evaluateSecondAsSynonym();
-    ResultTable evaluateSecondAsWildcard();
-    ResultTable evaluateWithoutSynonymOrWildCard();
+    ResultTable evaluateWithoutSynonym();
 
 public:
     ModifiesClause(TokenObject left, TokenObject right,

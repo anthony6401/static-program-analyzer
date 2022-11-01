@@ -19,10 +19,8 @@ ResultTable ModifiesClause::evaluateClause() {
         return ModifiesClause::evaluateSynonymNameQuotes();
     } else if ((leftType == TokenType::INTEGER || leftType == TokenType::NAME_WITH_QUOTATION) && rightType == TokenType::NAME) {
         return ModifiesClause::evaluateSecondAsSynonym();
-    } else if ((leftType == TokenType::INTEGER || leftType == TokenType::NAME_WITH_QUOTATION) && rightType == TokenType::WILDCARD) {
-        return ModifiesClause::evaluateSecondAsWildcard();
     } else {
-        return ModifiesClause::evaluateWithoutSynonymOrWildCard();
+        return ModifiesClause::evaluateWithoutSynonym();
     }
 }
 
@@ -51,7 +49,6 @@ std::set<std::string> ModifiesClause::getAllSynonyms() {
     }
     return synonyms;
 }
-
 
 ResultTable ModifiesClause::evaluateSynonymSynonym() {
     std::string leftValue = left.getValue();
@@ -84,12 +81,7 @@ ResultTable ModifiesClause::evaluateSecondAsSynonym() {
     return {rightValue, results};
 }
 
-ResultTable ModifiesClause::evaluateSecondAsWildcard() {
-    bool result = qpsClient.getRelationship(RelationshipType::MODIFIES, left, right);
-    return {result};
-}
-
-ResultTable ModifiesClause::evaluateWithoutSynonymOrWildCard() {
+ResultTable ModifiesClause::evaluateWithoutSynonym() {
     bool result = qpsClient.getRelationship(RelationshipType::MODIFIES, left, right);
     return {result};
 }
