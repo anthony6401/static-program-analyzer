@@ -1,6 +1,5 @@
 #include "ModifiesClause.h"
 #include "components/qps/query_evaluator/factory/utils/ClauseUtils.h"
-#include "iostream"
 
 ModifiesClause::ModifiesClause(TokenObject left, TokenObject right,
                        std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient)

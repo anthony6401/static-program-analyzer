@@ -18,7 +18,7 @@
 #include "models/Pattern/Pattern.h"
 #include "models/Pattern/AssignPattern.h"
 #include "components/qps/QPS.h"
-#include <iostream>
+
 
 // Populating data in PKB
 PKB* pkb = new PKB();
