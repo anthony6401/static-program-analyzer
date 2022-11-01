@@ -687,4 +687,15 @@ TEST_CASE("Affects* queries") {
         expectedResults.sort();
         REQUIRE(testResults == expectedResults);
     }
+
+    SECTION("Affects* Test 12") {
+        std::string testQuery = "assign a; read re; call c; \n "
+                                "Select a such that Affects*(a, a)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"7", "9"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m3);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
 }
