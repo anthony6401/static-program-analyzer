@@ -10,12 +10,12 @@ SuchThatClauseSyntaxChecker::SuchThatClauseSyntaxChecker() {
 
 SuchThatClauseSyntaxChecker::~SuchThatClauseSyntaxChecker() {};
 
-bool SuchThatClauseSyntaxChecker::isSyntacticallyCorrect(std::vector<TokenObject> tokenizedClause) {
+bool SuchThatClauseSyntaxChecker::isSyntacticallyCorrect(std::vector<TokenObject> &tokenizedClause) {
 	int index = 0;
 	bool isPrevTokenRelref = false;
 
 	while (index < tokenizedClause.size()) {
-		TokenObject token = tokenizedClause.at(index);
+		TokenObject &token = tokenizedClause.at(index);
 		TokenType tokenType = token.getTokenType();
 
 		if (isPrevTokenRelref) {
@@ -52,7 +52,7 @@ bool SuchThatClauseSyntaxChecker::isSyntacticallyCorrect(std::vector<TokenObject
 		}
 
 		// Checking for RELREF syntax
-		std::vector<TokenType> possibleTokenTypes = this->generalSyntax.at(syntax);
+		std::vector<TokenType> &possibleTokenTypes = this->generalSyntax.at(syntax);
 		bool foundToken = std::binary_search(possibleTokenTypes.begin(), possibleTokenTypes.end(), tokenType);
 
 		if (!foundToken) {
@@ -80,7 +80,7 @@ bool SuchThatClauseSyntaxChecker::isSyntacticallyCorrect(std::vector<TokenObject
 	return true;
 };
 
-std::tuple<int, std::vector<TokenObject>> SuchThatClauseSyntaxChecker::getRelationshipClauseTokens(std::vector<TokenObject> tokenizedClause, int relrefIndex) {
+std::tuple<int, std::vector<TokenObject>> SuchThatClauseSyntaxChecker::getRelationshipClauseTokens(std::vector<TokenObject> &tokenizedClause, int relrefIndex) {
 	auto closedBracketTokenIterator = std::find(tokenizedClause.begin() + relrefIndex + 1, tokenizedClause.end(), TokenObject(TokenType::CLOSED_BRACKET, ")"));
 
 	if (closedBracketTokenIterator == tokenizedClause.end()) {
@@ -94,7 +94,7 @@ std::tuple<int, std::vector<TokenObject>> SuchThatClauseSyntaxChecker::getRelati
 
 }
 
-bool SuchThatClauseSyntaxChecker::isRelationshipSyntacticallyCorrect(std::vector<TokenObject> relationshipClauseTokens, TokenType relrefToken) {
+bool SuchThatClauseSyntaxChecker::isRelationshipSyntacticallyCorrect(std::vector<TokenObject> &relationshipClauseTokens, TokenType relrefToken) {
 	if (relationshipClauseTokens.empty()) {
 		return false;
 	}
@@ -114,9 +114,9 @@ bool SuchThatClauseSyntaxChecker::isRelationshipSyntacticallyCorrect(std::vector
 	return hasValidSyntax;
 }
 
-bool SuchThatClauseSyntaxChecker::hasValidRelationshipSyntax(std::vector<TokenObject> relationshipClauseTokens) {
+bool SuchThatClauseSyntaxChecker::hasValidRelationshipSyntax(std::vector<TokenObject> &relationshipClauseTokens) {
 	for (int i = 0; i < relationshipClauseTokens.size(); i++) {
-		TokenObject token = relationshipClauseTokens.at(i);
+		TokenObject &token = relationshipClauseTokens.at(i);
 		TokenType tokenType = token.getTokenType();
 
 		if (this->suchThatSyntax.empty()) {
@@ -135,7 +135,7 @@ bool SuchThatClauseSyntaxChecker::hasValidRelationshipSyntax(std::vector<TokenOb
 		}
 
 		// STMTREF or ENTREF
-		std::vector<TokenType> possibleTokenTypes = this->generalSyntax.at(syntax);
+		std::vector<TokenType> &possibleTokenTypes = this->generalSyntax.at(syntax);
 		bool foundToken = std::binary_search(possibleTokenTypes.begin(), possibleTokenTypes.end(), tokenType);
 
 		if (!foundToken && !isSynonymToken(tokenType)) {
@@ -148,7 +148,7 @@ bool SuchThatClauseSyntaxChecker::hasValidRelationshipSyntax(std::vector<TokenOb
 }
 
 
-bool SuchThatClauseSyntaxChecker::hasValidUsesModifiesSyntax(std::vector<TokenObject> relationshipClauseTokens) {
+bool SuchThatClauseSyntaxChecker::hasValidUsesModifiesSyntax(std::vector<TokenObject> &relationshipClauseTokens) {
 	this->suchThatSyntax.push(TokenType::CLOSED_BRACKET);
 	this->suchThatSyntax.push(TokenType::ENTREF);
 	this->suchThatSyntax.push(TokenType::COMMA);
@@ -158,7 +158,7 @@ bool SuchThatClauseSyntaxChecker::hasValidUsesModifiesSyntax(std::vector<TokenOb
 	bool isFirstParameter = true;
 
 	for (int i = 0; i < relationshipClauseTokens.size(); i++) {
-		TokenObject token = relationshipClauseTokens.at(i);
+		TokenObject &token = relationshipClauseTokens.at(i);
 		TokenType tokenType = token.getTokenType();
 
 		if (this->suchThatSyntax.empty()) {
@@ -178,7 +178,7 @@ bool SuchThatClauseSyntaxChecker::hasValidUsesModifiesSyntax(std::vector<TokenOb
 		}
 
 		// ENTREF
-		std::vector<TokenType> possibleTokenTypes = this->generalSyntax.at(syntax);
+		std::vector<TokenType> &possibleTokenTypes = this->generalSyntax.at(syntax);
 		bool foundToken = std::binary_search(possibleTokenTypes.begin(), possibleTokenTypes.end(), tokenType);
 
 		// Check if token is SYNONYM

@@ -32,7 +32,7 @@ bool Validator::isSemanticallyValid() {
 
 	int numOfDeclaredSynonyms = this->parsedQuery.getNumOfDeclaredSynonyms();
 
-	std::unordered_map<std::string, DesignEntity> declaredSynonyms = this->parsedQuery.getSynonymToDesignEntityMap();
+	std::unordered_map<std::string, DesignEntity> &declaredSynonyms = this->parsedQuery.getSynonymToDesignEntityMap();
 
 	// Declaration contains multiple synonyms with the same name
 	if (numOfDeclaredSynonyms > declaredSynonyms.size()) {
@@ -59,15 +59,15 @@ bool Validator::isSemanticallyValid() {
 };
 
 bool Validator::selectClauseIsSemanticallyCorrect() {
-	Select selectClause = this->parsedQuery.getSelect();
+	Select &selectClause = this->parsedQuery.getSelect();
 	TokenType returnType = selectClause.getReturnType();
-	std::vector<TokenObject> returnValues = selectClause.getReturnValues();
+	std::vector<TokenObject> &returnValues = selectClause.getReturnValues();
 
 	std::vector<TokenObject> attributeTokens{};
 
-	std::unordered_map<std::string, DesignEntity> mappedSynonyms = this->parsedQuery.getSynonymToDesignEntityMap();
+	std::unordered_map<std::string, DesignEntity> &mappedSynonyms = this->parsedQuery.getSynonymToDesignEntityMap();
 
-	for (TokenObject token : returnValues) {
+	for (TokenObject &token : returnValues) {
 		TokenType currTokenType = token.getTokenType();
 		std::string tokenValue = token.getValue();
 
@@ -99,10 +99,10 @@ bool Validator::selectClauseIsSemanticallyCorrect() {
 };
 
 bool Validator::suchThatClauseIsSemanticallyCorrect() {
-	std::vector<SuchThat> suchThatClause = this->parsedQuery.getRelationships();
+	std::vector<SuchThat> &suchThatClause = this->parsedQuery.getRelationships();
 	bool isSemanticallyCorrect = true;
 
-	for (SuchThat relationship : suchThatClause) {
+	for (SuchThat &relationship : suchThatClause) {
 		TokenType relationshipType = relationship.getRelationshipType();
 
 		if (relationshipType == TokenType::USES || relationshipType == TokenType::MODIFIES) {
@@ -129,14 +129,14 @@ bool Validator::suchThatClauseIsSemanticallyCorrect() {
 };
 
 bool Validator::patternClauseIsSemanticallyCorrect() {
-	std::vector<Pattern> patternClause = this->parsedQuery.getPattern();
+	std::vector<Pattern> &patternClause = this->parsedQuery.getPattern();
 	int index = 0;
 
 	while (index < patternClause.size()) {
-		Pattern pattern = patternClause.at(index);
+		Pattern &pattern = patternClause.at(index);
 		TokenType patternType = pattern.getPatternType();
 		std::string patternSynonym = pattern.getSynonym();
-		TokenObject leftParam = pattern.getLeft();
+		TokenObject &leftParam = pattern.getLeft();
 
 		// Check that synonym is declared and declared appropriate design entity
 		if (!isDeclaredSynonym(patternSynonym)) {
@@ -178,9 +178,9 @@ bool Validator::patternClauseIsSemanticallyCorrect() {
 };
 
 bool Validator::withClauseIsSemanticallyCorrect() {
-	std::vector<With> withClause = this->parsedQuery.getWith();
+	std::vector<With> &withClause = this->parsedQuery.getWith();
 
-	for (With with : withClause) {
+	for (With &with : withClause) {
 		TokenType leftType = with.getLeftType();
 		TokenType rightType = with.getRightType();
 
@@ -190,7 +190,7 @@ bool Validator::withClauseIsSemanticallyCorrect() {
 		}
 
 		// If ref is IDENT or INTEGER, no need to validate. Hence, we only check if attribute is valid
-		std::vector<TokenObject> left = with.getLeft();
+		std::vector<TokenObject> &left = with.getLeft();
 
 		if (left.size() > 1) {
 			if (!isValidAttrRef(left)) {
@@ -198,7 +198,7 @@ bool Validator::withClauseIsSemanticallyCorrect() {
 			}
 		}
 
-		std::vector<TokenObject> right = with.getRight();
+		std::vector<TokenObject> &right = with.getRight();
 
 		if (right.size() > 1) {
 			if (!isValidAttrRef(right)) {
@@ -210,9 +210,9 @@ bool Validator::withClauseIsSemanticallyCorrect() {
 	return true;
 };
 
-bool Validator::isValidUsesAndModifies(SuchThat relationship) {
-	TokenObject leftParam = relationship.getLeft();
-	TokenObject rightParam = relationship.getRight();
+bool Validator::isValidUsesAndModifies(SuchThat &relationship) {
+	TokenObject &leftParam = relationship.getLeft();
+	TokenObject &rightParam = relationship.getRight();
 	bool isValid = true;
 
 	// First parameter of Uses and Modifies cannot be WILDCARD due to ambiguity
@@ -243,9 +243,9 @@ bool Validator::isValidUsesAndModifies(SuchThat relationship) {
 	return isValid;
 }
 
-bool Validator::isValidFollowsParentNext(SuchThat relationship) {
-	TokenObject leftParam = relationship.getLeft();
-	TokenObject rightParam = relationship.getRight();
+bool Validator::isValidFollowsParentNext(SuchThat &relationship) {
+	TokenObject &leftParam = relationship.getLeft();
+	TokenObject &rightParam = relationship.getRight();
 	bool isValid = true;
 
 	// Check first parameter is valid
@@ -264,9 +264,9 @@ bool Validator::isValidFollowsParentNext(SuchThat relationship) {
 }
 
 
-bool Validator::isValidCalls(SuchThat relationship) {
-	TokenObject leftParam = relationship.getLeft();
-	TokenObject rightParam = relationship.getRight();
+bool Validator::isValidCalls(SuchThat &relationship) {
+	TokenObject &leftParam = relationship.getLeft();
+	TokenObject &rightParam = relationship.getRight();
 	bool isValid = true; 
 
 	// Check first parameter is valid
@@ -299,7 +299,7 @@ bool Validator::isValidParameter(std::string synonymName, DesignEntity validDesi
 
 
 bool Validator::isDeclaredSynonym(std::string synonym) {
-	std::unordered_map<std::string, DesignEntity> mappedSynonyms = this->parsedQuery.getSynonymToDesignEntityMap();
+	std::unordered_map<std::string, DesignEntity> &mappedSynonyms = this->parsedQuery.getSynonymToDesignEntityMap();
 	if (mappedSynonyms.find(synonym) == mappedSynonyms.end()) {
 		return false;
 	}
@@ -309,7 +309,7 @@ bool Validator::isDeclaredSynonym(std::string synonym) {
 
 
 bool Validator::isStatement(std::string synonym) {
-	std::vector<DesignEntity> validDesignEntities = this->statementDesignEntities;
+	std::vector<DesignEntity> &validDesignEntities = this->statementDesignEntities;
 	DesignEntity designEntityOfSynonym = this->parsedQuery.getSynonymToDesignEntityMap().at(synonym);
 
 
@@ -332,7 +332,7 @@ bool Validator::isValidDesignEntity(std::string synonym, DesignEntity designEnti
 
 bool Validator::isValidUsesAndModifiesLeftParameter(std::string synonym) {
 	// Removed READ since according to the slides, READ is not a valid parameter for Uses and Modifies
-	std::vector<DesignEntity> validDesignEntities = this->validDesignEntitiesForUsesAndModifies;
+	std::vector<DesignEntity> &validDesignEntities = this->validDesignEntitiesForUsesAndModifies;
 	DesignEntity designEntityOfSynonym = this->parsedQuery.getSynonymToDesignEntityMap().at(synonym);
 
 
@@ -353,11 +353,11 @@ bool Validator::isValidAttrNameToAttrSynonym(std::string attrName, DesignEntity 
 	return true;
 };
 
-bool Validator::isValidAttrRef(std::vector<TokenObject> ref) {
+bool Validator::isValidAttrRef(std::vector<TokenObject> &ref) {
 	DesignEntity currAttributeSynonymDesignEntity{};
-	std::unordered_map<std::string, DesignEntity> mappedSynonyms = this->parsedQuery.getSynonymToDesignEntityMap();
+	std::unordered_map<std::string, DesignEntity> &mappedSynonyms = this->parsedQuery.getSynonymToDesignEntityMap();
 
-	for (TokenObject token : ref) {
+	for (TokenObject &token : ref) {
 		TokenType currTokenType = token.getTokenType();
 		std::string tokenValue = token.getValue();
 

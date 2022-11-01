@@ -12,7 +12,7 @@
 
 using namespace qps;
 
-Parser::Parser(std::vector<TokenObject> tokenizedQuery) {
+Parser::Parser(std::vector<TokenObject> &tokenizedQuery) {
 	this->tokenizedQuery = tokenizedQuery;
 };
 
@@ -21,12 +21,12 @@ std::vector<TokenObject> Parser::getTokenizedQuery() {
 }
 
 QueryObject Parser::parse() {
-	std::vector<std::vector<TokenObject>> groupedQueryTokens = groupQueryIntoClause();
-	std::vector<TokenObject> declarationTokenObjects = groupedQueryTokens[0];
-	std::vector<TokenObject> selectTokenObjects = groupedQueryTokens[1];
-	std::vector<TokenObject> relationshipTokenObjects = groupedQueryTokens[2];
-	std::vector<TokenObject> patternTokenObjects = groupedQueryTokens[3];
-	std::vector<TokenObject> withTokenObjects = groupedQueryTokens[4];
+	std::vector<std::vector<TokenObject>> &groupedQueryTokens = groupQueryIntoClause();
+	std::vector<TokenObject> &declarationTokenObjects = groupedQueryTokens[0];
+	std::vector<TokenObject> &selectTokenObjects = groupedQueryTokens[1];
+	std::vector<TokenObject> &relationshipTokenObjects = groupedQueryTokens[2];
+	std::vector<TokenObject> &patternTokenObjects = groupedQueryTokens[3];
+	std::vector<TokenObject> &withTokenObjects = groupedQueryTokens[4];
 
 	bool hasNoSyntaxError = true;
 
@@ -54,9 +54,9 @@ QueryObject Parser::parse() {
 
 	auto [numOfDeclaredSynonyms, mappedSynonyms] = mapSynonymToDesignEntity(declarationTokenObjects);
 	Select select = parseTokensIntoSelectObject(selectTokenObjects);
-	std::vector<SuchThat> relationships = parseTokensIntoSuchThatObjects(relationshipTokenObjects);
-	std::vector<Pattern> patterns = parseTokensIntoPatternObjects(patternTokenObjects);
-	std::vector<With> withs = parseTokensIntoWithObjects(withTokenObjects);
+	std::vector<SuchThat> &relationships = parseTokensIntoSuchThatObjects(relationshipTokenObjects);
+	std::vector<Pattern> &patterns = parseTokensIntoPatternObjects(patternTokenObjects);
+	std::vector<With> &withs = parseTokensIntoWithObjects(withTokenObjects);
 
 	return QueryObject(select, relationships, patterns, withs, mappedSynonyms, numOfDeclaredSynonyms);
 };
@@ -78,7 +78,7 @@ std::vector<std::vector<TokenObject>> Parser::groupQueryIntoClause() {
 	bool isPrevClauseWithClause = false;
 	bool isPrevEqualsToken = false;
 
-	for (TokenObject token : this->getTokenizedQuery()) {
+	for (TokenObject &token : this->getTokenizedQuery()) {
 		TokenType tokenType = token.getTokenType();
 
 		if (isDesignEntityToken(tokenType) && isEndOfDeclaration && !isSelectClause && !isSuchThatClause && !isPatternClause && !isWithClause) {
@@ -249,17 +249,17 @@ std::vector<std::vector<TokenObject>> Parser::groupQueryIntoClause() {
 	return groupedQuery;
 };
 
-bool Parser::isSyntacticallyCorrect(std::vector<TokenObject> tokenizedClause, SyntaxChecker* checker) {
+bool Parser::isSyntacticallyCorrect(std::vector<TokenObject> &tokenizedClause, SyntaxChecker* checker) {
 	return checker->isSyntacticallyCorrect(tokenizedClause);
 }
 
-std::tuple<int, std::unordered_map<std::string, DesignEntity>> Parser::mapSynonymToDesignEntity(std::vector<TokenObject> declarations) {
+std::tuple<int, std::unordered_map<std::string, DesignEntity>> Parser::mapSynonymToDesignEntity(std::vector<TokenObject> &declarations) {
 	std::unordered_map<std::string, DesignEntity> mappedSynonyms;
 	DesignEntity currDesignEntity;
 	bool newDeclaration = true;
 	int numOfDeclaredSynonyms = 0;
 
-	for (TokenObject token : declarations) {
+	for (TokenObject &token : declarations) {
 		TokenType currTokenType = token.getTokenType();
 
 		if (currTokenType == TokenType::COMMA) {
@@ -285,10 +285,10 @@ std::tuple<int, std::unordered_map<std::string, DesignEntity>> Parser::mapSynony
 	return { numOfDeclaredSynonyms, mappedSynonyms };
 }
 
-Select Parser::parseTokensIntoSelectObject(std::vector<TokenObject> selectTokens) {
+Select Parser::parseTokensIntoSelectObject(std::vector<TokenObject> &selectTokens) {
 	bool isFirstSelectToken = true;
 
-	for (TokenObject token : selectTokens) {
+	for (TokenObject &token : selectTokens) {
 		TokenType currTokenType = token.getTokenType();
 
 		if ((currTokenType == TokenType::SELECT) && isFirstSelectToken) {
@@ -305,7 +305,7 @@ Select Parser::parseTokensIntoSelectObject(std::vector<TokenObject> selectTokens
 		}
 
 		if (currTokenType == TokenType::TUPLE) {
-			std::vector<TokenObject> tupleElements = parseTupleIntoIndividualTokens(token.getValue());
+			std::vector<TokenObject> &tupleElements = parseTupleIntoIndividualTokens(token.getValue());
 			return Select(TokenType::TUPLE, tupleElements);
 		}
 
@@ -326,7 +326,7 @@ Select Parser::parseTokensIntoSelectObject(std::vector<TokenObject> selectTokens
 	return Select();
 };
 
-std::vector<SuchThat> Parser::parseTokensIntoSuchThatObjects(std::vector<TokenObject> relationshipTokens) {
+std::vector<SuchThat> Parser::parseTokensIntoSuchThatObjects(std::vector<TokenObject> &relationshipTokens) {
 	std::vector<SuchThat> relationships;
 	bool isFirstSuchToken = true;
 	bool isFirstThatToken = true;
@@ -336,7 +336,7 @@ std::vector<SuchThat> Parser::parseTokensIntoSuchThatObjects(std::vector<TokenOb
 	TokenObject leftParam = TokenObject();
 	TokenObject rightParam = TokenObject();
 
-	for (TokenObject token : relationshipTokens) {
+	for (TokenObject &token : relationshipTokens) {
 		TokenType currTokenType = token.getTokenType();
 
 		if ((currTokenType == TokenType::OPEN_BRACKET) || (currTokenType == TokenType::AND && isNewRelationship)) {
@@ -397,7 +397,7 @@ std::vector<SuchThat> Parser::parseTokensIntoSuchThatObjects(std::vector<TokenOb
 	return relationships;
 };
 
-std::vector<Pattern> Parser::parseTokensIntoPatternObjects(std::vector<TokenObject> patternTokens) {
+std::vector<Pattern> Parser::parseTokensIntoPatternObjects(std::vector<TokenObject> &patternTokens) {
 	std::vector<Pattern> patterns;
 	bool isNewPattern = true;
 	bool isFirstParam = true;
@@ -408,7 +408,7 @@ std::vector<Pattern> Parser::parseTokensIntoPatternObjects(std::vector<TokenObje
 	TokenObject leftParam = TokenObject();
 	TokenObject rightParam = TokenObject();
 
-	for (TokenObject token : patternTokens) {
+	for (TokenObject &token : patternTokens) {
 		TokenType currTokenType = token.getTokenType();
 
 		if (currTokenType == TokenType::OPEN_BRACKET) {
@@ -481,7 +481,7 @@ std::vector<Pattern> Parser::parseTokensIntoPatternObjects(std::vector<TokenObje
 	return patterns;
 };
 
-std::vector<With> Parser::parseTokensIntoWithObjects(std::vector<TokenObject> withTokens) {
+std::vector<With> Parser::parseTokensIntoWithObjects(std::vector<TokenObject> &withTokens) {
 	std::vector<With> withs;
 	bool isNewWith = true;
 	bool isLeft = true;
@@ -490,7 +490,7 @@ std::vector<With> Parser::parseTokensIntoWithObjects(std::vector<TokenObject> wi
 	std::vector<TokenObject> left;
 	std::vector<TokenObject> right;
 
-	for (TokenObject token : withTokens) {
+	for (TokenObject &token : withTokens) {
 		TokenType currTokenType = token.getTokenType();
 
 		if (currTokenType == TokenType::EQUALS) {
@@ -546,12 +546,7 @@ std::vector<With> Parser::parseTokensIntoWithObjects(std::vector<TokenObject> wi
 
 
 bool Parser::isRelationshipToken(TokenType token) {
-	std::vector<TokenType> relationshipTokens{
-		TokenType::MODIFIES, TokenType::USES, TokenType::FOLLOWS,
-		TokenType::FOLLOWS_T, TokenType::PARENT, TokenType::PARENT_T,
-		TokenType::CALLS, TokenType::CALLS_T, TokenType::NEXT, 
-		TokenType::NEXT_T, TokenType::AFFECTS, TokenType::AFFECTS_T
-	};
+	std::vector<TokenType> &relationshipTokens = this->relationshipTokens;
 
 	if (!std::binary_search(relationshipTokens.begin(), relationshipTokens.end(), token)) {
 		return false;
@@ -561,10 +556,7 @@ bool Parser::isRelationshipToken(TokenType token) {
 };
 
 bool Parser::isDesignEntityToken(TokenType token) {
-	std::vector<TokenType> designEntityTokens{
-		TokenType::STMT, TokenType::READ, TokenType::PRINT, TokenType::CALL, TokenType::WHILE, 
-		TokenType::IF, TokenType::ASSIGN, TokenType::VARIABLE, TokenType::CONSTANT, TokenType::PROCEDURE 
-	};
+	std::vector<TokenType> &designEntityTokens = this->designEntityTokens;
 
 	if (!std::binary_search(designEntityTokens.begin(), designEntityTokens.end(), token)) {
 		return false;

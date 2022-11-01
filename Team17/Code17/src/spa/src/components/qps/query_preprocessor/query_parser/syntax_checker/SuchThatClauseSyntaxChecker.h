@@ -12,17 +12,17 @@ using namespace qps;
 class SuchThatClauseSyntaxChecker : public SyntaxChecker {
 private:
     std::stack<TokenType> suchThatSyntax;
-    std::tuple<int, std::vector<TokenObject>> getRelationshipClauseTokens(std::vector<TokenObject> tokenizedClause, int relrefIndex);
-    bool isRelationshipSyntacticallyCorrect(std::vector<TokenObject> relationshipClauseTokens, TokenType relrefToken);
-    bool hasValidRelationshipSyntax(std::vector<TokenObject> relationshipClauseTokens);
-    bool hasValidUsesModifiesSyntax(std::vector<TokenObject> relationshipClauseTokens);
+    std::tuple<int, std::vector<TokenObject>> getRelationshipClauseTokens(std::vector<TokenObject> &tokenizedClause, int relrefIndex);
+    bool isRelationshipSyntacticallyCorrect(std::vector<TokenObject> &relationshipClauseTokens, TokenType relrefToken);
+    bool hasValidRelationshipSyntax(std::vector<TokenObject> &relationshipClauseTokens);
+    bool hasValidUsesModifiesSyntax(std::vector<TokenObject> &relationshipClauseTokens);
     bool isSynonymToken(TokenType tokenType);
     void hasEntrefEntrefSyntax();
     void hasStmtrefStmtrefSyntax();
 public:
     SuchThatClauseSyntaxChecker();
     ~SuchThatClauseSyntaxChecker();
-    bool isSyntacticallyCorrect(std::vector<TokenObject> tokenizedClause);
+    bool isSyntacticallyCorrect(std::vector<TokenObject> &tokenizedClause);
 
 };
 

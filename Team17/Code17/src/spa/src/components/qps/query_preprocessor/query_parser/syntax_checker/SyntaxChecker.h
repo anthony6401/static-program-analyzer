@@ -25,7 +25,7 @@ protected:
     };
 
 public:
-    virtual bool isSyntacticallyCorrect(std::vector<TokenObject> tokenizedClause) = 0;
+    virtual bool isSyntacticallyCorrect(std::vector<TokenObject> &tokenizedClause) = 0;
 };
 
 #endif //INC_22S1_CP_SPA_TEAM_17_SYNTAX_CHECKER_H

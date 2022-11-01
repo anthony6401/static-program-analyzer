@@ -9,9 +9,9 @@ SelectClauseSyntaxChecker::SelectClauseSyntaxChecker() {
 
 SelectClauseSyntaxChecker::~SelectClauseSyntaxChecker() {};
 
-bool SelectClauseSyntaxChecker::isSyntacticallyCorrect(std::vector<TokenObject> tokenizedClause) {
+bool SelectClauseSyntaxChecker::isSyntacticallyCorrect(std::vector<TokenObject> &tokenizedClause) {
 	for (int i = 0; i < tokenizedClause.size(); i++) {
-		TokenObject token = tokenizedClause.at(i);
+		TokenObject &token = tokenizedClause.at(i);
 		TokenType tokenType = token.getTokenType();
 
 		if (this->selectSyntax.empty()) {
@@ -31,7 +31,7 @@ bool SelectClauseSyntaxChecker::isSyntacticallyCorrect(std::vector<TokenObject> 
 		}
 
 		// RESULT_CL token
-		std::vector<TokenType> possibleTokenTypes = this->generalSyntax.at(syntax);
+		std::vector<TokenType> &possibleTokenTypes = this->generalSyntax.at(syntax);
 		bool foundToken = std::binary_search(possibleTokenTypes.begin(), possibleTokenTypes.end(), tokenType);
 
 		if (!foundToken && !isSynonymToken(tokenType)) {
@@ -52,7 +52,7 @@ bool SelectClauseSyntaxChecker::isSyntacticallyCorrect(std::vector<TokenObject> 
 };
 
 bool SelectClauseSyntaxChecker::isSynonymToken(TokenType tokenType) {
-	std::vector<TokenType> synonymTokens = this->generalSyntax.at(TokenType::SYNONYM);
+	std::vector<TokenType> &synonymTokens = this->generalSyntax.at(TokenType::SYNONYM);
 	bool foundToken = std::binary_search(synonymTokens.begin(), synonymTokens.end(), tokenType);
 
 	return foundToken;
