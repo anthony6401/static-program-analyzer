@@ -26,8 +26,7 @@
 #include "models/Pattern/AssignPattern.h"
 #include "models/Pattern/WhilePattern.h"
 #include "models/Pattern/IfPattern.h"
-#include "components/qps/QPS.h"
-#include <iostream>
+
 
 // Populating data in PKB
 PKB* pkb_m2 = new PKB();
