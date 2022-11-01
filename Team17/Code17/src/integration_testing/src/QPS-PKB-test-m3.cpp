@@ -475,9 +475,9 @@ TEST_CASE("Affects queries") {
         std::list<std::string> expectedResults = { "13 14", "14 15", "12 13", "4 7", "4 11", "5 9", 
                                                     "4 13", "4 15", "5 13","13 15", "16 17", "7 7", 
                                                     "7 11", "7 13", "7 15", "9 9", "9 13", "11 13", "11 15"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m3);
         testResults.sort();
         expectedResults.sort();
-        QPS::processQueryResult(testQuery, testResults, qpsClient_m3);
         REQUIRE(testResults == expectedResults);
     }
 
@@ -486,9 +486,9 @@ TEST_CASE("Affects queries") {
             "Select a1.stmt# such that Affects(a1, 13)";
         std::list<std::string> testResults;
         std::list<std::string> expectedResults = { "11", "5", "9", "12", "4", "7"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m3);
         testResults.sort();
         expectedResults.sort();
-        QPS::processQueryResult(testQuery, testResults, qpsClient_m3);
         REQUIRE(testResults == expectedResults);
     }
 
@@ -573,9 +573,9 @@ TEST_CASE("Affects* queries") {
                                                     "13 14", "13 15", "7 7", "7 11", "7 13", "7 14", 
                                                     "7 15", "9 9", "9 13", "9 14", "9 15", "11 13", 
                                                     "11 14", "11 15", "12 14", "12 15" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m3);
         testResults.sort();
         expectedResults.sort();
-        QPS::processQueryResult(testQuery, testResults, qpsClient_m3);
         REQUIRE(testResults == expectedResults);
     }
 }
