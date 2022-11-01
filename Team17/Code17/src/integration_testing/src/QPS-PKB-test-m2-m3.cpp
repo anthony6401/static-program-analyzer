@@ -1473,3 +1473,260 @@ TEST_CASE("While Pattern queries") {
         REQUIRE(testResults == expectedResults);
     }
 }
+
+TEST_CASE("Affects queries") {
+    SECTION("Affects Test 1") {
+        std::string testQuery = "assign a; \n "
+                                "Select a such that Affects(_, _)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "4", "5", "7", "9", "11", "12", "13", "14", "15", "16", "17"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Affects Test 2") {
+        std::string testQuery = "assign a; \n "
+                                "Select a such that Affects(4, 7)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "4", "5", "7", "9", "11", "12", "13", "14", "15", "16", "17" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Affects Test 3") {
+        std::string testQuery = "assign a1, a2; \n "
+                                "Select <a1,a2> such that Affects(a1, a2)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "13 14", "14 15", "12 13", "4 7", "4 11", "5 9",
+                                                   "4 13", "4 15", "5 13","13 15", "16 17", "7 7",
+                                                   "7 11", "7 13", "7 15", "9 9", "9 13", "11 13", "11 15"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Affects Test 4") {
+        std::string testQuery = "assign a1, a2; \n "
+                                "Select a1.stmt# such that Affects(a1, 13)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "11", "5", "9", "12", "4", "7"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Affects Test 5") {
+        std::string testQuery = "assign a1, a2; \n "
+                                "Select a2.stmt# such that Affects(4, a2)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"7", "11", "13", "15"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Affects Test 6") {
+        std::string testQuery = "stmt s1, s2; \n "
+                                "Select s1 such that Affects(4, 6)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults.empty() == true);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Affects Test 7") {
+        std::string testQuery = "stmt s1, s2; \n "
+                                "Select <s1, s2> such that Affects(s1, s2)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "13 14", "14 15", "12 13", "4 7", "4 11", "5 9",
+                                                   "4 13", "4 15", "5 13","13 15", "16 17", "7 7",
+                                                   "7 11", "7 13", "7 15", "9 9", "9 13", "11 13", "11 15" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Affects Test 8") {
+        std::string testQuery = "stmt s1, s2; \n "
+                                "Select s2 such that Affects(4, \"7\")";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "SyntaxError" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Affects Test 9") {
+        std::string testQuery = "stmt s1, s2; \n "
+                                "Select s2 such that Affect(4, s2)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = { "SyntaxError" };
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Affects Test 10") {
+        std::string testQuery = "stmt s1, s2; read r; \n "
+                                "Select s2 such that Affects(r, s2)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        REQUIRE(testResults == expectedResults);
+    }
+}
+
+TEST_CASE("Affects* queries") {
+    SECTION("Affects* Test 1") {
+        std::string testQuery = "assign a; \n "
+                                "Select a such that Affects*(_, _)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"4", "5", "7", "9", "11", "12", "13", "14", "15", "16", "17"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Affects* Test 2") {
+        std::string testQuery = "assign a1, a2; \n "
+                                "Select <a1,a2> such that Affects*(a1, a2)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"12 13", "4 7", "4 11", "5 9", "4 13", "4 14",
+                                                  "4 15", "5 13", "5 14", "16 17", "5 15", "14 15",
+                                                  "13 14", "13 15", "7 7", "7 11", "7 13", "7 14",
+                                                  "7 15", "9 9", "9 13", "9 14", "9 15", "11 13",
+                                                  "11 14", "11 15", "12 14", "12 15"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Affects* Test 3") {
+        std::string testQuery = "assign a; \n "
+                                "Select <a> such that Affects*(_, a)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"7", "9", "11", "13", "14", "15", "17"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Affects* Test 4") {
+        std::string testQuery = "assign a; read re; \n "
+                                "Select re such that Affects*(4, 15)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"1", "2"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Affects* Test 5") {
+        std::string testQuery = "assign a; read re; \n "
+                                "Select re such that Affects*(6, _)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Affects* Test 6") {
+        std::string testQuery = "assign a; read re; \n "
+                                "Select re.varName such that Affects*(11, _)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"x", "z"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Affects* Test 7") {
+        std::string testQuery = "assign a; read re; \n "
+                                "Select re.varName such that Affects*(17, a)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Affects* Test 8") {
+        std::string testQuery = "assign a; read re; call c; \n "
+                                "Select <a, c.procName> such that Affects*(7, a)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"7 Second", "7 Third", "11 Second", "13 Second", "14 Second",
+                                                  "15 Second", "11 Third", "13 Third", "14 Third", "15 Third"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Affects* Test 9") {
+        std::string testQuery = "assign a; read re; call c; \n "
+                                "Select a such that Affects*(a, 13)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"4", "7", "5", "9", "11", "12"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Affects* Test 10") {
+        std::string testQuery = "assign a; read re; call c; \n "
+                                "Select a such that Affects*(a, _)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"11", "12", "13", "14", "16", "4", "5", "7", "9"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Affects* Test 11") {
+        std::string testQuery = "assign a; read re; call c; \n "
+                                "Select a such that Affects*(re, _)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Affects* Test 12") {
+        std::string testQuery = "assign a; read re; call c; \n "
+                                "Select a such that Affects*(\"x\", _)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"SyntaxError"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+
+    SECTION("Affects* Test 13") {
+        std::string testQuery = "assign a; read re; call c; \n "
+                                "Select a such that Affects*(a, a)";
+        std::list<std::string> testResults;
+        std::list<std::string> expectedResults = {"7", "9"};
+        QPS::processQueryResult(testQuery, testResults, qpsClient_m2);
+        testResults.sort();
+        expectedResults.sort();
+        REQUIRE(testResults == expectedResults);
+    }
+}
