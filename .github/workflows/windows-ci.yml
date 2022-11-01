@@ -35,7 +35,7 @@ jobs:
           cmake --build . --config Release
           cmake --build . --target unit_testing --config Release
           cmake --build . --target integration_testing --config Release
-          cmake --build . --target autotester --config Release
+          # cmake --build . --target autotester --config Release
           cd ../..
 
       - name: Run Unit Tests
@@ -43,3 +43,8 @@ jobs:
 
       - name: Run Integration Tests
         run: ./Team17/Code17/build/src/integration_testing/Release/integration_testing.exe
+
+      - name: Run Autotester Tests
+        run: |
+          cd Team17/Tests17
+          python3 regression_tester.py ../Code17/build/src/autotester/autotester.exe
