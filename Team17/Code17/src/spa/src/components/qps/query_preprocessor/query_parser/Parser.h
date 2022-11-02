@@ -36,13 +36,24 @@ private:
         {TokenType::CONSTANT, DesignEntity::CONSTANT},
         {TokenType::PROCEDURE, DesignEntity::PROCEDURE}
     };
+    std::vector<TokenType> relationshipTokens{
+        TokenType::MODIFIES, TokenType::USES, TokenType::FOLLOWS,
+        TokenType::FOLLOWS_T, TokenType::PARENT, TokenType::PARENT_T,
+        TokenType::CALLS, TokenType::CALLS_T, TokenType::NEXT,
+        TokenType::NEXT_T, TokenType::AFFECTS, TokenType::AFFECTS_T
+    };
+    std::vector<TokenType> designEntityTokens{
+        TokenType::STMT, TokenType::READ, TokenType::PRINT, TokenType::CALL, 
+        TokenType::WHILE, TokenType::IF, TokenType::ASSIGN, 
+        TokenType::VARIABLE, TokenType::CONSTANT, TokenType::PROCEDURE
+    };
     std::vector<std::vector<TokenObject>> groupQueryIntoClause();
-    bool isSyntacticallyCorrect(std::vector<TokenObject> tokenizedClause, SyntaxChecker* checker);
-    std::tuple<int, std::unordered_map<std::string, DesignEntity>> mapSynonymToDesignEntity(std::vector<TokenObject> declarations);
-    Select parseTokensIntoSelectObject(std::vector<TokenObject> selectTokens);
-    std::vector<SuchThat> parseTokensIntoSuchThatObjects(std::vector<TokenObject> relationshipTokens);
-    std::vector<Pattern> parseTokensIntoPatternObjects(std::vector<TokenObject> patternTokens);
-    std::vector<With> parseTokensIntoWithObjects(std::vector<TokenObject> withTokens);
+    bool isSyntacticallyCorrect(std::vector<TokenObject> &tokenizedClause, SyntaxChecker* checker);
+    std::tuple<int, std::unordered_map<std::string, DesignEntity>> mapSynonymToDesignEntity(std::vector<TokenObject> &declarations);
+    Select parseTokensIntoSelectObject(std::vector<TokenObject> &selectTokens);
+    std::vector<SuchThat> parseTokensIntoSuchThatObjects(std::vector<TokenObject> &relationshipTokens);
+    std::vector<Pattern> parseTokensIntoPatternObjects(std::vector<TokenObject> &patternTokens);
+    std::vector<With> parseTokensIntoWithObjects(std::vector<TokenObject> &withTokens);
     bool isRelationshipToken(TokenType token);
     bool isDesignEntityToken(TokenType token);
     std::vector<TokenObject> parseTupleIntoIndividualTokens(std::string tupleValue);
@@ -50,7 +61,7 @@ private:
     TokenType setTokenTypeOfAttribute(std::string attrName);
 
 public:
-    Parser(std::vector<TokenObject> tokenizedQuery);
+    Parser(std::vector<TokenObject> &tokenizedQuery);
     std::vector<TokenObject> getTokenizedQuery();
     QueryObject parse();
 };

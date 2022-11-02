@@ -15,7 +15,7 @@ private:
 public:
     SelectClauseSyntaxChecker();
     ~SelectClauseSyntaxChecker();
-    bool isSyntacticallyCorrect(std::vector<TokenObject> tokenizedClause);
+    bool isSyntacticallyCorrect(std::vector<TokenObject> &tokenizedClause);
 };
 
 #endif //INC_22S1_CP_SPA_TEAM_17_SELECT_SYNTAX_CHECKER_H

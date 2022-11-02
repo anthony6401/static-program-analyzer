@@ -15,13 +15,13 @@ PatternClauseSyntaxChecker::PatternClauseSyntaxChecker() {
 
 PatternClauseSyntaxChecker::~PatternClauseSyntaxChecker() {};
 
-bool PatternClauseSyntaxChecker::isSyntacticallyCorrect(std::vector<TokenObject> tokenizedClause) {
+bool PatternClauseSyntaxChecker::isSyntacticallyCorrect(std::vector<TokenObject> &tokenizedClause) {
 	bool isPrevTokenClosedBracket = false;
 	bool isSecondParam = false;
 	bool isSecondParamWildcard = false;
 	
 	for (int i = 0; i < tokenizedClause.size(); i++) {
-		TokenObject token = tokenizedClause.at(i);
+		TokenObject &token = tokenizedClause.at(i);
 		TokenType tokenType = token.getTokenType();
 
 		if (isPrevTokenClosedBracket) {
@@ -84,7 +84,7 @@ bool PatternClauseSyntaxChecker::isSyntacticallyCorrect(std::vector<TokenObject>
 		}
 
 		// SYNONYM, EXPRESSION_SPEC token
-		std::vector<TokenType> possibleTokenTypes = this->generalSyntax.at(syntax);
+		std::vector<TokenType> &possibleTokenTypes = this->generalSyntax.at(syntax);
 		bool foundToken = std::binary_search(possibleTokenTypes.begin(), possibleTokenTypes.end(), tokenType);
 
 		if (!foundToken) {
@@ -109,7 +109,7 @@ bool PatternClauseSyntaxChecker::isSyntacticallyCorrect(std::vector<TokenObject>
 };
 
 bool PatternClauseSyntaxChecker::isEntrefToken(TokenType tokenType) {
-	std::vector<TokenType> possibleTokenTypes = this->generalSyntax.at(TokenType::ENTREF);
+	std::vector<TokenType> &possibleTokenTypes = this->generalSyntax.at(TokenType::ENTREF);
 	for (int j = 0; j < possibleTokenTypes.size(); j++) {
 		TokenType possibleTokenType = possibleTokenTypes.at(j);
 
@@ -122,7 +122,7 @@ bool PatternClauseSyntaxChecker::isEntrefToken(TokenType tokenType) {
 		}
 
 		// Check if ENTREF is SYNONYM
-		std::vector<TokenType> synonymTokens = this->generalSyntax.at(TokenType::SYNONYM);
+		std::vector<TokenType> &synonymTokens = this->generalSyntax.at(TokenType::SYNONYM);
 		for (int k = 0; k < synonymTokens.size(); k++) {
 			TokenType synonymToken = synonymTokens.at(k);
 

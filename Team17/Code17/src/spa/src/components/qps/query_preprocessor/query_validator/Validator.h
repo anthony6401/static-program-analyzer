@@ -16,43 +16,6 @@ using namespace qps;
 class Validator {
 private:
 	QueryObject parsedQuery;
-
-	//std::unordered_map<DesignEntity, int> validDesignEntitiesForUsesAndModifies = {
-	//	{DesignEntity::STMT, 1},
-	//	{DesignEntity::READ, 1},
-	//	{DesignEntity::PRINT, 1},
-	//	{DesignEntity::CALL, 1},
-	//	{DesignEntity::WHILE, 1},
-	//	{DesignEntity::IF, 1},
-	//	{DesignEntity::ASSIGN, 1},
-	//	{DesignEntity::PROCEDURE, 1}
-	//};
-
-	//std::unordered_map<DesignEntity, int> statementDesignEntities = {
-	//	{DesignEntity::STMT, 1},
-	//	{DesignEntity::READ, 1},
-	//	{DesignEntity::PRINT, 1},
-	//	{DesignEntity::CALL, 1},
-	//	{DesignEntity::WHILE, 1},
-	//	{DesignEntity::IF, 1},
-	//	{DesignEntity::ASSIGN, 1}
-	//};
-
-	//std::unordered_map<std::string, std::unordered_map<DesignEntity, int>>  attrNameToValidDesignEntity = {
-	//{std::string("procName"), std::unordered_map<DesignEntity, int>{ 
-	//	{DesignEntity::PROCEDURE, 1}, 
-	//	{DesignEntity::CALL, 1}
-	//}},
-	//{std::string("varName"), std::unordered_map<DesignEntity, int>{ 
-	//	{DesignEntity::VARIABLE, 1}, 
-	//	{DesignEntity::READ, 1}, 
-	//	{DesignEntity::PRINT, 1}
-	//}},
-	//{std::string("value"), std::unordered_map<DesignEntity, int>{ {DesignEntity::CONSTANT, 1}}},
-	//{std::string("stmt#"), statementDesignEntities},
-
-	//};
-
 	std::vector<DesignEntity> validDesignEntitiesForUsesAndModifies = {
 		DesignEntity::STMT, DesignEntity::READ, DesignEntity::PRINT, DesignEntity::CALL,
 		DesignEntity::WHILE, DesignEntity::IF, DesignEntity::ASSIGN, DesignEntity::PROCEDURE
@@ -76,15 +39,15 @@ private:
 	bool patternClauseIsSemanticallyCorrect();
 	bool withClauseIsSemanticallyCorrect();
 	bool isDeclaredSynonym(std::string synonym);
-	bool isValidUsesAndModifies(SuchThat relationship);
-	bool isValidFollowsParentNext(SuchThat relationship);
-	bool isValidCalls(SuchThat relationship);
+	bool isValidUsesAndModifies(SuchThat &relationship);
+	bool isValidFollowsParentNext(SuchThat &relationship);
+	bool isValidCalls(SuchThat &relationship);
 	bool isValidParameter(std::string synonymName, DesignEntity validDesignEntity);
 	bool isStatement(std::string synonym);
 	bool isValidDesignEntity(std::string synonym, DesignEntity designEntityToMatch);
 	bool isValidUsesAndModifiesLeftParameter(std::string synonym);
 	bool isValidAttrNameToAttrSynonym(std::string attrName, DesignEntity attrSynonymDesignEntity);
-	bool isValidAttrRef(std::vector<TokenObject> ref);
+	bool isValidAttrRef(std::vector<TokenObject> &ref);
 	bool isValidPatternSynonym(TokenType patternType, std::string patternSynonym);
 
 public:

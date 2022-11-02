@@ -13,8 +13,8 @@ patterns(std::vector<Pattern>()), withs(std::vector<With>()), select(Select()), 
 /*
 * Initializes query object with the values for clauses
 */
-QueryObject::QueryObject(Select select, std::vector<SuchThat> relationship, 
-	std::vector<Pattern> pattern, std::unordered_map<std::string, DesignEntity> synonymToDesignEntity, int numOfDeclaredSynonyms) {
+QueryObject::QueryObject(Select &select, std::vector<SuchThat> &relationship,
+	std::vector<Pattern> &pattern, std::unordered_map<std::string, DesignEntity> &synonymToDesignEntity, int numOfDeclaredSynonyms) {
 
 	this->relationships = relationship;
 	this->select = select;
@@ -27,7 +27,7 @@ QueryObject::QueryObject(Select select, std::vector<SuchThat> relationship,
 }
 
 
-QueryObject::QueryObject(Select select, std::vector<SuchThat> relationship, std::vector<qps::Pattern> pattern, std::vector<With> with, std::unordered_map<std::string, DesignEntity> synonymToDesignEntity, int numOfDeclaredSynonyms) {
+QueryObject::QueryObject(Select &select, std::vector<SuchThat> &relationship, std::vector<qps::Pattern> &pattern, std::vector<With> &with, std::unordered_map<std::string, DesignEntity> &synonymToDesignEntity, int numOfDeclaredSynonyms) {
 	this->relationships = relationship;
 	this->select = select;
 	this->patterns = pattern;
