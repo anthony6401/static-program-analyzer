@@ -3,23 +3,28 @@
 #include <unordered_set>
 #include <vector>
 #include <map>
-#include "../SimpleToken.h"
+
 #include "../utils/SpUtils.h"
+#include "../SimpleToken.h"
+
+class Extractor;
+class Entity;
 
 class StmtStack {
-
 public:
-    SimpleToken parent;
+    Entity* parent;
     virtual void close(int statementNumber) = 0;
     virtual void mergeStack() = 0;
-    std::unordered_set<SimpleToken, SimpleHash> varMod;
-    std::unordered_set<SimpleToken, SimpleHash> varUse;
-    std::unordered_set<SimpleToken, SimpleHash> stmtsNested;
-    std::vector<SimpleToken> stmts;
+    std::unordered_set<Entity*, SimpleHash> varMod;
+    std::unordered_set<Entity*, SimpleHash> varUse;
+    std::unordered_set<Entity*, SimpleHash> stmtsNested;
+    std::vector<Entity*> stmts;
     std::vector<SimpleToken> callStmts;
-    std::multimap<std::string, SimpleToken> whileIfCallMap;
-    virtual void extractNext(SimpleToken stmtToken) = 0;
+    std::multimap<std::string, Entity*> whileIfCallMap;
+    virtual void extractModify(Entity* left, Entity* right) = 0;
+    virtual void extractUses(Entity* left, Entity* right) = 0;
+    virtual void extractNext(Entity* entity) = 0;
 
 protected:
-    StmtStack(SimpleToken parent, Extractor* context) : parent(parent) {};
+    StmtStack(Entity* parent, Extractor* context) : parent(parent) {};
 };

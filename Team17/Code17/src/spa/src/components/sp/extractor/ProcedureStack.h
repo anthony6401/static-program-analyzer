@@ -7,17 +7,18 @@ class Entity;
 
 class ProcedureStack : public StmtStack {
 public:
-    ProcedureStack(SimpleToken parent, Extractor* context);
+    ProcedureStack(Entity* parent, Extractor* context);
     void close(int statementNumber);
     void mergeStack();
-    void extractFollows(std::vector<SimpleToken> stmts);
-    void extractFollowsT(std::vector<SimpleToken> stmts);
-    void extractUses(std::unordered_set<SimpleToken, SimpleHash> varUse);
-    void extractModify(std::unordered_set<SimpleToken, SimpleHash> varMod);
-    Entity* generateEntity(SimpleToken token);
-    void extractNext(SimpleToken stmtToken);
+    void extractFollows(std::vector<Entity*> stmts);
+    void extractFollowsT(std::vector<Entity*> stmts);
+    void extractUses(std::unordered_set<Entity*, SimpleHash> varUse);
+    void extractModify(std::unordered_set<Entity*, SimpleHash> varMod);
+    void extractModify(Entity* left, Entity* right);
+    void extractUses(Entity* left, Entity* right);
+    void extractNext(Entity* entity);
 
 private:
-    SimpleToken parent;
+    Entity* parent;
     Extractor* context;
 };
