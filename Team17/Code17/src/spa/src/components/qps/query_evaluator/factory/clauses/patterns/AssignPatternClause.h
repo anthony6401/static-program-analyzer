@@ -10,6 +10,7 @@ private:
     QPSClient qpsClient;
     TokenObject left;
     TokenObject right;
+    static const size_t priority = 2;
     ResultTable evaluateFirstAsSynonym();
     ResultTable evaluateFirstAsWildcard();
     ResultTable evaluateFirstAsNameQuotes();
@@ -19,6 +20,7 @@ public:
     ResultTable evaluateClause() override;
     size_t getNumberOfSynonyms() override;
     std::set<std::string> getAllSynonyms() override;
+    size_t getPriority() override;
 };
 
 #endif //SPA_ASSIGNPATTERNCLAUSE_H

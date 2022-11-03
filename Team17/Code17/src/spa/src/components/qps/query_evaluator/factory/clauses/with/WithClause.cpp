@@ -27,6 +27,10 @@ ResultTable WithClause::evaluateClause() {
     }
 }
 
+size_t WithClause::getPriority() {
+    return priority;
+}
+
 ResultTable WithClause::evaluateIntegerOrNameQuotes() {
     std::string leftValue = left.front().getValue();
     std::string rightValue = right.front().getValue();
@@ -34,7 +38,7 @@ ResultTable WithClause::evaluateIntegerOrNameQuotes() {
 }
 
 
-std::unordered_set<std::string> WithClause::findCommonAttributeValues(std::unordered_set<std::string> leftNameResult, std::unordered_set<std::string> rightNameResult) {
+std::unordered_set<std::string> WithClause::findCommonAttributeValues(const std::unordered_set<std::string>& leftNameResult, std::unordered_set<std::string> rightNameResult) {
     std::unordered_set<std::string> commonAttributeNames;
     for (auto &name : leftNameResult) {
         if (rightNameResult.find(name) != rightNameResult.end()) {
@@ -44,7 +48,7 @@ std::unordered_set<std::string> WithClause::findCommonAttributeValues(std::unord
     return commonAttributeNames;
 }
 
-std::unordered_set<std::pair<std::string, std::string>, hashFunction> WithClause::findCommonAttributeStatements(const std::unordered_set<std::string>& leftResult, const std::unordered_set<std::string> rightResult) {
+std::unordered_set<std::pair<std::string, std::string>, hashFunction> WithClause::findCommonAttributeStatements(const std::unordered_set<std::string>& leftResult, const std::unordered_set<std::string>& rightResult) {
     std::unordered_set<std::pair<std::string, std::string>, hashFunction> commonAttributeStatements;
     for (const auto &statement : leftResult) {
         if (rightResult.find(statement) != rightResult.end()) {
@@ -72,13 +76,13 @@ ResultTable WithClause::evaluateNameQuotesAttribute() {
         }
     } else {
         std::unordered_set<std::string> attributeResult = qpsClient.getAllEntity(attributeDesignEntityType);
-        if (attributeResult.find(nameQuotesValue) == attributeResult.end()) {
-            resultTable.setIsFalseResultToTrue();
-            return resultTable;
-        } else {
+        if (attributeResult.find(nameQuotesValue) != attributeResult.end()) {
             std::unordered_set<std::string> results;
             results.insert(nameQuotesValue);
             return {attributeSynonym, results};
+        } else {
+            resultTable.setIsFalseResultToTrue();
+            return resultTable;
         }
     }
 }
@@ -90,13 +94,13 @@ ResultTable WithClause::evaluateIntegerAttribute() {
     std::string integerValue = left.front().getValue();
     DesignEntity attributeDesignEntityType = synonymToDesignEntityMap[attributeSynonym];
     std::unordered_set<std::string> attributeResult = qpsClient.getAllEntity(attributeDesignEntityType);
-    if (attributeResult.find(integerValue) == attributeResult.end()) {
-        resultTable.setIsFalseResultToTrue();
-        return resultTable;
-    } else {
+    if (attributeResult.find(integerValue) != attributeResult.end()) {
         std::unordered_set<std::string> results;
         results.insert(integerValue);
         return {attributeSynonym, results};
+    } else {
+        resultTable.setIsFalseResultToTrue();
+        return resultTable;
     }
 }
 
@@ -118,13 +122,13 @@ ResultTable WithClause::evaluateAttributeNameQuotes() {
         }
     } else {
         std::unordered_set<std::string> attributeResult = qpsClient.getAllEntity(attributeDesignEntityType);
-        if (attributeResult.find(nameQuotesValue) == attributeResult.end()) {
-            resultTable.setIsFalseResultToTrue();
-            return resultTable;
-        } else {
+        if (attributeResult.find(nameQuotesValue) != attributeResult.end()) {
             std::unordered_set<std::string> results;
             results.insert(nameQuotesValue);
             return {attributeSynonym, results};
+        } else {
+            resultTable.setIsFalseResultToTrue();
+            return resultTable;
         }
     }
 }
@@ -135,13 +139,13 @@ ResultTable WithClause::evaluateAttributeInteger() {
     std::string integerValue = right.front().getValue();
     DesignEntity attributeDesignEntityType = synonymToDesignEntityMap[attributeSynonym];
     std::unordered_set<std::string> attributeResult = qpsClient.getAllEntity(attributeDesignEntityType);
-    if (attributeResult.find(integerValue) == attributeResult.end()) {
-        resultTable.setIsFalseResultToTrue();
-        return resultTable;
-    } else {
+    if (attributeResult.find(integerValue) != attributeResult.end()) {
         std::unordered_set<std::string> results;
         results.insert(integerValue);
         return {attributeSynonym, results};
+    } else {
+        resultTable.setIsFalseResultToTrue();
+        return resultTable;
     }
 }
 
@@ -224,10 +228,10 @@ std::unordered_set<std::pair<std::string, std::string>, hashFunction> WithClause
         intersectionRight.insert(statementFromNameRight.begin(), statementFromNameRight.end());
     }
 
-    auto it1 = intersectionLeft.begin();
-    auto it2 = intersectionRight.begin();
-    for (; it1 != intersectionLeft.end() && it2 != intersectionRight.end(); it1++, it2++) {
-        auto pair = std::make_pair(*it1, *it2);
+    auto itLeft = intersectionLeft.begin();
+    auto itRight = intersectionRight.begin();
+    for (; itLeft != intersectionLeft.end() && itRight != intersectionRight.end(); itLeft++, itRight++) {
+        auto pair = std::make_pair(*itLeft, *itRight);
         pairResult.insert(pair);
     }
 

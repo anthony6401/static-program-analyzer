@@ -118,6 +118,31 @@ std::unordered_set<std::string>* UsesRelationshipStorage::getSetBySecond(TokenOb
 	return set;
 }
 
+std::unordered_set<std::string> UsesRelationshipStorage::getAllStmt() {
+	std::unordered_set<std::string> result;
+	for (auto const& assignPair : this->assignForwardStorage) {
+		result.insert(assignPair.first);
+	}
+
+	for (auto const& printPair : this->printForwardStorage) {
+		result.insert(printPair.first);
+	}
+
+	for (auto const& whilePair : this->whileForwardStorage) {
+		result.insert(whilePair.first);
+	}
+
+	for (auto const& ifPair : this->ifForwardStorage) {
+		result.insert(ifPair.first);
+	}
+
+	for (auto const& callPair : this->callsForwardStorage) {
+		result.insert(callPair.first);
+	}
+
+	return result;
+}
+
 bool UsesRelationshipStorage::storeRelationship(Relationship* rel) {
 	UsesRelationship* usesRelationship = dynamic_cast<UsesRelationship*>(rel);
 	if (usesRelationship) {
@@ -143,16 +168,36 @@ bool UsesRelationshipStorage::storeRelationship(Relationship* rel) {
 	return false;
 }
 
+bool UsesRelationshipStorage::handleConstantConstant(TokenObject firstArgument, TokenObject secondArgument) {
+	std::unordered_set<std::string>* set = getSetByFirst(firstArgument);
+
+	if (set == nullptr) {
+		return false;
+	}
+
+	return set->find(secondArgument.getValue()) != set->end();
+}
+
+bool UsesRelationshipStorage::handleConstantWildcard(TokenObject firstArgument) {
+	std::unordered_set<std::string>* set = getSetByFirst(firstArgument);
+
+	if (set == nullptr) {
+		return false;
+	}
+
+	return set->size() != 0;
+}
+
 // To answer Uses(1, "x")
 bool UsesRelationshipStorage::getRelationship(RelationshipType relType, TokenObject firstArgument, TokenObject secondArgument) {
 	if (relType == RelationshipType::USES) {
-		std::unordered_set<std::string>* set = getSetByFirst(firstArgument);
-
-		if (set == nullptr) {
-			return false;
+		if ((firstArgument.getTokenType() == TokenType::NAME_WITH_QUOTATION || firstArgument.getTokenType() == TokenType::INTEGER) 
+			&& secondArgument.getTokenType() == TokenType::NAME_WITH_QUOTATION) {
+			return handleConstantConstant(firstArgument, secondArgument);
+		} else if ((firstArgument.getTokenType() == TokenType::NAME_WITH_QUOTATION || firstArgument.getTokenType() == TokenType::INTEGER) 
+			&& secondArgument.getTokenType() == TokenType::WILDCARD) {
+			return handleConstantWildcard(firstArgument);
 		}
-
-		return set->find(secondArgument.getValue()) != set->end();
 	}
 	return false;
 }
@@ -193,6 +238,25 @@ std::unordered_set<std::string> UsesRelationshipStorage::getRelationshipBySecond
 		}
 	}
 
+	return std::unordered_set<std::string>();
+}
+
+std::unordered_set<std::string> UsesRelationshipStorage::getRelationshipWithSecondWildcard(RelationshipType relType, DesignEntity returnType) {
+	if (relType == RelationshipType::USES) {
+		if (returnType == DesignEntity::STMT) {
+			return getAllStmt();
+		}
+
+		std::unordered_map<std::string, std::unordered_set<std::string>>* storage = getStorageForward(returnType);
+		if (storage != nullptr) {
+			std::unordered_set<std::string> result;
+			for (auto const& pair : *storage) {
+				result.insert(pair.first);
+			}
+
+			return result;
+		}
+	}
 	return std::unordered_set<std::string>();
 }
 

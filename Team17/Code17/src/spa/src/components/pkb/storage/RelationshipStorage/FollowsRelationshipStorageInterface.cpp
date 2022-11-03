@@ -2,7 +2,7 @@
 #include "models/Relationship/FollowsRelationship.h"
 #include "utils.h"
 
-FollowsRelationshipStorageInterface::FollowsRelationshipStorageInterface(RelationshipType relationshipType) : RelationshipStorage(), relationshipType(relationshipType) {}
+FollowsRelationshipStorageInterface::FollowsRelationshipStorageInterface(RelationshipType relationshipType) : RelationshipStorageFirstWildcard(), relationshipType(relationshipType) {}
 
 std::unordered_map<std::string, std::unordered_set<std::string>>* FollowsRelationshipStorageInterface::getReadSpecificEntityStorage(DesignEntity right) {
 	if (right == DesignEntity::READ) {
@@ -242,20 +242,47 @@ std::unordered_map<std::string, std::unordered_set<std::string>>* FollowsRelatio
 	return nullptr;
 }
 
+bool FollowsRelationshipStorageInterface::handleConstantConstant(TokenObject firstArgument, TokenObject secondArgument) {
+	std::unordered_map<std::string, std::unordered_set<std::string>>* storage{};
+	storage = getStorageForward(DesignEntity::STMT, DesignEntity::STMT);
+	if (storage->find(firstArgument.getValue()) != storage->end()) {
+		std::unordered_set<std::string>* set = &storage->find(firstArgument.getValue())->second;
+		return set->find(secondArgument.getValue()) != set->end();
+	}
+
+	return false;
+}
+
+bool FollowsRelationshipStorageInterface::handleConstantWildcard(TokenObject firstArgument) {
+	std::unordered_map<std::string, std::unordered_set<std::string>>* storage{};
+	storage = getStorageForward(DesignEntity::STMT, DesignEntity::STMT);
+	return storage->find(firstArgument.getValue()) != storage->end();
+}
+
+bool FollowsRelationshipStorageInterface::handleWildcardConstant(TokenObject secondArgument) {
+	std::unordered_map<std::string, std::unordered_set<std::string>>* storage{};
+	storage = getStorageBackward(DesignEntity::STMT);
+	return storage->find(secondArgument.getValue()) != storage->end();
+}
+
+bool FollowsRelationshipStorageInterface::handleWilcardWildcard() {
+	std::unordered_map<std::string, std::unordered_set<std::string>>* storage{};
+	storage = getStorageForward(DesignEntity::STMT, DesignEntity::STMT);
+	return storage->size() != 0;
+}
+
 
 bool FollowsRelationshipStorageInterface::getRelationship(RelationshipType relType, TokenObject firstArgument, TokenObject secondArgument) {
 	if (relType == relationshipType) {
-		std::unordered_map<std::string, std::unordered_set<std::string>>* storage{};
-
-		storage = getStorageForward(DesignEntity::STMT, DesignEntity::STMT);
-
-		if (storage->find(firstArgument.getValue()) == storage->end()) {
-			return false;
+		if (firstArgument.getTokenType() == TokenType::INTEGER && secondArgument.getTokenType() == TokenType::INTEGER) {
+			return handleConstantConstant(firstArgument, secondArgument);
+		} else if (firstArgument.getTokenType() == TokenType::WILDCARD && secondArgument.getTokenType() == TokenType::INTEGER) {
+			return handleWildcardConstant(secondArgument);
+		} else if (firstArgument.getTokenType() == TokenType::INTEGER && secondArgument.getTokenType() == TokenType::WILDCARD) {
+			return handleConstantWildcard(firstArgument);
+		} else if (firstArgument.getTokenType() == TokenType::WILDCARD && secondArgument.getTokenType() == TokenType::WILDCARD) {
+			return handleWilcardWildcard();
 		}
-
-		std::unordered_set<std::string>* set = &storage->find(firstArgument.getValue())->second;
-
-		return set->find(secondArgument.getValue()) != set->end();
 	}
 	return false;
 }
@@ -300,6 +327,50 @@ std::unordered_set<std::string> FollowsRelationshipStorageInterface::getRelation
 		}
 
 		return storage->find(findValue)->second;
+	}
+	return std::unordered_set<std::string>();
+}
+
+std::unordered_set<std::string> FollowsRelationshipStorageInterface::getRelationshipWithFirstWildcard(RelationshipType relType, DesignEntity returnType) {
+	if (relType == relationshipType) {
+		std::unordered_map<std::string, std::unordered_set<std::string>>* storage{};
+
+		storage = getStorageForward(DesignEntity::STMT, returnType);
+
+		if (storage == nullptr) {
+			return std::unordered_set<std::string>();
+		}
+
+		std::unordered_set<std::string> result;
+
+		for (auto const& pair : *storage) {
+			result.insert(pair.second.begin(), pair.second.end());
+		}
+
+		return result;
+
+	}
+	return std::unordered_set<std::string>();
+}
+
+std::unordered_set<std::string> FollowsRelationshipStorageInterface::getRelationshipWithSecondWildcard(RelationshipType relType, DesignEntity returnType) {
+	if (relType == relationshipType) {
+		std::unordered_map<std::string, std::unordered_set<std::string>>* storage{};
+
+		storage = getStorageForward(returnType, DesignEntity::STMT);
+
+		if (storage == nullptr) {
+			return std::unordered_set<std::string>();
+		}
+
+		std::unordered_set<std::string> result;
+
+		for (auto const& pair : *storage) {
+			result.insert(pair.first);
+		}
+
+		return result;
+
 	}
 	return std::unordered_set<std::string>();
 }

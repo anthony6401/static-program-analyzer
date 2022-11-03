@@ -12,8 +12,9 @@ private:
     std::vector<TokenObject> right;
     std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap;
     QPSClient qpsClient;
-    std::unordered_set<std::string> findCommonAttributeValues(std::unordered_set<std::string> leftNameResult, std::unordered_set<std::string> rightNameResult);
-    std::unordered_set<std::pair<std::string, std::string>, hashFunction> findCommonAttributeStatements(const std::unordered_set<std::string>& leftResult, std::unordered_set<std::string> rightResult);
+    static const size_t priority = 1;
+    static std::unordered_set<std::string> findCommonAttributeValues(const std::unordered_set<std::string>& leftNameResult, std::unordered_set<std::string> rightNameResult);
+    static std::unordered_set<std::pair<std::string, std::string>, hashFunction> findCommonAttributeStatements(const std::unordered_set<std::string>& leftResult, const std::unordered_set<std::string>& rightResult);
     ResultTable evaluateAttributeAttribute();
     std::unordered_set<std::pair<std::string, std::string>, hashFunction> leftAndRightAlternativeAttributeResultsHandler(DesignEntity leftDesignEntityType, DesignEntity rightDesignEntityType);
     std::unordered_set<std::pair<std::string, std::string>, hashFunction> leftAlternativeAttributeResultsHandler(DesignEntity leftDesignEntityType, DesignEntity rightDesignEntityType);
@@ -29,6 +30,7 @@ public:
     ResultTable evaluateClause() override;
     size_t getNumberOfSynonyms() override;
     std::set<std::string> getAllSynonyms() override;
+    size_t getPriority() override;
 };
 
 #endif //SPA_WITHCLAUSE_H

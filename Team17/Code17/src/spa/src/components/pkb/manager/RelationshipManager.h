@@ -1,5 +1,6 @@
 #pragma once
 #include "components/pkb/storage/RelationshipStorage/RelationshipStorage.h"
+#include "components/pkb/storage/RelationshipStorage/RelationshipStorageFirstWildcard.h"
 #include "components/pkb/runtimeEvaluator/RuntimeRelationshipEvaluator.h"
 
 #include <string>
@@ -13,16 +14,22 @@ public:
 	bool getRelationship(RelationshipType relType, TokenObject firstArgument, TokenObject secondArgument);
 	std::unordered_set<std::string> getRelationshipByFirst(RelationshipType relType, TokenObject firstArgument, DesignEntity returnType);
 	std::unordered_set<std::string> getRelationshipBySecond(RelationshipType relType, DesignEntity returnType, TokenObject secondArgument);
+	std::unordered_set<std::string> getRelationshipWithFirstWildcard(RelationshipType relType, DesignEntity returnType);
+	std::unordered_set<std::string> getRelationshipWithSecondWildcard(RelationshipType relType, DesignEntity returnType);
 	std::unordered_map<std::string, std::unordered_set<std::string>> getAllRelationship(RelationshipType relType, DesignEntity returnType1, DesignEntity returnType2);
 	bool getRuntimeRelationship(RelationshipType relType, TokenObject firstArgument, TokenObject secondArgument);
 	std::unordered_set<std::string> getRuntimeRelationshipByFirst(RelationshipType relType, TokenObject firstArgument, std::unordered_set<std::string>& filter);
 	std::unordered_set<std::string> getRuntimeRelationshipBySecond(RelationshipType relType, TokenObject secondArgument, std::unordered_set<std::string>& filter);
 	std::unordered_map<std::string, std::unordered_set<std::string>> getAllRuntimeRelationship(RelationshipType relType, std::unordered_set<std::string>& filter1, std::unordered_set<std::string>& filter2);
+	std::unordered_set<std::string> getRuntimeRelationshipWithFirstWildcard(RelationshipType relType, std::unordered_set<std::string>& filter1, std::unordered_set<std::string>& filter2);
+	std::unordered_set<std::string> getRuntimeRelationshipWithSecondWildcard(RelationshipType relType, std::unordered_set<std::string>& filter1, std::unordered_set<std::string>& filter2);
 	bool storeRelationship(Relationship* rel);
+	void clearCache();
 	~RelationshipManager();
 	
 private:
 	std::vector<RelationshipStorage*> relStorages;
+	std::vector<RelationshipStorageFirstWildcard*> relFirstWildcardStorages;
 	std::vector<RuntimeRelationshipEvaluator*> runtimeRelStorages;
 	
 };

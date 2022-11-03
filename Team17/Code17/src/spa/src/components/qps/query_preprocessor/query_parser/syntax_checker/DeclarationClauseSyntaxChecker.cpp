@@ -11,12 +11,12 @@ DeclarationClauseSyntaxChecker::DeclarationClauseSyntaxChecker() {
 
 DeclarationClauseSyntaxChecker::~DeclarationClauseSyntaxChecker() {};
 
-bool DeclarationClauseSyntaxChecker::isSyntacticallyCorrect(std::vector<TokenObject> tokenizedClause) {
+bool DeclarationClauseSyntaxChecker::isSyntacticallyCorrect(std::vector<TokenObject> &tokenizedClause) {
 	// Parser checks if there are any declaration.
 	// If there are no declarations, method will not be called
 	
 	for (int i = 0; i < tokenizedClause.size(); i++) {
-		TokenObject token = tokenizedClause.at(i);
+		TokenObject &token = tokenizedClause.at(i);
 		TokenType tokenType = token.getTokenType();
 
 		if (this->declarationSyntax.empty()) {
@@ -59,16 +59,8 @@ bool DeclarationClauseSyntaxChecker::isSyntacticallyCorrect(std::vector<TokenObj
 		}
 
 		// Token is either DESIGN_ENTITY or SYNONYM
-		std::vector<TokenType> possibleTokenTypes = this->generalSyntax.at(syntax);
-		bool foundToken = false;
-		for (int j = 0; j < possibleTokenTypes.size(); j++) {
-			TokenType possibleTokenType = possibleTokenTypes.at(j);
-
-			if (tokenType == possibleTokenType) {
-				foundToken = true;
-				break;
-			}
-		}
+		std::vector<TokenType> &possibleTokenTypes = this->generalSyntax.at(syntax);
+		bool foundToken = std::binary_search(possibleTokenTypes.begin(), possibleTokenTypes.end(), tokenType);
 
 		if (!foundToken) {
 			return false;

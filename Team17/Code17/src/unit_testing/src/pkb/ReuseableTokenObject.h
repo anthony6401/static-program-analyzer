@@ -43,7 +43,7 @@ static TokenObject assignPatternTokenObjectSubexprOne = TokenObject(TokenType::S
 static TokenObject assignPatternTokenObjectSubexprTwo = TokenObject(TokenType::SUBEXPRESSION, assignSubexprTwo);
 static TokenObject assignPatternTokenObjectSubexprThree = TokenObject(TokenType::SUBEXPRESSION, assignSubexprThree);
 
-static TokenObject wildCardTokenObject = TokenObject(TokenType::WILDCARD, "");
+static TokenObject wildcardTokenObject = TokenObject(TokenType::WILDCARD, "");
 
 static TokenObject ifPatternTokenObjectFirstOne = TokenObject(TokenType::NAME_WITH_QUOTATION, ifFirstValueOne);
 static TokenObject ifPatternTokenObjectFirstTwo = TokenObject(TokenType::NAME_WITH_QUOTATION, ifFirstValueTwo);

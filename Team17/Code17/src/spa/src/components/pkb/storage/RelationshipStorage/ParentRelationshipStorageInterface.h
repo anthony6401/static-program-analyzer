@@ -1,16 +1,22 @@
 #pragma once
-#include "RelationshipStorage.h"
+#include "RelationshipStorageFirstWildcard.h"
 
-class ParentRelationshipStorageInterface : public RelationshipStorage {
+class ParentRelationshipStorageInterface : public RelationshipStorageFirstWildcard {
 public:
 	ParentRelationshipStorageInterface(RelationshipType relationshipType);
 	virtual bool storeRelationship(Relationship* rel) = 0;
 	bool getRelationship(RelationshipType relType, TokenObject firstArgument, TokenObject secondArgument);
 	std::unordered_set<std::string> getRelationshipByFirst(RelationshipType relType, TokenObject firstArgument, DesignEntity returnType);
 	std::unordered_set<std::string> getRelationshipBySecond(RelationshipType relType, DesignEntity returnType, TokenObject secondArgument);
+	std::unordered_set<std::string> getRelationshipWithFirstWildcard(RelationshipType relType, DesignEntity returnType);
+	std::unordered_set<std::string> getRelationshipWithSecondWildcard(RelationshipType relType, DesignEntity returnType);
 	std::unordered_map<std::string, std::unordered_set<std::string>> getAllRelationship(RelationshipType relType, DesignEntity returnType1, DesignEntity returntype2);
 
 protected:
+	bool handleConstantConstant(TokenObject firstArgument, TokenObject secondArgument);
+	bool handleConstantWildcard(TokenObject firstArgument);
+	bool handleWildcardConstant(TokenObject secondArgument);
+	bool handleWilcardWildcard();
 	std::unordered_map<std::string, std::unordered_set<std::string>>* getStorageForward(DesignEntity left, DesignEntity right);
 	std::unordered_map<std::string, std::unordered_set<std::string>>* getStorageBackward(DesignEntity left);
 	std::unordered_map<std::string, std::unordered_set<std::string>>* getIfToSpecificStorage(DesignEntity right);

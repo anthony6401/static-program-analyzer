@@ -20,6 +20,12 @@ std::unordered_set<std::string>QPSClient::getRelationshipByFirst(RelationshipTyp
 std::unordered_set<std::string> QPSClient::getRelationshipBySecond(RelationshipType relType, DesignEntity returnType, TokenObject secondArgument) {
 	return pkb->getRelationshipBySecond(relType, returnType, secondArgument);
 }
+std::unordered_set<std::string> QPSClient::getRelationshipWithFirstWildcard(RelationshipType relType, DesignEntity returnType) {
+	return pkb->getRelationshipWithFirstWildcard(relType, returnType);
+}
+std::unordered_set<std::string> QPSClient::getRelationshipWithSecondWildcard(RelationshipType relType, DesignEntity returnType) {
+	return pkb->getRelationshipWithSecondWildcard(relType, returnType);
+}
 std::unordered_map<std::string, std::unordered_set<std::string>> QPSClient::getAllRelationship(RelationshipType relType, DesignEntity returnType1, DesignEntity returntype2) {
 	return pkb->getAllRelationship(relType, returnType1, returntype2);
 }
@@ -29,6 +35,12 @@ std::unordered_set<std::string> QPSClient::getPattern(DesignEntity designEntity,
 }
 std::unordered_set<std::string> QPSClient::getContainerPattern(DesignEntity designEntity, TokenObject firstArgument) {
 	return pkb->getPattern(designEntity, firstArgument, TokenObject());
+}
+std::unordered_set<std::string> QPSClient::getPatternWildcard(DesignEntity designEntity, TokenObject secondArgument) {
+	return pkb->getPatternWildcard(designEntity, secondArgument);
+}
+std::unordered_set<std::string> QPSClient::getPatternContainerWildcard(DesignEntity designEntity) {
+	return pkb->getPatternWildcard(designEntity, TokenObject());
 }
 std::vector<std::pair<std::string, std::string>> QPSClient::getPatternPair(DesignEntity designEntity, TokenObject secondArgument) {
 	return pkb->getPatternPair(designEntity, secondArgument);
@@ -46,4 +58,8 @@ std::unordered_set<std::string> QPSClient::getStatementByName(std::string& name,
 
 std::unordered_set<std::string> QPSClient::getAllName(DesignEntity entityType) {
 	return pkb->getAllName(entityType);
+}
+
+void QPSClient::clearCache() {
+	pkb->clearCache();
 }

@@ -12,13 +12,13 @@
 
 class Evaluator {
 private:
-    static ClauseDivider extractClausesToEvaluate(QueryObject queryObject, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap, QPSClient qpsClient);
-    static bool evaluateNoSynonymClauses(GroupedClause noSynonymsClauses);
-    static bool evaluateNoSelectSynonymClauses(std::vector<GroupedClause> noSelectSynonymPresent);
-    static ResultTable evaluateHasSelectSynonymClauses(std::vector<GroupedClause> hasSelectSynonymPresent, std::shared_ptr<Clause> &selectClause);
+    static ClauseDivider extractClausesToEvaluate(QueryObject queryObject, std::unordered_map<std::string, DesignEntity> &synonymToDesignEntityMap, QPSClient &qpsClient);
+    static bool evaluateNoSynonymClauses(GroupedClause &noSynonymsClauses);
+    static bool evaluateNoSelectSynonymClauses(std::vector<GroupedClause> &noSelectSynonymPresent);
+    static ResultTable evaluateHasSelectSynonymClauses(std::vector<GroupedClause> &hasSelectSynonymPresent, std::shared_ptr<Clause> &selectClause);
     static void combineResultsWithSelect(std::shared_ptr<Clause> &selectClause, ResultTable &evaluatedResults);
-    static void populateResultsList(ResultTable &finalResult, Select select, std::list<std::string> &results, QPSClient qpsClient, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap);
-    static void populateAttributesResultsList(ResultTable &evaluatedResults, Select select, std::list<std::string> &results, QPSClient qpsClient, std::unordered_map<std::string, DesignEntity> synonymToDesignEntityMap);
+    static void populateResultsList(ResultTable &finalResult, Select select, std::list<std::string> &results, QPSClient &qpsClient, std::unordered_map<std::string, DesignEntity> &synonymToDesignEntityMap);
+    static void populateAttributesResultsList(ResultTable &evaluatedResults, Select select, std::list<std::string> &results, QPSClient &qpsClient, std::unordered_map<std::string, DesignEntity> &synonymToDesignEntityMap);
 public:
     static void evaluateQuery(QueryObject queryObject, std::list<std::string> &results, QPSClient qpsClient);
 };

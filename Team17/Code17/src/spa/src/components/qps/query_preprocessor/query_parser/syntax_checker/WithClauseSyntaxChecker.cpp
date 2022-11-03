@@ -12,11 +12,11 @@ WithClauseSyntaxChecker::WithClauseSyntaxChecker() {
 
 WithClauseSyntaxChecker::~WithClauseSyntaxChecker() {};
 
-bool WithClauseSyntaxChecker::isSyntacticallyCorrect(std::vector<TokenObject> tokenizedClause) {
+bool WithClauseSyntaxChecker::isSyntacticallyCorrect(std::vector<TokenObject> &tokenizedClause) {
 	bool isSecondRef = false;
 	
 	for (int i = 0; i < tokenizedClause.size(); i++) {
-		TokenObject token = tokenizedClause.at(i);
+		TokenObject &token = tokenizedClause.at(i);
 		TokenType tokenType = token.getTokenType();
 
 		if (isSecondRef) {
@@ -58,16 +58,8 @@ bool WithClauseSyntaxChecker::isSyntacticallyCorrect(std::vector<TokenObject> to
 		}
 
 		// REF token
-		std::vector<TokenType> possibleTokenTypes = this->generalSyntax.at(syntax);
-		bool foundToken = false;
-		for (int j = 0; j < possibleTokenTypes.size(); j++) {
-			TokenType possibleTokenType = possibleTokenTypes.at(j);
-
-			if (tokenType == possibleTokenType) {
-				foundToken = true;
-				break;
-			}
-		}
+		std::vector<TokenType> &possibleTokenTypes = this->generalSyntax.at(syntax);
+		bool foundToken = std::binary_search(possibleTokenTypes.begin(), possibleTokenTypes.end(), tokenType);
 
 		if (!foundToken) {
 			return false;

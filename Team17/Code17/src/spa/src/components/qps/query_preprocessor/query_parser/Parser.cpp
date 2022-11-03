@@ -1,614 +1,657 @@
 #include "Parser.h"
+#include "components/qps/abstract_query_object/Pattern.h"
 #include "components/qps/abstract_query_object/QueryObject.h"
 #include "components/qps/abstract_query_object/Select.h"
 #include "components/qps/abstract_query_object/SuchThat.h"
-#include "components/qps/abstract_query_object/Pattern.h"
 #include "components/qps/abstract_query_object/With.h"
-#include <unordered_map>
-#include <stdexcept>
+#include <algorithm>
 #include <memory>
 #include <sstream>
+#include <stdexcept>
+#include <unordered_map>
 
 using namespace qps;
 
-Parser::Parser(std::vector<TokenObject> tokenizedQuery) {
-	this->tokenizedQuery = tokenizedQuery;
+Parser::Parser(std::vector<TokenObject> &tokenizedQuery) {
+  this->tokenizedQuery = tokenizedQuery;
 };
 
 std::vector<TokenObject> Parser::getTokenizedQuery() {
-	return this->tokenizedQuery;
+  return this->tokenizedQuery;
 }
 
 QueryObject Parser::parse() {
-	std::vector<std::vector<TokenObject>> groupedQueryTokens = groupQueryIntoClause();
-	std::vector<TokenObject> declarationTokenObjects = groupedQueryTokens[0];
-	std::vector<TokenObject> selectTokenObjects = groupedQueryTokens[1];
-	std::vector<TokenObject> relationshipTokenObjects = groupedQueryTokens[2];
-	std::vector<TokenObject> patternTokenObjects = groupedQueryTokens[3];
-	std::vector<TokenObject> withTokenObjects = groupedQueryTokens[4];
+  std::vector<std::vector<TokenObject>> groupedQueryTokens =
+      groupQueryIntoClause();
+  std::vector<TokenObject> &declarationTokenObjects = groupedQueryTokens[0];
+  std::vector<TokenObject> &selectTokenObjects = groupedQueryTokens[1];
+  std::vector<TokenObject> &relationshipTokenObjects = groupedQueryTokens[2];
+  std::vector<TokenObject> &patternTokenObjects = groupedQueryTokens[3];
+  std::vector<TokenObject> &withTokenObjects = groupedQueryTokens[4];
 
-	bool hasNoSyntaxError = true;
+  bool hasNoSyntaxError = true;
 
-	if (declarationTokenObjects.size() > 0) {
-		hasNoSyntaxError = hasNoSyntaxError && isSyntacticallyCorrect(declarationTokenObjects, new DeclarationClauseSyntaxChecker());
-	}
+  if (!declarationTokenObjects.empty()) {
+    hasNoSyntaxError =
+        hasNoSyntaxError &&
+        isSyntacticallyCorrect(declarationTokenObjects,
+                               new DeclarationClauseSyntaxChecker());
+  }
 
-	hasNoSyntaxError = hasNoSyntaxError && isSyntacticallyCorrect(selectTokenObjects, new SelectClauseSyntaxChecker());
+  hasNoSyntaxError = hasNoSyntaxError &&
+                     isSyntacticallyCorrect(selectTokenObjects,
+                                            new SelectClauseSyntaxChecker());
 
-	if (relationshipTokenObjects.size() > 0) {
-		hasNoSyntaxError = hasNoSyntaxError && isSyntacticallyCorrect(relationshipTokenObjects, new SuchThatClauseSyntaxChecker());
-	}
+  if (!relationshipTokenObjects.empty()) {
+    hasNoSyntaxError =
+        hasNoSyntaxError &&
+        isSyntacticallyCorrect(relationshipTokenObjects,
+                               new SuchThatClauseSyntaxChecker());
+  }
 
-	if (patternTokenObjects.size() > 0) {
-		hasNoSyntaxError = hasNoSyntaxError && isSyntacticallyCorrect(patternTokenObjects, new PatternClauseSyntaxChecker());
-	}
+  if (!patternTokenObjects.empty()) {
+    hasNoSyntaxError = hasNoSyntaxError &&
+                       isSyntacticallyCorrect(patternTokenObjects,
+                                              new PatternClauseSyntaxChecker());
+  }
 
-	if (withTokenObjects.size() > 0) {
-		hasNoSyntaxError = hasNoSyntaxError && isSyntacticallyCorrect(withTokenObjects, new WithClauseSyntaxChecker());
-	}
+  if (!withTokenObjects.empty()) {
+    hasNoSyntaxError =
+        hasNoSyntaxError &&
+        isSyntacticallyCorrect(withTokenObjects, new WithClauseSyntaxChecker());
+  }
 
-	if (!hasNoSyntaxError) {
-		return QueryObject();
-	}
+  if (!hasNoSyntaxError) {
+    return {};
+  }
 
-	auto [numOfDeclaredSynonyms, mappedSynonyms] = mapSynonymToDesignEntity(declarationTokenObjects);
-	Select select = parseTokensIntoSelectObject(selectTokenObjects);
-	std::vector<SuchThat> relationships = parseTokensIntoSuchThatObjects(relationshipTokenObjects);
-	std::vector<Pattern> patterns = parseTokensIntoPatternObjects(patternTokenObjects);
-	std::vector<With> withs = parseTokensIntoWithObjects(withTokenObjects);
+  auto [numOfDeclaredSynonyms, mappedSynonyms] =
+      mapSynonymToDesignEntity(declarationTokenObjects);
+  Select select = parseTokensIntoSelectObject(selectTokenObjects);
+  std::vector<SuchThat> relationships =
+      parseTokensIntoSuchThatObjects(relationshipTokenObjects);
+  std::vector<Pattern> patterns =
+      parseTokensIntoPatternObjects(patternTokenObjects);
+  std::vector<With> withs = parseTokensIntoWithObjects(withTokenObjects);
 
-	return QueryObject(select, relationships, patterns, withs, mappedSynonyms, numOfDeclaredSynonyms);
+  return {select, relationships,  patterns,
+          withs,  mappedSynonyms, numOfDeclaredSynonyms};
 };
 
 std::vector<std::vector<TokenObject>> Parser::groupQueryIntoClause() {
-	std::vector<TokenObject> declarationTokenObjects;
-	std::vector<TokenObject> selectTokenObjects;
-	std::vector<TokenObject> relationshipTokenObjects;
-	std::vector<TokenObject> patternTokenObjects;
-	std::vector<TokenObject> withTokenObjects;
+  std::vector<TokenObject> declarationTokenObjects;
+  std::vector<TokenObject> selectTokenObjects;
+  std::vector<TokenObject> relationshipTokenObjects;
+  std::vector<TokenObject> patternTokenObjects;
+  std::vector<TokenObject> withTokenObjects;
 
-	bool isEndOfDeclaration = true;
-	bool isSelectClause = false;
-	bool isSuchThatClause = false;
-	bool isPatternClause = false;
-	bool isWithClause = false;
-	bool isPrevClauseSuchThatClause = false;
-	bool isPrevClausePatternClause = false;
-	bool isPrevClauseWithClause = false;
-	bool isPrevEqualsToken = false;
+  bool isEndOfDeclaration = true;
+  bool isSelectClause = false;
+  bool isSuchThatClause = false;
+  bool isPatternClause = false;
+  bool isWithClause = false;
+  bool isPrevClauseSuchThatClause = false;
+  bool isPrevClausePatternClause = false;
+  bool isPrevClauseWithClause = false;
+  bool isPrevEqualsToken = false;
 
-	for (TokenObject token : this->getTokenizedQuery()) {
-		TokenType tokenType = token.getTokenType();
+  for (TokenObject &token : this->getTokenizedQuery()) {
+    TokenType tokenType = token.getTokenType();
 
-		if (isDesignEntityToken(tokenType) && isEndOfDeclaration && !isSelectClause && !isSuchThatClause && !isPatternClause && !isWithClause) {
-			declarationTokenObjects.push_back(token);
-			isEndOfDeclaration = false;
-			continue;
-		}
+    if (isDesignEntityToken(tokenType) && isEndOfDeclaration &&
+        !isSelectClause && !isSuchThatClause && !isPatternClause &&
+        !isWithClause) {
+      declarationTokenObjects.push_back(token);
+      isEndOfDeclaration = false;
+      continue;
+    }
 
-		// Any extra semi-colons shall be taken as a declaration token
-		if (tokenType == TokenType::SEMI_COLON) {
-			declarationTokenObjects.push_back(token);
-			isEndOfDeclaration = true;
-			continue;
-		}
+    // Any extra semi-colons shall be taken as a declaration token
+    if (tokenType == TokenType::SEMI_COLON) {
+      declarationTokenObjects.push_back(token);
+      isEndOfDeclaration = true;
+      continue;
+    }
 
-		if (!isEndOfDeclaration) {
-			declarationTokenObjects.push_back(token);
-			continue;
-		}
+    if (!isEndOfDeclaration) {
+      declarationTokenObjects.push_back(token);
+      continue;
+    }
 
-		// Start of such that clause
-		if (tokenType == TokenType::SUCH && !isSuchThatClause && !isPatternClause && !isWithClause) {
-			if (isSelectClause && selectTokenObjects.size() < 2) {
-				selectTokenObjects.push_back(token);
-				continue;
-			}
-			relationshipTokenObjects.push_back(token);
-			isSelectClause = false;
-			isSuchThatClause = true;
-			continue;
-		}
+    // Start of such that clause
+    if (tokenType == TokenType::SUCH && !isSuchThatClause && !isPatternClause &&
+        !isWithClause) {
+      if (isSelectClause && selectTokenObjects.size() < 2) {
+        selectTokenObjects.push_back(token);
+        continue;
+      }
+      relationshipTokenObjects.push_back(token);
+      isSelectClause = false;
+      isSuchThatClause = true;
+      continue;
+    }
 
-		// End of such that clause
-		if (tokenType == TokenType::CLOSED_BRACKET && !isSelectClause && isSuchThatClause && !isPatternClause && !isWithClause) {
-			relationshipTokenObjects.push_back(token);
-			isSuchThatClause = false;
-			isPrevClauseSuchThatClause = true;
-			isPrevClausePatternClause = false;
-			isPrevClauseWithClause = false;
-			continue;
-		}
+    // End of such that clause
+    if (tokenType == TokenType::CLOSED_BRACKET && !isSelectClause &&
+        isSuchThatClause && !isPatternClause && !isWithClause) {
+      relationshipTokenObjects.push_back(token);
+      isSuchThatClause = false;
+      isPrevClauseSuchThatClause = true;
+      isPrevClausePatternClause = false;
+      isPrevClauseWithClause = false;
+      continue;
+    }
 
-		// Start of pattern clause
-		if (tokenType == TokenType::PATTERN && !isSuchThatClause && !isPatternClause && !isWithClause) {
-			if (isSelectClause && selectTokenObjects.size() < 2) {
-				selectTokenObjects.push_back(token);
-				continue;
-			}
-			patternTokenObjects.push_back(token);
-			isPatternClause = true;
-			isSelectClause = false;
-			continue;
-		}
+    // Start of pattern clause
+    if (tokenType == TokenType::PATTERN && !isSuchThatClause &&
+        !isPatternClause && !isWithClause) {
+      if (isSelectClause && selectTokenObjects.size() < 2) {
+        selectTokenObjects.push_back(token);
+        continue;
+      }
+      patternTokenObjects.push_back(token);
+      isPatternClause = true;
+      isSelectClause = false;
+      continue;
+    }
 
-		// End of pattern clause
-		if (tokenType == TokenType::CLOSED_BRACKET && !isSelectClause && !isSuchThatClause && isPatternClause && !isWithClause) {
-			patternTokenObjects.push_back(token);
-			isPatternClause = false;
-			isPrevClauseSuchThatClause = false;
-			isPrevClausePatternClause = true;
-			isPrevClauseWithClause = false;
-			continue;
-		}
+    // End of pattern clause
+    if (tokenType == TokenType::CLOSED_BRACKET && !isSelectClause &&
+        !isSuchThatClause && isPatternClause && !isWithClause) {
+      patternTokenObjects.push_back(token);
+      isPatternClause = false;
+      isPrevClauseSuchThatClause = false;
+      isPrevClausePatternClause = true;
+      isPrevClauseWithClause = false;
+      continue;
+    }
 
-		// Start of with clause
-		if (tokenType == TokenType::WITH && !isSuchThatClause && !isPatternClause && !isWithClause) {
-			if (isSelectClause && selectTokenObjects.size() < 2) {
-				selectTokenObjects.push_back(token);
-				continue;
-			}
-			withTokenObjects.push_back(token);
-			isSelectClause = false;
-			isWithClause = true;
-			continue;
-		}
+    // Start of with clause
+    if (tokenType == TokenType::WITH && !isSuchThatClause && !isPatternClause &&
+        !isWithClause) {
+      if (isSelectClause && selectTokenObjects.size() < 2) {
+        selectTokenObjects.push_back(token);
+        continue;
+      }
+      withTokenObjects.push_back(token);
+      isSelectClause = false;
+      isWithClause = true;
+      continue;
+    }
 
-		if (tokenType == TokenType::EQUALS && !isSuchThatClause && !isPatternClause && isWithClause) {
-			withTokenObjects.push_back(token);
-			isPrevEqualsToken = true;
-			continue;
-		}
+    if (tokenType == TokenType::EQUALS && !isSuchThatClause &&
+        !isPatternClause && isWithClause) {
+      withTokenObjects.push_back(token);
+      isPrevEqualsToken = true;
+      continue;
+    }
 
-		// End of with clause
-		if (isPrevEqualsToken && !isSuchThatClause && !isPatternClause && isWithClause) {
-			withTokenObjects.push_back(token);
-			isPrevEqualsToken = false;
-			isWithClause = false;
-			isPrevClauseSuchThatClause = false;
-			isPrevClausePatternClause = false;
-			isPrevClauseWithClause = true;
-			continue;
-		}
+    // End of with clause
+    if (isPrevEqualsToken && !isSuchThatClause && !isPatternClause &&
+        isWithClause) {
+      withTokenObjects.push_back(token);
+      isPrevEqualsToken = false;
+      isWithClause = false;
+      isPrevClauseSuchThatClause = false;
+      isPrevClausePatternClause = false;
+      isPrevClauseWithClause = true;
+      continue;
+    }
 
-		if (tokenType == TokenType::AND && !isSuchThatClause && !isPatternClause && !isWithClause) {
-			if (isSelectClause && selectTokenObjects.size() < 2) {
-				selectTokenObjects.push_back(token);
-				continue;
-			}
+    if (tokenType == TokenType::AND && !isSuchThatClause && !isPatternClause &&
+        !isWithClause) {
+      if (isSelectClause && selectTokenObjects.size() < 2) {
+        selectTokenObjects.push_back(token);
+        continue;
+      }
 
-			if (isPrevClauseSuchThatClause) {
-				relationshipTokenObjects.push_back(token);
-				isSelectClause = false;
-				isSuchThatClause = true;
-				isWithClause = false;
-				isPrevClauseSuchThatClause = false;
-				continue;
-			}
+      if (isPrevClauseSuchThatClause) {
+        relationshipTokenObjects.push_back(token);
+        isSelectClause = false;
+        isSuchThatClause = true;
+        isWithClause = false;
+        isPrevClauseSuchThatClause = false;
+        continue;
+      }
 
-			if (isPrevClausePatternClause) {
-				patternTokenObjects.push_back(token);
-				isPatternClause = true;
-				isSelectClause = false;
-				isWithClause = false;
-				isPrevClausePatternClause = false;
-				continue;
-			}
+      if (isPrevClausePatternClause) {
+        patternTokenObjects.push_back(token);
+        isPatternClause = true;
+        isSelectClause = false;
+        isWithClause = false;
+        isPrevClausePatternClause = false;
+        continue;
+      }
 
-			if (isPrevClauseWithClause) {
-				withTokenObjects.push_back(token);
-				isWithClause = true;
-				isPatternClause = false;
-				isSelectClause = false;
-				isPrevClauseWithClause = false;
-				continue;
-			}
+      if (isPrevClauseWithClause) {
+        withTokenObjects.push_back(token);
+        isWithClause = true;
+        isPatternClause = false;
+        isSelectClause = false;
+        isPrevClauseWithClause = false;
+        continue;
+      }
+    }
 
-		}
+    // Start of select clause
+    if (isEndOfDeclaration && !isSelectClause && !isSuchThatClause &&
+        !isPatternClause && !isWithClause) {
+      selectTokenObjects.push_back(token);
+      isSelectClause = true;
+      continue;
+    }
 
-		// Start of select clause
-		if (isEndOfDeclaration && !isSelectClause && !isSuchThatClause && !isPatternClause && !isWithClause) {
-			selectTokenObjects.push_back(token);
-			isSelectClause = true;
-			continue;
-		}
+    if (isSelectClause) {
+      selectTokenObjects.push_back(token);
+      continue;
+    }
 
-		if (isSelectClause) {
-			selectTokenObjects.push_back(token);
-			continue;
-		}
+    if (isSuchThatClause) {
+      relationshipTokenObjects.push_back(token);
+      continue;
+    }
 
-		if (isSuchThatClause) {
-			relationshipTokenObjects.push_back(token);
-			continue;
-		}
+    if (isPatternClause) {
+      patternTokenObjects.push_back(token);
+      continue;
+    }
 
-		if (isPatternClause) {
-			patternTokenObjects.push_back(token);
-			continue;
-		}
+    if (isWithClause) {
+      withTokenObjects.push_back(token);
+      continue;
+    }
 
-		if (isWithClause) {
-			withTokenObjects.push_back(token);
-			continue;
-		}
+    // Should never reach here
+    throw std::runtime_error("Error parsing query");
+  }
 
-		// Should never reach here
-		throw std::runtime_error("Error parsing query");
-	}
+  std::vector<std::vector<TokenObject>> groupedQuery{
+      declarationTokenObjects, selectTokenObjects, relationshipTokenObjects,
+      patternTokenObjects, withTokenObjects};
 
-	std::vector<std::vector<TokenObject>> groupedQuery{
-		declarationTokenObjects,
-		selectTokenObjects,
-		relationshipTokenObjects,
-		patternTokenObjects,
-		withTokenObjects
-	};
-
-	return groupedQuery;
+  return groupedQuery;
 };
 
-bool Parser::isSyntacticallyCorrect(std::vector<TokenObject> tokenizedClause, SyntaxChecker* checker) {
-	return checker->isSyntacticallyCorrect(tokenizedClause);
+bool Parser::isSyntacticallyCorrect(std::vector<TokenObject> &tokenizedClause,
+                                    SyntaxChecker *checker) {
+  return checker->isSyntacticallyCorrect(tokenizedClause);
 }
 
-std::tuple<int, std::unordered_map<std::string, DesignEntity>> Parser::mapSynonymToDesignEntity(std::vector<TokenObject> declarations) {
-	std::unordered_map<std::string, DesignEntity> mappedSynonyms;
-	DesignEntity currDesignEntity;
-	bool newDeclaration = true;
-	int numOfDeclaredSynonyms = 0;
+std::tuple<int, std::unordered_map<std::string, DesignEntity>>
+Parser::mapSynonymToDesignEntity(std::vector<TokenObject> &declarations) {
+  std::unordered_map<std::string, DesignEntity> mappedSynonyms;
+  DesignEntity currDesignEntity;
+  bool newDeclaration = true;
+  int numOfDeclaredSynonyms = 0;
 
-	for (TokenObject token : declarations) {
-		TokenType currTokenType = token.getTokenType();
+  for (TokenObject &token : declarations) {
+    TokenType currTokenType = token.getTokenType();
 
-		if (currTokenType == TokenType::COMMA) {
-			continue;
-		}
+    if (currTokenType == TokenType::COMMA) {
+      continue;
+    }
 
-		if (currTokenType == TokenType::SEMI_COLON) {
-			newDeclaration = true;
-			continue;
-		}
+    if (currTokenType == TokenType::SEMI_COLON) {
+      newDeclaration = true;
+      continue;
+    }
 
-		if (newDeclaration) {
-			currDesignEntity = this->tokenToDesignEntity.at(currTokenType);
-			newDeclaration = false;
-			continue;
-		}
+    if (newDeclaration) {
+      currDesignEntity = this->tokenToDesignEntity.at(currTokenType);
+      newDeclaration = false;
+      continue;
+    }
 
-		mappedSynonyms.insert({ token.getValue(), currDesignEntity });
-		++numOfDeclaredSynonyms;
+    mappedSynonyms.insert({token.getValue(), currDesignEntity});
+    ++numOfDeclaredSynonyms;
+  }
 
-	}
-
-	return { numOfDeclaredSynonyms, mappedSynonyms };
+  return {numOfDeclaredSynonyms, mappedSynonyms};
 }
 
-Select Parser::parseTokensIntoSelectObject(std::vector<TokenObject> selectTokens) {
-	bool isFirstSelectToken = true;
+Select
+Parser::parseTokensIntoSelectObject(std::vector<TokenObject> &selectTokens) {
+  bool isFirstSelectToken = true;
 
-	for (TokenObject token : selectTokens) {
-		TokenType currTokenType = token.getTokenType();
+  for (TokenObject &token : selectTokens) {
+    TokenType currTokenType = token.getTokenType();
 
-		if ((currTokenType == TokenType::SELECT) && isFirstSelectToken) {
-			isFirstSelectToken = false;
-			continue;
-		}
+    if ((currTokenType == TokenType::SELECT) && isFirstSelectToken) {
+      isFirstSelectToken = false;
+      continue;
+    }
 
-		// Will check if BOOLEAN is declared as a design entity in Validator
-		if (currTokenType == TokenType::BOOLEAN) {
-			// Set TokenType to NAME in the event BOOLEAN is declared as a design entity
-			// If return type is BOOLEAN, return values are ignored
-			token.setTokenType(TokenType::NAME);
-			return Select(TokenType::BOOLEAN, {token});
-		}
+    // Will check if BOOLEAN is declared as a design entity in Validator
+    if (currTokenType == TokenType::BOOLEAN) {
+      // Set TokenType to NAME in the event BOOLEAN is declared as a design
+      // entity If return type is BOOLEAN, return values are ignored
+      token.setTokenType(TokenType::NAME);
+      return Select(TokenType::BOOLEAN, {token});
+    }
 
-		if (currTokenType == TokenType::TUPLE) {
-			std::vector<TokenObject> tupleElements = parseTupleIntoIndividualTokens(token.getValue());
-			return Select(TokenType::TUPLE, tupleElements);
-		}
+    if (currTokenType == TokenType::TUPLE) {
+      std::vector<TokenObject> tupleElements =
+          parseTupleIntoIndividualTokens(token.getValue());
+      return Select(TokenType::TUPLE, tupleElements);
+    }
 
-		if (currTokenType == TokenType::ATTRIBUTE) {
-			auto [attrSynonym, attrName] = parseAttributeIntoIndividualTokens(token.getValue());
-			return Select(TokenType::ATTRIBUTE, {attrSynonym, attrName});
-		}
+    if (currTokenType == TokenType::ATTRIBUTE) {
+      auto [attrSynonym, attrName] =
+          parseAttributeIntoIndividualTokens(token.getValue());
+      return Select(TokenType::ATTRIBUTE, {attrSynonym, attrName});
+    }
 
-		// Change TokenType of synonyms tokenized to design entity tokens etc to NAME
-		if ((currTokenType != TokenType::ATTRIBUTE) && (currTokenType != TokenType::NAME)) {
-			token.setTokenType(TokenType::NAME);
-		}
+    // Change TokenType of synonyms tokenized to design entity tokens etc to
+    // NAME
+    if ((currTokenType != TokenType::ATTRIBUTE) &&
+        (currTokenType != TokenType::NAME)) {
+      token.setTokenType(TokenType::NAME);
+    }
 
-		return Select(TokenType::SYNONYM, {token});
+    return Select(TokenType::SYNONYM, {token});
+  }
 
-	}
-
-	return Select();
+  return {};
 };
 
-std::vector<SuchThat> Parser::parseTokensIntoSuchThatObjects(std::vector<TokenObject> relationshipTokens) {
-	std::vector<SuchThat> relationships;
-	bool isFirstSuchToken = true;
-	bool isFirstThatToken = true;
-	bool isFirstParam = true;
-	bool isNewRelationship = true;
-	TokenType currRelationship{};
-	TokenObject leftParam = TokenObject();
-	TokenObject rightParam = TokenObject();
+std::vector<SuchThat> Parser::parseTokensIntoSuchThatObjects(
+    std::vector<TokenObject> &relationshipTokens) {
+  std::vector<SuchThat> relationships;
+  bool isFirstSuchToken = true;
+  bool isFirstThatToken = true;
+  bool isFirstParam = true;
+  bool isNewRelationship = true;
+  TokenType currRelationship{};
+  TokenObject leftParam = TokenObject();
+  TokenObject rightParam = TokenObject();
 
-	for (TokenObject token : relationshipTokens) {
-		TokenType currTokenType = token.getTokenType();
+  for (TokenObject &token : relationshipTokens) {
+    TokenType currTokenType = token.getTokenType();
 
-		if ((currTokenType == TokenType::OPEN_BRACKET) || (currTokenType == TokenType::AND && isNewRelationship)) {
-			continue;
-		}
+    if ((currTokenType == TokenType::OPEN_BRACKET) ||
+        (currTokenType == TokenType::AND && isNewRelationship)) {
+      continue;
+    }
 
-		if (currTokenType == TokenType::CLOSED_BRACKET) {
-			// For multi such that clauses in advanced SPA
-			isFirstSuchToken = true;
-			isFirstThatToken = true;
-			isNewRelationship = true;
-			continue;
-		}
+    if (currTokenType == TokenType::CLOSED_BRACKET) {
+      // For multi such that clauses in advanced SPA
+      isFirstSuchToken = true;
+      isFirstThatToken = true;
+      isNewRelationship = true;
+      continue;
+    }
 
-		if ((currTokenType == TokenType::SUCH) && isFirstSuchToken) {
-			isFirstSuchToken = false;
-			continue;
-		}
+    if ((currTokenType == TokenType::SUCH) && isFirstSuchToken) {
+      isFirstSuchToken = false;
+      continue;
+    }
 
-		if ((currTokenType == TokenType::THAT) && isFirstThatToken) {
-			isFirstThatToken = false;
-			continue;
-		}
+    if ((currTokenType == TokenType::THAT) && isFirstThatToken) {
+      isFirstThatToken = false;
+      continue;
+    }
 
-		if (currTokenType == TokenType::COMMA) {
-			isFirstParam = false;
-			continue;
-		}
+    if (currTokenType == TokenType::COMMA) {
+      isFirstParam = false;
+      continue;
+    }
 
-		if (this->isRelationshipToken(currTokenType) && isNewRelationship) {
-			currRelationship = currTokenType;
-			isNewRelationship = false;
-			isFirstParam = true;
-			continue;
-		}
+    if (this->isRelationshipToken(currTokenType) && isNewRelationship) {
+      currRelationship = currTokenType;
+      isNewRelationship = false;
+      isFirstParam = true;
+      continue;
+    }
 
+    // Change TokenType of synonyms tokenized to design entity tokens etc to
+    // NAME
+    if ((currTokenType != TokenType::WILDCARD) &&
+        (currTokenType != TokenType::INTEGER) &&
+        (currTokenType != TokenType::NAME_WITH_QUOTATION)) {
 
-		// Change TokenType of synonyms tokenized to design entity tokens etc to NAME
-		if ((currTokenType != TokenType::WILDCARD) && (currTokenType != TokenType::INTEGER) && 
-			(currTokenType != TokenType::NAME_WITH_QUOTATION)) {
-			
-			if (token.getTokenType() != TokenType::NAME) {
-				token.setTokenType(TokenType::NAME);
-			}
-		}
+      if (token.getTokenType() != TokenType::NAME) {
+        token.setTokenType(TokenType::NAME);
+      }
+    }
 
-		if (isFirstParam) {
-			leftParam = token;
-			continue;
-		}
+    if (isFirstParam) {
+      leftParam = token;
+      continue;
+    }
 
-		rightParam = token;
-		SuchThat relationship = SuchThat(currRelationship, leftParam, rightParam);
-		relationships.push_back(relationship);
+    rightParam = token;
+    SuchThat relationship = SuchThat(currRelationship, leftParam, rightParam);
+    relationships.push_back(relationship);
+  }
 
-	}
-
-	return relationships;
+  return relationships;
 };
 
-std::vector<Pattern> Parser::parseTokensIntoPatternObjects(std::vector<TokenObject> patternTokens) {
-	std::vector<Pattern> patterns;
-	bool isNewPattern = true;
-	bool isFirstParam = true;
-	bool isWhilePattern = false;
-	bool isIfPattern = false;
-	TokenType patternType{};
-	std::string patternSynonym = "";
-	TokenObject leftParam = TokenObject();
-	TokenObject rightParam = TokenObject();
+std::vector<Pattern>
+Parser::parseTokensIntoPatternObjects(std::vector<TokenObject> &patternTokens) {
+  std::vector<Pattern> patterns;
+  bool isNewPattern = true;
+  bool isFirstParam = true;
+  bool isWhilePattern = false;
+  bool isIfPattern = false;
+  TokenType patternType{};
+  std::string patternSynonym = "";
+  TokenObject leftParam = TokenObject();
+  TokenObject rightParam = TokenObject();
 
-	for (TokenObject token : patternTokens) {
-		TokenType currTokenType = token.getTokenType();
+  for (TokenObject &token : patternTokens) {
+    TokenType currTokenType = token.getTokenType();
 
-		if (currTokenType == TokenType::OPEN_BRACKET) {
-			continue;
-		}
+    if (currTokenType == TokenType::OPEN_BRACKET) {
+      continue;
+    }
 
-		if (currTokenType == TokenType::CLOSED_BRACKET) {
-			if (isWhilePattern) {
-				patternType = TokenType::WHILE;
-			} else if (isIfPattern) {
-				patternType = TokenType::IF;
-			} else {
-				patternType = TokenType::ASSIGN;
-			}
+    if (currTokenType == TokenType::CLOSED_BRACKET) {
+      if (isWhilePattern) {
+        patternType = TokenType::WHILE;
+      } else if (isIfPattern) {
+        patternType = TokenType::IF;
+      } else {
+        patternType = TokenType::ASSIGN;
+      }
 
-			Pattern pattern = Pattern(patternType, patternSynonym, leftParam, rightParam);
-			patterns.push_back(pattern);
+      Pattern pattern =
+          Pattern(patternType, patternSynonym, leftParam, rightParam);
+      patterns.push_back(pattern);
 
-			// For multi such that clauses in advanced SPA
-			isNewPattern = true;
-			isFirstParam = true;
-			isWhilePattern = false;
-			isIfPattern = false;
-			patternSynonym = "";
-			continue;
-		}
+      // For multi such that clauses in advanced SPA
+      isNewPattern = true;
+      isFirstParam = true;
+      isWhilePattern = false;
+      isIfPattern = false;
+      patternSynonym = "";
+      continue;
+    }
 
-		if ((currTokenType == TokenType::PATTERN || currTokenType == TokenType::AND) && isNewPattern) {
-			isNewPattern = false;
-			continue;
-		}
+    if ((currTokenType == TokenType::PATTERN ||
+         currTokenType == TokenType::AND) &&
+        isNewPattern) {
+      isNewPattern = false;
+      continue;
+    }
 
-		if (currTokenType == TokenType::COMMA) {
-			if (!isFirstParam) {
-				isIfPattern = true;
-				isWhilePattern = false;
-			}
+    if (currTokenType == TokenType::COMMA) {
+      if (!isFirstParam) {
+        isIfPattern = true;
+        isWhilePattern = false;
+      }
 
-			isFirstParam = false;
-			continue;
-		}
+      isFirstParam = false;
+      continue;
+    }
 
-		// Change TokenType of synonyms tokenized to design entity tokens etc to NAME
-		if ((currTokenType != TokenType::WILDCARD) && (currTokenType != TokenType::NAME_WITH_QUOTATION) && 
-			(currTokenType != TokenType::EXPRESSION) && (currTokenType != TokenType::SUBEXPRESSION)) {
+    // Change TokenType of synonyms tokenized to design entity tokens etc to
+    // NAME
+    if ((currTokenType != TokenType::WILDCARD) &&
+        (currTokenType != TokenType::NAME_WITH_QUOTATION) &&
+        (currTokenType != TokenType::EXPRESSION) &&
+        (currTokenType != TokenType::SUBEXPRESSION)) {
 
-			if (token.getTokenType() != TokenType::NAME) {
-				token.setTokenType(TokenType::NAME);
-			}
-		}
+      if (token.getTokenType() != TokenType::NAME) {
+        token.setTokenType(TokenType::NAME);
+      }
+    }
 
-		if (patternSynonym.empty()) {
-			patternSynonym = token.getValue();
-			continue;
-		}
+    if (patternSynonym.empty()) {
+      patternSynonym = token.getValue();
+      continue;
+    }
 
-		if (isFirstParam) {
-			leftParam = token;
-			continue;
-		}
+    if (isFirstParam) {
+      leftParam = token;
+      continue;
+    }
 
-		rightParam = token;
+    rightParam = token;
 
-		// If second param is wildcard, assume pattern is while pattern
-		if (currTokenType == TokenType::WILDCARD && !isIfPattern) {
-			isWhilePattern = true;
-		}
-
-	}
-	return patterns;
+    // If second param is wildcard, assume pattern is while pattern
+    if (currTokenType == TokenType::WILDCARD && !isIfPattern) {
+      isWhilePattern = true;
+    }
+  }
+  return patterns;
 };
 
-std::vector<With> Parser::parseTokensIntoWithObjects(std::vector<TokenObject> withTokens) {
-	std::vector<With> withs;
-	bool isNewWith = true;
-	bool isLeft = true;
-	TokenType leftType;
-	TokenType rightType;
-	std::vector<TokenObject> left;
-	std::vector<TokenObject> right;
+std::vector<With>
+Parser::parseTokensIntoWithObjects(std::vector<TokenObject> &withTokens) {
+  std::vector<With> withs;
+  bool isNewWith = true;
+  bool isLeft = true;
+  TokenType leftType;
+  TokenType rightType;
+  std::vector<TokenObject> left;
+  std::vector<TokenObject> right;
 
-	for (TokenObject token : withTokens) {
-		TokenType currTokenType = token.getTokenType();
+  for (TokenObject &token : withTokens) {
+    TokenType currTokenType = token.getTokenType();
 
-		if (currTokenType == TokenType::EQUALS) {
-			continue;
-		}
+    if (currTokenType == TokenType::EQUALS) {
+      continue;
+    }
 
-		if ((currTokenType == TokenType::WITH || currTokenType == TokenType::AND) && isNewWith) {
-			isNewWith = false;
-			continue;
-		}
+    if ((currTokenType == TokenType::WITH || currTokenType == TokenType::AND) &&
+        isNewWith) {
+      isNewWith = false;
+      continue;
+    }
 
-		if (isLeft) {
-			if (currTokenType == TokenType::ATTRIBUTE) {
-				auto [attrSynonym, attrName] = parseAttributeIntoIndividualTokens(token.getValue());
-				left.push_back(attrSynonym);
-				left.push_back(attrName);
+    if (isLeft) {
+      if (currTokenType == TokenType::ATTRIBUTE) {
+        auto [attrSynonym, attrName] =
+            parseAttributeIntoIndividualTokens(token.getValue());
+        left.push_back(attrSynonym);
+        left.push_back(attrName);
 
-				leftType = setTokenTypeOfAttribute(attrName.getValue());
-			} else {
-				// Ref is either NAME_WITH_QUOTATION or INTEGER
-				left.push_back(token);
-				leftType = token.getTokenType() == TokenType::NAME_WITH_QUOTATION ? TokenType::NAME : TokenType::INTEGER;
-				isLeft = false;
-			}
+        leftType = setTokenTypeOfAttribute(attrName.getValue());
+      } else {
+        // Ref is either NAME_WITH_QUOTATION or INTEGER
+        left.push_back(token);
+        leftType = token.getTokenType() == TokenType::NAME_WITH_QUOTATION
+                       ? TokenType::NAME
+                       : TokenType::INTEGER;
+        isLeft = false;
+      }
 
-			isLeft = false;
-			continue;
-		}
+      isLeft = false;
+      continue;
+    }
 
-		if (currTokenType == TokenType::ATTRIBUTE) {
-			auto [attrSynonym, attrName] = parseAttributeIntoIndividualTokens(token.getValue());
-			right.push_back(attrSynonym);
-			right.push_back(attrName);
+    if (currTokenType == TokenType::ATTRIBUTE) {
+      auto [attrSynonym, attrName] =
+          parseAttributeIntoIndividualTokens(token.getValue());
+      right.push_back(attrSynonym);
+      right.push_back(attrName);
 
-			rightType = setTokenTypeOfAttribute(attrName.getValue());
-		} else {
-			// Ref is either NAME_WITH_QUOTATION or INTEGER
-			right.push_back(token);
-			rightType = token.getTokenType() == TokenType::NAME_WITH_QUOTATION ? TokenType::NAME : TokenType::INTEGER;
-		}
+      rightType = setTokenTypeOfAttribute(attrName.getValue());
+    } else {
+      // Ref is either NAME_WITH_QUOTATION or INTEGER
+      right.push_back(token);
+      rightType = token.getTokenType() == TokenType::NAME_WITH_QUOTATION
+                      ? TokenType::NAME
+                      : TokenType::INTEGER;
+    }
 
-		With with = With(leftType, rightType, left, right);
-		withs.push_back(with);
+    With with = With(leftType, rightType, left, right);
+    withs.push_back(with);
 
-		isLeft = true;
-		isNewWith = true;
-		left.clear();
-		right.clear();
-
-	}
-	return withs;
+    isLeft = true;
+    isNewWith = true;
+    left.clear();
+    right.clear();
+  }
+  return withs;
 }
-
 
 bool Parser::isRelationshipToken(TokenType token) {
-	std::vector<TokenType> relationshipTokens{
-		TokenType::FOLLOWS, TokenType::FOLLOWS_T, TokenType::PARENT,
-		TokenType::PARENT_T, TokenType::USES, TokenType::MODIFIES,
-		TokenType::CALLS, TokenType::CALLS_T, TokenType::NEXT, 
-		TokenType::NEXT_T, TokenType::AFFECTS, TokenType::AFFECTS_T
-	};
+  std::vector<TokenType> &relationshipTokens = this->relationshipTokens;
 
-	if (std::find(relationshipTokens.begin(), relationshipTokens.end(), token) == relationshipTokens.end()) {
-		return false;
-	}
+  if (!std::binary_search(relationshipTokens.begin(), relationshipTokens.end(),
+                          token)) {
+    return false;
+  }
 
-	return true;
+  return true;
 };
 
 bool Parser::isDesignEntityToken(TokenType token) {
-	std::vector<TokenType> designEntityTokens{
-		TokenType::STMT, TokenType::READ, TokenType::PRINT, TokenType::CALL, TokenType::WHILE, 
-		TokenType::IF, TokenType::ASSIGN, TokenType::VARIABLE, TokenType::CONSTANT, TokenType::PROCEDURE 
+  std::vector<TokenType> &designEntityTokens = this->designEntityTokens;
+
+  if (!std::binary_search(designEntityTokens.begin(), designEntityTokens.end(),
+                          token)) {
+    return false;
+  }
+
+  return true;
 };
 
-	if (std::find(designEntityTokens.begin(), designEntityTokens.end(), token) == designEntityTokens.end()) {
-		return false;
-	}
+std::vector<TokenObject>
+Parser::parseTupleIntoIndividualTokens(std::string tupleValue) {
+  std::vector<TokenObject> elements{};
+  std::string stringOfElements = tupleValue.substr(1, tupleValue.length() - 2);
+  std::stringstream ss(stringOfElements);
 
-	return true;
-};
+  while (ss.good()) {
+    std::string elementValue;
+    std::getline(ss, elementValue, ',');
 
-std::vector<TokenObject> Parser::parseTupleIntoIndividualTokens(std::string tupleValue) {
-	std::vector<TokenObject> elements{};
-	std::string stringOfElements = tupleValue.substr(1, tupleValue.length() - 2);
-	std::stringstream ss(stringOfElements);
+    bool isAttribute = std::find(elementValue.begin(), elementValue.end(),
+                                 '.') != elementValue.end();
 
-	while (ss.good()) {
-		std::string elementValue;
-		std::getline(ss, elementValue, ',');
+    if (isAttribute) {
+      auto [attrSynonym, attrName] =
+          parseAttributeIntoIndividualTokens(elementValue);
+      elements.push_back(attrSynonym);
+      elements.push_back(attrName);
+      continue;
+    }
 
-		bool isAttribute = std::find(elementValue.begin(), elementValue.end(), '.') != elementValue.end();
+    // Synonym
+    elements.push_back({TokenObject(TokenType::NAME, elementValue)});
+  }
 
-		if (isAttribute) {
-			auto [attrSynonym, attrName] = parseAttributeIntoIndividualTokens(elementValue);
-			elements.push_back(attrSynonym);
-			elements.push_back(attrName);
-			continue;
-		}
-
-		// Synonym
-		elements.push_back({ TokenObject(TokenType::NAME, elementValue) });
-	}
-
-	return elements;
+  return elements;
 }
 
-std::tuple<TokenObject, TokenObject> Parser::parseAttributeIntoIndividualTokens(std::string attribute) {
-    size_t fullstopIndex = attribute.find('.');
-    std::string synonymName = attribute.substr(0, fullstopIndex);
-    std::string attributeName = attribute.substr(fullstopIndex + 1, attribute.length() - fullstopIndex - 1);
+std::tuple<TokenObject, TokenObject>
+Parser::parseAttributeIntoIndividualTokens(std::string attribute) {
+  size_t fullstopIndex = attribute.find('.');
+  std::string synonymName = attribute.substr(0, fullstopIndex);
+  std::string attributeName = attribute.substr(
+      fullstopIndex + 1, attribute.length() - fullstopIndex - 1);
 
-	return {TokenObject(TokenType::ATTRIBUTE_SYNONYM, synonymName), TokenObject(TokenType::ATTRIBUTE_NAME, attributeName)};
+  return {TokenObject(TokenType::ATTRIBUTE_SYNONYM, synonymName),
+          TokenObject(TokenType::ATTRIBUTE_NAME, attributeName)};
 }
 
 TokenType Parser::setTokenTypeOfAttribute(std::string attrName) {
-	if ((attrName == "procName") || (attrName == "varName")) {
-		return TokenType::NAME;
-	}
+  if ((attrName == "procName") || (attrName == "varName")) {
+    return TokenType::NAME;
+  }
 
-	return TokenType::INTEGER;
+  return TokenType::INTEGER;
 }

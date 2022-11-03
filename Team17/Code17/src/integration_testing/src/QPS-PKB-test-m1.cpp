@@ -18,7 +18,7 @@
 #include "models/Pattern/Pattern.h"
 #include "models/Pattern/AssignPattern.h"
 #include "components/qps/QPS.h"
-#include <iostream>
+
 
 // Populating data in PKB
 PKB* pkb = new PKB();
@@ -601,7 +601,6 @@ TEST_CASE("Syntax and Semantics Checks") {
         REQUIRE(testResults == expectedResults);
     }
 }
-
 
 TEST_CASE("Milestone 1 Integration Test 1") {
 

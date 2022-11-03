@@ -1,4 +1,6 @@
 #include "ClausesDivider.h"
+#include <algorithm>
+
 
 ClauseDivider::ClauseDivider() : noSynonymsPresent({}), connectedSynonymsGroups({}), selectSynonymPresentGroups({}), selectSynonymNotPresentGroups({}) {}
 
@@ -19,7 +21,9 @@ void ClauseDivider::divideConnectedSynonymGroupsBySelect(std::shared_ptr<Clause>
         updateConnectedSynonymGroups();
     }
     for (auto &gc : connectedSynonymsGroups) {
-        if (gc.hasCommonSynonymWithClause(selectClause)) {
+        std::set<std::string> synonymsOfClause = selectClause -> getAllSynonyms();
+        bool isRelated = gc.hasCommonSynonym(synonymsOfClause);
+        if (isRelated) {
             selectSynonymPresentGroups.emplace_back(gc);
         } else {
             selectSynonymNotPresentGroups.emplace_back(gc);
@@ -48,8 +52,9 @@ void ClauseDivider::updateConnectedSynonymGroups() {
 
 
 void ClauseDivider::addHasSynonymsClauseToDivider(std::shared_ptr<Clause> &clause) {
+    std::set<std::string> synonymsOfClause = clause -> getAllSynonyms();
     for (auto &gc : connectedSynonymsGroups) {
-        if (gc.hasCommonSynonymWithClause(clause)) {
+        if (gc.hasCommonSynonym(synonymsOfClause)) {
             gc.addClauseToGroup(clause);
             return;
         }

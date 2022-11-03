@@ -21,13 +21,14 @@ QueryObject QPS::tokenizeAndParseQuery(std::string query) {
 }
 
 void QPS::processQueryResult(std::string query, std::list<std::string> &results, QPSClient qpsClient) {
+    clock_t start, end;
     try {
         QueryObject parsedQuery = tokenizeAndParseQuery(query);
         Validator validator = Validator(parsedQuery);
         QueryObject parsedAndValidatedQuery = validator.validate();
         Evaluator::evaluateQuery(parsedAndValidatedQuery, results, qpsClient);
-    } catch (std::exception &e) {
-        std::cout << e.what() << std::endl;
+    }
+    catch (std::exception& e) {
         results.emplace_back("SyntaxError");
     }
 }

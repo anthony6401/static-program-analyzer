@@ -6,6 +6,27 @@ PKB::PKB() {
 	patternManager = new PatternManager();
 };
 
+
+bool PKB::isRuntimeRelationship(RelationshipType relType) {
+	return relType == RelationshipType::NEXT_T || relType == RelationshipType::AFFECTS || relType == RelationshipType::AFFECTS_T;
+}
+
+void PKB::clearCache() {
+	relManager->clearCache();
+}
+
+std::unordered_set<std::string> PKB::getFilter(RelationshipType relType, DesignEntity designEntity) {
+	if (relType == RelationshipType::AFFECTS || relType == RelationshipType::AFFECTS_T) {
+		if (designEntity == DesignEntity::STMT || designEntity == DesignEntity::ASSIGN) {
+			return entityManager->getAllEntity(DesignEntity::ASSIGN);
+		}
+
+		return std::unordered_set<std::string>();
+	}
+
+	return entityManager->getAllEntity(designEntity);
+}
+
 std::unordered_set<std::string> PKB::getAllEntity(DesignEntity returnType) {
 	return entityManager->getAllEntity(returnType);
 }
@@ -30,15 +51,20 @@ bool PKB::storeConstant(Entity* entity) {
 }
 
 bool PKB::getRelationship(RelationshipType relType, TokenObject firstArgument, TokenObject secondArgument) {
-	if (relType == RelationshipType::NEXT_T || relType == RelationshipType::AFFECTS || relType == RelationshipType::AFFECTS_T) {
+	if (isRuntimeRelationship(relType)) {
 		return relManager->getRuntimeRelationship(relType, firstArgument, secondArgument);
 	}
 	return relManager->getRelationship(relType, firstArgument, secondArgument);
 }
 
 std::unordered_set<std::string> PKB::getRelationshipByFirst(RelationshipType relType, TokenObject firstArgument, DesignEntity returnType) {
-	if (relType == RelationshipType::NEXT_T || relType == RelationshipType::AFFECTS || relType == RelationshipType::AFFECTS_T) {
-		std::unordered_set<std::string> filter = entityManager->getAllEntity(returnType);
+	if (isRuntimeRelationship(relType)) {
+		std::unordered_set<std::string> filter = getFilter(relType, returnType);
+
+		if (filter.size() == 0) {
+			return std::unordered_set<std::string>();
+		}
+
 		return relManager->getRuntimeRelationshipByFirst(relType, firstArgument, filter);
 	}
 
@@ -46,18 +72,55 @@ std::unordered_set<std::string> PKB::getRelationshipByFirst(RelationshipType rel
 }
 
 std::unordered_set<std::string> PKB::getRelationshipBySecond(RelationshipType relType, DesignEntity returnType, TokenObject secondArgument) {
-	if (relType == RelationshipType::NEXT_T || relType == RelationshipType::AFFECTS || relType == RelationshipType::AFFECTS_T) {
-		std::unordered_set<std::string> filter = entityManager->getAllEntity(returnType);
+	if (isRuntimeRelationship(relType)) {
+		std::unordered_set<std::string> filter = getFilter(relType, returnType);
+
+		if (filter.size() == 0) {
+			return std::unordered_set<std::string>();
+		}
+
 		return relManager->getRuntimeRelationshipBySecond(relType, secondArgument, filter);
 	}
 
 	return relManager->getRelationshipBySecond(relType, returnType, secondArgument);
 }
 
+std::unordered_set<std::string> PKB::getRelationshipWithFirstWildcard(RelationshipType relType, DesignEntity returnType) {
+	if (isRuntimeRelationship(relType)) {
+		std::unordered_set<std::string> filter1 = getFilter(relType, DesignEntity::STMT);
+		std::unordered_set<std::string> filter2 = getFilter(relType, returnType);
+
+		if (filter1.size() == 0 || filter2.size() == 0) {
+			return std::unordered_set<std::string>();
+		}
+		return relManager->getRuntimeRelationshipWithFirstWildcard(relType, filter1, filter2);
+	}
+	return relManager->getRelationshipWithFirstWildcard(relType, returnType);
+}
+
+std::unordered_set<std::string> PKB::getRelationshipWithSecondWildcard(RelationshipType relType, DesignEntity returnType) {
+	if (isRuntimeRelationship(relType)) {
+		std::unordered_set<std::string> filter1 = getFilter(relType, returnType);
+		std::unordered_set<std::string> filter2 = getFilter(relType, DesignEntity::STMT);
+
+		if (filter1.size() == 0 || filter2.size() == 0) {
+			return std::unordered_set<std::string>();
+		}
+
+		return relManager->getRuntimeRelationshipWithSecondWildcard(relType, filter1, filter2);
+	}
+	return relManager->getRelationshipWithSecondWildcard(relType, returnType);
+}
+
 std::unordered_map<std::string, std::unordered_set<std::string>> PKB::getAllRelationship(RelationshipType relType, DesignEntity returnType1, DesignEntity returnType2) {
-	if (relType == RelationshipType::NEXT_T || relType == RelationshipType::AFFECTS || relType == RelationshipType::AFFECTS_T) {
-		std::unordered_set<std::string> filter1 = entityManager->getAllEntity(returnType1);
-		std::unordered_set<std::string> filter2 = entityManager->getAllEntity(returnType2);
+	if (isRuntimeRelationship(relType)) {
+		std::unordered_set<std::string> filter1 = getFilter(relType, returnType1);
+		std::unordered_set<std::string> filter2 = getFilter(relType, returnType2);
+
+		if (filter1.size() == 0 || filter2.size() == 0) {
+			return std::unordered_map<std::string, std::unordered_set<std::string>>();
+		}
+
 		return relManager->getAllRuntimeRelationship(relType, filter1, filter2);
 	}
 	return relManager->getAllRelationship(relType, returnType1, returnType2);
@@ -69,6 +132,10 @@ bool PKB::storePattern(kb::Pattern* pattern) {
 
 std::unordered_set<std::string> PKB::getPattern(DesignEntity designEntity, TokenObject firstArgument, TokenObject secondArgument) {
 	return patternManager->getPattern(designEntity, firstArgument, secondArgument);
+}
+
+std::unordered_set<std::string> PKB::getPatternWildcard(DesignEntity designEntity, TokenObject secondArgument) {
+	return patternManager->getPatternWildcard(designEntity, secondArgument);
 }
 
 std::vector<std::pair<std::string, std::string>> PKB::getPatternPair(DesignEntity designEntity, TokenObject secondArgument) {

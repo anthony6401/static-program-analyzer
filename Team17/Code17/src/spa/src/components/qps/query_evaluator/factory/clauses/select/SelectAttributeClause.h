@@ -20,6 +20,7 @@ public:
     size_t getNumberOfSynonyms() override;
     std::set<std::string> getAllSynonyms() override;
     static bool checkIsAlternateAttributeName(DesignEntity returnType, std::string attributeName);
+    size_t getPriority() override;
 };
 
 #endif //SPA_SELECTATTRIBUTECLAUSE_H

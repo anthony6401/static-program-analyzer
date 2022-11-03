@@ -14,7 +14,7 @@ private:
 public:
     DeclarationClauseSyntaxChecker();
     ~DeclarationClauseSyntaxChecker();
-    bool isSyntacticallyCorrect(std::vector<TokenObject> tokenizedClause);
+    bool isSyntacticallyCorrect(std::vector<TokenObject> &tokenizedClause);
 };
 
 #endif //INC_22S1_CP_SPA_TEAM_17_DECLARATION_SYNTAX_CHECKER_H

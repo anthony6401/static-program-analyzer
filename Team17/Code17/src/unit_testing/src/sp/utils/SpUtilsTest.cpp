@@ -64,6 +64,11 @@ TEST_CASE("split whitespace") {
     REQUIRE(expected_result == test_result);
 }
 
+TEST_CASE("join string") {
+    std::vector<std::string> strings{ "if","(", "(", "(", ")", "1", ")", "2", ")","then","{"};
+    REQUIRE(SpUtils::join(strings, "") == std::string("if((()1)2)then{"));
+}
+
 TEST_CASE("find close bracket") {
     std::vector<std::string> strings{ "(", "(", "(", ")", "1", ")", "2", ")" };
     REQUIRE(SpUtils::findCloseBracket(strings, 0) == 7);

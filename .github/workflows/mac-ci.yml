@@ -36,8 +36,34 @@ jobs:
         shell: bash
         run: cmake --build . --config $BUILD_TYPE
 
-      - name: Run unit tests
+      - name: Build Unit Tests
+        working-directory: ${{runner.workspace}}/build
+        shell: bash
+        run: cmake --build . --config $BUILD_TYPE --target unit_testing
+
+      - name: Run Unit Tests
         run: ${{runner.workspace}}/build/src/unit_testing/unit_testing
 
-      - name: Run integration tests
+      - name: Build Integration Tests
+        working-directory: ${{runner.workspace}}/build
+        shell: bash
+        run: cmake --build . --config $BUILD_TYPE --target integration_testing
+
+      - name: Run Integration Tests
         run: ${{runner.workspace}}/build/src/integration_testing/integration_testing
+
+      - name: Build Autotester
+        working-directory: ${{runner.workspace}}/build
+        shell: bash
+        run: cmake --build . --config $BUILD_TYPE --target autotester
+
+      - name: Set up Regression Tests
+        shell: bash
+        run: |
+          mkdir -v -p ${{runner.workspace}}/build/regression_tests
+          cp -r $GITHUB_WORKSPACE/Team17/Tests17/* ${{runner.workspace}}/build/regression_tests
+
+      - name: Run Regression Tests
+        working-directory: ${{runner.workspace}}/build/regression_tests
+        shell: bash
+        run: python3 regression_tester.py ../src/autotester/autotester
