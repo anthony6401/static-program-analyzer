@@ -112,7 +112,7 @@ void Extractor::extractExpr(Entity* entity, SimpleToken exprToken) {
 void Extractor::extractCall(SimpleToken callToken) {
 	CallEntity* callEntity = new CallEntity(std::to_string(callToken.statementNumber), callToken.value);
 	this->currentStack->stmts.push_back(callEntity);
-	this->currentStack->callStmts.push_back(callEntity);
+	this->currentStack->callStmts.push_back(callToken);
 	this->currentStack->extractNext(callEntity);
 }
 
@@ -160,18 +160,18 @@ void Extractor::endOfParser(std::multimap<std::string, std::string> callProcedur
 
 	for (std::string proc : allProcedures) {
 		StmtStack* procStack = procedures.find(proc)->second;
-		std::vector<Entity*> callStmts = procStack->callStmts;
-		for (Entity* callStmt : callStmts) {
-			Entity* left = callStmt;
+		std::vector<SimpleToken> callStmts = procStack->callStmts;
+		for (SimpleToken callStmt : callStmts) {
+			CallEntity* left = new CallEntity(std::to_string(callStmt.statementNumber), callStmt.value);
 			for (auto itr = usesForCalls.begin(); itr != usesForCalls.end(); ++itr) {
-				if (itr->first == callStmt->getValue()) {
+				if (itr->first == callStmt.value) {
 					Entity* right = itr->second;
 					UsesRelationship* rel = new UsesRelationship(left, right);
 					this->client->storeRelationship(rel);
 				}
 			}
 			for (auto itr = modsForCalls.begin(); itr != modsForCalls.end(); ++itr) {
-				if (itr->first == callStmt->getValue()) {
+				if (itr->first == callStmt.value) {
 					Entity* right = itr->second;
 					ModifyRelationship* rel = new ModifyRelationship(left, right);
 					this->client->storeRelationship(rel);

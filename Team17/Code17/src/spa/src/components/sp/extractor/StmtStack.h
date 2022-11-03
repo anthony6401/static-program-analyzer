@@ -5,6 +5,7 @@
 #include <map>
 
 #include "../utils/SpUtils.h"
+#include "../SimpleToken.h"
 
 class Extractor;
 class Entity;
@@ -18,7 +19,7 @@ public:
     std::unordered_set<Entity*, SimpleHash> varUse;
     std::unordered_set<Entity*, SimpleHash> stmtsNested;
     std::vector<Entity*> stmts;
-    std::vector<Entity*> callStmts;
+    std::vector<SimpleToken> callStmts;
     std::multimap<std::string, Entity*> whileIfCallMap;
     virtual void extractModify(Entity* left, Entity* right) = 0;
     virtual void extractUses(Entity* left, Entity* right) = 0;

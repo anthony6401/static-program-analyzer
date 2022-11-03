@@ -26,19 +26,19 @@ void WhileStack::close(int statementNumber) {
 }
 
 void WhileStack::mergeStack() {
-    for (Entity* callStmt : this->callStmts) {
-        this->whileIfCallMap.insert(std::pair<std::string, Entity*>(callStmt->getValue(), this->parent));
+    for (SimpleToken callStmt : this->callStmts) {
+        this->whileIfCallMap.insert(std::pair<std::string, Entity*>(callStmt.value, this->parent));
     }
     StmtStack* parent = context->parentStack.top();
-    for (Entity* stmt : this->stmts) {
-        parent->stmtsNested.insert(stmt);
-    }
     parent->stmtsNested.merge(this->stmtsNested);
     parent->varUse.merge(this->varUse);
     parent->varMod.merge(this->varMod);
     parent->callStmts.insert(parent->callStmts.end(), this->callStmts.begin(), this->callStmts.end());
     for (std::pair<std::string, Entity*> pair : whileIfCallMap) {
         parent->whileIfCallMap.insert(pair);
+    }
+    for (Entity* stmt : this->stmts) {
+        parent->stmtsNested.insert(stmt);
     }
 }
 
